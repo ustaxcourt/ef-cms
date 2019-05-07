@@ -4,12 +4,11 @@ import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedW
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseCaptionPropFromStateAction } from '../actions/setCaseCaptionPropFromStateAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { updateCaseAction } from '../actions/updateCaseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
-
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
 export const updateCaseDetailSequence = [
   setFormSubmittingAction,

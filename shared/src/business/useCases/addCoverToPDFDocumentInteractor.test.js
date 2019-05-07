@@ -54,6 +54,8 @@ describe('addCoverToPDFDocument', () => {
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
         lodged: true,
+        additionalInfo: 'Additional Info Something',
+        addToCoversheet: true,
       },
     ],
     irsSendDate: '2019-04-19T14:45:15.595Z',

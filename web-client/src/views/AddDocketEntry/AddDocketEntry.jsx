@@ -6,12 +6,16 @@ import { SuccessNotification } from '../SuccessNotification';
 import { SupportingDocumentForm } from './SupportingDocumentForm';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const AddDocketEntry = connect(
-  { submitDocketEntrySequence: sequences.submitDocketEntrySequence },
-  ({ submitDocketEntrySequence }) => {
+  {
+    caseDetail: state.caseDetail,
+    screenMetadata: state.screenMetadata,
+    submitDocketEntrySequence: sequences.submitDocketEntrySequence,
+  },
+  ({ caseDetail, submitDocketEntrySequence, screenMetadata }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -56,10 +60,11 @@ export const AddDocketEntry = connect(
                 });
               }}
             >
-              Save and Finish
+              Finish
             </button>
             <button
               type="button"
+              id="save-and-add-supporting"
               className="usa-button-secondary"
               onClick={() => {
                 submitDocketEntrySequence({
@@ -67,8 +72,16 @@ export const AddDocketEntry = connect(
                 });
               }}
             >
-              Save and Add Supporting Document(s)
+              {screenMetadata.supporting &&
+                'Add Another Supporting Document(s)'}
+              {!screenMetadata.supporting && 'Add Supporting Document(s)'}
             </button>
+            <a
+              href={`/case-detail/${caseDetail.docketNumber}`}
+              id="cancel-button"
+            >
+              Cancel
+            </a>
           </div>
         </section>
       </React.Fragment>

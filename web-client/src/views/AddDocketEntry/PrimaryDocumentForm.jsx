@@ -192,7 +192,7 @@ export const PrimaryDocumentForm = connect(
               validationErrors.eventCode ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="document-type" id="document-type-label">
+            <label htmlFor="react-select-2-input" id="document-type-label">
               Document Type
             </label>
             <Select
@@ -221,6 +221,13 @@ export const PrimaryDocumentForm = connect(
                     });
                     validateDocketEntrySequence();
                     break;
+                  case 'clear':
+                    updateDocketEntryFormValueSequence({
+                      key: name,
+                      value: '',
+                    });
+                    validateDocketEntrySequence();
+                    break;
                 }
                 return true;
               }}
@@ -234,14 +241,13 @@ export const PrimaryDocumentForm = connect(
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
               className={`ustc-form-group ${
-                validationErrors.secondaryDocument &&
-                validationErrors.secondaryDocument.eventCode
+                validationErrors.secondaryDocument && !form.secondaryDocument
                   ? 'usa-input-error'
                   : ''
               }`}
             >
               <label
-                htmlFor="secondary-document-type"
+                htmlFor="react-select-3-input"
                 id="secondary-document-type-label"
               >
                 Which Document Is This Motion for Leave For?
@@ -274,14 +280,23 @@ export const PrimaryDocumentForm = connect(
                       });
                       validateDocketEntrySequence();
                       break;
+                    case 'clear':
+                      updateDocketEntryFormValueSequence({
+                        key: name,
+                        value: '',
+                      });
+                      validateDocketEntrySequence();
+                      break;
                   }
                   return true;
                 }}
               />
-              <Text
-                className="usa-input-error-message"
-                bind="validationErrors.secondaryDocument.eventCode"
-              />
+              {!form.secondaryDocument && (
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.secondaryDocument"
+                />
+              )}
             </div>
           )}
 
@@ -335,7 +350,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label">
+            <label htmlFor="additional-info2" id="additional-info2-label">
               Additional Info 2
             </label>
             <input
@@ -419,6 +434,9 @@ export const PrimaryDocumentForm = connect(
                             : ''
                         }`}
                     >
+                      <legend id="service-date-legend" className="usa-sr-only">
+                        Certificate of Service
+                      </legend>
                       <div className="usa-date-of-birth">
                         <div className="usa-form-group usa-form-group-month">
                           <input
@@ -509,6 +527,38 @@ export const PrimaryDocumentForm = connect(
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Who Is Filing This Document?</legend>
               <ul className="ustc-vertical-option-list">
+                {addDocketEntryHelper.showPractitionerParty &&
+                  addDocketEntryHelper.practitionerNames.map(
+                    (practitionerName, idx) => {
+                      return (
+                        <li key={idx}>
+                          <input
+                            id={`party-practitioner-${idx}`}
+                            type="checkbox"
+                            name={`practitioner.${idx}`}
+                            checked={
+                              (form.practitioner[idx] &&
+                                form.practitioner[idx].partyPractitioner) ||
+                              false
+                            }
+                            onChange={e => {
+                              updateDocketEntryFormValueSequence({
+                                key: e.target.name,
+                                value: {
+                                  name: practitionerName,
+                                  partyPractitioner: e.target.checked,
+                                },
+                              });
+                              validateDocketEntrySequence();
+                            }}
+                          />
+                          <label htmlFor={`party-practitioner-${idx}`}>
+                            Counsel {practitionerName}
+                          </label>
+                        </li>
+                      );
+                    },
+                  )}
                 <li>
                   <input
                     id="party-primary"

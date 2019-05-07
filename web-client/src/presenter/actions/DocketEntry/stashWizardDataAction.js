@@ -4,8 +4,7 @@ import { state } from 'cerebral';
  * stash wizard data in props
  *
  * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store object
- * @param {Object} providers.applicationContext the application context
+ * @param {Object} providers.get the cerebral get function
  * @param {Object} providers.props the cerebral props object
  */
 export const stashWizardDataAction = async ({ get, props }) => {

@@ -14,6 +14,10 @@ const { includes, omit } = require('lodash');
 function DocketEntryFactory(rawProps) {
   let entityConstructor = function(rawProps) {
     Object.assign(this, rawProps);
+    const { secondaryDocument } = rawProps;
+    if (secondaryDocument) {
+      this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument);
+    }
   };
 
   let schema = {
@@ -40,10 +44,14 @@ function DocketEntryFactory(rawProps) {
       .iso()
       .max('now')
       .required(),
-    objections: joi.string(),
-    partyPrimary: joi.boolean().required(),
+    objections: joi.string().required(),
+    partyPrimary: joi
+      .boolean()
+      .invalid(false)
+      .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
+    secondaryDocumentFile: joi.object().required(),
   };
 
   let errorToMessageMap = {
@@ -68,10 +76,12 @@ function DocketEntryFactory(rawProps) {
     exhibits: 'Enter selection for Exhibits.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     lodged: 'Enter selection for Filing Status.',
+    objections: 'Enter selection for Objections.',
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
     primaryDocumentFile: 'A file was not selected.',
+    secondaryDocumentFile: 'A file was not selected.',
   };
 
   let customValidate;
@@ -116,11 +126,28 @@ function DocketEntryFactory(rawProps) {
   ) {
     addToSchema('objections');
   }
+
+  if (
+    rawProps.scenario &&
+    rawProps.scenario.toLowerCase().trim() === 'nonstandard h'
+  ) {
+    addToSchema('secondaryDocumentFile');
+  }
+
+  let partyPractitioner = false;
+  if (Array.isArray(rawProps.practitioner)) {
+    rawProps.practitioner.forEach(practitioner => {
+      if (practitioner.partyPractitioner) {
+        partyPractitioner = true;
+      }
+    });
+  }
+
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
     rawProps.partyRespondent !== true &&
-    rawProps.partyPractitioner !== true
+    partyPractitioner !== true
   ) {
     addToSchema('partyPrimary');
   }
