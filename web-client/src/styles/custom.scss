@@ -553,6 +553,10 @@ header.usa-header {
 }
 
 nav.usa-nav {
+  .usa-nav-close {
+    width: auto;
+    color: $color-white;
+  }
   .usa-nav-primary {
     position: absolute;
     top: -9.75rem;
@@ -583,6 +587,52 @@ nav.usa-nav {
 
   .user-dropdown {
     margin-top: -4px;
+  }
+
+  .mobile-account-nav {
+  }
+
+  &.mobile-menu {
+    background: $color-cool-blue;
+
+    .usa-nav-primary {
+      position: inherit;
+      margin-top: 10rem;
+      margin-bottom: 3rem;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #fff;
+
+      .usa-nav__primary {
+        li.active,
+        li:hover {
+          border: none;
+        }
+      }
+
+      a {
+        color: $color-white;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .usa-nav-secondary {
+      li.usa-search {
+        position: absolute;
+        top: 8rem;
+      }
+      li.user-dropdown {
+        display: none;
+      }
+      a {
+        color: $color-white;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 

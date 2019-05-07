@@ -4,6 +4,23 @@ import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+export const AccountMenuItems = ({ signOut }) => {
+  return (
+    <ul className="usa-unstyled-list">
+      <li>
+        <a
+          className="account-menu-item"
+          href="/"
+          onClick={() => {
+            signOut();
+          }}
+        >
+          Log Out
+        </a>
+      </li>
+    </ul>
+  );
+};
 class AccountMenuComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -75,19 +92,7 @@ class AccountMenuContentComponent extends React.Component {
   render() {
     return (
       <div className="account-menu-content">
-        <ul className="usa-unstyled-list">
-          <li>
-            <a
-              className="account-menu-item"
-              href="/"
-              onClick={() => {
-                this.props.signOutSequence();
-              }}
-            >
-              Log Out
-            </a>
-          </li>
-        </ul>
+        {AccountMenuItems({ signOut: this.props.signOutSequence })}
       </div>
     );
   }
