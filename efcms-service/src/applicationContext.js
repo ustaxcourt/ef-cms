@@ -74,12 +74,6 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
-  getCasesByStatus,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByStatus');
-const {
-  getCasesByStatus: getCasesByStatusUC,
-} = require('../../shared/src/business/useCases/getCasesByStatusInteractor');
-const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
 const {
@@ -273,7 +267,6 @@ module.exports = (appContextUser = {}) => {
         deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
-        getCasesByStatus,
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
@@ -324,7 +317,6 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocument,
         forwardWorkItem,
         getCase,
-        getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,

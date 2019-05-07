@@ -131,6 +131,9 @@ describe('addDocketEntryHelper', () => {
 
   it("shows should show inclusions when previous document isn't secondary", async () => {
     state.form.previousDocument = 'Statement of Taxpayer Identification';
+    state.screenMetadata = {
+      filedDocumentIds: ['abc81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+    };
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showSupportingInclusions).toBeTruthy();
   });
