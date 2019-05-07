@@ -43,20 +43,23 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
+  if (!result.readAt) {
+    result.showUnreadStatusIcon = true;
+  }
   switch (result.caseStatus.trim()) {
     case 'Batched for IRS':
       result.showBatchedStatusIcon = true;
-      result.statusIcon = 'iconStatusBatched';
+      result.showUnreadStatusIcon = false;
       break;
     case 'Recalled':
-      result.showBatchedStatusIcon = true;
-      result.statusIcon = 'iconStatusRecalled';
+      result.showRecalledStatusIcon = true;
+      result.showUnreadStatusIcon = false;
       break;
     case 'General Docket':
     case 'New':
     default:
-      result.statusIcon = '';
       result.showBatchedStatusIcon = false;
+      result.showRecalledStatusIcon = false;
   }
 
   result.docketNumberWithSuffix = `${
