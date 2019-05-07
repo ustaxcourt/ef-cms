@@ -18,7 +18,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "Answer",
@@ -133,6 +133,16 @@
   ],
   "Appearance and Representation": [
     {
+      "documentTitle": "Entry of Appearance",
+      "documentType": "Entry of Appearance",
+      "category": "Appearance and Representation",
+      "eventCode": "EA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
       "category": "Appearance and Representation",
@@ -147,6 +157,16 @@
       "documentType": "Motion to Withdraw Counsel (filed by petitioner)",
       "category": "Appearance and Representation",
       "eventCode": "M116",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Substitution of Counsel",
+      "documentType": "Substitution of Counsel",
+      "category": "Appearance and Representation",
+      "eventCode": "SOC",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -251,10 +271,10 @@
       "documentType": "Stipulated Decision Entered",
       "category": "Decision",
       "eventCode": "SDEC",
-      "scenario": "Nonstandard B",
+      "scenario": "Nonstandard J",
       "labelPreviousDocument": "",
-      "labelFreeText": "First Field - Judge's Name Second Field - Decision Notes",
-      "ordinalField": ""
+      "labelFreeText": "Judge's Name",
+      "ordinalField": "Decision Notes"
     }
   ],
   "Miscellaneous": [
@@ -276,7 +296,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "Amended Certificate of Service of [Document Name]",
@@ -296,16 +316,16 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "[First, Second, etc.] Amendment to [anything]",
       "documentType": "Amendment [anything]",
       "category": "Miscellaneous",
       "eventCode": "ADMT",
-      "scenario": "",
+      "scenario": "Nonstandard I",
       "labelPreviousDocument": "",
-      "labelFreeText": "",
+      "labelFreeText": "What is This Amendment For?",
       "ordinalField": ""
     },
     {
@@ -1923,6 +1943,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Notice of Election to Participate",
+      "documentType": "Notice of Election to Participate",
+      "category": "Notice",
+      "eventCode": "NOEP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Notice of Filing of Petition and Right to Intervene",
       "documentType": "Notice of Filing of Petition and Right to Intervene",
       "category": "Notice",
@@ -1960,6 +1990,16 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Do You Intend Not to File?",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Intervention",
+      "documentType": "Notice of Intervention",
+      "category": "Notice",
+      "eventCode": "NOI",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
       "ordinalField": ""
     },
     {
@@ -2478,7 +2518,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "Request for Judicial Notice",
@@ -3258,7 +3298,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
@@ -3318,7 +3358,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     }
   ],
   "Supplement": [
@@ -3330,7 +3370,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Is This a Supplement To?",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "[First, Second, etc.] Supplement To [anything]",
@@ -3350,7 +3390,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Is This Supplemental For?",
       "labelFreeText": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": ""
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [anything]",
