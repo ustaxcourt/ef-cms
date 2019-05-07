@@ -2,11 +2,12 @@ import { find, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * resets the state.form which is used throughout the app for storing html form values
- * state.form is used throughout the app for storing html form values
+ * clears data in the state.form based on which field is being updated
  *
  * @param {Object} providers the providers object
+ * @param {Object} providers.get the cerebral get function
  * @param {Object} providers.store the cerebral store object
+ * @param {Object} providers.props the cerebral props object
  */
 export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
