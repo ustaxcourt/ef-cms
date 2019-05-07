@@ -127,9 +127,9 @@ export const SupportingDocumentForm = connect(
               />
             </div>
           )}
-
-          <SupportingDocumentSelect />
-
+          {addDocketEntryHelper.showSupportingDocumentSelect && (
+            <SupportingDocumentSelect />
+          )}
           <div className="ustc-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1
