@@ -11,6 +11,6 @@ describe('unsetSaveSuccessAction', () => {
       },
     });
 
-    expect(result.state.screenMetadata.showSaveSuccess).toEqual(true);
+    expect(result.state.screenMetadata.showSaveSuccess).toEqual(false);
   });
 });

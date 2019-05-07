@@ -25,7 +25,7 @@ describe('updateDocketEntryWizardDataAction', () => {
     expect(result.state.form.certificateOfServiceYear).toEqual(undefined);
   });
 
-  it('clears form values when props.key=eventCode', async () => {
+  it('unsets form state values when props.key=eventCode', async () => {
     const result = await runAction(updateDocketEntryWizardDataAction, {
       props: {
         key: 'eventCode',
@@ -47,17 +47,10 @@ describe('updateDocketEntryWizardDataAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual({
-      freeText: null,
-      ordinalValue: null,
-      previousDocument: null,
-      secondaryDocument: null,
-      serviceDate: null,
-      trialLocation: null,
-    });
+    expect(result.state.form).toEqual({});
   });
 
-  it('clears secondaryDocument form items', async () => {
+  it('unsets secondaryDocument form state values', async () => {
     const result = await runAction(updateDocketEntryWizardDataAction, {
       props: {
         key: 'secondaryDocument.eventCode',
@@ -81,13 +74,6 @@ describe('updateDocketEntryWizardDataAction', () => {
 
     expect(result.state.form).toEqual({
       documentTitle: 'document title',
-      secondaryDocument: {
-        freeText: null,
-        ordinalValue: null,
-        previousDocument: null,
-        serviceDate: null,
-        trialLocation: null,
-      },
     });
   });
 });
