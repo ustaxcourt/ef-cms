@@ -1,10 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import close from '../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
+
+import { AccountMenu } from './AccountMenu';
 
 const getNavigationList = helper => {
   return (
@@ -33,7 +34,6 @@ export const Header = connect(
     betaBar: state.betaBar,
     helper: state.headerHelper,
     mobileMenu: state.mobileMenu,
-    signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
@@ -42,7 +42,6 @@ export const Header = connect(
     betaBar,
     helper,
     mobileMenu,
-    signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -106,15 +105,7 @@ export const Header = connect(
                     )}
                     {user.userId && (
                       <li className="user-dropdown">
-                        Hello, {user.name}
-                        <button
-                          type="button"
-                          className="usa-button-secondary sign-out"
-                          aria-label="logout"
-                          onClick={() => signOutSequence()}
-                        >
-                          <FontAwesomeIcon icon="sign-out-alt" />
-                        </button>{' '}
+                        <AccountMenu />
                       </li>
                     )}
                   </ul>
