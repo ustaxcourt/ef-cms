@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -5,9 +6,9 @@ import React from 'react';
 import close from '../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
-import { AccountMenu } from './AccountMenu';
+import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
-const getNavigationList = helper => {
+const NavigationItems = helper => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
       {helper.showMessages && (
@@ -34,6 +35,7 @@ export const Header = connect(
     betaBar: state.betaBar,
     helper: state.headerHelper,
     mobileMenu: state.mobileMenu,
+    signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
@@ -42,6 +44,7 @@ export const Header = connect(
     betaBar,
     helper,
     mobileMenu,
+    signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -72,7 +75,7 @@ export const Header = connect(
           <div className="usa-navbar">
             <div className="usa-logo" id="extended-logo">
               <a href="/">
-                <img src={seal} width="75" height="75" alt="USTC Seal" />
+                <img src={seal} alt="USTC Seal" />
               </a>
             </div>
             <button
@@ -85,16 +88,24 @@ export const Header = connect(
 
           <nav
             role="navigation"
-            className={mobileMenu.isVisible ? 'usa-nav is-visible' : 'usa-nav'}
+            className={
+              mobileMenu.isVisible
+                ? 'usa-nav mobile-menu is-visible'
+                : 'usa-nav'
+            }
           >
             <div className="usa-nav-inner">
               <button
                 className="usa-nav-close"
                 onClick={() => toggleMobileMenuSequence()}
               >
-                <img src={close} alt="close" />
+                Close{' '}
+                <FontAwesomeIcon
+                  icon={['fa', 'times-circle']}
+                  className="account-menu-icon"
+                />
               </button>
-              <div className="usa-nav-primary">{getNavigationList(helper)}</div>
+              <div className="usa-nav-primary">{NavigationItems(helper)}</div>
               {user && (
                 <div className="usa-nav-secondary">
                   <ul className="usa-unstyled-list usa-nav-secondary-links">
@@ -109,6 +120,9 @@ export const Header = connect(
                       </li>
                     )}
                   </ul>
+                  {mobileMenu.isVisible && (
+                    <AccountMenuItems signOut={signOutSequence} />
+                  )}
                 </div>
               )}
             </div>
