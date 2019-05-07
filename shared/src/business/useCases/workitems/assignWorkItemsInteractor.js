@@ -79,7 +79,6 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
       caseToUpdate: caseToUpdate.validate().toRawObject(),
     });
 
-    console.log('should be seting as unread', newMessage.messageId);
     await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
       messageId: newMessage.messageId,
