@@ -59,7 +59,7 @@ export const IndividualWorkQueueInbox = connect(
                       size="lg"
                     />
                   )}
-                  {!item.readAt && !item.showBatchedStatusIcon && (
+                  {!item.isRead && !item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['fas', 'envelope']}
                       className={`${item.statusIcon} iconStatusUnread`}
@@ -79,7 +79,7 @@ export const IndividualWorkQueueInbox = connect(
                       messageId: item.currentMessage.messageId,
                     })}
                     className={
-                      item.readAt ? 'case-link' : 'link case-link-bold'
+                      item.isRead ? 'case-link' : 'link case-link-bold'
                     }
                   >
                     {item.document.documentType}
