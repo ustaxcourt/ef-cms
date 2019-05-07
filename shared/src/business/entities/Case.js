@@ -645,7 +645,7 @@ Case.prototype.updateDocketRecord = function(
 
 /**
  *
- * @returns {*[]}
+ * @returns {*|[]}
  */
 Case.getCaseTypes = () => {
   return CASE_TYPES;
@@ -716,7 +716,7 @@ Case.areYearsUnique = yearAmounts => {
 
 /**
  *
- * @returns {*[]}
+ * @returns {*|[]}
  */
 Case.getDocumentTypes = () => {
   return Object.keys(Case.documentTypes)
