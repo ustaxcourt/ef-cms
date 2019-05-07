@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import { presenter } from '../presenter';
 
 let test;
