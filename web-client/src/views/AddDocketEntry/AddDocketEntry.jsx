@@ -60,7 +60,7 @@ export const AddDocketEntry = connect(
                 });
               }}
             >
-              Finish
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finish&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
             <button
               type="button"
