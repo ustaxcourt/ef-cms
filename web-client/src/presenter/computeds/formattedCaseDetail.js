@@ -135,6 +135,25 @@ const formatDocketRecordWithDocument = (
   });
 };
 
+const getDocketRecordSortFunc = function(sortBy) {
+  const byIndex = (a, b) => a.index - b.index;
+  const byIndexReverse = (a, b) => byIndex(b, a);
+  const byDate = (a, b) => a.index - b.index; // TODO
+  const byDateReverse = (a, b) => byDate(b, a);
+
+  switch (sortBy) {
+    case 'byIndexDesc':
+      return byIndexReverse;
+    case 'byIndex':
+      return byIndex;
+    case 'byDateDesc':
+      return byDateReverse;
+    case 'byDate': // fall through
+    default:
+      return byDate;
+  }
+};
+
 const formatCase = (caseDetail, caseDetailErrors) => {
   if (_.isEmpty(caseDetail)) {
     return {};
@@ -151,10 +170,6 @@ const formatCase = (caseDetail, caseDetailErrors) => {
       result.documents,
     );
   }
-
-  result.docketRecordWithDocument.sort((a, b) => {
-    return a.index - b.index;
-  });
 
   if (result.respondent)
     result.respondent.formattedName = `${result.respondent.name} ${
@@ -209,7 +224,11 @@ const formatCase = (caseDetail, caseDetailErrors) => {
 
 export const formattedCases = get => {
   const cases = get(state.cases);
-  return cases.map(formatCase);
+  const docketRecordSort = get(state.prefs.docketRecordSort);
+  return cases.map(caseObj => {
+    const result = formatCase(caseObj);
+    return result.sort(getDocketRecordSortFunc(docketRecordSort));
+  });
 };
 
 export const formattedCaseDetail = get => {
