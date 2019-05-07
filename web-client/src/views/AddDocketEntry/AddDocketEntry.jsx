@@ -60,7 +60,7 @@ export const AddDocketEntry = connect(
                 });
               }}
             >
-              Save and Finish
+              Finish
             </button>
             <button
               type="button"
@@ -72,9 +72,8 @@ export const AddDocketEntry = connect(
               }}
             >
               {screenMetadata.supporting &&
-                'Save and Add Another Supporting Document'}
-              {!screenMetadata.supporting &&
-                'Save and Add Supporting Document(s)'}
+                'Add Another Supporting Document(s)'}
+              {!screenMetadata.supporting && 'Add Supporting Document(s)'}
             </button>
             <a
               href={`/case-detail/${caseDetail.docketNumber}`}
