@@ -7,7 +7,6 @@ import { state } from 'cerebral';
  * @param {Object} providers.applicationContext the application context needed for getting the validation use case
  * @param {Object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {Object} providers.get the cerebral get function used for getting state.form
- * @param {Object} providers.props the cerebral props object
  * @returns {Object} the next path based on if validation was successful or error
  */
 export const validateDocketEntryAction = ({
