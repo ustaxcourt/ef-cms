@@ -146,7 +146,7 @@ option:first-child {
 .usa-input-error input,
 .usa-input-error textarea,
 .usa-input-error select {
-  width: calc(100%);
+  width: calc(100% + 1.9rem);
 }
 
 .no-bottom-margin {
