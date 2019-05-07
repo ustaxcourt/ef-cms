@@ -13,7 +13,7 @@ export const fileUploadStatusHelper = get => {
   } else if (!Number.isFinite(timeRemaining)) {
     statusMessage = 'Preparing Upload';
   } else if (timeRemaining < 60) {
-    statusMessage = 'Less than 1 Minute Left';
+    statusMessage = 'Less Than 1 Minute Left';
   } else if (timeRemaining < 60 * 60) {
     statusMessage = `${Math.floor(timeRemaining / 60)} Minutes Left`;
   } else {
