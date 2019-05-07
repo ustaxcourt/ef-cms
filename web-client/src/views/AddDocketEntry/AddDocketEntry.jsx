@@ -60,10 +60,11 @@ export const AddDocketEntry = connect(
                 });
               }}
             >
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finish&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              Finish
             </button>
             <button
               type="button"
+              id="save-and-add-supporting"
               className="usa-button-secondary"
               onClick={() => {
                 submitDocketEntrySequence({
