@@ -29,6 +29,7 @@ export const validateDocketEntryAction = ({
       'dateReceived',
       'eventCode',
       'freeText',
+      'freeText2',
       'previousDocument',
       'serviceDate',
       'trialLocation',
