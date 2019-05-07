@@ -52,7 +52,7 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
     workItem => workItem.isInitializeCase,
   );
   if (initializeCaseWorkItem) {
-    const newMessaage = initializeCaseWorkItem.recallFromIRSBatchSystem({
+    const newMessage = initializeCaseWorkItem.recallFromIRSBatchSystem({
       user,
     });
     const invalidEntityError = new InvalidEntityError(
@@ -106,10 +106,10 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
     await createMappingRecord({
       applicationContext,
       item: {
-        messageId: newMessaage.messageId,
+        messageId: newMessage.messageId,
       },
       pkId: initializeCaseWorkItem.assigneeId,
-      skId: newMessaage.messageId,
+      skId: newMessage.messageId,
       type: 'unread-message',
     });
 
