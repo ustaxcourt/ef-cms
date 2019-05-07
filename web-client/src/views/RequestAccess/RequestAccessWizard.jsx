@@ -48,7 +48,9 @@ export const RequestAccessWizard = connect(
         <section className="usa-section usa-grid">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
-          {showModal && <FormCancelModalDialog />}
+          {showModal == 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <SuccessNotification />
           <ErrorNotification />
           <Tabs asSwitch defaultActiveTab="RequestAccess" bind="wizardStep">
