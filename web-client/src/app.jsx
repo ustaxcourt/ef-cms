@@ -1,3 +1,5 @@
+import { queryStringDecoder } from './queryStringDecoder';
+
 import {
   faArrowAltCircleLeft,
   faCheckCircle as faCheckCircleRegular,
@@ -66,6 +68,13 @@ const app = {
     applicationContext.setCurrentUserToken(token);
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+
+    const { code, token: queryToken } = queryStringDecoder();
+
+    if (process.env.USTC_ENV === 'prod' && (!user && !code && !queryToken)) {
+      window.location.replace(presenter.state.cognitoLoginUrl);
+      return;
+    }
 
     presenter.state.constants = applicationContext.getConstants();
 
