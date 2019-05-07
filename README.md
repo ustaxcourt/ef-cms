@@ -105,7 +105,6 @@ You can log in using these usernames:
 taxpayer
 petitionsclerk
 docketclerk
-intakeclerk
 respondent
 seniorattorney
 ```
@@ -120,7 +119,6 @@ To run use Cognito, start the web client with `npm run dev:cognito` (instead of 
 petitioner1@example.com – petitioner5@example.com
 petitionsclerk1@example.com – petitionsclerk5@example.com
 docketclerk1@example.com – docketclerk5@example.com
-intakeclerk1@example.com – intakeclerk5@example.com
 respondent1@example.com – respondent5@example.com
 seniorattorney1@example.com – seniorattorney5@example.com
 ```

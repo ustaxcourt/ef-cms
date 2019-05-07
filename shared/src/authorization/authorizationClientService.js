@@ -23,16 +23,6 @@ const AUTHORIZATION_MAP = {
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
   ],
-  intakeclerk: [
-    exports.CASE_METADATA,
-    exports.GET_CASE,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_CASES_BY_STATUS,
-    exports.UPDATE_CASE,
-    exports.WORKITEM,
-    exports.GET_USERS_IN_SECTION,
-    exports.GET_READ_MESSAGES,
-  ],
   petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
     exports.CASE_METADATA,
