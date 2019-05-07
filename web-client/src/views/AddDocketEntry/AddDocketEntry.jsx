@@ -11,10 +11,11 @@ import React from 'react';
 
 export const AddDocketEntry = connect(
   {
+    caseDetail: state.caseDetail,
     screenMetadata: state.screenMetadata,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
-  ({ submitDocketEntrySequence, screenMetadata }) => {
+  ({ caseDetail, submitDocketEntrySequence, screenMetadata }) => {
     return (
       <React.Fragment>
         <div className="usa-grid breadcrumb">
@@ -75,6 +76,12 @@ export const AddDocketEntry = connect(
               {!screenMetadata.supporting &&
                 'Save and Add Supporting Document(s)'}
             </button>
+            <a
+              href={`/case-detail/${caseDetail.docketNumber}`}
+              id="cancel-button"
+            >
+              Cancel
+            </a>
           </div>
         </section>
       </React.Fragment>

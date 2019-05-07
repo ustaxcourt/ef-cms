@@ -221,6 +221,13 @@ export const PrimaryDocumentForm = connect(
                     });
                     validateDocketEntrySequence();
                     break;
+                  case 'clear':
+                    updateDocketEntryFormValueSequence({
+                      key: name,
+                      value: '',
+                    });
+                    validateDocketEntrySequence();
+                    break;
                 }
                 return true;
               }}
@@ -234,8 +241,7 @@ export const PrimaryDocumentForm = connect(
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
               className={`ustc-form-group ${
-                validationErrors.secondaryDocument &&
-                validationErrors.secondaryDocument.eventCode
+                validationErrors.secondaryDocument && !form.secondaryDocument
                   ? 'usa-input-error'
                   : ''
               }`}
@@ -274,14 +280,23 @@ export const PrimaryDocumentForm = connect(
                       });
                       validateDocketEntrySequence();
                       break;
+                    case 'clear':
+                      updateDocketEntryFormValueSequence({
+                        key: name,
+                        value: '',
+                      });
+                      validateDocketEntrySequence();
+                      break;
                   }
                   return true;
                 }}
               />
-              <Text
-                className="usa-input-error-message"
-                bind="validationErrors.secondaryDocument.eventCode"
-              />
+              {!form.secondaryDocument && (
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.secondaryDocument"
+                />
+              )}
             </div>
           )}
 
