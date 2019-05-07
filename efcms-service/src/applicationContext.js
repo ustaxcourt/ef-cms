@@ -98,9 +98,6 @@ const {
   getNotifications,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getReadMessagesForUser,
-} = require('../../shared/src/persistence/dynamo/messages/getReadMessagesForUser');
-const {
   getSentWorkItemsForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
 const {
@@ -112,6 +109,9 @@ const {
 const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+const {
+  getUnreadMessagesForUser,
+} = require('../../shared/src/persistence/dynamo/messages/getUnreadMessagesForUser');
 const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
@@ -271,9 +271,9 @@ module.exports = (appContextUser = {}) => {
         getCasesForRespondent,
         getDownloadPolicyUrl,
         getInternalUsers,
-        getReadMessagesForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getUnreadMessagesForUser,
         getUploadPolicy,
         getUserById,
         getUsersInSection,

@@ -12,7 +12,11 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.saveWorkItemForPaper = async ({ workItem, applicationContext }) => {
+exports.saveWorkItemForPaper = async ({
+  messageId,
+  workItem,
+  applicationContext,
+}) => {
   // create the work item
   await put({
     Item: {
@@ -29,6 +33,16 @@ exports.saveWorkItemForPaper = async ({ workItem, applicationContext }) => {
     pkId: workItem.assigneeId,
     skId: workItem.workItemId,
     type: 'workItem',
+  });
+
+  await createMappingRecord({
+    applicationContext,
+    item: {
+      messageId,
+    },
+    pkId: workItem.assigneeId,
+    skId: messageId,
+    type: 'unread-message',
   });
 
   // section inbox
