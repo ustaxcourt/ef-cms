@@ -30,6 +30,7 @@ describe('addDocketEntryHelper', () => {
 
     const expected = {
       showObjection: false,
+      showPractitionerParty: false,
       showPrimaryDocumentValid: false,
       showSecondaryDocumentValid: false,
       showSecondaryParty: false,
@@ -42,10 +43,31 @@ describe('addDocketEntryHelper', () => {
     expect(Array.isArray(result.supportingDocumentTypeList)).toBeTruthy();
   });
 
+  it('does not error with empty caseDetail (for cerebral debugger)', async () => {
+    let testState = {
+      caseDetail: {},
+      constants: {
+        CATEGORY_MAP,
+        INTERNAL_CATEGORY_MAP,
+        PARTY_TYPES,
+      },
+    };
+
+    const result = await runCompute(addDocketEntryHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({});
+  });
+
   it('shows objection if document type is a motion', async () => {
-    state.form = { documentType: 'Motion for Leave to File' };
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      eventCode: 'M115',
+      scenario: 'Nonstandard H',
+    };
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showObjection).toBeTruthy();
+    expect(result.primary.showSecondaryDocumentForm).toBeTruthy();
   });
 
   it('indicates file uploads are valid', async () => {
@@ -95,5 +117,45 @@ describe('addDocketEntryHelper', () => {
     state.caseDetail.respondent = { name: 'Test Respondent' };
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showRespondentParty).toBeTruthy();
+  });
+
+  it('does not show practitioner option under Parties Filing if practitioners on case is an empty array', async () => {
+    state.caseDetail.practitioners = [];
+    const result = await runCompute(addDocketEntryHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
+  });
+
+  it('does not show practitioner option under Parties Filing if practitioners on case is not defined', async () => {
+    const result = await runCompute(addDocketEntryHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
+  });
+
+  it('shows single practitioner under Parties Filing if they are associated with the case', async () => {
+    state.caseDetail.practitioners = [{ name: 'Test Practitioner' }];
+    const result = await runCompute(addDocketEntryHelper, { state });
+    expect(result.showPractitionerParty).toBeTruthy();
+    expect(result.practitionerNames).toEqual(['Test Practitioner']);
+  });
+
+  it('shows multiple practitioners under Parties Filing if they are associated with the case', async () => {
+    state.caseDetail.practitioners = [
+      { name: 'Test Practitioner' },
+      { name: 'Test Practitioner1' },
+    ];
+    const result = await runCompute(addDocketEntryHelper, { state });
+    expect(result.showPractitionerParty).toBeTruthy();
+    expect(result.practitionerNames).toEqual([
+      'Test Practitioner',
+      'Test Practitioner1',
+    ]);
+  });
+
+  it("shows should show inclusions when previous document isn't secondary", async () => {
+    state.form.previousDocument = 'Statement of Taxpayer Identification';
+    state.screenMetadata = {
+      filedDocumentIds: ['abc81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+    };
+    const result = await runCompute(addDocketEntryHelper, { state });
+    expect(result.showSupportingInclusions).toBeTruthy();
   });
 });

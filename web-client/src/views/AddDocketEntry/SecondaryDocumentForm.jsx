@@ -77,16 +77,19 @@ export const SecondaryDocumentForm = connect(
           )}
 
           <div className="ustc-form-group">
-            <label htmlFor="additional-info" id="additional-info-label">
+            <label
+              htmlFor="secondary-additional-info"
+              id="secondary-additional-info-label"
+            >
               Additional Info 1
             </label>
             <input
-              id="additional-info"
+              id="secondary-additional-info"
               type="text"
-              aria-describedby="additional-info-label"
-              name="additionalInfo"
+              aria-describedby="secondary-additional-info-label"
+              name="secondaryDocument.additionalInfo"
               autoCapitalize="none"
-              value={form.additionalInfo || ''}
+              value={form.secondaryDocument.additionalInfo || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -100,10 +103,10 @@ export const SecondaryDocumentForm = connect(
           </div>
           <div className="ustc-form-group add-to-coversheet-checkbox">
             <input
-              id="add-to-coversheet"
+              id="secondary-add-to-coversheet"
               type="checkbox"
-              name="addToCoversheet"
-              checked={form.addToCoversheet}
+              name="secondaryDocument.addToCoversheet"
+              checked={form.secondaryDocument.addToCoversheet}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -112,20 +115,25 @@ export const SecondaryDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
+            <label htmlFor="secondary-add-to-coversheet">
+              Add to Cover Sheet
+            </label>
           </div>
 
           <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label">
+            <label
+              htmlFor="secondary-additional-info2"
+              id="secondary-additional-info2-label"
+            >
               Additional Info 2
             </label>
             <input
-              id="additional-info2"
+              id="secondary-additional-info2"
               type="text"
-              aria-describedby="additional-info2-label"
-              name="additionalInfo2"
+              aria-describedby="secondary-additional-info2-label"
+              name="secondaryDocument.additionalInfo2"
               autoCapitalize="none"
-              value={form.additionalInfo2 || ''}
+              value={form.secondaryDocument.additionalInfo2 || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,

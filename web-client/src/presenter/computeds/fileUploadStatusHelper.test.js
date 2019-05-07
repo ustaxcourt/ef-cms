@@ -13,14 +13,14 @@ describe('fileUploadStatusHelper', () => {
     expect(result.statusMessage).toEqual('Preparing Upload');
   });
 
-  it('returns `Less than 1 Minute Left` for anything less than 60 seconds', async () => {
+  it('returns `Less Than 1 Minute Left` for anything less than 60 seconds', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
         timeRemaining: 40,
       },
     });
 
-    expect(result.statusMessage).toEqual('Less than 1 Minute Left');
+    expect(result.statusMessage).toEqual('Less Than 1 Minute Left');
   });
 
   it('returns `1 Minutes Left` for time remaining being something between 60 and 3600 seconds', async () => {

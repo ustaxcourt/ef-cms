@@ -121,10 +121,7 @@ export const BeforeStartingCase = () => (
           <p>
             Scan your Petition and IRS notice into one Petition PDF or combine
             them digitally. This is what youʼll upload to the Court to start
-            your case.{' '}
-            <span className="color-red">
-              Uploads are limited to {MAX_FILE_SIZE_MB}MB.
-            </span>{' '}
+            your case. Uploads are limited to {MAX_FILE_SIZE_MB}MB.{' '}
             <a href={howToMergePDFs} target="_blank" rel="noopener noreferrer">
               Learn more about how to merge files into one PDF.
             </a>

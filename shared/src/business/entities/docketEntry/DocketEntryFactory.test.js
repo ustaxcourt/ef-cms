@@ -65,6 +65,36 @@ describe('DocketEntryFactory', () => {
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
+    it('should require one of [partyPrimary, partySecondary, partyRespondent, partyPractitioner] to be selected', () => {
+      rawEntity.practitioner = [
+        {
+          name: 'Test Practitioner',
+          partyPractitioner: false,
+        },
+        {
+          name: 'Test Practitioner1',
+          partyPractitioner: false,
+        },
+      ];
+      rawEntity.partyPrimary = false;
+      expect(errors().partyPrimary).toEqual('Select a filing party.');
+    });
+
+    it('should have no errors if a single partyPractitioner is true', () => {
+      rawEntity.practitioner = [
+        {
+          name: 'Test Practitioner',
+          partyPractitioner: true,
+        },
+        {
+          name: 'Test Practitioner1',
+          partyPractitioner: false,
+        },
+      ];
+      rawEntity.partyPrimary = false;
+      expect(errors().partyPrimary).toEqual(undefined);
+    });
+
     it('should not require Additional Info 1', () => {
       expect(errors().additionalInfo).toEqual(undefined);
     });
@@ -113,13 +143,48 @@ describe('DocketEntryFactory', () => {
         expect(errors().attachments).toEqual(undefined);
       });
 
+      it('should not require Objections', () => {
+        expect(errors().objections).toEqual(undefined);
+      });
+
       describe('Motion Document', () => {
         beforeEach(() => {
           rawEntity.category = 'Motion';
         });
 
-        it('should not require Objections', () => {
+        it('should require Objections', () => {
+          expect(errors().objections).toEqual(
+            'Enter selection for Objections.',
+          );
+          rawEntity.objections = 'No';
           expect(errors().objections).toEqual(undefined);
+        });
+      });
+
+      describe('Nonstandard H', () => {
+        beforeEach(() => {
+          rawEntity.scenario = 'Nonstandard H';
+        });
+
+        it('should require secondary file', () => {
+          expect(errors().secondaryDocumentFile).toEqual(
+            'A file was not selected.',
+          );
+          rawEntity.secondaryDocumentFile = {};
+          expect(errors().secondaryDocumentFile).toEqual(undefined);
+        });
+
+        describe('Secondary Document', () => {
+          beforeEach(() => {
+            rawEntity.secondaryDocument = {};
+          });
+
+          it('should validate secondary document', () => {
+            expect(errors().secondaryDocument).toEqual({
+              category: 'You must select a category.',
+              documentType: 'You must select a document type.',
+            });
+          });
         });
       });
     });

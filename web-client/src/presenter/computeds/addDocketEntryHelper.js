@@ -1,4 +1,4 @@
-import { find, orderBy } from 'lodash';
+import { find, includes, orderBy } from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
@@ -6,6 +6,7 @@ import {
   getOptionsForCategory,
   getPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
+import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 
 const getInternalDocumentTypes = typeMap => {
   let filteredTypeList = [];
@@ -102,25 +103,53 @@ export const addDocketEntryHelper = get => {
     secondaryCategoryInformation,
   );
 
+  const previousDocument =
+    form.previousDocument &&
+    find(
+      caseDetail.documents,
+      doc =>
+        includes(documentIdWhitelist, doc.documentId) &&
+        (doc.documentTitle || doc.documentType) === form.previousDocument,
+    );
+  const showSupportingInclusions =
+    previousDocument && previousDocument.relationship !== 'secondaryDocument';
+
   if (optionsForCategory.showSecondaryDocumentSelect) {
     optionsForCategory.showSecondaryDocumentSelect = false;
     optionsForCategory.showSecondaryDocumentForm = true;
+  }
+
+  let showPractitionerParty = false;
+  let practitionerNames = [];
+  if (caseDetail.practitioners && caseDetail.practitioners.length) {
+    showPractitionerParty = true;
+
+    caseDetail.practitioners.forEach(practitioner => {
+      practitionerNames.push(practitioner.name);
+    });
   }
 
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
     partyValidationError,
+    practitionerNames,
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
+    showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showRespondentParty: !!caseDetail.respondent,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
+    showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
+      form.documentType,
+    ),
+    showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
+    showSupportingInclusions,
     supportingDocumentTypeList,
   };
 };
