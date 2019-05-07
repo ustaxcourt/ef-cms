@@ -101,7 +101,7 @@ describe('setMessageAsReadInteractor integration test', () => {
     inbox = await getWorkItemsForUser({
       applicationContext,
     });
-    expect(inbox.readAt).toBeUndefined();
+    expect(inbox.isRead).toBeFalsy();
 
     const messageId = workItemEntity.getLatestMessageEntity().messageId;
 
@@ -115,7 +115,7 @@ describe('setMessageAsReadInteractor integration test', () => {
     });
     expect(inbox).toMatchObject([
       {
-        readAt: DATETIME,
+        isRead: true,
       },
     ]);
   });

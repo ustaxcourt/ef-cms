@@ -45,7 +45,7 @@ describe('getWorkItemsForUser', () => {
         return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
       },
       getPersistenceGateway: () => ({
-        getReadMessagesForUser: async () => [],
+        getUnreadMessagesForUser: async () => [],
         getWorkItemsForUser: async () => [],
       }),
     };
@@ -63,7 +63,7 @@ describe('getWorkItemsForUser', () => {
         return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
       },
       getPersistenceGateway: () => ({
-        getReadMessagesForUser: async () => [],
+        getUnreadMessagesForUser: async () => [],
         getWorkItemsForUser: async () => [mockWorkItem],
       }),
     };

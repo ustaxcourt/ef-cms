@@ -11,7 +11,7 @@ exports.getNotifications = async ({ applicationContext }) => {
     .getWorkItemsForUser({ applicationContext });
 
   const unreadCount = workItems.filter(
-    item => !item.readAt && !item.completedAt,
+    item => !item.isRead && !item.completedAt,
   ).length;
 
   return { unreadCount };
