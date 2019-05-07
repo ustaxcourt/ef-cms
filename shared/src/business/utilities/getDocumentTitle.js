@@ -45,6 +45,20 @@ exports.getDocumentTitle = ({ filingEvent, relatedInfo }) => {
       );
     case 'nonstandard g':
       return replaceBracketed(filingEvent.documentTitle, relatedInfo.ordinal);
+    case 'nonstandard i':
+      return replaceBracketed(
+        filingEvent.documentTitle,
+        relatedInfo.ordinal,
+        relatedInfo.userText,
+      );
+    case 'nonstandard j':
+      return replaceBracketed(
+        filingEvent.documentTitle,
+        relatedInfo.ordinal,
+        relatedInfo.userText,
+        relatedInfo.userText2,
+      );
+
     case 'standard': // fall-through
       return filingEvent.documentTitle;
     default:
