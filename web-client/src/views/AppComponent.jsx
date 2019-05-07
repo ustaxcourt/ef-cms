@@ -2,7 +2,6 @@ import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
-import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
 import { DashboardPractitioner } from './DashboardPractitioner';
@@ -33,7 +32,6 @@ const pages = {
   CaseDetail,
   CaseDetailInternal,
   DashboardDocketClerk,
-  DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPractitioner,
