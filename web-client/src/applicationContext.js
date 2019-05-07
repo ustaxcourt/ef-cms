@@ -64,7 +64,6 @@ import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
-import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
@@ -139,7 +138,6 @@ const allUseCases = {
   generateDocumentTitle,
   getCase,
   getCaseTypes,
-  getCasesByStatus,
   getCasesByUser,
   getCasesForRespondent,
   getFilingTypes,
