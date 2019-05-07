@@ -43,10 +43,31 @@ describe('addDocketEntryHelper', () => {
     expect(Array.isArray(result.supportingDocumentTypeList)).toBeTruthy();
   });
 
+  it('does not error with empty caseDetail (for cerebral debugger)', async () => {
+    let testState = {
+      caseDetail: {},
+      constants: {
+        CATEGORY_MAP,
+        INTERNAL_CATEGORY_MAP,
+        PARTY_TYPES,
+      },
+    };
+
+    const result = await runCompute(addDocketEntryHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({});
+  });
+
   it('shows objection if document type is a motion', async () => {
-    state.form = { documentType: 'Motion for Leave to File' };
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      eventCode: 'M115',
+      scenario: 'Nonstandard H',
+    };
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showObjection).toBeTruthy();
+    expect(result.primary.showSecondaryDocumentForm).toBeTruthy();
   });
 
   it('indicates file uploads are valid', async () => {
