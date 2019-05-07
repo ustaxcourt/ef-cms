@@ -1,8 +1,10 @@
 /**
- * creates the default success alert object
+ * returns the alertSuccess object to display an alert message based
+ * on the next step the user chose
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.props the cerebral props object
+ * @param {Object} providers.props.supportingDocument boolean that indicates whether or not they have supporting documents to upload
  * @returns {Object} the alertSuccess object with default strings
  */
 export const getDocketEntryAlertSuccessAction = ({ props }) => {

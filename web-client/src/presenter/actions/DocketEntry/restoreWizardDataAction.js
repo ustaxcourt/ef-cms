@@ -4,6 +4,7 @@ import { state } from 'cerebral';
  * restore wizard data
  *
  * @param {Object} providers the providers object
+ * @param {Object} providers.get the cerebral get function
  * @param {Object} providers.store the cerebral store object
  * @param {Object} providers.props the cerebral props object
  */
