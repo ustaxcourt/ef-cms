@@ -55,6 +55,10 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
       store.unset(state.form.secondaryDocument.trialLocation);
       store.unset(state.form.secondaryDocument.ordinalValue);
       store.unset(state.form.secondaryDocument.freeText);
+
+      if (!props.value) {
+        store.unset(state.form.secondaryDocument);
+      }
       break;
     case 'previousDocument':
       if (supporting) {
