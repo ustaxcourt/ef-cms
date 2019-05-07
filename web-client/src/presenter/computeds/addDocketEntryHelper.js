@@ -147,6 +147,7 @@ export const addDocketEntryHelper = get => {
     showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
       form.documentType,
     ),
+    showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
     showSupportingInclusions,
     supportingDocumentTypeList,
