@@ -81,6 +81,25 @@ export const getOptionsForCategory = (caseDetail, categoryInformation) => {
       };
       break;
     }
+    case 'Nonstandard I': {
+      options = {
+        ordinalField: categoryInformation.ordinalField,
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: categoryInformation.labelFreeText,
+      };
+      break;
+    }
+    case 'Nonstandard J': {
+      options = {
+        showNonstandardForm: true,
+        showTextInput: true,
+        showTextInput2: true,
+        textInputLabel: categoryInformation.labelFreeText,
+        textInputLabel2: categoryInformation.labelFreeText2,
+      };
+      break;
+    }
   }
 
   return options;
