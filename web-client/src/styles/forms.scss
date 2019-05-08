@@ -1,9 +1,9 @@
 label {
-  max-width: 100%;
-  margin: 0 0 15px;
-  font-size: 17px;
-  font-weight: $font-semibold;
-  line-height: 1;
+  // max-width: 100%;
+  // margin: 0 0 15px;
+  // font-size: 17px;
+  // font-weight: $font-semibold;
+  // line-height: 1;
   .usa-form-hint {
     margin: 0;
   }
@@ -48,25 +48,25 @@ textarea.caption {
   margin-bottom: 5px;
 }
 
-input[type='email']:hover,
-input[type='email']:focus,
-input[type='number']:hover,
-input[type='number']:focus,
-input[type='tel']:hover,
-input[type='tel']:focus,
-input[type='text']:hover,
-input[type='text']:focus,
-textarea:hover,
-textarea:focus,
-select:hover,
-select:focus {
-  &:not([disabled]) {
-    border: 1px solid $color-primary;
-    box-shadow: 0 0 0 1px $color-primary;
-    transition-duration: 0.1s;
-    transition-property: all;
-  }
-}
+// input[type='email']:hover,
+// input[type='email']:focus,
+// input[type='number']:hover,
+// input[type='number']:focus,
+// input[type='tel']:hover,
+// input[type='tel']:focus,
+// input[type='text']:hover,
+// input[type='text']:focus,
+// textarea:hover,
+// textarea:focus,
+// select:hover,
+// select:focus {
+//   &:not([disabled]) {
+//     border: 1px solid $color-primary;
+//     box-shadow: 0 0 0 1px $color-primary;
+//     transition-duration: 0.1s;
+//     transition-property: all;
+//   }
+// }
 
 [type='radio']:hover + label::before,
 [type='radio']:focus + label::before {
