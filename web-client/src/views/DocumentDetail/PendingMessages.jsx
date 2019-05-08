@@ -96,7 +96,7 @@ export const PendingMessages = connect(
                       workItem.workItemId,
                     )}
                     aria-controls={`history-card-${idx}`}
-                    className={`${
+                    className={`usa-button ${
                       documentDetailHelper.showAction(
                         'history',
                         workItem.workItemId,
@@ -123,7 +123,7 @@ export const PendingMessages = connect(
                         workItem.workItemId,
                       )}
                       aria-controls={`history-card-${idx}`}
-                      className={`${
+                      className={`usa-button ${
                         documentDetailHelper.showAction(
                           'complete',
                           workItem.workItemId,
@@ -155,7 +155,7 @@ export const PendingMessages = connect(
                       )}
                       aria-controls={`forward-card-${idx}`}
                       data-workitemid={workItem.workItemId}
-                      className={`send-to ${
+                      className={`usa-button send-to ${
                         documentDetailHelper.showAction(
                           'forward',
                           workItem.workItemId,
