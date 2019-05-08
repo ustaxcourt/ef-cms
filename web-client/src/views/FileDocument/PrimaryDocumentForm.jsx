@@ -96,7 +96,7 @@ export const PrimaryDocumentForm = connect(
               }
             >
               <fieldset className="usa-fieldset">
-                <legend>
+                <legend id="certificate-of-service-legend">
                   Does Your Filing Include A Certificate of Service?
                 </legend>
                 {['Yes', 'No'].map(option => (
@@ -107,6 +107,7 @@ export const PrimaryDocumentForm = connect(
                       name="certificateOfService"
                       className="usa-radio__input"
                       value={option}
+                      aria-describedby="certificate-of-service-legend"
                       checked={form.certificateOfService === (option === 'Yes')}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
