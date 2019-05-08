@@ -19,7 +19,7 @@ export const RequestAccessWizard = connect(
   ({ caseDetail, chooseWizardStepSequence, showModal }) => {
     return (
       <>
-        <div className="usa-grid breadcrumb">
+        <div className="grid-container breadcrumb">
           <Tabs asSwitch bind="wizardStep">
             <Tab tabName="RequestAccess">
               <FontAwesomeIcon icon="caret-left" />
@@ -45,7 +45,7 @@ export const RequestAccessWizard = connect(
             </Tab>
           </Tabs>
         </div>
-        <section className="usa-section usa-grid">
+        <section className="usa-section grid-container">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
           {showModal && <FormCancelModalDialog />}

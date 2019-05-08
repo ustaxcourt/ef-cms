@@ -28,28 +28,33 @@ export const Header = connect(
       <>
         {betaBar.isVisible && (
           <div className="beta">
-            <div className="usa-grid">
-              <div className="usa-width-five-sixths">
-                This is a testing site for the U.S. Tax Court and not intended
-                public use. To learn more about starting a case, visit the{' '}
-                <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>
-                .
-              </div>
-              <div className="usa-width-one-sixth">
-                <button
-                  className="usa-button usa-button-outline usa-button-unstyled"
-                  onClick={() => toggleBetaBarSequence()}
-                >
-                  <img src={close} alt="close" />
-                </button>
+            <div className="grid-container">
+              <div className="grid-row">
+                <div className="grid-col-10">
+                  This is a testing site for the U.S. Tax Court and not intended
+                  public use. To learn more about starting a case, visit the{' '}
+                  <a href="https://www.ustaxcourt.gov/">
+                    U.S. Tax Court website
+                  </a>
+                  .
+                </div>
+                <div className="grid-col-2">
+                  <button
+                    className="usa-button usa-button__outline usa-button__unstyled"
+                    onClick={() => toggleBetaBarSequence()}
+                  >
+                    <img src={close} alt="close" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
+        {/*
         <header className="usa-header usa-header-extended" role="banner">
           <div className="usa-navbar">
             <div className="usa-logo" id="extended-logo">
-              <em className="usa-logo-text">
+              <em className="usa-logo__text">
                 <a href="/">United States Tax Court</a>
               </em>
             </div>
@@ -85,7 +90,7 @@ export const Header = connect(
                         Hello, {user.name}
                         <button
                           type="button"
-                          className="usa-button-secondary sign-out"
+                          className="usa-button--outline sign-out"
                           aria-label="logout"
                           onClick={() => signOutSequence()}
                         >
@@ -99,6 +104,7 @@ export const Header = connect(
             </div>
           </nav>
         </header>
+        */}
       </>
     );
   },

@@ -28,7 +28,7 @@ export const RequestAccessDocumentForm = connect(
       <React.Fragment>
         <h3>Tell Us About This Document</h3>
         <div className="blue-container">
-          <div className="usa-grid-full">
+          <div className="grid-container padding-x-0">
             <div className="usa-width-seven-twelfths push-right">
               <div
                 id="document-upload-hint"

@@ -37,7 +37,7 @@ class SuccessNotificationComponent extends React.Component {
             role="alert"
             ref={this.notificationRef}
           >
-            <div className="usa-grid-full">
+            <div className="grid-container padding-x-0">
               <div className="usa-alert-body usa-width-five-sixths">
                 <p className="heading-3 usa-alert-heading">
                   {alertSuccess.title}

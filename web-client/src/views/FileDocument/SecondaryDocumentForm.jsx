@@ -29,7 +29,7 @@ export const SecondaryDocumentForm = connect(
       <React.Fragment>
         <h3>Tell Us About the {form.secondaryDocument.documentTitle}</h3>
         <div className="blue-container">
-          <div className="usa-grid-full">
+          <div className="grid-container padding-x-0">
             <div className="usa-width-seven-twelfths push-right">
               <div
                 id="document-secondary-upload-hint"

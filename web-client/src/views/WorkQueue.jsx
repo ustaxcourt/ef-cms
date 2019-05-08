@@ -57,7 +57,7 @@ export const WorkQueue = connect(
         </Tabs>
         <If bind="workQueueHelper.showRunBatchIRSProcessButton">
           <button
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => runBatchProcessSequence()}
           >
             Run IRS Batch Process

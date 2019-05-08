@@ -35,13 +35,13 @@ export const DocumentDetail = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="usa-grid breadcrumb">
+        <div className="grid-container breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
             Back
           </a>
         </div>
-        <section className="usa-section usa-grid DocumentDetail">
+        <section className="usa-section grid-container DocumentDetail">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
@@ -49,7 +49,7 @@ export const DocumentDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="usa-grid-full">
+          <div className="grid-container padding-x-0">
             <div className="usa-width-five-twelfths">
               <Tabs className="classic-horizontal-header3" bind="currentTab">
                 {helper.showDocumentInfoTab && (

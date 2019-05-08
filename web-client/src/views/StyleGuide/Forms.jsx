@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Forms = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <h1>Forms</h1>
     <hr />
     <form>

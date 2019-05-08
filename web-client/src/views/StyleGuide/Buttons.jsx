@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export const Buttons = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <h1>Buttons</h1>
     <hr />
     <button className="usa-button">Primary Default</button>
@@ -16,15 +16,15 @@ export const Buttons = () => (
       <FontAwesomeIcon icon="check-circle" size="sm" />
       Primary Icon
     </button>
-    <button className="usa-button-secondary">Secondary Default</button>
-    <button className="usa-button-secondary usa-button-hover">
+    <button className="usa-button usa-button--outline">Secondary Default</button>
+    <button className="usa-button--outline usa-button-hover">
       Secondary Hover
     </button>
-    <button className="usa-button-secondary usa-button-active">
+    <button className="usa-button--outline usa-button-active">
       Secondary Active
     </button>
-    <button className="usa-button-secondary usa-focus">Secondary Focus</button>
-    <button className="usa-button-secondary" disabled>
+    <button className="usa-button--outline usa-focus">Secondary Focus</button>
+    <button className="usa-button usa-button--outline" disabled>
       Secondary Disabled
     </button>
   </section>

@@ -35,13 +35,13 @@ export const CaseDetailInternal = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="usa-grid breadcrumb">
+        <div className="grid-container breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
             Back to dashboard
           </a>
         </div>
-        <section className="usa-section usa-grid">
+        <section className="usa-section grid-container">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
           <SuccessNotification />
