@@ -232,7 +232,7 @@ const getDocketRecordSortFunc = function(sortBy) {
   }
 };
 
-const sortDocketRecords = (docketRecords, sortBy = '') => {
+const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
   const isReversed = sortBy.indexOf('Desc') > -1;
   const result = docketRecords.sort(sortFunc);
