@@ -50,14 +50,14 @@ export const ContactPrimary = connect(
           />
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.name
                 ? 'usa-input-error'
                 : '')
             }
           >
-            <label htmlFor="name">
+            <label htmlFor="name" className="usa-label">
               {contactsHelper.contactPrimary.nameLabel}
             </label>
             <input
@@ -82,8 +82,8 @@ export const ContactPrimary = connect(
             />
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
-            <div className="ustc-form-group">
-              <label htmlFor="title">
+            <div className="usa-form-group">
+              <label htmlFor="title" className="usa-label">
                 Title
                 <p className="usa-form-hint">For example, Executor, PR, etc.</p>
               </label>
@@ -105,7 +105,7 @@ export const ContactPrimary = connect(
           {contactsHelper.contactPrimary.displayInCareOf && (
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.inCareOf
                   ? 'usa-input-error'
@@ -171,7 +171,7 @@ export const ContactPrimary = connect(
           {contactsHelper.showEmail && <Email bind={emailBind} />}
           <div
             className={
-              'ustc-form-group phone-input ' +
+              'usa-form-group phone-input ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
                 ? 'usa-input-error'

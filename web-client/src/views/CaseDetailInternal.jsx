@@ -127,10 +127,14 @@ export const CaseDetailInternal = connect(
                             });
                           }}
                         />
-                        <label htmlFor="paygov">Paid by pay.gov</label>
+                        <label htmlFor="paygov" className="usa-label">
+                          Paid by pay.gov
+                        </label>
                         {caseHelper.showPayGovIdInput && (
                           <React.Fragment>
-                            <label htmlFor="paygovid">Payment ID</label>
+                            <label htmlFor="paygovid" className="usa-label">
+                              Payment ID
+                            </label>
                             <input
                               id="paygovid"
                               type="text"

@@ -41,7 +41,7 @@ export const RequestAccess = connect(
         </div>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >
@@ -91,7 +91,10 @@ export const RequestAccess = connect(
                         validateCaseAssociationRequestSequence();
                       }}
                     />
-                    <label htmlFor={`document-type-${index}`}>
+                    <label
+                      htmlFor={`document-type-${index}`}
+                      className="usa-label"
+                    >
                       {option.documentType}
                     </label>
                   </li>

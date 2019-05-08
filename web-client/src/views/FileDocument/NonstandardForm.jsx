@@ -37,13 +37,13 @@ export const NonstandardForm = connect(
       <React.Fragment>
         {helper[level].showTextInput && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.freeText
                 ? 'usa-input-error'
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}free-text`}>
+            <label htmlFor={`${namespace}free-text`} className="usa-label">
               {helper[level].textInputLabel}
             </label>
             <input
@@ -71,13 +71,13 @@ export const NonstandardForm = connect(
 
         {helper[level].showTextInput2 && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.freeText2
                 ? 'usa-input-error'
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}free-text2`}>
+            <label htmlFor={`${namespace}free-text2`} className="usa-label">
               {helper[level].textInputLabel2}
             </label>
             <input
@@ -105,13 +105,16 @@ export const NonstandardForm = connect(
 
         {helper[level].previousDocumentSelectLabel && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.previousDocument
                 ? 'usa-input-error'
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}previous-document`}>
+            <label
+              htmlFor={`${namespace}previous-document`}
+              className="usa-label"
+            >
               {helper[level].previousDocumentSelectLabel}
             </label>
             <select
@@ -148,7 +151,7 @@ export const NonstandardForm = connect(
         {helper[level].showDateFields && (
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors && validationErrors.serviceDate
                 ? 'usa-input-error'
                 : '')
@@ -258,7 +261,7 @@ export const NonstandardForm = connect(
 
         {helper[level].showTrialLocationSelect && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.trialLocation
                 ? 'usa-input-error'
                 : ''
@@ -291,7 +294,7 @@ export const NonstandardForm = connect(
         {helper[level].ordinalField && (
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors && validationErrors.ordinalValue
                 ? 'usa-input-error'
                 : '')
@@ -324,7 +327,10 @@ export const NonstandardForm = connect(
                         validateSequence();
                       }}
                     />
-                    <label htmlFor={`${namespace}${ordinalValue}`}>
+                    <label
+                      htmlFor={`${namespace}${ordinalValue}`}
+                      className="usa-label"
+                    >
                       {ordinalValue}
                     </label>
                   </li>

@@ -26,7 +26,7 @@ export const CaseTypeSelect = connect(
       <div className="subsection">
         <div
           className={
-            'usa-form-group ustc-form-group case-type-select ' +
+            'usa-form-group usa-form-group case-type-select ' +
             (validationErrors.caseType ? 'usa-form-group--error' : '')
           }
         >

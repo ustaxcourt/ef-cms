@@ -47,7 +47,7 @@ export const ContactSecondary = connect(
           />
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
                 ? 'usa-input-error'
@@ -81,7 +81,7 @@ export const ContactSecondary = connect(
           {contactsHelper.contactSecondary.displayInCareOf && (
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.inCareOf
                   ? 'usa-input-error'
@@ -147,7 +147,7 @@ export const ContactSecondary = connect(
           {contactsHelper.contactSecondary.displayPhone && (
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.phone
                   ? 'usa-input-error'

@@ -27,6 +27,13 @@ exports.saveWorkItemForPaper = async ({
     applicationContext,
   });
 
+  await createMappingRecord({
+    applicationContext,
+    pkId: workItem.caseId,
+    skId: workItem.workItemId,
+    type: 'workItem',
+  });
+
   // individual inbox
   await createMappingRecord({
     applicationContext,

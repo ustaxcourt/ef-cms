@@ -49,7 +49,7 @@ export const RequestAccessDocumentForm = connect(
 
             <div className="usa-width-five-twelfths">
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
                 }`}
               >
@@ -57,7 +57,7 @@ export const RequestAccessDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                   className={
-                    'ustc-upload with-hint' +
+                    'usa-label ustc-upload with-hint' +
                     (requestAccessHelper.showPrimaryDocumentValid
                       ? 'validated'
                       : '')
@@ -85,7 +85,7 @@ export const RequestAccessDocumentForm = connect(
                 />
               </div>
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.certificateOfService ? 'usa-input-error' : ''
                 }`}
               >
@@ -112,7 +112,10 @@ export const RequestAccessDocumentForm = connect(
                             validateCaseAssociationRequestSequence();
                           }}
                         />
-                        <label htmlFor={`certificate-${option}`}>
+                        <label
+                          htmlFor={`certificate-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -126,7 +129,7 @@ export const RequestAccessDocumentForm = connect(
               </div>
               {form.certificateOfService && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.certificateOfServiceDate
                       ? 'usa-input-error'
                       : ''
@@ -220,7 +223,7 @@ export const RequestAccessDocumentForm = connect(
               )}
               {form.documentType === 'Substitution of Counsel' && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.objections ? 'usa-input-error' : ''
                   }`}
                 >
@@ -246,7 +249,10 @@ export const RequestAccessDocumentForm = connect(
                               validateCaseAssociationRequestSequence();
                             }}
                           />
-                          <label htmlFor={`objections-${option}`}>
+                          <label
+                            htmlFor={`objections-${option}`}
+                            className="usa-label"
+                          >
                             {option}
                           </label>
                         </li>

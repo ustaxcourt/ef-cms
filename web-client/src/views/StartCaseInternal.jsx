@@ -56,7 +56,7 @@ export const StartCaseInternal = connect(
           <div className="blue-container">
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.receivedAt ? 'usa-input-error' : '')
               }
             >
@@ -148,7 +148,7 @@ export const StartCaseInternal = connect(
 
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.caseCaption ? 'usa-input-error' : '')
               }
             >
@@ -176,7 +176,7 @@ export const StartCaseInternal = connect(
             </div>
 
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.petitionFile ? 'usa-input-error' : ''
               }`}
             >
@@ -227,7 +227,7 @@ export const StartCaseInternal = connect(
           <h2>Statement of Taxpayer Identification</h2>
           <div className="blue-container">
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.stinFile ? 'usa-input-error' : ''
               }`}
             >
