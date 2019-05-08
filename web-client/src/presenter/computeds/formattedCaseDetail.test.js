@@ -401,8 +401,8 @@ describe('formattedCaseDetail', () => {
     let sortedCaseDetail;
     beforeEach(() => {
       sortedCaseDetail = {
-        caseId: 'abdc-1234-5678-xyz',
         caseCaption: 'Brett Osborne, Petitioner',
+        caseId: 'abdc-1234-5678-xyz',
         docketRecord: [
           {
             description: 'Petition',
