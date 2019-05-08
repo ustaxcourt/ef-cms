@@ -36,6 +36,7 @@ import {
   faSpinner,
   faSync,
   faTimesCircle,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { route, router } from './router';
 
@@ -113,6 +114,7 @@ const app = {
       faSpinner,
       faSync,
       faTimesCircle,
+      faUser,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

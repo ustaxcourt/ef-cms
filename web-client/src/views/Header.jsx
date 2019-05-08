@@ -4,11 +4,37 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import close from '../../node_modules/uswds/dist/img/close.svg';
+import seal from '../images/ustc_seal.svg';
+
+import { AccountMenu, AccountMenuItems } from './AccountMenu';
+
+const NavigationItems = helper => {
+  return (
+    <ul className="usa-nav__primary usa-unstyled-list">
+      {helper.showMessages && (
+        <li className="usa-nav__primary-item">
+          <a href="/">Messages</a>
+        </li>
+      )}
+      {helper.showDocumentQC && (
+        <li className="usa-nav__primary-item">
+          <a href="/">Document QC</a>
+        </li>
+      )}
+      {helper.showMyCases && (
+        <li className="usa-nav__primary-item">
+          <a href="/">My Cases</a>
+        </li>
+      )}
+    </ul>
+  );
+};
 
 export const Header = connect(
   {
     betaBar: state.betaBar,
     helper: state.headerHelper,
+    loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
@@ -18,6 +44,7 @@ export const Header = connect(
   ({
     betaBar,
     helper,
+    loginSequence,
     mobileMenu,
     signOutSequence,
     toggleBetaBarSequence,
@@ -49,9 +76,9 @@ export const Header = connect(
         <header className="usa-header usa-header-extended" role="banner">
           <div className="usa-navbar">
             <div className="usa-logo" id="extended-logo">
-              <em className="usa-logo-text">
-                <a href="/">United States Tax Court</a>
-              </em>
+              <a href="/">
+                <img src={seal} alt="USTC Seal" />
+              </a>
             </div>
             <button
               className="usa-menu-btn"
@@ -63,15 +90,24 @@ export const Header = connect(
 
           <nav
             role="navigation"
-            className={mobileMenu.isVisible ? 'usa-nav is-visible' : 'usa-nav'}
+            className={
+              mobileMenu.isVisible
+                ? 'usa-nav mobile-menu is-visible'
+                : 'usa-nav'
+            }
           >
             <div className="usa-nav-inner">
               <button
                 className="usa-nav-close"
                 onClick={() => toggleMobileMenuSequence()}
               >
-                <img src={close} alt="close" />
+                Close{' '}
+                <FontAwesomeIcon
+                  icon={['fa', 'times-circle']}
+                  className="account-menu-icon"
+                />
               </button>
+              <div className="usa-nav-primary">{NavigationItems(helper)}</div>
               {user && (
                 <div className="usa-nav-secondary">
                   <ul className="usa-unstyled-list usa-nav-secondary-links">
@@ -81,18 +117,34 @@ export const Header = connect(
                       </li>
                     )}
                     {user.userId && (
-                      <li>
-                        Hello, {user.name}
-                        <button
-                          type="button"
-                          className="usa-button-secondary sign-out"
-                          aria-label="logout"
-                          onClick={() => signOutSequence()}
-                        >
-                          <FontAwesomeIcon icon="sign-out-alt" />
-                        </button>{' '}
+                      <li className="user-dropdown">
+                        <AccountMenu />
                       </li>
                     )}
+                  </ul>
+                  {mobileMenu.isVisible && user.userId && (
+                    <AccountMenuItems signOut={signOutSequence} />
+                  )}
+                </div>
+              )}
+              {!user && (
+                <div className="usa-nav-secondary">
+                  <ul className="usa-unstyled-list usa-nav-secondary-links">
+                    <li>
+                      <button
+                        title="Login"
+                        type="button"
+                        className="button-account-login"
+                        aria-label="login"
+                        onClick={() => loginSequence()}
+                      >
+                        <FontAwesomeIcon
+                          icon={['fa', 'user']}
+                          className="account-menu-icon"
+                        />{' '}
+                        Log In
+                      </button>
+                    </li>
                   </ul>
                 </div>
               )}
