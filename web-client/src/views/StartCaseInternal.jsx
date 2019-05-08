@@ -34,7 +34,7 @@ export const StartCaseInternal = connect(
     validatePetitionFromPaperSequence,
   }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <form
           role="form"
           aria-labelledby="start-case-header"
@@ -317,7 +317,7 @@ export const StartCaseInternal = connect(
           </button>
           <button
             type="button"
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => {
               formCancelToggleCancelSequence();
               return false;

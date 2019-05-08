@@ -59,7 +59,7 @@ export const StartCase = connect(
     validationErrors,
   }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <form
           role="form"
           aria-labelledby="start-case-header"
@@ -80,7 +80,7 @@ export const StartCase = connect(
           <h2>Upload Your Petition to Start Your Case</h2>
 
           <div className="blue-container">
-            <div className="usa-grid-full">
+            <div className="grid-container padding-x-0">
               <div className="usa-width-seven-twelfths push-right">
                 <div
                   id="petition-upload-hint"
@@ -208,7 +208,7 @@ export const StartCase = connect(
 
           <h2>Who is Filing This Case?</h2>
           <div className="blue-container">
-            <div className="usa-grid-full">
+            <div className="grid-container padding-x-0">
               <div className="usa-width-seven-twelfths push-right">
                 <div
                   id="petition-hint"
@@ -765,7 +765,7 @@ export const StartCase = connect(
           <div className="usa-accordion start-a-case">
             <button
               type="button"
-              className="usa-accordion-button case-difference"
+              className="usa-accordion__button case-difference"
               aria-expanded={!!screenMetadata.showCaseDifference}
               aria-controls="case-difference-container"
               onClick={() => toggleCaseDifferenceSequence()}
@@ -894,7 +894,7 @@ export const StartCase = connect(
           </button>
           <button
             type="button"
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

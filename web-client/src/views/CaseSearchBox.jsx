@@ -91,7 +91,7 @@ export const CaseSearchBox = connect(
               No case was found. Check your docket number and try again.
             </p>
           </div>
-          <button type="submit" className="usa-button-secondary">
+          <button type="submit" className="usa-button usa-button--outline">
             <span className="usa-search-submit-text">Search</span>
           </button>
         </div>

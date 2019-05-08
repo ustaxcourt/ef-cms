@@ -145,7 +145,7 @@ nav.horizontal-tabs,
               background-color: transparent;
               border-radius: 5px;
               color: $color-blue;
-              font-family: Noto Serif JP, $georgia, serif;
+              font-family: $font-serif;
               font-style: normal;
               &:hover {
                 border: 1px solid $color-gray-lighter;
@@ -153,7 +153,7 @@ nav.horizontal-tabs,
             }
             &.active {
               button {
-                background-color: $color-blue-darker;
+                background-color: $color-primary-darker;
                 color: $color-white;
               }
             }

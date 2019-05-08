@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Typography = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <div className="subsection">
       <h1>Typography</h1>
       <hr />
@@ -38,22 +38,24 @@ export const Typography = () => (
         .
       </p>
     </div>
-    <div className="usa-section usa-grid">
-      <div className="usa-width-one-third">
-        <h6 className="usa-heading-alt">Unordered list</h6>
-        <ul>
-          <li>Unordered list item</li>
-          <li>Unordered list item</li>
-          <li>Unordered list item</li>
-        </ul>
-      </div>
-      <div className="usa-width-one-third">
-        <h6 className="usa-heading-alt mt0">Ordered list</h6>
-        <ol>
-          <li>Ordered list item</li>
-          <li>Ordered list item</li>
-          <li>Ordered list item</li>
-        </ol>
+    <div className="usa-section grid-container">
+      <div className="grid-row">
+        <div className="grid-col-4">
+          <h6 className="usa-heading-alt">Unordered list</h6>
+          <ul>
+            <li>Unordered list item</li>
+            <li>Unordered list item</li>
+            <li>Unordered list item</li>
+          </ul>
+        </div>
+        <div className="grid-col-4">
+          <h6 className="usa-heading-alt mt0">Ordered list</h6>
+          <ol>
+            <li>Ordered list item</li>
+            <li>Ordered list item</li>
+            <li>Ordered list item</li>
+          </ol>
+        </div>
       </div>
     </div>
   </section>

@@ -17,35 +17,37 @@ export const AddDocketEntry = connect(
   ({ submitDocketEntrySequence, screenMetadata }) => {
     return (
       <React.Fragment>
-        <div className="usa-grid breadcrumb">
+        <div className="breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
             Back
           </a>
         </div>
-        <section className="usa-section usa-grid DocumentDetail">
+        <section className="usa-section DocumentDetail">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
 
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="usa-grid-full add-bottom-margin">
-            <div className="usa-width-one-third">
-              <Tabs
-                asSwitch
-                defaultActiveTab="PrimaryDocumentForm"
-                bind="wizardStep"
-              >
-                <Tab tabName="PrimaryDocumentForm">
-                  <PrimaryDocumentForm />
-                </Tab>
-                <Tab tabName="SupportingDocumentForm">
-                  <SupportingDocumentForm />
-                </Tab>
-              </Tabs>
+          <div className="grid-container padding-x-0 add-bottom-margin">
+            <div className="grid-row">
+              <div className="grid-col-4">
+                <Tabs
+                  asSwitch
+                  defaultActiveTab="PrimaryDocumentForm"
+                  bind="wizardStep"
+                >
+                  <Tab tabName="PrimaryDocumentForm">
+                    <PrimaryDocumentForm />
+                  </Tab>
+                  <Tab tabName="SupportingDocumentForm">
+                    <SupportingDocumentForm />
+                  </Tab>
+                </Tabs>
+              </div>
+              <div className="grid-col-8" />
             </div>
-            <div className="usa-width-two-thirds" />
           </div>
 
           <div className="button-box-container">
@@ -63,7 +65,7 @@ export const AddDocketEntry = connect(
             </button>
             <button
               type="button"
-              className="usa-button-secondary"
+              className="usa-button usa-button--outline"
               onClick={() => {
                 submitDocketEntrySequence({
                   supportingDocument: true,

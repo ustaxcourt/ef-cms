@@ -2,13 +2,38 @@ $font-path: '../node_modules/uswds/dist/fonts';
 $image-path: '../node_modules/uswds/dist/img';
 $site-max-width: 1440px;
 
-$font-serif: 'Noto Serif';
-$font-regular: 400;
-$font-medium: 500;
-$font-semibold: 600;
 $font-bold: 700;
+$font-medium: 500;
+$font-normal: 400;
+$font-regular: 400;
+$font-semibold: 600;
+$font-serif: 'Noto Serif';
 
+$color-base: #212121;
+$color-black: #212121;
+$color-blue: #0071bc;
+$color-gold-lighter: #fad980;
+$color-gold-lightest: #fff1d2;
+$color-gold: #fdb81e;
+$color-gray-cool-light: #888; // TODO: ???
+$color-gray-light: #aeb0b5;
+$color-gray-lighter: #d6d7d9;
+$color-gray-lightest: #f1f1f1;
+$color-gray: #5b616b;
+$color-green-light: #4aa564;
+$color-green: #2e8540;
+$color-primary-alt-dark: #00a6d2;
+$color-primary-alt-darkest: #046b99;
 $color-primary-alt-lightest: #f1f9fc;
+$color-primary-alt: #02bfe7;
+$color-primary-darker: #205493;
+$color-primary-darkest: #112e51;
+$color-primary: #0071bc;
+$color-red-dark: #cd2026;
+$color-red-darkest: #981b1e;
+$color-red: #e31c3d;
+$color-secondary-dark: #cd2026;
+$color-white: #fff;
 
 $small-screen: 576px;
 $medium-screen: 768px;

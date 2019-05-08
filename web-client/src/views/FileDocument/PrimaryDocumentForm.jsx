@@ -28,7 +28,7 @@ export const PrimaryDocumentForm = connect(
       <React.Fragment>
         <h3>Tell Us About the {form.documentTitle}</h3>
         <div className="blue-container">
-          <div className="usa-grid-full">
+          <div className="grid-container padding-x-0">
             <div className="usa-width-seven-twelfths push-right">
               <div
                 id="document-upload-hint"

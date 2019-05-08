@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Tables = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <h1>Tables</h1>
     <hr />
     <h2>Responsive Table</h2>

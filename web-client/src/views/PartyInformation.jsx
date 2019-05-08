@@ -36,7 +36,7 @@ export const PartyInformation = connect(
     return (
       <div className="subsection party-information">
         <h3 className="underlined">Party Information</h3>
-        <div className="usa-grid-full">
+        <div className="grid-container padding-x-0">
           <div className="usa-width-one-sixth">
             <p className="label">Party Type</p>
             <p>{caseDetail.partyType || 'My Party Type'}</p>

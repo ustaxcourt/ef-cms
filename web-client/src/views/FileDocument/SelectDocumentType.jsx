@@ -35,7 +35,7 @@ export const SelectDocumentType = connect(
         <div className="usa-accordion document-category">
           <button
             type="button"
-            className="usa-accordion-button document-category-accordion"
+            className="usa-accordion__button document-category-accordion"
             aria-expanded={!!screenMetadata.showDocumentCategoryAccordion}
             aria-controls="document-category-accordion-container"
             onClick={() => toggleDocumentCategoryAccordionSequence()}
@@ -59,104 +59,108 @@ export const SelectDocumentType = connect(
           </div>
         </div>
 
-        <div className="usa-grid-full">
-          <div className="usa-width-one-half">
-            {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
+        <div className="grid-container padding-x-0">
+          <div className="grid-row">
+            <div className="grid-col-6">
+              {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
 
-            {screenMetadata.isDocumentTypeSelected && <DocumentTypeReadOnly />}
-          </div>
-          <div className="usa-width-one-third push-right">
-            <div className="blue-container gray-background">
-              <h3>Frequently Used Documents</h3>
-              <ul className="ustc-unstyled-list">
-                {[
-                  {
-                    category: 'Motion',
-                    documentType: 'Motion for Judgment on the Pleadings',
-                  },
-                  {
-                    category: 'Application',
-                    documentType: 'Application for Waiver of Filing Fee',
-                  },
-                  {
-                    category: 'Motion',
-                    documentType: 'Motion for a New Trial',
-                  },
-                  {
-                    category: 'Motion',
-                    documentType:
-                      'Motion for Protective Order Pursuant to Rule 103',
-                  },
-                  {
-                    category: 'Motion',
-                    documentType: 'Motion for Continuance',
-                  },
-                  {
-                    category: 'Notice',
-                    documentType: 'Notice of No Objection',
-                    scenario: 'Nonstandard A',
-                  },
-                  {
-                    category: 'Statement',
-                    documentType: 'Statement',
-                    scenario: 'Nonstandard B',
-                  },
-                  {
-                    category: 'Supporting Document',
-                    documentType: 'Affidavit in Support',
-                    scenario: 'Nonstandard C',
-                  },
-                  {
-                    category: 'Miscellaneous',
-                    documentType: 'Certificate of Service',
-                    scenario: 'Nonstandard D',
-                  },
-                  {
-                    category: 'Motion',
-                    documentType:
-                      'Motion to Change Place of Submission of Declaratory Judgment Case',
-                    scenario: 'Nonstandard E',
-                  },
-                  {
-                    category: 'Miscellaneous',
-                    documentType: 'Amended',
-                    scenario: 'Nonstandard F',
-                  },
-                  {
-                    category: 'Request',
-                    documentType: 'Request for Admissions',
-                    scenario: 'Nonstandard G',
-                  },
-                  {
-                    category: 'Motion',
-                    documentType: 'Motion for Leave to File',
-                    scenario: 'Nonstandard H',
-                  },
-                ].map(document => {
-                  return (
-                    <li key={document.documentType}>
-                      <button
-                        className="link"
-                        type="button"
-                        onClick={() => {
-                          updateFileDocumentWizardFormValueSequence({
-                            key: 'category',
-                            value: document.category,
-                          });
-                          updateFileDocumentWizardFormValueSequence({
-                            key: 'documentType',
-                            value: document.documentType,
-                          });
-                          selectDocumentSequence();
-                        }}
-                      >
-                        {document.documentType}{' '}
-                        {document.scenario ? `(${document.scenario})` : ''}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              {screenMetadata.isDocumentTypeSelected && (
+                <DocumentTypeReadOnly />
+              )}
+            </div>
+            <div className="grid-col-4 push-right">
+              <div className="blue-container gray-background">
+                <h3>Frequently Used Documents</h3>
+                <ul className="ustc-unstyled-list">
+                  {[
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Judgment on the Pleadings',
+                    },
+                    {
+                      category: 'Application',
+                      documentType: 'Application for Waiver of Filing Fee',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for a New Trial',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType:
+                        'Motion for Protective Order Pursuant to Rule 103',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Continuance',
+                    },
+                    {
+                      category: 'Notice',
+                      documentType: 'Notice of No Objection',
+                      scenario: 'Nonstandard A',
+                    },
+                    {
+                      category: 'Statement',
+                      documentType: 'Statement',
+                      scenario: 'Nonstandard B',
+                    },
+                    {
+                      category: 'Supporting Document',
+                      documentType: 'Affidavit in Support',
+                      scenario: 'Nonstandard C',
+                    },
+                    {
+                      category: 'Miscellaneous',
+                      documentType: 'Certificate of Service',
+                      scenario: 'Nonstandard D',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType:
+                        'Motion to Change Place of Submission of Declaratory Judgment Case',
+                      scenario: 'Nonstandard E',
+                    },
+                    {
+                      category: 'Miscellaneous',
+                      documentType: 'Amended',
+                      scenario: 'Nonstandard F',
+                    },
+                    {
+                      category: 'Request',
+                      documentType: 'Request for Admissions',
+                      scenario: 'Nonstandard G',
+                    },
+                    {
+                      category: 'Motion',
+                      documentType: 'Motion for Leave to File',
+                      scenario: 'Nonstandard H',
+                    },
+                  ].map(document => {
+                    return (
+                      <li key={document.documentType}>
+                        <button
+                          className="link"
+                          type="button"
+                          onClick={() => {
+                            updateFileDocumentWizardFormValueSequence({
+                              key: 'category',
+                              value: document.category,
+                            });
+                            updateFileDocumentWizardFormValueSequence({
+                              key: 'documentType',
+                              value: document.documentType,
+                            });
+                            selectDocumentSequence();
+                          }}
+                        >
+                          {document.documentType}{' '}
+                          {document.scenario ? `(${document.scenario})` : ''}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

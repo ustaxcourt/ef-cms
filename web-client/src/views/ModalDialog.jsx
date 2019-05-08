@@ -123,7 +123,7 @@ export class ModalDialog extends React.Component {
               <button
                 type="button"
                 onClick={this.runCancelSequence}
-                className="usa-button-secondary"
+                className="usa-button usa-button--outline"
               >
                 {modal.cancelLabel}
               </button>
