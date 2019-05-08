@@ -1,6 +1,10 @@
 const { deleteMappingRecord } = require('../helpers/deleteMappingRecord');
 
-exports.deleteWorkItemFromInbox = async ({ workItem, applicationContext }) => {
+exports.deleteWorkItemFromInbox = async ({
+  workItem,
+  messageId,
+  applicationContext,
+}) => {
   if (workItem.assigneeId) {
     await deleteMappingRecord({
       applicationContext,
@@ -12,7 +16,7 @@ exports.deleteWorkItemFromInbox = async ({ workItem, applicationContext }) => {
     await deleteMappingRecord({
       applicationContext,
       pkId: workItem.assigneeId,
-      skId: workItem.workItemId,
+      skId: messageId,
       type: 'unread-message',
     });
   }
