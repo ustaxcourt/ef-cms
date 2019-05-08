@@ -43,7 +43,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
-  if (!result.readAt) {
+  if (!result.isRead) {
     result.showUnreadStatusIcon = true;
   }
   switch (result.caseStatus.trim()) {
