@@ -48,7 +48,7 @@ export const InternationalAddress = connect(
             }}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.address1`}
           />
         </div>
@@ -125,7 +125,7 @@ export const InternationalAddress = connect(
             }}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.state`}
           />
         </div>
@@ -157,7 +157,7 @@ export const InternationalAddress = connect(
             }}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.city`}
           />
         </div>
@@ -191,7 +191,7 @@ export const InternationalAddress = connect(
             }}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.postalCode`}
           />
         </div>

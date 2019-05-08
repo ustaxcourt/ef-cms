@@ -54,7 +54,7 @@ export const Country = connect(
             </option>
           </select>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.countryType`}
           />
         </div>
@@ -88,7 +88,7 @@ export const Country = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${type}.country`}
             />
           </div>
