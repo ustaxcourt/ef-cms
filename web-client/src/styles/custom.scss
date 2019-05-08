@@ -581,8 +581,8 @@ nav.usa-nav {
   }
 
   .usa-nav-secondary-links li:not(:last-child)::after {
-    content: '';
     padding-left: 0;
+    content: '';
   }
 
   .user-dropdown {
@@ -594,18 +594,15 @@ nav.usa-nav {
     color: $color-primary;
   }
 
-  .mobile-account-nav {
-  }
-
   &.mobile-menu {
     background: $color-cool-blue;
 
     .usa-nav-primary {
       position: inherit;
-      margin-top: 10rem;
-      margin-bottom: 3rem;
       padding-bottom: 10px;
       border-bottom: 1px solid #fff;
+      margin-top: 10rem;
+      margin-bottom: 3rem;
 
       .usa-nav__primary {
         li.active,
@@ -674,23 +671,23 @@ nav.usa-nav {
       background-color: $color-primary;
 
       button.button-account-menu {
-        background: none;
         padding: 8px;
         margin: 0;
+        background: none;
       }
     }
   }
   .account-menu-content {
     position: absolute;
     right: 30px;
-    background-color: $color-primary;
     width: 109px;
     padding: 10px 0;
+    background-color: $color-primary;
 
     ul li {
       display: block;
-      text-align: right;
       margin-right: 8px;
+      text-align: right;
 
       a {
         color: $color-white;
