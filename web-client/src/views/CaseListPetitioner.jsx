@@ -12,7 +12,7 @@ export const CaseListPetitioner = connect(
         <div className="grid-container padding-x-0 subsection">
           <div className="grid-row">
             <div className="grid-col-6 hide-on-mobile">
-              <h2>Your Cases</h2>
+              <h2 className="margin-0">Your Cases</h2>
             </div>
             <div className="grid-col-6">
               <a
