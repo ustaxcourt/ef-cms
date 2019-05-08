@@ -75,6 +75,7 @@ export const state = {
   getTrialCityName,
   headerHelper,
   internalTypesHelper,
+  isAccountMenuOpen: false,
   mobileMenu: {
     isVisible: false,
   },

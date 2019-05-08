@@ -5,7 +5,7 @@ export const headerHelper = get => {
 
   const isUserInternal = user => {
     const internalRoles = ['petitionsclerk', 'docketclerk'];
-    if (user && user.role && internalRoles.indexOf(user.role) > -1) {
+    if (user && user.role && internalRoles.includes(user.role)) {
       return true;
     } else {
       return false;
@@ -13,7 +13,7 @@ export const headerHelper = get => {
   };
   const isUserExternal = user => {
     const externalRoles = ['petitioner', 'practitioner'];
-    if (user && user.role && externalRoles.indexOf(user.role) > -1) {
+    if (user && user.role && externalRoles.includes(user.role)) {
       return true;
     } else {
       return false;

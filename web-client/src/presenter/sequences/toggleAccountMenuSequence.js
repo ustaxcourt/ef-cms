@@ -1,2 +1,4 @@
-import { toggleAccountMenuAction } from '../actions/toggleAccountMenuAction';
-export const toggleAccountMenuSequence = [toggleAccountMenuAction];
+import { state } from 'cerebral';
+import { toggle } from 'cerebral/factories';
+
+export const toggleAccountMenuSequence = [toggle(state.isAccountMenuOpen)];
