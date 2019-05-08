@@ -29,7 +29,7 @@ export const CaseInfo = connect(
         {caseDetail.isPaper && (
           <div className="subsection">
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 caseDetailErrors.receivedAt ? 'usa-input-error' : ''
               }`}
             >
@@ -132,7 +132,7 @@ export const CaseInfo = connect(
         )}
 
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <ProcedureType
               value={caseDetail.procedureType}
               onChange={e => {
@@ -191,7 +191,7 @@ export const CaseInfo = connect(
 
         <div className="subsection">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               caseDetailErrors.payGovDate ? 'usa-input-error' : ''
             }`}
           >
@@ -293,7 +293,7 @@ export const CaseInfo = connect(
         </div>
 
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="fee-payment-id">Fee Payment ID</label>
             <input
               id="fee-payment-id"
@@ -336,7 +336,7 @@ export const CaseInfo = connect(
           role="list"
           aria-labelledby="orders-needed"
         >
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="order-for-ratification"
               type="checkbox"
@@ -354,7 +354,7 @@ export const CaseInfo = connect(
               Order for Ratification of Petition
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="notice-of-attachments"
               type="checkbox"
@@ -372,7 +372,7 @@ export const CaseInfo = connect(
               Notice of Attachments in the Nature of Evidence
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="order-for-amended-petition"
               type="checkbox"
@@ -390,7 +390,7 @@ export const CaseInfo = connect(
               Order for Amended Petition
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="order-for-amended-petition-and-filing-fee"
               type="checkbox"

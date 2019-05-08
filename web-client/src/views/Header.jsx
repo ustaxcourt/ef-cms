@@ -50,8 +50,11 @@ export const Header = connect(
             </div>
           </div>
         )}
-        {/*
-        <header className="usa-header usa-header-extended" role="banner">
+
+        <header
+          className="usa-header usa-header-extended grid-container"
+          role="banner"
+        >
           <div className="usa-navbar">
             <div className="usa-logo" id="extended-logo">
               <em className="usa-logo__text">
@@ -104,7 +107,6 @@ export const Header = connect(
             </div>
           </nav>
         </header>
-        */}
       </>
     );
   },

@@ -24,7 +24,7 @@ export const PartiesRepresenting = connect(
         <h3>Tell Us About the Parties You’re Representing</h3>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               requestAccessHelper.partyValidationError ? 'usa-input-error' : ''
             }`}
           >

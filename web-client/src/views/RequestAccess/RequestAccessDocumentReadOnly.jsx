@@ -25,14 +25,14 @@ export const RequestAccessDocumentReadOnly = connect(
         </div>
 
         <div className="blue-container">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="primary-filing">{form.documentTitle}</label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             {form.primaryDocumentFile.name}
           </div>
 
           {form.certificateOfService === true && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="filing-includes">Filing Includes</label>
               <ul className="ustc-unstyled-list without-margins">
                 <li>
@@ -44,7 +44,7 @@ export const RequestAccessDocumentReadOnly = connect(
           )}
 
           {form.certificateOfService === false && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="filing-not-includes">
                 Filing Does Not Include
               </label>
@@ -55,7 +55,7 @@ export const RequestAccessDocumentReadOnly = connect(
           )}
 
           {form.documentType === 'Substitution of Counsel' && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="objections">
                 Are There Any Objections to This Document?
               </label>

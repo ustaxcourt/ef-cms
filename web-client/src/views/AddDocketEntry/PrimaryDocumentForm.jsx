@@ -35,7 +35,7 @@ export const PrimaryDocumentForm = connect(
         <h2>Add Docket Entry</h2>
         <div className="blue-container docket-entry-form">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
@@ -68,7 +68,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.lodged ? 'usa-input-error' : ''
             }`}
           >
@@ -103,7 +103,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.dateReceived ? 'usa-input-error' : ''
             }`}
           >
@@ -188,7 +188,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.eventCode ? 'usa-input-error' : ''
             }`}
           >
@@ -240,7 +240,7 @@ export const PrimaryDocumentForm = connect(
 
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.secondaryDocument && !form.secondaryDocument
                   ? 'usa-input-error'
                   : ''
@@ -310,7 +310,7 @@ export const PrimaryDocumentForm = connect(
             />
           )}
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1
             </label>
@@ -332,7 +332,7 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
+          <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="add-to-coversheet"
               type="checkbox"
@@ -349,7 +349,7 @@ export const PrimaryDocumentForm = connect(
             <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="additional-info2" id="additional-info2-label">
               Additional Info 2
             </label>
@@ -372,7 +372,7 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Inclusions</legend>
               <ul className="ustc-vertical-option-list">
@@ -520,7 +520,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               addDocketEntryHelper.partyValidationError ? 'usa-input-error' : ''
             }`}
           >
@@ -624,7 +624,7 @@ export const PrimaryDocumentForm = connect(
           </div>
           {addDocketEntryHelper.showObjection && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.objections ? 'usa-input-error' : ''
               }`}
             >

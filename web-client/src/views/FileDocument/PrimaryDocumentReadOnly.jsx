@@ -25,14 +25,14 @@ export const PrimaryDocumentReadOnly = connect(
         </div>
 
         <div className="blue-container">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="primary-filing">{form.documentTitle}</label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             {form.primaryDocumentFile.name}
           </div>
 
           {form.supportingDocumentFile && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="supporting-documents">
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
@@ -42,7 +42,7 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingIncludes && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="filing-includes">Filing Includes</label>
               <ul className="ustc-unstyled-list without-margins">
                 {form.certificateOfServiceDate && (
@@ -58,7 +58,7 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingNotIncludes && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="filing-not-includes">
                 Filing Does Not Include
               </label>
@@ -72,7 +72,7 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showObjection && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="objections">
                 Are There Any Objections to This Document?
               </label>

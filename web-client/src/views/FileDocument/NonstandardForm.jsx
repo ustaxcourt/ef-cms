@@ -37,7 +37,7 @@ export const NonstandardForm = connect(
       <React.Fragment>
         {helper[level].showTextInput && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.freeText
                 ? 'usa-input-error'
                 : ''
@@ -71,7 +71,7 @@ export const NonstandardForm = connect(
 
         {helper[level].showTextInput2 && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.freeText2
                 ? 'usa-input-error'
                 : ''
@@ -105,7 +105,7 @@ export const NonstandardForm = connect(
 
         {helper[level].previousDocumentSelectLabel && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.previousDocument
                 ? 'usa-input-error'
                 : ''
@@ -148,7 +148,7 @@ export const NonstandardForm = connect(
         {helper[level].showDateFields && (
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors && validationErrors.serviceDate
                 ? 'usa-input-error'
                 : '')
@@ -258,7 +258,7 @@ export const NonstandardForm = connect(
 
         {helper[level].showTrialLocationSelect && (
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors && validationErrors.trialLocation
                 ? 'usa-input-error'
                 : ''
@@ -291,7 +291,7 @@ export const NonstandardForm = connect(
         {helper[level].ordinalField && (
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors && validationErrors.ordinalValue
                 ? 'usa-input-error'
                 : '')

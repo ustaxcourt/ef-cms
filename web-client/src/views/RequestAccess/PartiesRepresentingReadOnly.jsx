@@ -22,7 +22,7 @@ export const PartiesRepresentingReadOnly = connect(
           Edit
         </button>
         <div className="blue-container">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="filing-parties">Parties</label>
             <ul className="ustc-unstyled-list without-margins">
               {form.representingPrimary && (

@@ -100,7 +100,7 @@ export const StartCase = connect(
 
               <div className="usa-width-five-twelfths">
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.petitionFile ? 'usa-input-error' : ''
                   }`}
                 >
@@ -156,7 +156,7 @@ export const StartCase = connect(
           <h2>Upload Your Statement of Taxpayer Identification</h2>
           <div className="blue-container">
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.stinFile ? 'usa-input-error' : ''
               }`}
             >
@@ -232,7 +232,7 @@ export const StartCase = connect(
               <div className="usa-width-five-twelfths">
                 <div
                   className={
-                    'ustc-form-group ' +
+                    'usa-form-group ' +
                     (validationErrors.filingType ? 'usa-input-error' : '')
                   }
                 >
@@ -858,7 +858,7 @@ export const StartCase = connect(
 
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.signature ? 'usa-input-error' : '')
               }
             >

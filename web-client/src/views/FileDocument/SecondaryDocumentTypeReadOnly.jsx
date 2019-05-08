@@ -21,7 +21,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
     selectDocumentTypeHelper,
   }) => {
     return (
-      <div className="ustc-form-group">
+      <div className="usa-form-group">
         <div>
           <Focus className="header-with-link-button">
             <label htmlFor="category" tabIndex="-1" className="focusable">

@@ -41,7 +41,7 @@ export const RequestAccess = connect(
         </div>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >

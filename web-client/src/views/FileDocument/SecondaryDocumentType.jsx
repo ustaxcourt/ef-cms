@@ -33,7 +33,7 @@ export const SecondaryDocumentType = connect(
           </h4>
         </Focus>
         <div
-          className={`ustc-form-group ${
+          className={`usa-form-group ${
             validationErrors.secondaryDocument &&
             validationErrors.secondaryDocument.category
               ? 'usa-input-error'
@@ -71,7 +71,7 @@ export const SecondaryDocumentType = connect(
         {form.secondaryDocument && (
           <>
             <div
-              className={`ustc-form-group only-large-screens ${
+              className={`usa-form-group only-large-screens ${
                 validationErrors.secondaryDocument &&
                 validationErrors.secondaryDocument.documentType
                   ? 'usa-input-error'
@@ -108,7 +108,7 @@ export const SecondaryDocumentType = connect(
                 bind="validationErrors.secondaryDocument.documentType"
               />
             </div>
-            <div className="ustc-form-group only-small-screens">
+            <div className="usa-form-group only-small-screens">
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Document Type</legend>
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
@@ -139,7 +139,7 @@ export const SecondaryDocumentType = connect(
             </div>
           </>
         )}
-        <div className="ustc-form-group only-large-screens">
+        <div className="usa-form-group only-large-screens">
           <button
             type="submit"
             className="usa-button"

@@ -35,7 +35,7 @@ export const IRSNotice = connect(
     const renderIrsNoticeRadios = () => {
       return (
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <fieldset
               id="irs-verified-notice-radios"
               className="usa-fieldset-inputs usa-sans"
@@ -97,7 +97,7 @@ export const IRSNotice = connect(
         <div className="subsection">
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
             }
           >
