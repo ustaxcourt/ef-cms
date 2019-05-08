@@ -1,4 +1,4 @@
-import { find, omit, pick } from 'lodash';
+import { find, includes, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -8,6 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.get the cerebral get function
  * @param {Object} providers.store the cerebral store object
  * @param {Object} providers.props the cerebral props object
+ * @returns {void}
  */
 export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
@@ -70,6 +71,24 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         store.unset(state.form.certificateOfServiceMonth);
         store.unset(state.form.certificateOfServiceDay);
         store.unset(state.form.certificateOfServiceYear);
+
+        //restore previous doc data from screenMetadata onto form
+        const caseDetail = get(state.caseDetail);
+        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
+
+        const previousDocument =
+          props.value &&
+          find(
+            caseDetail.documents,
+            doc =>
+              includes(filedDocumentIds, doc.documentId) &&
+              (doc.documentTitle || doc.documentType) === props.value,
+          );
+        if (previousDocument.relationship === 'primaryDocument') {
+          store.merge(state.form, get(state.screenMetadata.primary));
+        } else if (previousDocument.relationship === 'secondaryDocument') {
+          store.merge(state.form, get(state.screenMetadata.secondary));
+        }
       }
       break;
   }
