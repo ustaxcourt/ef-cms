@@ -52,10 +52,15 @@ export const DocketRecordHeader = connect(
                 name="docketRecordSort"
                 className="usa-select"
                 aria-label="docket record sort"
+                value={sessionMetadata.docketRecordSort}
                 onChange={e => {
                   updateSessionMetadataSequence({
                     key: e.target.name,
                     value: e.target.value,
+                  });
+                  updateSessionMetadataSequence({
+                    key: 'caseId',
+                    value: caseDetail.caseId,
                   });
                 }}
               >
@@ -89,13 +94,15 @@ export const DocketRecordHeader = connect(
                 className="link mobile-sort-docket-button"
                 onClick={() => {
                   toggleMobileDocketSortSequence();
+                  updateSessionMetadataSequence({
+                    key: 'caseId',
+                    value: caseDetail.caseId,
+                  });
                 }}
               >
-                {(!sessionMetadata.docketRecordSort ||
-                  sessionMetadata.docketRecordSort === 'byDate') &&
+                {sessionMetadata.docketRecordSort === 'byDate' &&
                   'Oldest to Newest'}
-                {sessionMetadata.docketRecordSort &&
-                  sessionMetadata.docketRecordSort === 'byDateDesc' &&
+                {sessionMetadata.docketRecordSort === 'byDateDesc' &&
                   'Newest to Oldest'}
                 <FontAwesomeIcon icon="sort" size="sm" />
               </button>

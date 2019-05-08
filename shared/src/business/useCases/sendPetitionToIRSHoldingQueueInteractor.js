@@ -37,8 +37,10 @@ exports.sendPetitionToIRSHoldingQueue = async ({
 
   for (let workItem of caseEntity.getWorkItems()) {
     if (workItem.isInitializeCase) {
+      const latestMessageId = workItem.getLatestMessageEntity().messageId;
       await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
         applicationContext,
+        messageId: latestMessageId,
         workItem: workItem.validate().toRawObject(),
       });
       workItem.assignToIRSBatchSystem({
@@ -50,6 +52,7 @@ exports.sendPetitionToIRSHoldingQueue = async ({
         applicationContext,
         workItem: workItem.validate().toRawObject(),
       });
+
       await applicationContext
         .getPersistenceGateway()
         .addWorkItemToSectionInbox({

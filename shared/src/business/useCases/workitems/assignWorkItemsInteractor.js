@@ -42,6 +42,7 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
+      messageId: workItemEntity.getLatestMessageEntity().messageId,
       workItem: fullWorkItem,
     });
 

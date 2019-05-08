@@ -43,9 +43,6 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  saveWorkItem: saveWorkItemPersistence,
-} = require('../../persistence/dynamo/workitems/saveWorkItem');
-const {
   saveWorkItemForNonPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
@@ -98,7 +95,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         getWorkItemsForUser: getWorkItemsForUserPersistence,
         incrementCounter,
         putWorkItemInOutbox,
-        saveWorkItem: saveWorkItemPersistence,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setMessageAsRead,

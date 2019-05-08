@@ -39,7 +39,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(0).args[0]).toMatchObject({
+    expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
         createdAt: '100',
         pk: 'a_id',
@@ -57,7 +57,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
         pk: '123|workItem',
         sk: 'a_id',
@@ -71,7 +71,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(3).args[0]).toMatchObject({
+    expect(putStub.getCall(4).args[0]).toMatchObject({
       Item: {
         pk: 'a_user|outbox',
         sk: '100',
@@ -86,7 +86,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(4).args[0]).toMatchObject({
+    expect(putStub.getCall(5).args[0]).toMatchObject({
       Item: {
         pk: 'docket|workItem',
         sk: 'a_id',
@@ -100,7 +100,7 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(5).args[0]).toMatchObject({
+    expect(putStub.getCall(6).args[0]).toMatchObject({
       Item: {
         pk: 'docket|outbox',
         sk: '100',

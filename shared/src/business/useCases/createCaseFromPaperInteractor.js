@@ -42,7 +42,7 @@ const addPetitionDocumentWithWorkItemToCase = (
     message,
   });
 
-  workItemEntity.addMessage(new Message(newMessage));
+  workItemEntity.addMessage(newMessage);
 
   documentEntity.addWorkItem(workItemEntity);
   caseToAdd.addDocument(documentEntity);
