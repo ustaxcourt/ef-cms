@@ -1,7 +1,9 @@
 import { state } from 'cerebral';
 
 /**
- * toggles mobile docket sort to other option (byDate/byDateDesc)
+ * sets state.sessionMetadata.docketRecordSort to its default value if the current caseId
+ * is different than the state.sessionMetadata.caseId (last case the user was viewing
+ * when they changed the default sort option)
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.store the cerebral store used for setting state.sessionMetadata.docketRecordSort
