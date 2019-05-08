@@ -14,6 +14,10 @@ const { includes, omit } = require('lodash');
 function DocketEntryFactory(rawProps) {
   let entityConstructor = function(rawProps) {
     Object.assign(this, rawProps);
+    const { secondaryDocument } = rawProps;
+    if (secondaryDocument) {
+      this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument);
+    }
   };
 
   let schema = {
@@ -47,6 +51,7 @@ function DocketEntryFactory(rawProps) {
       .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
+    secondaryDocumentFile: joi.object().required(),
   };
 
   let errorToMessageMap = {
@@ -76,6 +81,7 @@ function DocketEntryFactory(rawProps) {
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
     primaryDocumentFile: 'A file was not selected.',
+    secondaryDocumentFile: 'A file was not selected.',
   };
 
   let customValidate;
@@ -119,6 +125,13 @@ function DocketEntryFactory(rawProps) {
     )
   ) {
     addToSchema('objections');
+  }
+
+  if (
+    rawProps.scenario &&
+    rawProps.scenario.toLowerCase().trim() === 'nonstandard h'
+  ) {
+    addToSchema('secondaryDocumentFile');
   }
 
   let partyPractitioner = false;

@@ -156,6 +156,35 @@ describe('DocketEntryFactory', () => {
           expect(errors().objections).toEqual(
             'Enter selection for Objections.',
           );
+          rawEntity.objections = 'No';
+          expect(errors().objections).toEqual(undefined);
+        });
+      });
+
+      describe('Nonstandard H', () => {
+        beforeEach(() => {
+          rawEntity.scenario = 'Nonstandard H';
+        });
+
+        it('should require secondary file', () => {
+          expect(errors().secondaryDocumentFile).toEqual(
+            'A file was not selected.',
+          );
+          rawEntity.secondaryDocumentFile = {};
+          expect(errors().secondaryDocumentFile).toEqual(undefined);
+        });
+
+        describe('Secondary Document', () => {
+          beforeEach(() => {
+            rawEntity.secondaryDocument = {};
+          });
+
+          it('should validate secondary document', () => {
+            expect(errors().secondaryDocument).toEqual({
+              category: 'You must select a category.',
+              documentType: 'You must select a document type.',
+            });
+          });
         });
       });
     });

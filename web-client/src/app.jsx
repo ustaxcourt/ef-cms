@@ -1,3 +1,5 @@
+import { queryStringDecoder } from './queryStringDecoder';
+
 import {
   faArrowAltCircleLeft,
   faCheckCircle as faCheckCircleRegular,
@@ -30,6 +32,7 @@ import {
   faShareSquare,
   faSignOutAlt,
   faSlash,
+  faSort,
   faSpinner,
   faSync,
   faTimesCircle,
@@ -67,13 +70,19 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
+    const { code, token: queryToken } = queryStringDecoder();
+
+    if (process.env.USTC_ENV === 'prod' && (!user && !code && !queryToken)) {
+      window.location.replace(presenter.state.cognitoLoginUrl);
+      return;
+    }
+
     presenter.state.constants = applicationContext.getConstants();
 
     library.add(
       faArrowAltCircleLeft,
       faCaretDown,
       faCaretLeft,
-      faSpinner,
       faCaretUp,
       faCheckCircle,
       faCheckCircleRegular,
@@ -81,17 +90,17 @@ const app = {
       faCloudUploadAlt,
       faCopy,
       faDollarSign,
-      faEnvelopeSolid,
       faEdit,
       faEditSolid,
+      faEnvelopeSolid,
       faExclamationTriangle,
       faEyeSlash,
+      faFileAlt,
+      faFileAltSolid,
       faFilePdf,
       faFilePdfRegular,
       faFlag,
       faLaptop,
-      faFileAlt,
-      faFileAltSolid,
       faListUl,
       faPaperclip,
       faPlusCircle,
@@ -100,6 +109,8 @@ const app = {
       faShareSquare,
       faSignOutAlt,
       faSlash,
+      faSort,
+      faSpinner,
       faSync,
       faTimesCircle,
     );

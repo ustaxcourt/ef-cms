@@ -26,22 +26,20 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
       userId: user.userId,
     });
 
-  const readMessages = await applicationContext
+  const unreadMessages = await applicationContext
     .getPersistenceGateway()
-    .getReadMessagesForUser({
+    .getUnreadMessagesForUser({
       applicationContext,
       userId: user.userId,
     });
 
   workItems.forEach(workItem => {
     const message = new WorkItem(workItem).getLatestMessageEntity();
-    const readMessage = readMessages.find(
-      readMessage => readMessage.messageId === message.messageId,
+    const unreadMessage = unreadMessages.find(
+      unreadMessage => unreadMessage.messageId === message.messageId,
     );
 
-    if (readMessage) {
-      workItem.readAt = readMessage.readAt;
-    }
+    workItem.isRead = unreadMessage === undefined;
   });
 
   return workItems;
