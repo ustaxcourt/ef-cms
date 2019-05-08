@@ -13,6 +13,7 @@ export const Forms = () => (
           <input id="input-text" className="usa-input" type="text" />
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group">
           <label className="usa-label with-hint" htmlFor="input-text-hint">
@@ -41,6 +42,7 @@ export const Forms = () => (
           <span className="usa-error-message">Error message</span>
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group">
           <label htmlFor="input-email" className="usa-label">
@@ -66,6 +68,7 @@ export const Forms = () => (
           <input id="input-number" className="usa-input" type="number" />
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-number-error" className="usa-label">
@@ -79,6 +82,7 @@ export const Forms = () => (
           <span className="usa-error-message">Error message</span>
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group">
           <label htmlFor="input-tel" className="usa-label">
@@ -87,6 +91,7 @@ export const Forms = () => (
           <input id="input-tel" className="usa-input" type="tel" />
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-tel-error" className="usa-label">
@@ -100,6 +105,7 @@ export const Forms = () => (
           <span className="usa-error-message">Error message</span>
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group">
           <label htmlFor="input-file" className="usa-label">
@@ -108,6 +114,7 @@ export const Forms = () => (
           <input id="input-file" className="usa-input" type="file" />
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-file-error" className="usa-label">
@@ -117,6 +124,7 @@ export const Forms = () => (
           <span className="usa-error-message">Error message</span>
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group">
           <label htmlFor="options">Dropdown label</label>
@@ -128,6 +136,7 @@ export const Forms = () => (
           </select>
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="options-error">Dropdown label with error</label>
@@ -140,6 +149,7 @@ export const Forms = () => (
           <span className="usa-error-message">Error message</span>
         </div>
       </div>
+
       <div className="blue-container">
         <div className="usa-form-group">
           <label htmlFor="textarea">Text Area</label>

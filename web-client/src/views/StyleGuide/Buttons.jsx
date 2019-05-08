@@ -16,14 +16,18 @@ export const Buttons = () => (
       <FontAwesomeIcon icon="check-circle" size="sm" />
       Primary Icon
     </button>
-    <button className="usa-button usa-button--outline">Secondary Default</button>
-    <button className="usa-button--outline usa-button-hover">
+    <button className="usa-button usa-button--outline">
+      Secondary Default
+    </button>
+    <button className="usa-button usa-button--outline usa-button--hover">
       Secondary Hover
     </button>
-    <button className="usa-button--outline usa-button-active">
+    <button className="usa-button usa-button--outline usa-button--active">
       Secondary Active
     </button>
-    <button className="usa-button--outline usa-focus">Secondary Focus</button>
+    <button className="usa-button usa-button--outline usa-focus">
+      Secondary Focus
+    </button>
     <button className="usa-button usa-button--outline" disabled>
       Secondary Disabled
     </button>
