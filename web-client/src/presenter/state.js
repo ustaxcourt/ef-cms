@@ -3,6 +3,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { accountMenuHelper } from './computeds/accountMenuHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
@@ -31,6 +32,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
+  accountMenuHelper,
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
@@ -73,6 +75,7 @@ export const state = {
   getTrialCityName,
   headerHelper,
   internalTypesHelper,
+  isAccountMenuOpen: false,
   mobileMenu: {
     isVisible: false,
   },
