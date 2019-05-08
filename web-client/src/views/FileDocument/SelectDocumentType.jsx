@@ -40,7 +40,7 @@ export const SelectDocumentType = connect(
             aria-controls="document-category-accordion-container"
             onClick={() => toggleDocumentCategoryAccordionSequence()}
           >
-            <span className="usa-banner-button-text">
+            <span className="usa-accordion__heading usa-banner__button-text">
               <FontAwesomeIcon icon="question-circle" size="sm" />
               Need help determining what document category to select?
               {screenMetadata.showDocumentCategoryAccordion ? (
@@ -52,7 +52,7 @@ export const SelectDocumentType = connect(
           </button>
           <div
             id="document-category-accordion-container"
-            className="usa-accordion-content"
+            className="usa-accordion__content"
             aria-hidden={!screenMetadata.showDocumentCategoryAccordion}
           >
             <DocumentCategoryAccordion />
