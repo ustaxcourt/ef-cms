@@ -6,6 +6,7 @@ import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { state } from 'cerebral';
 
 export const gotoCaseDetailSequence = [
@@ -15,7 +16,7 @@ export const gotoCaseDetailSequence = [
   getCaseAction,
   setCaseAction,
   set(state.documentDetail.tab, 'docketRecord'),
-  set(state.sessionMetadata.docketRecordSort, 'byDate'),
+  setDefaultDocketRecordSortAction,
   setBaseUrlAction,
   getUserRoleAction,
   {
