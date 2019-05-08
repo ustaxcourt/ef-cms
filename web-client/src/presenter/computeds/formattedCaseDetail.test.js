@@ -497,7 +497,7 @@ describe('formattedCaseDetail', () => {
           caseDetail,
           caseDetailErrors: {},
           constants,
-          prefs: {
+          sessionMetadata: {
             docketRecordSort: 'byDateDesc',
           },
         },
@@ -531,7 +531,7 @@ describe('formattedCaseDetail', () => {
           caseDetail,
           caseDetailErrors: {},
           constants,
-          prefs: {
+          sessionMetadata: {
             docketRecordSort: 'byIndex',
           },
         },
@@ -564,7 +564,7 @@ describe('formattedCaseDetail', () => {
           caseDetail,
           caseDetailErrors: {},
           constants,
-          prefs: {
+          sessionMetadata: {
             docketRecordSort: 'byIndexDesc',
           },
         },
