@@ -660,30 +660,33 @@ nav.usa-nav {
 }
 
 .account-menu {
+  .account-button-container {
+    button.button-account-menu {
+      padding: 12px;
+      margin: -4px 0 0 0;
+      background: none;
+      color: $color-primary;
+    }
+
+    .caret {
+      margin-right: 0;
+    }
+  }
+
   &.closed {
     .account-menu-icon {
       color: $color-primary;
     }
-    .button-container {
+    .account-button-container {
       background: none;
     }
   }
   &.open {
     .account-menu-icon {
       color: $color-white;
-
-      &.caret {
-        margin-right: 0;
-      }
     }
     .account-button-container {
       background-color: $color-primary;
-
-      button.button-account-menu {
-        padding: 8px;
-        margin: 0;
-        background: none;
-      }
     }
   }
   .account-menu-content {

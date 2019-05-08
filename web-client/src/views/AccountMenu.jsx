@@ -31,7 +31,7 @@ export const AccountMenu = connect(
   },
   ({ isMenuOpen, toggleAccountMenu, user }) => {
     return (
-      <div className="account-menu open">
+      <div className={isMenuOpen ? 'account-menu open' : 'account-menu closed'}>
         <div className="account-button-container">
           <button
             title={`Hello, ${user.name}`}
