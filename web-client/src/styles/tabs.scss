@@ -37,8 +37,8 @@ nav.horizontal-tabs,
 
     button {
       padding-bottom: 10px;
-      margin: 0 45px 0 0;
       border-bottom: 3px $color-white solid;
+      margin: 0 45px 0 0;
       border-radius: 0;
       cursor: pointer;
       font-family: $font-serif;
@@ -92,22 +92,24 @@ nav.horizontal-tabs,
         display: inline-block;
         margin: 0;
 
-        button {
-          padding-bottom: 10px;
-          margin: 0 45px 0 0;
-          border-radius: 0;
-          cursor: pointer;
-
-          &:hover {
-            background-color: transparent;
-            color: $color-primary-darkest;
-          }
-        }
-
-        &.active {
+        @media only screen and (min-width: $medium-screen) {
           button {
-            cursor: default;
-            font-weight: $font-bold;
+            padding-bottom: 10px;
+            margin: 0 45px 0 0;
+            border-radius: 0;
+            cursor: pointer;
+
+            &:hover {
+              background-color: transparent;
+              color: $color-primary-darkest;
+            }
+          }
+
+          &.active {
+            button {
+              cursor: default;
+              font-weight: $font-bold;
+            }
           }
         }
       }
@@ -116,28 +118,44 @@ nav.horizontal-tabs,
 
   &.classic-horizontal,
   &.classic-horizontal-header3 {
-    > nav {
-      ul {
-        li {
-          &.active {
+    > nav > ul > li {
+      display: inline-block;
+      width: 100%;
+      @media only screen and (min-width: $medium-screen) {
+        width: unset;
+      }
+    }
+
+    &.ustc-num-tabs-2 > nav > ul > li {
+      width: 50%;
+      @media only screen and (min-width: $medium-screen) {
+        width: unset;
+      }
+    }
+
+    /* small screens */
+    @media only screen and (max-width: $medium-screen - 1px) {
+      > nav {
+        ul {
+          li {
             button {
-              border-bottom: 3px $color-blue solid;
+              width: 100%;
+              min-height: 40px;
+              border: 1px solid $color-gray-lighter;
+              background-color: transparent;
+              border-radius: 5px;
+              color: $color-blue;
+              font-family: Noto Serif JP, $georgia, serif;
+              font-style: normal;
+              &:hover {
+                border: 1px solid $color-gray-lighter;
+              }
             }
-          }
-
-          button {
-            padding-bottom: 10px;
-            margin: 0 45px 0 0;
-            border-bottom: 3px $color-white solid;
-            border-radius: 0;
-            font-family: $font-serif;
-            font-size: 24px;
-            font-weight: $font-medium;
-            line-height: 1.3em;
-
-            &:hover {
-              border-bottom: 3px $color-primary-darkest solid;
-              color: $color-primary-darkest;
+            &.active {
+              button {
+                background-color: $color-blue-darker;
+                color: $color-white;
+              }
             }
           }
         }
@@ -145,13 +163,46 @@ nav.horizontal-tabs,
     }
   }
 
-  &.classic-horizontal-header3 {
-    > nav {
-      ul {
-        li {
-          &.active {
+  @media only screen and (min-width: $medium-screen) {
+    &.classic-horizontal,
+    &.classic-horizontal-header3 {
+      > nav {
+        ul {
+          li {
+            &.active {
+              button {
+                border-bottom: 3px $color-blue solid;
+              }
+            }
+
             button {
-              font-weight: $font-bold;
+              padding-bottom: 10px;
+              border-bottom: 3px $color-white solid;
+              margin: 0 45px 0 0;
+              border-radius: 0;
+              font-family: $font-serif;
+              font-size: 24px;
+              font-weight: $font-medium;
+              line-height: 1.3em;
+
+              &:hover {
+                border-bottom: 3px $color-primary-darkest solid;
+                color: $color-primary-darkest;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.classic-horizontal-header3 {
+      > nav {
+        ul {
+          li {
+            &.active {
+              button {
+                font-weight: $font-bold;
+              }
             }
           }
         }
@@ -200,8 +251,8 @@ nav.horizontal-tabs,
     }
 
     > nav {
-      margin-bottom: 0;
       border: 1px solid $color-gray-lighter;
+      margin-bottom: 0;
       background-color: $color-gray-lightest;
 
       ul {
@@ -234,7 +285,7 @@ nav.horizontal-tabs,
   }
 
   > .fix-top-right {
-    @media only screen and (min-width: $small-screen) {
+    @media only screen and (min-width: $medium-screen) {
       position: absolute;
       top: 4px;
       right: 0px;

@@ -15,6 +15,7 @@
     },
     "documents": [
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-01T21:42:29.073Z",
         "documentType": "Petition",
         "filedBy": "Test Petitioner",
@@ -56,6 +57,7 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
+        "processingStatus": "complete",
         "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
@@ -109,12 +111,14 @@
     "docketRecord": [
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
-        "description": "Request for Place of Trial at Boise, Idaho"
+        "description": "Petition",
+        "filedBy": "Test Petitioner",
+        "index": 1
       },
       {
         "filingDate": "2019-03-01T21:42:29.073Z",
-        "description": "Petition",
-        "filedBy": "Test Petitioner"
+        "description": "Request for Place of Trial at Boise, Idaho",
+        "index": 2
       }
     ],
     "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",

@@ -16,7 +16,9 @@ import {
   faCloudUploadAlt,
   faDollarSign,
   faEdit as faEditSolid,
+  faEnvelope as faEnvelopeSolid,
   faExclamationTriangle,
+  faFileAlt as faFileAltSolid,
   faFilePdf,
   faFlag,
   faLaptop,
@@ -24,9 +26,11 @@ import {
   faPaperclip,
   faPlusCircle,
   faQuestionCircle,
+  faSearch,
   faShareSquare,
   faSignOutAlt,
   faSlash,
+  faSpinner,
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -34,6 +38,7 @@ import { route, router } from './router';
 
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
+import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import App from 'cerebral';
@@ -44,15 +49,18 @@ import ReactDOM from 'react-dom';
  * Instantiates the Cerebral app with React
  */
 const app = {
-  initialize: (applicationContext, debugTools) => {
+  initialize: async (applicationContext, debugTools) => {
     const user =
-      JSON.parse(window.localStorage.getItem('user') || 'null') ||
-      presenter.state.user;
+      (await applicationContext
+        .getUseCases()
+        .getItem({ applicationContext, key: 'user' })) || presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
     const token =
-      JSON.parse(window.localStorage.getItem('token') || 'null') ||
+      (await applicationContext
+        .getUseCases()
+        .getItem({ applicationContext, key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
@@ -65,6 +73,7 @@ const app = {
       faArrowAltCircleLeft,
       faCaretDown,
       faCaretLeft,
+      faSpinner,
       faCaretUp,
       faCheckCircle,
       faCheckCircleRegular,
@@ -72,6 +81,7 @@ const app = {
       faCloudUploadAlt,
       faCopy,
       faDollarSign,
+      faEnvelopeSolid,
       faEdit,
       faEditSolid,
       faExclamationTriangle,
@@ -81,10 +91,12 @@ const app = {
       faFlag,
       faLaptop,
       faFileAlt,
+      faFileAltSolid,
       faListUl,
       faPaperclip,
       faPlusCircle,
       faQuestionCircle,
+      faSearch,
       faShareSquare,
       faSignOutAlt,
       faSlash,
@@ -99,6 +111,7 @@ const app = {
     router.initialize(cerebralApp);
     ReactDOM.render(
       <Container app={cerebralApp}>
+        <IdleActivityMonitor />
         <AppComponent />
       </Container>,
       document.querySelector('#app'),

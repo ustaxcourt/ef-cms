@@ -42,7 +42,7 @@ export const workQueueSectionHelper = () => {
       pughsChambers: "Pugh's Chambers",
       ruwesChambers: "Ruwe's Chambers",
       thortonsChambers: "Thorton's Chambers",
-      urdasChambes: "Urda's Chambes",
+      urdasChambers: "Urda's Chambers",
       vasquezsChambers: "Vasquez's Chambers",
       wellsChambers: "Wells' Chambers",
     }[key];

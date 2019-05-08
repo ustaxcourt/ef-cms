@@ -128,7 +128,7 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showSendTo).toBeFalsy();
     expect(result2[0].showComplete).toBeFalsy();
   });
-  it('sets showBatchedStatusIcon and statusIcon when false', () => {
+  it('sets showBatchedStatusIcon when false', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
@@ -137,9 +137,8 @@ describe('formatted work queue computed', () => {
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeFalsy();
-    expect(result2[0].statusIcon).toEqual('');
   });
-  it('sets showBatchedStatusIcon and statusIcon when true', () => {
+  it('sets showBatchedStatusIcon when true', () => {
     workItem.isInitializeCase = true;
     workItem.caseStatus = 'Batched for IRS';
     const result2 = runCompute(formattedWorkQueue, {
@@ -149,10 +148,9 @@ describe('formatted work queue computed', () => {
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeTruthy();
-    expect(result2[0].statusIcon).toEqual('iconStatusBatched');
   });
 
-  it('sets showBatchedStatusIcon and statusIcon for recalled', () => {
+  it('sets showBatchedStatusIcon to recalled', () => {
     workItem.isInitializeCase = true;
     workItem.caseStatus = 'Recalled';
     const result2 = runCompute(formattedWorkQueue, {
@@ -161,7 +159,7 @@ describe('formatted work queue computed', () => {
         workQueue: [workItem],
       },
     });
-    expect(result2[0].showBatchedStatusIcon).toBeTruthy();
-    expect(result2[0].statusIcon).toEqual('iconStatusRecalled');
+    expect(result2[0].showRecalledStatusIcon).toBeTruthy();
+    expect(result2[0].showUnreadIndicators).toEqual(true);
   });
 });

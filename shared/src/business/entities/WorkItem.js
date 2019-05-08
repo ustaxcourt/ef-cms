@@ -78,6 +78,10 @@ joiValidationDecorator(
       .array()
       .items(joi.object())
       .required(),
+    readAt: joi
+      .date()
+      .iso()
+      .optional(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
     sentBySection: joi.string().optional(),
