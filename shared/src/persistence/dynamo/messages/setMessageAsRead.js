@@ -5,14 +5,11 @@ exports.setMessageAsRead = async ({
   messageId,
   applicationContext,
 }) => {
-  await client.put({
-    Item: {
-      messageId,
-      pk: `${userId}|read-messages`,
-      readAt: new Date().toISOString(),
-      sk: messageId,
-      userId,
-    },
+  await client.delete({
     applicationContext,
+    key: {
+      pk: `${userId}|unread-message`,
+      sk: messageId,
+    },
   });
 };

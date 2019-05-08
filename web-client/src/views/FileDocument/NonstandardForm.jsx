@@ -69,6 +69,40 @@ export const NonstandardForm = connect(
           </div>
         )}
 
+        {helper[level].showTextInput2 && (
+          <div
+            className={`ustc-form-group ${
+              validationErrors && validationErrors.freeText2
+                ? 'usa-input-error'
+                : ''
+            }`}
+          >
+            <label htmlFor={`${namespace}free-text2`}>
+              {helper[level].textInputLabel2}
+            </label>
+            <input
+              id={`${namespace}free-text2`}
+              type="text"
+              name={`${namespace}freeText2`}
+              autoCapitalize="none"
+              value={get(form, `${namespace}freeText2`, '')}
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onBlur={() => {
+                validateSequence();
+              }}
+            />
+            <Text
+              className="usa-input-error-message"
+              bind={`validationErrors.${namespace}freeText2`}
+            />
+          </div>
+        )}
+
         {helper[level].previousDocumentSelectLabel && (
           <div
             className={`ustc-form-group ${
