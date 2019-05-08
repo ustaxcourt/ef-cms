@@ -61,12 +61,12 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 
 `./docker-run.sh`
 
-You can access the UI at http://localhost:1234
-You can access the API at http://localhost:3000
-You can access the dynamodb shell at http://localhost:8000/shell
-You can access the dynamodb-admin ui at http://localhost:8001
-You can access s3 local at http://localhost:9000
-You can access the style guide at http://localhost:1234/style-guide
+- You can access the UI at http://localhost:1234
+- You can access the API at http://localhost:3000
+- You can access the dynamodb shell at http://localhost:8000/shell
+- You can access the dynamodb-admin ui at http://localhost:8001
+- You can access s3 local at http://localhost:9000
+- You can access the style guide at http://localhost:1234/style-guide
 
 ## Running this project locally without Docker
 
