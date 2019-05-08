@@ -50,6 +50,7 @@ export const DocketRecordHeader = connect(
             <div className="only-large-screens">
               <select
                 name="docketRecordSort"
+                aria-label="docket record sort"
                 onChange={e => {
                   updateSessionMetadataSequence({
                     key: e.target.name,
@@ -83,6 +84,7 @@ export const DocketRecordHeader = connect(
             </div>
             <div className="only-small-screens">
               <button
+                aria-label="docket record sort"
                 className="link mobile-sort-docket-button"
                 onClick={() => {
                   toggleMobileDocketSortSequence();
