@@ -206,6 +206,7 @@ export const PendingMessages = connect(
                         Add Message (optional)
                       </label>
                       <textarea
+                        className="usa-textarea"
                         name="completeMessage"
                         id={`complete-message-${idx}`}
                         onChange={e => {
@@ -305,7 +306,7 @@ export const PendingMessages = connect(
                           Select Section
                         </label>
                         <select
-                          className="usa-input-inline"
+                          className="usa-select"
                           id={`section-${idx}`}
                           name="section"
                           onChange={e => {
@@ -354,7 +355,7 @@ export const PendingMessages = connect(
                           </label>
 
                           <select
-                            className="usa-input-inline"
+                            className="usa-select"
                             id={`chambers-${idx}`}
                             name="chambers"
                             onChange={e => {
@@ -405,7 +406,7 @@ export const PendingMessages = connect(
                           Select Recipient
                         </label>
                         <select
-                          className="usa-input-inline"
+                          className="usa-select"
                           id={`assignee-id-${idx}`}
                           name="assigneeId"
                           disabled={
@@ -459,6 +460,7 @@ export const PendingMessages = connect(
                         </label>
                         <textarea
                           aria-labelledby={`message-label-${idx}`}
+                          className="usa-textarea"
                           name="forwardMessage"
                           id={`forward-message-${idx}`}
                           onChange={e => {
