@@ -37,7 +37,7 @@ export const AccountMenu = connect(
             title={`Hello, ${user.name}`}
             type="button"
             className="button-account-menu"
-            aria-label="logout"
+            aria-label="account menu"
             onClick={() => toggleAccountMenu()}
           >
             <FontAwesomeIcon
