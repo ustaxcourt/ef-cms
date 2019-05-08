@@ -100,15 +100,15 @@ input:focus::placeholder {
   }
 }
 
-.ustc-hide-radio-buttons {
-  li label {
-    padding-bottom: 10px;
+div.ustc-hide-radio-button {
+  padding-bottom: 10px;
+
+  input {
+    display: none;
+  }
+  label {
     color: $color-primary;
     text-decoration: underline;
-
-    &::before {
-      display: none;
-    }
   }
 }
 

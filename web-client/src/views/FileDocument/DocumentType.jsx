@@ -26,7 +26,7 @@ export const DocumentType = connect(
       <div className="blue-container">
         <div
           className={`usa-form-group ${
-            validationErrors.category ? 'usa-input-error' : ''
+            validationErrors.category ? 'usa-form-group--error' : ''
           }`}
         >
           <label className="usa-label" htmlFor="document-category">
@@ -34,7 +34,9 @@ export const DocumentType = connect(
           </label>
           <select
             name="category"
-            className="usa-select"
+            className={`usa-select ${
+              validationErrors.category ? 'usa-select--error' : ''
+            }`}
             id="document-category"
             aria-label="category"
             onChange={e => {
@@ -56,7 +58,7 @@ export const DocumentType = connect(
             })}
           </select>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind="validationErrors.category"
           />
         </div>
@@ -64,7 +66,7 @@ export const DocumentType = connect(
           <>
             <div
               className={`usa-form-group only-large-screens ${
-                validationErrors.documentType ? 'usa-input-error' : ''
+                validationErrors.documentType ? 'usa-form-group--error' : ''
               }`}
             >
               <label className="usa-label" htmlFor="document-type">
@@ -73,7 +75,9 @@ export const DocumentType = connect(
               <select
                 id="document-type"
                 name="documentType"
-                className="usa-select documentType"
+                className={`usa-select documentType ${
+                  validationErrors.category ? 'usa-select--error' : ''
+                }`}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
@@ -91,37 +95,38 @@ export const DocumentType = connect(
                 ))}
               </select>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.documentType"
               />
             </div>
             <div className="usa-form-group only-small-screens">
-              <fieldset className="usa-fieldset-inputs usa-sans">
+              <fieldset className="usa-fieldset">
                 <legend>Document Type</legend>
-                <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
-                  {(constants.CATEGORY_MAP[form.category] || []).map(
-                    (entry, index) => (
-                      <li key={entry.documentType}>
-                        <input
-                          id={`documentType-${index}`}
-                          type="radio"
-                          name="documentType"
-                          value={entry.documentType}
-                          onClick={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            selectDocumentSequence();
-                          }}
-                        />
-                        <label htmlFor={`documentType-${index}`}>
-                          {entry.documentType}
-                        </label>
-                      </li>
-                    ),
-                  )}
-                </ul>
+                {(constants.CATEGORY_MAP[form.category] || []).map(
+                  (entry, index) => (
+                    <div
+                      key={entry.documentType}
+                      className="usa-radio ustc-hide-radio-button"
+                    >
+                      <input
+                        id={`documentType-${index}`}
+                        type="radio"
+                        name="documentType"
+                        value={entry.documentType}
+                        onClick={e => {
+                          updateFileDocumentWizardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          selectDocumentSequence();
+                        }}
+                      />
+                      <label htmlFor={`documentType-${index}`}>
+                        {entry.documentType}
+                      </label>
+                    </div>
+                  ),
+                )}
               </fieldset>
             </div>
           </>
