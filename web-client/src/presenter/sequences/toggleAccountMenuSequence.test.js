@@ -2,10 +2,9 @@ import { CerebralTest } from 'cerebral/test';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 
-let test;
 presenter.providers.applicationContext = applicationContext;
 
-test = CerebralTest(presenter);
+const test = CerebralTest(presenter);
 
 describe('toggleAccountMenuSequence', () => {
   it('should show the account menu if it is currently hidden', () => {
