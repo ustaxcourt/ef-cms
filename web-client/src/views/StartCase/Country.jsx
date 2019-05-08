@@ -28,7 +28,7 @@ export const Country = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].countryType
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
@@ -65,7 +65,7 @@ export const Country = connect(
               (validationErrors &&
               validationErrors[type] &&
               validationErrors[type].country
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >

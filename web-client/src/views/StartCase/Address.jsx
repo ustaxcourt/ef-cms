@@ -26,7 +26,7 @@ export const Address = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].address1
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
@@ -99,7 +99,7 @@ export const Address = connect(
             validationErrors &&
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : ''
           }
         >
@@ -138,7 +138,7 @@ export const Address = connect(
                 (validationErrors &&
                 validationErrors[type] &&
                 validationErrors[type].state
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
               id={`${type}.state`}
@@ -236,7 +236,7 @@ export const Address = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].postalCode
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >

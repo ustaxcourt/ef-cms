@@ -50,7 +50,7 @@ export const ContactSecondary = connect(
               'usa-form-group ' +
               (validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
@@ -84,7 +84,7 @@ export const ContactSecondary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.inCareOf
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
@@ -150,7 +150,7 @@ export const ContactSecondary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.phone
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
