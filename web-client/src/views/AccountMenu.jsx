@@ -21,25 +21,15 @@ export const AccountMenuItems = ({ signOut }) => {
     </ul>
   );
 };
-class AccountMenuComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      menuOpen: false,
-    };
-  }
 
-  openMenu() {
-    this.setState({ menuOpen: true });
-  }
-
-  closeMenu() {
-    this.setState({ menuOpen: false });
-  }
-
-  render() {
-    const { user } = this.props;
-    const { menuOpen } = this.state;
+export const AccountMenu = connect(
+  {
+    isMenuOpen: state.accountMenuHelper.isMenuOpen,
+    signOutSequence: sequences.signOutSequence,
+    toggleAccountMenu: sequences.toggleAccountMenuSequence,
+    user: state.user,
+  },
+  ({ isMenuOpen, toggleAccountMenu, user }) => {
     return (
       <div className="account-menu open">
         <div className="account-button-container">
@@ -48,7 +38,7 @@ class AccountMenuComponent extends React.Component {
             type="button"
             className="button-account-menu"
             aria-label="logout"
-            onClick={menuOpen ? () => null : () => this.openMenu()}
+            onClick={() => toggleAccountMenu()}
           >
             <FontAwesomeIcon
               icon={['fa', 'user']}
@@ -56,11 +46,11 @@ class AccountMenuComponent extends React.Component {
             />
           </button>
         </div>
-        {menuOpen && <AccountMenuContent close={() => this.closeMenu()} />}
+        {isMenuOpen && <AccountMenuContent />}
       </div>
     );
-  }
-}
+  },
+);
 
 class AccountMenuContentComponent extends React.Component {
   constructor(props) {
@@ -71,14 +61,11 @@ class AccountMenuContentComponent extends React.Component {
 
   handleClick(e) {
     const targetClasses = Array.from(e.target.classList);
-    if (
-      targetClasses.indexOf('account-menu-item') > -1 &&
-      targetClasses.indexOf('button-account-menu') > -1
-    ) {
+    if (targetClasses.indexOf('account-menu-item') > -1) {
       return true;
     } else {
       // set a small delay to account for state updates in parent
-      setTimeout(this.props.close, 100);
+      setTimeout(this.props.closeAccountMenu, 200);
     }
   }
   componentDidMount() {
@@ -98,21 +85,19 @@ class AccountMenuContentComponent extends React.Component {
   }
 }
 
-AccountMenuComponent.propTypes = {
-  user: PropTypes.object,
-};
-
 AccountMenuContentComponent.propTypes = {
-  close: PropTypes.func.isRequired,
+  closeAccountMenu: PropTypes.func,
   signOutSequence: PropTypes.func.isRequired,
 };
 
-const AccountMenuContent = connect(
-  { signOutSequence: sequences.signOutSequence },
-  AccountMenuContentComponent,
-);
+AccountMenuItems.propTypes = {
+  signOut: PropTypes.func,
+};
 
-export const AccountMenu = connect(
-  { signOutSequence: sequences.signOutSequence, user: state.user },
-  AccountMenuComponent,
+const AccountMenuContent = connect(
+  {
+    closeAccountMenu: sequences.closeAccountMenuSequence,
+    signOutSequence: sequences.signOutSequence,
+  },
+  AccountMenuContentComponent,
 );
