@@ -26,7 +26,7 @@ export const InternationalAddress = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].address1
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
@@ -100,7 +100,7 @@ export const InternationalAddress = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].state
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
@@ -135,7 +135,7 @@ export const InternationalAddress = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].city
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
@@ -167,7 +167,7 @@ export const InternationalAddress = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].postalCode
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >

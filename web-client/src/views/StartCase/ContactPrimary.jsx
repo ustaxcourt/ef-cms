@@ -53,7 +53,7 @@ export const ContactPrimary = connect(
               'usa-form-group ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.name
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
@@ -108,7 +108,7 @@ export const ContactPrimary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.inCareOf
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
@@ -174,7 +174,7 @@ export const ContactPrimary = connect(
               'usa-form-group phone-input ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
