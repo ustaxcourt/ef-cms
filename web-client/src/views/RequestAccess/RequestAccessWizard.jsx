@@ -33,7 +33,7 @@ export const RequestAccessWizard = connect(
             <Tab tabName="RequestAccessReview">
               <FontAwesomeIcon icon="caret-left" />
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="queue-nav"
                 type="button"
                 onClick={() =>

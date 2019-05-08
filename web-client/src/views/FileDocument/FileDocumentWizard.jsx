@@ -34,7 +34,7 @@ export const FileDocumentWizard = connect(
             <Tab tabName="FileDocument">
               <FontAwesomeIcon icon="caret-left" />
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="queue-nav"
                 type="button"
                 onClick={() =>
@@ -47,7 +47,7 @@ export const FileDocumentWizard = connect(
             <Tab tabName="FileDocumentReview">
               <FontAwesomeIcon icon="caret-left" />
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="queue-nav"
                 type="button"
                 onClick={() =>

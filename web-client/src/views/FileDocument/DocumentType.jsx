@@ -25,13 +25,16 @@ export const DocumentType = connect(
     return (
       <div className="blue-container">
         <div
-          className={`ustc-form-group ${
+          className={`usa-form-group ${
             validationErrors.category ? 'usa-input-error' : ''
           }`}
         >
-          <label htmlFor="document-category">Document Category</label>
+          <label className="usa-label" htmlFor="document-category">
+            Document Category
+          </label>
           <select
             name="category"
+            className="usa-select"
             id="document-category"
             aria-label="category"
             onChange={e => {
@@ -64,11 +67,13 @@ export const DocumentType = connect(
                 validationErrors.documentType ? 'usa-input-error' : ''
               }`}
             >
-              <label htmlFor="document-type">Document Type</label>
+              <label className="usa-label" htmlFor="document-type">
+                Document Type
+              </label>
               <select
                 id="document-type"
                 name="documentType"
-                className="documentType"
+                className="usa-select documentType"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
