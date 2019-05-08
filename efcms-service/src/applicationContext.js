@@ -171,9 +171,6 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
-  saveWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
-const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
@@ -283,7 +280,6 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         putWorkItemInOutbox,
         saveDocument,
-        saveWorkItem,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setMessageAsRead,

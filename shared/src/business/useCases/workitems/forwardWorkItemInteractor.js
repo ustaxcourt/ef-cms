@@ -50,6 +50,9 @@ exports.forwardWorkItem = async ({
     toUserId: userToForwardTo.userId,
   });
 
+  const latestMessageId = new WorkItem(fullWorkItem).getLatestMessageEntity()
+    .messageId;
+
   const workItemToForward = new WorkItem(fullWorkItem)
     .assignToUser({
       assigneeId: userToForwardTo.userId,
@@ -72,6 +75,7 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
+    messageId: latestMessageId,
     workItem: fullWorkItem,
   });
 

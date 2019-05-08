@@ -40,14 +40,6 @@ describe('getWorkItemsBySection', () => {
           sk: 'abc',
           workItemId: 'abc',
         },
-      ])
-      .onSecondCall()
-      .resolves([
-        {
-          caseId: '123',
-          docketNumber: '123-19',
-          status: 'New',
-        },
       ]);
   });
 
@@ -67,7 +59,10 @@ describe('getWorkItemsBySection', () => {
       applicationContext,
     });
     expect(result).toMatchObject([
-      { caseStatus: 'New', docketNumber: '123-19', workItemId: 'abc' },
+      {
+        caseId: '123',
+        workItemId: 'abc',
+      },
     ]);
   });
 });

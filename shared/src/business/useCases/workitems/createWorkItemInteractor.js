@@ -79,15 +79,7 @@ exports.createWorkItem = async ({
       sentByUserId: user.userId,
       sentByUserRole: user.role,
     })
-    .addMessage(
-      new Message({
-        from: user.name,
-        fromUserId: user.userId,
-        message,
-        to: userToAssignTo.name,
-        toUserId: userToAssignTo.userId,
-      }),
-    );
+    .addMessage(newMessage);
 
   document.addWorkItem(newWorkItem);
 

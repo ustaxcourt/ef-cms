@@ -29,7 +29,6 @@ describe('forwardWorkItem', () => {
           return { userId: 'docketclerk' };
         },
         getWorkItemById: async () => mockWorkItem,
-        saveWorkItem: async ({ workItemToSave }) => workItemToSave,
       }),
     };
     let error;

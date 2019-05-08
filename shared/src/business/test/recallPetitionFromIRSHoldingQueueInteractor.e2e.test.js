@@ -35,7 +35,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('should create the expected work items and update their status', async () => {
+  it('should create the expected work items and update their status when a petition is recalled', async () => {
     const { caseId } = await createCase({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
