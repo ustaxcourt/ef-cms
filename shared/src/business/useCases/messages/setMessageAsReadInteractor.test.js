@@ -1,4 +1,5 @@
 const { setMessageAsRead } = require('./setMessageAsReadInteractor');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('setMessageAsReadInteractor', () => {
   it('unauthorized user tries to invoke this interactor', async () => {
@@ -18,6 +19,7 @@ describe('setMessageAsReadInteractor', () => {
       error = err;
     }
     expect(error).toBeDefined();
+    expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
   it('returns the expected result', async () => {

@@ -158,8 +158,8 @@ describe('Get case', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'intakeclerk',
-          userId: 'intakeclerk',
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
         };
       },
       getPersistenceGateway: () => {
