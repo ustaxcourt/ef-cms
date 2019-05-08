@@ -152,6 +152,7 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     );
   }
 
+  // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
     return a.index - b.index;
   });
@@ -207,13 +208,62 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   return result;
 };
 
+const getDocketRecordSortFunc = function(sortBy) {
+  const byIndex = (a, b) => a.index - b.index;
+  const byDate = (a, b) => {
+    const secondsDifference = 30 * 1000;
+    const aDate = new Date(a.record.filingDate);
+    const bDate = new Date(b.record.filingDate);
+    if (Math.abs(aDate - bDate) < secondsDifference) {
+      // treat as equal timestamps
+      return 0;
+    }
+    return aDate - bDate;
+  };
+
+  switch (sortBy) {
+    case 'byIndex': // fall-through
+    case 'byIndexDesc':
+      return byIndex;
+    case 'byDate': // fall through, is the default sort method
+    case 'byDateDesc':
+    default:
+      return byDate;
+  }
+};
+
+const sortDocketRecords = (docketRecords, sortBy = '') => {
+  const sortFunc = getDocketRecordSortFunc(sortBy);
+  const isReversed = sortBy.indexOf('Desc') > -1;
+  const result = docketRecords.sort(sortFunc);
+  if (isReversed) {
+    // reversing AFTER the sort keeps sorting stable
+    return result.reverse();
+  }
+  return result;
+};
+
 export const formattedCases = get => {
   const cases = get(state.cases);
-  return cases.map(formatCase);
+  const docketRecordSort = get(state.sessionMetadata.docketRecordSort);
+  return cases.map(caseObj => {
+    const result = formatCase(caseObj);
+    result.docketRecordWithDocument = sortDocketRecords(
+      result.docketRecordWithDocument,
+      docketRecordSort,
+    );
+    return result;
+  });
 };
 
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
+  const docketRecordSort = get(state.sessionMetadata.docketRecordSort);
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  const result = formatCase(caseDetail, caseDetailErrors);
+  result.docketRecordWithDocument = sortDocketRecords(
+    result.docketRecordWithDocument,
+    docketRecordSort,
+  );
+  return result;
 };
