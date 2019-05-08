@@ -56,7 +56,9 @@ export const SectionWorkQueueInbox = connect(
                 <span className="selected-count">
                   {selectedWorkItems.length} selected
                 </span>
-                <label htmlFor="options">Send to</label>
+                <label htmlFor="options" className="usa-label">
+                  Send to
+                </label>
                 <select
                   onChange={event =>
                     selectAssigneeSequence({
@@ -120,6 +122,7 @@ export const SectionWorkQueueInbox = connect(
                 <label
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
+                  className="usa-label"
                 />
               </td>
               <td className="section-queue-row has-icon">

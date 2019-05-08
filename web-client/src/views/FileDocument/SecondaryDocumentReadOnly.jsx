@@ -29,7 +29,7 @@ export const SecondaryDocumentReadOnly = connect(
         <div className="blue-container">
           {form.secondaryDocumentFile && (
             <div className="usa-form-group">
-              <label htmlFor="secondary-filing">
+              <label htmlFor="secondary-filing" className="usa-label">
                 {form.secondaryDocument.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -39,7 +39,10 @@ export const SecondaryDocumentReadOnly = connect(
 
           {form.secondarySupportingDocumentFile && (
             <div className="usa-form-group">
-              <label htmlFor="secondary-supporting-documents">
+              <label
+                htmlFor="secondary-supporting-documents"
+                className="usa-label"
+              >
                 {form.secondarySupportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -53,7 +56,7 @@ export const SecondaryDocumentReadOnly = connect(
 
           {fileDocumentHelper.showSecondaryFilingNotIncludes && (
             <div className="usa-form-group">
-              <label htmlFor="filing-not-includes">
+              <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>
               <ul className="ustc-unstyled-list without-margins">

@@ -40,7 +40,9 @@ export const SecondaryDocumentType = connect(
               : ''
           }`}
         >
-          <label htmlFor="document-secondary-category">Document Category</label>
+          <label htmlFor="document-secondary-category" className="usa-label">
+            Document Category
+          </label>
           <select
             name="secondaryDocument.category"
             id="document-secondary-category"
@@ -78,7 +80,10 @@ export const SecondaryDocumentType = connect(
                   : ''
               }`}
             >
-              <label htmlFor="secondary-doc-secondary-document-type">
+              <label
+                htmlFor="secondary-doc-secondary-document-type"
+                className="usa-label"
+              >
                 Document Type
               </label>
               <select
@@ -128,7 +133,10 @@ export const SecondaryDocumentType = connect(
                             selectDocumentSequence();
                           }}
                         />
-                        <label htmlFor={`secondaryDocumentType-${index}`}>
+                        <label
+                          htmlFor={`secondaryDocumentType-${index}`}
+                          className="usa-label"
+                        >
                           {entry.documentType}
                         </label>
                       </li>

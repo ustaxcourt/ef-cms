@@ -23,7 +23,9 @@ export const PartiesRepresentingReadOnly = connect(
         </button>
         <div className="blue-container">
           <div className="usa-form-group">
-            <label htmlFor="filing-parties">Parties</label>
+            <label htmlFor="filing-parties" className="usa-label">
+              Parties
+            </label>
             <ul className="ustc-unstyled-list without-margins">
               {form.representingPrimary && (
                 <li>{caseDetail.contactPrimary.name}</li>

@@ -49,7 +49,7 @@ export const PartiesRepresenting = connect(
                       validateCaseAssociationRequestSequence();
                     }}
                   />
-                  <label htmlFor="party-primary">
+                  <label htmlFor="party-primary" className="usa-label">
                     {caseDetail.contactPrimary.name}
                   </label>
                 </li>
@@ -69,7 +69,7 @@ export const PartiesRepresenting = connect(
                         validateCaseAssociationRequestSequence();
                       }}
                     />
-                    <label htmlFor="party-secondary">
+                    <label htmlFor="party-secondary" className="usa-label">
                       {caseDetail.contactSecondary.name}
                     </label>
                   </li>

@@ -91,7 +91,10 @@ export const RequestAccess = connect(
                         validateCaseAssociationRequestSequence();
                       }}
                     />
-                    <label htmlFor={`document-type-${index}`}>
+                    <label
+                      htmlFor={`document-type-${index}`}
+                      className="usa-label"
+                    >
                       {option.documentType}
                     </label>
                   </li>
