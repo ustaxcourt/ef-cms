@@ -26,8 +26,8 @@ export const CaseTypeSelect = connect(
       <div className="subsection">
         <div
           className={
-            'ustc-form-group case-type-select ' +
-            (validationErrors.caseType ? 'usa-input-error' : '')
+            'usa-form-group ustc-form-group case-type-select ' +
+            (validationErrors.caseType ? 'usa-form-group--error' : '')
           }
         >
           <fieldset>
@@ -37,6 +37,7 @@ export const CaseTypeSelect = connect(
               id="case-type"
               aria-labelledby="case-type"
               value={value}
+              className="usa-select"
               onChange={e => {
                 onChange({
                   key: e.target.name,
@@ -57,7 +58,7 @@ export const CaseTypeSelect = connect(
             </select>
           </fieldset>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind="validationErrors.caseType"
           />
         </div>
