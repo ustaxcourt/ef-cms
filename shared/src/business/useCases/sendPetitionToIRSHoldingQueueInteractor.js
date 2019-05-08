@@ -41,6 +41,7 @@ exports.sendPetitionToIRSHoldingQueue = async ({
         applicationContext,
         workItem: workItem.validate().toRawObject(),
       });
+
       workItem.assignToIRSBatchSystem({
         name: user.name,
         userId: user.userId,
@@ -50,6 +51,7 @@ exports.sendPetitionToIRSHoldingQueue = async ({
         applicationContext,
         workItem: workItem.validate().toRawObject(),
       });
+
       await applicationContext
         .getPersistenceGateway()
         .addWorkItemToSectionInbox({

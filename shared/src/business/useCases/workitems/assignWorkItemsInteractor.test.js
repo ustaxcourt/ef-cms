@@ -56,9 +56,6 @@ describe('assignWorkItems', () => {
       getPersistenceGateway: () => {
         return {
           getWorkItemById: async () => _.omit(MOCK_WORK_ITEM, 'caseId'),
-          saveWorkItem: async () => ({
-            abc: 123,
-          }),
         };
       },
       user: {

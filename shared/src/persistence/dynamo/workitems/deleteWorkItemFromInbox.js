@@ -8,6 +8,13 @@ exports.deleteWorkItemFromInbox = async ({ workItem, applicationContext }) => {
       skId: workItem.workItemId,
       type: 'workItem',
     });
+
+    await deleteMappingRecord({
+      applicationContext,
+      pkId: workItem.assigneeId,
+      skId: workItem.workItemId,
+      type: 'unread-message',
+    });
   }
 
   await deleteMappingRecord({

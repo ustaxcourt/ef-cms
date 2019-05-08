@@ -19,14 +19,11 @@ describe('getWorkItemsForUser', () => {
   it('returns an unread count', async () => {
     applicationContext = {
       environment: { stage: 'local' },
-      getPersistenceGateway: () => ({
-        getUnreadMessagesForUser: async () => [],
-        getWorkItemsForUser: async () => [],
+      getCurrentUser: () => ({
+        userId: 'abc',
       }),
-      getUseCases: () => ({
-        getWorkItemsForUser: () => {
-          return [mockWorkItem];
-        },
+      getPersistenceGateway: () => ({
+        getUnreadMessagesForUser: async () => [{}],
       }),
     };
     const result = await getNotifications({
@@ -39,14 +36,11 @@ describe('getWorkItemsForUser', () => {
   it('returns an accurate unread count for legacy items marked complete', async () => {
     applicationContext = {
       environment: { stage: 'local' },
+      getCurrentUser: () => ({
+        userId: 'abc',
+      }),
       getPersistenceGateway: () => ({
         getUnreadMessagesForUser: async () => [],
-        getWorkItemsForUser: async () => [],
-      }),
-      getUseCases: () => ({
-        getWorkItemsForUser: () => {
-          return [{ ...mockWorkItem, completedAt: new Date() }];
-        },
       }),
     };
     const result = await getNotifications({

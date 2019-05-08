@@ -28,4 +28,11 @@ exports.saveWorkItemForNonPaper = async ({ workItem, applicationContext }) => {
     skId: workItem.workItemId,
     type: 'workItem',
   });
+
+  await createMappingRecord({
+    applicationContext,
+    pkId: workItem.caseId,
+    skId: workItem.workItemId,
+    type: 'workItem',
+  });
 };
