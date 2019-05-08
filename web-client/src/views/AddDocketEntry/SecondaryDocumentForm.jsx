@@ -37,7 +37,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
               className={
-                'ustc-upload with-hint' +
+                'usa-label ustc-upload with-hint' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
@@ -78,6 +78,7 @@ export const SecondaryDocumentForm = connect(
 
           <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="secondary-additional-info"
               id="secondary-additional-info-label"
             >
@@ -115,7 +116,7 @@ export const SecondaryDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="secondary-add-to-coversheet">
+            <label htmlFor="secondary-add-to-coversheet" className="usa-label">
               Add to Cover Sheet
             </label>
           </div>
@@ -124,6 +125,7 @@ export const SecondaryDocumentForm = connect(
             <label
               htmlFor="secondary-additional-info2"
               id="secondary-additional-info2-label"
+              className="usa-label"
             >
               Additional Info 2
             </label>

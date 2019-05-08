@@ -50,7 +50,7 @@ export const PartiesFiling = connect(
                         validateExternalDocumentInformationSequence();
                       }}
                     />
-                    <label htmlFor="party-practitioner">
+                    <label htmlFor="party-practitioner" className="usa-label">
                       Myself as Petitioner’s Counsel
                     </label>
                   </li>
@@ -70,7 +70,7 @@ export const PartiesFiling = connect(
                       validateExternalDocumentInformationSequence();
                     }}
                   />
-                  <label htmlFor="party-primary">
+                  <label htmlFor="party-primary" className="usa-label">
                     {fileDocumentHelper.partyPrimaryLabel}
                   </label>
                 </li>
@@ -90,7 +90,7 @@ export const PartiesFiling = connect(
                         validateExternalDocumentInformationSequence();
                       }}
                     />
-                    <label htmlFor="party-secondary">
+                    <label htmlFor="party-secondary" className="usa-label">
                       {caseDetail.contactSecondary.name}
                     </label>
                   </li>
@@ -111,7 +111,9 @@ export const PartiesFiling = connect(
                         validateExternalDocumentInformationSequence();
                       }}
                     />
-                    <label htmlFor="party-respondent">Respondent</label>
+                    <label htmlFor="party-respondent" className="usa-label">
+                      Respondent
+                    </label>
                   </li>
                 )}
               </ul>

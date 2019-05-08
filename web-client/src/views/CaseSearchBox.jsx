@@ -73,7 +73,9 @@ export const CaseSearchBox = connect(
             }
           >
             <div>
-              <label htmlFor="docket-search-field">Docket Number</label>
+              <label htmlFor="docket-search-field" className="usa-label">
+                Docket Number
+              </label>
               <input
                 id="docket-search-field"
                 type="text"

@@ -43,7 +43,7 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}free-text`}>
+            <label htmlFor={`${namespace}free-text`} className="usa-label">
               {helper[level].textInputLabel}
             </label>
             <input
@@ -77,7 +77,7 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}free-text2`}>
+            <label htmlFor={`${namespace}free-text2`} className="usa-label">
               {helper[level].textInputLabel2}
             </label>
             <input
@@ -111,7 +111,10 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}previous-document`}>
+            <label
+              htmlFor={`${namespace}previous-document`}
+              className="usa-label"
+            >
               {helper[level].previousDocumentSelectLabel}
             </label>
             <select
@@ -324,7 +327,10 @@ export const NonstandardForm = connect(
                         validateSequence();
                       }}
                     />
-                    <label htmlFor={`${namespace}${ordinalValue}`}>
+                    <label
+                      htmlFor={`${namespace}${ordinalValue}`}
+                      className="usa-label"
+                    >
                       {ordinalValue}
                     </label>
                   </li>

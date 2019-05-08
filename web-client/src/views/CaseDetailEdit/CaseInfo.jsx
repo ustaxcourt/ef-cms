@@ -163,7 +163,9 @@ export const CaseInfo = connect(
                   autoSaveCaseSequence();
                 }}
               />
-              <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+              <label htmlFor="order-to-show-cause" className="usa-label">
+                Order to Show Cause
+              </label>
             </div>
           </div>
         </div>
@@ -294,7 +296,9 @@ export const CaseInfo = connect(
 
         <div className="subsection">
           <div className="usa-form-group">
-            <label htmlFor="fee-payment-id">Fee Payment ID</label>
+            <label htmlFor="fee-payment-id" className="usa-label">
+              Fee Payment ID
+            </label>
             <input
               id="fee-payment-id"
               name="payGovId"
@@ -325,7 +329,9 @@ export const CaseInfo = connect(
                   autoSaveCaseSequence();
                 }}
               />
-              <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+              <label htmlFor="order-for-filing-fee" className="usa-label">
+                Order for Filing Fee
+              </label>
             </div>
           </div>
         </div>
@@ -350,7 +356,7 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-ratification">
+            <label htmlFor="order-for-ratification" className="usa-label">
               Order for Ratification of Petition
             </label>
           </div>
@@ -368,7 +374,7 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="notice-of-attachments">
+            <label htmlFor="notice-of-attachments" className="usa-label">
               Notice of Attachments in the Nature of Evidence
             </label>
           </div>
@@ -386,7 +392,7 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-amended-petition">
+            <label htmlFor="order-for-amended-petition" className="usa-label">
               Order for Amended Petition
             </label>
           </div>
@@ -404,7 +410,10 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-amended-petition-and-filing-fee">
+            <label
+              htmlFor="order-for-amended-petition-and-filing-fee"
+              className="usa-label"
+            >
               Order for Amended Petition and Filing Fee
             </label>
           </div>

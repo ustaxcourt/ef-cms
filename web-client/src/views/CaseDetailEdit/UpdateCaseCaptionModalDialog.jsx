@@ -17,7 +17,9 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
   renderBody() {
     return (
       <div>
-        <label htmlFor="caption">Case Caption</label>
+        <label htmlFor="caption" className="usa-label">
+          Case Caption
+        </label>
         <textarea
           id="caption"
           className="caption"
