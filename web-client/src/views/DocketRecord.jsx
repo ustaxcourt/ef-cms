@@ -103,7 +103,7 @@ export const DocketRecord = connect(
           </a>
         )}
         <table
-          className="docket-record responsive-table row-border-only"
+          className="usa-table docket-record responsive-table row-border-only"
           aria-label="docket record"
         >
           <thead>

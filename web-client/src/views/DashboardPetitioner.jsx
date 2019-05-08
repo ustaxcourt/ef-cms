@@ -16,7 +16,7 @@ export const DashboardPetitioner = connect(
         <h1 tabIndex="-1">Welcome, {user.name}</h1>
         <SuccessNotification />
         <ErrorNotification />
-        <div className="grid-row">
+        <div className="grid-row grid-gap">
           <div className="grid-col-8">
             {helper.showWhatToExpect && <WhatToExpect />}
             {helper.showCaseList && <CaseListPetitioner />}

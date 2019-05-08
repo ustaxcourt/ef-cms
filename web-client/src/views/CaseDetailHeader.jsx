@@ -21,7 +21,7 @@ export const CaseDetailHeader = connect(
             </a>
           </h1>
           <span
-            className="usa-label case-status-label"
+            className="usa-tag case-status-label"
             aria-label={`status: ${caseDetail.status}`}
           >
             <span aria-hidden="true">{caseDetail.status}</span>

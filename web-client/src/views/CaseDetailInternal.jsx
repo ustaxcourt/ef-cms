@@ -52,7 +52,7 @@ export const CaseDetailInternal = connect(
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
-            <table className="row-border-only subsection">
+            <table className="usa-table row-border-only subsection">
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
