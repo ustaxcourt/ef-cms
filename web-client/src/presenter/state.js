@@ -90,6 +90,7 @@ export const state = {
   searchTerm: '',
   selectDocumentTypeHelper,
   selectedWorkItems: [],
+  sessionMetadata: {},
   showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,

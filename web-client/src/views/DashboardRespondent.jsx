@@ -24,7 +24,10 @@ export const DashboardRespondent = connect(
           </p>
         )}
         {helper.showCaseList && (
-          <table className="responsive-table dashboard" id="workQueue">
+          <table
+            className="usa-table responsive-table dashboard"
+            id="workQueue"
+          >
             <thead>
               <tr>
                 <th>Docket Number</th>

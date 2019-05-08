@@ -20,7 +20,7 @@ describe('getWorkItemsForUser', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getPersistenceGateway: () => ({
-        getReadMessagesForUser: async () => [],
+        getUnreadMessagesForUser: async () => [],
         getWorkItemsForUser: async () => [],
       }),
       getUseCases: () => ({
@@ -40,7 +40,7 @@ describe('getWorkItemsForUser', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getPersistenceGateway: () => ({
-        getReadMessagesForUser: async () => [],
+        getUnreadMessagesForUser: async () => [],
         getWorkItemsForUser: async () => [],
       }),
       getUseCases: () => ({

@@ -28,7 +28,7 @@ export const CaseListPetitioner = connect(
         <div className="show-on-mobile">
           <h2>Your Cases</h2>
         </div>
-        <table className="responsive-table dashboard" id="case-list">
+        <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
             <tr>
               <th>Docket Number</th>

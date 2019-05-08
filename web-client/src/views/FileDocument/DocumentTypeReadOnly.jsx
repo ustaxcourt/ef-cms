@@ -32,7 +32,7 @@ export const DocumentTypeReadOnly = connect(
                 </label>
               </Focus>
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="edit-selected-document-type"
                 onClick={() => {
                   closeDocumentCategoryAccordionSequence();

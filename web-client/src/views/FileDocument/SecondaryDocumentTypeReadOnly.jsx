@@ -29,7 +29,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
             </label>
           </Focus>
           <button
-            className="link"
+            className="usa-button usa-button--unstyled"
             id="edit-selected-secondary-document-type"
             onClick={() => {
               closeDocumentCategoryAccordionSequence();
