@@ -245,7 +245,7 @@ const sortDocketRecords = (docketRecords, sortBy = '') => {
 
 export const formattedCases = get => {
   const cases = get(state.cases);
-  const docketRecordSort = get(state.prefs.docketRecordSort);
+  const docketRecordSort = get(state.sessionMetadata.docketRecordSort);
   return cases.map(caseObj => {
     const result = formatCase(caseObj);
     result.docketRecordWithDocument = sortDocketRecords(
@@ -258,7 +258,7 @@ export const formattedCases = get => {
 
 export const formattedCaseDetail = get => {
   const caseDetail = get(state.caseDetail);
-  const docketRecordSort = get(state.prefs.docketRecordSort);
+  const docketRecordSort = get(state.sessionMetadata.docketRecordSort);
   const caseDetailErrors = get(state.caseDetailErrors);
   const result = formatCase(caseDetail, caseDetailErrors);
   result.docketRecordWithDocument = sortDocketRecords(
