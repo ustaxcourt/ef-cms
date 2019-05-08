@@ -152,13 +152,17 @@ export const Forms = () => (
 
       <div className="blue-container">
         <div className="usa-form-group">
-          <label htmlFor="textarea">Text Area</label>
+          <label htmlFor="textarea" className="usa-label">
+            Text Area
+          </label>
           <textarea id="textarea" className="usa-textarea" />
         </div>
       </div>
       <div className="blue-container">
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="textarea-error">Text Area with error</label>
+          <label htmlFor="textarea-error" className="usa-label">
+            Text Area with error
+          </label>
           <textarea
             id="textarea-error"
             className="usa-textarea usa-textarea--error"
