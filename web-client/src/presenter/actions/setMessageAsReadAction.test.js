@@ -1,17 +1,25 @@
-import { presenter } from '../presenter';
 import { setMessageAsReadAction } from './setMessageAsReadAction';
-import { state } from 'cerebral';
 import sinon from 'sinon';
 
-let messageId = 123;
-let setMessageAsReadStub = sinon.stub().returns(messageId);
-
-let applicationContext = {
-  getUseCases: () => ({
-    setMessageAsRead: setMessageAsReadStub,
-  }),
-};
-
 describe('setMessageAsReadAction', () => {
-  it('should run setMessageAsReadAction on messageId', async () => {});
+  let messageId;
+  let get;
+  let applicationContext;
+
+  it('should set message as read', async () => {
+    let setMessageAsReadStub = sinon.stub();
+
+    messageId = 123;
+    get = sinon.stub().returns(messageId);
+    applicationContext = {
+      getUseCases: () => ({
+        setMessageAsRead: setMessageAsReadStub,
+      }),
+    };
+
+    await setMessageAsReadAction({ applicationContext, get });
+
+    expect(setMessageAsReadStub.calledOnce).toEqual(true);
+    expect(get.calledOnce).toEqual(true);
+  });
 });
