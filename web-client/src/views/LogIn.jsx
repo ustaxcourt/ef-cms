@@ -29,6 +29,7 @@ export const LogIn = connect(
               </label>
               <input
                 autoCapitalize="none"
+                className="usa-input"
                 id="name"
                 name="name"
                 type="text"

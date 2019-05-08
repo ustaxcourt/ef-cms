@@ -60,7 +60,7 @@ export const SelectDocumentType = connect(
         </div>
 
         <div className="grid-container padding-x-0">
-          <div className="grid-row">
+          <div className="grid-row grid-gap">
             <div className="grid-col-6">
               {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
 
