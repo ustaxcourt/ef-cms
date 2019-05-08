@@ -81,73 +81,76 @@ export const StartCase = connect(
 
           <div className="blue-container">
             <div className="grid-container padding-x-0">
-              <div className="usa-width-seven-twelfths push-right">
-                <div
-                  id="petition-upload-hint"
-                  className="alert-gold add-bottom-margin"
-                >
-                  <span className="usa-form-hint ustc-form-hint-with-svg">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="lg"
-                    />
-                    This should include your Petition form and any IRS notice
-                    <span aria-hidden="true">(s)</span> you received.
-                  </span>
-                </div>
-              </div>
-
-              <div className="usa-width-five-twelfths">
-                <div
-                  className={`ustc-form-group ${
-                    validationErrors.petitionFile ? 'usa-input-error' : ''
-                  }`}
-                >
-                  <label
-                    htmlFor="petition-file"
-                    className={
-                      'ustc-upload-petition with-hint ' +
-                      (startCaseHelper.showPetitionFileValid ? 'validated' : '')
-                    }
+              <div className="grid-row">
+                <div className="grid-row-7 push-right">
+                  <div
+                    id="petition-upload-hint"
+                    className="alert-gold add-bottom-margin"
                   >
-                    Upload Your Petition{' '}
-                    <span className="success-message">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                    <span className="usa-hint ustc-form-hint-with-svg">
+                      <FontAwesomeIcon
+                        icon={['far', 'arrow-alt-circle-left']}
+                        className="fa-icon-gold"
+                        size="lg"
+                      />
+                      This should include your Petition form and any IRS notice
+                      <span aria-hidden="true">(s)</span> you received.
                     </span>
-                  </label>
-                  <span className="usa-form-hint">
-                    File must be in PDF format (.pdf). Max file size{' '}
-                    {constants.MAX_FILE_SIZE_MB}MB.
-                  </span>
-                  <input
-                    id="petition-file"
-                    type="file"
-                    accept=".pdf"
-                    aria-describedby="petition-hint"
-                    name="petitionFile"
-                    onChange={e => {
-                      limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                        updatePetitionValueSequence({
-                          key: e.target.name,
-                          value: e.target.files[0],
+                  </div>
+                </div>
+                <div className="grid-row-5">
+                  <div
+                    className={`ustc-form-group ${
+                      validationErrors.petitionFile ? 'usa-input--error' : ''
+                    }`}
+                  >
+                    <label
+                      htmlFor="petition-file"
+                      className={
+                        'ustc-upload-petition with-hint ' +
+                        (startCaseHelper.showPetitionFileValid
+                          ? 'validated'
+                          : '')
+                      }
+                    >
+                      Upload Your Petition{' '}
+                      <span className="success-message">
+                        <FontAwesomeIcon icon="check-circle" size="sm" />
+                      </span>
+                    </label>
+                    <span className="usa-hint">
+                      File must be in PDF format (.pdf). Max file size{' '}
+                      {constants.MAX_FILE_SIZE_MB}MB.
+                    </span>
+                    <input
+                      id="petition-file"
+                      type="file"
+                      accept=".pdf"
+                      aria-describedby="petition-hint"
+                      name="petitionFile"
+                      onChange={e => {
+                        limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                          updatePetitionValueSequence({
+                            key: e.target.name,
+                            value: e.target.files[0],
+                          });
+                          updatePetitionValueSequence({
+                            key: `${e.target.name}Size`,
+                            value: e.target.files[0].size,
+                          });
+                          validateStartCaseSequence();
                         });
-                        updatePetitionValueSequence({
-                          key: `${e.target.name}Size`,
-                          value: e.target.files[0].size,
-                        });
-                        validateStartCaseSequence();
-                      });
-                    }}
-                  />
-                  <Text
-                    className="usa-input-error-message"
-                    bind="validationErrors.petitionFile"
-                  />
-                  <Text
-                    className="usa-input-error-message"
-                    bind="validationErrors.petitionFileSize"
-                  />
+                      }}
+                    />
+                    <Text
+                      className="usa-error-message"
+                      bind="validationErrors.petitionFile"
+                    />
+                    <Text
+                      className="usa-error-message"
+                      bind="validationErrors.petitionFileSize"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,7 +160,7 @@ export const StartCase = connect(
           <div className="blue-container">
             <div
               className={`ustc-form-group ${
-                validationErrors.stinFile ? 'usa-input-error' : ''
+                validationErrors.stinFile ? 'usa-input--error' : ''
               }`}
             >
               <label
@@ -172,7 +175,7 @@ export const StartCase = connect(
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
-              <span className="usa-form-hint">
+              <span className="usa-hint">
                 File must be in PDF format (.pdf). Max file size{' '}
                 {constants.MAX_FILE_SIZE_MB}MB.
               </span>
@@ -196,11 +199,11 @@ export const StartCase = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.stinFile"
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.stinFileSize"
               />
             </div>
@@ -209,12 +212,12 @@ export const StartCase = connect(
           <h2>Who is Filing This Case?</h2>
           <div className="blue-container">
             <div className="grid-container padding-x-0">
-              <div className="usa-width-seven-twelfths push-right">
+              <div className="grid-row-7 push-right">
                 <div
                   id="petition-hint"
                   className="alert-gold add-bottom-margin"
                 >
-                  <span className="usa-form-hint ustc-form-hint-with-svg">
+                  <span className="usa-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
@@ -229,16 +232,16 @@ export const StartCase = connect(
                   </span>
                 </div>
               </div>
-              <div className="usa-width-five-twelfths">
+              <div className="grid-row-5">
                 <div
                   className={
                     'ustc-form-group ' +
-                    (validationErrors.filingType ? 'usa-input-error' : '')
+                    (validationErrors.filingType ? 'usa-input--error' : '')
                   }
                 >
                   <fieldset
                     id="filing-type-radios"
-                    className="usa-fieldset-inputs usa-sans"
+                    className="usa-fieldset usa-sans"
                   >
                     <legend htmlFor="filing-type-radios">
                       I am filing this petition on behalf of …
@@ -252,6 +255,7 @@ export const StartCase = connect(
                             type="radio"
                             name="filingType"
                             value={filingType}
+                            className="usa-radio__input"
                             onChange={e => {
                               updateStartCaseFormValueSequence({
                                 key: e.target.name,
@@ -260,14 +264,18 @@ export const StartCase = connect(
                               validateStartCaseSequence();
                             }}
                           />
-                          <label id={`filing-type-${idx}`} htmlFor={filingType}>
+                          <label
+                            id={`filing-type-${idx}`}
+                            htmlFor={filingType}
+                            className="usa-radio__label"
+                          >
                             {filingType}
                           </label>
                         </li>
                       ))}
                     </ul>
                     <Text
-                      className="usa-input-error-message"
+                      className="usa-error-message"
                       bind="validationErrors.partyType"
                     />
                   </fieldset>
@@ -279,12 +287,12 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input-error' : '')
+                  (validationErrors.partyType ? 'usa-input--error' : '')
                 }
               >
                 <fieldset
                   id="deceased-spouse-radios"
-                  className="usa-fieldset-inputs usa-sans"
+                  className="usa-fieldset usa-sans"
                 >
                   <legend htmlFor="deceased-spouse-radios">
                     {startCaseHelper.deceasedSpouseLegend}
@@ -296,6 +304,7 @@ export const StartCase = connect(
                           id={`isSpouseDeceased-${isSpouseDeceased}`}
                           type="radio"
                           name="isSpouseDeceased"
+                          className="usa-radio__input"
                           value={isSpouseDeceased}
                           onChange={e => {
                             updateStartCaseFormValueSequence({
@@ -308,6 +317,7 @@ export const StartCase = connect(
                         <label
                           id={`is-spouse-deceased-${idx}`}
                           htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
+                          className="usa-radio__label"
                         >
                           {isSpouseDeceased}
                         </label>
@@ -322,12 +332,12 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input-error' : '')
+                  (validationErrors.partyType ? 'usa-input--error' : '')
                 }
               >
                 <fieldset
                   id="business-type-radios"
-                  className="usa-fieldset-inputs usa-sans"
+                  className="usa-fieldset usa-sans"
                 >
                   <legend htmlFor="business-type-radios">
                     What type of business are you filing for?
@@ -345,6 +355,7 @@ export const StartCase = connect(
                           type="radio"
                           name="businessType"
                           value={businessType}
+                          className="usa-radio__input"
                           onChange={e => {
                             updateStartCaseFormValueSequence({
                               key: e.target.name,
@@ -356,6 +367,7 @@ export const StartCase = connect(
                         <label
                           id={`is-business-type-${idx}`}
                           htmlFor={`businessType-${businessType}`}
+                          className="usa-radio__label"
                         >
                           {businessType}
                         </label>
@@ -369,12 +381,12 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input-error' : '')
+                  (validationErrors.partyType ? 'usa-input--error' : '')
                 }
               >
                 <fieldset
                   id="other-type-radios"
-                  className="usa-fieldset-inputs usa-sans"
+                  className="usa-fieldset usa-sans"
                 >
                   <legend htmlFor="other-type-radios">
                     What other type of taxpayer are you filing for?
@@ -393,6 +405,7 @@ export const StartCase = connect(
                           type="radio"
                           name="otherType"
                           value={otherType}
+                          className="usa-radio__input"
                           onChange={e => {
                             updateStartCaseFormValueSequence({
                               key: e.target.name,
@@ -404,6 +417,7 @@ export const StartCase = connect(
                         <label
                           id={`is-other-type-${idx}`}
                           htmlFor={`otherType-${otherType}`}
+                          className="usa-radio__label"
                         >
                           {otherType}
                         </label>
@@ -419,12 +433,12 @@ export const StartCase = connect(
                 <div
                   className={
                     'ustc-secondary-question ' +
-                    (validationErrors.partyType ? 'usa-input-error' : '')
+                    (validationErrors.partyType ? 'usa-input--error' : '')
                   }
                 >
                   <fieldset
                     id="estate-type-radios"
-                    className="usa-fieldset-inputs usa-sans"
+                    className="usa-fieldset usa-sans"
                   >
                     <legend htmlFor="estate-type-radios">
                       What type of estate or trust are you filing for?
@@ -440,6 +454,7 @@ export const StartCase = connect(
                             id={`estateType-${estateType}`}
                             type="radio"
                             name="estateType"
+                            className="usa-radio__input"
                             value={estateType}
                             onChange={e => {
                               updateStartCaseFormValueSequence({
@@ -452,6 +467,7 @@ export const StartCase = connect(
                           <label
                             id={`is-estate-type-${idx}`}
                             htmlFor={`estateType-${estateType}`}
+                            className="usa-radio__label"
                           >
                             {estateType}
                           </label>
@@ -467,12 +483,12 @@ export const StartCase = connect(
                 <div
                   className={
                     'ustc-secondary-question ' +
-                    (validationErrors.partyType ? 'usa-input-error' : '')
+                    (validationErrors.partyType ? 'usa-input--error' : '')
                   }
                 >
                   <fieldset
                     id="minorIncompetent-type-radios"
-                    className="usa-fieldset-inputs usa-sans"
+                    className="usa-fieldset usa-sans"
                   >
                     <legend htmlFor="minorIncompetent-type-radios">
                       {startCaseHelper.minorIncompetentLegend}
@@ -490,6 +506,7 @@ export const StartCase = connect(
                             id={`minorIncompetentType-${minorIncompetentType}`}
                             type="radio"
                             name="minorIncompetentType"
+                            className="usa-radio__input"
                             value={minorIncompetentType}
                             onChange={e => {
                               updateStartCaseFormValueSequence({
@@ -502,6 +519,7 @@ export const StartCase = connect(
                           <label
                             id={`is-minorIncompetent-type-${idx}`}
                             htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                            className="usa-radio__label"
                           >
                             {minorIncompetentType}
                           </label>
@@ -557,7 +575,7 @@ export const StartCase = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <span className="usa-form-hint">
+                <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
@@ -581,11 +599,11 @@ export const StartCase = connect(
                   }}
                 />
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.ownershipDisclosureFile"
                 />
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.ownershipDisclosureFileSize"
                 />
               </div>
@@ -598,14 +616,14 @@ export const StartCase = connect(
               <fieldset
                 id="irs-notice-radios"
                 className={
-                  'usa-form-group usa-fieldset-inputs usa-sans ' +
-                  (validationErrors.hasIrsNotice ? 'usa-input-error' : '')
+                  'usa-form-group usa-fieldset usa-sans ' +
+                  (validationErrors.hasIrsNotice ? 'usa-input--error' : '')
                 }
               >
                 <legend>{startCaseHelper.noticeLegend}</legend>
-                <ul className="usa-unstyled-list">
+                <div className="usa-radio">
                   {['Yes', 'No'].map((hasIrsNotice, idx) => (
-                    <li key={hasIrsNotice}>
+                    <>
                       <input
                         id={`hasIrsNotice-${hasIrsNotice}`}
                         type="radio"
@@ -618,18 +636,20 @@ export const StartCase = connect(
                           });
                           validateStartCaseSequence();
                         }}
+                        className="usa-radio__input"
                       />
                       <label
                         id={`hasIrsNotice-${idx}`}
                         htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                        className="usa-radio__label"
                       >
                         {hasIrsNotice}
                       </label>
-                    </li>
+                    </>
                   ))}
-                </ul>
+                </div>
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.hasIrsNotice"
                 />
               </fieldset>
@@ -646,13 +666,13 @@ export const StartCase = connect(
                   <div
                     className={
                       'usa-form-group ' +
-                      (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                      (validationErrors.irsNoticeDate ? 'usa-input--error' : '')
                     }
                   >
                     <fieldset>
                       <legend id="date-of-notice-legend">Date of Notice</legend>
-                      <div className="usa-date-of-birth">
-                        <div className="usa-form-group usa-form-group-month">
+                      <div className="usa-memorable-date">
+                        <div className="usa-form-group usa-form-group--month">
                           <label
                             htmlFor="date-of-notice-month"
                             aria-hidden="true"
@@ -660,7 +680,7 @@ export const StartCase = connect(
                             MM
                           </label>
                           <input
-                            className="usa-input-inline"
+                            className="usa-input usa-input--inline"
                             aria-describedby="date-of-notice-legend"
                             id="date-of-notice-month"
                             name="month"
@@ -679,7 +699,7 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-form-group usa-form-group-day">
+                        <div className="usa-form-group usa-form-group--day">
                           <label
                             htmlFor="date-of-notice-day"
                             aria-hidden="true"
@@ -687,7 +707,7 @@ export const StartCase = connect(
                             DD
                           </label>
                           <input
-                            className="usa-input-inline"
+                            className="usa-input usa-input--inline"
                             aria-describedby="date-of-notice-legend"
                             aria-label="day, two digits"
                             id="date-of-notice-day"
@@ -706,7 +726,7 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-form-group usa-form-group-year">
+                        <div className="usa-form-group usa-form-group--year">
                           <label
                             htmlFor="date-of-notice-year"
                             aria-hidden="true"
@@ -714,7 +734,7 @@ export const StartCase = connect(
                             YYYY
                           </label>
                           <input
-                            className="usa-input-inline"
+                            className="usa-input usa-input--inline"
                             aria-describedby="date-of-notice-legend"
                             aria-label="year, four digits"
                             id="date-of-notice-year"
@@ -734,7 +754,7 @@ export const StartCase = connect(
                           />
                         </div>
                         <Text
-                          className="usa-input-error-message"
+                          className="usa-error-message"
                           bind="validationErrors.irsNoticeDate"
                         />
                       </div>
@@ -783,7 +803,7 @@ export const StartCase = connect(
             </button>
             <div
               id="case-difference-container"
-              className="usa-accordion-content"
+              className="usa-accordion__content"
               aria-hidden={!screenMetadata.showCaseDifference}
             >
               <CaseDifferenceExplained />
@@ -827,12 +847,12 @@ export const StartCase = connect(
               />
             )}
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.procedureType"
             />
             {!validationErrors.procedureType && (
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.preferredTrialCity"
               />
             )}
@@ -859,7 +879,7 @@ export const StartCase = connect(
             <div
               className={
                 'ustc-form-group ' +
-                (validationErrors.signature ? 'usa-input-error' : '')
+                (validationErrors.signature ? 'usa-input--error' : '')
               }
             >
               <legend>Review and Sign</legend>
@@ -883,7 +903,7 @@ export const StartCase = connect(
                 able to edit your case once it’s submitted.
               </label>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.signature"
               />
             </div>
