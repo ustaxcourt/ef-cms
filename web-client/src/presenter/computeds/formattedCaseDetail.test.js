@@ -401,6 +401,7 @@ describe('formattedCaseDetail', () => {
     let sortedCaseDetail;
     beforeEach(() => {
       sortedCaseDetail = {
+        caseId: 'abdc-1234-5678-xyz',
         caseCaption: 'Brett Osborne, Petitioner',
         docketRecord: [
           {
@@ -498,7 +499,7 @@ describe('formattedCaseDetail', () => {
           caseDetailErrors: {},
           constants,
           sessionMetadata: {
-            docketRecordSort: 'byDateDesc',
+            docketRecordSort: { [caseDetail.caseId]: 'byDateDesc' },
           },
         },
       });
@@ -532,7 +533,7 @@ describe('formattedCaseDetail', () => {
           caseDetailErrors: {},
           constants,
           sessionMetadata: {
-            docketRecordSort: 'byIndex',
+            docketRecordSort: { [caseDetail.caseId]: 'byIndex' },
           },
         },
       });
@@ -565,7 +566,7 @@ describe('formattedCaseDetail', () => {
           caseDetailErrors: {},
           constants,
           sessionMetadata: {
-            docketRecordSort: 'byIndexDesc',
+            docketRecordSort: { [caseDetail.caseId]: 'byIndexDesc' },
           },
         },
       });
