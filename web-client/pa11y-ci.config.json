@@ -402,9 +402,6 @@
       ]
     },
 
-    "http://localhost:1234/mock-login?token=intakeclerk&path=/",
-    "http://localhost:1234/mock-login?token=intakeclerk&path=/case-detail/101-19",
-
     "http://localhost:1234/mock-login?token=respondent&path=/",
     "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-19",
     {
