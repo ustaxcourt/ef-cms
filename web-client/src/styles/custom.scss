@@ -211,7 +211,7 @@ select[disabled] {
 .usa-accordion.document-category {
   margin-bottom: 2rem;
 
-  .usa-accordion-button {
+  .usa-accordion__button {
     display: inline-block;
     padding-left: 0;
     border: 0;
@@ -224,18 +224,22 @@ select[disabled] {
     }
   }
 
-  .usa-accordion-button:hover {
+  .usa-accordion__button:hover {
     color: $color-primary-darker;
   }
 
-  .usa-accordion-button:focus {
+  .usa-accordion__button:focus {
     outline: none;
   }
 
-  .usa-accordion-content {
+  .usa-accordion__content {
     border: 1px solid $color-primary;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 4px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .usa-banner__button-text {
+    text-decoration: none;
   }
 }
 
