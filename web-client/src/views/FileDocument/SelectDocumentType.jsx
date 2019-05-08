@@ -139,7 +139,7 @@ export const SelectDocumentType = connect(
                     return (
                       <li key={document.documentType}>
                         <button
-                          className="link"
+                          className="usa-button usa-button--unstyled"
                           type="button"
                           onClick={() => {
                             updateFileDocumentWizardFormValueSequence({
