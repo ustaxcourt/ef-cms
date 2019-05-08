@@ -44,12 +44,27 @@ export const FileDocumentWizard = connect(
                 Back
               </button>
             </Tab>
+            <Tab tabName="FileDocumentReview">
+              <FontAwesomeIcon icon="caret-left" />
+              <button
+                className="link"
+                id="queue-nav"
+                type="button"
+                onClick={() =>
+                  chooseWizardStepSequence({ value: 'FileDocument' })
+                }
+              >
+                Back
+              </button>
+            </Tab>
           </Tabs>
         </div>
         <section className="usa-section usa-grid">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
-          {showModal && <FormCancelModalDialog />}
+          {showModal == 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <SuccessNotification />
           <ErrorNotification />
           <Tabs

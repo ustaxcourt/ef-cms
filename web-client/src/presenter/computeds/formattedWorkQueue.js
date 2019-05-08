@@ -39,26 +39,27 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
+  result.showUnreadIndicators = !result.readAt;
+
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
+  if (!result.readAt) {
+    result.showUnreadStatusIcon = true;
+  }
   switch (result.caseStatus.trim()) {
     case 'Batched for IRS':
       result.showBatchedStatusIcon = true;
-      result.statusIcon = 'iconStatusBatched';
+      result.showUnreadStatusIcon = false;
       break;
     case 'Recalled':
-      result.showBatchedStatusIcon = true;
-      result.statusIcon = 'iconStatusRecalled';
+      result.showRecalledStatusIcon = true;
+      result.showUnreadStatusIcon = false;
       break;
     case 'General Docket':
-      result.caseStatus = 'General Docket';
-      result.statusIcon = '';
-      result.showBatchedStatusIcon = false;
-      break;
     case 'New':
     default:
-      result.statusIcon = '';
       result.showBatchedStatusIcon = false;
+      result.showRecalledStatusIcon = false;
   }
 
   result.docketNumberWithSuffix = `${
@@ -85,5 +86,6 @@ export const formattedWorkQueue = get => {
     .map(items => formatWorkItem(items, selectedWorkItems));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+
   return workQueue;
 };

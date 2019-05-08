@@ -6,9 +6,10 @@ import React from 'react';
 export const SecondaryDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
-  ({ form, chooseWizardStepSequence }) => {
+  ({ chooseWizardStepSequence, fileDocumentHelper, form }) => {
     return (
       <React.Fragment>
         <div>
@@ -26,13 +27,15 @@ export const SecondaryDocumentReadOnly = connect(
         </div>
 
         <div className="blue-container">
-          <div className="ustc-form-group">
-            <label htmlFor="secondary-filing">
-              {form.secondaryDocument.documentTitle}
-            </label>
-            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            {form.secondaryDocumentFile.name}
-          </div>
+          {form.secondaryDocumentFile && (
+            <div className="ustc-form-group">
+              <label htmlFor="secondary-filing">
+                {form.secondaryDocument.documentTitle}
+              </label>
+              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+              {form.secondaryDocumentFile.name}
+            </div>
+          )}
 
           {form.secondarySupportingDocumentFile && (
             <div className="ustc-form-group">
@@ -41,6 +44,23 @@ export const SecondaryDocumentReadOnly = connect(
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               {form.secondarySupportingDocumentFile.name}
+            </div>
+          )}
+
+          {!form.secondaryDocumentFile &&
+            !form.secondarySupportingDocumentFile &&
+            'No file attached'}
+
+          {fileDocumentHelper.showSecondaryFilingNotIncludes && (
+            <div className="ustc-form-group">
+              <label htmlFor="filing-not-includes">
+                Filing Does Not Include
+              </label>
+              <ul className="ustc-unstyled-list without-margins">
+                {!form.hasSecondarySupportingDocuments && (
+                  <li>Supporting Documents</li>
+                )}
+              </ul>
             </div>
           )}
         </div>

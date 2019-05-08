@@ -4,6 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/Case');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
@@ -84,7 +85,7 @@ exports.createCase = async ({
     },
   );
 
-  let practitioner = null;
+  let practitioners = [];
   if (user.role === 'practitioner') {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
@@ -92,12 +93,12 @@ exports.createCase = async ({
         applicationContext,
         userId: user.userId,
       });
-    practitioner = practitionerUser;
+    practitioners = [practitionerUser];
   }
 
   const caseToAdd = new Case({
     userId: user.userId,
-    practitioner,
+    practitioners,
     ...petitionEntity.toRawObject(),
     docketNumber,
     isPaper: false,
@@ -109,20 +110,33 @@ exports.createCase = async ({
     documentId: petitionFileId,
     documentType: Case.documentTypes.petitionFile,
     filedBy: user.name,
+    practitioner: practitioners[0],
     userId: user.userId,
   });
+  petitionDocumentEntity.generateFiledBy(caseToAdd);
   const newWorkItem = addDocumentToCase(
     user,
     caseToAdd,
     petitionDocumentEntity,
   );
 
+  caseToAdd.addDocketRecord(
+    new DocketRecord({
+      description: `Request for Place of Trial at ${
+        caseToAdd.preferredTrialCity
+      }`,
+      filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
+    }),
+  );
+
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
     documentType: Case.documentTypes.stin,
     filedBy: user.name,
+    practitioner: practitioners[0],
     userId: user.userId,
   });
+  stinDocumentEntity.generateFiledBy(caseToAdd);
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
@@ -130,8 +144,10 @@ exports.createCase = async ({
       documentId: ownershipDisclosureFileId,
       documentType: Case.documentTypes.ownershipDisclosure,
       filedBy: user.name,
+      practitioner: practitioners[0],
       userId: user.userId,
     });
+    odsDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(odsDocumentEntity);
   }
 

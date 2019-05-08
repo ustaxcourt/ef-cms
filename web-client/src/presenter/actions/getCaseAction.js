@@ -1,5 +1,5 @@
 /**
- * Fetches the case usign the getCase use case using the props.docketNumber
+ * Fetches the case using the getCase use case using the props.docketNumber
  *
  * @param {Object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting state.user.token

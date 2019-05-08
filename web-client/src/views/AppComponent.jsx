@@ -2,7 +2,6 @@ import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
-import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
 import { DashboardPractitioner } from './DashboardPractitioner';
@@ -13,9 +12,11 @@ import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
@@ -31,7 +32,6 @@ const pages = {
   CaseDetail,
   CaseDetailInternal,
   DashboardDocketClerk,
-  DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPractitioner,
@@ -40,9 +40,11 @@ const pages = {
   DocumentDetail,
   Error,
   FileDocumentWizard,
+  IdleLogout,
   Interstitial,
   Loading,
   LogIn,
+  RequestAccessWizard,
   SelectDocumentType,
   StartCase,
   StartCaseInternal,

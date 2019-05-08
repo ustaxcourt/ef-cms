@@ -248,6 +248,153 @@ describe('formatYearAmounts', () => {
     );
   });
 
+  it('formats docket record document data strings correctly', async () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      contactSecondary: {
+        name: 'Bill',
+      },
+      docketRecord: [
+        {
+          description: 'Amended Petition',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          filingDate: '2019-04-19T17:29:13.120Z',
+        },
+        {
+          description:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          filingDate: '2019-04-19T18:24:09.515Z',
+        },
+        {
+          description:
+            'Motion for Leave to File Computation for Entry of Decision',
+          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
+          filingDate: '2019-04-19T17:39:10.476Z',
+        },
+        {
+          description:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          filingDate: '2019-04-19T17:29:13.122Z',
+        },
+      ],
+      documents: [
+        {
+          attachments: false,
+          category: 'Petition',
+          certificateOfService: false,
+          createdAt: '2019-04-19T17:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          documentTitle: 'Amended Petition',
+          documentType: 'Amended Petition',
+          eventCode: 'PAP',
+          exhibits: false,
+          hasSupportingDocuments: true,
+          objections: 'No',
+          partyPrimary: true,
+          relationship: 'primaryDocument',
+          scenario: 'Standard',
+          supportingDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          supportingDocumentFreeText: 'Test',
+        },
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          partyPrimary: true,
+          partyRespondent: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        {
+          attachments: true,
+          category: 'Motion',
+          certificateOfService: true,
+          certificateOfServiceDate: '2018-06-07',
+          certificateOfServiceDay: '7',
+          certificateOfServiceMonth: '6',
+          certificateOfServiceYear: '2018',
+          createdAt: '2019-04-19T17:39:10.476Z',
+          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
+          documentTitle:
+            'Motion for Leave to File Computation for Entry of Decision',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
+          exhibits: true,
+          hasSecondarySupportingDocuments: false,
+          hasSupportingDocuments: true,
+          objections: 'Yes',
+          partyPrimary: true,
+          partySecondary: true,
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard H',
+          secondarySupportingDocument: null,
+          secondarySupportingDocumentFreeText: null,
+          supportingDocument: 'Declaration in Support',
+          supportingDocumentFreeText: 'Rachael',
+        },
+        {
+          category: 'Supporting Document',
+          createdAt: '2019-04-19T17:29:13.122Z',
+          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          documentTitle:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+          documentType:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          eventCode: 'USDL',
+          freeText: 'Test',
+          lodged: true,
+          partyPractitioner: true,
+          partyRespondent: true,
+          previousDocument: 'Amended Petition',
+          relationship: 'primarySupportingDocument',
+          scenario: 'Nonstandard C',
+        },
+      ],
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+      practitioner: { name: 'Test Practitioner' },
+    };
+    const result = await runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail,
+        caseDetailErrors: {},
+        constants,
+      },
+    });
+    expect(
+      result.docketRecordWithDocument[0].record.filingsAndProceedings,
+    ).toEqual('(No Objection)');
+    expect(
+      result.docketRecordWithDocument[1].record.filingsAndProceedings,
+    ).toEqual('(Exhibit(s))');
+    expect(
+      result.docketRecordWithDocument[2].record.filingsAndProceedings,
+    ).toEqual('(C/S 06/07/2018) (Exhibit(s)) (Attachment(s)) (Objection)');
+    expect(
+      result.docketRecordWithDocument[3].record.filingsAndProceedings,
+    ).toEqual('(Lodged)');
+  });
+
   it('sorts the docket record in the expected order', async () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
@@ -334,6 +481,20 @@ describe('formatYearAmounts', () => {
   });
 
   describe('case name mapping', () => {
+    it('should not error if caseCaption does not exist', async () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.caseName).toEqual('');
+    });
+
     it("should remove ', Petitioner' from caseCaption", async () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
