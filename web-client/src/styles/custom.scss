@@ -542,6 +542,15 @@ textarea#case-caption {
   padding-right: 45px;
   padding-left: 45px;
 }
+button.link.mobile-sort-docket-button {
+  color: $color-black;
+  text-decoration: none;
+  svg {
+    margin-left: 5px;
+    color: $color-primary;
+  }
+}
+
 header.usa-header {
   height: 115px;
   border-bottom: none;

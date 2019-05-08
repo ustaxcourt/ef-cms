@@ -84,6 +84,7 @@ import { toggleAccountMenuSequence } from './sequences/toggleAccountMenuSequence
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleDocumentCategoryAccordionSequence } from './sequences/toggleDocumentCategoryAccordionSequence';
+import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
@@ -107,6 +108,7 @@ import { updateMessageValueSequence } from './sequences/updateMessageValueSequen
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
+import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
@@ -211,6 +213,7 @@ export const presenter = {
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
     toggleDocumentCategoryAccordionSequence,
+    toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
@@ -234,6 +237,7 @@ export const presenter = {
     updatePetitionValueSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,
+    updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
     validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
