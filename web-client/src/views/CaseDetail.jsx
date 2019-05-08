@@ -1,5 +1,5 @@
 import { CaseInformationPublic } from './CaseInformationPublic';
-import { DocketRecord } from './DocketRecord';
+import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './PartyInformation';

@@ -54,6 +54,7 @@ export const setupPercentDone = (files, store) => {
  * @param {Object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
  * @param {Object} providers.props the cerebral props object
+ * @returns {Object} the next path based on if creation was successful or error
  */
 export const createCaseFromPaperAction = async ({
   applicationContext,
