@@ -50,7 +50,7 @@ export const SecondaryDocumentForm = connect(
 
             <div className="usa-width-five-twelfths">
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.secondaryDocumentFile
                     ? 'usa-input-error'
                     : ''
@@ -94,7 +94,7 @@ export const SecondaryDocumentForm = connect(
 
               {fileDocumentHelper.showSecondaryDocumentValid && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.hasSecondarySupportingDocuments
                       ? 'usa-input-error'
                       : ''
@@ -143,7 +143,7 @@ export const SecondaryDocumentForm = connect(
 
               {form.hasSecondarySupportingDocuments && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.secondarySupportingDocument
                       ? 'usa-input-error'
                       : ''
@@ -204,7 +204,7 @@ export const SecondaryDocumentForm = connect(
 
               {fileDocumentHelper.showSecondarySupportingDocumentFreeText && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.secondarySupportingDocumentFreeText
                       ? 'usa-input-error'
                       : ''
@@ -246,7 +246,7 @@ export const SecondaryDocumentForm = connect(
 
               {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.secondarySupportingDocumentFile
                       ? 'usa-input-error'
                       : ''

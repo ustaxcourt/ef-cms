@@ -49,7 +49,7 @@ export const PrimaryDocumentForm = connect(
 
             <div className="usa-width-five-twelfths">
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
                 }`}
               >
@@ -86,7 +86,7 @@ export const PrimaryDocumentForm = connect(
               </div>
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.certificateOfService ? 'usa-input-error' : ''
                 }`}
               >
@@ -128,7 +128,7 @@ export const PrimaryDocumentForm = connect(
 
               {form.certificateOfService && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.certificateOfServiceDate
                       ? 'usa-input-error'
                       : ''
@@ -222,7 +222,7 @@ export const PrimaryDocumentForm = connect(
               )}
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.exhibits ? 'usa-input-error' : ''
                 }`}
               >
@@ -260,7 +260,7 @@ export const PrimaryDocumentForm = connect(
               </div>
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.attachments ? 'usa-input-error' : ''
                 }`}
               >
@@ -301,7 +301,7 @@ export const PrimaryDocumentForm = connect(
 
               {fileDocumentHelper.showObjection && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.objections ? 'usa-input-error' : ''
                   }`}
                 >
@@ -342,7 +342,7 @@ export const PrimaryDocumentForm = connect(
               )}
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.hasSupportingDocuments
                     ? 'usa-input-error'
                     : ''
@@ -387,7 +387,7 @@ export const PrimaryDocumentForm = connect(
 
               {form.hasSupportingDocuments && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.supportingDocument ? 'usa-input-error' : ''
                   }`}
                 >
@@ -445,7 +445,7 @@ export const PrimaryDocumentForm = connect(
 
               {fileDocumentHelper.showSupportingDocumentFreeText && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.supportingDocumentFreeText
                       ? 'usa-input-error'
                       : ''
@@ -487,7 +487,7 @@ export const PrimaryDocumentForm = connect(
 
               {fileDocumentHelper.showSupportingDocumentUpload && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.supportingDocumentFile
                       ? 'usa-input-error'
                       : ''

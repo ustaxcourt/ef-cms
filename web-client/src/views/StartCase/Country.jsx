@@ -24,7 +24,7 @@ export const Country = connect(
       <React.Fragment>
         <div
           className={
-            'ustc-form-group ' +
+            'usa-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].countryType
@@ -61,7 +61,7 @@ export const Country = connect(
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors &&
               validationErrors[type] &&
               validationErrors[type].country

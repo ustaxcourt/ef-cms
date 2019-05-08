@@ -49,7 +49,7 @@ export const RequestAccessDocumentForm = connect(
 
             <div className="usa-width-five-twelfths">
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
                 }`}
               >
@@ -85,7 +85,7 @@ export const RequestAccessDocumentForm = connect(
                 />
               </div>
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.certificateOfService ? 'usa-input-error' : ''
                 }`}
               >
@@ -126,7 +126,7 @@ export const RequestAccessDocumentForm = connect(
               </div>
               {form.certificateOfService && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.certificateOfServiceDate
                       ? 'usa-input-error'
                       : ''
@@ -220,7 +220,7 @@ export const RequestAccessDocumentForm = connect(
               )}
               {form.documentType === 'Substitution of Counsel' && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.objections ? 'usa-input-error' : ''
                   }`}
                 >

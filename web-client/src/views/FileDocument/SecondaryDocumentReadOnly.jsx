@@ -28,7 +28,7 @@ export const SecondaryDocumentReadOnly = connect(
 
         <div className="blue-container">
           {form.secondaryDocumentFile && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="secondary-filing">
                 {form.secondaryDocument.documentTitle}
               </label>
@@ -38,7 +38,7 @@ export const SecondaryDocumentReadOnly = connect(
           )}
 
           {form.secondarySupportingDocumentFile && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="secondary-supporting-documents">
                 {form.secondarySupportingDocumentMetadata.documentTitle}
               </label>
@@ -52,7 +52,7 @@ export const SecondaryDocumentReadOnly = connect(
             'No file attached'}
 
           {fileDocumentHelper.showSecondaryFilingNotIncludes && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="filing-not-includes">
                 Filing Does Not Include
               </label>

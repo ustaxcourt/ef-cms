@@ -27,7 +27,7 @@ export const SupportingDocumentForm = connect(
         <h2>Add Supporting Document</h2>
         <div className="blue-container docket-entry-form">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
@@ -60,7 +60,7 @@ export const SupportingDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >
@@ -97,7 +97,7 @@ export const SupportingDocumentForm = connect(
 
           {addDocketEntryHelper.showSupportingDocumentFreeText && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.freeText ? 'usa-input-error' : ''
               }`}
             >
@@ -130,7 +130,7 @@ export const SupportingDocumentForm = connect(
           {addDocketEntryHelper.showSupportingDocumentSelect && (
             <SupportingDocumentSelect />
           )}
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1
             </label>
@@ -152,7 +152,7 @@ export const SupportingDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
+          <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="add-to-coversheet"
               type="checkbox"
@@ -169,7 +169,7 @@ export const SupportingDocumentForm = connect(
             <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="additional-info2" id="additional-info-label2">
               Additional Info 2
             </label>
@@ -193,7 +193,7 @@ export const SupportingDocumentForm = connect(
           </div>
 
           {addDocketEntryHelper.showSupportingInclusions && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Inclusions</legend>
                 <ul className="ustc-vertical-option-list">

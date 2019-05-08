@@ -29,7 +29,7 @@ export const SecondaryDocumentForm = connect(
         <h2>Add Entry for {form.secondaryDocument.documentType}</h2>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.secondaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
@@ -76,7 +76,7 @@ export const SecondaryDocumentForm = connect(
             />
           )}
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label
               htmlFor="secondary-additional-info"
               id="secondary-additional-info-label"
@@ -101,7 +101,7 @@ export const SecondaryDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
+          <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="secondary-add-to-coversheet"
               type="checkbox"
@@ -120,7 +120,7 @@ export const SecondaryDocumentForm = connect(
             </label>
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label
               htmlFor="secondary-additional-info2"
               id="secondary-additional-info2-label"

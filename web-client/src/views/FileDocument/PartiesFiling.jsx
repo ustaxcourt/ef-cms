@@ -24,7 +24,7 @@ export const PartiesFiling = connect(
         <h3>Tell Us About the Parties Filing This Document</h3>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               fileDocumentHelper.partyValidationError ? 'usa-input-error' : ''
             }`}
           >

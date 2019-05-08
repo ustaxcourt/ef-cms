@@ -28,7 +28,7 @@ export const TrialCity = connect(
     return (
       <div
         className={
-          'ustc-form-group ' +
+          'usa-form-group ' +
           (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
         }
       >

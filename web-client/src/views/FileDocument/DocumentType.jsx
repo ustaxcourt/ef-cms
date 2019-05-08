@@ -63,7 +63,7 @@ export const DocumentType = connect(
         {form.category && (
           <>
             <div
-              className={`ustc-form-group only-large-screens ${
+              className={`usa-form-group only-large-screens ${
                 validationErrors.documentType ? 'usa-input-error' : ''
               }`}
             >
@@ -95,7 +95,7 @@ export const DocumentType = connect(
                 bind="validationErrors.documentType"
               />
             </div>
-            <div className="ustc-form-group only-small-screens">
+            <div className="usa-form-group only-small-screens">
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Document Type</legend>
                 <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
@@ -126,7 +126,7 @@ export const DocumentType = connect(
             </div>
           </>
         )}
-        <div className="ustc-form-group only-large-screens">
+        <div className="usa-form-group only-large-screens">
           <button
             type="submit"
             className="usa-button"

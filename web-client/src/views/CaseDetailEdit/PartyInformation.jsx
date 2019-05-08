@@ -29,7 +29,7 @@ export const PartyInformation = connect(
     return (
       <div className="blue-container document-detail-one-third">
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="case-caption">Case Caption</label>
             <textarea
               id="case-caption"
@@ -49,7 +49,7 @@ export const PartyInformation = connect(
           </div>
         </div>
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label htmlFor="party-type">Party Type</label>
             <select
               id="party-type"
@@ -77,7 +77,7 @@ export const PartyInformation = connect(
         </div>
         {caseDetailEditHelper.showOwnershipDisclosureStatement && (
           <div className="subsection">
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <label htmlFor="ods-link">Ownership Disclosure Statement</label>
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
