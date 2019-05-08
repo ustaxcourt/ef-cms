@@ -69,11 +69,13 @@ export const Country = connect(
                 : '')
             }
           >
-            <label htmlFor={`${type}.country`}>Country Name</label>
+            <label htmlFor={`${type}.country`} className="usa-label">
+              Country Name
+            </label>
             <input
               id={`${type}.country`}
               type="text"
-              className={`${type}-country`}
+              className={`${type}-country usa-input`}
               name={`${type}.country`}
               autoCapitalize="none"
               value={data[type].country || ''}
