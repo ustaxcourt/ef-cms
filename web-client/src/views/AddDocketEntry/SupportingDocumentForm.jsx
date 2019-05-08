@@ -28,15 +28,15 @@ export const SupportingDocumentForm = connect(
         <div className="blue-container docket-entry-form">
           <div
             className={`ustc-form-group ${
-              validationErrors.supportingDocumentFile ? 'usa-input-error' : ''
+              validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
             <label
-              htmlFor="supporting-document"
-              id="supporting-document-label"
+              htmlFor="primary-document"
+              id="primary-document-label"
               className={
                 'ustc-upload ' +
-                (addDocketEntryHelper.showSupportingDocumentValid
+                (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
               }
@@ -47,15 +47,15 @@ export const SupportingDocumentForm = connect(
               </span>
             </label>
             <StateDrivenFileInput
-              id="primary-document"
+              id="supporting-document"
               name="primaryDocumentFile"
-              aria-describedby="primary-document-label"
+              aria-describedby="supporting-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
               className="usa-input-error-message"
-              bind="validationErrors.supportingDocumentFile"
+              bind="validationErrors.primaryDocumentFile"
             />
           </div>
 
@@ -64,7 +64,7 @@ export const SupportingDocumentForm = connect(
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="document-type" id="document-type-label">
+            <label htmlFor="event-code" id="event-code-label">
               Document Type
             </label>
             <select
@@ -127,9 +127,9 @@ export const SupportingDocumentForm = connect(
               />
             </div>
           )}
-
-          <SupportingDocumentSelect />
-
+          {addDocketEntryHelper.showSupportingDocumentSelect && (
+            <SupportingDocumentSelect />
+          )}
           <div className="ustc-form-group">
             <label htmlFor="additional-info" id="additional-info-label">
               Additional Info 1
@@ -170,13 +170,13 @@ export const SupportingDocumentForm = connect(
           </div>
 
           <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label">
+            <label htmlFor="additional-info2" id="additional-info-label2">
               Additional Info 2
             </label>
             <input
               id="additional-info2"
               type="text"
-              aria-describedby="additional-info2-label"
+              aria-describedby="additional-info2-label2"
               name="additionalInfo2"
               autoCapitalize="none"
               value={form.additionalInfo2 || ''}
@@ -247,7 +247,14 @@ export const SupportingDocumentForm = connect(
                       Certificate of Service
                     </label>
                     {form.certificateOfService && (
-                      <fieldset className="service-date">
+                      <fieldset
+                        className={`service-date
+                        ${
+                          validationErrors.certificateOfServiceDate
+                            ? 'usa-input-error'
+                            : ''
+                        }`}
+                      >
                         <div className="usa-date-of-birth">
                           <div className="usa-form-group usa-form-group-month">
                             <input
@@ -319,6 +326,10 @@ export const SupportingDocumentForm = connect(
                             />
                           </div>
                         </div>
+                        <Text
+                          className="usa-input-error-message"
+                          bind="validationErrors.certificateOfServiceDate"
+                        />
                       </fieldset>
                     )}
                   </li>

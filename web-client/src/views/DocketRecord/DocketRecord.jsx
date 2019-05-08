@@ -1,9 +1,9 @@
+import { DocketRecordHeader } from './DocketRecordHeader';
+import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
-
-import { DocketRecordOverlay } from './DocketRecordOverlay';
 
 export const DocketRecord = connect(
   {
@@ -20,10 +20,10 @@ export const DocketRecord = connect(
   },
   ({
     baseUrl,
-    refreshCaseSequence,
     caseDetail,
     documentHelper,
     helper,
+    refreshCaseSequence,
     showDocketRecordDetailModalSequence,
     showModal,
     token,
@@ -84,24 +84,8 @@ export const DocketRecord = connect(
 
     return (
       <React.Fragment>
-        {helper.showAddDocketEntryButton && (
-          <a
-            className="usa-button tablet-full-width"
-            href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
-            id="button-add-record"
-          >
-            <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Docket Entry
-          </a>
-        )}
-        {helper.showFileDocumentButton && (
-          <a
-            className="usa-button tablet-full-width"
-            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
-            id="button-file-document"
-          >
-            <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
-          </a>
-        )}
+        <DocketRecordHeader />
+
         <table
           className="usa-table docket-record responsive-table row-border-only"
           aria-label="docket record"

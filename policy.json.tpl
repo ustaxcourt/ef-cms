@@ -20,7 +20,8 @@
         "dynamodb:ListTables",
         "dynamodb:ListTagsOfResource",
         "dynamodb:TagResource",
-        "dynamodb:DescribeTimeToLive"
+        "dynamodb:DescribeTimeToLive",
+        "dynamodb:UpdateContinuousBackups"
       ],
       "Resource": "*"
     },

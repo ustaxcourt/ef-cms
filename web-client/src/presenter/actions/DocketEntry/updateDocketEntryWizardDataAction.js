@@ -1,12 +1,14 @@
-import { find, omit, pick } from 'lodash';
+import { find, includes, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * resets the state.form which is used throughout the app for storing html form values
- * state.form is used throughout the app for storing html form values
+ * clears data in the state.form based on which field is being updated
  *
  * @param {Object} providers the providers object
+ * @param {Object} providers.get the cerebral get function
  * @param {Object} providers.store the cerebral store object
+ * @param {Object} providers.props the cerebral props object
+ * @returns {void}
  */
 export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
@@ -16,10 +18,10 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
 
   switch (props.key) {
     case 'certificateOfService':
-      store.set(state.form.certificateOfServiceDate, null);
-      store.set(state.form.certificateOfServiceMonth, null);
-      store.set(state.form.certificateOfServiceDay, null);
-      store.set(state.form.certificateOfServiceYear, null);
+      store.unset(state.form.certificateOfServiceDate);
+      store.unset(state.form.certificateOfServiceMonth);
+      store.unset(state.form.certificateOfServiceDay);
+      store.unset(state.form.certificateOfServiceYear);
       break;
     case 'eventCode':
       find(
@@ -31,12 +33,14 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
-      store.set(state.form.previousDocument, null);
-      store.set(state.form.serviceDate, null);
-      store.set(state.form.trialLocation, null);
-      store.set(state.form.ordinalValue, null);
-      store.set(state.form.freeText, null);
-      store.set(state.form.secondaryDocument, null);
+      if (!supporting) {
+        store.unset(state.form.previousDocument);
+      }
+      store.unset(state.form.serviceDate);
+      store.unset(state.form.trialLocation);
+      store.unset(state.form.ordinalValue);
+      store.unset(state.form.freeText);
+      store.unset(state.form.secondaryDocument);
       break;
     case 'secondaryDocument.eventCode':
       find(
@@ -48,21 +52,43 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form.secondaryDocument, form);
-      store.set(state.form.secondaryDocument.previousDocument, null);
-      store.set(state.form.secondaryDocument.serviceDate, null);
-      store.set(state.form.secondaryDocument.trialLocation, null);
-      store.set(state.form.secondaryDocument.ordinalValue, null);
-      store.set(state.form.secondaryDocument.freeText, null);
+      store.unset(state.form.secondaryDocument.previousDocument);
+      store.unset(state.form.secondaryDocument.serviceDate);
+      store.unset(state.form.secondaryDocument.trialLocation);
+      store.unset(state.form.secondaryDocument.ordinalValue);
+      store.unset(state.form.secondaryDocument.freeText);
+
+      if (!props.value) {
+        store.unset(state.form.secondaryDocument);
+      }
       break;
     case 'previousDocument':
       if (supporting) {
-        store.set(state.form.exhibits, null);
-        store.set(state.form.attachments, null);
-        store.set(state.form.certificateOfService, null);
-        store.set(state.form.certificateOfServiceDate, null);
-        store.set(state.form.certificateOfServiceMonth, null);
-        store.set(state.form.certificateOfServiceDay, null);
-        store.set(state.form.certificateOfServiceYear, null);
+        store.unset(state.form.exhibits);
+        store.unset(state.form.attachments);
+        store.unset(state.form.certificateOfService);
+        store.unset(state.form.certificateOfServiceDate);
+        store.unset(state.form.certificateOfServiceMonth);
+        store.unset(state.form.certificateOfServiceDay);
+        store.unset(state.form.certificateOfServiceYear);
+
+        //restore previous doc data from screenMetadata onto form
+        const caseDetail = get(state.caseDetail);
+        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
+
+        const previousDocument =
+          props.value &&
+          find(
+            caseDetail.documents,
+            doc =>
+              includes(filedDocumentIds, doc.documentId) &&
+              (doc.documentTitle || doc.documentType) === props.value,
+          );
+        if (previousDocument.relationship === 'primaryDocument') {
+          store.merge(state.form, get(state.screenMetadata.primary));
+        } else if (previousDocument.relationship === 'secondaryDocument') {
+          store.merge(state.form, get(state.screenMetadata.secondary));
+        }
       }
       break;
   }
