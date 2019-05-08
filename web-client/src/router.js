@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import { queryStringDecoder } from './queryStringDecoder';
 import route from 'riot-route';
 
 route.base('/');
@@ -80,11 +80,7 @@ const router = {
     });
     route('/log-in...', () => {
       // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
-      const query = queryString.parse(location.search);
-      const hash = queryString.parse(location.hash); // cognito uses a # instead of ?
-      const code = query.code;
-      const token = hash.id_token || query.token;
-      const path = query.path || '/';
+      const { token, code, path } = queryStringDecoder();
       if (code) {
         app.getSequence('loginWithCodeSequence')({ code, path });
       } else {
@@ -113,8 +109,7 @@ const router = {
       }),
     );
     route('/mock-login...', () => {
-      const query = queryString.parse(location.search);
-      const { token, path } = query;
+      const { token, path } = queryStringDecoder();
       if (token) {
         document.title = `Mock Login ${pageTitleSuffix}`;
         app.getSequence('submitLoginSequence')({ path, token });

@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -253,7 +253,7 @@ export const IRSNotice = connect(
                 </span>
                 {idx !== 0 && (
                   <button
-                    className="link"
+                    className="usa-button usa-button--unstyled"
                     type="button"
                     aria-controls="removeYearAmount"
                     onClick={e => {
@@ -278,7 +278,7 @@ export const IRSNotice = connect(
             </div>
           ))}
           <button
-            className="link"
+            className="usa-button usa-button--unstyled"
             type="button"
             aria-controls="addAnotherYearAmount"
             disabled={!formattedCaseDetail.canAddYearAmount}

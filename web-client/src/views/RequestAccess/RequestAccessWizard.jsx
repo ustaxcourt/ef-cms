@@ -33,7 +33,7 @@ export const RequestAccessWizard = connect(
             <Tab tabName="RequestAccessReview">
               <FontAwesomeIcon icon="caret-left" />
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="queue-nav"
                 type="button"
                 onClick={() =>
@@ -48,7 +48,9 @@ export const RequestAccessWizard = connect(
         <section className="usa-section grid-container">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
-          {showModal && <FormCancelModalDialog />}
+          {showModal == 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <SuccessNotification />
           <ErrorNotification />
           <Tabs asSwitch defaultActiveTab="RequestAccess" bind="wizardStep">

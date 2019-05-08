@@ -537,3 +537,17 @@ textarea#case-caption {
   display: inline-block;
   margin-right: 10px;
 }
+
+#save-and-finish {
+  padding-right: 45px;
+  padding-left: 45px;
+}
+
+button.link.mobile-sort-docket-button {
+  color: $color-black;
+  text-decoration: none;
+  svg {
+    margin-left: 5px;
+    color: $color-primary;
+  }
+}

@@ -12,7 +12,7 @@ export const CaseDifferenceExplained = () => (
     </p>
     <table
       aria-labelledby="small-case-qualifications"
-      className="responsive-table small-case-qualifications-table"
+      className="usa-table responsive-table small-case-qualifications-table"
     >
       <thead>
         <tr>

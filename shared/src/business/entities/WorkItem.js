@@ -180,6 +180,14 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
  * @param user
  */
 WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
+  const message = new Message({
+    from: 'IRS Holding Queue',
+    fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+    message: 'Petition recalled from IRS Holding Queue',
+    to: user.name,
+    toUserId: user.userId,
+  });
+
   this.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
@@ -189,15 +197,8 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     sentByUserRole: user.role,
   });
   this.section = PETITIONS_SECTION;
-  this.addMessage(
-    new Message({
-      from: 'IRS Holding Queue',
-      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
-      message: 'Petition recalled from IRS Holding Queue',
-      to: user.name,
-      toUserId: user.userId,
-    }),
-  );
+  this.addMessage(message);
+  return message;
 };
 
 /**

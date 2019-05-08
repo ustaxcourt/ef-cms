@@ -8,6 +8,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -18,6 +19,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -28,6 +30,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -38,6 +41,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -48,6 +52,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -58,6 +63,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -68,6 +74,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -78,6 +85,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -88,6 +96,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -98,6 +107,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -108,6 +118,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -118,6 +129,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -128,10 +140,22 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
   "Appearance and Representation": [
+    {
+      "documentTitle": "Entry of Appearance",
+      "documentType": "Entry of Appearance",
+      "category": "Appearance and Representation",
+      "eventCode": "EA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
     {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
@@ -140,6 +164,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -150,6 +175,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Substitution of Counsel",
+      "documentType": "Substitution of Counsel",
+      "category": "Appearance and Representation",
+      "eventCode": "SOC",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -162,6 +199,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Application For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -172,6 +210,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -182,6 +221,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -192,6 +232,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -202,6 +243,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -214,6 +256,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -224,6 +267,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -234,6 +278,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -244,6 +289,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -251,9 +297,10 @@
       "documentType": "Stipulated Decision Entered",
       "category": "Decision",
       "eventCode": "SDEC",
-      "scenario": "Nonstandard B",
+      "scenario": "Nonstandard J",
       "labelPreviousDocument": "",
-      "labelFreeText": "First Field - Judge's Name Second Field - Decision Notes",
+      "labelFreeText": "Judge's Name",
+      "labelFreeText2": "Decision Notes",
       "ordinalField": ""
     }
   ],
@@ -266,6 +313,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -276,6 +324,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -286,6 +335,7 @@
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
       "labelFreeText": "Date of Service",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -296,6 +346,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -303,10 +354,11 @@
       "documentType": "Amendment [anything]",
       "category": "Miscellaneous",
       "eventCode": "ADMT",
-      "scenario": "",
+      "scenario": "Nonstandard I",
       "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
+      "labelFreeText": "What is This Amendment For?",
+      "labelFreeText2": "",
+      "ordinalField": "What Iteration is This Filing?"
     },
     {
       "documentTitle": "Certificate as to the Genuineness of the Administrative Record",
@@ -316,6 +368,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -326,6 +379,7 @@
       "scenario": "Nonstandard D",
       "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
       "labelFreeText": "Date of Service",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -336,6 +390,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -346,6 +401,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -356,6 +412,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -366,6 +423,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -376,6 +434,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Are You Ratifying?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -386,6 +445,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Redacting?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -396,6 +456,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Redacted Information Details",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -406,6 +467,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -416,6 +478,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -426,6 +489,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -436,6 +500,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Has Been Unredacted?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -448,6 +513,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -458,6 +524,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -468,6 +535,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -478,6 +546,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -488,6 +557,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -498,6 +568,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -508,6 +579,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Motion For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -518,6 +590,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -528,6 +601,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -538,6 +612,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -548,6 +623,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -558,6 +634,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -568,6 +645,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -578,6 +656,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -588,6 +667,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -598,6 +678,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -608,6 +689,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -618,6 +700,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -628,6 +711,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -638,6 +722,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -648,6 +733,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -658,6 +744,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -668,6 +755,7 @@
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -678,6 +766,7 @@
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -688,6 +777,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -698,6 +788,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -708,6 +799,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -718,6 +810,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -728,6 +821,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -738,6 +832,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -748,6 +843,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -758,6 +854,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -768,6 +865,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -778,6 +876,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -788,6 +887,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -798,6 +898,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -808,6 +909,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -818,6 +920,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -828,6 +931,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -838,6 +942,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -848,6 +953,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -858,6 +964,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -868,6 +975,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -878,6 +986,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -888,6 +997,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -898,6 +1008,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -908,6 +1019,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -918,6 +1030,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -928,6 +1041,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -938,6 +1052,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -948,6 +1063,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -958,6 +1074,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -968,6 +1085,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -978,6 +1096,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -988,6 +1107,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -998,6 +1118,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1008,6 +1129,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1018,6 +1140,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1028,6 +1151,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1038,6 +1162,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1048,6 +1173,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1058,6 +1184,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1068,6 +1195,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket Numbers (separate with a comma)",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1078,6 +1206,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1088,6 +1217,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1098,6 +1228,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1108,6 +1239,7 @@
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1118,6 +1250,7 @@
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1128,6 +1261,7 @@
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1138,6 +1272,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1148,6 +1283,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1158,6 +1294,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1168,6 +1305,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1178,6 +1316,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1188,6 +1327,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1198,6 +1338,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1208,6 +1349,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1218,6 +1360,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket Numbers to Be Consolidated (separate with a comma)",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1228,6 +1371,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1238,6 +1382,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1248,6 +1393,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1258,6 +1404,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1268,6 +1415,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1278,6 +1426,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1288,6 +1437,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1298,6 +1448,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1308,6 +1459,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Person, Notice, or Year",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1318,6 +1470,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1328,6 +1481,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1338,6 +1492,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1348,6 +1503,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1358,6 +1514,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1368,6 +1525,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1378,6 +1536,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1388,6 +1547,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1398,6 +1558,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1408,6 +1569,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1418,6 +1580,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1428,6 +1591,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1438,6 +1602,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1448,6 +1613,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1458,6 +1624,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1468,6 +1635,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1478,6 +1646,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1488,6 +1657,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1498,6 +1668,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1508,6 +1679,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1518,6 +1690,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1528,6 +1701,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1538,6 +1712,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1548,6 +1723,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1558,6 +1734,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1568,6 +1745,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1578,6 +1756,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1588,6 +1767,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1598,6 +1778,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1608,6 +1789,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1618,6 +1800,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1628,6 +1811,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1638,6 +1822,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1648,6 +1833,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1658,6 +1844,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1668,6 +1855,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1678,6 +1866,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1688,6 +1877,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1698,6 +1888,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1708,6 +1899,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1718,6 +1910,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1728,6 +1921,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1738,6 +1932,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1748,6 +1943,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1758,6 +1954,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1768,6 +1965,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1778,6 +1976,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1788,6 +1987,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -1800,6 +2000,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Notice For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1810,6 +2011,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1820,6 +2022,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1830,6 +2033,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1840,6 +2044,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1850,6 +2055,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1860,6 +2066,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1870,6 +2077,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1880,6 +2088,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1890,6 +2099,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1900,6 +2110,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1910,6 +2121,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1920,6 +2132,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Election to Participate",
+      "documentType": "Notice of Election to Participate",
+      "category": "Notice",
+      "eventCode": "NOEP",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1930,6 +2154,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1940,6 +2165,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1950,6 +2176,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1960,6 +2187,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Do You Intend Not to File?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1970,6 +2198,18 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Intervention",
+      "documentType": "Notice of Intervention",
+      "category": "Notice",
+      "eventCode": "NOI",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1980,6 +2220,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -1990,6 +2231,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2000,6 +2242,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2010,6 +2253,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Not Objecting To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2020,6 +2264,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Objecting To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2030,6 +2275,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2040,6 +2286,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2050,6 +2297,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2060,6 +2308,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2070,6 +2319,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2080,6 +2330,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2090,6 +2341,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2100,6 +2352,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2110,6 +2363,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2122,6 +2376,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2132,6 +2387,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2142,6 +2398,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2152,6 +2409,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2162,6 +2420,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2172,6 +2431,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2182,6 +2442,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2192,6 +2453,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2202,6 +2464,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2212,6 +2475,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2222,6 +2486,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2232,6 +2497,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2242,6 +2508,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2254,6 +2521,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2264,6 +2532,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2274,6 +2543,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2284,6 +2554,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2294,6 +2565,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2304,6 +2576,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2314,6 +2587,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2324,6 +2598,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2334,6 +2609,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2346,6 +2622,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2356,6 +2633,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2366,6 +2644,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Replying To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2376,6 +2655,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2386,6 +2666,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2396,6 +2677,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2406,6 +2688,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2416,6 +2699,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2426,6 +2710,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2436,6 +2721,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2446,6 +2732,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2456,6 +2743,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Replying To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2468,6 +2756,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Request For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2478,6 +2767,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -2488,6 +2778,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2498,6 +2789,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2508,6 +2800,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2518,6 +2811,7 @@
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested Location",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2528,6 +2822,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2540,6 +2835,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Not Objecting To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2550,6 +2846,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Objecting To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2560,6 +2857,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is Being Objected To?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2570,6 +2868,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Opposed To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2580,6 +2879,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is Being Opposed?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2590,6 +2890,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Are You Responding To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2600,6 +2901,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Responding To?",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2612,6 +2914,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2622,6 +2925,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2632,6 +2936,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2642,6 +2947,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2652,6 +2958,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2662,6 +2969,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2672,6 +2980,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2682,6 +2991,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2692,6 +3002,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2702,6 +3013,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2712,6 +3024,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2722,6 +3035,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2732,6 +3046,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2742,6 +3057,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2752,6 +3068,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2762,6 +3079,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2772,6 +3090,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2782,6 +3101,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2792,6 +3112,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2802,6 +3123,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2812,6 +3134,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -2824,6 +3147,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2834,6 +3158,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2844,6 +3169,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2854,6 +3180,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2864,6 +3191,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2874,6 +3202,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2884,6 +3213,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2894,6 +3224,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2904,6 +3235,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2914,6 +3246,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2924,6 +3257,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2934,6 +3268,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2944,6 +3279,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2954,6 +3290,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2964,6 +3301,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2974,6 +3312,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2984,6 +3323,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -2994,6 +3334,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3004,6 +3345,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3014,6 +3356,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3024,6 +3367,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3034,6 +3378,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3044,6 +3389,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3054,6 +3400,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3064,6 +3411,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3074,6 +3422,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3084,6 +3433,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3094,6 +3444,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3104,6 +3455,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3114,6 +3466,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3124,6 +3477,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3134,6 +3488,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3144,6 +3499,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3154,6 +3510,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -3166,6 +3523,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3176,6 +3534,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Statement For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3186,6 +3545,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3196,6 +3556,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3206,6 +3567,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -3218,6 +3580,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3228,6 +3591,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Stipulation For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3238,6 +3602,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3248,6 +3613,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3258,6 +3624,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -3268,6 +3635,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3278,6 +3646,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3288,6 +3657,7 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3298,6 +3668,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket Number",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3308,6 +3679,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3318,6 +3690,7 @@
       "scenario": "Nonstandard G",
       "labelPreviousDocument": "",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     }
   ],
@@ -3330,6 +3703,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Is This a Supplement To?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -3340,6 +3714,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What Is This Supplement For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3350,6 +3725,7 @@
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which Document Is This Supplemental For?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": "What Iteration Is This Filing?"
     },
     {
@@ -3360,6 +3736,7 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "What is This Supplemental For?",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ],
@@ -3372,6 +3749,7 @@
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document Is This Affidavit in Support Of?",
       "labelFreeText": "Who Signed This?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3382,6 +3760,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Is This Brief in Support Of?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3392,6 +3771,7 @@
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document Is This Declaration in Support Of?",
       "labelFreeText": "Who Signed This?",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3402,6 +3782,7 @@
       "scenario": "Nonstandard A",
       "labelPreviousDocument": "Which Document Is This Memorandum in Support Of?",
       "labelFreeText": "",
+      "labelFreeText2": "",
       "ordinalField": ""
     },
     {
@@ -3412,6 +3793,7 @@
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document Is This Declaration in Support Of?",
       "labelFreeText": "Who Signed This?",
+      "labelFreeText2": "",
       "ordinalField": ""
     }
   ]

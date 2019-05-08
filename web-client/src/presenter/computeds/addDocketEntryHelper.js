@@ -1,4 +1,4 @@
-import { find, orderBy } from 'lodash';
+import { find, includes, orderBy } from 'lodash';
 import { state } from 'cerebral';
 import moment from 'moment';
 
@@ -107,7 +107,9 @@ export const addDocketEntryHelper = get => {
     form.previousDocument &&
     find(
       caseDetail.documents,
-      doc => (doc.documentTitle || doc.documentType) === form.previousDocument,
+      doc =>
+        includes(documentIdWhitelist, doc.documentId) &&
+        (doc.documentTitle || doc.documentType) === form.previousDocument,
     );
   const showSupportingInclusions =
     previousDocument && previousDocument.relationship !== 'secondaryDocument';
@@ -145,6 +147,7 @@ export const addDocketEntryHelper = get => {
     showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
       form.documentType,
     ),
+    showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
     showSupportingInclusions,
     supportingDocumentTypeList,

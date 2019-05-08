@@ -1,6 +1,6 @@
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationInternal } from './CaseInformationInternal';
-import { DocketRecord } from './DocketRecord';
+import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './PartyInformation';
@@ -52,7 +52,7 @@ export const CaseDetailInternal = connect(
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
-            <table className="row-border-only subsection">
+            <table className="usa-table row-border-only subsection">
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>

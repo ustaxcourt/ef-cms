@@ -34,7 +34,7 @@ export const FileDocument = connect(
             Type of Document You’re Filing
           </h3>
           <button
-            className="link"
+            className="usa-button usa-button--unstyled"
             type="button"
             onClick={() =>
               chooseWizardStepSequence({ value: 'SelectDocumentType' })

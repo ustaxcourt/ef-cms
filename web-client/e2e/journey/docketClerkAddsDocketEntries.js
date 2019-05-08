@@ -63,6 +63,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
       secondaryDocument: 'You must select a document.',
+      secondaryDocumentFile: 'A file was not selected.',
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -134,23 +135,6 @@ export default (test, fakeFile) => {
       value: 'Amendment to Seriatim Opening Brief',
     });
 
-    //this section needs to be removed when inclusions validation is fixed
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'exhibits',
-      value: false,
-    });
-
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
-
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfService',
-      value: false,
-    });
-    //end section to remove
-
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
       supportingDocument: true,
@@ -187,18 +171,6 @@ export default (test, fakeFile) => {
       key: 'attachments',
       value: false,
     });
-
-    //this section needs to be removed when inclusions validation is fixed
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'exhibits',
-      value: false,
-    });
-
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfService',
-      value: false,
-    });
-    //end section to remove
 
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
