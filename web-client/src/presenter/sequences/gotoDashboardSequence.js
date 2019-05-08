@@ -22,10 +22,6 @@ const goToDashboard = [
       setCurrentPageAction('DashboardDocketClerk'),
       ...chooseWorkQueueSequence,
     ],
-    intakeclerk: [
-      clearAlertsAction,
-      setCurrentPageAction('DashboardIntakeClerk'),
-    ],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,
