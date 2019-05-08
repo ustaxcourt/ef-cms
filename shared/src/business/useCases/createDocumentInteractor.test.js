@@ -24,7 +24,7 @@ describe('createDocumentInteractor', () => {
     partyType: 'Petitioner',
   };
 
-  it('failure', async () => {
+  it('throws an exception when it fails to create a document', async () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
