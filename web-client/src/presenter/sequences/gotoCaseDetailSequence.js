@@ -15,6 +15,7 @@ export const gotoCaseDetailSequence = [
   getCaseAction,
   setCaseAction,
   set(state.documentDetail.tab, 'docketRecord'),
+  set(state.sessionMetadata.docketRecordSort, 'byDate'),
   setBaseUrlAction,
   getUserRoleAction,
   {

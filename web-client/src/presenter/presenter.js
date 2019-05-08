@@ -82,6 +82,7 @@ import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleDocumentCategoryAccordionSequence } from './sequences/toggleDocumentCategoryAccordionSequence';
+import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
@@ -208,6 +209,7 @@ export const presenter = {
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
     toggleDocumentCategoryAccordionSequence,
+    toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
