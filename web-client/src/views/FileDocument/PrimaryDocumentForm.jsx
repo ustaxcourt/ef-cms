@@ -57,7 +57,7 @@ export const PrimaryDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                   className={
-                    'ustc-upload with-hint' +
+                    'usa-label ustc-upload with-hint' +
                     (fileDocumentHelper.showPrimaryDocumentValid
                       ? 'validated'
                       : '')
@@ -113,7 +113,10 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`certificate-${option}`}>
+                        <label
+                          htmlFor={`certificate-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -248,7 +251,12 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`exhibits-${option}`}>{option}</label>
+                        <label
+                          htmlFor={`exhibits-${option}`}
+                          className="usa-label"
+                        >
+                          {option}
+                        </label>
                       </li>
                     ))}
                   </ul>
@@ -286,7 +294,10 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`attachments-${option}`}>
+                        <label
+                          htmlFor={`attachments-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -327,7 +338,10 @@ export const PrimaryDocumentForm = connect(
                               validateExternalDocumentInformationSequence();
                             }}
                           />
-                          <label htmlFor={`objections-${option}`}>
+                          <label
+                            htmlFor={`objections-${option}`}
+                            className="usa-label"
+                          >
                             {option}
                           </label>
                         </li>
@@ -372,7 +386,10 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`supporting-documents-${option}`}>
+                        <label
+                          htmlFor={`supporting-documents-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -394,6 +411,7 @@ export const PrimaryDocumentForm = connect(
                   <label
                     htmlFor="supporting-document"
                     id="supporting-document-label"
+                    className="usa-label"
                   >
                     Select Supporting Document
                   </label>
@@ -454,6 +472,7 @@ export const PrimaryDocumentForm = connect(
                   <label
                     htmlFor="supporting-document-free-text"
                     id="supporting-document-free-text-label"
+                    className="usa-label"
                   >
                     Supporting Document Signed By
                   </label>
@@ -497,7 +516,7 @@ export const PrimaryDocumentForm = connect(
                     htmlFor="supporting-document-file"
                     id="supporting-document-file-label"
                     className={
-                      'ustc-upload ' +
+                      'usa-label ustc-upload ' +
                       (fileDocumentHelper.showSupportingDocumentValid
                         ? 'validated'
                         : '')

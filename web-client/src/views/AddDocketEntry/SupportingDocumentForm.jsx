@@ -35,7 +35,7 @@ export const SupportingDocumentForm = connect(
               htmlFor="primary-document"
               id="primary-document-label"
               className={
-                'ustc-upload ' +
+                'usa-label ustc-upload ' +
                 (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
@@ -64,7 +64,11 @@ export const SupportingDocumentForm = connect(
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="event-code" id="event-code-label">
+            <label
+              htmlFor="event-code"
+              id="event-code-label"
+              className="usa-label"
+            >
               Document Type
             </label>
             <select
@@ -101,7 +105,11 @@ export const SupportingDocumentForm = connect(
                 validationErrors.freeText ? 'usa-input-error' : ''
               }`}
             >
-              <label htmlFor="free-text" id="free-text-label">
+              <label
+                htmlFor="free-text"
+                id="free-text-label"
+                className="usa-label"
+              >
                 Supporting Document Signed By
               </label>
               <input
@@ -131,7 +139,11 @@ export const SupportingDocumentForm = connect(
             <SupportingDocumentSelect />
           )}
           <div className="usa-form-group">
-            <label htmlFor="additional-info" id="additional-info-label">
+            <label
+              htmlFor="additional-info"
+              id="additional-info-label"
+              className="usa-label"
+            >
               Additional Info 1
             </label>
             <input
@@ -166,11 +178,17 @@ export const SupportingDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
+            <label htmlFor="add-to-coversheet" className="usa-label">
+              Add to Cover Sheet
+            </label>
           </div>
 
           <div className="usa-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label2">
+            <label
+              htmlFor="additional-info2"
+              id="additional-info-label2"
+              className="usa-label"
+            >
               Additional Info 2
             </label>
             <input
@@ -211,7 +229,9 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="exhibits">Exhibit(s)</label>
+                    <label htmlFor="exhibits" className="usa-label">
+                      Exhibit(s)
+                    </label>
                   </li>
                   <li>
                     <input
@@ -227,7 +247,9 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="attachments">Attachment(s)</label>
+                    <label htmlFor="attachments" className="usa-label">
+                      Attachment(s)
+                    </label>
                   </li>
                   <li>
                     <input
@@ -243,7 +265,10 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="certificate-of-service">
+                    <label
+                      htmlFor="certificate-of-service"
+                      className="usa-label"
+                    >
                       Certificate of Service
                     </label>
                     {form.certificateOfService && (

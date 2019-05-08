@@ -57,7 +57,7 @@ export const ContactPrimary = connect(
                 : '')
             }
           >
-            <label htmlFor="name">
+            <label htmlFor="name" className="usa-label">
               {contactsHelper.contactPrimary.nameLabel}
             </label>
             <input
@@ -83,7 +83,7 @@ export const ContactPrimary = connect(
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
-              <label htmlFor="title">
+              <label htmlFor="title" className="usa-label">
                 Title
                 <p className="usa-form-hint">For example, Executor, PR, etc.</p>
               </label>

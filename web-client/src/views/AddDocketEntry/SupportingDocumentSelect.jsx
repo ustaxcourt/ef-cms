@@ -29,7 +29,7 @@ export const SupportingDocumentSelect = connect(
               : ''
           }`}
         >
-          <label htmlFor={'previous-document'}>
+          <label htmlFor={'previous-document'} className="usa-label">
             Which Document is This Supporting?
           </label>
           <select

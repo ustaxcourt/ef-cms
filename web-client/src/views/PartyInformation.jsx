@@ -37,82 +37,84 @@ export const PartyInformation = connect(
       <div className="subsection party-information">
         <h3 className="underlined">Party Information</h3>
         <div className="grid-container padding-x-0">
-          <div className="usa-width-one-sixth">
-            <p className="label">Party Type</p>
-            <p>{caseDetail.partyType || 'My Party Type'}</p>
-          </div>
+          <div className="grid-row">
+            <div className="grid-col-2">
+              <p className="label">Party Type</p>
+              <p>{caseDetail.partyType || 'My Party Type'}</p>
+            </div>
 
-          <div className="usa-width-one-sixth">
-            {caseDetail.contactPrimary && (
-              <React.Fragment>
-                <p className="label" id="primary-label">
-                  Primary Contact
-                </p>
-                <div>
-                  <address aria-labelledby="primary-label">
-                    {addressDisplay(caseDetail.contactPrimary)}
-                  </address>
-                </div>
-              </React.Fragment>
-            )}{' '}
-          </div>
-
-          <div className="usa-width-one-sixth">
-            {caseDetail.contactSecondary &&
-              caseDetail.contactSecondary.name && (
+            <div className="grid-col-2">
+              {caseDetail.contactPrimary && (
                 <React.Fragment>
-                  <p className="label" id="secondary-label">
-                    Secondary Contact
+                  <p className="label" id="primary-label">
+                    Primary Contact
                   </p>
                   <div>
-                    <address aria-labelledby="secondary-label">
-                      {caseDetail.contactSecondary.name &&
-                        addressDisplay(caseDetail.contactSecondary)}
+                    <address aria-labelledby="primary-label">
+                      {addressDisplay(caseDetail.contactPrimary)}
                     </address>
                   </div>
                 </React.Fragment>
               )}{' '}
-          </div>
+            </div>
 
-          {caseDetail.practitioners &&
-            caseDetail.practitioners.map((practitioner, index) => (
-              <div className="usa-width-one-sixth" key={index}>
-                {index === 0 && (
-                  <p className="label" id="petitioner-label">
-                    Petitioner Counsel
-                  </p>
-                )}
-                <div>
-                  <address aria-labelledby="petitioner-label">
-                    {practitioner.name &&
-                      addressDisplay({
-                        ...practitioner,
-                        address1: practitioner.addressLine1,
-                        address2: practitioner.addressLine2,
-                        address3: practitioner.addressLine3,
-                      })}
-                  </address>
+            <div className="grid-col-2">
+              {caseDetail.contactSecondary &&
+                caseDetail.contactSecondary.name && (
+                  <React.Fragment>
+                    <p className="label" id="secondary-label">
+                      Secondary Contact
+                    </p>
+                    <div>
+                      <address aria-labelledby="secondary-label">
+                        {caseDetail.contactSecondary.name &&
+                          addressDisplay(caseDetail.contactSecondary)}
+                      </address>
+                    </div>
+                  </React.Fragment>
+                )}{' '}
+            </div>
+
+            {caseDetail.practitioners &&
+              caseDetail.practitioners.map((practitioner, index) => (
+                <div className="usa-width-one-sixth" key={index}>
+                  {index === 0 && (
+                    <p className="label" id="petitioner-label">
+                      Petitioner Counsel
+                    </p>
+                  )}
+                  <div>
+                    <address aria-labelledby="petitioner-label">
+                      {practitioner.name &&
+                        addressDisplay({
+                          ...practitioner,
+                          address1: practitioner.addressLine1,
+                          address2: practitioner.addressLine2,
+                          address3: practitioner.addressLine3,
+                        })}
+                    </address>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-          <div className="usa-width-one-sixth">
-            {caseDetail.respondent && (
-              <React.Fragment>
-                <p className="label" id="respondent-label">
-                  Respondent Information
-                </p>
-                <address aria-labelledby="respondent-label">
-                  {addressDisplay({
-                    ...caseDetail.respondent,
-                    name: caseDetail.respondent.formattedName,
-                    address1: caseDetail.respondent.addressLine1,
-                    address2: caseDetail.respondent.addressLine2,
-                    address3: caseDetail.respondent.addressLine3,
-                  })}
-                </address>
-              </React.Fragment>
-            )}
+            <div className="grid-col-2">
+              {caseDetail.respondent && (
+                <React.Fragment>
+                  <p className="label" id="respondent-label">
+                    Respondent Information
+                  </p>
+                  <address aria-labelledby="respondent-label">
+                    {addressDisplay({
+                      ...caseDetail.respondent,
+                      name: caseDetail.respondent.formattedName,
+                      address1: caseDetail.respondent.addressLine1,
+                      address2: caseDetail.respondent.addressLine2,
+                      address3: caseDetail.respondent.addressLine3,
+                    })}
+                  </address>
+                </React.Fragment>
+              )}
+            </div>
           </div>
         </div>
       </div>

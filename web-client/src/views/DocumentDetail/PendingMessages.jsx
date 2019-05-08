@@ -199,7 +199,10 @@ export const PendingMessages = connect(
                         });
                       }}
                     >
-                      <label htmlFor={`complete-message-${idx}`}>
+                      <label
+                        htmlFor={`complete-message-${idx}`}
+                        className="usa-label"
+                      >
                         Add Message (optional)
                       </label>
                       <textarea
@@ -298,8 +301,9 @@ export const PendingMessages = connect(
                             : '')
                         }
                       >
-                        <label htmlFor={`section-${idx}`}>Select Section</label>
-
+                        <label htmlFor={`section-${idx}`} className="usa-label">
+                          Select Section
+                        </label>
                         <select
                           className="usa-input-inline"
                           id={`section-${idx}`}
@@ -342,7 +346,10 @@ export const PendingMessages = connect(
                               : '')
                           }
                         >
-                          <label htmlFor={`chambers-${idx}`}>
+                          <label
+                            htmlFor={`chambers-${idx}`}
+                            className="usa-label"
+                          >
                             Select Chambers
                           </label>
 
@@ -391,7 +398,10 @@ export const PendingMessages = connect(
                             : '')
                         }
                       >
-                        <label htmlFor={`assignee-id-${idx}`}>
+                        <label
+                          htmlFor={`assignee-id-${idx}`}
+                          className="usa-label"
+                        >
                           Select Recipient
                         </label>
                         <select
@@ -441,7 +451,10 @@ export const PendingMessages = connect(
                             : '')
                         }
                       >
-                        <label htmlFor={`forward-message-${idx}`}>
+                        <label
+                          htmlFor={`forward-message-${idx}`}
+                          className="usa-label"
+                        >
                           Add Message
                         </label>
                         <textarea

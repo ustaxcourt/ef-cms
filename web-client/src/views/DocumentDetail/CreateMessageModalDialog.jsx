@@ -1,8 +1,7 @@
-import { sequences, state } from 'cerebral';
-
 import { ModalDialog } from '../ModalDialog';
-import React from 'react';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 class CreateMessageModalDialogComponent extends ModalDialog {
   constructor(props) {
@@ -27,7 +26,9 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               : '')
           }
         >
-          <label htmlFor="section">Select Section</label>
+          <label htmlFor="section" className="usa-label">
+            Select Section
+          </label>
 
           <select
             className="usa-input-inline"
@@ -63,8 +64,9 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               (this.props.validationErrors.section ? 'usa-input-error' : '')
             }
           >
-            <label htmlFor={'chambers'}>Select Chambers</label>
-
+            <label htmlFor={'chambers'} className="usa-label">
+              Select Chambers
+            </label>
             <select
               className="usa-input-inline"
               id={'chambers'}
@@ -99,7 +101,9 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             (this.props.validationErrors.assigneeId ? 'usa-input-error' : '')
           }
         >
-          <label htmlFor="assigneeId">Select Recipient</label>
+          <label htmlFor="assigneeId" className="usa-label">
+            Select Recipient
+          </label>
           <select
             className="usa-input-inline"
             id="assigneeId"
@@ -132,7 +136,9 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             (this.props.validationErrors.message ? 'usa-input-error' : '')
           }
         >
-          <label htmlFor="message">Add Message</label>
+          <label htmlFor="message" className="usa-label">
+            Add Message
+          </label>
           <textarea
             name="message"
             id="message"

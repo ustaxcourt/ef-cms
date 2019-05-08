@@ -26,7 +26,9 @@ export const PartiesFilingReadOnly = connect(
         </button>
         <div className="blue-container">
           <div className="usa-form-group">
-            <label htmlFor="filing-parties">Filing Parties</label>
+            <label htmlFor="filing-parties" className="usa-label">
+              Filing Parties
+            </label>
             <ul className="ustc-unstyled-list without-margins">
               {form.partyPractitioner && (
                 <li>Myself as Petitioner’s Counsel</li>

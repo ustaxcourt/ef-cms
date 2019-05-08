@@ -62,6 +62,7 @@ export const IRSNotice = connect(
                   <label
                     id="has-irs-verified-notice-yes"
                     htmlFor="hasVerifiedIrsNotice-yes"
+                    className="usa-label"
                   >
                     Yes
                   </label>
@@ -81,6 +82,7 @@ export const IRSNotice = connect(
                   <label
                     id="has-irs-verified-notice-no"
                     htmlFor="hasVerifiedIrsNotice-no"
+                    className="usa-label"
                   >
                     No
                   </label>
@@ -209,7 +211,9 @@ export const IRSNotice = connect(
               className={yearAmount.showError ? ' usa-input-error' : ''}
             >
               <div className="inline-input-year">
-                <label htmlFor="year">Year</label>
+                <label htmlFor="year" className="usa-label">
+                  Year
+                </label>
                 <input
                   id="year"
                   type="number"
@@ -228,7 +232,9 @@ export const IRSNotice = connect(
                 />
               </div>
               <div className="inline-input-amount">
-                <label htmlFor="amount">Amount</label>
+                <label htmlFor="amount" className="usa-label">
+                  Amount
+                </label>
                 <span aria-hidden="true" role="presentation">
                   $
                 </span>
