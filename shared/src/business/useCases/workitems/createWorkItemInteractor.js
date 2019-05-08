@@ -51,6 +51,14 @@ exports.createWorkItem = async ({
     documentId,
   });
 
+  const newMessage = new Message({
+    from: user.name,
+    fromUserId: user.userId,
+    message,
+    to: userToAssignTo.name,
+    toUserId: userToAssignTo.userId,
+  });
+
   const newWorkItem = new WorkItem({
     caseId: caseId,
     caseStatus: theCase.status,
@@ -85,6 +93,7 @@ exports.createWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().createWorkItem({
     applicationContext,
+    messageId: newMessage.messageId,
     workItem: newWorkItem.validate().toRawObject(),
   });
 

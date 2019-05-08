@@ -9,29 +9,58 @@ const fs = require('fs');
 const parse = require('csv-parse');
 
 const USAGE = `
-Usage: node generateCategories.js spreadsheet.csv > output.json
+Usage: node generateCategories.js [internal/external] spreadsheet.csv > output.json
 `;
+
+const type = process.argv[2];
 
 const files = [];
 process.argv.forEach((val, index) => {
-  if (index > 1) {
+  if (index > 2) {
     files.push(val);
   }
 });
 
-const exportColumns = [
-  'documentTitle',
-  'documentType',
-  'category',
-  'eventCode',
-  'scenario',
-  'labelPreviousDocument',
-  'labelFreeText',
-  'ordinalField',
-];
-
-const csvOptions = {
-  columns: [
+let exportColumns;
+let csvColumns;
+if (type === 'internal') {
+  exportColumns = [
+    'documentTitle',
+    'documentType',
+    'category',
+    'eventCode',
+    'scenario',
+    'labelPreviousDocument',
+    'labelFreeText',
+    'labelFreeText2',
+    'ordinalField',
+  ];
+  csvColumns = [
+    'documentTitle',
+    'documentType',
+    'category',
+    'respondent-ignore',
+    'practictioner-ignore',
+    'petitioner-ignore',
+    'eventCode',
+    'scenario',
+    'labelPreviousDocument',
+    'labelFreeText',
+    'labelFreeText2',
+    'ordinalField',
+  ];
+} else if (type === 'external') {
+  exportColumns = [
+    'documentTitle',
+    'documentType',
+    'category',
+    'eventCode',
+    'scenario',
+    'labelPreviousDocument',
+    'labelFreeText',
+    'ordinalField',
+  ];
+  csvColumns = [
     'documentTitle',
     'documentType',
     'category',
@@ -43,7 +72,11 @@ const csvOptions = {
     'labelPreviousDocument',
     'labelFreeText',
     'ordinalField',
-  ],
+  ];
+}
+
+const csvOptions = {
+  columns: csvColumns,
   delimiter: ',',
   from_line: 2, // assumes first entry is header column containing labels
   relax_column_count: true,

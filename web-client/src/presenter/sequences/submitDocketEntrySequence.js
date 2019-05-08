@@ -8,7 +8,6 @@ import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { restoreWizardDataAction } from '../actions/DocketEntry/restoreWizardDataAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -58,7 +57,6 @@ export const submitDocketEntrySequence = [
           getDocketEntryAlertSuccessAction,
           setAlertSuccessAction,
           clearFormAction,
-          restoreWizardDataAction,
           set(state.wizardStep, 'SupportingDocumentForm'),
           setCurrentPageAction('AddDocketEntry'),
         ],
