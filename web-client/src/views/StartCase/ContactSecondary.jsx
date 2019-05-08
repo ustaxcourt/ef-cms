@@ -74,7 +74,7 @@ export const ContactSecondary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactSecondary.name"
             />
           </div>
@@ -121,7 +121,7 @@ export const ContactSecondary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactSecondary.inCareOf"
               />
             </div>
@@ -173,7 +173,7 @@ export const ContactSecondary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactSecondary.phone"
               />
             </div>

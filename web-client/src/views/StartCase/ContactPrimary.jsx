@@ -64,6 +64,7 @@ export const ContactPrimary = connect(
               id="name"
               type="text"
               name="contactPrimary.name"
+              className="usa-input"
               autoCapitalize="none"
               value={data.contactPrimary.name || ''}
               onChange={e => {
@@ -77,7 +78,7 @@ export const ContactPrimary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactPrimary.name"
             />
           </div>
@@ -91,6 +92,7 @@ export const ContactPrimary = connect(
                 id="title"
                 type="text"
                 name="contactPrimary.title"
+                className="usa-input"
                 autoCapitalize="none"
                 value={data.contactPrimary.title || ''}
                 onChange={e => {
@@ -132,6 +134,7 @@ export const ContactPrimary = connect(
                 id="inCareOf"
                 type="text"
                 name="contactPrimary.inCareOf"
+                className="usa-input"
                 autoCapitalize="none"
                 value={data.contactPrimary.inCareOf || ''}
                 onChange={e => {
@@ -145,7 +148,7 @@ export const ContactPrimary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactPrimary.inCareOf"
               />
             </div>
@@ -183,7 +186,7 @@ export const ContactPrimary = connect(
               id="phone"
               type="tel"
               name="contactPrimary.phone"
-              className="ustc-input-phone"
+              className="usa-input ustc-input-phone"
               autoCapitalize="none"
               value={data.contactPrimary.phone || ''}
               onChange={e => {
@@ -197,7 +200,7 @@ export const ContactPrimary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactPrimary.phone"
             />
           </div>

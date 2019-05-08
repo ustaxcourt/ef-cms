@@ -48,7 +48,7 @@ export const Address = connect(
             }}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.address1`}
           />
         </div>
@@ -222,11 +222,11 @@ export const Address = connect(
             </select>
           </div>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.city`}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.state`}
           />
         </div>
@@ -261,7 +261,7 @@ export const Address = connect(
             }}
           />
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.postalCode`}
           />
         </div>
