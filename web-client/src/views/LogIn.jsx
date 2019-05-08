@@ -24,7 +24,9 @@ export const LogIn = connect(
         >
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name" className="usa-label">
+                Name
+              </label>
               <input
                 autoCapitalize="none"
                 id="name"
