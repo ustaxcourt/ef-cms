@@ -50,6 +50,7 @@ export const DocketRecordHeader = connect(
             <div className="only-large-screens">
               <select
                 name="docketRecordSort"
+                className="usa-select"
                 aria-label="docket record sort"
                 onChange={e => {
                   updateSessionMetadataSequence({
