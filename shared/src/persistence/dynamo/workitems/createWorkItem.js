@@ -19,6 +19,13 @@ exports.createWorkItem = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
+  await createMappingRecord({
+    applicationContext,
+    pkId: workItem.caseId,
+    skId: workItem.workItemId,
+    type: 'workItem',
+  });
+
   // create the work item
   await put({
     Item: {
