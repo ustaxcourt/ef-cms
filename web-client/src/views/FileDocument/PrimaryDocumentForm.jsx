@@ -49,7 +49,7 @@ export const PrimaryDocumentForm = connect(
 
             <div className="usa-width-five-twelfths">
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
                 }`}
               >
@@ -57,7 +57,7 @@ export const PrimaryDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                   className={
-                    'ustc-upload with-hint' +
+                    'usa-label ustc-upload with-hint' +
                     (fileDocumentHelper.showPrimaryDocumentValid
                       ? 'validated'
                       : '')
@@ -86,7 +86,7 @@ export const PrimaryDocumentForm = connect(
               </div>
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.certificateOfService ? 'usa-input-error' : ''
                 }`}
               >
@@ -113,7 +113,10 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`certificate-${option}`}>
+                        <label
+                          htmlFor={`certificate-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -128,7 +131,7 @@ export const PrimaryDocumentForm = connect(
 
               {form.certificateOfService && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.certificateOfServiceDate
                       ? 'usa-input-error'
                       : ''
@@ -222,7 +225,7 @@ export const PrimaryDocumentForm = connect(
               )}
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.exhibits ? 'usa-input-error' : ''
                 }`}
               >
@@ -248,7 +251,12 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`exhibits-${option}`}>{option}</label>
+                        <label
+                          htmlFor={`exhibits-${option}`}
+                          className="usa-label"
+                        >
+                          {option}
+                        </label>
                       </li>
                     ))}
                   </ul>
@@ -260,7 +268,7 @@ export const PrimaryDocumentForm = connect(
               </div>
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.attachments ? 'usa-input-error' : ''
                 }`}
               >
@@ -286,7 +294,10 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`attachments-${option}`}>
+                        <label
+                          htmlFor={`attachments-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -301,7 +312,7 @@ export const PrimaryDocumentForm = connect(
 
               {fileDocumentHelper.showObjection && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.objections ? 'usa-input-error' : ''
                   }`}
                 >
@@ -327,7 +338,10 @@ export const PrimaryDocumentForm = connect(
                               validateExternalDocumentInformationSequence();
                             }}
                           />
-                          <label htmlFor={`objections-${option}`}>
+                          <label
+                            htmlFor={`objections-${option}`}
+                            className="usa-label"
+                          >
                             {option}
                           </label>
                         </li>
@@ -342,7 +356,7 @@ export const PrimaryDocumentForm = connect(
               )}
 
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.hasSupportingDocuments
                     ? 'usa-input-error'
                     : ''
@@ -372,7 +386,10 @@ export const PrimaryDocumentForm = connect(
                             validateExternalDocumentInformationSequence();
                           }}
                         />
-                        <label htmlFor={`supporting-documents-${option}`}>
+                        <label
+                          htmlFor={`supporting-documents-${option}`}
+                          className="usa-label"
+                        >
                           {option}
                         </label>
                       </li>
@@ -387,13 +404,14 @@ export const PrimaryDocumentForm = connect(
 
               {form.hasSupportingDocuments && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.supportingDocument ? 'usa-input-error' : ''
                   }`}
                 >
                   <label
                     htmlFor="supporting-document"
                     id="supporting-document-label"
+                    className="usa-label"
                   >
                     Select Supporting Document
                   </label>
@@ -445,7 +463,7 @@ export const PrimaryDocumentForm = connect(
 
               {fileDocumentHelper.showSupportingDocumentFreeText && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.supportingDocumentFreeText
                       ? 'usa-input-error'
                       : ''
@@ -454,6 +472,7 @@ export const PrimaryDocumentForm = connect(
                   <label
                     htmlFor="supporting-document-free-text"
                     id="supporting-document-free-text-label"
+                    className="usa-label"
                   >
                     Supporting Document Signed By
                   </label>
@@ -487,7 +506,7 @@ export const PrimaryDocumentForm = connect(
 
               {fileDocumentHelper.showSupportingDocumentUpload && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.supportingDocumentFile
                       ? 'usa-input-error'
                       : ''
@@ -497,7 +516,7 @@ export const PrimaryDocumentForm = connect(
                     htmlFor="supporting-document-file"
                     id="supporting-document-file-label"
                     className={
-                      'ustc-upload ' +
+                      'usa-label ustc-upload ' +
                       (fileDocumentHelper.showSupportingDocumentValid
                         ? 'validated'
                         : '')

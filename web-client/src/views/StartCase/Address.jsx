@@ -22,7 +22,7 @@ export const Address = connect(
       <React.Fragment>
         <div
           className={
-            'ustc-form-group ' +
+            'usa-form-group ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].address1
@@ -52,7 +52,7 @@ export const Address = connect(
             bind={`validationErrors.${type}.address1`}
           />
         </div>
-        <div className="ustc-form-group">
+        <div className="usa-form-group">
           <label htmlFor={`${type}.address2`}>
             Address Line 2 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -73,7 +73,7 @@ export const Address = connect(
             }}
           />
         </div>
-        <div className="ustc-form-group">
+        <div className="usa-form-group">
           <label htmlFor={`${type}.address3`}>
             Address Line 3 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -103,7 +103,7 @@ export const Address = connect(
               : ''
           }
         >
-          <div className="ustc-form-group ustc-form-group-city">
+          <div className="usa-form-group usa-form-group-city">
             <label htmlFor={`${type}.city`}>City</label>
             <input
               id={`${type}.city`}
@@ -130,7 +130,7 @@ export const Address = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group ustc-form-group-state">
+          <div className="usa-form-group usa-form-group-state">
             <label htmlFor={`${type}.state`}>State</label>
             <select
               className={
@@ -232,7 +232,7 @@ export const Address = connect(
         </div>
         <div
           className={
-            'ustc-form-group clear-both ' +
+            'usa-form-group clear-both ' +
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].postalCode

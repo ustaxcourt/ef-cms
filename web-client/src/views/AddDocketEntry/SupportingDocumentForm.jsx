@@ -27,7 +27,7 @@ export const SupportingDocumentForm = connect(
         <h2>Add Supporting Document</h2>
         <div className="blue-container docket-entry-form">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
@@ -35,7 +35,7 @@ export const SupportingDocumentForm = connect(
               htmlFor="primary-document"
               id="primary-document-label"
               className={
-                'ustc-upload ' +
+                'usa-label ustc-upload ' +
                 (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
@@ -60,11 +60,15 @@ export const SupportingDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.documentType ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="event-code" id="event-code-label">
+            <label
+              htmlFor="event-code"
+              id="event-code-label"
+              className="usa-label"
+            >
               Document Type
             </label>
             <select
@@ -97,11 +101,15 @@ export const SupportingDocumentForm = connect(
 
           {addDocketEntryHelper.showSupportingDocumentFreeText && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.freeText ? 'usa-input-error' : ''
               }`}
             >
-              <label htmlFor="free-text" id="free-text-label">
+              <label
+                htmlFor="free-text"
+                id="free-text-label"
+                className="usa-label"
+              >
                 Supporting Document Signed By
               </label>
               <input
@@ -130,8 +138,12 @@ export const SupportingDocumentForm = connect(
           {addDocketEntryHelper.showSupportingDocumentSelect && (
             <SupportingDocumentSelect />
           )}
-          <div className="ustc-form-group">
-            <label htmlFor="additional-info" id="additional-info-label">
+          <div className="usa-form-group">
+            <label
+              htmlFor="additional-info"
+              id="additional-info-label"
+              className="usa-label"
+            >
               Additional Info 1
             </label>
             <input
@@ -152,7 +164,7 @@ export const SupportingDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
+          <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="add-to-coversheet"
               type="checkbox"
@@ -166,11 +178,17 @@ export const SupportingDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
+            <label htmlFor="add-to-coversheet" className="usa-label">
+              Add to Cover Sheet
+            </label>
           </div>
 
-          <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info-label2">
+          <div className="usa-form-group">
+            <label
+              htmlFor="additional-info2"
+              id="additional-info-label2"
+              className="usa-label"
+            >
               Additional Info 2
             </label>
             <input
@@ -193,7 +211,7 @@ export const SupportingDocumentForm = connect(
           </div>
 
           {addDocketEntryHelper.showSupportingInclusions && (
-            <div className="ustc-form-group">
+            <div className="usa-form-group">
               <fieldset className="usa-fieldset-inputs usa-sans">
                 <legend>Inclusions</legend>
                 <ul className="ustc-vertical-option-list">
@@ -211,7 +229,9 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="exhibits">Exhibit(s)</label>
+                    <label htmlFor="exhibits" className="usa-label">
+                      Exhibit(s)
+                    </label>
                   </li>
                   <li>
                     <input
@@ -227,7 +247,9 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="attachments">Attachment(s)</label>
+                    <label htmlFor="attachments" className="usa-label">
+                      Attachment(s)
+                    </label>
                   </li>
                   <li>
                     <input
@@ -243,7 +265,10 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="certificate-of-service">
+                    <label
+                      htmlFor="certificate-of-service"
+                      className="usa-label"
+                    >
                       Certificate of Service
                     </label>
                     {form.certificateOfService && (

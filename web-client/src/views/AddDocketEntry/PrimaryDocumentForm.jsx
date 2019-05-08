@@ -35,7 +35,7 @@ export const PrimaryDocumentForm = connect(
         <h2>Add Docket Entry</h2>
         <div className="blue-container docket-entry-form">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
@@ -43,7 +43,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="primary-document"
               id="primary-document-label"
               className={
-                'ustc-upload ' +
+                'usa-label ustc-upload ' +
                 (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
@@ -68,7 +68,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.lodged ? 'usa-input-error' : ''
             }`}
           >
@@ -91,7 +91,12 @@ export const PrimaryDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor={`filing-status-${option}`}>{option}</label>
+                    <label
+                      htmlFor={`filing-status-${option}`}
+                      className="usa-label"
+                    >
+                      {option}
+                    </label>
                   </li>
                 ))}
               </ul>
@@ -103,7 +108,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.dateReceived ? 'usa-input-error' : ''
             }`}
           >
@@ -188,11 +193,15 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.eventCode ? 'usa-input-error' : ''
             }`}
           >
-            <label htmlFor="react-select-2-input" id="document-type-label">
+            <label
+              htmlFor="react-select-2-input"
+              id="document-type-label"
+              className="usa-label"
+            >
               Document Type
             </label>
             <Select
@@ -240,7 +249,7 @@ export const PrimaryDocumentForm = connect(
 
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.secondaryDocument && !form.secondaryDocument
                   ? 'usa-input-error'
                   : ''
@@ -249,6 +258,7 @@ export const PrimaryDocumentForm = connect(
               <label
                 htmlFor="react-select-3-input"
                 id="secondary-document-type-label"
+                className="usa-label"
               >
                 Which Document Is This Motion for Leave For?
               </label>
@@ -310,8 +320,12 @@ export const PrimaryDocumentForm = connect(
             />
           )}
 
-          <div className="ustc-form-group">
-            <label htmlFor="additional-info" id="additional-info-label">
+          <div className="usa-form-group">
+            <label
+              htmlFor="additional-info"
+              id="additional-info-label"
+              className="usa-label"
+            >
               Additional Info 1
             </label>
             <input
@@ -332,7 +346,7 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
+          <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="add-to-coversheet"
               type="checkbox"
@@ -346,11 +360,17 @@ export const PrimaryDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
+            <label htmlFor="add-to-coversheet" className="usa-label">
+              Add to Cover Sheet
+            </label>
           </div>
 
-          <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info2-label">
+          <div className="usa-form-group">
+            <label
+              htmlFor="additional-info2"
+              id="additional-info2-label"
+              className="usa-label"
+            >
               Additional Info 2
             </label>
             <input
@@ -372,7 +392,7 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <fieldset className="usa-fieldset-inputs usa-sans">
               <legend>Inclusions</legend>
               <ul className="ustc-vertical-option-list">
@@ -390,7 +410,9 @@ export const PrimaryDocumentForm = connect(
                       validateDocketEntrySequence();
                     }}
                   />
-                  <label htmlFor="exhibits">Exhibit(s)</label>
+                  <label htmlFor="exhibits" className="usa-label">
+                    Exhibit(s)
+                  </label>
                 </li>
                 <li>
                   <input
@@ -406,7 +428,9 @@ export const PrimaryDocumentForm = connect(
                       validateDocketEntrySequence();
                     }}
                   />
-                  <label htmlFor="attachments">Attachment(s)</label>
+                  <label htmlFor="attachments" className="usa-label">
+                    Attachment(s)
+                  </label>
                 </li>
                 <li>
                   <input
@@ -422,7 +446,7 @@ export const PrimaryDocumentForm = connect(
                       validateDocketEntrySequence();
                     }}
                   />
-                  <label htmlFor="certificate-of-service">
+                  <label htmlFor="certificate-of-service" className="usa-label">
                     Certificate of Service
                   </label>
                   {form.certificateOfService && (
@@ -520,7 +544,7 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               addDocketEntryHelper.partyValidationError ? 'usa-input-error' : ''
             }`}
           >
@@ -552,7 +576,10 @@ export const PrimaryDocumentForm = connect(
                               validateDocketEntrySequence();
                             }}
                           />
-                          <label htmlFor={`party-practitioner-${idx}`}>
+                          <label
+                            htmlFor={`party-practitioner-${idx}`}
+                            className="usa-label"
+                          >
                             Counsel {practitionerName}
                           </label>
                         </li>
@@ -573,7 +600,7 @@ export const PrimaryDocumentForm = connect(
                       validateDocketEntrySequence();
                     }}
                   />
-                  <label htmlFor="party-primary">
+                  <label htmlFor="party-primary" className="usa-label">
                     {caseDetail.contactPrimary.name}
                   </label>
                 </li>
@@ -592,7 +619,7 @@ export const PrimaryDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="party-secondary">
+                    <label htmlFor="party-secondary" className="usa-label">
                       {caseDetail.contactSecondary.name}
                     </label>
                   </li>
@@ -612,7 +639,9 @@ export const PrimaryDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="party-respondent">Respondent</label>
+                    <label htmlFor="party-respondent" className="usa-label">
+                      Respondent
+                    </label>
                   </li>
                 )}
               </ul>
@@ -624,7 +653,7 @@ export const PrimaryDocumentForm = connect(
           </div>
           {addDocketEntryHelper.showObjection && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.objections ? 'usa-input-error' : ''
               }`}
             >
@@ -650,7 +679,12 @@ export const PrimaryDocumentForm = connect(
                           validateDocketEntrySequence();
                         }}
                       />
-                      <label htmlFor={`objections-${option}`}>{option}</label>
+                      <label
+                        htmlFor={`objections-${option}`}
+                        className="usa-label"
+                      >
+                        {option}
+                      </label>
                     </li>
                   ))}
                 </ul>

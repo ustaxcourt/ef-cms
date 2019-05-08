@@ -29,7 +29,7 @@ export const CaseInfo = connect(
         {caseDetail.isPaper && (
           <div className="subsection">
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 caseDetailErrors.receivedAt ? 'usa-input-error' : ''
               }`}
             >
@@ -132,7 +132,7 @@ export const CaseInfo = connect(
         )}
 
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <ProcedureType
               value={caseDetail.procedureType}
               onChange={e => {
@@ -163,7 +163,9 @@ export const CaseInfo = connect(
                   autoSaveCaseSequence();
                 }}
               />
-              <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+              <label htmlFor="order-to-show-cause" className="usa-label">
+                Order to Show Cause
+              </label>
             </div>
           </div>
         </div>
@@ -191,7 +193,7 @@ export const CaseInfo = connect(
 
         <div className="subsection">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               caseDetailErrors.payGovDate ? 'usa-input-error' : ''
             }`}
           >
@@ -293,8 +295,10 @@ export const CaseInfo = connect(
         </div>
 
         <div className="subsection">
-          <div className="ustc-form-group">
-            <label htmlFor="fee-payment-id">Fee Payment ID</label>
+          <div className="usa-form-group">
+            <label htmlFor="fee-payment-id" className="usa-label">
+              Fee Payment ID
+            </label>
             <input
               id="fee-payment-id"
               name="payGovId"
@@ -325,7 +329,9 @@ export const CaseInfo = connect(
                   autoSaveCaseSequence();
                 }}
               />
-              <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+              <label htmlFor="order-for-filing-fee" className="usa-label">
+                Order for Filing Fee
+              </label>
             </div>
           </div>
         </div>
@@ -336,7 +342,7 @@ export const CaseInfo = connect(
           role="list"
           aria-labelledby="orders-needed"
         >
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="order-for-ratification"
               type="checkbox"
@@ -350,11 +356,11 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-ratification">
+            <label htmlFor="order-for-ratification" className="usa-label">
               Order for Ratification of Petition
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="notice-of-attachments"
               type="checkbox"
@@ -368,11 +374,11 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="notice-of-attachments">
+            <label htmlFor="notice-of-attachments" className="usa-label">
               Notice of Attachments in the Nature of Evidence
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="order-for-amended-petition"
               type="checkbox"
@@ -386,11 +392,11 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-amended-petition">
+            <label htmlFor="order-for-amended-petition" className="usa-label">
               Order for Amended Petition
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
               id="order-for-amended-petition-and-filing-fee"
               type="checkbox"
@@ -404,7 +410,10 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-amended-petition-and-filing-fee">
+            <label
+              htmlFor="order-for-amended-petition-and-filing-fee"
+              className="usa-label"
+            >
               Order for Amended Petition and Filing Fee
             </label>
           </div>

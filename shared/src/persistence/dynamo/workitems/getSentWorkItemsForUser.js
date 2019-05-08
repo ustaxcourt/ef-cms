@@ -2,9 +2,6 @@ const moment = require('moment');
 const {
   getSortRecordsViaMapping,
 } = require('../../dynamo/helpers/getSortRecordsViaMapping');
-const {
-  updateWorkItemsUsingCases,
-} = require('../../dynamo/helpers/updateWorkItemsUsingCases');
 
 exports.getSentWorkItemsForUser = async ({ userId, applicationContext }) => {
   const workItems = await getSortRecordsViaMapping({
@@ -20,5 +17,5 @@ exports.getSentWorkItemsForUser = async ({ userId, applicationContext }) => {
     type: 'outbox',
   });
 
-  return updateWorkItemsUsingCases({ applicationContext, workItems });
+  return workItems;
 };

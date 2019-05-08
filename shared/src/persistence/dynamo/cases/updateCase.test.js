@@ -11,10 +11,17 @@ const applicationContext = {
 describe('updateCase', () => {
   beforeEach(() => {
     sinon.stub(client, 'put').resolves(null);
+    sinon.stub(client, 'get').resolves({
+      docketNumberSuffix: null,
+      status: 'General Docket',
+    });
+    sinon.stub(client, 'query').resolves([]);
   });
 
   afterEach(() => {
     client.put.restore();
+    client.get.restore();
+    client.query.restore();
   });
 
   it('updates case with new version number', async () => {
@@ -24,6 +31,7 @@ describe('updateCase', () => {
         caseId: '123',
         currentVersion: '10',
         docketNumber: '101-18',
+        docketNumberSuffix: null,
         status: 'General Docket',
         userId: 'taxpayer',
       },

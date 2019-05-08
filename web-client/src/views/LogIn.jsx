@@ -23,10 +23,13 @@ export const LogIn = connect(
           }}
         >
           <div className="blue-container">
-            <div className="ustc-form-group">
-              <label htmlFor="name">Name</label>
+            <div className="usa-form-group">
+              <label htmlFor="name" className="usa-label">
+                Name
+              </label>
               <input
                 autoCapitalize="none"
+                className="usa-input"
                 id="name"
                 name="name"
                 type="text"

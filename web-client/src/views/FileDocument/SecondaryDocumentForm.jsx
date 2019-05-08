@@ -50,7 +50,7 @@ export const SecondaryDocumentForm = connect(
 
             <div className="usa-width-five-twelfths">
               <div
-                className={`ustc-form-group ${
+                className={`usa-form-group ${
                   validationErrors.secondaryDocumentFile
                     ? 'usa-input-error'
                     : ''
@@ -60,7 +60,7 @@ export const SecondaryDocumentForm = connect(
                   htmlFor="secondary-document"
                   id="secondary-document-label"
                   className={
-                    'ustc-upload ' +
+                    'usa-label ustc-upload ' +
                     (fileDocumentHelper.showSecondaryDocumentValid
                       ? 'validated'
                       : '')
@@ -94,7 +94,7 @@ export const SecondaryDocumentForm = connect(
 
               {fileDocumentHelper.showSecondaryDocumentValid && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.hasSecondarySupportingDocuments
                       ? 'usa-input-error'
                       : ''
@@ -127,6 +127,7 @@ export const SecondaryDocumentForm = connect(
                           />
                           <label
                             htmlFor={`secondary-supporting-documents-${option}`}
+                            className="usa-label"
                           >
                             {option}
                           </label>
@@ -143,7 +144,7 @@ export const SecondaryDocumentForm = connect(
 
               {form.hasSecondarySupportingDocuments && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.secondarySupportingDocument
                       ? 'usa-input-error'
                       : ''
@@ -152,6 +153,7 @@ export const SecondaryDocumentForm = connect(
                   <label
                     htmlFor="secondary-supporting-document"
                     id="secondary-supporting-document-label"
+                    className="usa-label"
                   >
                     Select Supporting Document
                   </label>
@@ -204,7 +206,7 @@ export const SecondaryDocumentForm = connect(
 
               {fileDocumentHelper.showSecondarySupportingDocumentFreeText && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.secondarySupportingDocumentFreeText
                       ? 'usa-input-error'
                       : ''
@@ -213,6 +215,7 @@ export const SecondaryDocumentForm = connect(
                   <label
                     htmlFor="secondary-supporting-document-free-text"
                     id="secondary-supporting-document-free-text-label"
+                    className="usa-label"
                   >
                     Supporting Document Signed By
                   </label>
@@ -246,7 +249,7 @@ export const SecondaryDocumentForm = connect(
 
               {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
                 <div
-                  className={`ustc-form-group ${
+                  className={`usa-form-group ${
                     validationErrors.secondarySupportingDocumentFile
                       ? 'usa-input-error'
                       : ''
@@ -256,7 +259,7 @@ export const SecondaryDocumentForm = connect(
                     htmlFor="secondary-supporting-document-file"
                     id="secondary-supporting-document-file-label"
                     className={
-                      'ustc-upload with-hint' +
+                      'usa-label ustc-upload with-hint' +
                       (fileDocumentHelper.showSecondarySupportingDocumentValid
                         ? 'validated'
                         : '')
