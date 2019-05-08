@@ -6,6 +6,7 @@ const {
 const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
 const { orderBy } = require('lodash');
+const { STATUS_TYPES } = require('./Case');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -164,6 +165,7 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
     sentByUserId: userId,
     sentByUserRole: userRole,
   });
+  this.caseStatus = STATUS_TYPES.batchedForIRS;
   this.addMessage(
     new Message({
       from: name,
@@ -196,6 +198,7 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     sentByUserId: user.userId,
     sentByUserRole: user.role,
   });
+  this.caseStatus = STATUS_TYPES.recalled;
   this.section = PETITIONS_SECTION;
   this.addMessage(message);
   return message;
