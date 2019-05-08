@@ -45,6 +45,15 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
       workItem: fullWorkItem,
     });
 
+    const newMessage = new Message({
+      createdAt: new Date().toISOString(),
+      from: user.name,
+      fromUserId: user.userId,
+      message: workItemEntity.getLatestMessageEntity().message,
+      to: workItem.assigneeName,
+      toUserId: workItem.assigneeId,
+    });
+
     workItemEntity
       .assignToUser({
         assigneeId: workItem.assigneeId,
@@ -54,16 +63,7 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
         sentByUserId: user.userId,
         sentByUserRole: user.role,
       })
-      .addMessage(
-        new Message({
-          createdAt: new Date().toISOString(),
-          from: user.name,
-          fromUserId: user.userId,
-          message: workItemEntity.getLatestMessageEntity().message,
-          to: workItem.assigneeName,
-          toUserId: workItem.assigneeId,
-        }),
-      );
+      .addMessage(newMessage);
 
     caseToUpdate.documents.forEach(
       document =>
@@ -81,6 +81,7 @@ exports.assignWorkItems = async ({ workItems, applicationContext }) => {
 
     await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
+      messageId: newMessage.messageId,
       workItem: workItemEntity.validate().toRawObject(),
     });
   }
