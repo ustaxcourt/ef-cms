@@ -52,7 +52,9 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
     workItem => workItem.isInitializeCase,
   );
   if (initializeCaseWorkItem) {
-    initializeCaseWorkItem.recallFromIRSBatchSystem({ user });
+    const newMessage = initializeCaseWorkItem.recallFromIRSBatchSystem({
+      user,
+    });
     const invalidEntityError = new InvalidEntityError(
       'Invalid for recall from IRS',
     );
@@ -93,11 +95,22 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       type: 'outbox',
     });
 
+    // individual inbox
     await createMappingRecord({
       applicationContext,
       pkId: initializeCaseWorkItem.assigneeId,
       skId: initializeCaseWorkItem.workItemId,
       type: 'workItem',
+    });
+
+    await createMappingRecord({
+      applicationContext,
+      item: {
+        messageId: newMessage.messageId,
+      },
+      pkId: initializeCaseWorkItem.assigneeId,
+      skId: newMessage.messageId,
+      type: 'unread-message',
     });
 
     await createMappingRecord({

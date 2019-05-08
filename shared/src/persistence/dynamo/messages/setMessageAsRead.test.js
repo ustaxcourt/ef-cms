@@ -6,14 +6,14 @@ describe('setMessageAsRead', () => {
   let getCurrentUserStub;
 
   beforeEach(() => {
-    sinon.stub(client, 'put').resolves(null);
+    sinon.stub(client, 'delete').resolves(null);
   });
 
   afterEach(() => {
-    client.put.restore();
+    client.delete.restore();
   });
 
-  it('invokes the peristence layer with pk of {userId}|read-messages and other expected params', async () => {
+  it('invokes the peristence layer with pk of {userId}|unread-message and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -25,12 +25,12 @@ describe('setMessageAsRead', () => {
       messageId: 'abc',
       userId: '123',
     });
-    expect(client.put.getCall(0).args[0]).toMatchObject({
-      Item: {
-        pk: '123|read-messages',
+    expect(client.delete.getCall(0).args[0]).toMatchObject({
+      applicationContext: { environment: { stage: 'dev' } },
+      key: {
+        pk: '123|unread-message',
         sk: 'abc',
       },
-      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });
