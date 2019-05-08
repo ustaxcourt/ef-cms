@@ -1,6 +1,7 @@
 const {
   uploadExternalDocuments,
 } = require('./uploadExternalDocumentsInteractor');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('uploadExternalDocuments', () => {
   let applicationContext;
@@ -57,6 +58,7 @@ describe('uploadExternalDocuments', () => {
       error = e;
     }
     expect(error).toBeDefined();
+    expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
   it('runs successfully with no errors with minimum data and valid user', async () => {

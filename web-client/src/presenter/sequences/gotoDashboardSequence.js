@@ -26,10 +26,6 @@ const goToDashboard = [
         ],
       ]),
     ],
-    intakeclerk: [
-      clearAlertsAction,
-      setCurrentPageAction('DashboardIntakeClerk'),
-    ],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,

@@ -27,12 +27,6 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
-  it('should authorize a intakeclerk for getCase', () => {
-    expect(
-      isAuthorized({ role: 'intakeclerk', userId: 'intakeclerk' }, GET_CASE),
-    ).toBeTruthy();
-  });
-
   it('should return false when a user doesnt have a petitionsclerk role', () => {
     expect(
       isAuthorized(
