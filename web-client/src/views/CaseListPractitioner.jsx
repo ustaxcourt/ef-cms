@@ -11,7 +11,7 @@ export const CaseListPractitioner = connect(
   },
   ({ caseList, helper }) => {
     const renderTable = () => (
-      <table className="responsive-table dashboard" id="case-list">
+      <table className="usa-table responsive-table dashboard" id="case-list">
         <thead>
           <tr>
             <th>Docket Number</th>
