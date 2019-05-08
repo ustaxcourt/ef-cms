@@ -34,6 +34,7 @@ export const Header = connect(
   {
     betaBar: state.betaBar,
     helper: state.headerHelper,
+    loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
@@ -43,6 +44,7 @@ export const Header = connect(
   ({
     betaBar,
     helper,
+    loginSequence,
     mobileMenu,
     signOutSequence,
     toggleBetaBarSequence,
@@ -120,9 +122,30 @@ export const Header = connect(
                       </li>
                     )}
                   </ul>
-                  {mobileMenu.isVisible && (
+                  {mobileMenu.isVisible && user.userId && (
                     <AccountMenuItems signOut={signOutSequence} />
                   )}
+                </div>
+              )}
+              {!user && (
+                <div className="usa-nav-secondary">
+                  <ul className="usa-unstyled-list usa-nav-secondary-links">
+                    <li>
+                      <button
+                        title="Login"
+                        type="button"
+                        className="button-account-login"
+                        aria-label="login"
+                        onClick={() => loginSequence()}
+                      >
+                        <FontAwesomeIcon
+                          icon={['fa', 'user']}
+                          className="account-menu-icon"
+                        />{' '}
+                        Log In
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>

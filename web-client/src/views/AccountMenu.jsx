@@ -44,6 +44,10 @@ export const AccountMenu = connect(
               icon={['fa', 'user']}
               className="account-menu-icon"
             />
+            <FontAwesomeIcon
+              icon={['fa', 'caret-down']}
+              className="account-menu-icon caret"
+            />
           </button>
         </div>
         {isMenuOpen && <AccountMenuContent />}

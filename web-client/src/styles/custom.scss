@@ -589,6 +589,11 @@ nav.usa-nav {
     margin-top: -4px;
   }
 
+  .button-account-login {
+    background: none;
+    color: $color-primary;
+  }
+
   .mobile-account-nav {
   }
 
@@ -621,6 +626,14 @@ nav.usa-nav {
       li.usa-search {
         position: absolute;
         top: 8rem;
+
+        button {
+          background: $color-gray;
+        }
+
+        button:active {
+          background: $color-primary-darker;
+        }
       }
       li.user-dropdown {
         display: none;
@@ -629,9 +642,13 @@ nav.usa-nav {
         color: $color-white;
         text-decoration: none;
       }
-      a:hover {
+      a:active {
         text-decoration: underline;
       }
+    }
+    .button-account-login {
+      background: none;
+      color: $color-white;
     }
   }
 }
@@ -648,6 +665,10 @@ nav.usa-nav {
   &.open {
     .account-menu-icon {
       color: $color-white;
+
+      &.caret {
+        margin-right: 0;
+      }
     }
     .account-button-container {
       background-color: $color-primary;
