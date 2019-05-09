@@ -61,7 +61,9 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           <div
             className={
               'usa-form-group ' +
-              (this.props.validationErrors.section ? 'usa-input--error' : '')
+              (this.props.validationErrors.section
+                ? 'usa-form-group--error'
+                : '')
             }
           >
             <label htmlFor={'chambers'} className="usa-label">
