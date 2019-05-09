@@ -4,7 +4,7 @@ export const Forms = () => (
   <section className="usa-section grid-container">
     <h1>Forms</h1>
     <hr />
-    <form>
+    <form className="usa-form usa-form--large">
       <div className="blue-container">
         <div className="usa-form-group">
           <label htmlFor="input-text" className="usa-label">
@@ -361,6 +361,59 @@ export const Forms = () => (
               />
             </div>
           </div>
+        </fieldset>
+
+        <fieldset className="usa-fieldset">
+          <legend className="usa-legend">Mailing address</legend>
+          <label className="usa-label" htmlFor="mailing-address-1">
+            Street address 1
+          </label>
+          <input
+            className="usa-input"
+            id="mailing-address-1"
+            name="mailing-address-1"
+            type="text"
+          />
+
+          <label className="usa-label" htmlFor="mailing-address-2">
+            Street address 2 <span className="usa-hint">(optional)</span>
+          </label>
+          <input
+            className="usa-input"
+            id="mailing-address-2"
+            name="mailing-address-2"
+            type="text"
+          />
+
+          <div className="grid-row grid-gap">
+            <div className="mobile-lg:grid-col-8">
+              <label className="usa-label" htmlFor="city">
+                City
+              </label>
+              <input className="usa-input" id="city" name="city" type="text" />
+            </div>
+            <div className="mobile-lg:grid-col-4">
+              <label className="usa-label" htmlFor="state">
+                State
+              </label>
+              <select className="usa-select" id="state" name="state">
+                <option value>- Select -</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+              </select>
+            </div>
+          </div>
+
+          <label className="usa-label" htmlFor="zip">
+            ZIP
+          </label>
+          <input
+            className="usa-input usa-input--medium"
+            id="zip"
+            name="zip"
+            type="text"
+            pattern="[\d]{5}(-[\d]{4})?"
+          />
         </fieldset>
       </div>
     </form>
