@@ -70,10 +70,10 @@ export const CaseListPractitioner = connect(
       <React.Fragment>
         <div className="grid-container padding-x-0 case-list-header">
           <div className="grid-row">
-            <div className="grid-col-6 hide-on-mobile">
+            <div className="tablet:grid-col-6 hide-on-mobile">
               <h2>Your Cases</h2>
             </div>
-            <div className="grid-col-6">{renderStartButton()}</div>
+            <div className="tablet:grid-col-6">{renderStartButton()}</div>
           </div>
         </div>
         <div className="show-on-mobile">
@@ -87,10 +87,10 @@ export const CaseListPractitioner = connect(
       <>
         <div className="grid-container padding-x-0 subsection">
           <div className="grid-row">
-            <div className="grid-col-4 push-right">
+            <div className="tablet:grid-col-4 push-right">
               {helper.showCaseSearch && <CaseSearchBox />}
             </div>
-            <div className="grid-col-8">
+            <div className="tablet:grid-col-8">
               {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
             </div>
           </div>

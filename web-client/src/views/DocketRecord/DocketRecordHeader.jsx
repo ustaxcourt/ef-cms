@@ -20,8 +20,8 @@ export const DocketRecordHeader = connect(
       <React.Fragment>
         <div className="grid-container add-bottom-margin padding-0">
           <div className="grid-row">
-            {helper.showAddDocketEntryButton && (
-              <div className="tablet:grid-col-8">
+            <div className="tablet:grid-col-8">
+              {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button tablet-full-width"
                   href={`/case-detail/${
@@ -32,10 +32,8 @@ export const DocketRecordHeader = connect(
                   <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Docket
                   Entry
                 </a>
-              </div>
-            )}
-            {helper.showFileDocumentButton && (
-              <div className="tablet:grid-col-8">
+              )}
+              {helper.showFileDocumentButton && (
                 <a
                   className="usa-button tablet-full-width"
                   href={`/case-detail/${
@@ -45,8 +43,8 @@ export const DocketRecordHeader = connect(
                 >
                   <FontAwesomeIcon icon="cloud-upload-alt" /> File Document
                 </a>
-              </div>
-            )}
+              )}
+            </div>
             <div className="tablet:grid-offset-2 tablet:grid-col-2">
               <div className="only-large-screens">
                 <select

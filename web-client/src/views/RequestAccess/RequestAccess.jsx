@@ -42,7 +42,7 @@ export const RequestAccess = connect(
         <div className="blue-container">
           <div
             className={`usa-form-group ${
-              validationErrors.documentType ? 'usa-input-error' : ''
+              validationErrors.documentType ? 'usa-form-group--error' : ''
             }`}
           >
             <fieldset className="usa-fieldset">
@@ -101,7 +101,7 @@ export const RequestAccess = connect(
               ))}
             </fieldset>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.documentType"
             />
           </div>
