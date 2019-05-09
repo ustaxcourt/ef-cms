@@ -21,16 +21,14 @@ export const CaseSearchBox = connect(
         <div className="show-on-mobile">
           <p className="lead bold">Search For a Case</p>
           <div
-            className={
-              form.searchError
-                ? 'usa-input-error usa-input-group'
-                : 'usa-input-group'
-            }
+            className={`usa-form-group  ${
+              form.searchError ? 'usa-form-group--error' : ''
+            }`}
           >
             <div className="usa-search">
               <label
                 htmlFor="docket-search-field-mobile"
-                className="usa-sr-only"
+                className="usa-sr-only usa-label"
               >
                 Docket Number
               </label>
@@ -38,7 +36,7 @@ export const CaseSearchBox = connect(
                 id="docket-search-field-mobile"
                 type="search"
                 name="searchTerm"
-                className="usa-search-input"
+                className="usa-input"
                 value={searchTerm}
                 onChange={e => {
                   updateSearchTermSequence({
@@ -52,9 +50,11 @@ export const CaseSearchBox = connect(
               </button>
             </div>
 
-            <p className="usa-input-error-message">
-              No case was found. Check your docket number and try again.
-            </p>
+            {form.searchError && (
+              <p className="usa-error-message">
+                No case was found. Check your docket number and try again.
+              </p>
+            )}
           </div>
         </div>
       );
@@ -63,14 +63,12 @@ export const CaseSearchBox = connect(
       return (
         <div className="hide-on-mobile">
           {' '}
-          <p className="lead bold">Search For a Case</p>
+          <p className="lead bold margin-0">Search For a Case</p>
           <p>To file an Entry of Appearance, Substitution of Counsel, etc.</p>
           <div
-            className={
-              form.searchError
-                ? 'usa-input-error usa-input-group'
-                : 'usa-input-group'
-            }
+            className={`usa-form-group  ${
+              form.searchError ? 'usa-form-group--error' : ''
+            }`}
           >
             <div>
               <label htmlFor="docket-search-field" className="usa-label">
@@ -80,6 +78,7 @@ export const CaseSearchBox = connect(
                 id="docket-search-field"
                 type="text"
                 name="searchTerm"
+                className="usa-input"
                 value={searchTerm}
                 onChange={e => {
                   updateSearchTermSequence({
@@ -89,9 +88,11 @@ export const CaseSearchBox = connect(
               />
             </div>
 
-            <p className="usa-input-error-message">
-              No case was found. Check your docket number and try again.
-            </p>
+            {form.searchError && (
+              <p className="usa-error-message">
+                No case was found. Check your docket number and try again.
+              </p>
+            )}
           </div>
           <button type="submit" className="usa-button usa-button--outline">
             <span className="usa-search-submit-text">Search</span>
