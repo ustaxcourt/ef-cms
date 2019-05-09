@@ -103,27 +103,27 @@ option:first-child {
   }
 }
 
-.usa-input-error {
+.usa-input--error {
   padding-top: unset;
   padding-bottom: 0;
   margin-top: auto;
   margin-bottom: 20px;
 }
 
-.usa-input-error-message {
+.usa-error-message {
   padding: 15px 0 0 0;
   margin: 0;
   clear: left;
   line-height: 1;
 }
 
-.usa-alert-error,
-.usa-alert-success,
-.usa-alert-warning {
+.usa-alert--error,
+.usa-alert--success,
+.usa-alert--warning {
   max-width: 700px;
   min-height: 75px;
 
-  .usa-alert-heading {
+  .usa-alert__heading {
     margin-top: 0;
     margin-bottom: 0;
   }

@@ -25,22 +25,43 @@ export const PartiesRepresenting = connect(
         <div className="blue-container">
           <div
             className={`usa-form-group ${
-              requestAccessHelper.partyValidationError ? 'usa-input-error' : ''
+              requestAccessHelper.partyValidationError ? 'usa-input--error' : ''
             }`}
           >
-            <fieldset className="usa-fieldset-inputs usa-sans">
+            <fieldset className="usa-fieldset">
               <legend className="with-hint" id="who-legend">
                 Who Are You Representing?
               </legend>
               <span className="usa-form-hint">Check all that apply.</span>
-              <ul className="ustc-vertical-option-list">
-                <li>
+              <div className="usa-checkbox">
+                <input
+                  id="party-primary"
+                  type="checkbox"
+                  name="representingPrimary"
+                  aria-describedby="who-legend"
+                  className="usa-checkbox__input"
+                  checked={form.representingPrimary || false}
+                  onChange={e => {
+                    updateCaseAssociationFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateCaseAssociationRequestSequence();
+                  }}
+                />
+                <label htmlFor="party-primary" className="usa-checkbox__label">
+                  {caseDetail.contactPrimary.name}
+                </label>
+              </div>
+              {requestAccessHelper.showSecondaryParty && (
+                <div className="usa-checkbox">
                   <input
-                    id="party-primary"
+                    id="party-secondary"
                     type="checkbox"
-                    name="representingPrimary"
                     aria-describedby="who-legend"
-                    checked={form.representingPrimary || false}
+                    name="representingSecondary"
+                    className="usa-checkbox__input"
+                    checked={form.representingSecondary || false}
                     onChange={e => {
                       updateCaseAssociationFormValueSequence({
                         key: e.target.name,
@@ -49,35 +70,17 @@ export const PartiesRepresenting = connect(
                       validateCaseAssociationRequestSequence();
                     }}
                   />
-                  <label htmlFor="party-primary" className="usa-label">
-                    {caseDetail.contactPrimary.name}
+                  <label
+                    htmlFor="party-secondary"
+                    className="usa-checkbox__label"
+                  >
+                    {caseDetail.contactSecondary.name}
                   </label>
-                </li>
-                {requestAccessHelper.showSecondaryParty && (
-                  <li>
-                    <input
-                      id="party-secondary"
-                      type="checkbox"
-                      aria-describedby="who-legend"
-                      name="representingSecondary"
-                      checked={form.representingSecondary || false}
-                      onChange={e => {
-                        updateCaseAssociationFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateCaseAssociationRequestSequence();
-                      }}
-                    />
-                    <label htmlFor="party-secondary" className="usa-label">
-                      {caseDetail.contactSecondary.name}
-                    </label>
-                  </li>
-                )}
-              </ul>
+                </div>
+              )}
             </fieldset>
             {requestAccessHelper.partyValidationError && (
-              <span className="usa-input-error-message">
+              <span className="usa-error-message">
                 {requestAccessHelper.partyValidationError}
               </span>
             )}

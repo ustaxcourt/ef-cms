@@ -1,7 +1,7 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { FormCancelModalDialog } from '../modals/FormCancelModalDialog';
 import { RequestAccess } from './RequestAccess';
 import { RequestAccessReview } from './RequestAccessReview';
 import { SuccessNotification } from '../SuccessNotification';
