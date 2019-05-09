@@ -149,7 +149,7 @@ export const SecondaryDocumentType = connect(
             </div>
           </>
         )}
-        <div className="usa-form-group only-large-screens">
+        <div className="only-large-screens">
           <button
             type="submit"
             className="usa-button"

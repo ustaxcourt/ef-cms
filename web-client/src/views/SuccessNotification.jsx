@@ -40,13 +40,13 @@ class SuccessNotificationComponent extends React.Component {
             <div className="usa-alert__body">
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
-                  <div className="grid-col-10">
+                  <div className="tablet:grid-col-10">
                     <p className="heading-3 usa-alert__heading">
                       {alertSuccess.title}
                     </p>
                     <p className="usa-alert__text">{alertSuccess.message}</p>
                   </div>
-                  <div className="usa-alert__action grid-col-2">
+                  <div className="tablet:grid-col-2 usa-alert__action">
                     <button
                       type="button"
                       className="modal-close-button usa-button usa-button--unstyled"
