@@ -7,14 +7,12 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
-    sessionMetadata: state.sessionMetadata,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
     caseDetail,
     helper,
-    sessionMetadata,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
@@ -49,18 +47,14 @@ export const DocketRecordHeader = connect(
           <div className="usa-width-one-sixth">
             <div className="only-large-screens">
               <select
-                name="docketRecordSort"
+                name={`docketRecordSort.${caseDetail.caseId}`}
                 className="usa-select"
                 aria-label="docket record sort"
-                value={sessionMetadata.docketRecordSort}
+                value={caseDetail.docketRecordSort}
                 onChange={e => {
                   updateSessionMetadataSequence({
                     key: e.target.name,
                     value: e.target.value,
-                  });
-                  updateSessionMetadataSequence({
-                    key: 'caseId',
-                    value: caseDetail.caseId,
                   });
                 }}
               >
@@ -94,16 +88,14 @@ export const DocketRecordHeader = connect(
                 className="link mobile-sort-docket-button"
                 onClick={() => {
                   toggleMobileDocketSortSequence();
-                  updateSessionMetadataSequence({
-                    key: 'caseId',
-                    value: caseDetail.caseId,
-                  });
                 }}
               >
-                {sessionMetadata.docketRecordSort === 'byDate' &&
-                  'Oldest to Newest'}
-                {sessionMetadata.docketRecordSort === 'byDateDesc' &&
+                {caseDetail.docketRecordSort === 'byDate' && 'Oldest to Newest'}
+                {caseDetail.docketRecordSort === 'byDateDesc' &&
                   'Newest to Oldest'}
+                {caseDetail.docketRecordSort === 'byIndex' && 'Order Ascending'}
+                {caseDetail.docketRecordSort === 'byIndexDesc' &&
+                  'Order Descending'}
                 <FontAwesomeIcon icon="sort" size="sm" />
               </button>
             </div>

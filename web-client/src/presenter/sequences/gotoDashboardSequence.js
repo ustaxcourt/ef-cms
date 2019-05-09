@@ -6,6 +6,7 @@ import { getCasesForRespondentAction } from '../actions/getCasesForRespondentAct
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -17,14 +18,13 @@ const goToDashboard = [
   getUserRoleAction,
   {
     docketclerk: [
-      getUsersInSectionAction({ section: 'docket' }),
-      setUsersAction,
-      setCurrentPageAction('DashboardDocketClerk'),
-      ...chooseWorkQueueSequence,
-    ],
-    intakeclerk: [
-      clearAlertsAction,
-      setCurrentPageAction('DashboardIntakeClerk'),
+      parallel([
+        [getUsersInSectionAction({ section: 'docket' }), setUsersAction],
+        [
+          setCurrentPageAction('DashboardDocketClerk'),
+          ...chooseWorkQueueSequence,
+        ],
+      ]),
     ],
     petitioner: [
       getCasesByUserAction,
@@ -32,10 +32,13 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     petitionsclerk: [
-      getUsersInSectionAction({ section: 'petitions' }),
-      setUsersAction,
-      setCurrentPageAction('DashboardPetitionsClerk'),
-      ...chooseWorkQueueSequence,
+      parallel([
+        [getUsersInSectionAction({ section: 'petitions' }), setUsersAction],
+        [
+          setCurrentPageAction('DashboardPetitionsClerk'),
+          ...chooseWorkQueueSequence,
+        ],
+      ]),
     ],
     practitioner: [
       getCasesByUserAction,
