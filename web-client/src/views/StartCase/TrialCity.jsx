@@ -34,7 +34,7 @@ export const TrialCity = connect(
       >
         <label
           htmlFor="preferred-trial-city"
-          className={showHint && 'with-hint'}
+          className={"usa-label ${showHint && 'with-hint'}"}
         >
           {label}
         </label>
@@ -58,6 +58,7 @@ export const TrialCity = connect(
         <select
           name="preferredTrialCity"
           id="preferred-trial-city"
+          className="usa-select"
           onChange={onChange}
           value={value}
         >

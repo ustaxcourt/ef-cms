@@ -1,12 +1,7 @@
 const client = require('../../dynamodbClientService');
 
-exports.deleteMappingRecord = async ({
-  applicationContext,
-  pkId,
-  skId,
-  type,
-}) => {
-  await client.delete({
+exports.deleteMappingRecord = ({ applicationContext, pkId, skId, type }) => {
+  return client.delete({
     applicationContext,
     key: {
       pk: `${pkId}|${type}`,

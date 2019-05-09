@@ -52,7 +52,7 @@ export const PrimaryDocumentForm = connect(
                 <div
                   className={`usa-form-group ${
                     validationErrors.primaryDocumentFile
-                      ? 'usa-input--error'
+                      ? 'usa-form-group--error'
                       : ''
                   }`}
                 >
@@ -92,7 +92,9 @@ export const PrimaryDocumentForm = connect(
 
             <div
               className={`usa-form-group ${
-                validationErrors.certificateOfService ? 'usa-input--error' : ''
+                validationErrors.certificateOfService
+                  ? 'usa-form-group--error'
+                  : ''
               }`}
             >
               <fieldset className="usa-fieldset">
@@ -136,7 +138,7 @@ export const PrimaryDocumentForm = connect(
               <div
                 className={
                   validationErrors.certificateOfServiceDate
-                    ? 'usa-input--error'
+                    ? 'usa-form-group--error'
                     : ''
                 }
               >
@@ -243,7 +245,7 @@ export const PrimaryDocumentForm = connect(
 
             <div
               className={`usa-form-group ${
-                validationErrors.exhibits ? 'usa-input--error' : ''
+                validationErrors.exhibits ? 'usa-form-group--error' : ''
               }`}
             >
               <fieldset className="usa-fieldset">
@@ -285,7 +287,7 @@ export const PrimaryDocumentForm = connect(
 
             <div
               className={`usa-form-group ${
-                validationErrors.attachments ? 'usa-input--error' : ''
+                validationErrors.attachments ? 'usa-form-group--error' : ''
               }`}
             >
               <fieldset className="usa-fieldset">
@@ -328,7 +330,7 @@ export const PrimaryDocumentForm = connect(
             {fileDocumentHelper.showObjection && (
               <div
                 className={`usa-form-group ${
-                  validationErrors.objections ? 'usa-input--error' : ''
+                  validationErrors.objections ? 'usa-form-group--error' : ''
                 }`}
               >
                 <fieldset className="usa-fieldset">
@@ -372,7 +374,7 @@ export const PrimaryDocumentForm = connect(
             <div
               className={`usa-form-group ${
                 validationErrors.hasSupportingDocuments
-                  ? 'usa-input--error'
+                  ? 'usa-form-group--error'
                   : ''
               }`}
             >
@@ -483,7 +485,7 @@ export const PrimaryDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.supportingDocumentFreeText
-                    ? 'usa-input--error'
+                    ? 'usa-form-group--error'
                     : ''
                 }`}
               >
@@ -527,7 +529,7 @@ export const PrimaryDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.supportingDocumentFile
-                    ? 'usa-input--error'
+                    ? 'usa-form-group--error'
                     : ''
                 }`}
               >

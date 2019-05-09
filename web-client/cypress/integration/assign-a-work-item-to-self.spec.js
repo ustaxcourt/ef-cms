@@ -27,7 +27,7 @@ describe('Assign a work item ', () => {
     getWorkItemCheckboxLabel('2611344f-f7bf-4f47-8ba0-60c70cb25446').click();
     getSectionUsersSelect().select('Test Petitionsclerk');
     getSendButton().click();
-    cy.wait(1000); // TODO: find a way to avoid this... we need to wait for the XHR and the list to resort
+    cy.wait(3000); // TODO: find a way to avoid this... we need to wait for the XHR and the list to resort
   });
 
   it('creates a section inbox message in this work item', () => {

@@ -25,7 +25,9 @@ export const PartiesRepresenting = connect(
         <div className="blue-container">
           <div
             className={`usa-form-group ${
-              requestAccessHelper.partyValidationError ? 'usa-input--error' : ''
+              requestAccessHelper.partyValidationError
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <fieldset className="usa-fieldset">

@@ -50,7 +50,9 @@ export const RequestAccessDocumentForm = connect(
             <div className="tablet:grid-col-5">
               <div
                 className={`usa-form-group ${
-                  validationErrors.primaryDocumentFile ? 'usa-input--error' : ''
+                  validationErrors.primaryDocumentFile
+                    ? 'usa-form-group--error'
+                    : ''
                 }`}
               >
                 <label
@@ -87,7 +89,7 @@ export const RequestAccessDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.certificateOfService
-                    ? 'usa-input--error'
+                    ? 'usa-form-group--error'
                     : ''
                 }`}
               >
@@ -132,7 +134,7 @@ export const RequestAccessDocumentForm = connect(
                 <div
                   className={
                     validationErrors.certificateOfServiceDate
-                      ? 'usa-input--error'
+                      ? 'usa-form-group--error'
                       : ''
                   }
                 >
@@ -239,7 +241,7 @@ export const RequestAccessDocumentForm = connect(
               {form.documentType === 'Substitution of Counsel' && (
                 <div
                   className={`usa-form-group ${
-                    validationErrors.objections ? 'usa-input--error' : ''
+                    validationErrors.objections ? 'usa-form-group--error' : ''
                   }`}
                 >
                   <fieldset className="usa-fieldset">
