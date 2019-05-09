@@ -14,7 +14,7 @@ export const PartiesRepresentingReadOnly = connect(
       <React.Fragment>
         <h3 className="header-with-link-button">Parties You’re Representing</h3>
         <button
-          className="link push-right"
+          className="link push-right usa-button usa-button--unstyled"
           type="button"
           onClick={() => chooseWizardStepSequence({ value: 'RequestAccess' })}
         >
