@@ -1,30 +1,41 @@
 const { deleteMappingRecord } = require('../helpers/deleteMappingRecord');
 
-exports.deleteWorkItemFromInbox = async ({
+exports.deleteWorkItemFromInbox = ({
   workItem,
   messageId,
   applicationContext,
+  deleteFromSection = true,
 }) => {
+  const requests = [];
   if (workItem.assigneeId) {
-    await deleteMappingRecord({
-      applicationContext,
-      pkId: workItem.assigneeId,
-      skId: workItem.workItemId,
-      type: 'workItem',
-    });
-
-    await deleteMappingRecord({
-      applicationContext,
-      pkId: workItem.assigneeId,
-      skId: messageId,
-      type: 'unread-message',
-    });
+    requests.push(
+      deleteMappingRecord({
+        applicationContext,
+        pkId: workItem.assigneeId,
+        skId: workItem.workItemId,
+        type: 'workItem',
+      }),
+    );
+    requests.push(
+      deleteMappingRecord({
+        applicationContext,
+        pkId: workItem.assigneeId,
+        skId: messageId,
+        type: 'unread-message',
+      }),
+    );
   }
 
-  await deleteMappingRecord({
-    applicationContext,
-    pkId: workItem.section,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
+  if (deleteFromSection) {
+    requests.push(
+      deleteMappingRecord({
+        applicationContext,
+        pkId: workItem.section,
+        skId: workItem.workItemId,
+        type: 'workItem',
+      }),
+    );
+  }
+
+  return Promise.all(requests);
 };

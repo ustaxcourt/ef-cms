@@ -13,25 +13,25 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
  * @returns {*}
  */
 exports.createCase = async ({ caseToCreate, applicationContext }) => {
-  await createMappingRecord({
-    applicationContext,
-    pkId: caseToCreate.userId,
-    skId: caseToCreate.caseId,
-    type: 'case',
-  });
-
-  await createMappingRecord({
-    applicationContext,
-    pkId: caseToCreate.docketNumber,
-    skId: caseToCreate.caseId,
-    type: 'case',
-  });
-
-  const results = await saveVersionedCase({
-    applicationContext,
-    caseToSave: caseToCreate,
-    existingVersion: (caseToCreate || {}).currentVersion,
-  });
+  const [results] = await Promise.all([
+    saveVersionedCase({
+      applicationContext,
+      caseToSave: caseToCreate,
+      existingVersion: (caseToCreate || {}).currentVersion,
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: caseToCreate.userId,
+      skId: caseToCreate.caseId,
+      type: 'case',
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: caseToCreate.docketNumber,
+      skId: caseToCreate.caseId,
+      type: 'case',
+    }),
+  ]);
 
   return stripWorkItems(
     stripInternalKeys(results),
