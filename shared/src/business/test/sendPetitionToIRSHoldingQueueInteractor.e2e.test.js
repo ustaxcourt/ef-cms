@@ -115,13 +115,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
 
     await assignWorkItems({
       applicationContext,
-      workItems: [
-        {
-          assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          assigneeName: 'Test Petitionsclerk',
-          workItemId,
-        },
-      ],
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      assigneeName: 'Test Petitionsclerk',
+      workItemId,
     });
     const petitionsUserInbox = await getWorkItemsForUser({
       applicationContext,

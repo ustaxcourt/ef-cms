@@ -8,17 +8,19 @@ const client = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.getCaseByCaseId = async ({ caseId, applicationContext }) => {
-  const results = await client.get({
-    Key: {
-      pk: caseId,
-      sk: '0',
-    },
-    applicationContext,
-  });
-
-  return stripWorkItems(
-    stripInternalKeys(results),
-    applicationContext.isAuthorizedForWorkItems(),
-  );
+exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
+  return client
+    .get({
+      Key: {
+        pk: caseId,
+        sk: '0',
+      },
+      applicationContext,
+    })
+    .then(results =>
+      stripWorkItems(
+        stripInternalKeys(results),
+        applicationContext.isAuthorizedForWorkItems(),
+      ),
+    );
 };

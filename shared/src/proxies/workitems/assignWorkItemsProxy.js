@@ -7,10 +7,19 @@ const { put } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = ({ workItems, applicationContext }) => {
+exports.assignWorkItems = ({
+  workItemId,
+  assigneeId,
+  assigneeName,
+  applicationContext,
+}) => {
   return put({
     applicationContext,
-    body: workItems,
+    body: {
+      assigneeId,
+      assigneeName,
+      workItemId,
+    },
     endpoint: '/workitems',
   });
 };
