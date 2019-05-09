@@ -277,25 +277,26 @@ export const StartCase = connect(
                 </div>
               </div>
             </div>
-          </div>
 
-          {startCaseHelper.showPetitionerDeceasedSpouseForm && (
-            <div
-              className={
-                'ustc-secondary-question ' +
-                (validationErrors.partyType ? 'usa-input--error' : '')
-              }
-            >
-              <fieldset
-                id="deceased-spouse-radios"
-                className="usa-fieldset usa-sans"
+            {startCaseHelper.showPetitionerDeceasedSpouseForm && (
+              <div
+                className={
+                  'ustc-secondary-question ' +
+                  (validationErrors.partyType ? 'usa-input--error' : '')
+                }
               >
-                <legend htmlFor="deceased-spouse-radios">
-                  {startCaseHelper.deceasedSpouseLegend}
-                </legend>
-                <ul className="usa-unstyled-list">
+                <fieldset
+                  id="deceased-spouse-radios"
+                  className="usa-fieldset usa-sans"
+                >
+                  <legend htmlFor="deceased-spouse-radios">
+                    {startCaseHelper.deceasedSpouseLegend}
+                  </legend>
                   {['Yes', 'No'].map((isSpouseDeceased, idx) => (
-                    <li key={isSpouseDeceased}>
+                    <div
+                      className="usa-radio usa-radio__inline"
+                      key={isSpouseDeceased}
+                    >
                       <input
                         id={`isSpouseDeceased-${isSpouseDeceased}`}
                         type="radio"
@@ -317,130 +318,36 @@ export const StartCase = connect(
                       >
                         {isSpouseDeceased}
                       </label>
-                    </li>
+                    </div>
                   ))}
-                </ul>
-              </fieldset>
-            </div>
-          )}
+                </fieldset>
+              </div>
+            )}
 
-          {startCaseHelper.showBusinessFilingTypeOptions && (
-            <div
-              className={
-                'ustc-secondary-question ' +
-                (validationErrors.partyType ? 'usa-input--error' : '')
-              }
-            >
-              <fieldset id="business-type-radios" className="usa-fieldset">
-                <legend htmlFor="business-type-radios">
-                  What type of business are you filing for?
-                </legend>
-                {[
-                  constants.BUSINESS_TYPES.corporation,
-                  constants.BUSINESS_TYPES.partnershipAsTaxMattersPartner,
-                  constants.BUSINESS_TYPES.partnershipOtherThanTaxMatters,
-                  constants.BUSINESS_TYPES.partnershipBBA,
-                ].map((businessType, idx) => (
-                  <div className="usa-radio" key={businessType}>
-                    <input
-                      id={`businessType-${businessType}`}
-                      type="radio"
-                      name="businessType"
-                      value={businessType}
-                      className="usa-radio__input"
-                      onChange={e => {
-                        updateStartCaseFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateStartCaseSequence();
-                      }}
-                    />
-                    <label
-                      id={`is-business-type-${idx}`}
-                      htmlFor={`businessType-${businessType}`}
-                      className="usa-radio__label"
-                    >
-                      {businessType}
-                    </label>
-                  </div>
-                ))}
-              </fieldset>
-            </div>
-          )}
-          {startCaseHelper.showOtherFilingTypeOptions && (
-            <div
-              className={
-                'ustc-secondary-question ' +
-                (validationErrors.partyType ? 'usa-input--error' : '')
-              }
-            >
-              <fieldset id="other-type-radios" className="usa-fieldset">
-                <legend htmlFor="other-type-radios">
-                  What other type of taxpayer are you filing for?
-                </legend>
-                {[
-                  'An estate or trust',
-                  'A minor or legally incompetent person',
-                  'Donor',
-                  'Transferee',
-                  'Deceased Spouse',
-                ].map((otherType, idx) => (
-                  <div className="usa-radio" key={otherType}>
-                    <input
-                      id={`otherType-${otherType}`}
-                      type="radio"
-                      name="otherType"
-                      value={otherType}
-                      className="usa-radio__input"
-                      onChange={e => {
-                        updateStartCaseFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateStartCaseSequence();
-                      }}
-                    />
-                    <label
-                      id={`is-other-type-${idx}`}
-                      htmlFor={`otherType-${otherType}`}
-                      className="usa-radio__label"
-                    >
-                      {otherType}
-                    </label>
-                  </div>
-                ))}
-              </fieldset>
-            </div>
-          )}
-
-          {startCaseHelper.showOtherFilingTypeOptions &&
-            startCaseHelper.showEstateFilingOptions && (
+            {startCaseHelper.showBusinessFilingTypeOptions && (
               <div
                 className={
                   'ustc-secondary-question ' +
                   (validationErrors.partyType ? 'usa-input--error' : '')
                 }
               >
-                <fieldset
-                  id="estate-type-radios"
-                  className="usa-fieldset usa-sans"
-                >
-                  <legend htmlFor="estate-type-radios">
-                    What type of estate or trust are you filing for?
+                <fieldset id="business-type-radios" className="usa-fieldset">
+                  <legend htmlFor="business-type-radios">
+                    What type of business are you filing for?
                   </legend>
                   {[
-                    constants.ESTATE_TYPES.estate,
-                    constants.ESTATE_TYPES.estateWithoutExecutor,
-                    constants.ESTATE_TYPES.trust,
-                  ].map((estateType, idx) => (
-                    <div className="usa-radio" key={estateType}>
+                    constants.BUSINESS_TYPES.corporation,
+                    constants.BUSINESS_TYPES.partnershipAsTaxMattersPartner,
+                    constants.BUSINESS_TYPES.partnershipOtherThanTaxMatters,
+                    constants.BUSINESS_TYPES.partnershipBBA,
+                  ].map((businessType, idx) => (
+                    <div className="usa-radio" key={businessType}>
                       <input
-                        id={`estateType-${estateType}`}
+                        id={`businessType-${businessType}`}
                         type="radio"
-                        name="estateType"
+                        name="businessType"
+                        value={businessType}
                         className="usa-radio__input"
-                        value={estateType}
                         onChange={e => {
                           updateStartCaseFormValueSequence({
                             key: e.target.name,
@@ -450,47 +357,42 @@ export const StartCase = connect(
                         }}
                       />
                       <label
-                        id={`is-estate-type-${idx}`}
-                        htmlFor={`estateType-${estateType}`}
+                        id={`is-business-type-${idx}`}
+                        htmlFor={`businessType-${businessType}`}
                         className="usa-radio__label"
                       >
-                        {estateType}
+                        {businessType}
                       </label>
                     </div>
                   ))}
                 </fieldset>
               </div>
             )}
-
-          {startCaseHelper.showOtherFilingTypeOptions &&
-            startCaseHelper.showMinorIncompetentFilingOptions && (
+            {startCaseHelper.showOtherFilingTypeOptions && (
               <div
                 className={
                   'ustc-secondary-question ' +
                   (validationErrors.partyType ? 'usa-input--error' : '')
                 }
               >
-                <fieldset
-                  id="minorIncompetent-type-radios"
-                  className="usa-fieldset"
-                >
-                  <legend htmlFor="minorIncompetent-type-radios">
-                    {startCaseHelper.minorIncompetentLegend}
+                <fieldset id="other-type-radios" className="usa-fieldset">
+                  <legend htmlFor="other-type-radios">
+                    What other type of taxpayer are you filing for?
                   </legend>
                   {[
-                    constants.OTHER_TYPES.conservator,
-                    constants.OTHER_TYPES.guardian,
-                    constants.OTHER_TYPES.custodian,
-                    constants.OTHER_TYPES.nextFriendForMinor,
-                    constants.OTHER_TYPES.nextFriendForIncompetentPerson,
-                  ].map((minorIncompetentType, idx) => (
-                    <div className="usa-radio" key={minorIncompetentType}>
+                    'An estate or trust',
+                    'A minor or legally incompetent person',
+                    'Donor',
+                    'Transferee',
+                    'Deceased Spouse',
+                  ].map((otherType, idx) => (
+                    <div className="usa-radio" key={otherType}>
                       <input
-                        id={`minorIncompetentType-${minorIncompetentType}`}
+                        id={`otherType-${otherType}`}
                         type="radio"
-                        name="minorIncompetentType"
+                        name="otherType"
+                        value={otherType}
                         className="usa-radio__input"
-                        value={minorIncompetentType}
                         onChange={e => {
                           updateStartCaseFormValueSequence({
                             key: e.target.name,
@@ -500,17 +402,116 @@ export const StartCase = connect(
                         }}
                       />
                       <label
-                        id={`is-minorIncompetent-type-${idx}`}
-                        htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                        id={`is-other-type-${idx}`}
+                        htmlFor={`otherType-${otherType}`}
                         className="usa-radio__label"
                       >
-                        {minorIncompetentType}
+                        {otherType}
                       </label>
                     </div>
                   ))}
                 </fieldset>
               </div>
             )}
+
+            {startCaseHelper.showOtherFilingTypeOptions &&
+              startCaseHelper.showEstateFilingOptions && (
+                <div
+                  className={
+                    'ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input--error' : '')
+                  }
+                >
+                  <fieldset
+                    id="estate-type-radios"
+                    className="usa-fieldset usa-sans"
+                  >
+                    <legend htmlFor="estate-type-radios">
+                      What type of estate or trust are you filing for?
+                    </legend>
+                    {[
+                      constants.ESTATE_TYPES.estate,
+                      constants.ESTATE_TYPES.estateWithoutExecutor,
+                      constants.ESTATE_TYPES.trust,
+                    ].map((estateType, idx) => (
+                      <div className="usa-radio" key={estateType}>
+                        <input
+                          id={`estateType-${estateType}`}
+                          type="radio"
+                          name="estateType"
+                          className="usa-radio__input"
+                          value={estateType}
+                          onChange={e => {
+                            updateStartCaseFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateStartCaseSequence();
+                          }}
+                        />
+                        <label
+                          id={`is-estate-type-${idx}`}
+                          htmlFor={`estateType-${estateType}`}
+                          className="usa-radio__label"
+                        >
+                          {estateType}
+                        </label>
+                      </div>
+                    ))}
+                  </fieldset>
+                </div>
+              )}
+
+            {startCaseHelper.showOtherFilingTypeOptions &&
+              startCaseHelper.showMinorIncompetentFilingOptions && (
+                <div
+                  className={
+                    'ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-input--error' : '')
+                  }
+                >
+                  <fieldset
+                    id="minorIncompetent-type-radios"
+                    className="usa-fieldset"
+                  >
+                    <legend htmlFor="minorIncompetent-type-radios">
+                      {startCaseHelper.minorIncompetentLegend}
+                    </legend>
+                    {[
+                      constants.OTHER_TYPES.conservator,
+                      constants.OTHER_TYPES.guardian,
+                      constants.OTHER_TYPES.custodian,
+                      constants.OTHER_TYPES.nextFriendForMinor,
+                      constants.OTHER_TYPES.nextFriendForIncompetentPerson,
+                    ].map((minorIncompetentType, idx) => (
+                      <div className="usa-radio" key={minorIncompetentType}>
+                        <input
+                          id={`minorIncompetentType-${minorIncompetentType}`}
+                          type="radio"
+                          name="minorIncompetentType"
+                          className="usa-radio__input"
+                          value={minorIncompetentType}
+                          onChange={e => {
+                            updateStartCaseFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateStartCaseSequence();
+                          }}
+                        />
+                        <label
+                          id={`is-minorIncompetent-type-${idx}`}
+                          htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                          className="usa-radio__label"
+                        >
+                          {minorIncompetentType}
+                        </label>
+                      </div>
+                    ))}
+                  </fieldset>
+                </div>
+              )}
+          </div>
 
           <Contacts
             parentView="StartCase"

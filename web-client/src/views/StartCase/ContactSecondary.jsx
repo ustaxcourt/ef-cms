@@ -54,7 +54,7 @@ export const ContactSecondary = connect(
                 : '')
             }
           >
-            <label htmlFor="secondaryName">
+            <label htmlFor="secondaryName" className="usa-label">
               {contactsHelper.contactSecondary.nameLabel}
             </label>
             <input
@@ -62,6 +62,7 @@ export const ContactSecondary = connect(
               type="text"
               name="contactSecondary.name"
               autoCapitalize="none"
+              className="usa-input"
               value={data.contactSecondary.name || ''}
               onChange={e => {
                 onChangeSequence({
@@ -88,7 +89,7 @@ export const ContactSecondary = connect(
                   : '')
               }
             >
-              <label htmlFor="secondaryInCareOf">
+              <label htmlFor="secondaryInCareOf" className="usa-label">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
                   <span>
                     {contactsHelper.contactSecondary.inCareOfLabel}{' '}
@@ -109,6 +110,7 @@ export const ContactSecondary = connect(
                 type="text"
                 name="contactSecondary.inCareOf"
                 autoCapitalize="none"
+                className="usa-input"
                 value={data.contactSecondary.inCareOf || ''}
                 onChange={e => {
                   onChangeSequence({
@@ -154,12 +156,14 @@ export const ContactSecondary = connect(
                   : '')
               }
             >
-              <label htmlFor="secondaryPhone">Phone Number</label>
+              <label htmlFor="secondaryPhone" className="usa-label">
+                Phone Number
+              </label>
               <input
                 id="secondaryPhone"
                 type="tel"
                 name="contactSecondary.phone"
-                className="ustc-input-phone"
+                className="usa-input"
                 autoCapitalize="none"
                 value={data.contactSecondary.phone || ''}
                 onChange={e => {

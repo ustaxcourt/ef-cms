@@ -91,16 +91,16 @@ export const PrimaryDocumentForm = connect(
             </div>
 
             <div
-              className={
+              className={`usa-form-group ${
                 validationErrors.certificateOfService ? 'usa-input--error' : ''
-              }
+              }`}
             >
               <fieldset className="usa-fieldset">
                 <legend id="certificate-of-service-legend">
                   Does Your Filing Include A Certificate of Service?
                 </legend>
                 {['Yes', 'No'].map(option => (
-                  <div className="usa-radio" key={option}>
+                  <div className="usa-radio usa-radio__inline" key={option}>
                     <input
                       id={`certificate-${option}`}
                       type="radio"
@@ -242,14 +242,16 @@ export const PrimaryDocumentForm = connect(
             )}
 
             <div
-              className={validationErrors.exhibits ? 'usa-input--error' : ''}
+              className={`usa-form-group ${
+                validationErrors.exhibits ? 'usa-input--error' : ''
+              }`}
             >
               <fieldset className="usa-fieldset">
                 <legend id="exhibits-legend">
                   Does Your Filing Include Exhibits?
                 </legend>
                 {['Yes', 'No'].map(option => (
-                  <div className="usa-radio" key={option}>
+                  <div className="usa-radio usa-radio__inline" key={option}>
                     <input
                       id={`exhibits-${option}`}
                       type="radio"
@@ -282,14 +284,16 @@ export const PrimaryDocumentForm = connect(
             </div>
 
             <div
-              className={validationErrors.attachments ? 'usa-input--error' : ''}
+              className={`usa-form-group ${
+                validationErrors.attachments ? 'usa-input--error' : ''
+              }`}
             >
               <fieldset className="usa-fieldset">
                 <legend id="attachments-legend">
                   Does Your Filing Include Attachments?
                 </legend>
                 {['Yes', 'No'].map(option => (
-                  <div className="usa-radio" key={option}>
+                  <div className="usa-radio usa-radio__inline" key={option}>
                     <input
                       id={`attachments-${option}`}
                       type="radio"
@@ -323,16 +327,16 @@ export const PrimaryDocumentForm = connect(
 
             {fileDocumentHelper.showObjection && (
               <div
-                className={
+                className={`usa-form-group ${
                   validationErrors.objections ? 'usa-input--error' : ''
-                }
+                }`}
               >
                 <fieldset className="usa-fieldset">
                   <legend id="objections-legend">
                     Are There Any Objections to This Document?
                   </legend>
                   {['Yes', 'No', 'Unknown'].map(option => (
-                    <div className="usa-radio" key={option}>
+                    <div className="usa-radio usa-radio__inline" key={option}>
                       <input
                         id={`objections-${option}`}
                         type="radio"
@@ -366,18 +370,18 @@ export const PrimaryDocumentForm = connect(
             )}
 
             <div
-              className={
+              className={`usa-form-group ${
                 validationErrors.hasSupportingDocuments
                   ? 'usa-input--error'
                   : ''
-              }
+              }`}
             >
               <fieldset className="usa-fieldset">
                 <legend id="support-docs-legend">
                   Do You Have Any Supporting Documents for This Filing?
                 </legend>
                 {['Yes', 'No'].map(option => (
-                  <div className="usa-radio" key={option}>
+                  <div className="usa-radio usa-radio__inline" key={option}>
                     <input
                       id={`supporting-documents-${option}`}
                       type="radio"
@@ -413,11 +417,11 @@ export const PrimaryDocumentForm = connect(
 
             {form.hasSupportingDocuments && (
               <div
-                className={
+                className={`usa-form-group ${
                   validationErrors.supportingDocument
                     ? 'usa-form-group--error'
                     : ''
-                }
+                }`}
               >
                 <label
                   htmlFor="supporting-document"
@@ -477,11 +481,11 @@ export const PrimaryDocumentForm = connect(
 
             {fileDocumentHelper.showSupportingDocumentFreeText && (
               <div
-                className={
+                className={`usa-form-group ${
                   validationErrors.supportingDocumentFreeText
                     ? 'usa-input--error'
                     : ''
-                }
+                }`}
               >
                 <label
                   htmlFor="supporting-document-free-text"
@@ -521,11 +525,11 @@ export const PrimaryDocumentForm = connect(
 
             {fileDocumentHelper.showSupportingDocumentUpload && (
               <div
-                className={
+                className={`usa-form-group ${
                   validationErrors.supportingDocumentFile
                     ? 'usa-input--error'
                     : ''
-                }
+                }`}
               >
                 <label
                   htmlFor="supporting-document-file"
