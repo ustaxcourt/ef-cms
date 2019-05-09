@@ -602,33 +602,34 @@ export const StartCase = connect(
                 }
               >
                 <legend>{startCaseHelper.noticeLegend}</legend>
-                <ul className="usa-unstyled-list">
-                  {['Yes', 'No'].map((hasIrsNotice, idx) => (
-                    <li key={hasIrsNotice}>
-                      <input
-                        id={`hasIrsNotice-${hasIrsNotice}`}
-                        type="radio"
-                        name="hasIrsNotice"
-                        value={hasIrsNotice === 'Yes'}
-                        onChange={e => {
-                          updateHasIrsNoticeFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value === 'true',
-                          });
-                          validateStartCaseSequence();
-                        }}
-                        className="usa-radio__input"
-                      />
-                      <label
-                        id={`hasIrsNotice-${idx}`}
-                        htmlFor={`hasIrsNotice-${hasIrsNotice}`}
-                        className="usa-radio__label"
-                      >
-                        {hasIrsNotice}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
+                {['Yes', 'No'].map((hasIrsNotice, idx) => (
+                  <div
+                    className="usa-radio usa-radio__inline"
+                    key={hasIrsNotice}
+                  >
+                    <input
+                      id={`hasIrsNotice-${hasIrsNotice}`}
+                      type="radio"
+                      name="hasIrsNotice"
+                      value={hasIrsNotice === 'Yes'}
+                      onChange={e => {
+                        updateHasIrsNoticeFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value === 'true',
+                        });
+                        validateStartCaseSequence();
+                      }}
+                      className="usa-radio__input"
+                    />
+                    <label
+                      id={`hasIrsNotice-${idx}`}
+                      htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                      className="usa-radio__label"
+                    >
+                      {hasIrsNotice}
+                    </label>
+                  </div>
+                ))}
                 <Text
                   className="usa-error-message"
                   bind="validationErrors.hasIrsNotice"

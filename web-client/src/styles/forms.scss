@@ -73,6 +73,15 @@ textarea.caption {
   box-shadow: 0 0 0 2px $color-white, 0 0 0 3px $color-primary;
 }
 
+div.usa-radio.usa-radio__inline {
+  display: inline;
+
+  .usa-radio__label {
+    padding-right: 2rem;
+    padding-left: 0;
+  }
+}
+
 [type='checkbox']:hover + label::before,
 [type='checkbox']:focus + label::before {
   box-shadow: 0 0 0 1px $color-primary;
