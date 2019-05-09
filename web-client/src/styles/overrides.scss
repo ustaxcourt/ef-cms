@@ -129,6 +129,16 @@ option:first-child {
     margin-bottom: 0;
   }
 
+  .usa-alert__body {
+    display: block;
+  }
+
+  .usa-alert__action {
+    button {
+      margin: 0;
+    }
+  }
+
   &.usa-alert-success-message-only {
     @media only screen and (min-width: $medium-screen) {
       .usa-grid-full {
