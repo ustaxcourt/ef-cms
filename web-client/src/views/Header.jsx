@@ -82,82 +82,92 @@ export const Header = connect(
           className="usa-header usa-header-extended grid-container"
           role="banner"
         >
-          <div className="usa-navbar">
+          <div className="grid-col-1">
             <div className="usa-logo" id="extended-logo">
               <a href="/">
                 <img src={seal} alt="USTC Seal" />
               </a>
             </div>
+          </div>
+          <div className="grid-col-5">
+            <nav role="navigation" className="main-navigation">
+              {user && NavigationItems(helper)}
+            </nav>
+          </div>
+          <div className="grid-col-6">
             <button
               className="usa-menu-btn"
               onClick={() => toggleMobileMenuSequence()}
             >
               Menu
             </button>
-          </div>
-
-          <nav
-            role="navigation"
-            className={
-              mobileMenu.isVisible
-                ? 'usa-nav mobile-menu is-visible'
-                : 'usa-nav'
-            }
-          >
-            <div className="usa-nav-inner">
-              <button
-                className="usa-nav-close"
-                onClick={() => toggleMobileMenuSequence()}
-              >
-                Close{' '}
-                <FontAwesomeIcon
-                  icon={['fa', 'times-circle']}
-                  className="account-menu-icon"
-                />
-              </button>
-              <div className="usa-nav-primary">{NavigationItems(helper)}</div>
-              {user && (
-                <div className="usa-nav-secondary">
-                  <ul className="usa-unstyled-list usa-nav-secondary-links">
+            <nav
+              role="navigation"
+              className={
+                mobileMenu.isVisible
+                  ? 'usa-nav mobile-menu is-visible'
+                  : 'usa-nav'
+              }
+            >
+              <div className="usa-nav-inner">
+                <button
+                  className="usa-nav-close"
+                  onClick={() => toggleMobileMenuSequence()}
+                >
+                  Close{' '}
+                  <FontAwesomeIcon
+                    icon={['fa', 'times-circle']}
+                    className="account-menu-icon"
+                  />
+                </button>
+                <div className="header-search-container">
+                  <ul className="usa-unstyled-list">
                     {helper.showSearchInHeader && (
                       <li role="search" className="usa-search">
                         <SearchBox />
+                        {user && user.userId && (
+                          <div className="mobile-account-menu-container">
+                            {NavigationItems(helper)}
+                          </div>
+                        )}
                       </li>
                     )}
-                    {user.userId && (
+                    {user && user.userId && (
                       <li className="user-dropdown">
                         <AccountMenu />
                       </li>
                     )}
                   </ul>
-                  {mobileMenu.isVisible && user.userId && (
-                    <AccountMenuItems signOut={signOutSequence} />
-                  )}
+                  <div className="account-menu-items">
+                    {mobileMenu.isVisible && user && user.userId && (
+                      <AccountMenuItems signOut={signOutSequence} />
+                    )}
+                  </div>
                 </div>
-              )}
-              {!user && (
-                <div className="usa-nav-secondary">
-                  <ul className="usa-unstyled-list usa-nav-secondary-links">
-                    <li>
-                      <button
-                        title="Login"
-                        type="button"
-                        className="button-account-login"
-                        aria-label="login"
-                        onClick={() => loginSequence()}
-                      >
-                        <FontAwesomeIcon
-                          icon={['far', 'user']}
-                          className="account-menu-icon"
-                        />{' '}
-                        Log In
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          </nav>
+                {!user && (
+                  <div className="">
+                    <ul className="usa-unstyled-list">
+                      <li>
+                        <button
+                          title="Login"
+                          type="button"
+                          className="button-account-login"
+                          aria-label="login"
+                          onClick={() => loginSequence()}
+                        >
+                          <FontAwesomeIcon
+                            icon={['far', 'user']}
+                            className="account-menu-icon"
+                          />{' '}
+                          Log In
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
         </header>
       </>
     );
