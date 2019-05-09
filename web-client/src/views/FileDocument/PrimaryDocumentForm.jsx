@@ -71,7 +71,7 @@ export const PrimaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  <span className="usa-hint">
+                  <span className="usa-form-hint">
                     File must be in PDF format (.pdf). Max file size{' '}
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
