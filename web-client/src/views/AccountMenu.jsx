@@ -41,7 +41,7 @@ export const AccountMenu = connect(
             onClick={() => toggleAccountMenu()}
           >
             <FontAwesomeIcon
-              icon={['fa', 'user']}
+              icon={['far', 'user']}
               className="account-menu-icon"
             />
             <FontAwesomeIcon

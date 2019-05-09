@@ -9,6 +9,7 @@ import {
   faEyeSlash,
   faFileAlt,
   faFilePdf as faFilePdfRegular,
+  faUser,
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faCaretDown,
@@ -36,7 +37,6 @@ import {
   faSpinner,
   faSync,
   faTimesCircle,
-  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { route, router } from './router';
 
