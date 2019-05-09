@@ -19,19 +19,11 @@ export const Address = connect(
     validationErrors,
   }) => {
     return (
-      <React.Fragment>
-        <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].address1
-              ? 'usa-form-group--error'
-              : '')
-          }
-        >
+      <fieldset className="usa-fieldset">
+        <legend className="usa-legend">Mailing Address</legend>
+        <div className="usa-form-group">
           <label htmlFor={`${type}.address1`} className="usa-label">
-            Mailing Address
+            Address Line 1
           </label>
           <input
             id={`${type}.address1`}
@@ -54,8 +46,6 @@ export const Address = connect(
             className="usa-error-message"
             bind={`validationErrors.${type}.address1`}
           />
-        </div>
-        <div className="usa-form-group">
           <label htmlFor={`${type}.address2`} className="usa-label">
             Address Line 2 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -76,8 +66,6 @@ export const Address = connect(
               validateStartCaseSequence();
             }}
           />
-        </div>
-        <div className="usa-form-group">
           <label htmlFor={`${type}.address3`} className="usa-label">
             Address Line 3 <span className="usa-form-hint">(optional)</span>
           </label>
@@ -98,19 +86,8 @@ export const Address = connect(
               validateStartCaseSequence();
             }}
           />
-        </div>
-        <div
-          className={
-            'usa-form-group' +
-            (validationErrors &&
-            validationErrors[type] &&
-            (validationErrors[type].city || validationErrors[type].state)
-              ? 'usa-form-group--error'
-              : '')
-          }
-        >
           <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-4 ustc-form-group-city">
+            <div className="mobile-lg:grid-col-8">
               <label htmlFor={`${type}.city`} className="usa-label">
                 City
               </label>
@@ -132,7 +109,7 @@ export const Address = connect(
                 }}
               />
             </div>
-            <div className="ustc-form-group-state">
+            <div className="mobile-lg:grid-col-4">
               <label htmlFor={`${type}.state`} className="usa-label">
                 State
               </label>
@@ -227,17 +204,6 @@ export const Address = connect(
               bind={`validationErrors.${type}.state`}
             />
           </div>
-        </div>
-        <div
-          className={
-            'usa-form-group clear-both ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].postalCode
-              ? 'usa-form-group--error'
-              : '')
-          }
-        >
           <label
             htmlFor={`${type}.postalCode`}
             className="usa-label"
@@ -267,7 +233,7 @@ export const Address = connect(
             bind={`validationErrors.${type}.postalCode`}
           />
         </div>
-      </React.Fragment>
+      </fieldset>
     );
   },
 );
