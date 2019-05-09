@@ -92,10 +92,6 @@ nav.horizontal-tabs,
         display: inline-block;
         margin: 0;
 
-        button:focus {
-          outline: 0;
-        }
-
         @media only screen and (min-width: $medium-screen) {
           button {
             padding-bottom: 10px;
