@@ -39,7 +39,7 @@ class SuccessNotificationComponent extends React.Component {
           >
             <div className="usa-alert__body">
               <div className="grid-container padding-x-0">
-                <div className="grid-row grid-gap">
+                <div className="grid-row">
                   <div className="grid-col-10">
                     <p className="heading-3 usa-alert__heading">
                       {alertSuccess.title}
