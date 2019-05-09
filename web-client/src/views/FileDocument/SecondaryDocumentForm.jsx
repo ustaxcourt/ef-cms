@@ -108,7 +108,7 @@ export const SecondaryDocumentForm = connect(
                     Do You Have Any Supporting Documents for This Filing?
                   </legend>
                   {['Yes', 'No'].map(option => (
-                    <div className="usa-radio" key={option}>
+                    <div className="usa-radio usa-radio__inline" key={option}>
                       <input
                         id={`secondary-supporting-documents-${option}`}
                         type="radio"
@@ -211,11 +211,11 @@ export const SecondaryDocumentForm = connect(
 
             {fileDocumentHelper.showSecondarySupportingDocumentFreeText && (
               <div
-                className={
+                className={`usa-form-group ${
                   validationErrors.secondarySupportingDocumentFreeText
                     ? 'usa-input-error'
                     : ''
-                }
+                }`}
               >
                 <label
                   htmlFor="secondary-supporting-document-free-text"
@@ -276,7 +276,7 @@ export const SecondaryDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <span className="usa-hint">
+                <span className="usa-form-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
