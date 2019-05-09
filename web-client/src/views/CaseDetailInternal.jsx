@@ -57,17 +57,17 @@ export const CaseDetailInternal = connect(
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
                     <td className="responsive-title">
-                      <p>
+                      <p className="margin-y-0">
                         <span className="label-inline">To</span>
                         {workItem.assigneeName}
                       </p>
-                      <p>
+                      <p className="margin-y-0">
                         <span className="label-inline">From</span>
                         {workItem.messages[0].from}
                       </p>
                     </td>
                     <td>
-                      <p>
+                      <p className="margin-y-0">
                         <a
                           href={documentHelper({
                             docketNumber: workItem.docketNumber,
@@ -79,7 +79,9 @@ export const CaseDetailInternal = connect(
                           {workItem.document.documentType}
                         </a>
                       </p>
-                      <p>{workItem.messages[0].message}</p>
+                      <p className="margin-y-0">
+                        {workItem.messages[0].message}
+                      </p>
                     </td>
                     <td>
                       <span className="label-inline">Received</span>
