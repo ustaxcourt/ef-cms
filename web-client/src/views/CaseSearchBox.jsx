@@ -25,36 +25,38 @@ export const CaseSearchBox = connect(
               form.searchError ? 'usa-form-group--error' : ''
             }`}
           >
-            <div className="usa-search">
-              <label
-                htmlFor="docket-search-field-mobile"
-                className="usa-sr-only usa-label"
-              >
-                Docket Number
-              </label>
-              <input
-                id="docket-search-field-mobile"
-                type="search"
-                name="searchTerm"
-                className="usa-input"
-                value={searchTerm}
-                onChange={e => {
-                  updateSearchTermSequence({
-                    searchTerm: e.target.value,
-                  });
-                }}
-              />
-              <button type="submit" className="usa-button-primary">
-                <span className="usa-sr-only">Search</span>
-                <FontAwesomeIcon icon={['fas', 'search']} />
-              </button>
-            </div>
+            <div className="usa-search usa-search--small">
+              <div role="search">
+                <label
+                  htmlFor="docket-search-field-mobile"
+                  className="usa-sr-only"
+                >
+                  Docket Number
+                </label>
+                <input
+                  id="docket-search-field-mobile"
+                  type="search"
+                  name="searchTerm"
+                  className="usa-input"
+                  value={searchTerm}
+                  onChange={e => {
+                    updateSearchTermSequence({
+                      searchTerm: e.target.value,
+                    });
+                  }}
+                />
+                <button type="submit" className="usa-button">
+                  <span className="usa-sr-only">Search</span>
+                  <FontAwesomeIcon icon={['fas', 'search']} />
+                </button>
+              </div>
 
-            {form.searchError && (
-              <p className="usa-error-message">
-                No case was found. Check your docket number and try again.
-              </p>
-            )}
+              {form.searchError && (
+                <p className="usa-error-message">
+                  No case was found. Check your docket number and try again.
+                </p>
+              )}
+            </div>
           </div>
         </div>
       );
