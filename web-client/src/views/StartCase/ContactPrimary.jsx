@@ -186,7 +186,7 @@ export const ContactPrimary = connect(
               id="phone"
               type="tel"
               name="contactPrimary.phone"
-              className="usa-input ustc-input-phone"
+              className="usa-input"
               autoCapitalize="none"
               value={data.contactPrimary.phone || ''}
               onChange={e => {
