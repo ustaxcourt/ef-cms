@@ -12,7 +12,7 @@ export const CaseInformationPublic = connect(
       <div className="petitions-details">
         <div className="grid-container padding-x-0">
           <div className="grid-row">
-            <div className="desktop:grid-col-6">
+            <div className="tablet:grid-col-6">
               <h3 className="underlined">Petition Details</h3>
               <div className="grid-container padding-x-0">
                 {helper.showPaymentRecord && (
@@ -27,18 +27,18 @@ export const CaseInformationPublic = connect(
                 )}
               </div>
             </div>
-            <div className="desktop:grid-col-6">
+            <div className="tablet:grid-col-6">
               <h3 className="underlined">Trial Information</h3>
               <div className="grid-row">
-                <div className="desktop:grid-col-4">
+                <div className="tablet:grid-col-4">
                   <p className="label">Place of Trial</p>
                   <p>{caseDetail.preferredTrialCity}</p>
                 </div>
-                <div className="desktop:grid-col-4">
+                <div className="tablet:grid-col-4">
                   <p className="label">Assigned Judge</p>
                   <p>Not assigned</p>
                 </div>
-                <div className="desktop:grid-col-4">
+                <div className="tablet:grid-col-4">
                   <p className="label">Trial Date</p>
                   <p>Not scheduled</p>
                 </div>

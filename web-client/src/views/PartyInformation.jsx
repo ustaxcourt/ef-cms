@@ -38,12 +38,12 @@ export const PartyInformation = connect(
         <h3 className="underlined">Party Information</h3>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
-            <div className="desktop:grid-col-2">
+            <div className="tablet:grid-col-2">
               <p className="label">Party Type</p>
               <p>{caseDetail.partyType || 'My Party Type'}</p>
             </div>
 
-            <div className="desktop:grid-col-2">
+            <div className="tablet:grid-col-2">
               {caseDetail.contactPrimary && (
                 <React.Fragment>
                   <p className="label" id="primary-label">
@@ -58,7 +58,7 @@ export const PartyInformation = connect(
               )}{' '}
             </div>
 
-            <div className="desktop:grid-col-2">
+            <div className="tablet:grid-col-2">
               {caseDetail.contactSecondary &&
                 caseDetail.contactSecondary.name && (
                   <React.Fragment>
@@ -77,7 +77,7 @@ export const PartyInformation = connect(
 
             {caseDetail.practitioners &&
               caseDetail.practitioners.map((practitioner, index) => (
-                <div className="desktop:grid-col-2" key={index}>
+                <div className="tablet:grid-col-2" key={index}>
                   {index === 0 && (
                     <p className="label" id="petitioner-label">
                       Petitioner Counsel
@@ -97,7 +97,7 @@ export const PartyInformation = connect(
                 </div>
               ))}
 
-            <div className="desktop:grid-col-2">
+            <div className="tablet:grid-col-2">
               {caseDetail.respondent && (
                 <React.Fragment>
                   <p className="label" id="respondent-label">
