@@ -14,7 +14,7 @@ export const DocumentCategoryAccordion = () => (
       className="document-category-features grid-container padding-x-0"
     >
       <div className="grid-row">
-        <div role="listitem" className="grid-col-3 document-feature">
+        <div role="listitem" className="tablet:grid-col-3 document-feature">
           <h4>To Request Something From the Court</h4>
           <ul>
             <li>Application</li>
@@ -22,7 +22,7 @@ export const DocumentCategoryAccordion = () => (
             <li>Petition</li>
           </ul>
         </div>
-        <div role="listitem" className="grid-col-3 document-feature">
+        <div role="listitem" className="tablet:grid-col-3 document-feature">
           <h4>To Notify the Court of a Change</h4>
           <ul>
             <li>Brief</li>
@@ -32,14 +32,17 @@ export const DocumentCategoryAccordion = () => (
             <li>Stipulation</li>
           </ul>
         </div>
-        <div role="listitem" className="grid-col-3 document-feature">
+        <div role="listitem" className="tablet:grid-col-3 document-feature">
           <h4>To Update or Add to a Previous Document</h4>
           <ul>
             <li>Miscellaneous</li>
             <li>Supporting Documents</li>
           </ul>
         </div>
-        <div role="listitem" className="grid-col-3 document-feature warning">
+        <div
+          role="listitem"
+          className="tablet:grid-col-3 document-feature warning"
+        >
           <h4>To Respond to a Previous Document</h4>
           <ul>
             <li>Answer</li>

@@ -54,17 +54,28 @@ export const IndividualWorkQueueInbox = connect(
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
-                      className={item.statusIcon}
-                      aria-hidden="true"
+                      className="iconStatusBatched"
+                      aria-label="batched for IRS"
+                      aria-hidden="false"
                       size="lg"
                     />
                   )}
-                  {!item.isRead && !item.showBatchedStatusIcon && (
+                  {item.showRecalledStatusIcon && (
+                    <FontAwesomeIcon
+                      icon={['far', 'clock']}
+                      className="iconStatusRecalled"
+                      aria-label="recalled from IRS"
+                      aria-hidden="false"
+                      size="lg"
+                    />
+                  )}
+                  {item.showUnreadStatusIcon && (
                     <FontAwesomeIcon
                       icon={['fas', 'envelope']}
-                      className={`${item.statusIcon} iconStatusUnread`}
-                      aria-hidden="true"
+                      className="iconStatusUnread"
+                      aria-label="unread message"
                       size="lg"
+                      aria-hidden="false"
                     />
                   )}
                 </td>

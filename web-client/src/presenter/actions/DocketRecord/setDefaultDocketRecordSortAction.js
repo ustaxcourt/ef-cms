@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  * @param {Object} providers.get the cerebral store used for getting state.sessionMetadata.docketRecordSort
  */
 export const setDefaultDocketRecordSortAction = ({ store, get }) => {
-  const newCaseId = get(state.caseDetail.caseId);
-  const oldCaseId = get(state.sessionMetadata.caseId);
+  const caseId = get(state.caseDetail.caseId);
+  const hasSort = get(state.sessionMetadata.docketRecordSort[caseId]);
 
-  if (newCaseId !== oldCaseId) {
-    store.set(state.sessionMetadata.docketRecordSort, 'byDate');
+  if (!hasSort) {
+    store.set(state.sessionMetadata.docketRecordSort[caseId], 'byDate');
   }
 };

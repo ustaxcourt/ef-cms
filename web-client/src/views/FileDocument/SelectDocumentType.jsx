@@ -40,7 +40,7 @@ export const SelectDocumentType = connect(
             aria-controls="document-category-accordion-container"
             onClick={() => toggleDocumentCategoryAccordionSequence()}
           >
-            <span className="usa-banner-button-text">
+            <span className="usa-accordion__heading usa-banner__button-text">
               <FontAwesomeIcon icon="question-circle" size="sm" />
               Need help determining what document category to select?
               {screenMetadata.showDocumentCategoryAccordion ? (
@@ -52,7 +52,7 @@ export const SelectDocumentType = connect(
           </button>
           <div
             id="document-category-accordion-container"
-            className="usa-accordion-content"
+            className="usa-accordion__content"
             aria-hidden={!screenMetadata.showDocumentCategoryAccordion}
           >
             <DocumentCategoryAccordion />
@@ -61,14 +61,14 @@ export const SelectDocumentType = connect(
 
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="grid-col-6">
+            <div className="tablet:grid-col-6">
               {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
 
               {screenMetadata.isDocumentTypeSelected && (
                 <DocumentTypeReadOnly />
               )}
             </div>
-            <div className="grid-col-4 push-right">
+            <div className="tablet:grid-col-4 tablet:grid-offset-2">
               <div className="blue-container gray-background">
                 <h3>Frequently Used Documents</h3>
                 <ul className="ustc-unstyled-list">
