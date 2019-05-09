@@ -88,7 +88,7 @@ export const DocketRecordHeader = connect(
               <div className="only-small-screens">
                 <button
                   aria-label="docket record sort"
-                  className="link mobile-sort-docket-button"
+                  className="link mobile-sort-docket-button border-0"
                   onClick={() => {
                     toggleMobileDocketSortSequence();
                   }}
