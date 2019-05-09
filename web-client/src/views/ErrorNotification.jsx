@@ -26,17 +26,17 @@ class ErrorNotificationComponent extends React.Component {
       <React.Fragment>
         {alertHelper.showErrorAlert && (
           <div
-            className="usa-alert usa-alert-error"
+            className="usa-alert usa-alert--error"
             aria-live="assertive"
             role="alert"
             ref={this.notificationRef}
           >
-            <div className="usa-alert-body">
+            <div className="usa-alert__body">
               <Focus>
-                <h3 className="usa-alert-heading">{alertError.title}</h3>
+                <h3 className="usa-alert__heading">{alertError.title}</h3>
               </Focus>
               {alertHelper.showSingleMessage && (
-                <p className="usa-alert-text">{alertError.message}</p>
+                <p className="usa-alert__text">{alertError.message}</p>
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
