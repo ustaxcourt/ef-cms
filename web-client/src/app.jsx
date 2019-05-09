@@ -9,6 +9,7 @@ import {
   faEyeSlash,
   faFileAlt,
   faFilePdf as faFilePdfRegular,
+  faUser,
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faCaretDown,
@@ -113,6 +114,7 @@ const app = {
       faSpinner,
       faSync,
       faTimesCircle,
+      faUser,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

@@ -75,14 +75,11 @@ joiValidationDecorator(
       .optional(),
     document: joi.object().required(),
     isInitializeCase: joi.boolean().optional(),
+    isRead: joi.boolean().optional(),
     messages: joi
       .array()
       .items(joi.object())
       .required(),
-    readAt: joi
-      .date()
-      .iso()
-      .optional(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
     sentBySection: joi.string().optional(),
