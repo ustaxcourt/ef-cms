@@ -25,7 +25,9 @@ export const PartiesFiling = connect(
         <div className="blue-container">
           <div
             className={`usa-form-group ${
-              fileDocumentHelper.partyValidationError ? 'usa-input--error' : ''
+              fileDocumentHelper.partyValidationError
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <fieldset className="usa-fieldset">

@@ -39,7 +39,7 @@ export const NonstandardForm = connect(
           <div
             className={`usa-form-group ${
               validationErrors && validationErrors.freeText
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : ''
             }`}
           >
@@ -63,7 +63,7 @@ export const NonstandardForm = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${namespace}freeText`}
             />
           </div>
@@ -73,7 +73,7 @@ export const NonstandardForm = connect(
           <div
             className={`usa-form-group ${
               validationErrors && validationErrors.freeText2
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : ''
             }`}
           >
@@ -97,7 +97,7 @@ export const NonstandardForm = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${namespace}freeText2`}
             />
           </div>
@@ -107,7 +107,7 @@ export const NonstandardForm = connect(
           <div
             className={`usa-form-group ${
               validationErrors && validationErrors.previousDocument
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : ''
             }`}
           >
@@ -142,7 +142,7 @@ export const NonstandardForm = connect(
               )}
             </select>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${namespace}previousDocument`}
             />
           </div>
@@ -153,7 +153,7 @@ export const NonstandardForm = connect(
             className={
               'usa-form-group ' +
               (validationErrors && validationErrors.serviceDate
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
@@ -253,7 +253,7 @@ export const NonstandardForm = connect(
               </div>
             </fieldset>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${namespace}serviceDate`}
             />
           </div>
@@ -263,7 +263,7 @@ export const NonstandardForm = connect(
           <div
             className={`usa-form-group ${
               validationErrors && validationErrors.trialLocation
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : ''
             }`}
           >
@@ -285,7 +285,7 @@ export const NonstandardForm = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${namespace}trialLocation`}
             />
           </div>
@@ -296,7 +296,7 @@ export const NonstandardForm = connect(
             className={
               'usa-form-group ' +
               (validationErrors && validationErrors.ordinalValue
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
@@ -337,7 +337,7 @@ export const NonstandardForm = connect(
                 ))}
               </ul>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind={`validationErrors.${namespace}ordinalValue`}
               />
             </fieldset>

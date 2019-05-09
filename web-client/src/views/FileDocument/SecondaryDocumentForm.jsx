@@ -53,7 +53,7 @@ export const SecondaryDocumentForm = connect(
                 <div
                   className={`usa-form-group ${
                     validationErrors.secondaryDocumentFile
-                      ? 'usa-input--error'
+                      ? 'usa-form-group--error'
                       : ''
                   }`}
                 >
@@ -99,7 +99,7 @@ export const SecondaryDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.hasSecondarySupportingDocuments
-                    ? 'usa-input--error'
+                    ? 'usa-form-group--error'
                     : ''
                 }`}
               >
@@ -257,7 +257,7 @@ export const SecondaryDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.secondarySupportingDocumentFile
-                    ? 'usa-input--error'
+                    ? 'usa-form-group--error'
                     : ''
                 }`}
               >
