@@ -50,11 +50,11 @@ export const ContactSecondary = connect(
               'usa-form-group ' +
               (validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
-            <label htmlFor="secondaryName">
+            <label htmlFor="secondaryName" className="usa-label">
               {contactsHelper.contactSecondary.nameLabel}
             </label>
             <input
@@ -62,6 +62,7 @@ export const ContactSecondary = connect(
               type="text"
               name="contactSecondary.name"
               autoCapitalize="none"
+              className="usa-input"
               value={data.contactSecondary.name || ''}
               onChange={e => {
                 onChangeSequence({
@@ -74,7 +75,7 @@ export const ContactSecondary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactSecondary.name"
             />
           </div>
@@ -84,11 +85,11 @@ export const ContactSecondary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.inCareOf
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
-              <label htmlFor="secondaryInCareOf">
+              <label htmlFor="secondaryInCareOf" className="usa-label">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
                   <span>
                     {contactsHelper.contactSecondary.inCareOfLabel}{' '}
@@ -109,6 +110,7 @@ export const ContactSecondary = connect(
                 type="text"
                 name="contactSecondary.inCareOf"
                 autoCapitalize="none"
+                className="usa-input"
                 value={data.contactSecondary.inCareOf || ''}
                 onChange={e => {
                   onChangeSequence({
@@ -121,7 +123,7 @@ export const ContactSecondary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactSecondary.inCareOf"
               />
             </div>
@@ -150,16 +152,18 @@ export const ContactSecondary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.phone
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
-              <label htmlFor="secondaryPhone">Phone Number</label>
+              <label htmlFor="secondaryPhone" className="usa-label">
+                Phone Number
+              </label>
               <input
                 id="secondaryPhone"
                 type="tel"
                 name="contactSecondary.phone"
-                className="ustc-input-phone"
+                className="usa-input"
                 autoCapitalize="none"
                 value={data.contactSecondary.phone || ''}
                 onChange={e => {
@@ -173,7 +177,7 @@ export const ContactSecondary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactSecondary.phone"
               />
             </div>

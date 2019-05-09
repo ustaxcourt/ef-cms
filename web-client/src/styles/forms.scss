@@ -1,30 +1,20 @@
-label {
-  // max-width: 100%;
-  // margin: 0 0 15px;
-  // font-size: 17px;
-  // font-weight: $font-semibold;
-  // line-height: 1;
-  .usa-form-hint {
-    margin: 0;
-  }
-}
-
-label.with-hint,
-legend.with-hint {
-  margin-bottom: 2px;
-}
-
-label p.usa-form-hint {
-  display: block;
-}
-
+.usa-label,
+.usa-legend,
+label,
 legend {
-  margin-bottom: 15px;
+  max-width: 100%;
+  margin: 0 0 15px;
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
   .usa-form-hint {
     margin: 0;
+  }
+  p.usa-form-hint {
+    display: block;
+  }
+  .with-hint {
+    margin-bottom: 2px;
   }
 }
 
@@ -48,34 +38,13 @@ textarea.caption {
   margin-bottom: 5px;
 }
 
-// input[type='email']:hover,
-// input[type='email']:focus,
-// input[type='number']:hover,
-// input[type='number']:focus,
-// input[type='tel']:hover,
-// input[type='tel']:focus,
-// input[type='text']:hover,
-// input[type='text']:focus,
-// textarea:hover,
-// textarea:focus,
-// select:hover,
-// select:focus {
-//   &:not([disabled]) {
-//     border: 1px solid $color-primary;
-//     box-shadow: 0 0 0 1px $color-primary;
-//     transition-duration: 0.1s;
-//     transition-property: all;
-//   }
-// }
+div.usa-radio.usa-radio__inline {
+  display: inline;
 
-[type='radio']:hover + label::before,
-[type='radio']:focus + label::before {
-  box-shadow: 0 0 0 2px $color-white, 0 0 0 3px $color-primary;
-}
-
-[type='checkbox']:hover + label::before,
-[type='checkbox']:focus + label::before {
-  box-shadow: 0 0 0 1px $color-primary;
+  .usa-radio__label {
+    padding-right: 2rem;
+    padding-left: 0;
+  }
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -206,18 +175,18 @@ label.validated::after {
 }
 
 .ustc-form-group-city {
-  width: 25rem;
-  margin-right: 3rem;
+  width: 20rem;
   clear: none;
   float: left;
 }
 
 .ustc-form-group-state {
-  width: 18rem;
+  width: 12rem;
   clear: none;
   float: left;
-  &.usa-form-group {
-    margin-bottom: 25px;
+
+  select {
+    margin-top: 0;
   }
 }
 
@@ -277,7 +246,7 @@ label.validated::after {
   width: 25rem;
 }
 
-.usa-grid-full {
+.grid-container {
   &.ustc-secondary-question {
     margin-top: 20px;
   }

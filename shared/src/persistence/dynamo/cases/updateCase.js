@@ -33,7 +33,6 @@ exports.updateCase = async ({ caseToUpdate, applicationContext }) => {
       KeyConditionExpression: '#pk = :pk',
       applicationContext,
     });
-
     for (let mapping of workItemMappings) {
       await client.update({
         ExpressionAttributeNames: {
@@ -42,7 +41,7 @@ exports.updateCase = async ({ caseToUpdate, applicationContext }) => {
         },
         ExpressionAttributeValues: {
           ':caseStatus': caseToUpdate.status,
-          ':docketNumberSuffix': `${caseToUpdate.docketNumberSuffix}`,
+          ':docketNumberSuffix': caseToUpdate.docketNumberSuffix,
         },
         Key: {
           pk: mapping.sk,

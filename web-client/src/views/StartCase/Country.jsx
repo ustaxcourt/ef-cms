@@ -28,13 +28,15 @@ export const Country = connect(
             (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].countryType
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
-          <label htmlFor={`${type}.countryType`}>Country</label>
+          <label htmlFor={`${type}.countryType`} className="usa-label">
+            Country
+          </label>
           <select
-            className={`${type}-country-type `}
+            className={`${type}-country-type usa-select`}
             id={`${type}.countryType`}
             name={`${type}.countryType`}
             value={data[type].countryType}
@@ -54,7 +56,7 @@ export const Country = connect(
             </option>
           </select>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind={`validationErrors.${type}.countryType`}
           />
         </div>
@@ -65,15 +67,17 @@ export const Country = connect(
               (validationErrors &&
               validationErrors[type] &&
               validationErrors[type].country
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
-            <label htmlFor={`${type}.country`}>Country Name</label>
+            <label htmlFor={`${type}.country`} className="usa-label">
+              Country Name
+            </label>
             <input
               id={`${type}.country`}
               type="text"
-              className={`${type}-country`}
+              className={`${type}-country usa-input`}
               name={`${type}.country`}
               autoCapitalize="none"
               value={data[type].country || ''}
@@ -88,7 +92,7 @@ export const Country = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind={`validationErrors.${type}.country`}
             />
           </div>

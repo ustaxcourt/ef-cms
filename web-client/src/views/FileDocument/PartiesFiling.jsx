@@ -25,43 +25,23 @@ export const PartiesFiling = connect(
         <div className="blue-container">
           <div
             className={`usa-form-group ${
-              fileDocumentHelper.partyValidationError ? 'usa-input-error' : ''
+              fileDocumentHelper.partyValidationError ? 'usa-input--error' : ''
             }`}
           >
-            <fieldset className="usa-fieldset-inputs usa-sans">
+            <fieldset className="usa-fieldset">
               <legend className="with-hint" id="who-legend">
                 Who Is Filing This Document?
               </legend>
               <span className="usa-form-hint">Check all that apply.</span>
-              <ul className="ustc-vertical-option-list">
-                {fileDocumentHelper.showPractitionerParty && (
-                  <li>
-                    <input
-                      id="party-practitioner"
-                      type="checkbox"
-                      name="partyPractitioner"
-                      aria-describedby="who-legend"
-                      checked={form.partyPractitioner || false}
-                      onChange={e => {
-                        updateFileDocumentWizardFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateExternalDocumentInformationSequence();
-                      }}
-                    />
-                    <label htmlFor="party-practitioner" className="usa-label">
-                      Myself as Petitioner’s Counsel
-                    </label>
-                  </li>
-                )}
-                <li>
+              {fileDocumentHelper.showPractitionerParty && (
+                <div className="usa-checkbox">
                   <input
-                    id="party-primary"
+                    id="party-practitioner"
                     type="checkbox"
-                    name="partyPrimary"
+                    name="partyPractitioner"
                     aria-describedby="who-legend"
-                    checked={form.partyPrimary || false}
+                    className="usa-checkbox__input"
+                    checked={form.partyPractitioner || false}
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
@@ -70,56 +50,87 @@ export const PartiesFiling = connect(
                       validateExternalDocumentInformationSequence();
                     }}
                   />
-                  <label htmlFor="party-primary" className="usa-label">
-                    {fileDocumentHelper.partyPrimaryLabel}
+                  <label
+                    htmlFor="party-practitioner"
+                    className="usa-checkbox__label"
+                  >
+                    Myself as Petitioner’s Counsel
                   </label>
-                </li>
-                {fileDocumentHelper.showSecondaryParty && (
-                  <li>
-                    <input
-                      id="party-secondary"
-                      type="checkbox"
-                      aria-describedby="who-legend"
-                      name="partySecondary"
-                      checked={form.partySecondary || false}
-                      onChange={e => {
-                        updateFileDocumentWizardFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateExternalDocumentInformationSequence();
-                      }}
-                    />
-                    <label htmlFor="party-secondary" className="usa-label">
-                      {caseDetail.contactSecondary.name}
-                    </label>
-                  </li>
-                )}
-                {fileDocumentHelper.showRespondentParty && (
-                  <li>
-                    <input
-                      id="party-respondent"
-                      type="checkbox"
-                      aria-describedby="who-legend"
-                      name="partyRespondent"
-                      checked={form.partyRespondent || false}
-                      onChange={e => {
-                        updateFileDocumentWizardFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateExternalDocumentInformationSequence();
-                      }}
-                    />
-                    <label htmlFor="party-respondent" className="usa-label">
-                      Respondent
-                    </label>
-                  </li>
-                )}
-              </ul>
+                </div>
+              )}
+              <div className="usa-checkbox">
+                <input
+                  id="party-primary"
+                  type="checkbox"
+                  name="partyPrimary"
+                  aria-describedby="who-legend"
+                  className="usa-checkbox__input"
+                  checked={form.partyPrimary || false}
+                  onChange={e => {
+                    updateFileDocumentWizardFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
+                <label htmlFor="party-primary" className="usa-checkbox__label">
+                  {fileDocumentHelper.partyPrimaryLabel}
+                </label>
+              </div>
+              {fileDocumentHelper.showSecondaryParty && (
+                <div className="usa-checkbox">
+                  <input
+                    id="party-secondary"
+                    type="checkbox"
+                    aria-describedby="who-legend"
+                    name="partySecondary"
+                    className="usa-checkbox__input"
+                    checked={form.partySecondary || false}
+                    onChange={e => {
+                      updateFileDocumentWizardFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
+                  <label
+                    htmlFor="party-secondary"
+                    className="usa-checkbox__label"
+                  >
+                    {caseDetail.contactSecondary.name}
+                  </label>
+                </div>
+              )}
+              {fileDocumentHelper.showRespondentParty && (
+                <div className="usa-checkbox">
+                  <input
+                    id="party-respondent"
+                    type="checkbox"
+                    aria-describedby="who-legend"
+                    name="partyRespondent"
+                    className="usa-checkbox__input"
+                    checked={form.partyRespondent || false}
+                    onChange={e => {
+                      updateFileDocumentWizardFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateExternalDocumentInformationSequence();
+                    }}
+                  />
+                  <label
+                    htmlFor="party-respondent"
+                    className="usa-checkbox__label"
+                  >
+                    Respondent
+                  </label>
+                </div>
+              )}
             </fieldset>
             {fileDocumentHelper.partyValidationError && (
-              <span className="usa-input-error-message">
+              <span className="usa-error-message">
                 {fileDocumentHelper.partyValidationError}
               </span>
             )}

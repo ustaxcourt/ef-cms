@@ -17,7 +17,7 @@ export const SecondaryDocumentReadOnly = connect(
             {form.secondaryDocument.documentTitle}
           </h3>
           <button
-            className="link push-right"
+            className="link push-right usa-button usa-button--unstyled"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
           >
