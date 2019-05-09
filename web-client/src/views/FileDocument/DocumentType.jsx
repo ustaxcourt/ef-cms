@@ -121,7 +121,10 @@ export const DocumentType = connect(
                           selectDocumentSequence();
                         }}
                       />
-                      <label htmlFor={`documentType-${index}`}>
+                      <label
+                        htmlFor={`documentType-${index}`}
+                        className="usa-label"
+                      >
                         {entry.documentType}
                       </label>
                     </div>

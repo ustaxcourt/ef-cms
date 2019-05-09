@@ -36,7 +36,7 @@ export const SecondaryDocumentType = connect(
           className={`usa-form-group ${
             validationErrors.secondaryDocument &&
             validationErrors.secondaryDocument.category
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : ''
           }`}
         >
@@ -47,6 +47,7 @@ export const SecondaryDocumentType = connect(
             name="secondaryDocument.category"
             id="document-secondary-category"
             aria-label="secondaryCategory"
+            className="usa-select"
             onChange={e => {
               updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
@@ -66,7 +67,7 @@ export const SecondaryDocumentType = connect(
             })}
           </select>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind="validationErrors.secondaryDocument.category"
           />
         </div>
@@ -76,7 +77,7 @@ export const SecondaryDocumentType = connect(
               className={`usa-form-group only-large-screens ${
                 validationErrors.secondaryDocument &&
                 validationErrors.secondaryDocument.documentType
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : ''
               }`}
             >
@@ -89,7 +90,7 @@ export const SecondaryDocumentType = connect(
               <select
                 id="secondary-doc-secondary-document-type"
                 name="secondaryDocument.documentType"
-                className="secondaryDocumentType"
+                className="secondaryDocumentType usa-select"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
@@ -109,40 +110,41 @@ export const SecondaryDocumentType = connect(
                 )}
               </select>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.secondaryDocument.documentType"
               />
             </div>
             <div className="usa-form-group only-small-screens">
-              <fieldset className="usa-fieldset-inputs usa-sans">
+              <fieldset className="usa-fieldset">
                 <legend>Document Type</legend>
-                <ul className="ustc-vertical-option-list ustc-hide-radio-buttons secondaryDocumentType">
-                  {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
-                    (entry, index) => (
-                      <li key={entry.documentType}>
-                        <input
-                          id={`secondaryDocumentType-${index}`}
-                          type="radio"
-                          name="secondaryDocument.documentType"
-                          value={entry.documentType || ''}
-                          onClick={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            selectDocumentSequence();
-                          }}
-                        />
-                        <label
-                          htmlFor={`secondaryDocumentType-${index}`}
-                          className="usa-label"
-                        >
-                          {entry.documentType}
-                        </label>
-                      </li>
-                    ),
-                  )}
-                </ul>
+                {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
+                  (entry, index) => (
+                    <div
+                      key={entry.documentType}
+                      className="usa-radio ustc-hide-radio-button"
+                    >
+                      <input
+                        id={`secondaryDocumentType-${index}`}
+                        type="radio"
+                        name="secondaryDocument.documentType"
+                        value={entry.documentType || ''}
+                        onClick={e => {
+                          updateFileDocumentWizardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          selectDocumentSequence();
+                        }}
+                      />
+                      <label
+                        htmlFor={`secondaryDocumentType-${index}`}
+                        className="usa-label"
+                      >
+                        {entry.documentType}
+                      </label>
+                    </div>
+                  ),
+                )}
               </fieldset>
             </div>
           </>
