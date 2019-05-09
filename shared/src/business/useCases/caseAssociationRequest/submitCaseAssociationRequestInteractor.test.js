@@ -11,7 +11,7 @@ describe('submitCaseAssociationRequest', () => {
     docketNumber: '123-19',
   };
 
-  it('should throw when not authorized', async () => {
+  it('should throw an error when not authorized', async () => {
     let error;
     try {
       applicationContext = {
