@@ -68,6 +68,7 @@ export const StartCase = connect(
             e.preventDefault();
             submitFilePetitionSequence();
           }}
+          className="usa-form usa-form--large"
         >
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
