@@ -101,7 +101,7 @@ export const SectionWorkQueueInbox = connect(
             <tr>
               <td className="focus-toggle">
                 <button
-                  className="focus-button"
+                  className="focus-button usa-button usa-button--unstyled"
                   aria-label="Expand message detail"
                   aria-expanded={item.isFocused}
                   aria-controls={`detail-${item.workItemId}`}
@@ -124,7 +124,7 @@ export const SectionWorkQueueInbox = connect(
                 <label
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label padding-top-05"
                 />
               </td>
               <td className="section-queue-row has-icon">
@@ -165,7 +165,7 @@ export const SectionWorkQueueInbox = connect(
               <tr className="queue-focus queue-message">
                 <td className="focus-toggle">
                   <button
-                    className="focus-button"
+                    className="focus-button usa-button usa-button--unstyled"
                     tabIndex="-1"
                     aria-disabled="true"
                   />
