@@ -90,13 +90,9 @@ describe('setMessageAsReadInteractor integration test', () => {
 
     await assignWorkItems({
       applicationContext,
-      workItems: [
-        {
-          assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          assigneeName: 'richard',
-          workItemId: workItem.workItemId,
-        },
-      ],
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      assigneeName: 'richard',
+      workItemId: workItem.workItemId,
     });
     inbox = await getWorkItemsForUser({
       applicationContext,
