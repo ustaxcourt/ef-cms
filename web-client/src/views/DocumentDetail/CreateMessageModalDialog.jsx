@@ -51,11 +51,12 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               </option>
             ))}
           </select>
-          {!this.props.modal.showChambersSelect && (
-            <div className="usa-error-message beneath">
-              {this.props.validationErrors.section}
-            </div>
-          )}
+          {!this.props.modal.showChambersSelect &&
+            this.props.validationErrors.section && (
+              <div className="usa-error-message beneath">
+                {this.props.validationErrors.section}
+              </div>
+            )}
         </div>
         {this.props.modal.showChambersSelect && (
           <div
@@ -129,9 +130,11 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               </option>
             ))}
           </select>
-          <div className="usa-error-message beneath">
-            {this.props.validationErrors.assigneeId}
-          </div>
+          {this.props.validationErrors.assigneeId && (
+            <div className="usa-error-message beneath">
+              {this.props.validationErrors.assigneeId}
+            </div>
+          )}
         </div>
 
         <div
@@ -155,9 +158,11 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               this.props.validateInitialWorkItemMessageSequence();
             }}
           />
-          <div className="usa-error-message beneath">
-            {this.props.validationErrors.message}
-          </div>
+          {this.props.validationErrors.message && (
+            <div className="usa-error-message beneath">
+              {this.props.validationErrors.message}
+            </div>
+          )}
         </div>
       </div>
     );
