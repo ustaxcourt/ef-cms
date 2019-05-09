@@ -111,7 +111,7 @@
     "stylelint": "^10.0.1",
     "stylelint-config-idiomatic-order": "^7.0.0",
     "stylelint-config-standard": "^18.3.0",
-    "uswds": "^2.0.1",
+    "uswds": "^2.0.2",
     "webdriver-manager": "^13.0.0",
     "wicg-inert": "^2.1.0"
   }
