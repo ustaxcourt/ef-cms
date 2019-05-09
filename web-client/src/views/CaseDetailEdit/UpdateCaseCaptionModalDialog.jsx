@@ -21,7 +21,7 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
         </label>
         <textarea
           id="caption"
-          className="caption"
+          className="caption usa-textarea"
           defaultValue={this.props.caseCaption}
           aria-labelledby="caption-label"
           onChange={e =>
