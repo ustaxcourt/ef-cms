@@ -12,13 +12,7 @@ export const Email = connect(
       <React.Fragment>
         <div className="usa-form-group">
           <div className="grid-row grid-gap">
-            <div className="grid-col-5 email-input">
-              <label htmlFor="email" className="usa-label">
-                Email Address
-              </label>
-              {email}
-            </div>
-            <div className="grid-col-7">
+            <div className="mobile-lg:grid-col-7 push-right">
               <div
                 id="change-email-hint"
                 className="alert-gold add-bottom-margin"
@@ -32,6 +26,12 @@ export const Email = connect(
                   To change your email, go to your Account Settings.
                 </span>
               </div>
+            </div>
+            <div className="mobile-lg:grid-col-5 email-input">
+              <label htmlFor="email" className="usa-label">
+                Email Address
+              </label>
+              {email}
             </div>
           </div>
         </div>
