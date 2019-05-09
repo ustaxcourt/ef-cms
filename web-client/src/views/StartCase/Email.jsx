@@ -13,7 +13,9 @@ export const Email = connect(
         <div className="usa-form-group">
           <div className="grid-row grid-gap">
             <div className="grid-col-5 email-input">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email" className="usa-label">
+                Email Address
+              </label>
               {email}
             </div>
             <div className="grid-col-7">

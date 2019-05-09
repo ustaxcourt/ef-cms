@@ -32,9 +32,11 @@ export const Country = connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.countryType`}>Country</label>
+          <label htmlFor={`${type}.countryType`} className="usa-label">
+            Country
+          </label>
           <select
-            className={`${type}-country-type `}
+            className={`${type}-country-type usa-select`}
             id={`${type}.countryType`}
             name={`${type}.countryType`}
             value={data[type].countryType}
