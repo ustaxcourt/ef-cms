@@ -188,9 +188,10 @@ select[disabled] {
   }
 }
 
+/* big screens */
 @media only screen and (min-width: $medium-screen) {
   .push-right {
-    margin-right: 0;
+    order: 1;
     float: right;
   }
 }

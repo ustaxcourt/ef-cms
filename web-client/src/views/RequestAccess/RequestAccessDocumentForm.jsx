@@ -29,7 +29,7 @@ export const RequestAccessDocumentForm = connect(
         <h3>Tell Us About This Document</h3>
         <div className="blue-container">
           <div className="grid-container padding-x-0">
-            <div className="usa-width-seven-twelfths push-right">
+            <div className="tablet:grid-col-7 push-right">
               <div
                 id="document-upload-hint"
                 className="alert-gold add-bottom-margin"
@@ -47,10 +47,10 @@ export const RequestAccessDocumentForm = connect(
               </div>
             </div>
 
-            <div className="usa-width-five-twelfths">
+            <div className="tablet:grid-col-5">
               <div
                 className={`usa-form-group ${
-                  validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
+                  validationErrors.primaryDocumentFile ? 'usa-input--error' : ''
                 }`}
               >
                 <label
@@ -80,70 +80,77 @@ export const RequestAccessDocumentForm = connect(
                   validationSequence="validateCaseAssociationRequestSequence"
                 />
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.primaryDocumentFile"
                 />
               </div>
               <div
                 className={`usa-form-group ${
-                  validationErrors.certificateOfService ? 'usa-input-error' : ''
+                  validationErrors.certificateOfService
+                    ? 'usa-input--error'
+                    : ''
                 }`}
               >
-                <fieldset className="usa-fieldset-inputs usa-sans">
+                <fieldset className="usa-fieldset">
                   <legend>
                     Does Your Filing Include A Certificate of Service?
                   </legend>
-                  <ul className="usa-unstyled-list">
-                    {['Yes', 'No'].map(option => (
-                      <li key={option}>
-                        <input
-                          id={`certificate-${option}`}
-                          type="radio"
-                          name="certificateOfService"
-                          value={option}
-                          checked={
-                            form.certificateOfService === (option === 'Yes')
-                          }
-                          onChange={e => {
-                            updateCaseAssociationFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value === 'Yes',
-                            });
-                            validateCaseAssociationRequestSequence();
-                          }}
-                        />
-                        <label
-                          htmlFor={`certificate-${option}`}
-                          className="usa-label"
-                        >
-                          {option}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+                  {['Yes', 'No'].map(option => (
+                    <div className="usa-radio usa-radio__inline" key={option}>
+                      <input
+                        id={`certificate-${option}`}
+                        type="radio"
+                        name="certificateOfService"
+                        className="usa-radio__input"
+                        value={option}
+                        checked={
+                          form.certificateOfService === (option === 'Yes')
+                        }
+                        onChange={e => {
+                          updateCaseAssociationFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value === 'Yes',
+                          });
+                          validateCaseAssociationRequestSequence();
+                        }}
+                      />
+                      <label
+                        htmlFor={`certificate-${option}`}
+                        className="usa-radio__label"
+                      >
+                        {option}
+                      </label>
+                    </div>
+                  ))}
                 </fieldset>
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.certificateOfService"
                 />
               </div>
               {form.certificateOfService && (
                 <div
-                  className={`usa-form-group ${
+                  className={
                     validationErrors.certificateOfServiceDate
-                      ? 'usa-input-error'
+                      ? 'usa-input--error'
                       : ''
-                  }`}
+                  }
                 >
-                  <fieldset className="service-date">
-                    <legend id="service-date-legend">Service Date</legend>
-                    <div className="usa-date-of-birth">
-                      <div className="usa-form-group usa-form-group-month">
-                        <label htmlFor="service-date-month" aria-hidden="true">
+                  <fieldset className="service-date usa-fieldset">
+                    <legend id="service-date-legend" className="usa-legend">
+                      Service Date
+                    </legend>
+                    <div className="usa-memorable-date">
+                      <div className="usa-form-group usa-form-group--month">
+                        <label
+                          htmlFor="service-date-month"
+                          className="usa-label"
+                          aria-hidden="true"
+                        >
                           MM
                         </label>
                         <input
-                          className="usa-input-inline"
+                          className="usa-input usa-input-inline"
                           id="service-date-month"
                           aria-label="month, two digits"
                           aria-describedby="service-date-legend"
@@ -163,12 +170,16 @@ export const RequestAccessDocumentForm = connect(
                           }}
                         />
                       </div>
-                      <div className="usa-form-group usa-form-group-day">
-                        <label htmlFor="service-date-day" aria-hidden="true">
+                      <div className="usa-form-group usa-form-group--day">
+                        <label
+                          htmlFor="service-date-day"
+                          className="usa-label"
+                          aria-hidden="true"
+                        >
                           DD
                         </label>
                         <input
-                          className="usa-input-inline"
+                          className="usa-input usa-input-inline"
                           id="service-date-day"
                           name="certificateOfServiceDay"
                           value={form.certificateOfServiceDay}
@@ -188,12 +199,16 @@ export const RequestAccessDocumentForm = connect(
                           }}
                         />
                       </div>
-                      <div className="usa-form-group usa-form-group-year">
-                        <label htmlFor="service-date-year" aria-hidden="true">
+                      <div className="usa-form-group usa-form-group--year">
+                        <label
+                          htmlFor="service-date-year"
+                          className="usa-label"
+                          aria-hidden="true"
+                        >
                           YYYY
                         </label>
                         <input
-                          className="usa-input-inline"
+                          className="usa-input usa-input-inline"
                           id="service-date-year"
                           aria-label="year, four digits"
                           aria-describedby="service-date-legend"
@@ -216,7 +231,7 @@ export const RequestAccessDocumentForm = connect(
                     </div>
                   </fieldset>
                   <Text
-                    className="usa-input-error-message"
+                    className="usa-error-message"
                     bind="validationErrors.certificateOfServiceDate"
                   />
                 </div>
@@ -224,43 +239,42 @@ export const RequestAccessDocumentForm = connect(
               {form.documentType === 'Substitution of Counsel' && (
                 <div
                   className={`usa-form-group ${
-                    validationErrors.objections ? 'usa-input-error' : ''
+                    validationErrors.objections ? 'usa-input--error' : ''
                   }`}
                 >
-                  <fieldset className="usa-fieldset-inputs usa-sans">
+                  <fieldset className="usa-fieldset">
                     <legend id="objections-legend">
                       Are There Any Objections to This Document?
                     </legend>
-                    <ul className="usa-unstyled-list">
-                      {['Yes', 'No', 'Unknown'].map(option => (
-                        <li key={option}>
-                          <input
-                            id={`objections-${option}`}
-                            type="radio"
-                            aria-describedby="objections-legend"
-                            name="objections"
-                            value={option}
-                            checked={form.objections === option}
-                            onChange={e => {
-                              updateCaseAssociationFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validateCaseAssociationRequestSequence();
-                            }}
-                          />
-                          <label
-                            htmlFor={`objections-${option}`}
-                            className="usa-label"
-                          >
-                            {option}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
+                    {['Yes', 'No', 'Unknown'].map(option => (
+                      <div className="usa-radio usa-radio__inline" key={option}>
+                        <input
+                          id={`objections-${option}`}
+                          type="radio"
+                          aria-describedby="objections-legend"
+                          name="objections"
+                          className="usa-radio__input"
+                          value={option}
+                          checked={form.objections === option}
+                          onChange={e => {
+                            updateCaseAssociationFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateCaseAssociationRequestSequence();
+                          }}
+                        />
+                        <label
+                          htmlFor={`objections-${option}`}
+                          className="usa-radio__label"
+                        >
+                          {option}
+                        </label>
+                      </div>
+                    ))}
                   </fieldset>
                   <Text
-                    className="usa-input-error-message"
+                    className="usa-error-message"
                     bind="validationErrors.objections"
                   />
                 </div>

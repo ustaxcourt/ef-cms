@@ -33,13 +33,13 @@ export const CaseDetail = connect(
         <section className="usa-section grid-container">
           <div className="grid-container padding-x-0">
             <div className="grid-row">
-              <div className="grid-col-6">
+              <div className="desktop:grid-col-6">
                 <h1 className="captioned" tabIndex="-1">
                   Docket Number: {caseDetail.docketNumberWithSuffix}
                 </h1>
                 <p>{caseDetail.caseTitle}</p>
               </div>
-              <div className="grid-col-6">
+              <div className="desktop:grid-col-6">
                 {caseHelper.showRequestAccessToCaseButton && (
                   <a
                     className="usa-button tablet-full-width push-right"
@@ -88,7 +88,7 @@ export const CaseDetail = connect(
                       aria-hidden="false"
                     >
                       <div className="grid-row">
-                        <div className="grid-col-6">
+                        <div className="desktop:grid-col-6">
                           <h3>Pay by debit card/credit card.</h3>
                           <p>Copy your docket number(s) and pay online.</p>
                           <div id="paygov-link-container">
@@ -109,7 +109,7 @@ export const CaseDetail = connect(
                             </i>
                           </p>
                         </div>
-                        <div className="grid-col-6">
+                        <div className="desktop:grid-col-6">
                           <h4>Canʼt afford to pay the fee?</h4>
                           <p>
                             You may be eligible for a filing fee waiver. File an
