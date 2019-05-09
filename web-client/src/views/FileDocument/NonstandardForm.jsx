@@ -51,6 +51,7 @@ export const NonstandardForm = connect(
               type="text"
               name={`${namespace}freeText`}
               autoCapitalize="none"
+              className="usa-input"
               value={get(form, `${namespace}freeText`, '')}
               onChange={e => {
                 updateSequence({
@@ -85,6 +86,7 @@ export const NonstandardForm = connect(
               type="text"
               name={`${namespace}freeText2`}
               autoCapitalize="none"
+              className="usa-input"
               value={get(form, `${namespace}freeText2`, '')}
               onChange={e => {
                 updateSequence({
@@ -122,6 +124,11 @@ export const NonstandardForm = connect(
               id={`${namespace}previous-document`}
               value={get(form, `${namespace}previousDocument`, '')}
               aria-label="previousDocument"
+              className={`usa-select ${
+                validationErrors && validationErrors.previousDocument
+                  ? 'usa-select--error'
+                  : ''
+              }`}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -157,20 +164,24 @@ export const NonstandardForm = connect(
                 : '')
             }
           >
-            <fieldset>
+            <fieldset className="usa-fieldset">
               <legend id="date-of-service-legend">Service Date</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor={`${namespace}month`} aria-hidden="true">
+              <div className="usa-memorable-date">
+                <div className="usa-form-group usa-form-group--month">
+                  <label
+                    htmlFor={`${namespace}month`}
+                    className="usa-label"
+                    aria-hidden="true"
+                  >
                     MM
                   </label>
                   <input
                     aria-describedby="date-of-service-legend"
                     aria-label="month, two digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input usa-input-inline ' +
                       (validationErrors && validationErrors.serviceDate
-                        ? '-error'
+                        ? 'usa-input--error'
                         : '')
                     }
                     id={`${namespace}month`}
@@ -190,17 +201,21 @@ export const NonstandardForm = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor={`${namespace}day`} aria-hidden="true">
+                <div className="usa-form-group usa-form-group--day">
+                  <label
+                    htmlFor={`${namespace}day`}
+                    className="usa-label"
+                    aria-hidden="true"
+                  >
                     DD
                   </label>
                   <input
                     aria-describedby="date-of-service-legend"
                     aria-label="day, two digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input usa-input-inline ' +
                       (validationErrors && validationErrors.serviceDate
-                        ? '-error'
+                        ? 'usa-input--error'
                         : '')
                     }
                     id={`${namespace}day`}
@@ -220,17 +235,21 @@ export const NonstandardForm = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor={`${namespace}year`} aria-hidden="true">
+                <div className="usa-form-group usa-form-group--year">
+                  <label
+                    htmlFor={`${namespace}year`}
+                    className="usa-label"
+                    aria-hidden="true"
+                  >
                     YYYY
                   </label>
                   <input
                     aria-describedby="date-of-service-legend"
                     aria-label="year, four digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input usa-input-inline ' +
                       (validationErrors && validationErrors.serviceDate
-                        ? '-error'
+                        ? 'usa-input--error'
                         : '')
                     }
                     id={`${namespace}year`}
@@ -302,40 +321,38 @@ export const NonstandardForm = connect(
           >
             <fieldset
               id={`${namespace}ordinal-field-radios`}
-              className="usa-fieldset-inputs usa-sans"
+              className="usa-fieldset"
             >
               <legend htmlFor={`${namespace}ordinal-field-radios`}>
                 {helper[level].ordinalField}
               </legend>
-              <ul className="usa-unstyled-list">
-                {['First', 'Second', 'Third'].map(ordinalValue => (
-                  <li key={ordinalValue}>
-                    <input
-                      id={`${namespace}${ordinalValue}`}
-                      type="radio"
-                      name={`${namespace}ordinalValue`}
-                      value={ordinalValue}
-                      checked={
-                        get(form, `${namespace}ordinalValue`, '') ===
-                        ordinalValue
-                      }
-                      onChange={e => {
-                        updateSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateSequence();
-                      }}
-                    />
-                    <label
-                      htmlFor={`${namespace}${ordinalValue}`}
-                      className="usa-label"
-                    >
-                      {ordinalValue}
-                    </label>
-                  </li>
-                ))}
-              </ul>
+              {['First', 'Second', 'Third'].map(ordinalValue => (
+                <div className="usa-radio usa-radio__inline" key={ordinalValue}>
+                  <input
+                    id={`${namespace}${ordinalValue}`}
+                    type="radio"
+                    name={`${namespace}ordinalValue`}
+                    value={ordinalValue}
+                    className="usa-radio__input"
+                    checked={
+                      get(form, `${namespace}ordinalValue`, '') === ordinalValue
+                    }
+                    onChange={e => {
+                      updateSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                  />
+                  <label
+                    htmlFor={`${namespace}${ordinalValue}`}
+                    className="usa-radio__label"
+                  >
+                    {ordinalValue}
+                  </label>
+                </div>
+              ))}
               <Text
                 className="usa-error-message"
                 bind={`validationErrors.${namespace}ordinalValue`}
