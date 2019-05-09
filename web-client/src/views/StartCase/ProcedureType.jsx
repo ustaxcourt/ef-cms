@@ -20,29 +20,27 @@ export const ProcedureType = connect(
       >
         <fieldset id="procedure-type-radios" className="usa-fieldset">
           <legend>{legend}</legend>
-          <div className="usa-radio">
-            {procedureTypes.map((procedureType, idx) => (
-              <>
-                <input
-                  id={procedureType}
-                  data-type={procedureType}
-                  type="radio"
-                  name="procedureType"
-                  className="usa-radio__input"
-                  checked={value === procedureType}
-                  value={procedureType}
-                  onChange={onChange}
-                />
-                <label
-                  id={`proc-type-${idx}`}
-                  htmlFor={procedureType}
-                  className="usa-radio__label"
-                >
-                  {procedureType} case
-                </label>
-              </>
-            ))}
-          </div>
+          {procedureTypes.map((procedureType, idx) => (
+            <div className="usa-radio usa-radio__inline" key={procedureType}>
+              <input
+                id={procedureType}
+                data-type={procedureType}
+                type="radio"
+                name="procedureType"
+                className="usa-radio__input usa-radio__inline"
+                checked={value === procedureType}
+                value={procedureType}
+                onChange={onChange}
+              />
+              <label
+                id={`proc-type-${idx}`}
+                htmlFor={procedureType}
+                className="usa-radio__label usa-radio__inline"
+              >
+                {procedureType} case
+              </label>
+            </div>
+          ))}
         </fieldset>
       </div>
     );
