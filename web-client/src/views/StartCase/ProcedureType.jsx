@@ -15,11 +15,13 @@ export const ProcedureType = connect(
     return (
       <div
         className={
-          validationErrors.procedureType ? 'usa-form-group--error' : ''
+          validationErrors.procedureType
+            ? 'usa-form-group usa-form-group--error'
+            : 'usa-form-group'
         }
       >
         <fieldset id="procedure-type-radios" className="usa-fieldset">
-          <legend>{legend}</legend>
+          <legend className="usa-legend">{legend}</legend>
           {procedureTypes.map((procedureType, idx) => (
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input

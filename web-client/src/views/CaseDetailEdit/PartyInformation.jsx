@@ -34,6 +34,7 @@ export const PartyInformation = connect(
               Case Caption
             </label>
             <textarea
+              className="usa-textarea"
               id="case-caption"
               name="caseCaption"
               value={caseDetail.caseCaption}
@@ -56,6 +57,7 @@ export const PartyInformation = connect(
               Party Type
             </label>
             <select
+              className="usa-select"
               id="party-type"
               name="partyType"
               value={caseDetail.partyType}
