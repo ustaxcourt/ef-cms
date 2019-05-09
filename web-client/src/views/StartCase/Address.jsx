@@ -110,7 +110,7 @@ export const Address = connect(
           }
         >
           <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-4">
+            <div className="mobile-lg:grid-col-4 ustc-form-group-city">
               <label htmlFor={`${type}.city`} className="usa-label">
                 City
               </label>
@@ -132,7 +132,7 @@ export const Address = connect(
                 }}
               />
             </div>
-            <div className="mobile-lg:grid-col-2">
+            <div className="ustc-form-group-state">
               <label htmlFor={`${type}.state`} className="usa-label">
                 State
               </label>
