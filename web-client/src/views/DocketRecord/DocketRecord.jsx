@@ -64,7 +64,7 @@ export const DocketRecord = connect(
                 {description} {additionalInfo}
               </a>
               <button
-                className="show-on-mobile link"
+                className="show-on-mobile link border-0"
                 aria-roledescription="button to view document details"
                 onClick={() => {
                   showDocketRecordDetailModalSequence({
