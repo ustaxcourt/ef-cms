@@ -2,17 +2,18 @@
   max-width: 1440px;
 }
 
+.usa-header + .usa-section,
+.usa-header + main {
+  border: none;
+}
+
 .usa-header {
   margin-bottom: 3rem;
 
   .usa-logo {
-    width: 75px;
-    margin: 20px 20px 0 0;
-
-    @media only screen and (max-width: 950px) {
-      width: 35px;
-      margin: 0;
-    }
+    width: 100%;
+    max-width: 75px;
+    margin: 20px 0 0 0;
   }
 
   .usa-nav {

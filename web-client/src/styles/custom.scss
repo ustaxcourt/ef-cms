@@ -556,41 +556,64 @@ button.link.mobile-sort-docket-button {
 }
 
 header.usa-header {
+  display: flex;
   height: 115px;
+  flex-direction: row;
   border-bottom: none;
 
-  nav.usa-nav-primary {
-    display: block;
-    padding-top: 43px;
+  .main-navigation {
+    display: none;
+    margin-top: 3.5rem;
+
+    @media (min-width: 64em) {
+      display: block;
+    }
+
+    li {
+      &.active,
+      :hover {
+        border-bottom: 2px solid $color-primary;
+      }
+    }
+
+    a {
+      padding: 0 0 6px 0;
+      background: none;
+      color: $color-primary;
+      :hover {
+        background: none;
+        color: $color-primary;
+      }
+    }
+  }
+
+  .usa-menu-btn {
+    margin-right: -1rem;
+    float: right;
   }
 }
 
 nav.usa-nav {
   .usa-nav-close {
+    display: none;
+  }
+
+  .header-search-container {
+    margin-top: 2.5rem;
+  }
+
+  .mobile-account-menu-container {
+    display: none;
+  }
+
+  .usa-search {
     width: auto;
-    color: $color-white;
-  }
-  .usa-nav-primary {
-    position: absolute;
-    top: -9.75rem;
-    left: 140px;
+    margin: 0;
+    float: none;
 
-    a,
-    :hover {
-      padding: 0px;
-      background: none;
-      color: $color-primary;
+    @media (min-width: 64em) {
+      float: none;
     }
-
-    .usa-nav__primary {
-      li.active,
-      li:hover {
-        border-bottom: 2px solid $color-primary;
-      }
-    }
-  }
-  .usa-nav-secondary {
-    margin-top: -24px;
   }
 
   .usa-nav-secondary-links li:not(:last-child)::after {
@@ -599,10 +622,11 @@ nav.usa-nav {
   }
 
   .user-dropdown {
-    margin-top: -4px;
+    margin: -4px 0 0 50px;
   }
 
   .button-account-login {
+    border: none;
     background: none;
     color: $color-primary;
   }
@@ -610,13 +634,59 @@ nav.usa-nav {
   &.mobile-menu {
     background: $color-primary;
 
-    .usa-nav-primary {
-      position: inherit;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #fff;
-      margin-top: 10rem;
-      margin-bottom: 3rem;
+    .usa-nav-close {
+      display: block;
+      width: auto;
+      border: none;
+      background: none;
+      color: $color-white;
+      float: right;
+    }
 
+    .header-search-container {
+      .usa-unstyled-list {
+        padding: 0;
+
+        li {
+          border: none;
+          &.usa-search {
+            button {
+              background: $color-gray;
+            }
+
+            button:active {
+              background: $color-primary-darker;
+            }
+          }
+        }
+
+        a {
+          padding: 0px;
+          color: $color-white;
+          text-decoration: none;
+          &:active {
+            text-decoration: underline;
+          }
+          &:hover {
+            background: none;
+            text-decoration: underline;
+          }
+        }
+        .user-dropdown {
+          display: none;
+        }
+      }
+      .account-menu-items {
+        padding: 0;
+        border-top: 2px solid $color-white;
+      }
+    }
+
+    .mobile-account-menu-container {
+      display: block;
+    }
+
+    .usa-nav-primary {
       .usa-nav__primary {
         li.active,
         li:hover {
@@ -632,30 +702,6 @@ nav.usa-nav {
       }
     }
 
-    .usa-nav-secondary {
-      li.usa-search {
-        position: absolute;
-        top: 8rem;
-
-        button {
-          background: $color-gray;
-        }
-
-        button:active {
-          background: $color-primary-darker;
-        }
-      }
-      li.user-dropdown {
-        display: none;
-      }
-      a {
-        color: $color-white;
-        text-decoration: none;
-      }
-      a:active {
-        text-decoration: underline;
-      }
-    }
     .button-account-login {
       background: none;
       color: $color-white;
@@ -667,7 +713,7 @@ nav.usa-nav {
   .account-button-container {
     button.button-account-menu {
       padding: 12px;
-      margin: -4px 0 0 0;
+      border: none;
       background: none;
       color: $color-primary;
     }
@@ -695,7 +741,7 @@ nav.usa-nav {
   }
   .account-menu-content {
     position: absolute;
-    right: 30px;
+    right: 0px;
     width: 109px;
     padding: 10px 0;
     background-color: $color-primary;
