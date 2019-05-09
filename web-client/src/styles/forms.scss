@@ -1,30 +1,20 @@
-label {
-  // max-width: 100%;
-  // margin: 0 0 15px;
-  // font-size: 17px;
-  // font-weight: $font-semibold;
-  // line-height: 1;
-  .usa-form-hint {
-    margin: 0;
-  }
-}
-
-label.with-hint,
-legend.with-hint {
-  margin-bottom: 2px;
-}
-
-label p.usa-form-hint {
-  display: block;
-}
-
+.usa-label,
+.usa-legend,
+label,
 legend {
-  margin-bottom: 15px;
+  max-width: 100%;
+  margin: 0 0 15px;
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
   .usa-form-hint {
     margin: 0;
+  }
+  p.usa-form-hint {
+    display: block;
+  }
+  .with-hint {
+    margin-bottom: 2px;
   }
 }
 
@@ -46,36 +36,6 @@ textarea.caption {
   width: 379px;
   height: 107px;
   margin-bottom: 5px;
-}
-
-// input[type='email']:hover,
-// input[type='email']:focus,
-// input[type='number']:hover,
-// input[type='number']:focus,
-// input[type='tel']:hover,
-// input[type='tel']:focus,
-// input[type='text']:hover,
-// input[type='text']:focus,
-// textarea:hover,
-// textarea:focus,
-// select:hover,
-// select:focus {
-//   &:not([disabled]) {
-//     border: 1px solid $color-primary;
-//     box-shadow: 0 0 0 1px $color-primary;
-//     transition-duration: 0.1s;
-//     transition-property: all;
-//   }
-// }
-
-[type='radio']:hover + label::before,
-[type='radio']:focus + label::before {
-  box-shadow: 0 0 0 2px $color-white, 0 0 0 3px $color-primary;
-}
-
-[type='checkbox']:hover + label::before,
-[type='checkbox']:focus + label::before {
-  box-shadow: 0 0 0 1px $color-primary;
 }
 
 input[type='number']::-webkit-inner-spin-button,
