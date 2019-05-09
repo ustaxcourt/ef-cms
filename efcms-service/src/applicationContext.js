@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -228,6 +229,9 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
+let dynamoClientCache = {};
+let s3Cache;
+
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
@@ -235,14 +239,17 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCurrentUser,
-    getDocumentClient: ({ useMasterRegion } = {}) => {
-      const dynamo = new DynamoDB.DocumentClient({
-        endpoint: useMasterRegion
-          ? environment.masterDynamoDbEndpoint
-          : environment.dynamoDbEndpoint,
-        region: useMasterRegion ? environment.masterRegion : environment.region,
-      });
-      return dynamo;
+    getDocumentClient: ({ useMasterRegion = false } = {}) => {
+      const type = useMasterRegion ? 'master' : 'region';
+      if (!dynamoClientCache[type]) {
+        dynamoClientCache[type] = new DynamoDB.DocumentClient({
+          endpoint: useMasterRegion
+            ? environment.masterDynamoDbEndpoint
+            : environment.dynamoDbEndpoint,
+          region: useMasterRegion ? environment.masterRegion : environment.region,
+        });
+      }
+      return dynamoClientCache[type];
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -290,12 +297,14 @@ module.exports = (appContextUser = {}) => {
       };
     },
     getStorageClient: () => {
-      const s3 = new S3({
-        endpoint: environment.s3Endpoint,
-        region: environment.region,
-        s3ForcePathStyle: true,
-      });
-      return s3;
+      if (!s3Cache) {
+        s3Cache = new S3({
+          endpoint: environment.s3Endpoint,
+          region: environment.region,
+          s3ForcePathStyle: true,
+        });
+      }
+      return s3Cache;
     },
     // TODO: replace external calls to environment
     getUniqueId: () => {
