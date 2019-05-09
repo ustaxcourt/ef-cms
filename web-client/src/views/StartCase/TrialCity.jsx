@@ -29,7 +29,7 @@ export const TrialCity = connect(
       <div
         className={
           'usa-form-group ' +
-          (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
+          (validationErrors.preferredTrialCity ? 'usa-form-group--error' : '')
         }
       >
         <label
