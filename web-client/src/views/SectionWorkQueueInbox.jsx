@@ -60,6 +60,7 @@ export const SectionWorkQueueInbox = connect(
                   Send to
                 </label>
                 <select
+                  className="usa-select"
                   onChange={event =>
                     selectAssigneeSequence({
                       assigneeId: event.target.value,
@@ -110,6 +111,7 @@ export const SectionWorkQueueInbox = connect(
                 <input
                   id={item.workItemId}
                   type="checkbox"
+                  className="usa-checkbox__input"
                   onChange={e => {
                     selectWorkItemSequence({
                       workItem: item,
@@ -122,7 +124,7 @@ export const SectionWorkQueueInbox = connect(
                 <label
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
-                  className="usa-label"
+                  className="usa-checkbox__label"
                 />
               </td>
               <td className="section-queue-row has-icon">
