@@ -2,6 +2,11 @@
   max-width: 1440px;
 }
 
+.usa-header + .usa-section,
+.usa-header + main {
+  border: none;
+}
+
 .usa-header {
   margin-bottom: 3rem;
 
