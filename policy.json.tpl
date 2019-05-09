@@ -99,6 +99,8 @@
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [
+        "dynamodb:Scan",
+        "dynamodb:BatchWriteItem",
         "dynamodb:PutItem",
         "dynamodb:DeleteItem",
         "dynamodb:CreateTable",
