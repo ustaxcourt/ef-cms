@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -228,7 +229,7 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
-let dynamClientCache;
+let dynamoClientCache = {};
 let s3Cache;
 
 module.exports = (appContextUser = {}) => {
@@ -238,16 +239,17 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCurrentUser,
-    getDocumentClient: ({ useMasterRegion } = {}) => {
-      if (!dynamClientCache) {
-        dynamClientCache = new DynamoDB.DocumentClient({
+    getDocumentClient: ({ useMasterRegion = false } = {}) => {
+      const type = useMasterRegion ? 'master' : 'region';
+      if (!dynamoClientCache[type]) {
+        dynamoClientCache[type] = new DynamoDB.DocumentClient({
           endpoint: useMasterRegion
             ? environment.masterDynamoDbEndpoint
             : environment.dynamoDbEndpoint,
           region: useMasterRegion ? environment.masterRegion : environment.region,
         });
       }
-      return dynamClientCache;
+      return dynamoClientCache[type];
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
