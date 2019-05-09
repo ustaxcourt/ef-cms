@@ -175,18 +175,18 @@ label.validated::after {
 }
 
 .ustc-form-group-city {
-  width: 25rem;
-  margin-right: 3rem;
+  width: 20rem;
   clear: none;
   float: left;
 }
 
 .ustc-form-group-state {
-  width: 18rem;
+  width: 12rem;
   clear: none;
   float: left;
-  &.usa-form-group {
-    margin-bottom: 25px;
+
+  select {
+    margin-top: 0;
   }
 }
 
@@ -246,7 +246,7 @@ label.validated::after {
   width: 25rem;
 }
 
-.usa-grid-full {
+.grid-container {
   &.ustc-secondary-question {
     margin-top: 20px;
   }
