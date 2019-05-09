@@ -334,15 +334,15 @@ select[disabled] {
 .usa-label-uploading {
   padding: 0.3rem 0.7rem;
   margin-right: 0.5rem;
-  background-color: #5b616b;
+  background-color: $color-gray;
   border-radius: 2px;
-  color: #ffffff;
+  color: $color-white;
   font-size: 1.3rem;
   text-transform: uppercase;
 }
 
 .fa-spinner {
-  color: #5b616b;
+  color: $color-gray;
 }
 
 .icon-column {
@@ -468,11 +468,12 @@ select.ustc-input-error {
 
 .ustc-create-message-modal,
 .forward-form {
-  .usa-input-error input,
-  .usa-input-error textarea,
-  .usa-input-error select {
-    width: calc(100% + 1.9rem);
-    border: 3px solid #cd2026;
+  .usa-form-group--error input,
+  .usa-form-group--error textarea,
+  .usa-form-group--error select {
+    width: 100%;
+    border-color: $color-red-dark;
+    box-shadow: 0 0 0 2px $color-red-dark;
   }
 }
 

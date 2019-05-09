@@ -1,5 +1,5 @@
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
-import { FileUploadStatusModal } from '../FileUploadStatusModal';
+import { FileUploadErrorModal } from '../modals/FileUploadErrorModal';
+import { FileUploadStatusModal } from '../modals/FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFilingReadOnly } from './PartiesFilingReadOnly';
 import { PrimaryDocumentReadOnly } from './PrimaryDocumentReadOnly';
