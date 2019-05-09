@@ -3,7 +3,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FileDocument } from './FileDocument';
 import { FileDocumentReview } from './FileDocumentReview';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { FormCancelModalDialog } from '../modals/FormCancelModalDialog';
 import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';

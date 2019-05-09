@@ -1,4 +1,4 @@
-import { AppTimeoutModal } from './AppTimeoutModal';
+import { AppTimeoutModal } from './modals/AppTimeoutModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import IdleTimer from 'react-idle-timer';
