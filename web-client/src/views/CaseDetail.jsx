@@ -84,7 +84,7 @@ export const CaseDetail = connect(
                   {showDetails && (
                     <div
                       id="paymentInfo"
-                      className="usa-accordion-content grid-container padding-x-0"
+                      className="usa-accordion-content grid-container padding-x-0 padding-y-205"
                       aria-hidden="false"
                     >
                       <div className="grid-row">
