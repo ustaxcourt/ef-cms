@@ -27,7 +27,7 @@ export const ProcedureType = connect(
                 data-type={procedureType}
                 type="radio"
                 name="procedureType"
-                className="usa-radio__input usa-radio__inline"
+                className="usa-radio__input"
                 checked={value === procedureType}
                 value={procedureType}
                 onChange={onChange}
@@ -35,7 +35,7 @@ export const ProcedureType = connect(
               <label
                 id={`proc-type-${idx}`}
                 htmlFor={procedureType}
-                className="usa-radio__label usa-radio__inline"
+                className="usa-radio__label"
               >
                 {procedureType} case
               </label>
