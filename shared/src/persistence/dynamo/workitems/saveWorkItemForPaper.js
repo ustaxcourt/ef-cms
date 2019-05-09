@@ -17,46 +17,41 @@ exports.saveWorkItemForPaper = async ({
   workItem,
   applicationContext,
 }) => {
-  // create the work item
-  await put({
-    Item: {
-      pk: workItem.workItemId,
-      sk: workItem.workItemId,
-      ...workItem,
-    },
-    applicationContext,
-  });
-
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.caseId,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
-
-  // individual inbox
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.assigneeId,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
-
-  await createMappingRecord({
-    applicationContext,
-    item: {
-      messageId,
-    },
-    pkId: workItem.assigneeId,
-    skId: messageId,
-    type: 'unread-message',
-  });
-
-  // section inbox
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.section,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
+  return Promise.all([
+    put({
+      Item: {
+        pk: workItem.workItemId,
+        sk: workItem.workItemId,
+        ...workItem,
+      },
+      applicationContext,
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.caseId,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.assigneeId,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+    createMappingRecord({
+      applicationContext,
+      item: {
+        messageId,
+      },
+      pkId: workItem.assigneeId,
+      skId: messageId,
+      type: 'unread-message',
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.section,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+  ]);
 };

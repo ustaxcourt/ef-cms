@@ -68,7 +68,6 @@ describe('assignWorkItems', () => {
       await assignWorkItems({
         applicationContext,
         userId: 'docketclerk',
-        workItems: [{}],
       });
     } catch (err) {
       error = err;
