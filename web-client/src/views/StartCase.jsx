@@ -81,7 +81,23 @@ export const StartCase = connect(
 
           <div className="blue-container grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
+              <div className="mobile-lg:grid-col-7 push-right">
+                <div
+                  id="petition-upload-hint"
+                  className="alert-gold add-bottom-margin"
+                >
+                  <span className="usa-hint ustc-form-hint-with-svg">
+                    <FontAwesomeIcon
+                      icon={['far', 'arrow-alt-circle-left']}
+                      className="fa-icon-gold"
+                      size="lg"
+                    />
+                    This should include your Petition form and any IRS notice
+                    <span aria-hidden="true">(s)</span> you received.
+                  </span>
+                </div>
+              </div>
+              <div className="mobile-lg:grid-col-5">
                 <div
                   className={`usa-form-group ${
                     validationErrors.petitionFile ? 'usa-input--error' : ''
@@ -132,22 +148,6 @@ export const StartCase = connect(
                     className="usa-error-message"
                     bind="validationErrors.petitionFileSize"
                   />
-                </div>
-              </div>
-              <div className="grid-col-7 push-right">
-                <div
-                  id="petition-upload-hint"
-                  className="alert-gold add-bottom-margin"
-                >
-                  <span className="usa-hint ustc-form-hint-with-svg">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="lg"
-                    />
-                    This should include your Petition form and any IRS notice
-                    <span aria-hidden="true">(s)</span> you received.
-                  </span>
                 </div>
               </div>
             </div>
@@ -210,7 +210,27 @@ export const StartCase = connect(
           <h2>Who is Filing This Case?</h2>
           <div className="blue-container grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
+              <div className="mobile-lg:grid-col-7 push-right">
+                <div
+                  id="petition-hint"
+                  className="alert-gold add-bottom-margin"
+                >
+                  <span className="usa-hint ustc-form-hint-with-svg">
+                    <FontAwesomeIcon
+                      icon={['far', 'arrow-alt-circle-left']}
+                      className="fa-icon-gold"
+                      size="lg"
+                    />
+                    To file a case on behalf of another taxpayer, you must be
+                    authorized to litigate in this Court as provided by the Tax
+                    Court Rules of Practice and Procedure (Rule 60). Enrolled
+                    agents, certified public accountants, and powers of attorney
+                    who are not admitted to practice before the Court are not
+                    eligible to represent taxpayers.
+                  </span>
+                </div>
+              </div>
+              <div className="mobile-lg:grid-col-5">
                 <div
                   className={
                     validationErrors.filingType ? 'usa-input--error' : ''
@@ -254,26 +274,6 @@ export const StartCase = connect(
                       bind="validationErrors.partyType"
                     />
                   </fieldset>
-                </div>
-              </div>
-              <div className="grid-col-7 push-right">
-                <div
-                  id="petition-hint"
-                  className="alert-gold add-bottom-margin"
-                >
-                  <span className="usa-hint ustc-form-hint-with-svg">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="lg"
-                    />
-                    To file a case on behalf of another taxpayer, you must be
-                    authorized to litigate in this Court as provided by the Tax
-                    Court Rules of Practice and Procedure (Rule 60). Enrolled
-                    agents, certified public accountants, and powers of attorney
-                    who are not admitted to practice before the Court are not
-                    eligible to represent taxpayers.
-                  </span>
                 </div>
               </div>
             </div>
@@ -323,7 +323,6 @@ export const StartCase = connect(
                 </fieldset>
               </div>
             )}
-
             {startCaseHelper.showBusinessFilingTypeOptions && (
               <div
                 className={
@@ -413,7 +412,6 @@ export const StartCase = connect(
                 </fieldset>
               </div>
             )}
-
             {startCaseHelper.showOtherFilingTypeOptions &&
               startCaseHelper.showEstateFilingOptions && (
                 <div
@@ -461,7 +459,6 @@ export const StartCase = connect(
                   </fieldset>
                 </div>
               )}
-
             {startCaseHelper.showOtherFilingTypeOptions &&
               startCaseHelper.showMinorIncompetentFilingOptions && (
                 <div
