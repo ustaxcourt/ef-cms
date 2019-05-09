@@ -139,7 +139,7 @@ export const Header = connect(
                         onClick={() => loginSequence()}
                       >
                         <FontAwesomeIcon
-                          icon={['fa', 'user']}
+                          icon={['far', 'user']}
                           className="account-menu-icon"
                         />{' '}
                         Log In
