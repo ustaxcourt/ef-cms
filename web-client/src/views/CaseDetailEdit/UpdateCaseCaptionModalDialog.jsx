@@ -1,7 +1,6 @@
-import { sequences, state } from 'cerebral';
-
-import { ModalDialog } from '../ModalDialog';
+import { ModalDialog } from '../modals/ModalDialog';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
@@ -22,7 +21,7 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
         </label>
         <textarea
           id="caption"
-          className="caption"
+          className="caption usa-textarea"
           defaultValue={this.props.caseCaption}
           aria-labelledby="caption-label"
           onChange={e =>

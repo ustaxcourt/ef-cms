@@ -18,7 +18,7 @@ class FileUploadErrorModalComponent extends ModalDialog {
       <div>
         <div className="uhoh">Uh oh!</div>
         <div className="message">
-          An error occured while uploading your document and it wasn't
+          An error occured while uploading your document and it wasn’t
           completed.
         </div>
       </div>
