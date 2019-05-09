@@ -50,7 +50,7 @@ export const ContactSecondary = connect(
               'usa-form-group ' +
               (validationErrors.contactSecondary &&
               validationErrors.contactSecondary.name
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
@@ -74,7 +74,7 @@ export const ContactSecondary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactSecondary.name"
             />
           </div>
@@ -84,7 +84,7 @@ export const ContactSecondary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.inCareOf
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
@@ -121,7 +121,7 @@ export const ContactSecondary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactSecondary.inCareOf"
               />
             </div>
@@ -150,7 +150,7 @@ export const ContactSecondary = connect(
                 'usa-form-group ' +
                 (validationErrors.contactSecondary &&
                 validationErrors.contactSecondary.phone
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
@@ -173,7 +173,7 @@ export const ContactSecondary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactSecondary.phone"
               />
             </div>
