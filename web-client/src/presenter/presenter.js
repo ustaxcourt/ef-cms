@@ -15,6 +15,7 @@ import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
@@ -79,6 +80,7 @@ import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetit
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitSearchSequence } from './sequences/submitSearchSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
+import { toggleAccountMenuSequence } from './sequences/toggleAccountMenuSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleDocumentCategoryAccordionSequence } from './sequences/toggleDocumentCategoryAccordionSequence';
@@ -145,6 +147,7 @@ export const presenter = {
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
     clickServeToIrsSequence,
+    closeAccountMenuSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
     confirmStayLoggedInSequence,
@@ -206,6 +209,7 @@ export const presenter = {
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
     submitUpdateCaseSequence,
+    toggleAccountMenuSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
     toggleDocumentCategoryAccordionSequence,

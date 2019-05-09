@@ -224,6 +224,7 @@ export const Forms = () => (
           </div>
         </fieldset>
       </div>
+
       <div className="blue-container">
         <fieldset className="usa-fieldset">
           <legend>Radio Buttons</legend>
@@ -266,6 +267,50 @@ export const Forms = () => (
           </div>
         </fieldset>
       </div>
+
+      <div className="blue-container">
+        <fieldset className="usa-fieldset">
+          <legend>Inline Radio Buttons</legend>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="fieri"
+              type="radio"
+              checked
+              name="celebrity-chefs-2"
+              value="fieri"
+            />
+            <label className="usa-radio__label" htmlFor="fieri">
+              Guy Fieri
+            </label>
+          </div>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="flay"
+              type="radio"
+              name="celebrity-chefs-2"
+              value="flay"
+            />
+            <label className="usa-radio__label" htmlFor="flay">
+              Bobby Flay
+            </label>
+          </div>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="ramsay"
+              type="radio"
+              name="celebrity-chefs-2"
+              value="ramsay"
+            />
+            <label className="usa-radio__label" htmlFor="ramsay">
+              Gordon Ramsay
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
       <div className="blue-container">
         <fieldset className="usa-fieldset">
           <legend className="usa-legend">Date of birth</legend>
