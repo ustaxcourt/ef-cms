@@ -62,7 +62,6 @@ export const DocumentDetail = connect(
                       <div
                         id="tab-document-info-panel"
                         aria-labelledby="tab-document-info"
-                        tabIndex="0"
                       >
                         {helper.showCaseDetailsEdit && <CaseDetailEdit />}
                         {helper.showCaseDetailsView && <CaseDetailReadOnly />}
@@ -77,7 +76,6 @@ export const DocumentDetail = connect(
                     <div
                       id="tab-pending-messages-panel"
                       aria-labelledby="tab-pending-messages"
-                      tabIndex="0"
                     >
                       <Tabs
                         className="container-tabs"
@@ -156,7 +154,6 @@ export const DocumentDetail = connect(
             </div>
           </div>
         </section>
-        <div tabIndex="0" />
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'RecallPetitionModalDialog' && (
           <RecallPetitionModalDialog />
@@ -164,7 +161,6 @@ export const DocumentDetail = connect(
         {showModal === 'CreateMessageModalDialog' && (
           <CreateMessageModalDialog />
         )}
-        <div tabIndex="0" />
       </React.Fragment>
     );
   },

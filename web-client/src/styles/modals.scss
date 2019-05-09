@@ -67,7 +67,7 @@
   }
 
   .usa-button,
-  .usa-button-secondary {
+  .usa-button--outline {
     min-width: 150px;
   }
 }
@@ -151,7 +151,7 @@
     font-weight: $font-semibold;
   }
 
-  button.usa-button-secondary {
+  button.usa-button--outline {
     background-color: $color-primary;
     color: $color-white;
   }
