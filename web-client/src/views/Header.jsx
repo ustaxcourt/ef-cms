@@ -67,7 +67,7 @@ export const Header = connect(
                 </div>
                 <div className="grid-col-2">
                   <button
-                    className="usa-button usa-button__outline usa-button__unstyled"
+                    className="button-icon float-right"
                     onClick={() => toggleBetaBarSequence()}
                   >
                     <img src={close} alt="close" />
