@@ -485,10 +485,11 @@ textarea#case-caption {
 
 .header-with-link-button {
   display: inline-block;
-  margin-right: 20px;
+  margin-right: 10px;
 
-  + .link {
+  + .usa-button--unstyled {
     width: auto;
+    margin-right: 0;
   }
 }
 
