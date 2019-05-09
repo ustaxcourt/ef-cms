@@ -30,28 +30,32 @@ class SuccessNotificationComponent extends React.Component {
           <div
             className={classNames(
               'usa-alert',
-              'usa-alert-success',
+              'usa-alert--success',
               isMessageOnly && 'usa-alert-success-message-only',
             )}
             aria-live="polite"
             role="alert"
             ref={this.notificationRef}
           >
-            <div className="grid-container padding-x-0">
-              <div className="usa-alert-body usa-width-five-sixths">
-                <p className="heading-3 usa-alert-heading">
-                  {alertSuccess.title}
-                </p>
-                <p className="usa-alert-text">{alertSuccess.message}</p>
-              </div>
-              <div className="usa-alert-action usa-width-one-sixth">
-                <button
-                  type="button"
-                  className="modal-close-button text-style"
-                  onClick={() => dismissAlert()}
-                >
-                  Dismiss <FontAwesomeIcon icon="times-circle" />
-                </button>
+            <div className="usa-alert__body">
+              <div className="grid-container padding-x-0">
+                <div className="grid-row">
+                  <div className="grid-col-10">
+                    <p className="heading-3 usa-alert__heading">
+                      {alertSuccess.title}
+                    </p>
+                    <p className="usa-alert__text">{alertSuccess.message}</p>
+                  </div>
+                  <div className="usa-alert__action grid-col-2">
+                    <button
+                      type="button"
+                      className="modal-close-button usa-button usa-button--unstyled"
+                      onClick={() => dismissAlert()}
+                    >
+                      Dismiss <FontAwesomeIcon icon="times-circle" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

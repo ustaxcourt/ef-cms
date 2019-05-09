@@ -136,11 +136,11 @@ export const PrimaryDocumentForm = connect(
 
             {form.certificateOfService && (
               <div
-                className={
+                className={`usa-form-group ${
                   validationErrors.certificateOfServiceDate
                     ? 'usa-form-group--error'
                     : ''
-                }
+                }`}
               >
                 <fieldset className="service-date usa-fieldset">
                   <legend id="service-date-legend" className="usa-legend">

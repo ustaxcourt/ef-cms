@@ -297,9 +297,9 @@ label.ustc-upload {
       display: none;
     }
 
-    .usa-input-error.usa-input-group {
-      border-left: 4px solid $color-secondary-dark;
-    }
+    // .usa-input-error.usa-input-group {
+    //   border-left: 4px solid $color-secondary-dark;
+    // }
 
     .usa-input-group {
       border-left: 4px solid transparent;
@@ -309,28 +309,28 @@ label.ustc-upload {
       background-image: none;
     }
 
-    .usa-input-error #docket-search-field-mobile {
-      width: calc(100% - 45px);
-      border-width: 1px;
-      box-shadow: 0px 0 0px 2px $color-secondary-dark;
-    }
+    // .usa-input-error #docket-search-field-mobile {
+    //   width: calc(100% - 45px);
+    //   border-width: 1px;
+    //   box-shadow: 0px 0 0px 2px $color-secondary-dark;
+    // }
   }
 
   min-width: 200px;
 
-  .usa-input-error-message {
-    display: none;
-  }
+  // .usa-input-error-message {
+  //   display: none;
+  // }
 
   .usa-input-group {
     margin-bottom: 10px;
-    &.usa-input-error {
-      padding-left: 9px;
-      margin-left: 6px;
-      .usa-input-error-message {
-        display: block;
-      }
-    }
+    //   &.usa-input-error {
+    //     padding-left: 9px;
+    //     margin-left: 6px;
+    //     .usa-input-error-message {
+    //       display: block;
+    //     }
+    //   }
   }
 }
 
@@ -363,9 +363,9 @@ label.ustc-upload {
   }
 }
 
-.usa-input-error .select-react-element {
-  width: calc(100% + 1.9rem);
-}
+// .usa-input-error .select-react-element {
+//   width: calc(100% + 1.9rem);
+// }
 
 .docket-entry-form {
   .service-date {

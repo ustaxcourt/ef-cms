@@ -213,7 +213,7 @@ export const SecondaryDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.secondarySupportingDocumentFreeText
-                    ? 'usa-input-error'
+                    ? 'usa-form-group--error'
                     : ''
                 }`}
               >
