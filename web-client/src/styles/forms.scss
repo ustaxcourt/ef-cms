@@ -353,6 +353,8 @@ label.ustc-upload {
 
 .select-react-element {
   .select-react-element__control {
+    padding-top: 4px;
+    padding-bottom: 4px;
     border: 1px solid $color-gray;
     border-radius: 0;
 
@@ -368,6 +370,8 @@ label.ustc-upload {
 
       .select-react-element__input input {
         border: none;
+        margin-top: auto;
+        margin-bottom: auto;
         box-shadow: none;
       }
     }
