@@ -76,4 +76,23 @@ describe('updateDocketEntryWizardDataAction', () => {
       documentTitle: 'document title',
     });
   });
+
+  it('unsets additionalInfo if empty', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'additionalInfo',
+      },
+      state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          additionalInfo: '',
+          documentTitle: 'document title',
+        },
+      },
+    });
+
+    expect(result.state.form.additionalInfo).toEqual(undefined);
+  });
 });
