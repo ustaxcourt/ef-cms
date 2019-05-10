@@ -29,6 +29,15 @@
   }
 }
 
+.usa-button {
+  &.usa-button--unstyled {
+    padding: 2px;
+    margin: 0;
+    &:disabled {
+      color: $color-gray;
+    }
+  }
+}
 option:first-child {
   font-weight: initial;
 }
@@ -97,10 +106,18 @@ option:first-child {
   }
 }
 
-.usa-date-of-birth {
+.usa-memorable-date {
   label {
     margin: 0 0 5px;
     font-weight: $font-normal;
+  }
+}
+
+.subsection .usa-form-group .usa-fieldset .usa-memorable-date {
+  .usa-form-group--day,
+  .usa-form-group--month,
+  .usa-form-group--year {
+    margin-bottom: 0;
   }
 }
 
