@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const headerHelper = get => {
   const user = get(state.user);
+  const currentPage = get(state.currentPage);
 
   const isUserInternal = user => {
     const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
@@ -21,6 +22,11 @@ export const headerHelper = get => {
   };
 
   return {
+    pageIsDocumentQC: false, // doesn't exist yet
+    pageIsMessages:
+      currentPage && currentPage.includes('Dashboard') && isUserInternal(user),
+    pageIsMyCases:
+      currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
     showDocumentQC: isUserInternal(user),
     showMessages: isUserInternal(user),
     showMyCases: isUserExternal(user),

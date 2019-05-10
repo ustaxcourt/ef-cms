@@ -2,8 +2,8 @@ import { headerHelper } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 
 describe('headerHelper', () => {
-  it('should show search in header for non-practitioners', () => {
-    const result = runCompute(headerHelper, {
+  it('should show search in header for non-practitioners', async () => {
+    const result = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'taxpayer',
@@ -12,22 +12,22 @@ describe('headerHelper', () => {
     });
     expect(result.showSearchInHeader).toBeTruthy();
   });
-  it('should show document qc for internal users', () => {
-    const result1 = runCompute(headerHelper, {
+  it('should show document qc for internal users', async () => {
+    const result1 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'petitionsclerk',
         },
       },
     });
-    const result2 = runCompute(headerHelper, {
+    const result2 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'docketclerk',
         },
       },
     });
-    const result3 = runCompute(headerHelper, {
+    const result3 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'seniorattorney',
@@ -38,22 +38,22 @@ describe('headerHelper', () => {
     expect(result2.showDocumentQC).toBeTruthy();
     expect(result3.showDocumentQC).toBeTruthy();
   });
-  it('should show messages for internal users', () => {
-    const result1 = runCompute(headerHelper, {
+  it('should show messages for internal users', async () => {
+    const result1 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'petitionsclerk',
         },
       },
     });
-    const result2 = runCompute(headerHelper, {
+    const result2 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'docketclerk',
         },
       },
     });
-    const result3 = runCompute(headerHelper, {
+    const result3 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'seniorattorney',
@@ -64,22 +64,22 @@ describe('headerHelper', () => {
     expect(result2.showMessages).toBeTruthy();
     expect(result3.showMessages).toBeTruthy();
   });
-  it('should show cases for external users', () => {
-    const result1 = runCompute(headerHelper, {
+  it('should show cases for external users', async () => {
+    const result1 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'petitioner',
         },
       },
     });
-    const result2 = runCompute(headerHelper, {
+    const result2 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'practitioner',
         },
       },
     });
-    const result3 = runCompute(headerHelper, {
+    const result3 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'respondent',
@@ -90,8 +90,8 @@ describe('headerHelper', () => {
     expect(result2.showMyCases).toBeTruthy();
     expect(result3.showMyCases).toBeTruthy();
   });
-  it('should NOT show search in header for practitioners', () => {
-    const result = runCompute(headerHelper, {
+  it('should NOT show search in header for practitioners', async () => {
+    const result = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'practitioner',
@@ -100,22 +100,22 @@ describe('headerHelper', () => {
     });
     expect(result.showSearchInHeader).toBeFalsy();
   });
-  it('should NOT show document qc for external users', () => {
-    const result1 = runCompute(headerHelper, {
+  it('should NOT show document qc for external users', async () => {
+    const result1 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'petitioner',
         },
       },
     });
-    const result2 = runCompute(headerHelper, {
+    const result2 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'practitioner',
         },
       },
     });
-    const result3 = runCompute(headerHelper, {
+    const result3 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'respondent',
@@ -126,22 +126,22 @@ describe('headerHelper', () => {
     expect(result2.showDocumentQC).toBeFalsy();
     expect(result3.showDocumentQC).toBeFalsy();
   });
-  it('should NOT show messages for external users', () => {
-    const result1 = runCompute(headerHelper, {
+  it('should NOT show messages for external users', async () => {
+    const result1 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'petitioner',
         },
       },
     });
-    const result2 = runCompute(headerHelper, {
+    const result2 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'practitioner',
         },
       },
     });
-    const result3 = runCompute(headerHelper, {
+    const result3 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'respondent',
@@ -152,22 +152,22 @@ describe('headerHelper', () => {
     expect(result2.showMessages).toBeFalsy();
     expect(result3.showMessages).toBeFalsy();
   });
-  it('should NOT show cases for internal users', () => {
-    const result1 = runCompute(headerHelper, {
+  it('should NOT show cases for internal users', async () => {
+    const result1 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'petitionsclerk',
         },
       },
     });
-    const result2 = runCompute(headerHelper, {
+    const result2 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'docketclerk',
         },
       },
     });
-    const result3 = runCompute(headerHelper, {
+    const result3 = await runCompute(headerHelper, {
       state: {
         user: {
           role: 'seniorattorney',
@@ -177,5 +177,27 @@ describe('headerHelper', () => {
     expect(result1.showMyCases).toBeFalsy();
     expect(result2.showMyCases).toBeFalsy();
     expect(result3.showMyCases).toBeFalsy();
+  });
+  it('should know when the page is Messages', async () => {
+    const result = await runCompute(headerHelper, {
+      state: {
+        currentPage: 'DashboardPetitionsClerk',
+        user: {
+          role: 'petitionsclerk',
+        },
+      },
+    });
+    expect(result.pageIsMessages).toBeTruthy();
+  });
+  it('should know when the page is My Cases', async () => {
+    const result = await runCompute(headerHelper, {
+      state: {
+        currentPage: 'DashboardPetitioner',
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.pageIsMyCases).toBeTruthy();
   });
 });
