@@ -76,4 +76,42 @@ describe('updateDocketEntryWizardDataAction', () => {
       documentTitle: 'document title',
     });
   });
+
+  it('unsets additionalInfo if empty', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'additionalInfo',
+      },
+      state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          additionalInfo: '',
+          documentTitle: 'document title',
+        },
+      },
+    });
+
+    expect(result.state.form.additionalInfo).toEqual(undefined);
+  });
+
+  it('unsets additionalInfo2 if empty', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'additionalInfo2',
+      },
+      state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          additionalInfo2: '',
+          documentTitle: 'document title',
+        },
+      },
+    });
+
+    expect(result.state.form.additionalInfo2).toEqual(undefined);
+  });
 });
