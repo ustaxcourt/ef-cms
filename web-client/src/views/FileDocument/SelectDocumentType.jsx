@@ -137,7 +137,10 @@ export const SelectDocumentType = connect(
                     },
                   ].map(document => {
                     return (
-                      <li key={document.documentType}>
+                      <li
+                        key={document.documentType}
+                        className="margin-bottom-2"
+                      >
                         <button
                           className="usa-button usa-button--unstyled"
                           type="button"
