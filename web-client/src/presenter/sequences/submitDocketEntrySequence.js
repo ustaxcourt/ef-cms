@@ -1,6 +1,7 @@
 import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
+import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
@@ -8,6 +9,8 @@ import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
+import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -36,29 +39,36 @@ export const submitDocketEntrySequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
-      setCurrentPageAction('Interstitial'),
       generateTitleAction,
       set(state.showValidation, false),
       clearAlertsAction,
+      openFileUploadStatusModalAction,
       uploadExternalDocumentsAction,
-      submitDocketEntryAction,
-      stashWizardDataAction,
-      setCaseAction,
-      chooseNextStepAction,
       {
-        caseDetail: [
-          getDocketEntryAlertSuccessAction,
-          setAlertSuccessAction,
-          set(state.saveAlertsForNavigation, true),
-          navigateToCaseDetailAction,
-        ],
-        supportingDocument: [
-          set(state.screenMetadata.supporting, true),
-          getDocketEntryAlertSuccessAction,
-          setAlertSuccessAction,
-          clearFormAction,
-          set(state.wizardStep, 'SupportingDocumentForm'),
-          setCurrentPageAction('AddDocketEntry'),
+        error: [openFileUploadErrorModal],
+        success: [
+          submitDocketEntryAction,
+          stashWizardDataAction,
+          setCaseAction,
+          closeFileUploadStatusModalAction,
+          chooseNextStepAction,
+          {
+            caseDetail: [
+              getDocketEntryAlertSuccessAction,
+              setAlertSuccessAction,
+              set(state.saveAlertsForNavigation, true),
+              navigateToCaseDetailAction,
+            ],
+            supportingDocument: [
+              set(state.screenMetadata.supporting, true),
+              getDocketEntryAlertSuccessAction,
+              setAlertSuccessAction,
+              clearFormAction,
+              set(state.wizardStep, 'SupportingDocumentForm'),
+              setCurrentPageAction('Interstitial', { force: true }),
+              setCurrentPageAction('AddDocketEntry'),
+            ],
+          },
         ],
       },
     ],
