@@ -19,7 +19,9 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-hidden="true">&nbsp;</th>
+              <th aria-hidden="true" className="collapse-header">
+                &nbsp;
+              </th>
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
