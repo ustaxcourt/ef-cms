@@ -674,11 +674,12 @@ nav.usa-nav {
       background: none;
       color: $color-white;
     }
-  }
-  .usa-search {
-    max-width: 220px;
-    input#search-field {
-      width: 115px;
+
+    .usa-search {
+      max-width: 220px;
+      input#search-field {
+        width: 115px;
+      }
     }
   }
 
