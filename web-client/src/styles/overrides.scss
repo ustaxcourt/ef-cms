@@ -24,7 +24,7 @@
 .usa-form-group {
   margin-bottom: 25px;
 
-  label {
+  label:not(.usa-checkbox__label, .usa-radio__label) {
     margin: 0 0 5px;
   }
 }
