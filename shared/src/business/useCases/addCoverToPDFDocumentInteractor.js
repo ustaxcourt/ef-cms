@@ -52,20 +52,20 @@ exports.addCoverToPDFDocument = async ({
     })}`;
   }
 
-  let dateReceivedFormatted = '';
-  let dateReceivedLabel = '';
   const dateReceived = new Date(documentEntity.createdAt);
+  const dateReceivedDateFormatted = dateReceived.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  const dateReceivedTimeFormatted = dateReceived.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'America/New_York',
+  });
+  let dateReceivedFormatted = `${dateReceivedDateFormatted}`;
   if (!isPaper) {
-    dateReceivedLabel = 'Received';
-    dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })} ${dateReceived.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZone: 'America/New_York',
-    })}`;
+    dateReceivedFormatted += ` ${dateReceivedTimeFormatted}`;
   }
 
   const dateFiled = new Date(documentEntity.createdAt);
@@ -283,7 +283,7 @@ exports.addCoverToPDFDocument = async ({
 
   // Content areas
   const contentDateReceivedLabel = {
-    content: dateReceivedLabel,
+    content: 'Received',
     fontName: 'Helvetica-Bold',
     xPos: 900,
     yPos: 3036,
