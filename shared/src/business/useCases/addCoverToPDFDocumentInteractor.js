@@ -39,6 +39,9 @@ exports.addCoverToPDFDocument = async ({
     document => document.documentId === documentId,
   );
 
+  const isLodged = documentEntity.lodged;
+  const isPaper = documentEntity.isPaper;
+
   let dateServedFormatted = '';
   if (caseEntity.irsSendDate) {
     const dateServed = new Date(caseEntity.irsSendDate);
@@ -49,23 +52,28 @@ exports.addCoverToPDFDocument = async ({
     })}`;
   }
 
+  let dateReceivedFormatted = '';
+  let dateReceivedLabel = '';
   const dateReceived = new Date(documentEntity.createdAt);
-  const dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  })} ${dateReceived.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'America/New_York',
-  })}`;
+  if (!isPaper) {
+    dateReceivedLabel = 'Received';
+    dateReceivedFormatted = `${dateReceived.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })} ${dateReceived.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/New_York',
+    })}`;
+  }
+
   const dateFiled = new Date(documentEntity.createdAt);
   const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
   });
-  const isLodged = documentEntity.lodged;
 
   const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
@@ -275,7 +283,7 @@ exports.addCoverToPDFDocument = async ({
 
   // Content areas
   const contentDateReceivedLabel = {
-    content: 'Received',
+    content: dateReceivedLabel,
     fontName: 'Helvetica-Bold',
     xPos: 900,
     yPos: 3036,
