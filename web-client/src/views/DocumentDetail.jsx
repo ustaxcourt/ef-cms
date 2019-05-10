@@ -6,8 +6,8 @@ import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDia
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PendingMessages } from './DocumentDetail/PendingMessages';
-import { RecallPetitionModalDialog } from './modals/RecallPetitionModalDialog';
-import { ServeToIrsModalDialog } from './modals/ServeToIrsModalDialog';
+import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
+import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';

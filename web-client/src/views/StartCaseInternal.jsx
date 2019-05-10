@@ -1,8 +1,8 @@
 import { ErrorNotification } from './ErrorNotification';
-import { FileUploadErrorModal } from './modals/FileUploadErrorModal';
-import { FileUploadStatusModal } from './modals/FileUploadStatusModal';
+import { FileUploadErrorModal } from './FileUploadErrorModal';
+import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from './modals/FormCancelModalDialog';
+import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
