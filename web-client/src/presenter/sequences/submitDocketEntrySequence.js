@@ -65,6 +65,7 @@ export const submitDocketEntrySequence = [
               setAlertSuccessAction,
               clearFormAction,
               set(state.wizardStep, 'SupportingDocumentForm'),
+              setCurrentPageAction('Interstitial', { force: true }),
               setCurrentPageAction('AddDocketEntry'),
             ],
           },

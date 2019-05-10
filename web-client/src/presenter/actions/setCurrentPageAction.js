@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {string} page the name of the page to set
  */
-export const setCurrentPageAction = page =>
+export const setCurrentPageAction = (page, options = {}) =>
   /**
    * sets the state.currentPage based on the scoped page
    *
@@ -14,4 +14,9 @@ export const setCurrentPageAction = page =>
    */
   ({ store }) => {
     store.set(state.currentPage, page);
+    if (options.force) {
+      return new Promise(resolve => {
+        setTimeout(resolve, 1);
+      });
+    }
   };
