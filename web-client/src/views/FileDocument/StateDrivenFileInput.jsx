@@ -52,6 +52,7 @@ export const StateDrivenFileInput = connect(
               validationSequence();
             });
           }}
+          className="usa-input"
         />
 
         {form[name] && (

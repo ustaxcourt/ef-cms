@@ -18,13 +18,13 @@ export const AddDocketEntry = connect(
   ({ caseDetail, submitDocketEntrySequence, screenMetadata }) => {
     return (
       <React.Fragment>
-        <div className="breadcrumb">
+        <div className="grid-container breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
             Back
           </a>
         </div>
-        <section className="usa-section DocumentDetail">
+        <section className="usa-section grid-container DocumentDetail">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
 

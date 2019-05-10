@@ -367,7 +367,6 @@ label.ustc-upload {
       }
 
       .select-react-element__input input {
-        height: 3.4rem;
         border: none;
         box-shadow: none;
       }
@@ -377,6 +376,16 @@ label.ustc-upload {
   .select-react-element__control--menu-is-open {
     outline: 2px dotted $color-gray-light !important;
     outline-offset: 3px;
+  }
+}
+
+.date-received {
+  .usa-form-group {
+    margin-bottom: 0px;
+
+    input[type='number'] {
+      margin-bottom: 5px;
+    }
   }
 }
 
