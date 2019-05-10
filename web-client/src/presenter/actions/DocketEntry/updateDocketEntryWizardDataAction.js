@@ -91,5 +91,11 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         }
       }
       break;
+    case 'additionalInfo':
+    case 'additionalInfo2':
+      if (!props.value) {
+        store.unset(state.form[props.key]);
+      }
+      break;
   }
 };
