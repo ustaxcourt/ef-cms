@@ -101,7 +101,7 @@ export const StartCase = connect(
               <div className="mobile-lg:grid-col-5">
                 <div
                   className={`usa-form-group ${
-                    validationErrors.petitionFile ? 'usa-input--error' : ''
+                    validationErrors.petitionFile ? 'usa-form-group--error' : ''
                   }`}
                 >
                   <label
@@ -158,7 +158,7 @@ export const StartCase = connect(
           <div className="blue-container">
             <div
               className={`usa-form-group ${
-                validationErrors.stinFile ? 'usa-input--error' : ''
+                validationErrors.stinFile ? 'usa-form-group--error' : ''
               }`}
             >
               <label
@@ -234,7 +234,7 @@ export const StartCase = connect(
               <div className="mobile-lg:grid-col-5">
                 <div
                   className={
-                    validationErrors.filingType ? 'usa-input--error' : ''
+                    validationErrors.filingType ? 'usa-form-group--error' : ''
                   }
                 >
                   <fieldset
@@ -283,7 +283,7 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input--error' : '')
+                  (validationErrors.partyType ? 'usa-form-group--error' : '')
                 }
               >
                 <fieldset
@@ -328,7 +328,7 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input--error' : '')
+                  (validationErrors.partyType ? 'usa-form-group--error' : '')
                 }
               >
                 <fieldset id="business-type-radios" className="usa-fieldset">
@@ -372,7 +372,7 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input--error' : '')
+                  (validationErrors.partyType ? 'usa-form-group--error' : '')
                 }
               >
                 <fieldset id="other-type-radios" className="usa-fieldset">
@@ -418,7 +418,7 @@ export const StartCase = connect(
                 <div
                   className={
                     'ustc-secondary-question ' +
-                    (validationErrors.partyType ? 'usa-input--error' : '')
+                    (validationErrors.partyType ? 'usa-form-group--error' : '')
                   }
                 >
                   <fieldset
@@ -465,7 +465,7 @@ export const StartCase = connect(
                 <div
                   className={
                     'ustc-secondary-question ' +
-                    (validationErrors.partyType ? 'usa-input--error' : '')
+                    (validationErrors.partyType ? 'usa-form-group--error' : '')
                   }
                 >
                   <fieldset
@@ -597,7 +597,7 @@ export const StartCase = connect(
                 id="irs-notice-radios"
                 className={
                   'usa-fieldset ' +
-                  (validationErrors.hasIrsNotice ? 'usa-input--error' : '')
+                  (validationErrors.hasIrsNotice ? 'usa-form-group--error' : '')
                 }
               >
                 <legend>{startCaseHelper.noticeLegend}</legend>
@@ -647,7 +647,9 @@ export const StartCase = connect(
                   <div
                     className={
                       'usa-form-group ' +
-                      (validationErrors.irsNoticeDate ? 'usa-input--error' : '')
+                      (validationErrors.irsNoticeDate
+                        ? 'usa-form-group--error'
+                        : '')
                     }
                   >
                     <fieldset>
@@ -860,7 +862,7 @@ export const StartCase = connect(
             <div
               className={
                 'usa-checkbox ' +
-                (validationErrors.signature ? 'usa-input--error' : '')
+                (validationErrors.signature ? 'usa-form-group--error' : '')
               }
             >
               <legend>Review and Sign</legend>
