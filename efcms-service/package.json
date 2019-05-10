@@ -31,7 +31,7 @@
     "parcel-bundler": "^1.12.3",
     "prettier": "^1.17.0",
     "proxyquire": "^2.1.0",
-    "serverless": "^1.41.1",
+    "serverless": "^1.42.2",
     "serverless-domain-manager": "2.6.13",
     "serverless-dynamodb-local": "0.2.37",
     "serverless-offline": "^4.10.0",
