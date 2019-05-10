@@ -222,8 +222,7 @@ const applicationContext = {
     SECTIONS,
     SESSION_DEBOUNCE: 250,
     SESSION_MODAL_TIMEOUT: 5000 * 60, // 5 minutes
-    // SESSION_TIMEOUT: 1000 * 60 * 55, // 55 minutes
-    SESSION_TIMEOUT: 1000 * 60 * 1, // 1 minutes
+    SESSION_TIMEOUT: 1000 * 60 * 55, // 55 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,
