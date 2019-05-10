@@ -239,7 +239,7 @@ label.validated::after {
 }
 
 .usa-form--large {
-  @include at-media('desktop') {
+  @media only screen and (min-width: $medium-screen) {
     max-width: units('desktop');
   }
 
