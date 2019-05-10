@@ -353,6 +353,8 @@ label.ustc-upload {
 
 .select-react-element {
   .select-react-element__control {
+    padding-top: 4px;
+    padding-bottom: 4px;
     border: 1px solid $color-gray;
     border-radius: 0;
 
@@ -367,8 +369,9 @@ label.ustc-upload {
       }
 
       .select-react-element__input input {
-        height: 3.4rem;
         border: none;
+        margin-top: auto;
+        margin-bottom: auto;
         box-shadow: none;
       }
     }
@@ -377,6 +380,16 @@ label.ustc-upload {
   .select-react-element__control--menu-is-open {
     outline: 2px dotted $color-gray-light !important;
     outline-offset: 3px;
+  }
+}
+
+.date-received {
+  .usa-form-group {
+    margin-bottom: 0px;
+
+    input[type='number'] {
+      margin-bottom: 5px;
+    }
   }
 }
 
