@@ -9,7 +9,7 @@ export const AccountMenuItems = ({ signOut }) => {
     <ul className="usa-unstyled-list">
       <li>
         <a
-          className="account-menu-item"
+          className="account-menu-item log-out"
           href="/"
           onClick={() => {
             signOut();
@@ -42,7 +42,7 @@ export const AccountMenu = connect(
           >
             <FontAwesomeIcon
               icon={['far', 'user']}
-              className="account-menu-icon"
+              className="account-menu-icon user-icon"
             />
             <FontAwesomeIcon
               icon={['fa', 'caret-down']}

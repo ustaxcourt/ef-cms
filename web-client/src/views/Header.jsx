@@ -12,17 +12,35 @@ const NavigationItems = helper => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
       {helper.showMessages && (
-        <li className="usa-nav__primary-item">
+        <li
+          className={
+            helper.pageIsMessages
+              ? 'usa-nav__primary-item active'
+              : 'usa-nav__primary-item'
+          }
+        >
           <a href="/">Messages</a>
         </li>
       )}
       {helper.showDocumentQC && (
-        <li className="usa-nav__primary-item">
+        <li
+          className={
+            helper.pageIsDocumentQC
+              ? 'usa-nav__primary-item active'
+              : 'usa-nav__primary-item'
+          }
+        >
           <a href="/">Document QC</a>
         </li>
       )}
       {helper.showMyCases && (
-        <li className="usa-nav__primary-item">
+        <li
+          className={
+            helper.pageIsMyCases
+              ? 'usa-nav__primary-item active'
+              : 'usa-nav__primary-item'
+          }
+        >
           <a href="/">My Cases</a>
         </li>
       )}
@@ -140,7 +158,7 @@ export const Header = connect(
                       >
                         <FontAwesomeIcon
                           icon={['far', 'user']}
-                          className="account-menu-icon"
+                          className="account-menu-icon user-icon"
                         />{' '}
                         Log In
                       </button>
