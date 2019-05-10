@@ -5,6 +5,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadExternalDocuments = async ({
+  onUploadProgresses,
   documentFiles,
   applicationContext,
 }) => {
@@ -23,6 +24,7 @@ exports.uploadExternalDocuments = async ({
         .uploadDocument({
           applicationContext,
           document: documentFiles[i],
+          onUploadProgress: onUploadProgresses[i],
         });
       documentIds[i] = documentId;
     }
