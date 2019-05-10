@@ -29,10 +29,11 @@ export const uploadExternalDocumentsAction = async ({
       secondaryDocumentFileId,
     ] = await applicationContext.getUseCases().uploadExternalDocuments({
       applicationContext,
-      onPrimaryUploadProgress: progressFunctions.primary,
-      onSecondaryUploadProgress: progressFunctions.secondary,
-      primaryDocumentFile,
-      secondaryDocumentFile,
+      documentFiles: [primaryDocumentFile, secondaryDocumentFile],
+      onUploadProgresses: [
+        progressFunctions.primary,
+        progressFunctions.secondary,
+      ],
     });
 
     return path.success({ primaryDocumentFileId, secondaryDocumentFileId });
