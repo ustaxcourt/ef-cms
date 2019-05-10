@@ -24,12 +24,18 @@ exports.uploadPdf = async ({
   formData.append('X-Amz-Signature', policy.fields['X-Amz-Signature']);
   formData.append('Content-Type', 'application/pdf');
   formData.append('file', file, file.name || 'fileName');
-  await applicationContext.getHttpClient().post(policy.url, formData, {
-    headers: {
-      /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
-      'content-type': `multipart/form-data; boundary=${formData._boundary}`,
-    },
-    onUploadProgress,
-  });
+  await applicationContext
+    .getHttpClient()
+    .post(policy.url, formData, {
+      headers: {
+        /* eslint no-underscore-dangle: ["error", {"allow": ["_boundary"] }] */
+        'content-type': `multipart/form-data; boundary=${formData._boundary}`,
+      },
+      onUploadProgress,
+    })
+    .then(r => {
+      onUploadProgress({ isDone: true });
+      return r;
+    });
   return documentId;
 };

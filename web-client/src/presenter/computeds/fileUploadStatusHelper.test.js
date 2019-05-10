@@ -6,6 +6,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `Preparing Upload` for infinity time remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: Number.POSITIVE_INFINITY,
       },
     });
@@ -16,6 +17,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `Less Than 1 Minute Left` for anything less than 60 seconds', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: 40,
       },
     });
@@ -26,6 +28,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `1 Minutes Left` for time remaining being something between 60 and 3600 seconds', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: 61,
       },
     });
@@ -36,6 +39,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `1 Minutes Left` for time remaining for 119 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: 119,
       },
     });
@@ -46,6 +50,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `59 Minutes Left` for time remaining for 119 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: 3599,
       },
     });
@@ -56,6 +61,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `1 Hour Left` for time remaining for 119 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: 3600,
       },
     });
@@ -66,6 +72,7 @@ describe('fileUploadStatusHelper', () => {
   it('returns `5 Hour Left` for time remaining for 119 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
+        isUploading: true,
         timeRemaining: 3600 * 4 + 60 * 21,
       },
     });
