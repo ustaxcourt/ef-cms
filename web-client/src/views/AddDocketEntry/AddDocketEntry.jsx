@@ -33,7 +33,7 @@ export const AddDocketEntry = connect(
 
           <div className="grid-container padding-x-0 add-bottom-margin">
             <div className="grid-row">
-              <div className="grid-col-4">
+              <div className="mobile-lg:grid-col-4">
                 <Tabs
                   asSwitch
                   defaultActiveTab="PrimaryDocumentForm"
@@ -47,7 +47,7 @@ export const AddDocketEntry = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-8" />
+              <div className="mobile-lg:grid-col-8" />
             </div>
           </div>
 
