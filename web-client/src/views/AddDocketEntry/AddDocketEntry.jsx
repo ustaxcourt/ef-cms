@@ -67,7 +67,7 @@ export const AddDocketEntry = connect(
               onClick={() => {
                 updateScreenMetadataSequence({
                   key: 'supportingDocument',
-                  value: true,
+                  value: false,
                 });
                 submitDocketEntrySequence();
               }}
