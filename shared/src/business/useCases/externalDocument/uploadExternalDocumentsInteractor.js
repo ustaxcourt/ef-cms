@@ -5,7 +5,10 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadExternalDocuments = async ({
-  documentFiles,
+  onPrimaryUploadProgress,
+  onSecondaryUploadProgress,
+  primaryDocumentFile,
+  secondaryDocumentFile,
   applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -14,19 +17,24 @@ exports.uploadExternalDocuments = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  documentFiles = documentFiles || [];
-  const documentIds = new Array(documentFiles.length);
-  for (let i = 0; i < documentFiles.length; i++) {
-    if (documentFiles[i]) {
-      const documentId = await applicationContext
-        .getPersistenceGateway()
-        .uploadDocument({
-          applicationContext,
-          document: documentFiles[i],
-        });
-      documentIds[i] = documentId;
-    }
+  const primaryDocumentFileId = await applicationContext
+    .getPersistenceGateway()
+    .uploadDocument({
+      applicationContext,
+      document: primaryDocumentFile,
+      onUploadProgress: onPrimaryUploadProgress,
+    });
+
+  let secondaryDocumentFileId;
+  if (secondaryDocumentFile) {
+    secondaryDocumentFileId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: secondaryDocumentFile,
+        onUploadProgress: onSecondaryUploadProgress,
+      });
   }
 
-  return documentIds;
+  return [primaryDocumentFileId, secondaryDocumentFileId];
 };

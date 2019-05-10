@@ -11,6 +11,11 @@ export default (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
+    await test.runSequence('updateScreenMetadataSequence', {
+      key: 'supportingDocument',
+      value: false,
+    });
+
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
@@ -56,6 +61,11 @@ export default (test, fakeFile) => {
       'Motion for Leave to File',
     );
 
+    await test.runSequence('updateScreenMetadataSequence', {
+      key: 'supportingDocument',
+      value: false,
+    });
+
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
     });
@@ -92,9 +102,13 @@ export default (test, fakeFile) => {
       value: true,
     });
 
+    await test.runSequence('updateScreenMetadataSequence', {
+      key: 'supportingDocument',
+      value: true,
+    });
+
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      supportingDocument: true,
     });
 
     expect(test.getState('alertSuccess').title).toEqual(
@@ -135,9 +149,13 @@ export default (test, fakeFile) => {
       value: 'Amendment to Seriatim Opening Brief',
     });
 
+    await test.runSequence('updateScreenMetadataSequence', {
+      key: 'supportingDocument',
+      value: true,
+    });
+
     await test.runSequence('submitDocketEntrySequence', {
       docketNumber: test.docketNumber,
-      supportingDocument: true,
     });
 
     expect(test.getState('validationErrors')).toEqual({});
@@ -169,6 +187,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'attachments',
+      value: false,
+    });
+
+    await test.runSequence('updateScreenMetadataSequence', {
+      key: 'supportingDocument',
       value: false,
     });
 

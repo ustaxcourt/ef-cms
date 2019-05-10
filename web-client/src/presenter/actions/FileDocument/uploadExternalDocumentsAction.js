@@ -1,3 +1,4 @@
+import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -8,20 +9,34 @@ import { state } from 'cerebral';
  */
 export const uploadExternalDocumentsAction = async ({
   get,
+  store,
+  path,
   applicationContext,
 }) => {
   const { primaryDocumentFile, secondaryDocumentFile } = get(state.form);
 
-  const documentFiles = [primaryDocumentFile, secondaryDocumentFile];
+  const progressFunctions = setupPercentDone(
+    {
+      primary: primaryDocumentFile,
+      secondary: secondaryDocumentFile,
+    },
+    store,
+  );
 
-  const documentIds = await applicationContext
-    .getUseCases()
-    .uploadExternalDocuments({
+  try {
+    const [
+      primaryDocumentFileId,
+      secondaryDocumentFileId,
+    ] = await applicationContext.getUseCases().uploadExternalDocuments({
       applicationContext,
-      documentFiles,
+      onPrimaryUploadProgress: progressFunctions.primary,
+      onSecondaryUploadProgress: progressFunctions.secondary,
+      primaryDocumentFile,
+      secondaryDocumentFile,
     });
 
-  const [primaryDocumentFileId, secondaryDocumentFileId] = documentIds;
-
-  return { primaryDocumentFileId, secondaryDocumentFileId };
+    return path.success({ primaryDocumentFileId, secondaryDocumentFileId });
+  } catch (err) {
+    return path.error();
+  }
 };
