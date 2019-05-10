@@ -52,6 +52,7 @@ exports.addCoverToPDFDocument = async ({
     })}`;
   }
 
+  let dateReceivedFormatted;
   const dateReceived = new Date(documentEntity.createdAt);
   const dateReceivedDateFormatted = dateReceived.toLocaleDateString('en-US', {
     day: '2-digit',
@@ -63,9 +64,10 @@ exports.addCoverToPDFDocument = async ({
     minute: '2-digit',
     timeZone: 'America/New_York',
   });
-  let dateReceivedFormatted = `${dateReceivedDateFormatted}`;
-  if (!isPaper) {
-    dateReceivedFormatted += ` ${dateReceivedTimeFormatted}`;
+  if (isPaper) {
+    dateReceivedFormatted = `${dateReceivedDateFormatted}`;
+  } else {
+    dateReceivedFormatted = `${dateReceivedDateFormatted} ${dateReceivedTimeFormatted}`;
   }
 
   const dateFiled = new Date(documentEntity.createdAt);
@@ -285,7 +287,7 @@ exports.addCoverToPDFDocument = async ({
   const contentDateReceivedLabel = {
     content: 'Received',
     fontName: 'Helvetica-Bold',
-    xPos: 900,
+    xPos: isPaper ? 800 : 900,
     yPos: 3036,
   };
 
