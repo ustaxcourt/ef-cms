@@ -85,7 +85,7 @@ export const Address = connect(
             validateStartCaseSequence();
           }}
         />
-        <div className="grid-row grid-gap">
+        <div className="grid-row grid-gap state-and-city">
           <div className="mobile-lg:grid-col-8">
             <label htmlFor={`${type}.city`} className="usa-label">
               City

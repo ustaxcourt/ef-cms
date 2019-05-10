@@ -238,6 +238,23 @@ label.validated::after {
   }
 }
 
+.usa-form--large {
+  @include at-media('desktop') {
+    max-width: units('desktop');
+  }
+
+  .contact-group {
+    input,
+    select {
+      max-width: units('mobile') + 5;
+    }
+
+    .grid-row.grid-gap.state-and-city {
+      max-width: units('mobile') + 7;
+    }
+  }
+}
+
 .clear-both {
   clear: both;
 }
