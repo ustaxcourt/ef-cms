@@ -571,22 +571,34 @@ nav.usa-nav {
     top: -9.75rem;
     left: 140px;
 
-    a,
-    :hover {
+    a {
       padding: 0px;
       background: none;
-      color: $color-primary;
+      font-size: 20px;
+      font-weight: $font-bold;
+      font-family: $font-serif;
+      color: $color-black;
+    }
+    :hover {
+      color: $color-primary-darker;
     }
 
     .usa-nav__primary {
       li.active,
       li:hover {
-        border-bottom: 2px solid $color-primary;
+        border-bottom: 2px solid $color-primary-darker;
       }
     }
   }
   .usa-nav-secondary {
     margin-top: -24px;
+  }
+
+  .usa-search {
+    max-width: 320px;
+    input#search-field {
+      width: 220px;
+    }
   }
 
   .usa-nav-secondary-links li:not(:last-child)::after {
@@ -595,12 +607,18 @@ nav.usa-nav {
   }
 
   .user-dropdown {
-    margin-top: -4px;
+    margin-top: -11px;
   }
 
   .button-account-login {
     background: none;
     color: $color-primary;
+    font-weight: $font-semibold;
+  }
+
+  .user-icon {
+    width: 25px;
+    height: 25px;
   }
 
   &.mobile-menu {
@@ -657,13 +675,25 @@ nav.usa-nav {
       color: $color-white;
     }
   }
+  .usa-search {
+    max-width: 220px;
+    input#search-field {
+      width: 115px;
+    }
+  }
+
+  a.log-out {
+    font-size: 20px;
+    font-weight: $font-bold;
+    font-family: $font-serif;
+  }
 }
 
 .account-menu {
   .account-button-container {
     button.button-account-menu {
       padding: 12px;
-      margin: -4px 0 0 0;
+      margin: 0;
       background: none;
       color: $color-primary;
     }
@@ -679,6 +709,15 @@ nav.usa-nav {
     }
     .account-button-container {
       background: none;
+
+      :hover {
+        background-color: $color-primary;
+        border-radius: 0;
+
+        .account-menu-icon {
+          color: $color-white;
+        }
+      }
     }
   }
   &.open {
