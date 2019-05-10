@@ -600,39 +600,43 @@ export const StartCase = connect(
                   (validationErrors.hasIrsNotice ? 'usa-form-group--error' : '')
                 }
               >
-                <legend>{startCaseHelper.noticeLegend}</legend>
-                {['Yes', 'No'].map((hasIrsNotice, idx) => (
-                  <div
-                    className="usa-radio usa-radio__inline"
-                    key={hasIrsNotice}
-                  >
-                    <input
-                      id={`hasIrsNotice-${hasIrsNotice}`}
-                      type="radio"
-                      name="hasIrsNotice"
-                      value={hasIrsNotice === 'Yes'}
-                      onChange={e => {
-                        updateHasIrsNoticeFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value === 'true',
-                        });
-                        validateStartCaseSequence();
-                      }}
-                      className="usa-radio__input"
-                    />
-                    <label
-                      id={`hasIrsNotice-${idx}`}
-                      htmlFor={`hasIrsNotice-${hasIrsNotice}`}
-                      className="usa-radio__label"
+                <legend className="usa-legend">
+                  {startCaseHelper.noticeLegend}
+                </legend>
+                <div className="usa-form-group">
+                  {['Yes', 'No'].map((hasIrsNotice, idx) => (
+                    <div
+                      className="usa-radio usa-radio__inline"
+                      key={hasIrsNotice}
                     >
-                      {hasIrsNotice}
-                    </label>
-                  </div>
-                ))}
-                <Text
-                  className="usa-error-message"
-                  bind="validationErrors.hasIrsNotice"
-                />
+                      <input
+                        id={`hasIrsNotice-${hasIrsNotice}`}
+                        type="radio"
+                        name="hasIrsNotice"
+                        value={hasIrsNotice === 'Yes'}
+                        onChange={e => {
+                          updateHasIrsNoticeFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value === 'true',
+                          });
+                          validateStartCaseSequence();
+                        }}
+                        className="usa-radio__input"
+                      />
+                      <label
+                        id={`hasIrsNotice-${idx}`}
+                        htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                        className="usa-radio__label"
+                      >
+                        {hasIrsNotice}
+                      </label>
+                    </div>
+                  ))}
+                  <Text
+                    className="usa-error-message"
+                    bind="validationErrors.hasIrsNotice"
+                  />
+                </div>
               </fieldset>
 
               {startCaseHelper.showHasIrsNoticeOptions && (
@@ -646,14 +650,16 @@ export const StartCase = connect(
                   />
                   <div
                     className={
-                      'usa-form-group ' +
+                      'usa-form-group' +
                       (validationErrors.irsNoticeDate
-                        ? 'usa-form-group--error'
+                        ? ' usa-form-group--error'
                         : '')
                     }
                   >
-                    <fieldset>
-                      <legend id="date-of-notice-legend">Date of Notice</legend>
+                    <fieldset className="usa-fieldset">
+                      <legend id="date-of-notice-legend" className="usa-legend">
+                        Date of Notice
+                      </legend>
                       <div className="usa-memorable-date">
                         <div className="usa-form-group usa-form-group--month">
                           <label
