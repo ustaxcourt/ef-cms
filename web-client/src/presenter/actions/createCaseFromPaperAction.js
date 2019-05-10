@@ -21,14 +21,14 @@ export const setupPercentDone = (files, store) => {
   const createOnUploadProgress = key => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { loaded } = progressEvent;
+      const { loaded, isDone } = progressEvent;
+      loadedAmounts[key] = isDone ? files[key].size : loaded;
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
       const timeRemaining = Math.floor(
         (totalSize - uploadedBytes) / uploadSpeed,
       );
-      loadedAmounts[key] = loaded;
       const percent = parseInt((uploadedBytes / totalSize) * 100);
       store.set(state.percentComplete, percent);
       store.set(state.timeRemaining, timeRemaining);
