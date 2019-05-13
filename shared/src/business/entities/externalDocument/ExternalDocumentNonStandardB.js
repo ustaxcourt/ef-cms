@@ -23,12 +23,12 @@ ExternalDocumentNonStandardB.errorToMessageMap = {
   freeText: 'You must provide a value.',
 };
 
-ExternalDocumentNonStandardB.schema = joi.object().keys({
+ExternalDocumentNonStandardB.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().required(),
-});
+};
 
 joiValidationDecorator(
   ExternalDocumentNonStandardB,

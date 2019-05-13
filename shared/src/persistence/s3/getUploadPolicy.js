@@ -1,3 +1,6 @@
+exports.MAX_FILE_SIZE_MB = 500; // megabytes
+exports.MAX_FILE_SIZE_BYTES = exports.MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -> megabytes
+
 /**
  * getUploadPolicy
  * @param applicationContext
@@ -11,6 +14,7 @@ exports.getUploadPolicy = ({ applicationContext }) =>
         Conditions: [
           ['starts-with', '$key', ''],
           ['starts-with', '$Content-Type', ''],
+          ['content-length-range', 0, exports.MAX_FILE_SIZE_BYTES],
         ],
       },
       (err, data) => {

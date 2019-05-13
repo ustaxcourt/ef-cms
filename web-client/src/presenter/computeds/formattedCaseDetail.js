@@ -152,6 +152,7 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     );
   }
 
+  // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
     return a.index - b.index;
   });
@@ -207,13 +208,76 @@ const formatCase = (caseDetail, caseDetailErrors) => {
   return result;
 };
 
+const dateStringsCompared = (a, b) => {
+  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
+  const simpleDateLength = 10; // e.g. YYYY-MM-DD
+
+  if (a.length == simpleDateLength || b.length == simpleDateLength) {
+    // at least one date has a simple format, compare only year, month, and day
+    const [aSimple, bSimple] = [
+      a.match(simpleDatePattern)[0],
+      b.match(simpleDatePattern)[0],
+    ];
+    if (aSimple.localeCompare(bSimple) == 0) {
+      return 0;
+    }
+  }
+
+  const secondsDifference = 30 * 1000;
+  const aDate = new Date(a);
+  const bDate = new Date(b);
+  if (Math.abs(aDate - bDate) < secondsDifference) {
+    // treat as equal timestamps
+    return 0;
+  }
+  return aDate - bDate;
+};
+
+const getDocketRecordSortFunc = sortBy => {
+  const byIndex = (a, b) => a.index - b.index;
+  const byDate = (a, b) =>
+    dateStringsCompared(a.record.filingDate, b.record.filingDate);
+
+  switch (sortBy) {
+    case 'byIndex': // fall-through
+    case 'byIndexDesc':
+      return byIndex;
+    case 'byDate': // fall through, is the default sort method
+    case 'byDateDesc':
+    default:
+      return byDate;
+  }
+};
+
+const sortDocketRecords = (docketRecords = [], sortBy = '') => {
+  const sortFunc = getDocketRecordSortFunc(sortBy);
+  const isReversed = sortBy.indexOf('Desc') > -1;
+  const result = docketRecords.sort(sortFunc);
+  if (isReversed) {
+    // reversing AFTER the sort keeps sorting stable
+    return result.reverse();
+  }
+  return result;
+};
+
 export const formattedCases = get => {
   const cases = get(state.cases);
   return cases.map(formatCase);
 };
 
 export const formattedCaseDetail = get => {
+  let docketRecordSort;
   const caseDetail = get(state.caseDetail);
+  const caseId = get(state.caseDetail.caseId);
+  if (caseId) {
+    docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
+  }
   const caseDetailErrors = get(state.caseDetailErrors);
-  return formatCase(caseDetail, caseDetailErrors);
+  const result = formatCase(caseDetail, caseDetailErrors);
+  result.docketRecordWithDocument = sortDocketRecords(
+    result.docketRecordWithDocument,
+    docketRecordSort,
+  );
+  result.docketRecordSort = docketRecordSort;
+  return result;
 };

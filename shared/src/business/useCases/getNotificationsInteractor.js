@@ -6,13 +6,12 @@
  * @returns {Promise<*>}
  */
 exports.getNotifications = async ({ applicationContext }) => {
-  const workItems = await applicationContext
-    .getUseCases()
-    .getWorkItemsForUser({ applicationContext });
+  const inbox = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemsForUser({
+      applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
+    });
 
-  const unreadCount = workItems.filter(
-    item => !item.readAt && !item.completedAt,
-  ).length;
-
-  return { unreadCount };
+  return { unreadCount: inbox.filter(item => !item.isRead).length };
 };

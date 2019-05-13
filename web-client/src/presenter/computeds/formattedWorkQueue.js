@@ -39,24 +39,27 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
-  result.showUnreadIndicators = !result.readAt;
+  result.showUnreadIndicators = !result.isRead;
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
+  if (!result.isRead) {
+    result.showUnreadStatusIcon = true;
+  }
   switch (result.caseStatus.trim()) {
     case 'Batched for IRS':
       result.showBatchedStatusIcon = true;
-      result.statusIcon = 'iconStatusBatched';
+      result.showUnreadStatusIcon = false;
       break;
     case 'Recalled':
-      result.showBatchedStatusIcon = true;
-      result.statusIcon = 'iconStatusRecalled';
+      result.showRecalledStatusIcon = true;
+      result.showUnreadStatusIcon = false;
       break;
     case 'General Docket':
     case 'New':
     default:
-      result.statusIcon = '';
       result.showBatchedStatusIcon = false;
+      result.showRecalledStatusIcon = false;
   }
 
   result.docketNumberWithSuffix = `${

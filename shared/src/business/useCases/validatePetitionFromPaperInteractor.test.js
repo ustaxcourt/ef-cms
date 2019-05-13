@@ -21,6 +21,8 @@ describe('validatePetition', () => {
           'caseType',
           'irsNoticeDate',
           'ownershipDisclosureFile',
+          'petitionFileSize',
+          'stinFileSize',
         ]),
       ),
     );

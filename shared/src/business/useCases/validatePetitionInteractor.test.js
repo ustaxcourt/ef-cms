@@ -17,8 +17,11 @@ describe('validatePetition', () => {
     expect(errors).toEqual({
       ...omit(Petition.errorToMessageMap, [
         'ownershipDisclosureFile',
+        'ownershipDisclosureFileSize',
         'irsNoticeDate',
         'caseType',
+        'petitionFileSize',
+        'stinFileSize',
       ]),
     });
   });
@@ -33,6 +36,10 @@ describe('validatePetition', () => {
       petition: {
         caseType: 'defined',
         hasIrsNotice: true,
+        petitionFile: new File([], 'test.png'),
+        petitionFileSize: 1,
+        stinFile: new File([], 'test.png'),
+        stinFileSize: 1,
       },
     });
     expect(errors).toEqual({
@@ -40,6 +47,11 @@ describe('validatePetition', () => {
         'caseType',
         'hasIrsNotice',
         'ownershipDisclosureFile',
+        'ownershipDisclosureFileSize',
+        'petitionFile',
+        'petitionFileSize',
+        'stinFile',
+        'stinFileSize',
       ]),
       irsNoticeDate: 'Notice Date is a required field.',
     });
@@ -59,10 +71,12 @@ describe('validatePetition', () => {
         irsNoticeDate: new Date().toISOString(),
         partyType: 'defined',
         petitionFile: new File([], 'test.png'),
+        petitionFileSize: 1,
         preferredTrialCity: 'defined',
         procedureType: 'defined',
         signature: true,
-        stinFile: {},
+        stinFile: new File([], 'testStinFile.pdf'),
+        stinFileSize: 1,
       },
     });
     expect(errors).toEqual(null);
@@ -84,10 +98,12 @@ describe('validatePetition', () => {
         irsNoticeDate: futureDate.toDate().toISOString(),
         partyType: 'defined',
         petitionFile: new File([], 'test.png'),
+        petitionFileSize: 1,
         preferredTrialCity: 'defined',
         procedureType: 'defined',
         signature: true,
-        stinFile: {},
+        stinFile: new File([], 'testStinFile.pdf'),
+        stinFileSize: 1,
       },
     });
 

@@ -1,8 +1,7 @@
 import { isEmpty } from 'lodash';
-import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
-const getOptionsForCategory = (caseDetail, categoryInformation) => {
+export const getOptionsForCategory = (caseDetail, categoryInformation) => {
   let options = {};
   if (!categoryInformation) {
     return {}; // debugger-safe
@@ -82,16 +81,43 @@ const getOptionsForCategory = (caseDetail, categoryInformation) => {
       };
       break;
     }
+    case 'Nonstandard I': {
+      options = {
+        ordinalField: categoryInformation.ordinalField,
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: categoryInformation.labelFreeText,
+      };
+      break;
+    }
+    case 'Nonstandard J': {
+      options = {
+        showNonstandardForm: true,
+        showTextInput: true,
+        showTextInput2: true,
+        textInputLabel: categoryInformation.labelFreeText,
+        textInputLabel2: categoryInformation.labelFreeText2,
+      };
+      break;
+    }
   }
 
   return options;
 };
 
-const getPreviouslyFiledDocuments = caseDetail => {
+export const getPreviouslyFiledDocuments = (
+  caseDetail,
+  documentIdWhitelist,
+) => {
   return caseDetail.documents
     .filter(
       document =>
         document.documentType !== 'Statement of Taxpayer Identification',
+    )
+    .filter(
+      document =>
+        !documentIdWhitelist ||
+        documentIdWhitelist.indexOf(document.documentId) > -1,
     )
     .map(document => {
       return document.documentTitle || document.documentType;
@@ -142,28 +168,6 @@ export const selectDocumentTypeHelper = get => {
         );
       }
     }
-  }
-
-  if (
-    returnData.primary.showTrialLocationSelect ||
-    (returnData.secondary && returnData.secondary.showTrialLocationSelect)
-  ) {
-    const { TRIAL_CITIES } = get(state.constants);
-    let trialCities =
-      caseDetail.procedureType === 'Small'
-        ? TRIAL_CITIES.SMALL
-        : TRIAL_CITIES.REGULAR;
-    trialCities = sortBy(trialCities, ['state', 'city']);
-    const getTrialCityName = get(state.getTrialCityName);
-    const states = {};
-    trialCities.forEach(
-      trialCity =>
-        (states[trialCity.state] = [
-          ...(states[trialCity.state] || []),
-          getTrialCityName(trialCity),
-        ]),
-    );
-    returnData.trialCities = states;
   }
 
   return returnData;

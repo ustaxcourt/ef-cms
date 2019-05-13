@@ -1,8 +1,8 @@
+import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
-import { DashboardIntakeClerk } from './DashboardIntakeClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
 import { DashboardPractitioner } from './DashboardPractitioner';
@@ -29,11 +29,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const pages = {
+  AddDocketEntry,
   BeforeStartingCase,
   CaseDetail,
   CaseDetailInternal,
   DashboardDocketClerk,
-  DashboardIntakeClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPractitioner,

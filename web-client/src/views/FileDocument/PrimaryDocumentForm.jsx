@@ -7,6 +7,7 @@ import React from 'react';
 
 export const PrimaryDocumentForm = connect(
   {
+    constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     updateFileDocumentWizardFormValueSequence:
@@ -21,6 +22,7 @@ export const PrimaryDocumentForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
+    constants,
   }) => {
     return (
       <React.Fragment>
@@ -55,7 +57,7 @@ export const PrimaryDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                   className={
-                    'ustc-upload ' +
+                    'ustc-upload with-hint' +
                     (fileDocumentHelper.showPrimaryDocumentValid
                       ? 'validated'
                       : '')
@@ -66,6 +68,10 @@ export const PrimaryDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
+                <span className="usa-form-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
                 <StateDrivenFileInput
                   id="primary-document"
                   name="primaryDocumentFile"
@@ -502,7 +508,10 @@ export const PrimaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-
+                  <span className="usa-form-hint">
+                    File must be in PDF format (.pdf). Max file size{' '}
+                    {constants.MAX_FILE_SIZE_MB}MB.
+                  </span>
                   <StateDrivenFileInput
                     id="supporting-document-file"
                     name="supportingDocumentFile"

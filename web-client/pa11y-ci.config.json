@@ -4,7 +4,8 @@
     "If further actions are required at a given URL, use the 'actions' array to carry out the necessary steps.",
     "If tests fail due to timeouts, try walking through tests manually.",
     "See info on actions here: https://github.com/pa11y/pa11y#actions",
-    "To fire onChange when altering a select menu, use 'set field' followed by 'check field'."
+    "To fire onChange when altering a select menu, use 'set field' followed by 'check field'.",
+    "To check a checkbox, use click element label (of the checkbox)"
   ],
   "EXAMPLE": [
     "http://example.com/simple-url-with-no-actions-to-set-up",
@@ -401,9 +402,6 @@
       ]
     },
 
-    "http://localhost:1234/mock-login?token=intakeclerk&path=/",
-    "http://localhost:1234/mock-login?token=intakeclerk&path=/case-detail/101-19",
-
     "http://localhost:1234/mock-login?token=respondent&path=/",
     "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-19",
     {
@@ -440,6 +438,16 @@
         "wait for .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible",
         "click element .send-to[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2']",
         "wait for form.forward-form[data-workitemid='337f4e0d-cf5e-4c4f-b373-5256edbbbdf2'] to be visible"
+      ]
+    },
+    "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry",
+    {
+      "notes": "reveal all secondary drop-downs and inputs ",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry&info=show-cos-inputs",
+      "actions": [
+        "wait for element #certificate-of-service to be visible",
+        "click element #certificate-of-service+label",
+        "wait for element #service-date-month to be visible"
       ]
     },
 

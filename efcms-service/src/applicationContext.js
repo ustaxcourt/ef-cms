@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -74,12 +75,6 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
-  getCasesByStatus,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesByStatus');
-const {
-  getCasesByStatus: getCasesByStatusUC,
-} = require('../../shared/src/business/useCases/getCasesByStatusInteractor');
-const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
 const {
@@ -103,9 +98,6 @@ const {
 const {
   getNotifications,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
-const {
-  getReadMessagesForUser,
-} = require('../../shared/src/persistence/dynamo/messages/getReadMessagesForUser');
 const {
   getSentWorkItemsForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -177,9 +169,6 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
-  saveWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
-const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
@@ -189,11 +178,11 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  setMessageAsRead,
-} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
+  setWorkItemAsRead,
+} = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
-  setMessageAsRead: setMessageAsReadUC,
-} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+  setWorkItemAsRead: setWorkItemAsReadUC,
+} = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
   submitCaseAssociationRequest,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
@@ -237,6 +226,9 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
+let dynamoClientCache = {};
+let s3Cache;
+
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
@@ -244,14 +236,17 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCurrentUser,
-    getDocumentClient: ({ useMasterRegion } = {}) => {
-      const dynamo = new DynamoDB.DocumentClient({
-        endpoint: useMasterRegion
-          ? environment.masterDynamoDbEndpoint
-          : environment.dynamoDbEndpoint,
-        region: useMasterRegion ? environment.masterRegion : environment.region,
-      });
-      return dynamo;
+    getDocumentClient: ({ useMasterRegion = false } = {}) => {
+      const type = useMasterRegion ? 'master' : 'region';
+      if (!dynamoClientCache[type]) {
+        dynamoClientCache[type] = new DynamoDB.DocumentClient({
+          endpoint: useMasterRegion
+            ? environment.masterDynamoDbEndpoint
+            : environment.dynamoDbEndpoint,
+          region: useMasterRegion ? environment.masterRegion : environment.region,
+        });
+      }
+      return dynamoClientCache[type];
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -273,12 +268,10 @@ module.exports = (appContextUser = {}) => {
         deleteWorkItemFromSection,
         getCaseByCaseId,
         getCaseByDocketNumber,
-        getCasesByStatus,
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
         getInternalUsers,
-        getReadMessagesForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getUploadPolicy,
@@ -290,10 +283,9 @@ module.exports = (appContextUser = {}) => {
         incrementCounter,
         putWorkItemInOutbox,
         saveDocument,
-        saveWorkItem,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
-        setMessageAsRead,
+        setWorkItemAsRead,
         updateCase,
         updateDocumentProcessingStatus,
         updateWorkItem,
@@ -301,12 +293,14 @@ module.exports = (appContextUser = {}) => {
       };
     },
     getStorageClient: () => {
-      const s3 = new S3({
-        endpoint: environment.s3Endpoint,
-        region: environment.region,
-        s3ForcePathStyle: true,
-      });
-      return s3;
+      if (!s3Cache) {
+        s3Cache = new S3({
+          endpoint: environment.s3Endpoint,
+          region: environment.region,
+          s3ForcePathStyle: true,
+        });
+      }
+      return s3Cache;
     },
     // TODO: replace external calls to environment
     getUniqueId: () => {
@@ -324,7 +318,6 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocument,
         forwardWorkItem,
         getCase,
-        getCasesByStatus: getCasesByStatusUC,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
         getInternalUsers: getInternalUsersUC,
@@ -339,7 +332,7 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
-        setMessageAsRead: setMessageAsReadUC,
+        setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         updateCase: updateCaseUC,
         verifyCaseForUser,

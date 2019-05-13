@@ -3,6 +3,7 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/Case');
+const { cloneDeep } = require('lodash');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -15,73 +16,80 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({ workItems, applicationContext }) => {
+exports.assignWorkItems = async ({
+  workItemId,
+  assigneeId,
+  assigneeName,
+  applicationContext,
+}) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
-  for (let workItem of workItems) {
-    const fullWorkItem = await applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById({
-        applicationContext,
-        workItemId: workItem.workItemId,
-      });
-
-    const caseObject = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
-        applicationContext,
-        caseId: fullWorkItem.caseId,
-      });
-
-    const caseToUpdate = new Case(caseObject);
-
-    const workItemEntity = new WorkItem(fullWorkItem);
-
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+  const fullWorkItem = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemById({
       applicationContext,
-      workItem: fullWorkItem,
+      workItemId,
     });
 
-    workItemEntity
-      .assignToUser({
-        assigneeId: workItem.assigneeId,
-        assigneeName: workItem.assigneeName,
-        role: user.role,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-        sentByUserRole: user.role,
-      })
-      .addMessage(
-        new Message({
-          createdAt: new Date().toISOString(),
-          from: user.name,
-          fromUserId: user.userId,
-          message: workItemEntity.getLatestMessageEntity().message,
-          to: workItem.assigneeName,
-          toUserId: workItem.assigneeId,
-        }),
-      );
+  const caseObject = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId: fullWorkItem.caseId,
+    });
 
-    caseToUpdate.documents.forEach(
-      document =>
-        (document.workItems = document.workItems.map(item => {
-          return item.workItemId === workItemEntity.workItemId
-            ? workItemEntity
-            : item;
-        })),
-    );
+  const caseToUpdate = new Case(caseObject);
+  const workItemEntity = new WorkItem(fullWorkItem);
+  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem));
+  const latestMessageId = originalWorkItem.getLatestMessageEntity().messageId;
 
-    await applicationContext.getPersistenceGateway().updateCase({
+  const newMessage = new Message({
+    createdAt: new Date().toISOString(),
+    from: user.name,
+    fromUserId: user.userId,
+    message: workItemEntity.getLatestMessageEntity().message,
+    to: assigneeName,
+    toUserId: assigneeId,
+  });
+
+  workItemEntity
+    .assignToUser({
+      assigneeId,
+      assigneeName,
+      role: user.role,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+      sentByUserRole: user.role,
+    })
+    .addMessage(newMessage);
+
+  caseToUpdate.documents.forEach(
+    document =>
+      (document.workItems = document.workItems.map(item => {
+        return item.workItemId === workItemEntity.workItemId
+          ? workItemEntity
+          : item;
+      })),
+  );
+
+  await Promise.all([
+    applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext,
+      deleteFromSection: false,
+      messageId: latestMessageId,
+      workItem: originalWorkItem,
+    }),
+    applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseToUpdate.validate().toRawObject(),
-    });
-
-    await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    }),
+    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
+      messageId: newMessage.messageId,
       workItem: workItemEntity.validate().toRawObject(),
-    });
-  }
+    }),
+  ]);
 };

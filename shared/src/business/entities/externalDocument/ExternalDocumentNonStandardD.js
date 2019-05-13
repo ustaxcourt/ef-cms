@@ -35,7 +35,7 @@ ExternalDocumentNonStandardD.errorToMessageMap = {
   ],
 };
 
-ExternalDocumentNonStandardD.schema = joi.object().keys({
+ExternalDocumentNonStandardD.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
@@ -45,7 +45,7 @@ ExternalDocumentNonStandardD.schema = joi.object().keys({
     .iso()
     .max('now')
     .required(),
-});
+};
 
 joiValidationDecorator(
   ExternalDocumentNonStandardD,

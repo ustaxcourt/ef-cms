@@ -1,22 +1,59 @@
 import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
-import { getTrialCityName } from './formattedTrialCity';
 import { runCompute } from 'cerebral/test';
 import { selectDocumentTypeHelper } from './selectDocumentTypeHelper';
-import { trialCitiesHelper } from './trialCitiesHelper';
+
+// external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
+CATEGORY_MAP['Miscellaneous'].push({
+  category: 'Miscellaneous',
+  documentTitle: '[First, Second, etc.] Amendment to [anything]',
+  documentType: 'Amendment [anything]',
+  eventCode: 'ADMT',
+  labelFreeText: 'What is This Amendment For?',
+  labelFreeText2: '',
+  labelPreviousDocument: '',
+  ordinalField: 'What Iteration is This Filing?',
+  scenario: 'Nonstandard I',
+});
+
+CATEGORY_MAP['Decision'].push({
+  category: 'Decision',
+  documentTitle: 'Stipulated Decision Entered [judge] [anything]',
+  documentType: 'Stipulated Decision Entered',
+  eventCode: 'SDEC',
+  labelFreeText: "Judge's Name",
+  labelFreeText2: 'Decision Notes',
+  labelPreviousDocument: '',
+  ordinalField: '',
+  scenario: 'Nonstandard J',
+});
 
 const state = {
   caseDetail: MOCK_CASE,
   constants: {
     CATEGORY_MAP,
-    TRIAL_CITIES,
   },
-  getTrialCityName,
-  trialCitiesHelper,
 };
 
 describe('selectDocumentTypeHelper', () => {
+  it('should return an empty object if no case detail is available', async () => {
+    const result = runCompute(selectDocumentTypeHelper, {
+      state: {},
+    });
+    expect(result).toEqual({});
+  });
+
+  it('should return an empty "primary" object if a matching category is not found', async () => {
+    state.form = {
+      category: 'Bananas',
+      documentType: 'Foster',
+    };
+    const result = runCompute(selectDocumentTypeHelper, {
+      state,
+    });
+    expect(result.primary).toEqual({});
+  });
+
   it('should return correct data for Standard document scenario', async () => {
     state.form = {
       category: 'Answer (filed by respondent only)',
@@ -121,9 +158,6 @@ describe('selectDocumentTypeHelper', () => {
         showTrialLocationSelect: true,
         textInputLabel: 'Requested Location',
       },
-      trialCities: {
-        Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
-      },
     });
   });
 
@@ -176,5 +210,58 @@ describe('selectDocumentTypeHelper', () => {
         showSecondaryDocumentSelect: true,
       },
     });
+  });
+
+  it('should return correct data for Nonstandard I document scenario', async () => {
+    state.form = {
+      category: 'Miscellaneous',
+      documentType: 'Amendment [anything]',
+    };
+    const result = runCompute(selectDocumentTypeHelper, {
+      state,
+    });
+    expect(result).toEqual({
+      primary: {
+        ordinalField: 'What Iteration is This Filing?',
+        showNonstandardForm: true,
+        showTextInput: true,
+        textInputLabel: 'What is This Amendment For?',
+      },
+    });
+  });
+
+  it('should return correct data for Nonstandard J document scenario', async () => {
+    state.form = {
+      category: 'Decision',
+      documentType: 'Stipulated Decision Entered',
+    };
+    const result = runCompute(selectDocumentTypeHelper, {
+      state,
+    });
+    expect(result).toEqual({
+      primary: {
+        showNonstandardForm: true,
+        showTextInput: true,
+        showTextInput2: true,
+        textInputLabel: "Judge's Name",
+        textInputLabel2: 'Decision Notes',
+      },
+    });
+  });
+
+  it('should return correct data for a secondary document', async () => {
+    state.form = {
+      category: 'Motion',
+      documentType: 'Motion for Leave to File',
+      secondaryDocument: {
+        category: 'Answer (filed by respondent only)',
+        documentType: 'Answer',
+      },
+    };
+    const result = runCompute(selectDocumentTypeHelper, {
+      state,
+    });
+    expect(result.filteredSecondaryDocumentTypes.length).toBeGreaterThan(0);
+    expect(result.secondary.showNonstandardForm).toBeFalsy();
   });
 });

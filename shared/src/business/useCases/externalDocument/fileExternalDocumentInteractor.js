@@ -93,31 +93,35 @@ exports.fileExternalDocument = async ({
       });
       documentEntity.generateFiledBy(caseToUpdate);
 
-      const workItem = new WorkItem({
-        assigneeId: null,
-        assigneeName: null,
-        caseId: caseId,
-        caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
-          ...documentEntity.toRawObject(),
-          createdAt: documentEntity.createdAt,
-        },
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
+      if (!metadata.isPaper) {
+        const workItem = new WorkItem({
+          assigneeId: null,
+          assigneeName: null,
+          caseId: caseId,
+          caseStatus: caseToUpdate.status,
+          docketNumber: caseToUpdate.docketNumber,
+          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+          document: {
+            ...documentEntity.toRawObject(),
+            createdAt: documentEntity.createdAt,
+          },
+          section: DOCKET_SECTION,
+          sentBy: user.userId,
+        });
 
-      const message = new Message({
-        from: user.name,
-        fromUserId: user.userId,
-        message: `${documentEntity.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-      });
+        const message = new Message({
+          from: user.name,
+          fromUserId: user.userId,
+          message: `${documentEntity.documentType} filed by ${capitalize(
+            user.role,
+          )} is ready for review.`,
+        });
 
-      workItem.addMessage(message);
-      documentEntity.addWorkItem(workItem);
+        workItem.addMessage(message);
+        documentEntity.addWorkItem(workItem);
+
+        workItems.push(workItem);
+      }
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
       caseEntity.addDocketRecord(
@@ -127,8 +131,6 @@ exports.fileExternalDocument = async ({
           filingDate: documentEntity.createdAt,
         }),
       );
-
-      workItems.push(workItem);
     }
   });
 
