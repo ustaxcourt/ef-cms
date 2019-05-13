@@ -219,7 +219,6 @@ const dateStringsCompared = (a, b) => {
       b.match(simpleDatePattern)[0],
     ];
     if (aSimple.localeCompare(bSimple) == 0) {
-      console.log('THESE ARE SAME', a, b);
       return 0;
     }
   }
