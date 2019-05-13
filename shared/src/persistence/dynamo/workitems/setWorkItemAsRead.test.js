@@ -6,11 +6,11 @@ describe('setWorkItemAsRead', () => {
   let getCurrentUserStub;
 
   beforeEach(() => {
-    sinon.stub(client, 'delete').resolves(null);
+    sinon.stub(client, 'update').resolves(null);
   });
 
   afterEach(() => {
-    client.delete.restore();
+    client.update.restore();
   });
 
   it('invokes the peristence layer with pk of {userId}|unread-message and other expected params', async () => {
@@ -22,13 +22,12 @@ describe('setWorkItemAsRead', () => {
     };
     await setWorkItemAsRead({
       applicationContext,
-      messageId: 'abc',
       userId: '123',
+      workItemId: 'abc',
     });
-    expect(client.delete.getCall(0).args[0]).toMatchObject({
-      applicationContext: { environment: { stage: 'dev' } },
-      key: {
-        pk: '123|unread-message',
+    expect(client.update.getCall(0).args[0]).toMatchObject({
+      Key: {
+        pk: '123|workItem',
         sk: 'abc',
       },
     });

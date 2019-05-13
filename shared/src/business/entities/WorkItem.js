@@ -145,6 +145,10 @@ WorkItem.prototype.assignToUser = function({
   return this;
 };
 
+WorkItem.prototype.setStatus = function(status) {
+  this.caseStatus = status;
+};
+
 /**
  *
  * @param userId
@@ -162,7 +166,6 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
     sentByUserId: userId,
     sentByUserRole: userRole,
   });
-  this.caseStatus = STATUS_TYPES.batchedForIRS;
   this.addMessage(
     new Message({
       from: name,
@@ -195,7 +198,6 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     sentByUserId: user.userId,
     sentByUserRole: user.role,
   });
-  this.caseStatus = STATUS_TYPES.recalled;
   this.section = PETITIONS_SECTION;
   this.addMessage(message);
   return message;

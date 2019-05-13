@@ -47,7 +47,7 @@ const {
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
   setWorkItemAsRead,
-} = require('../../persistence/dynamo/messages/setWorkItemAsRead');
+} = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
 const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');

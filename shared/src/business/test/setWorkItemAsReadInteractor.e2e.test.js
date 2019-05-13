@@ -10,7 +10,7 @@ const {
 } = require('../useCases/workitems/getWorkItemsForUserInteractor');
 const {
   setWorkItemAsRead,
-} = require('../useCases/messages/setWorkItemAsReadInteractor');
+} = require('../useCases/workitems/setWorkItemAsReadInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -99,11 +99,9 @@ describe('setWorkItemAsReadInteractor integration test', () => {
     });
     expect(inbox.isRead).toBeFalsy();
 
-    const messageId = workItemEntity.getLatestMessageEntity().messageId;
-
     await setWorkItemAsRead({
       applicationContext,
-      messageId,
+      workItemId: workItemEntity.workItemId,
     });
 
     inbox = await getWorkItemsForUser({

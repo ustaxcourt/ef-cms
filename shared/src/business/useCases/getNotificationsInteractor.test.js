@@ -9,7 +9,13 @@ describe('getWorkItemsForUser', () => {
       getCurrentUser: () => ({
         userId: 'abc',
       }),
-      getPersistenceGateway: () => ({}),
+      getPersistenceGateway: () => ({
+        getWorkItemsForUser: () => [
+          {
+            isRead: false,
+          },
+        ],
+      }),
     };
     const result = await getNotifications({
       applicationContext,
@@ -24,7 +30,13 @@ describe('getWorkItemsForUser', () => {
       getCurrentUser: () => ({
         userId: 'abc',
       }),
-      getPersistenceGateway: () => ({}),
+      getPersistenceGateway: () => ({
+        getWorkItemsForUser: () => [
+          {
+            isRead: true,
+          },
+        ],
+      }),
     };
     const result = await getNotifications({
       applicationContext,
