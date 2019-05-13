@@ -42,7 +42,9 @@ export const SecondaryDocumentTypeReadOnly = connect(
             </button>
           </div>
           <div>
-            <p className="margin-0">{form.secondaryDocument.documentType}</p>
+            <p className="margin-top-105">
+              {form.secondaryDocument.documentType}
+            </p>
           </div>
         </div>
         {selectDocumentTypeHelper.secondary.showNonstandardForm && (
