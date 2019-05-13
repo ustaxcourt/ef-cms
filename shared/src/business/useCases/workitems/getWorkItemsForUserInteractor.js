@@ -26,21 +26,5 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
       userId: user.userId,
     });
 
-  const unreadMessages = await applicationContext
-    .getPersistenceGateway()
-    .getUnreadMessagesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
-
-  workItems.forEach(workItem => {
-    const message = new WorkItem(workItem).getLatestMessageEntity();
-    const unreadMessage = unreadMessages.find(
-      unreadMessage => unreadMessage.messageId === message.messageId,
-    );
-
-    workItem.isRead = unreadMessage === undefined;
-  });
-
   return workItems;
 };

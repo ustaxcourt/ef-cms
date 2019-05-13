@@ -44,16 +44,6 @@ exports.createWorkItem = async ({
     type: 'workItem',
   });
 
-  await createMappingRecord({
-    applicationContext,
-    item: {
-      messageId,
-    },
-    pkId: workItem.assigneeId,
-    skId: messageId,
-    type: 'unread-message',
-  });
-
   // sending user 'my' outbox
   await createMappingRecord({
     applicationContext,

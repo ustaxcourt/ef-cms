@@ -9,9 +9,7 @@ describe('getWorkItemsForUser', () => {
       getCurrentUser: () => ({
         userId: 'abc',
       }),
-      getPersistenceGateway: () => ({
-        getUnreadMessagesForUser: async () => [{}],
-      }),
+      getPersistenceGateway: () => ({}),
     };
     const result = await getNotifications({
       applicationContext,
@@ -26,9 +24,7 @@ describe('getWorkItemsForUser', () => {
       getCurrentUser: () => ({
         userId: 'abc',
       }),
-      getPersistenceGateway: () => ({
-        getUnreadMessagesForUser: async () => [],
-      }),
+      getPersistenceGateway: () => ({}),
     };
     const result = await getNotifications({
       applicationContext,
