@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { omit } = require('lodash');
 const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getRecordsViaMapping = async ({
@@ -28,13 +29,10 @@ exports.getRecordsViaMapping = async ({
     })),
   });
 
-  const mergedResults = results.map(result => {
-    const mapping = mappings.find(mapping => mapping.sk === result.pk);
-    return {
-      ...result,
-      ...mapping,
-    };
-  });
+  const afterMapping = mappings.map(m => ({
+    ...m,
+    ...results.find(r => m.sk === r.pk),
+  }));
 
-  return stripInternalKeys(mergedResults);
+  return stripInternalKeys(afterMapping);
 };
