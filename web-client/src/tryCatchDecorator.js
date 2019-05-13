@@ -4,7 +4,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
  * Decorates a list of use cases so that they return cerebral specific errors from the ErrorFactory when exceptions occur
  *
  * @param {Array} useCases the use case funnctions to decorate
- * @returns {Undefined} does not return anything
+ * @returns {undefined} does not return anything
  */
 export const tryCatchDecorator = useCases => {
   /**
