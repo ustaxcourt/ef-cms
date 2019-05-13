@@ -7,3 +7,4 @@ cypress/videos
 sonarqube-status.json
 coverage-e2e/
 coverage-unit/
+.cache/

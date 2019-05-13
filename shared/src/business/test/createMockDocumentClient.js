@@ -93,7 +93,11 @@ const createMockDocumentClient = () => {
       const gg = expressions.map(v => v.split('=').map(x => x.trim()));
       let obj = {};
       for (let [k, v] of gg) {
-        obj[k] = v;
+        if (v === 'true' || v === 'false') {
+          obj[k] = v === 'true';
+        } else {
+          obj[k] = v;
+        }
       }
       if (hasSet) {
         data[`${Key.pk} ${Key.sk}`] = {

@@ -7,7 +7,7 @@ exports.getRecordsViaMapping = async ({
   type,
   isVersioned = false,
 }) => {
-  const mapping = await client.query({
+  const mappings = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -18,7 +18,7 @@ exports.getRecordsViaMapping = async ({
     applicationContext,
   });
 
-  const ids = mapping.map(metadata => metadata.sk);
+  const ids = mappings.map(metadata => metadata.sk);
 
   const results = await client.batchGet({
     applicationContext,
@@ -28,5 +28,10 @@ exports.getRecordsViaMapping = async ({
     })),
   });
 
-  return stripInternalKeys(results);
+  const afterMapping = mappings.map(m => ({
+    ...m,
+    ...results.find(r => m.sk === r.pk),
+  }));
+
+  return stripInternalKeys(afterMapping);
 };

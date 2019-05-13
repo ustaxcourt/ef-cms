@@ -7,7 +7,7 @@ const {
   InvalidEntityError,
   NotFoundError,
 } = require('../../errors/errors');
-const { Case } = require('../entities/Case');
+const { Case, STATUS_TYPES } = require('../entities/Case');
 
 const {
   createMappingRecord,
@@ -51,8 +51,18 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   const initializeCaseWorkItem = petitionDocument.workItems.find(
     workItem => workItem.isInitializeCase,
   );
+
+  for (let workItem of caseEntity.getWorkItems()) {
+    workItem.setStatus(STATUS_TYPES.recalled);
+
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: workItem.toRawObject(),
+    });
+  }
+
   if (initializeCaseWorkItem) {
-    const newMessage = initializeCaseWorkItem.recallFromIRSBatchSystem({
+    initializeCaseWorkItem.recallFromIRSBatchSystem({
       user,
     });
     const invalidEntityError = new InvalidEntityError(
@@ -101,16 +111,6 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       pkId: initializeCaseWorkItem.assigneeId,
       skId: initializeCaseWorkItem.workItemId,
       type: 'workItem',
-    });
-
-    await createMappingRecord({
-      applicationContext,
-      item: {
-        messageId: newMessage.messageId,
-      },
-      pkId: initializeCaseWorkItem.assigneeId,
-      skId: newMessage.messageId,
-      type: 'unread-message',
     });
 
     await createMappingRecord({
