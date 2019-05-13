@@ -632,18 +632,16 @@ nav.usa-nav {
 
   .usa-search {
     width: auto;
+    max-width: 320px;
     margin: 0;
     float: none;
 
-    @media (min-width: 64em) {
-      float: none;
-    }
-  }
-
-  .usa-search {
-    max-width: 320px;
     input#search-field {
       width: 220px;
+    }
+
+    @media (min-width: 64em) {
+      float: none;
     }
   }
 
