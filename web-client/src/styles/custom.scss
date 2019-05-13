@@ -570,8 +570,15 @@ header.usa-header {
     }
 
     li {
+      &.active {
+        a {
+          color: $color-gray;
+        }
+      }
+
       &.active,
-      :hover {
+      &:hover {
+        padding-bottom: 5px;
         border-bottom: 2px solid $color-primary;
       }
     }
@@ -580,6 +587,8 @@ header.usa-header {
       padding: 0 0 6px 0;
       background: none;
       color: $color-primary;
+      font-size: 20px;
+      font-weight: $font-semibold;
       :hover {
         background: none;
         color: $color-primary;
@@ -615,33 +624,17 @@ nav.usa-nav {
     :hover {
       color: $color-primary-darker;
     }
-
-    .usa-nav__primary {
-      li.active {
-        a {
-          color: $color-gray;
-        }
-      }
-      li.active,
-      li:hover {
-        padding-bottom: 5px;
-        border-bottom: 2px solid $color-primary;
-      }
-    }
   }
 
   .usa-search {
     width: auto;
+    max-width: 320px;
     margin: 0;
     float: none;
 
     @media (min-width: 64em) {
       float: none;
     }
-  }
-
-  .usa-search {
-    max-width: 320px;
     input#search-field {
       width: 220px;
     }
@@ -654,7 +647,6 @@ nav.usa-nav {
 
   .user-dropdown {
     margin: -4px 0 0 50px;
-    //margin-top: -11px;
   }
 
   .button-account-login {
