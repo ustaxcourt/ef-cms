@@ -53,6 +53,7 @@ describe('uploadExternalDocuments', () => {
         applicationContext,
         documentFiles: ['something'],
         documentMetadata: {},
+        onUploadProgresses: [() => null],
       });
     } catch (e) {
       error = e;
@@ -83,6 +84,7 @@ describe('uploadExternalDocuments', () => {
         applicationContext,
         documentFiles: ['something'],
         documentMetadata: {},
+        onUploadProgresses: [() => null],
       });
     } catch (err) {
       error = err;
@@ -112,6 +114,7 @@ describe('uploadExternalDocuments', () => {
         applicationContext,
         documentFiles: ['something', 'something2', undefined, 'something4'],
         documentMetadata: {},
+        onUploadProgresses: [() => null, () => null, null, () => null],
       });
       expect(docIds[2]).toBeUndefined();
       expect(docIds.length).toEqual(4);

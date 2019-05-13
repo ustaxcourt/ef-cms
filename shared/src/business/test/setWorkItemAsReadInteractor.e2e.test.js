@@ -9,8 +9,8 @@ const {
   getWorkItemsForUser,
 } = require('../useCases/workitems/getWorkItemsForUserInteractor');
 const {
-  setMessageAsRead,
-} = require('../useCases/messages/setMessageAsReadInteractor');
+  setWorkItemAsRead,
+} = require('../useCases/workitems/setWorkItemAsReadInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -18,7 +18,7 @@ const { WorkItem } = require('../entities/WorkItem');
 
 const DATETIME = '2019-03-01T22:54:06.000Z';
 
-describe('setMessageAsReadInteractor integration test', () => {
+describe('setWorkItemAsReadInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -99,11 +99,9 @@ describe('setMessageAsReadInteractor integration test', () => {
     });
     expect(inbox.isRead).toBeFalsy();
 
-    const messageId = workItemEntity.getLatestMessageEntity().messageId;
-
-    await setMessageAsRead({
+    await setWorkItemAsRead({
       applicationContext,
-      messageId,
+      workItemId: workItemEntity.workItemId,
     });
 
     inbox = await getWorkItemsForUser({

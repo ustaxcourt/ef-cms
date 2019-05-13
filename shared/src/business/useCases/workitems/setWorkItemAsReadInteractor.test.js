@@ -1,7 +1,7 @@
-const { setMessageAsRead } = require('./setMessageAsReadInteractor');
+const { setWorkItemAsRead } = require('./setWorkItemAsReadInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-describe('setMessageAsReadInteractor', () => {
+describe('setWorkItemAsReadInteractor', () => {
   it('unauthorized user tries to invoke this interactor', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
@@ -11,7 +11,7 @@ describe('setMessageAsReadInteractor', () => {
     };
     let error;
     try {
-      await setMessageAsRead({
+      await setWorkItemAsRead({
         applicationContext,
         messageId: 'abc',
       });
@@ -31,11 +31,11 @@ describe('setMessageAsReadInteractor', () => {
       }),
       getPersistenceGateway: () => {
         return {
-          setMessageAsRead: async () => [],
+          setWorkItemAsRead: async () => [],
         };
       },
     };
-    const res = await setMessageAsRead({
+    const res = await setWorkItemAsRead({
       applicationContext,
       messageId: 'abc',
     });

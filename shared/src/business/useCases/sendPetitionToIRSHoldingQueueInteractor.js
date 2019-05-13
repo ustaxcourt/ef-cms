@@ -2,7 +2,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/Case');
+const { Case, STATUS_TYPES } = require('../entities/Case');
 const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
 
 /**
@@ -37,10 +37,8 @@ exports.sendPetitionToIRSHoldingQueue = async ({
 
   for (let workItem of caseEntity.getWorkItems()) {
     if (workItem.isInitializeCase) {
-      const latestMessageId = workItem.getLatestMessageEntity().messageId;
       await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
         applicationContext,
-        messageId: latestMessageId,
         workItem: workItem.validate().toRawObject(),
       });
       workItem.assignToIRSBatchSystem({
@@ -52,7 +50,6 @@ exports.sendPetitionToIRSHoldingQueue = async ({
         applicationContext,
         workItem: workItem.validate().toRawObject(),
       });
-
       await applicationContext
         .getPersistenceGateway()
         .addWorkItemToSectionInbox({
@@ -60,6 +57,8 @@ exports.sendPetitionToIRSHoldingQueue = async ({
           workItem: workItem.validate().toRawObject(),
         });
     }
+    workItem.setStatus(STATUS_TYPES.batchedForIRS);
+
     await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,
       workItemToUpdate: workItem.validate().toRawObject(),

@@ -1,19 +1,23 @@
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
+import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesRepresentingReadOnly } from './PartiesRepresentingReadOnly';
 import { RequestAccessDocumentReadOnly } from './RequestAccessDocumentReadOnly';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const RequestAccessReview = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    showModal: state.showModal,
     submitCaseAssociationRequestSequence:
       sequences.submitCaseAssociationRequestSequence,
   },
   ({
     formCancelToggleCancelSequence,
     submitCaseAssociationRequestSequence,
+    showModal,
   }) => {
     return (
       <React.Fragment>
@@ -63,6 +67,13 @@ export const RequestAccessReview = connect(
             Cancel
           </button>
         </div>
+
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal
+            confirmSequence={submitCaseAssociationRequestSequence}
+          />
+        )}
       </React.Fragment>
     );
   },

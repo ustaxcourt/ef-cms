@@ -604,6 +604,30 @@ nav.usa-nav {
 
   .mobile-account-menu-container {
     display: none;
+    a {
+      padding: 0px;
+      background: none;
+      color: $color-primary;
+      font-family: $font-serif;
+      font-size: 20px;
+      font-weight: $font-bold;
+    }
+    :hover {
+      color: $color-primary-darker;
+    }
+
+    .usa-nav__primary {
+      li.active {
+        a {
+          color: $color-gray;
+        }
+      }
+      li.active,
+      li:hover {
+        padding-bottom: 5px;
+        border-bottom: 2px solid $color-primary;
+      }
+    }
   }
 
   .usa-search {
@@ -616,6 +640,13 @@ nav.usa-nav {
     }
   }
 
+  .usa-search {
+    max-width: 320px;
+    input#search-field {
+      width: 220px;
+    }
+  }
+
   .usa-nav-secondary-links li:not(:last-child)::after {
     padding-left: 0;
     content: '';
@@ -623,16 +654,24 @@ nav.usa-nav {
 
   .user-dropdown {
     margin: -4px 0 0 50px;
+    //margin-top: -11px;
   }
 
   .button-account-login {
     border: none;
     background: none;
     color: $color-primary;
+    font-weight: $font-semibold;
+  }
+
+  .user-icon {
+    width: 25px;
+    height: 25px;
   }
 
   &.mobile-menu {
-    background: $color-primary;
+    background: $color-primary-darker;
+    font-family: $font-source-sans;
 
     .usa-nav-close {
       display: block;
@@ -659,10 +698,10 @@ nav.usa-nav {
             }
           }
         }
-
         a {
           padding: 0px;
           color: $color-white;
+          font-family: $font-source-sans;
           text-decoration: none;
           &:active {
             text-decoration: underline;
@@ -706,6 +745,32 @@ nav.usa-nav {
       background: none;
       color: $color-white;
     }
+
+    .usa-search {
+      max-width: 220px;
+      input#search-field {
+        width: 115px;
+      }
+    }
+
+    .usa-nav__primary {
+      li {
+        &:last-child:hover {
+          padding-bottom: 0px;
+        }
+        &.active {
+          a {
+            color: $color-white;
+          }
+        }
+      }
+    }
+  }
+
+  a.log-out {
+    font-family: $font-source-sans;
+    font-size: 20px;
+    font-weight: $font-bold;
   }
 }
 
@@ -729,6 +794,15 @@ nav.usa-nav {
     }
     .account-button-container {
       background: none;
+
+      :hover {
+        background-color: $color-primary;
+        border-radius: 0;
+
+        .account-menu-icon {
+          color: $color-white;
+        }
+      }
     }
   }
   &.open {

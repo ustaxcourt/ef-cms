@@ -32,7 +32,7 @@ describe('deleteWorkItemFromInbox', () => {
         sk: '123',
       },
     });
-    expect(client.delete.getCall(2).args[0]).toEqual({
+    expect(client.delete.getCall(1).args[0]).toEqual({
       applicationContext: { environment: { stage: 'dev' } },
       key: {
         pk: 'docket|workItem',
