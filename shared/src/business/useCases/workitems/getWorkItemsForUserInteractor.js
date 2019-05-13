@@ -3,7 +3,6 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getWorkItems
@@ -25,22 +24,6 @@ exports.getWorkItemsForUser = async ({ applicationContext }) => {
       applicationContext,
       userId: user.userId,
     });
-
-  const unreadMessages = await applicationContext
-    .getPersistenceGateway()
-    .getUnreadMessagesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
-
-  workItems.forEach(workItem => {
-    const message = new WorkItem(workItem).getLatestMessageEntity();
-    const unreadMessage = unreadMessages.find(
-      unreadMessage => unreadMessage.messageId === message.messageId,
-    );
-
-    workItem.isRead = unreadMessage === undefined;
-  });
 
   return workItems;
 };

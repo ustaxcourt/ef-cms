@@ -14,9 +14,10 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
-import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageIdFromUrlAction } from '../actions/setMessageIdFromUrlAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
+import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
+import { setWorkItemIdFromMessageIdAction } from '../actions/setWorkItemIdFromMessageIdAction';
 import { state } from 'cerebral';
 
 export const gotoDocumentDetailMessageSequence = [
@@ -28,8 +29,13 @@ export const gotoDocumentDetailMessageSequence = [
   setMessageIdFromUrlAction,
   setDocumentIdAction,
   parallel([
-    [setMessageAsReadAction],
-    [getCaseAction, setCaseAction, setFormForCaseAction],
+    [
+      getCaseAction,
+      setCaseAction,
+      setWorkItemIdFromMessageIdAction,
+      setFormForCaseAction,
+      setWorkItemAsReadAction,
+    ],
     [getInternalUsersAction, setInternalUsersAction],
   ]),
   set(state.currentTab, 'Messages'),

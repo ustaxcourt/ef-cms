@@ -223,11 +223,11 @@ functions:
           method: get
           cors: true
 
-  setMessageAsRead:
-    handler: src/handlers.setMessageAsReadLambda
+  setWorkItemAsRead:
+    handler: src/handlers.setWorkItemAsReadLambda
     events:
       - http:
-          path: v1/messages/{messageId}/read
+          path: v1/workitems/{workItemId}/read
           method: post
           cors: true
 

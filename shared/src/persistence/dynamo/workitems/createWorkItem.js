@@ -12,19 +12,8 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.createWorkItem = async ({
-  messageId,
-  workItem,
-  applicationContext,
-}) => {
+exports.createWorkItem = async ({ workItem, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
-
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.caseId,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
 
   // create the work item
   await put({
@@ -42,16 +31,6 @@ exports.createWorkItem = async ({
     pkId: workItem.assigneeId,
     skId: workItem.workItemId,
     type: 'workItem',
-  });
-
-  await createMappingRecord({
-    applicationContext,
-    item: {
-      messageId,
-    },
-    pkId: workItem.assigneeId,
-    skId: messageId,
-    type: 'unread-message',
   });
 
   // sending user 'my' outbox

@@ -11,12 +11,12 @@ const { handle } = require('../middleware/apiGatewayHelper');
 exports.handler = event =>
   handle(event, async () => {
     const user = getUserFromAuthHeader(event);
-    const messageId = event.pathParameters.messageId;
+    const workItemId = event.pathParameters.workItemId;
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().setMessageAsRead({
+      const results = await applicationContext.getUseCases().setWorkItemAsRead({
         applicationContext,
-        messageId: messageId,
+        workItemId: workItemId,
       });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
