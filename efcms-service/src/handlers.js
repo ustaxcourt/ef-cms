@@ -27,7 +27,7 @@ module.exports = {
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda').handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda').handler,
-  setMessageAsReadLambda: require('./messages/setMessageAsReadLambda').handler,
+  setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,

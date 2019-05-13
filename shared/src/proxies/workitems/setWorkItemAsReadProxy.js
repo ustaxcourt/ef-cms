@@ -1,15 +1,15 @@
 const { post } = require('../requests');
 
 /**
- * setMessageAsRead
+ * setWorkItemAsRead
  *
  * @param documents
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.setMessageAsRead = ({ applicationContext, messageId }) => {
+exports.setWorkItemAsRead = ({ applicationContext, workItemId }) => {
   return post({
     applicationContext,
-    endpoint: `/messages/${messageId}/read`,
+    endpoint: `/workitems/${workItemId}/read`,
   });
 };
