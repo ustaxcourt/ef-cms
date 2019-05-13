@@ -105,16 +105,6 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
 
     await createMappingRecord({
       applicationContext,
-      item: {
-        messageId: newMessage.messageId,
-      },
-      pkId: initializeCaseWorkItem.assigneeId,
-      skId: newMessage.messageId,
-      type: 'unread-message',
-    });
-
-    await createMappingRecord({
-      applicationContext,
       pkId: initializeCaseWorkItem.section,
       skId: initializeCaseWorkItem.workItemId,
       type: 'workItem',

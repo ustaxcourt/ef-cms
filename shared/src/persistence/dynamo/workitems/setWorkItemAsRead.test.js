@@ -1,8 +1,8 @@
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
-const { setMessageAsRead } = require('./setMessageAsRead');
+const { setWorkItemAsRead } = require('./setWorkItemAsRead');
 
-describe('setMessageAsRead', () => {
+describe('setWorkItemAsRead', () => {
   let getCurrentUserStub;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('setMessageAsRead', () => {
       },
       getCurrentUser: getCurrentUserStub,
     };
-    await setMessageAsRead({
+    await setWorkItemAsRead({
       applicationContext,
       messageId: 'abc',
       userId: '123',

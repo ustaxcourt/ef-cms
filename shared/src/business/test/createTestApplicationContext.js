@@ -19,9 +19,6 @@ const {
   getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
 } = require('../../persistence/dynamo/workitems/getSentWorkItemsForUser');
 const {
-  getUnreadMessagesForUser,
-} = require('../../persistence/dynamo/messages/getUnreadMessagesForUser');
-const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
 const {
@@ -49,8 +46,8 @@ const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
-  setMessageAsRead,
-} = require('../../persistence/dynamo/messages/setMessageAsRead');
+  setWorkItemAsRead,
+} = require('../../persistence/dynamo/messages/setWorkItemAsRead');
 const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
@@ -88,7 +85,6 @@ const createTestApplicationContext = ({ user } = {}) => {
         getCaseByCaseId,
         getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
         getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
-        getUnreadMessagesForUser,
         getUserById: getUserByIdPersistence,
         getWorkItemById: getWorkItemByIdPersistence,
         getWorkItemsBySection: getWorkItemsBySectionPersistence,
@@ -97,7 +93,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         putWorkItemInOutbox,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
-        setMessageAsRead,
+        setWorkItemAsRead,
         updateCase,
         updateWorkItem,
       };
