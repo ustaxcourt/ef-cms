@@ -87,7 +87,7 @@ export const StartCase = connect(
                   id="petition-upload-hint"
                   className="alert-gold add-bottom-margin"
                 >
-                  <span className="usa-hint ustc-form-hint-with-svg">
+                  <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
@@ -116,7 +116,7 @@ export const StartCase = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  <span className="usa-hint">
+                  <span className="usa-form-hint">
                     File must be in PDF format (.pdf). Max file size{' '}
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
@@ -173,7 +173,7 @@ export const StartCase = connect(
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
-              <span className="usa-hint">
+              <span className="usa-form-hint">
                 File must be in PDF format (.pdf). Max file size{' '}
                 {constants.MAX_FILE_SIZE_MB}MB.
               </span>
@@ -216,7 +216,7 @@ export const StartCase = connect(
                   id="petition-hint"
                   className="alert-gold add-bottom-margin"
                 >
-                  <span className="usa-hint ustc-form-hint-with-svg">
+                  <span className="usa-form-hint ustc-form-hint-with-svg">
                     <FontAwesomeIcon
                       icon={['far', 'arrow-alt-circle-left']}
                       className="fa-icon-gold"
@@ -555,7 +555,7 @@ export const StartCase = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <span className="usa-hint">
+                <span className="usa-form-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
