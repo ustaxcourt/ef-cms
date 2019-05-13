@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -110,9 +111,6 @@ const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
-  getUnreadMessagesForUser,
-} = require('../../shared/src/persistence/dynamo/messages/getUnreadMessagesForUser');
-const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
@@ -180,11 +178,11 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  setMessageAsRead,
-} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
+  setWorkItemAsRead,
+} = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
-  setMessageAsRead: setMessageAsReadUC,
-} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+  setWorkItemAsRead: setWorkItemAsReadUC,
+} = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
   submitCaseAssociationRequest,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
@@ -228,6 +226,9 @@ const setCurrentUser = newUser => {
   user = new User(newUser);
 };
 
+let dynamoClientCache = {};
+let s3Cache;
+
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
 
@@ -235,14 +236,17 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCurrentUser,
-    getDocumentClient: ({ useMasterRegion } = {}) => {
-      const dynamo = new DynamoDB.DocumentClient({
-        endpoint: useMasterRegion
-          ? environment.masterDynamoDbEndpoint
-          : environment.dynamoDbEndpoint,
-        region: useMasterRegion ? environment.masterRegion : environment.region,
-      });
-      return dynamo;
+    getDocumentClient: ({ useMasterRegion = false } = {}) => {
+      const type = useMasterRegion ? 'master' : 'region';
+      if (!dynamoClientCache[type]) {
+        dynamoClientCache[type] = new DynamoDB.DocumentClient({
+          endpoint: useMasterRegion
+            ? environment.masterDynamoDbEndpoint
+            : environment.dynamoDbEndpoint,
+          region: useMasterRegion ? environment.masterRegion : environment.region,
+        });
+      }
+      return dynamoClientCache[type];
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
@@ -270,7 +274,6 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
-        getUnreadMessagesForUser,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
@@ -282,7 +285,7 @@ module.exports = (appContextUser = {}) => {
         saveDocument,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
-        setMessageAsRead,
+        setWorkItemAsRead,
         updateCase,
         updateDocumentProcessingStatus,
         updateWorkItem,
@@ -290,12 +293,14 @@ module.exports = (appContextUser = {}) => {
       };
     },
     getStorageClient: () => {
-      const s3 = new S3({
-        endpoint: environment.s3Endpoint,
-        region: environment.region,
-        s3ForcePathStyle: true,
-      });
-      return s3;
+      if (!s3Cache) {
+        s3Cache = new S3({
+          endpoint: environment.s3Endpoint,
+          region: environment.region,
+          s3ForcePathStyle: true,
+        });
+      }
+      return s3Cache;
     },
     // TODO: replace external calls to environment
     getUniqueId: () => {
@@ -327,7 +332,7 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
-        setMessageAsRead: setMessageAsReadUC,
+        setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         updateCase: updateCaseUC,
         verifyCaseForUser,

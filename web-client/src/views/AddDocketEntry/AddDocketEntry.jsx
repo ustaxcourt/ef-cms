@@ -1,5 +1,7 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
+import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SuccessNotification } from '../SuccessNotification';
@@ -13,9 +15,17 @@ export const AddDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
     screenMetadata: state.screenMetadata,
+    showModal: state.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
-  ({ caseDetail, submitDocketEntrySequence, screenMetadata }) => {
+  ({
+    caseDetail,
+    submitDocketEntrySequence,
+    updateScreenMetadataSequence,
+    screenMetadata,
+    showModal,
+  }) => {
     return (
       <React.Fragment>
         <div className="grid-container breadcrumb">
@@ -57,9 +67,11 @@ export const AddDocketEntry = connect(
               type="submit"
               className="usa-button"
               onClick={() => {
-                submitDocketEntrySequence({
-                  supportingDocument: false,
+                updateScreenMetadataSequence({
+                  key: 'supportingDocument',
+                  value: false,
                 });
+                submitDocketEntrySequence();
               }}
             >
               Finish
@@ -69,9 +81,11 @@ export const AddDocketEntry = connect(
               id="save-and-add-supporting"
               className="usa-button usa-button--outline"
               onClick={() => {
-                submitDocketEntrySequence({
-                  supportingDocument: true,
+                updateScreenMetadataSequence({
+                  key: 'supportingDocument',
+                  value: true,
                 });
+                submitDocketEntrySequence();
               }}
             >
               {screenMetadata.supporting &&
@@ -86,6 +100,11 @@ export const AddDocketEntry = connect(
             </a>
           </div>
         </section>
+
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal confirmSequence={submitDocketEntrySequence} />
+        )}
       </React.Fragment>
     );
   },

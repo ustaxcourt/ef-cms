@@ -408,14 +408,14 @@ describe('formattedCaseDetail', () => {
             description: 'Petition',
             documentId: 'Petition',
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-10-28T21:10:39.488Z',
+            filingDate: '2019-01-28T21:10:55.488Z',
             index: 1,
           },
           {
             description: 'Request for Place of Trial',
             documentId: null,
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-01-28T21:10:41.488Z',
+            filingDate: '2019-01-28T21:10:33.488Z',
             index: 2,
           },
           {
@@ -429,7 +429,7 @@ describe('formattedCaseDetail', () => {
             description: 'Other',
             documentId: 'Other',
             filedBy: 'Jessica Frase Marine',
-            filingDate: '2019-01-01T21:18:39.488Z',
+            filingDate: '2019-01-28',
             index: 3,
           },
         ],
@@ -472,7 +472,7 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.docketRecordWithDocument[0]).toMatchObject({
         document: {
-          documentType: 'Other',
+          documentType: 'Petition',
         },
       });
       expect(result.docketRecordWithDocument[1]).toMatchObject({
@@ -482,12 +482,12 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.docketRecordWithDocument[2]).toMatchObject({
         document: {
-          documentType: 'Ownership Disclosure Statement',
+          documentType: 'Other',
         },
       });
       expect(result.docketRecordWithDocument[3]).toMatchObject({
         document: {
-          documentType: 'Petition',
+          documentType: 'Ownership Disclosure Statement',
         },
       });
     });
@@ -505,7 +505,7 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.docketRecordWithDocument[3]).toMatchObject({
         document: {
-          documentType: 'Other',
+          documentType: 'Petition',
         },
       });
       expect(result.docketRecordWithDocument[2]).toMatchObject({
@@ -515,12 +515,12 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.docketRecordWithDocument[1]).toMatchObject({
         document: {
-          documentType: 'Ownership Disclosure Statement',
+          documentType: 'Other',
         },
       });
       expect(result.docketRecordWithDocument[0]).toMatchObject({
         document: {
-          documentType: 'Petition',
+          documentType: 'Ownership Disclosure Statement',
         },
       });
     });

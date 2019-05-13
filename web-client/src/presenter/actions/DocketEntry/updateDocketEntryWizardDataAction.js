@@ -35,6 +35,24 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
       store.set(state.form, form);
       if (!supporting) {
         store.unset(state.form.previousDocument);
+      } else {
+        //if there is only one previously selected doc, default that selection on the form
+        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
+        if (filedDocumentIds.length === 1) {
+          const caseDetail = get(state.caseDetail);
+
+          const previousDocument = find(caseDetail.documents, doc =>
+            includes(filedDocumentIds, doc.documentId),
+          );
+          if (previousDocument) {
+            store.set(
+              state.form.previousDocument,
+              previousDocument.documentTitle,
+            );
+
+            store.merge(state.form, get(state.screenMetadata.primary));
+          }
+        }
       }
       store.unset(state.form.serviceDate);
       store.unset(state.form.trialLocation);
@@ -89,6 +107,12 @@ export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
         } else if (previousDocument.relationship === 'secondaryDocument') {
           store.merge(state.form, get(state.screenMetadata.secondary));
         }
+      }
+      break;
+    case 'additionalInfo':
+    case 'additionalInfo2':
+      if (!props.value) {
+        store.unset(state.form[props.key]);
       }
       break;
   }

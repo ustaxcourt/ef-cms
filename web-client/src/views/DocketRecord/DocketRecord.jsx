@@ -182,15 +182,13 @@ export const DocketRecord = connect(
                         arrayIndex,
                       )}
                     {!document && !record.documentId && record.description}
-                    {record.filingsAndProceedings && (
-                      <>
-                        {' '}
-                        <span className="filings-and-proceedings">
-                          {record.filingsAndProceedings}{' '}
-                          {document && document.additionalInfo2}
-                        </span>
-                      </>
-                    )}
+                    <span className="filings-and-proceedings">
+                      {record.filingsAndProceedings &&
+                        ` ${record.filingsAndProceedings}`}
+                      {document &&
+                        document.additionalInfo2 &&
+                        ` ${document.additionalInfo2}`}
+                    </span>
                   </td>
                   <td className="hide-on-mobile">
                     {document && document.filedBy}
