@@ -574,19 +574,25 @@ nav.usa-nav {
     a {
       padding: 0px;
       background: none;
-      color: $color-black;
+      color: $color-primary;
       font-family: $font-serif;
       font-size: 20px;
       font-weight: $font-bold;
     }
     :hover {
-      color: $color-primary-darker;
+      color: $color-cool-blue;
     }
 
     .usa-nav__primary {
+      li.active {
+        a {
+          color: $color-gray;
+        }
+      }
       li.active,
       li:hover {
-        border-bottom: 2px solid $color-primary-darker;
+        padding-bottom: 5px;
+        border-bottom: 2px solid $color-primary;
       }
     }
   }
@@ -623,6 +629,7 @@ nav.usa-nav {
 
   &.mobile-menu {
     background: $color-cool-blue;
+    font-family: $font-source-sans;
 
     .usa-nav-primary {
       position: inherit;
@@ -640,6 +647,7 @@ nav.usa-nav {
 
       a {
         color: $color-white;
+        font-family: $font-source-sans;
       }
       a:hover {
         text-decoration: underline;
@@ -681,10 +689,23 @@ nav.usa-nav {
         width: 115px;
       }
     }
+
+    .usa-nav__primary {
+      li {
+        &:last-child:hover {
+          padding-bottom: 0px;
+        }
+        &.active {
+          a {
+            color: $color-white;
+          }
+        }
+      }
+    }
   }
 
   a.log-out {
-    font-family: $font-serif;
+    font-family: $font-source-sans;
     font-size: 20px;
     font-weight: $font-bold;
   }
