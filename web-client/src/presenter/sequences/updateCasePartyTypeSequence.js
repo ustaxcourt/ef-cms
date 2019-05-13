@@ -1,7 +1,6 @@
 import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
-
 import { resetContactsAction } from '../actions/resetContactsAction';
+import { set } from 'cerebral/factories';
 
 /**
  * set state.caseDetail.partyType to the passed

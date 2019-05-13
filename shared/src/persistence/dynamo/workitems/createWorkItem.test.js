@@ -8,6 +8,7 @@ describe('createWorkItem', () => {
 
   const workItem = {
     assigneeId: '123',
+    caseId: '123',
     createdAt: '100',
     section: 'docket',
     sentByUserId: 'a_user',
@@ -41,10 +42,8 @@ describe('createWorkItem', () => {
     });
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        createdAt: '100',
+        caseId: '123',
         pk: 'a_id',
-        section: 'docket',
-        sentByUserId: 'a_user',
         sk: 'a_id',
         workItemId: 'a_id',
       },

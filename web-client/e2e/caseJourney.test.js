@@ -5,6 +5,7 @@ import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -12,6 +13,7 @@ import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 
+import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
 import docketClerkForwardWorkItem from './journey/docketClerkForwardWorkItem';
@@ -109,6 +111,7 @@ describe('Case journey', () => {
       CATEGORY_MAP,
       COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Case.documentTypes,
+      INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
       TRIAL_CITIES,
     });
@@ -162,6 +165,7 @@ describe('Case journey', () => {
   docketClerkForwardWorkItem(test);
   docketClerkViewsDashboardAfterForward(test);
   docketClerkViewsOutboxAfterForward(test);
+  docketClerkAddsDocketEntries(test, fakeFile);
 
   seniorAttorneyLogIn(test);
   seniorAttorneyViewsDashboard(test);

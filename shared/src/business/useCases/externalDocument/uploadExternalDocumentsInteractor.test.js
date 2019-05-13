@@ -1,6 +1,7 @@
 const {
   uploadExternalDocuments,
 } = require('./uploadExternalDocumentsInteractor');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('uploadExternalDocuments', () => {
   let applicationContext;
@@ -52,11 +53,13 @@ describe('uploadExternalDocuments', () => {
         applicationContext,
         documentFiles: ['something'],
         documentMetadata: {},
+        onUploadProgresses: [() => null],
       });
     } catch (e) {
       error = e;
     }
     expect(error).toBeDefined();
+    expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
   it('runs successfully with no errors with minimum data and valid user', async () => {
@@ -81,6 +84,7 @@ describe('uploadExternalDocuments', () => {
         applicationContext,
         documentFiles: ['something'],
         documentMetadata: {},
+        onUploadProgresses: [() => null],
       });
     } catch (err) {
       error = err;
@@ -110,6 +114,7 @@ describe('uploadExternalDocuments', () => {
         applicationContext,
         documentFiles: ['something', 'something2', undefined, 'something4'],
         documentMetadata: {},
+        onUploadProgresses: [() => null, () => null, null, () => null],
       });
       expect(docIds[2]).toBeUndefined();
       expect(docIds.length).toEqual(4);

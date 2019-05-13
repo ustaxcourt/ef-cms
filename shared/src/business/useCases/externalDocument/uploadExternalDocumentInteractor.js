@@ -7,6 +7,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.uploadExternalDocument = async ({
   documentMetadata,
   primaryDocumentFile,
+  onPrimarySupportingUploadProgress,
+  onPrimaryUploadProgress,
+  onSecondarySupportUploadProgress,
+  onSecondaryUploadProgress,
   secondaryDocumentFile,
   supportingDocumentFile,
   secondarySupportingDocumentFile,
@@ -23,6 +27,7 @@ exports.uploadExternalDocument = async ({
     .uploadDocument({
       applicationContext,
       document: primaryDocumentFile,
+      onUploadProgress: onPrimaryUploadProgress,
     });
 
   let secondaryDocumentFileId;
@@ -32,6 +37,7 @@ exports.uploadExternalDocument = async ({
       .uploadDocument({
         applicationContext,
         document: secondaryDocumentFile,
+        onUploadProgress: onSecondaryUploadProgress,
       });
   }
 
@@ -42,6 +48,7 @@ exports.uploadExternalDocument = async ({
       .uploadDocument({
         applicationContext,
         document: supportingDocumentFile,
+        onUploadProgress: onPrimarySupportingUploadProgress,
       });
   }
 
@@ -52,11 +59,12 @@ exports.uploadExternalDocument = async ({
       .uploadDocument({
         applicationContext,
         document: secondarySupportingDocumentFile,
+        onUploadProgress: onSecondarySupportUploadProgress,
       });
   }
 
   if (user.role === 'practitioner') {
-    documentMetadata.practitioner = user;
+    documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
   }
 
   return await applicationContext.getUseCases().fileExternalDocument({

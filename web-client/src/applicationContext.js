@@ -15,8 +15,13 @@ import uuidv4 from 'uuid/v4';
 import {
   CATEGORIES,
   CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+const {
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+} = require('../../shared/src/persistence/s3/getUploadPolicy');
 const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import {
   CHAMBERS_SECTION,
@@ -24,6 +29,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -58,7 +64,6 @@ import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
-import { getCasesByStatus } from '../../shared/src/proxies/getCasesByStatusProxy';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
@@ -76,7 +81,7 @@ import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/reca
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
-import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
+import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
@@ -84,6 +89,7 @@ import { uploadExternalDocument } from '../../shared/src/business/useCases/exter
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDetail } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateDocketEntry } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocument } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
@@ -132,7 +138,6 @@ const allUseCases = {
   generateDocumentTitle,
   getCase,
   getCaseTypes,
-  getCasesByStatus,
   getCasesByUser,
   getCasesForRespondent,
   getFilingTypes,
@@ -153,13 +158,14 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   setItem: setItemUC,
-  setMessageAsRead,
+  setWorkItemAsRead,
   submitCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,
   validateCaseDetail,
+  validateDocketEntry,
   validateExternalDocument,
   validateExternalDocumentInformation,
   validateForwardMessage,
@@ -207,19 +213,25 @@ const applicationContext = {
     COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Case.documentTypes,
     ESTATE_TYPES,
+    INTERNAL_CATEGORY_MAP,
+    MAX_FILE_SIZE_BYTES,
+    MAX_FILE_SIZE_MB,
     OTHER_TYPES,
     PARTY_TYPES,
     REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
     SECTIONS,
     SESSION_DEBOUNCE: 250,
     SESSION_MODAL_TIMEOUT: 5000 * 60, // 5 minutes
-    SESSION_TIMEOUT: 1000 * 60 * 55, // 55 minutes
+    SESSION_TIMEOUT:
+      (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
+      1000 * 60 * 55, // 55 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
     CaseAssociationRequestFactory,
+    DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,

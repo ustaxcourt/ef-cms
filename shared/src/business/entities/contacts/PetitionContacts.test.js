@@ -13,10 +13,12 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         partyType: PARTY_TYPES.corporation,
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -41,10 +43,12 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         partyType: PARTY_TYPES.corporation,
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
@@ -70,10 +74,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.petitioner,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -98,10 +104,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.estateWithoutExecutor,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -114,10 +122,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.estate,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -149,10 +159,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.estate,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -165,10 +177,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.partnershipBBA,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -202,10 +216,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.partnershipBBA,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -218,10 +234,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.trust,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -255,10 +273,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.trust,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -271,10 +291,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.conservator,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -308,10 +330,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.conservator,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -324,10 +348,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.guardian,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -361,10 +387,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.guardian,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -377,10 +405,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.custodian,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -414,10 +444,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.custodian,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -430,10 +462,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.donor,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -457,10 +491,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.donor,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });
@@ -473,10 +509,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.transferee,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.isValid()).toEqual(false);
   });
@@ -500,10 +538,12 @@ describe('Petition', () => {
       irsNoticeDate: '2009-10-13',
       partyType: PARTY_TYPES.transferee,
       petitionFile: {},
+      petitionFileSize: 1,
       preferredTrialCity: 'Chattanooga, TN',
       procedureType: 'Small',
       signature: true,
       stinFile: {},
+      stinFileSize: 1,
     });
     expect(petition.getFormattedValidationErrors()).toEqual(null);
   });

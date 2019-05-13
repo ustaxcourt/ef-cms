@@ -5,6 +5,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
+import { parallel } from 'cerebral/factories';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -13,9 +14,10 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
-import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageIdFromUrlAction } from '../actions/setMessageIdFromUrlAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
+import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
+import { setWorkItemIdFromMessageIdAction } from '../actions/setWorkItemIdFromMessageIdAction';
 import { state } from 'cerebral';
 
 export const gotoDocumentDetailMessageSequence = [
@@ -23,15 +25,19 @@ export const gotoDocumentDetailMessageSequence = [
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
+  setBaseUrlAction,
   setMessageIdFromUrlAction,
   setDocumentIdAction,
-  setMessageAsReadAction,
-  getCaseAction,
-  setCaseAction,
-  setFormForCaseAction,
-  setBaseUrlAction,
-  getInternalUsersAction,
-  setInternalUsersAction,
+  parallel([
+    [
+      getCaseAction,
+      setCaseAction,
+      setWorkItemIdFromMessageIdAction,
+      setFormForCaseAction,
+      setWorkItemAsReadAction,
+    ],
+    [getInternalUsersAction, setInternalUsersAction],
+  ]),
   set(state.currentTab, 'Messages'),
   getProcedureTypesAction,
   setProcedureTypesAction,

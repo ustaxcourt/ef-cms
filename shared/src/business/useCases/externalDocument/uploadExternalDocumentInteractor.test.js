@@ -119,4 +119,36 @@ describe('uploadExternalDocument', () => {
     }
     expect(error).toBeUndefined();
   });
+
+  it('runs successfully with no errors with all data and valid user who is a practitioner', async () => {
+    let error;
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return {
+            role: 'practitioner',
+            userId: 'practitioner',
+          };
+        },
+        getPersistenceGateway: () => ({
+          uploadDocument: async () => caseRecord,
+        }),
+        getUseCases: () => ({
+          fileExternalDocument: () => {},
+        }),
+      };
+      await uploadExternalDocument({
+        applicationContext,
+        documentMetadata: {},
+        primaryDocumentFile: 'something',
+        secondaryDocumentFile: 'something2',
+        secondarySupportingDocumentFile: 'something3',
+        supportingDocumentFile: 'something4',
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+  });
 });

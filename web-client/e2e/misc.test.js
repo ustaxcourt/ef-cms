@@ -21,6 +21,12 @@ describe('Miscellaneous', () => {
     expect(test.getState('usaBanner.showDetails')).toEqual(false);
   });
 
+  it('Toggles Beta Bar Visibility', async () => {
+    expect(test.getState('betaBar.isVisible')).toEqual(true);
+    await test.runSequence('toggleBetaBarSequence');
+    expect(test.getState('betaBar.isVisible')).toEqual(false);
+  });
+
   it('Toggles payment info content', async () => {
     await test.runSequence('togglePaymentDetailsSequence');
     expect(test.getState('paymentInfo.showDetails')).toEqual(true);

@@ -1,14 +1,20 @@
 import { omit } from 'lodash';
+import { setupPercentDone } from './createCaseFromPaperAction';
 import { state } from 'cerebral';
-
 /**
  * invokes the filePetition useCase.
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
+ * @returns {Object} the next path based on if creation was successful or error
  */
-export const createCaseAction = async ({ applicationContext, get }) => {
+export const createCaseAction = async ({
+  applicationContext,
+  store,
+  get,
+  path,
+}) => {
   const { petitionFile, ownershipDisclosureFile, stinFile } = get(
     state.petition,
   );
@@ -22,13 +28,31 @@ export const createCaseAction = async ({ applicationContext, get }) => {
 
   form.contactPrimary.email = get(state.user.email);
 
-  const caseDetail = await applicationContext.getUseCases().filePetition({
-    applicationContext,
-    ownershipDisclosureFile,
-    petitionFile,
-    petitionMetadata: form,
-    stinFile,
-  });
+  const progressFunctions = setupPercentDone(
+    {
+      ownership: ownershipDisclosureFile,
+      petition: petitionFile,
+      stin: stinFile,
+    },
+    store,
+  );
+
+  let caseDetail;
+
+  try {
+    caseDetail = await applicationContext.getUseCases().filePetition({
+      applicationContext,
+      ownershipDisclosureFile,
+      ownershipDisclosureUploadProgress: progressFunctions.ownership,
+      petitionFile,
+      petitionMetadata: form,
+      petitionUploadProgress: progressFunctions.petition,
+      stinFile,
+      stinUploadProgress: progressFunctions.stin,
+    });
+  } catch (err) {
+    return path.error();
+  }
 
   for (let document of caseDetail.documents) {
     await applicationContext.getUseCases().createCoverSheet({
@@ -38,7 +62,7 @@ export const createCaseAction = async ({ applicationContext, get }) => {
     });
   }
 
-  return {
+  return path.success({
     caseDetail,
-  };
+  });
 };

@@ -2,6 +2,10 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const {
+  MAX_FILE_SIZE_MB,
+  MAX_FILE_SIZE_BYTES,
+} = require('../../persistence/s3/getUploadPolicy');
 const { instantiateContacts } = require('./contacts/PetitionContact');
 
 /**
@@ -34,12 +38,33 @@ Petition.errorToMessageMap = {
     'Notice Date is a required field.',
   ],
   ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Ownership Disclosure Statement file size is empty.',
+  ],
   partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
+  petitionFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Petition file size is empty.',
+  ],
   preferredTrialCity: 'Preferred Trial City is a required field.',
   procedureType: 'Procedure Type is a required field.',
   signature: 'You must review the form before submitting.',
   stinFile: 'Statement of Taxpayer Identification Number is required.',
+  stinFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your STIN file size is empty.',
+  ],
 };
 
 joiValidationDecorator(
@@ -71,12 +96,42 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
+    ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
     partyType: joi.string().required(),
     petitionFile: joi.object().required(),
+    petitionFileSize: joi.when('petitionFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
     signature: joi.boolean().required(),
     stinFile: joi.object().required(),
+    stinFileSize: joi.when('stinFile', {
+      is: joi.exist(),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
   }),
   function() {
     return !this.getFormattedValidationErrors();
