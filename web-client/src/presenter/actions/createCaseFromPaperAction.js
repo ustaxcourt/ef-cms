@@ -3,10 +3,15 @@ import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 export const setupPercentDone = (files, store) => {
-  let totalSize = 0;
   const loadedAmounts = {};
   const startTime = new Date();
+  const totalSizes = {};
 
+  const calculateTotalSize = () => {
+    return Object.keys(loadedAmounts).reduce((acc, key) => {
+      return totalSizes[key] + acc;
+    }, 0);
+  };
   const calculateTotalLoaded = () => {
     return Object.keys(loadedAmounts).reduce((acc, key) => {
       return loadedAmounts[key] + acc;
@@ -15,14 +20,18 @@ export const setupPercentDone = (files, store) => {
 
   Object.keys(files).forEach(key => {
     if (!files[key]) return;
-    totalSize += files[key].size;
+    totalSizes[key] = files[key].size;
   });
 
   const createOnUploadProgress = key => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { loaded, isDone } = progressEvent;
-      loadedAmounts[key] = isDone ? files[key].size : loaded;
+      const { loaded, total, isDone } = progressEvent;
+      if (total) {
+        totalSizes[key] = total;
+      }
+      loadedAmounts[key] = isDone ? totalSizes[key] : loaded;
+      const totalSize = calculateTotalSize();
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
