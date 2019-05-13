@@ -2,7 +2,6 @@ const { deleteMappingRecord } = require('../helpers/deleteMappingRecord');
 
 exports.deleteWorkItemFromInbox = ({
   workItem,
-  messageId,
   applicationContext,
   deleteFromSection = true,
 }) => {
@@ -14,14 +13,6 @@ exports.deleteWorkItemFromInbox = ({
         pkId: workItem.assigneeId,
         skId: workItem.workItemId,
         type: 'workItem',
-      }),
-    );
-    requests.push(
-      deleteMappingRecord({
-        applicationContext,
-        pkId: workItem.assigneeId,
-        skId: messageId,
-        type: 'unread-message',
       }),
     );
   }

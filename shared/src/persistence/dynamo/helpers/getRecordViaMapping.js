@@ -30,5 +30,10 @@ exports.getRecordViaMapping = async ({
     applicationContext,
   });
 
-  return stripInternalKeys(results);
+  const afterMapping = {
+    ...mapping,
+    ...results,
+  };
+
+  return stripInternalKeys(afterMapping);
 };

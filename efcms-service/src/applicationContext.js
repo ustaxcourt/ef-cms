@@ -111,9 +111,6 @@ const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
-  getUnreadMessagesForUser,
-} = require('../../shared/src/persistence/dynamo/messages/getUnreadMessagesForUser');
-const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
@@ -181,11 +178,11 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  setMessageAsRead,
-} = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
+  setWorkItemAsRead,
+} = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
-  setMessageAsRead: setMessageAsReadUC,
-} = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+  setWorkItemAsRead: setWorkItemAsReadUC,
+} = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
   submitCaseAssociationRequest,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
@@ -277,7 +274,6 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
-        getUnreadMessagesForUser,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
@@ -289,7 +285,7 @@ module.exports = (appContextUser = {}) => {
         saveDocument,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
-        setMessageAsRead,
+        setWorkItemAsRead,
         updateCase,
         updateDocumentProcessingStatus,
         updateWorkItem,
@@ -336,7 +332,7 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sendPetitionToIRSHoldingQueue,
-        setMessageAsRead: setMessageAsReadUC,
+        setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         updateCase: updateCaseUC,
         verifyCaseForUser,

@@ -81,7 +81,7 @@ import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/reca
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
-import { setMessageAsRead } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
+import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
@@ -158,7 +158,7 @@ const allUseCases = {
   runBatchProcess,
   sendPetitionToIRSHoldingQueue,
   setItem: setItemUC,
-  setMessageAsRead,
+  setWorkItemAsRead,
   submitCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
