@@ -1,5 +1,4 @@
 const client = require('../../dynamodbClientService');
-const { omit } = require('lodash');
 const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getRecordsViaMapping = async ({

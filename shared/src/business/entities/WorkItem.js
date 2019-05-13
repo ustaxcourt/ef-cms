@@ -6,7 +6,6 @@ const {
 const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
 const { orderBy } = require('lodash');
-const { STATUS_TYPES } = require('./Case');
 
 const uuidVersions = {
   version: ['uuidv4'],
