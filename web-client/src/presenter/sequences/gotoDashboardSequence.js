@@ -10,6 +10,7 @@ import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageHeaderAction } from '../actions/setCurrentPageHeaderAction';
 import { setUsersAction } from '../actions/setUsersAction';
 
 const goToDashboard = [
@@ -22,6 +23,7 @@ const goToDashboard = [
         [getUsersInSectionAction({ section: 'docket' }), setUsersAction],
         [
           setCurrentPageAction('DashboardDocketClerk'),
+          setCurrentPageHeaderAction('HeaderDashboardInternal'),
           ...chooseWorkQueueSequence,
         ],
       ]),
@@ -36,6 +38,7 @@ const goToDashboard = [
         [getUsersInSectionAction({ section: 'petitions' }), setUsersAction],
         [
           setCurrentPageAction('DashboardPetitionsClerk'),
+          setCurrentPageHeaderAction('HeaderDashboardInternal'),
           ...chooseWorkQueueSequence,
         ],
       ]),
@@ -54,6 +57,7 @@ const goToDashboard = [
     seniorattorney: [
       clearAlertsAction,
       setCurrentPageAction('DashboardSeniorAttorney'),
+      setCurrentPageHeaderAction('HeaderDashboardInternal'),
       ...chooseWorkQueueSequence,
     ],
   },
