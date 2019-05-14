@@ -78,6 +78,19 @@ jobs:
           name: Cypress
           command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev:cypress &) && ../wait-until.sh http://localhost:1234 && npm run cypress'
 
+  cypress:
+    machine:
+      docker_layer_caching: true
+
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
+      - run: 
+          name: Cypress
+          command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev:cypress &) && ../wait-until.sh http://localhost:1234 && npm run cypress'
+
 
   deploy:
     machine:
@@ -133,10 +146,12 @@ workflows:
     jobs:
       - build
       - e2e
+      - cypress
       - deploy:
           requires:
             - build
             - e2e
+            - cypress
           filters:
             branches:
               only: 
