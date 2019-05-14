@@ -564,11 +564,6 @@ textarea#case-caption {
   margin-right: 10px;
 }
 
-#work-queue-title {
-  display: inline-block;
-  margin-right: 10px;
-}
-
 #save-and-finish {
   padding-right: 45px;
   padding-left: 45px;
@@ -587,6 +582,7 @@ header.usa-header {
   height: 115px;
   flex-direction: row;
   border-bottom: none;
+  margin-bottom: 0px;
 
   .main-navigation {
     display: none;
@@ -851,4 +847,33 @@ nav.usa-nav {
       }
     }
   }
+}
+
+.big-blue-header {
+  padding: 25px 0;
+  margin-bottom: 40px;
+  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  h1 {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    color: $color-white;
+  }
+
+  .unread {
+    position: relative;
+    top: -3px;
+    background: $color-white;
+    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  }
+}
+
+.button-switch-box {
+  position: relative;
+  top: -3px;
+  border: none;
+  margin-left: 5px;
+  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  color: #fff;
+  font-size: 14px;
+  font-weight: $font-semibold;
 }

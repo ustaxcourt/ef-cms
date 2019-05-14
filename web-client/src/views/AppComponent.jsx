@@ -13,6 +13,7 @@ import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { HeaderDashboardInternal } from './HeaderDashboardInternal';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
@@ -53,6 +54,8 @@ const pages = {
   StyleGuide,
 };
 
+const pageHeaders = { HeaderDashboardInternal };
+
 /**
  * Root application component
  */
@@ -70,6 +73,7 @@ class App extends React.Component {
 
   render() {
     const CurrentPage = pages[this.props.currentPage];
+    const CurrentPageHeader = pageHeaders[this.props.currentPageHeader];
     return (
       <React.Fragment>
         <a
@@ -83,6 +87,7 @@ class App extends React.Component {
         <UsaBanner />
         <Header />
         <main id="main-content" role="main">
+          {this.props.currentPageHeader !== '' && <CurrentPageHeader />}
           <CurrentPage />
         </main>
         <Footer />
@@ -94,11 +99,13 @@ class App extends React.Component {
 
 App.propTypes = {
   currentPage: PropTypes.string,
+  currentPageHeader: PropTypes.string,
 };
 
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
+    currentPageHeader: state.currentPageHeader,
   },
   App,
 );
