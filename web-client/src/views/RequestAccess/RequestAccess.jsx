@@ -41,65 +41,67 @@ export const RequestAccess = connect(
         </div>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
-              validationErrors.documentType ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              validationErrors.documentType ? 'usa-form-group--error' : ''
             }`}
           >
-            <fieldset className="usa-fieldset-inputs usa-sans">
+            <fieldset className="usa-fieldset">
               <legend>Document Type</legend>
-              <ul className="ustc-vertical-option-list">
-                {[
-                  {
-                    documentTitleTemplate:
-                      'Entry of Appearance for [Petitioner Names]',
-                    documentType: 'Entry of Appearance',
-                    eventCode: 'EA',
-                    scenario: 'Standard',
-                  },
-                  {
-                    documentTitleTemplate:
-                      'Substitution of Counsel for [Petitioner Names]',
-                    documentType: 'Substitution of Counsel',
-                    eventCode: 'SOC',
-                    scenario: 'Standard',
-                  },
-                ].map((option, index) => (
-                  <li key={option.documentType}>
-                    <input
-                      id={`document-type-${index}`}
-                      type="radio"
-                      name="documentType"
-                      value={option.documentType}
-                      checked={form.documentType === option.documentType}
-                      onChange={e => {
-                        updateCaseAssociationFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        updateCaseAssociationFormValueSequence({
-                          key: 'documentTitleTemplate',
-                          value: option.documentTitleTemplate,
-                        });
-                        updateCaseAssociationFormValueSequence({
-                          key: 'eventCode',
-                          value: option.eventCode,
-                        });
-                        updateCaseAssociationFormValueSequence({
-                          key: 'scenario',
-                          value: option.scenario,
-                        });
-                        validateCaseAssociationRequestSequence();
-                      }}
-                    />
-                    <label htmlFor={`document-type-${index}`}>
-                      {option.documentType}
-                    </label>
-                  </li>
-                ))}
-              </ul>
+              {[
+                {
+                  documentTitleTemplate:
+                    'Entry of Appearance for [Petitioner Names]',
+                  documentType: 'Entry of Appearance',
+                  eventCode: 'EA',
+                  scenario: 'Standard',
+                },
+                {
+                  documentTitleTemplate:
+                    'Substitution of Counsel for [Petitioner Names]',
+                  documentType: 'Substitution of Counsel',
+                  eventCode: 'SOC',
+                  scenario: 'Standard',
+                },
+              ].map((option, index) => (
+                <div className="usa-radio" key={index}>
+                  <input
+                    id={`document-type-${index}`}
+                    className="usa-radio__input"
+                    type="radio"
+                    name="documentType"
+                    value={option.documentType}
+                    checked={form.documentType === option.documentType}
+                    onChange={e => {
+                      updateCaseAssociationFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      updateCaseAssociationFormValueSequence({
+                        key: 'documentTitleTemplate',
+                        value: option.documentTitleTemplate,
+                      });
+                      updateCaseAssociationFormValueSequence({
+                        key: 'eventCode',
+                        value: option.eventCode,
+                      });
+                      updateCaseAssociationFormValueSequence({
+                        key: 'scenario',
+                        value: option.scenario,
+                      });
+                      validateCaseAssociationRequestSequence();
+                    }}
+                  />
+                  <label
+                    htmlFor={`document-type-${index}`}
+                    className="usa-radio__label"
+                  >
+                    {option.documentType}
+                  </label>
+                </div>
+              ))}
             </fieldset>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.documentType"
             />
           </div>
@@ -122,7 +124,7 @@ export const RequestAccess = connect(
           </button>
           <button
             type="button"
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

@@ -21,27 +21,31 @@ export const SecondaryDocumentTypeReadOnly = connect(
     selectDocumentTypeHelper,
   }) => {
     return (
-      <div className="ustc-form-group">
-        <div>
-          <Focus className="header-with-link-button">
-            <label htmlFor="category" tabIndex="-1" className="focusable">
-              Selected Secondary Document Type
-            </label>
-          </Focus>
-          <button
-            className="link"
-            id="edit-selected-secondary-document-type"
-            onClick={() => {
-              closeDocumentCategoryAccordionSequence();
-              editSelectedSecondaryDocumentSequence();
-            }}
-          >
-            <FontAwesomeIcon icon="edit" size="sm" />
-            Edit
-          </button>
-        </div>
-        <div>
-          <p>{form.secondaryDocument.documentType}</p>
+      <>
+        <div className="usa-form-group">
+          <div>
+            <Focus className="header-with-link-button">
+              <label htmlFor="category" tabIndex="-1" className="focusable">
+                Selected Secondary Document Type
+              </label>
+            </Focus>
+            <button
+              className="usa-button usa-button--unstyled"
+              id="edit-selected-secondary-document-type"
+              onClick={() => {
+                closeDocumentCategoryAccordionSequence();
+                editSelectedSecondaryDocumentSequence();
+              }}
+            >
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
+            </button>
+          </div>
+          <div>
+            <p className="margin-top-105">
+              {form.secondaryDocument.documentType}
+            </p>
+          </div>
         </div>
         {selectDocumentTypeHelper.secondary.showNonstandardForm && (
           <NonstandardForm
@@ -53,7 +57,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
             validationErrors="validationErrors.secondaryDocument"
           />
         )}
-      </div>
+      </>
     );
   },
 );

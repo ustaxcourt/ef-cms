@@ -77,7 +77,7 @@ class DocketRecordOverlayComponent extends React.Component {
             role="dialog"
           >
             <button
-              className="heading-1 text-style"
+              className="heading-1 text-style usa-button usa-button--unstyled"
               onClick={() => closeFunc()}
               aria-roledescription="button to return to docket record"
             >

@@ -12,7 +12,7 @@ export const DashboardRespondent = connect(
   },
   ({ caseList, helper, user }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <h1 tabIndex="-1">Welcome, {user.name}</h1>
         <SuccessNotification />
         <ErrorNotification />
@@ -24,7 +24,10 @@ export const DashboardRespondent = connect(
           </p>
         )}
         {helper.showCaseList && (
-          <table className="responsive-table dashboard" id="workQueue">
+          <table
+            className="usa-table responsive-table dashboard"
+            id="workQueue"
+          >
             <thead>
               <tr>
                 <th>Docket Number</th>

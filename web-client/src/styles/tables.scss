@@ -1,6 +1,7 @@
-table {
+table,
+.usa-table {
   width: 100%;
-  margin: 0;
+  margin: 0 0 2em 0;
 
   td {
     vertical-align: top;
@@ -66,6 +67,10 @@ table.work-queue {
   td,
   th {
     border: none;
+  }
+
+  th.collapse-header {
+    padding: 0;
   }
 
   td {
@@ -154,7 +159,7 @@ table.work-queue {
 
   .action-bar {
     background-color: $color-primary-alt-lightest;
-    font-size: 1.7rem;
+    font-size: 1em;
 
     label {
       display: inline-block;
@@ -172,7 +177,7 @@ table.work-queue {
     }
 
     .selected-count {
-      margin-right: 3rem;
+      margin-right: 3em;
       font-weight: $font-bold;
     }
   }
