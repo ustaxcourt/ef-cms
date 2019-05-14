@@ -6,7 +6,7 @@ import {
   CATEGORIES,
   CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-import { Case } from '../../shared/src/business/entities/Case';
+import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
 import { applicationContext } from '../src/applicationContext';
@@ -70,7 +70,7 @@ describe('Taxpayer files document', () => {
       CATEGORIES,
       CATEGORY_MAP,
       COUNTRY_TYPES,
-      DOCUMENT_TYPES_MAP: Case.documentTypes,
+      DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       PARTY_TYPES,
       TRIAL_CITIES,
     });

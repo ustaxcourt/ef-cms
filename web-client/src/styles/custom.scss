@@ -531,7 +531,26 @@ textarea#case-caption {
   color: $color-white;
 }
 
-.unread {
+.action-section {
+  padding-top: 20px;
+  padding-bottom: 10px;
+
+  .assign-work-item-count {
+    top: 50%;
+    width: 70px;
+    padding: 8px;
+    margin-top: 10px;
+    margin-right: 20px;
+    float: left;
+  }
+
+  .usa-select {
+    width: 230px;
+    height: 42px;
+  }
+}
+
+.unread, .assign-work-item-count {
   display: inline-block;
   min-width: 35px;
   background: $color-primary;
@@ -539,6 +558,10 @@ textarea#case-caption {
   color: $color-white;
   font-weight: $font-bold;
   text-align: center;
+}
+
+.assign-work-item-count svg {
+  margin-right: 10px;
 }
 
 #save-and-finish {
