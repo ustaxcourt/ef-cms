@@ -1,6 +1,3 @@
-const documentMapExternal = require('../../tools/externalFilingEvents.json');
-const documentMapInternal = require('../../tools/internalFilingEvents.json');
-
 const joi = require('joi-browser');
 const moment = require('moment');
 const uuid = require('uuid');
@@ -8,9 +5,10 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
-const { flatten, uniqBy } = require('lodash');
+const { Document } = require('./Document');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
+const { uniqBy } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -66,8 +64,6 @@ exports.CASE_CAPTION_POSTFIX =
  * @constructor
  */
 function Case(rawCase) {
-  const { Document } = require('./Document'); // circular reference back to Case, hence located here
-
   Object.assign(
     this,
     rawCase,
@@ -233,7 +229,6 @@ joiValidationDecorator(
       .optional(),
   }),
   function() {
-    const { Document } = require('./Document');
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
@@ -688,51 +683,12 @@ Case.stripLeadingZeros = docketNumber => {
 };
 
 /**
- * documentTypes
- * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string, answer: string, stipulatedDecision: string}}
- */
-Case.documentTypes = {
-  answer: 'Answer',
-  ownershipDisclosure: 'Ownership Disclosure Statement',
-  petitionFile: 'Petition',
-  stin: 'Statement of Taxpayer Identification',
-  stipulatedDecision: 'Stipulated Decision',
-};
-
-/**
- * 531 doc type used when associating a user
- */
-const practitionerAssociationDocumentType = [
-  'Entry of Appearance',
-  'Substitution of Counsel',
-];
-
-/**
  *
  * @param yearAmounts
  * @returns {boolean}
  */
 Case.areYearsUnique = yearAmounts => {
   return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
-};
-
-/**
- *
- * @returns {*|Array}
- */
-Case.getDocumentTypes = () => {
-  const allFilingEvents = flatten([
-    ...Object.values(documentMapExternal),
-    ...Object.values(documentMapInternal),
-  ]);
-  const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const documentTypes = [
-    ...Object.values(Case.documentTypes),
-    ...practitionerAssociationDocumentType,
-    ...filingEventTypes,
-  ];
-
-  return documentTypes;
 };
 
 /**
