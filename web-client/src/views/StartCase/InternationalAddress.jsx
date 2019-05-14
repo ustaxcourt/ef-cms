@@ -19,7 +19,8 @@ export const InternationalAddress = connect(
     validationErrors,
   }) => {
     return (
-      <React.Fragment>
+      <fieldset className="usa-fieldset">
+        <legend className="usa-legend">Mailing Address</legend>
         <div
           className={
             'usa-form-group ' +
@@ -30,11 +31,14 @@ export const InternationalAddress = connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.address1`}>Mailing Address</label>
+          <label htmlFor={`${type}.address1`} className="usa-label">
+            Address Line 1
+          </label>
           <input
             id={`${type}.address1`}
             type="text"
             name={`${type}.address1`}
+            className="usa-input"
             autoCapitalize="none"
             value={data[type].address1 || ''}
             onChange={e => {
@@ -52,83 +56,71 @@ export const InternationalAddress = connect(
             bind={`validationErrors.${type}.address1`}
           />
         </div>
-        <div className="usa-form-group">
-          <label htmlFor={`${type}.address2`}>
-            Address Line 2 <span className="usa-form-hint">(optional)</span>
-          </label>
-          <input
-            id={`${type}.address2`}
-            type="text"
-            name={`${type}.address2`}
-            autoCapitalize="none"
-            value={data[type].address2 || ''}
-            onChange={e => {
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-            onBlur={() => {
-              validateStartCaseSequence();
-            }}
-          />
-        </div>
-        <div className="usa-form-group">
-          <label htmlFor={`${type}.address3`}>
-            Address Line 3 <span className="usa-form-hint">(optional)</span>
-          </label>
-          <input
-            id={`${type}.address3`}
-            type="text"
-            name={`${type}.address3`}
-            autoCapitalize="none"
-            value={data[type].address3 || ''}
-            onChange={e => {
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-            onBlur={() => {
-              validateStartCaseSequence();
-            }}
-          />
-        </div>
-        <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].state
-              ? 'usa-form-group--error'
-              : '')
-          }
-        >
-          <label htmlFor={`${type}.state`}>
-            State/Province/Region{' '}
-            <span className="usa-form-hint">(optional)</span>
-          </label>
-          <input
-            id={`${type}.state`}
-            type="text"
-            name={`${type}.state`}
-            autoCapitalize="none"
-            value={data[type].state || ''}
-            onChange={e => {
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-            onBlur={() => {
-              validateStartCaseSequence();
-            }}
-          />
-          <Text
-            className="usa-error-message"
-            bind={`validationErrors.${type}.state`}
-          />
-        </div>
+        <label htmlFor={`${type}.address2`} className="usa-label">
+          Address Line 2 <span className="usa-form-hint">(optional)</span>
+        </label>
+        <input
+          id={`${type}.address2`}
+          type="text"
+          name={`${type}.address2`}
+          className="usa-input"
+          autoCapitalize="none"
+          value={data[type].address2 || ''}
+          onChange={e => {
+            updateFormValueSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+          onBlur={() => {
+            validateStartCaseSequence();
+          }}
+        />
+        <label htmlFor={`${type}.address3`} className="usa-label">
+          Address Line 3 <span className="usa-form-hint">(optional)</span>
+        </label>
+        <input
+          id={`${type}.address3`}
+          type="text"
+          name={`${type}.address3`}
+          className="usa-input"
+          autoCapitalize="none"
+          value={data[type].address3 || ''}
+          onChange={e => {
+            updateFormValueSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+          onBlur={() => {
+            validateStartCaseSequence();
+          }}
+        />
+        <label htmlFor={`${type}.state`} className="usa-label">
+          State/Province/Region{' '}
+          <span className="usa-form-hint">(optional)</span>
+        </label>
+        <input
+          id={`${type}.state`}
+          type="text"
+          name={`${type}.state`}
+          className="usa-input"
+          autoCapitalize="none"
+          value={data[type].state || ''}
+          onChange={e => {
+            updateFormValueSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+          onBlur={() => {
+            validateStartCaseSequence();
+          }}
+        />
+        <Text
+          className="usa-error-message"
+          bind={`validationErrors.${type}.state`}
+        />
         <div
           className={
             'usa-form-group ' +
@@ -139,11 +131,14 @@ export const InternationalAddress = connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.city`}>City</label>
+          <label htmlFor={`${type}.city`} className="usa-label">
+            City
+          </label>
           <input
             id={`${type}.city`}
             type="text"
             name={`${type}.city`}
+            className="usa-input"
             autoCapitalize="none"
             value={data[type].city || ''}
             onChange={e => {
@@ -171,13 +166,18 @@ export const InternationalAddress = connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.postalCode`} aria-label="postal code">
+          <label
+            htmlFor={`${type}.postalCode`}
+            aria-label="postal code"
+            className="usa-label"
+          >
             Postal Code
           </label>
           <input
             id={`${type}.postalCode`}
             type="text"
             name={`${type}.postalCode`}
+            className="usa-input"
             autoCapitalize="none"
             value={data[type].postalCode || ''}
             onChange={e => {
@@ -195,7 +195,7 @@ export const InternationalAddress = connect(
             bind={`validationErrors.${type}.postalCode`}
           />
         </div>
-      </React.Fragment>
+      </fieldset>
     );
   },
 );

@@ -44,7 +44,7 @@ export const DocumentTypeReadOnly = connect(
               </button>
             </div>
             <div>
-              <p className="margin-0">{form.documentType}</p>
+              <p className="margin-top-105">{form.documentType}</p>
             </div>
           </div>
           {selectDocumentTypeHelper.primary.showNonstandardForm && (

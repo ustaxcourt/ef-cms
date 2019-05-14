@@ -155,7 +155,7 @@ select[disabled] {
   padding: 20px;
   margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
-  .ustc-form-group:last-of-type {
+  .usa-form-group:last-of-type {
     margin: 0;
   }
 
@@ -306,6 +306,10 @@ select[disabled] {
   svg {
     margin-right: 5px;
   }
+}
+
+.usa-hint {
+  color: $color-gray;
 }
 
 .alert-gold {
@@ -635,6 +639,7 @@ nav.usa-nav {
     @media (min-width: 64em) {
       float: none;
     }
+
     input#search-field {
       width: 220px;
     }
