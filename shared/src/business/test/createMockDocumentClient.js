@@ -69,11 +69,47 @@ const createMockDocumentClient = () => {
         }),
       };
     },
-    update: ({ Key }) => {
-      let id = (data[`${Key.pk} ${Key.sk}`] || {}).id;
-      data[`${Key.pk} ${Key.sk}`] = {
-        id: (id || 0) + 1,
-      };
+    update: ({
+      Key,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      UpdateExpression,
+    }) => {
+      for (let name in ExpressionAttributeNames) {
+        UpdateExpression = UpdateExpression.replace(
+          name,
+          ExpressionAttributeNames[name],
+        );
+      }
+      for (let name in ExpressionAttributeValues) {
+        UpdateExpression = UpdateExpression.replace(
+          name,
+          ExpressionAttributeValues[name],
+        );
+      }
+      const hasSet = UpdateExpression.indexOf('SET') !== -1;
+      UpdateExpression = UpdateExpression.replace('SET', '').trim();
+      const expressions = UpdateExpression.split(',').map(t => t.trim());
+      const gg = expressions.map(v => v.split('=').map(x => x.trim()));
+      let obj = {};
+      for (let [k, v] of gg) {
+        if (v === 'true' || v === 'false') {
+          obj[k] = v === 'true';
+        } else {
+          obj[k] = v;
+        }
+      }
+      if (hasSet) {
+        data[`${Key.pk} ${Key.sk}`] = {
+          ...data[`${Key.pk} ${Key.sk}`],
+          ...obj,
+        };
+      } else {
+        let id = (data[`${Key.pk} ${Key.sk}`] || {}).id;
+        data[`${Key.pk} ${Key.sk}`] = {
+          id: (id || 0) + 1,
+        };
+      }
       return {
         promise: async () => ({
           Attributes: data[`${Key.pk} ${Key.sk}`],

@@ -1,7 +1,6 @@
 exports.CASE_METADATA = 'caseMetadata';
 exports.FILE_EXTERNAL_DOCUMENT = 'fileExternalDocument';
 exports.GET_CASE = 'getCase';
-exports.GET_CASES_BY_STATUS = 'getCasesByStatus';
 exports.PETITION = 'getPetitionOptions';
 exports.UPDATE_CASE = 'updateCase';
 exports.WORKITEM = 'workItem';
@@ -16,19 +15,18 @@ const AUTHORIZATION_MAP = {
     exports.CASE_METADATA,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_CASES_BY_STATUS,
     exports.WORKITEM,
     exports.UPDATE_CASE,
     exports.GET_USERS_IN_SECTION,
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
+    exports.FILE_EXTERNAL_DOCUMENT,
   ],
   petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
     exports.CASE_METADATA,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_CASES_BY_STATUS,
     exports.PETITION,
     exports.UPDATE_CASE,
     exports.WORKITEM,
@@ -44,7 +42,6 @@ const AUTHORIZATION_MAP = {
   ],
   respondent: [
     exports.GET_CASE,
-    exports.GET_CASES_BY_STATUS,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.UPDATE_CASE,
   ],
@@ -52,7 +49,6 @@ const AUTHORIZATION_MAP = {
     exports.CASE_METADATA,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_CASES_BY_STATUS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.GET_READ_MESSAGES,

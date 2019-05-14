@@ -7,7 +7,7 @@ const {
   InvalidEntityError,
   NotFoundError,
 } = require('../../errors/errors');
-const { Case } = require('../entities/Case');
+const { Case, STATUS_TYPES } = require('../entities/Case');
 
 const {
   createMappingRecord,
@@ -51,8 +51,20 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   const initializeCaseWorkItem = petitionDocument.workItems.find(
     workItem => workItem.isInitializeCase,
   );
+
+  for (let workItem of caseEntity.getWorkItems()) {
+    workItem.setStatus(STATUS_TYPES.recalled);
+
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: workItem.toRawObject(),
+    });
+  }
+
   if (initializeCaseWorkItem) {
-    initializeCaseWorkItem.recallFromIRSBatchSystem({ user });
+    initializeCaseWorkItem.recallFromIRSBatchSystem({
+      user,
+    });
     const invalidEntityError = new InvalidEntityError(
       'Invalid for recall from IRS',
     );
@@ -93,6 +105,7 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       type: 'outbox',
     });
 
+    // individual inbox
     await createMappingRecord({
       applicationContext,
       pkId: initializeCaseWorkItem.assigneeId,

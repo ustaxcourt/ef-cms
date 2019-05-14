@@ -5,6 +5,7 @@ import { getSentWorkItemsForSectionAction } from '../actions/getSentWorkItemsFor
 import { getSentWorkItemsForUserAction } from '../actions/getSentWorkItemsForUserAction';
 import { getWorkItemsByUserAction } from '../actions/getWorkItemsByUserAction';
 import { getWorkItemsForSectionAction } from '../actions/getWorkItemsForSectionAction';
+import { parallel } from 'cerebral/factories';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
@@ -13,14 +14,32 @@ import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction'
 export const chooseWorkQueueSequence = [
   setFormSubmittingAction,
   clearWorkQueueAction,
-  getNotificationsAction,
-  setNotificationsAction,
   chooseWorkQueueAction,
   {
-    myinbox: [getWorkItemsByUserAction, setWorkItemsAction],
-    myoutbox: [getSentWorkItemsForUserAction, setWorkItemsAction],
-    sectioninbox: [getWorkItemsForSectionAction, setWorkItemsAction],
-    sectionoutbox: [getSentWorkItemsForSectionAction, setWorkItemsAction],
+    myinbox: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getWorkItemsByUserAction, setWorkItemsAction],
+      ]),
+    ],
+    myoutbox: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getSentWorkItemsForUserAction, setWorkItemsAction],
+      ]),
+    ],
+    sectioninbox: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getWorkItemsForSectionAction, setWorkItemsAction],
+      ]),
+    ],
+    sectionoutbox: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getSentWorkItemsForSectionAction, setWorkItemsAction],
+      ]),
+    ],
   },
   unsetFormSubmittingAction,
 ];

@@ -3,9 +3,13 @@ $image-path: '../node_modules/uswds/dist/img';
 $site-max-width: 1440px;
 
 $font-serif: 'Noto Serif';
+$font-source-sans: 'Source Sans Pro', sans-serif;
 $font-regular: 400;
 $font-medium: 500;
 $font-semibold: 600;
 $font-bold: 700;
 
 $color-primary-alt-lightest: #f1f9fc;
+
+$small-screen: 576px;
+$medium-screen: 768px;

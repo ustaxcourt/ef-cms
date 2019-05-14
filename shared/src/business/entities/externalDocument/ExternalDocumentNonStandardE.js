@@ -23,12 +23,12 @@ ExternalDocumentNonStandardE.errorToMessageMap = {
   trialLocation: 'You must select a trial location.',
 };
 
-ExternalDocumentNonStandardE.schema = joi.object().keys({
+ExternalDocumentNonStandardE.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   trialLocation: joi.string().required(),
-});
+};
 
 joiValidationDecorator(
   ExternalDocumentNonStandardE,

@@ -30,7 +30,6 @@ describe('completeWorkItem', () => {
       },
       getPersistenceGateway: () => ({
         getWorkItemById: async () => mockWorkItem,
-        saveWorkItem: async ({ workItemToSave }) => workItemToSave,
       }),
     };
     let error;

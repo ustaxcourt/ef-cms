@@ -90,7 +90,7 @@ export const IndividualWorkQueueInbox = connect(
                       messageId: item.currentMessage.messageId,
                     })}
                     className={
-                      item.readAt ? 'case-link' : 'link case-link-bold'
+                      item.isRead ? 'case-link' : 'link case-link-bold'
                     }
                   >
                     {item.document.documentType}

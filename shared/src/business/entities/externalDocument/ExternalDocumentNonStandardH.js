@@ -29,12 +29,12 @@ ExternalDocumentNonStandardH.errorToMessageMap = {
   secondaryDocument: 'You must select a document.',
 };
 
-ExternalDocumentNonStandardH.schema = joi.object().keys({
+ExternalDocumentNonStandardH.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   secondaryDocument: joi.object().required(),
-});
+};
 
 joiValidationDecorator(
   ExternalDocumentNonStandardH,

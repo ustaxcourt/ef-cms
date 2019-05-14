@@ -150,10 +150,6 @@
     "pk": "104-19|case"
   },
   {
-    "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "New|case-status"
-  },
-  {
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "document": {

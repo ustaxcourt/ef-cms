@@ -28,7 +28,12 @@ export const submitCaseAssociationRequestAction = async ({
     ...documentMetadata,
     docketNumber,
     caseId,
-    practitioner: user,
+    practitioner: [
+      {
+        ...user,
+        partyPractitioner: documentMetadata.partyPractitioner,
+      },
+    ],
   };
 
   const caseDetail = await applicationContext
