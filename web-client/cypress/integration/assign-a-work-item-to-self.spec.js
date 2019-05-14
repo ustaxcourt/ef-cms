@@ -17,6 +17,7 @@ describe('Assign a work item ', () => {
   it('views the section inbox', () => {
     navigateToDashboard('petitionsclerk');
     viewSectionInbox();
+    cy.wait(3000); // TODO: find a way to avoid this... we need to wait for the XHR and the list to resort
     getWorkItemRow('101-19W').click();
     getWorkItemMessage('2611344f-f7bf-4f47-8ba0-60c70cb25446').contains(
       'Petition filed by Brett Osborne is ready for review.',
