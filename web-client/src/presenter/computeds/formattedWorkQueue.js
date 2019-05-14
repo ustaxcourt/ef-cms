@@ -39,11 +39,11 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
     .format(DATE_FORMAT_LONG);
   result.assigneeName = result.assigneeName || 'Unassigned';
 
-  result.showUnreadIndicators = !result.readAt;
+  result.showUnreadIndicators = !result.isRead;
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
-  if (!result.readAt) {
+  if (!result.isRead) {
     result.showUnreadStatusIcon = true;
   }
   switch (result.caseStatus.trim()) {

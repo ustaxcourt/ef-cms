@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MAX_FILE_SIZE_MB } from '../../../shared/src/persistence/s3/getUploadPolicy';
 import React from 'react';
 import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
 import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
@@ -120,7 +121,7 @@ export const BeforeStartingCase = () => (
           <p>
             Scan your Petition and IRS notice into one Petition PDF or combine
             them digitally. This is what youʼll upload to the Court to start
-            your case.{' '}
+            your case. Uploads are limited to {MAX_FILE_SIZE_MB}MB.{' '}
             <a href={howToMergePDFs} target="_blank" rel="noopener noreferrer">
               Learn more about how to merge files into one PDF.
             </a>

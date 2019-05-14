@@ -3,7 +3,7 @@ const { uploadPdf } = require('./uploadPdf');
 
 describe('uploadPdf', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {
-    let postSpy = sinon.spy();
+    let postStub = sinon.stub().resolves(null);
     const applicationContext = {
       getCurrentUser: () => {
         return { role: 'petitioner', userId: 'taxpayer' };
@@ -12,13 +12,14 @@ describe('uploadPdf', () => {
         return '';
       },
       getHttpClient: () => ({
-        post: postSpy,
+        post: postStub,
       }),
       getUniqueId: () => '123',
     };
     await uploadPdf({
       applicationContext,
       file: new File([], 'abc'),
+      onUploadProgress: () => null,
       policy: {
         fields: {
           Policy: 'gg',
@@ -31,8 +32,8 @@ describe('uploadPdf', () => {
         url: 'http://test.com',
       },
     });
-    expect(postSpy.getCall(0).args[0]).toEqual('http://test.com');
-    expect([...postSpy.getCall(0).args[1].entries()]).toMatchObject([
+    expect(postStub.getCall(0).args[0]).toEqual('http://test.com');
+    expect([...postStub.getCall(0).args[1].entries()]).toMatchObject([
       ['key', '123'],
       ['X-Amz-Algorithm', '1'],
       ['X-Amz-Credential', '2'],
@@ -43,12 +44,12 @@ describe('uploadPdf', () => {
       ['Content-Type', 'application/pdf'],
       ['file', {}],
     ]);
-    expect(postSpy.getCall(0).args[2]).toEqual({
+    expect(postStub.getCall(0).args[2]).toMatchObject({
       headers: { 'content-type': 'multipart/form-data; boundary=undefined' },
     });
   });
   it('makes use of defaults when not provided', async () => {
-    let postSpy = sinon.spy();
+    let postStub = sinon.stub().resolves(null);
     const applicationContext = {
       getCurrentUser: () => {
         return { role: 'petitioner', userId: 'taxpayer' };
@@ -57,13 +58,14 @@ describe('uploadPdf', () => {
         return '';
       },
       getHttpClient: () => ({
-        post: postSpy,
+        post: postStub,
       }),
       getUniqueId: () => '123',
     };
     await uploadPdf({
       applicationContext,
       file: new Blob([]),
+      onUploadProgress: () => null,
       policy: {
         fields: {
           Policy: 'gg',
@@ -75,7 +77,7 @@ describe('uploadPdf', () => {
         url: 'http://test.com',
       },
     });
-    expect([...postSpy.getCall(0).args[1].entries()]).toMatchObject([
+    expect([...postStub.getCall(0).args[1].entries()]).toMatchObject([
       ['key', '123'],
       ['X-Amz-Algorithm', '1'],
       ['X-Amz-Credential', '2'],
@@ -86,7 +88,7 @@ describe('uploadPdf', () => {
       ['Content-Type', 'application/pdf'],
       ['file', {}],
     ]);
-    expect(postSpy.getCall(0).args[2]).toEqual({
+    expect(postStub.getCall(0).args[2]).toMatchObject({
       headers: { 'content-type': 'multipart/form-data; boundary=undefined' },
     });
   });

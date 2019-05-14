@@ -11,10 +11,12 @@ describe('Petition', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -51,10 +53,12 @@ describe('Petition', () => {
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });

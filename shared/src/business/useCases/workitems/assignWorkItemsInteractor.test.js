@@ -56,9 +56,6 @@ describe('assignWorkItems', () => {
       getPersistenceGateway: () => {
         return {
           getWorkItemById: async () => _.omit(MOCK_WORK_ITEM, 'caseId'),
-          saveWorkItem: async () => ({
-            abc: 123,
-          }),
         };
       },
       user: {
@@ -71,7 +68,6 @@ describe('assignWorkItems', () => {
       await assignWorkItems({
         applicationContext,
         userId: 'docketclerk',
-        workItems: [{}],
       });
     } catch (err) {
       error = err;

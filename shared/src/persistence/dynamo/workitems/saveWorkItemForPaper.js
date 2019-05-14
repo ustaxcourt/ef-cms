@@ -13,29 +13,32 @@ const { put } = require('../../dynamodbClientService');
  * @returns {*}
  */
 exports.saveWorkItemForPaper = async ({ workItem, applicationContext }) => {
-  // create the work item
-  await put({
-    Item: {
-      pk: workItem.workItemId,
-      sk: workItem.workItemId,
-      ...workItem,
-    },
-    applicationContext,
-  });
-
-  // individual inbox
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.assigneeId,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
-
-  // section inbox
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.section,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
+  return Promise.all([
+    put({
+      Item: {
+        pk: workItem.workItemId,
+        sk: workItem.workItemId,
+        ...workItem,
+      },
+      applicationContext,
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.caseId,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.assigneeId,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.section,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+  ]);
 };

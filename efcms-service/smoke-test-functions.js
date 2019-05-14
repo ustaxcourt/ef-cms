@@ -36,7 +36,6 @@ async function deleteCase(context, events, done) {
   );
 
   for (let workItem of workItems) {
-    console.log('deleting workItem:', workItem.workItemId);
     await client.delete({
       applicationContext,
       key: {
@@ -44,8 +43,6 @@ async function deleteCase(context, events, done) {
         sk: workItem.workItemId,
       },
     });
-
-    console.log('deleting petitions|workItem', workItem.workItemId);
 
     await client.delete({
       applicationContext,

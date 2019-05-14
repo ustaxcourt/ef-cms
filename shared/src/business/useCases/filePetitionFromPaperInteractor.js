@@ -10,6 +10,9 @@ exports.filePetitionFromPaper = async ({
   ownershipDisclosureFile,
   stinFile,
   applicationContext,
+  ownershipDisclosureUploadProgress,
+  petitionUploadProgress,
+  stinUploadProgress,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -22,6 +25,7 @@ exports.filePetitionFromPaper = async ({
     .uploadDocument({
       applicationContext,
       document: petitionFile,
+      onUploadProgress: petitionUploadProgress,
     });
 
   let ownershipDisclosureFileId;
@@ -31,6 +35,7 @@ exports.filePetitionFromPaper = async ({
       .uploadDocument({
         applicationContext,
         document: ownershipDisclosureFile,
+        onUploadProgress: ownershipDisclosureUploadProgress,
       });
   }
 
@@ -41,6 +46,7 @@ exports.filePetitionFromPaper = async ({
       .uploadDocument({
         applicationContext,
         document: stinFile,
+        onUploadProgress: stinUploadProgress,
       });
   }
 

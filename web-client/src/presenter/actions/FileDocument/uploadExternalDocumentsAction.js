@@ -1,3 +1,4 @@
+import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -5,23 +6,39 @@ import { state } from 'cerebral';
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext the application context
+ * @returns {Object} the next path based on if validation was successful or error
  */
 export const uploadExternalDocumentsAction = async ({
   get,
+  store,
+  path,
   applicationContext,
 }) => {
-  const { primaryDocumentFile } = get(state.form);
+  const { primaryDocumentFile, secondaryDocumentFile } = get(state.form);
 
-  const documentFiles = [primaryDocumentFile];
+  const progressFunctions = setupPercentDone(
+    {
+      primary: primaryDocumentFile,
+      secondary: secondaryDocumentFile,
+    },
+    store,
+  );
 
-  const documentIds = await applicationContext
-    .getUseCases()
-    .uploadExternalDocuments({
+  try {
+    const [
+      primaryDocumentFileId,
+      secondaryDocumentFileId,
+    ] = await applicationContext.getUseCases().uploadExternalDocuments({
       applicationContext,
-      documentFiles,
+      documentFiles: [primaryDocumentFile, secondaryDocumentFile],
+      onUploadProgresses: [
+        progressFunctions.primary,
+        progressFunctions.secondary,
+      ],
     });
 
-  const [primaryDocumentFileId] = documentIds;
-
-  return { primaryDocumentFileId };
+    return path.success({ primaryDocumentFileId, secondaryDocumentFileId });
+  } catch (err) {
+    return path.error();
+  }
 };

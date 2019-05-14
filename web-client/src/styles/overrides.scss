@@ -1,5 +1,24 @@
 .usa-header {
   margin-bottom: 3rem;
+
+  .usa-logo {
+    width: 75px;
+    margin: 20px 20px 0 0;
+
+    img {
+      width: 100%;
+      max-height: 100%;
+    }
+
+    @media only screen and (max-width: 950px) {
+      width: 35px;
+      margin: 0;
+    }
+  }
+
+  .usa-nav {
+    border: none;
+  }
 }
 
 .usa-form-group {
@@ -146,7 +165,7 @@ option:first-child {
 .usa-input-error input,
 .usa-input-error textarea,
 .usa-input-error select {
-  width: calc(100%);
+  width: calc(100% + 1.9rem);
 }
 
 .no-bottom-margin {
