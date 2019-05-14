@@ -3,7 +3,7 @@ const moment = require('moment');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { replaceBracketed } = require('../../utilities/getDocumentTitle');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
  *
