@@ -541,11 +541,6 @@ textarea#case-caption {
   text-align: center;
 }
 
-#work-queue-title {
-  display: inline-block;
-  margin-right: 10px;
-}
-
 #save-and-finish {
   padding-right: 45px;
   padding-left: 45px;
@@ -562,6 +557,7 @@ button.link.mobile-sort-docket-button {
 header.usa-header {
   display: flex;
   height: 115px;
+  margin-bottom: 0px;
   flex-direction: row;
   border-bottom: none;
 
@@ -828,4 +824,32 @@ nav.usa-nav {
       }
     }
   }
+}
+
+.big-blue-header {
+  padding: 25px 0;
+  margin-bottom: 40px;
+  background-color: $color-primary-darkest;
+
+  h1 {
+    display: inline-block;
+    margin: 0 10px 0 0;
+    color: $color-white;
+  }
+
+  .unread {
+    position: relative;
+    top: -3px;
+    background: $color-white;
+    color: $color-primary-darkest;
+  }
+}
+
+.button-switch-box {
+  position: relative;
+  top: -3px;
+  border: none;
+  margin-left: 5px;
+  background: none;
+  color: #fff;
 }
