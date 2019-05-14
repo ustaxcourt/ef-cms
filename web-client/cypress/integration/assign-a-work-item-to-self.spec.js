@@ -45,6 +45,7 @@ describe('Assign a work item ', () => {
   });
 
   it('places the work item in the petitionsclerk my inbox', () => {
+    navigateToDashboard('petitionsclerk');
     viewMyInbox();
     getWorkItemRow('101-19W')
       .contains('td.from', 'Test Petitionsclerk')
