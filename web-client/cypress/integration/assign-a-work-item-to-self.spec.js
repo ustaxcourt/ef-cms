@@ -27,7 +27,6 @@ describe('Assign a work item ', () => {
   it('assigns the work item to self', () => {
     getWorkItemCheckboxLabel('2611344f-f7bf-4f47-8ba0-60c70cb25446').click();
     getSectionUsersSelect().select('Test Petitionsclerk');
-    getSendButton().click();
     cy.wait(3000); // TODO: find a way to avoid this... we need to wait for the XHR and the list to resort
   });
 

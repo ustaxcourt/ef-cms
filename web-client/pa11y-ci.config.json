@@ -425,7 +425,7 @@
         "wait for #section-work-queue to be visible",
         "wait for #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2 to be visible",
         "click element #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
-        "wait for td.action-bar to be visible"
+        "wait for .action-section to be visible"
       ]
     },
     "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19",
