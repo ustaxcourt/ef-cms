@@ -43,6 +43,7 @@ import { route, router } from './router';
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import App from 'cerebral';
@@ -60,6 +61,17 @@ const app = {
         .getItem({ applicationContext, key: 'user' })) || presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
+
+    const applicationContextDecorator = f => {
+      return get => f(get, applicationContext);
+    };
+
+    presenter.state = mapValues(presenter.state, value => {
+      if (isFunction(value)) {
+        return applicationContextDecorator(value);
+      }
+      return value;
+    });
 
     const token =
       (await applicationContext
