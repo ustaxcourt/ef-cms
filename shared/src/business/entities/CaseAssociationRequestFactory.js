@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { includes } = require('lodash');
-const { replaceBracketed } = require('../utilities/getDocumentTitle');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 /**
  * @param rawProps
