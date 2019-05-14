@@ -829,8 +829,7 @@ nav.usa-nav {
 .big-blue-header {
   padding: 25px 0;
   margin-bottom: 40px;
-  background-color: $color-primary-darkest;
-
+  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
@@ -841,7 +840,7 @@ nav.usa-nav {
     position: relative;
     top: -3px;
     background: $color-white;
-    color: $color-primary-darkest;
+    color: #162e51; // TODO: Replace with USWDSv2 var when available;
   }
 }
 
@@ -850,6 +849,6 @@ nav.usa-nav {
   top: -3px;
   border: none;
   margin-left: 5px;
-  background: none;
   color: #fff;
+  font-size: 14px;
 }
