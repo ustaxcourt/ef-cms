@@ -308,6 +308,10 @@ select[disabled] {
   }
 }
 
+.usa-hint {
+  color: $color-gray;
+}
+
 .alert-gold {
   max-width: 700px;
   padding: 10px;
@@ -570,8 +574,15 @@ header.usa-header {
     }
 
     li {
+      &.active {
+        a {
+          color: $color-gray;
+        }
+      }
+
       &.active,
-      :hover {
+      &:hover {
+        padding-bottom: 5px;
         border-bottom: 2px solid $color-primary;
       }
     }
@@ -580,6 +591,8 @@ header.usa-header {
       padding: 0 0 6px 0;
       background: none;
       color: $color-primary;
+      font-size: 20px;
+      font-weight: $font-semibold;
       :hover {
         background: none;
         color: $color-primary;
@@ -615,19 +628,6 @@ nav.usa-nav {
     :hover {
       color: $color-primary-darker;
     }
-
-    .usa-nav__primary {
-      li.active {
-        a {
-          color: $color-gray;
-        }
-      }
-      li.active,
-      li:hover {
-        padding-bottom: 5px;
-        border-bottom: 2px solid $color-primary;
-      }
-    }
   }
 
   .usa-search {
@@ -636,12 +636,12 @@ nav.usa-nav {
     margin: 0;
     float: none;
 
-    input#search-field {
-      width: 220px;
-    }
-
     @media (min-width: 64em) {
       float: none;
+    }
+
+    input#search-field {
+      width: 220px;
     }
   }
 
@@ -652,7 +652,6 @@ nav.usa-nav {
 
   .user-dropdown {
     margin: -4px 0 0 50px;
-    //margin-top: -11px;
   }
 
   .button-account-login {
