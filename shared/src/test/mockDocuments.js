@@ -32,7 +32,7 @@ exports.MOCK_DOCUMENTS = [
   {
     createdAt: '2018-11-21T20:49:28.192Z',
     documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    documentType: 'Stipulated Decision',
+    documentType: 'Proposed Stipulated Decision',
     processingStatus: 'pending',
     reviewDate: '2018-11-21T20:49:28.192Z',
     reviewUser: 'petitionsclerk',
