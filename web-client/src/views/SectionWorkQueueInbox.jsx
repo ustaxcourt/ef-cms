@@ -38,6 +38,7 @@ export const SectionWorkQueueInbox = connect(
               {selectedWorkItems.length}
             </span>
             <select
+              aria-label="select a assignee"
               className="usa-select"
               onChange={event => {
                 selectAssigneeSequence({
