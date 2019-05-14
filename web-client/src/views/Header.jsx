@@ -175,7 +175,7 @@ export const Header = connect(
                         >
                           <FontAwesomeIcon
                             icon={['far', 'user']}
-                            className="account-menu-icon"
+                            className="account-menu-icon user-icon"
                           />{' '}
                           Log In
                         </button>
