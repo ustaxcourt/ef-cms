@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  *
  * @param {Object} providers the providers object
  * @param {Object} providers.applicationContext the application context
+ * @returns {Object} the next path based on if validation was successful or error
  */
 export const uploadExternalDocumentsAction = async ({
   get,
