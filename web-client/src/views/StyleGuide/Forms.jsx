@@ -376,7 +376,7 @@ export const Forms = () => (
           />
 
           <label className="usa-label" htmlFor="mailing-address-2">
-            Street address 2 <span className="usa-hint">(optional)</span>
+            Street address 2 <span className="usa-form-hint">(optional)</span>
           </label>
           <input
             className="usa-input"
