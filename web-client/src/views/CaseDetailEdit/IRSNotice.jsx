@@ -1,5 +1,5 @@
-import { connect } from '@cerebral/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -35,17 +35,21 @@ export const IRSNotice = connect(
     const renderIrsNoticeRadios = () => {
       return (
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <fieldset
               id="irs-verified-notice-radios"
-              className="usa-fieldset-inputs usa-sans"
+              className="usa-fieldset usa-sans"
             >
-              <legend htmlFor="irs-verified-notice-radios">
+              <legend
+                htmlFor="irs-verified-notice-radios"
+                className="usa-legend"
+              >
                 Notice Attached to Petition?
               </legend>
-              <ul className="usa-unstyled-list">
+              <ul className="usa-list usa-unstyled-list">
                 <li>
                   <input
+                    className="usa-radio__input"
                     id="hasVerifiedIrsNotice-yes"
                     type="radio"
                     name="hasVerifiedIrsNotice"
@@ -62,12 +66,14 @@ export const IRSNotice = connect(
                   <label
                     id="has-irs-verified-notice-yes"
                     htmlFor="hasVerifiedIrsNotice-yes"
+                    className="usa-radio__label"
                   >
                     Yes
                   </label>
                 </li>
                 <li>
                   <input
+                    className="usa-radio__input"
                     id="hasVerifiedIrsNotice-no"
                     type="radio"
                     name="hasVerifiedIrsNotice"
@@ -81,6 +87,7 @@ export const IRSNotice = connect(
                   <label
                     id="has-irs-verified-notice-no"
                     htmlFor="hasVerifiedIrsNotice-no"
+                    className="usa-radio__label"
                   >
                     No
                   </label>
@@ -97,23 +104,29 @@ export const IRSNotice = connect(
         <div className="subsection">
           <div
             className={
-              'ustc-form-group ' +
-              (caseDetailErrors.irsNoticeDate ? 'usa-input-error' : '')
+              'usa-form-group ' +
+              (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
             }
           >
-            <fieldset>
-              <legend id="date-of-notice-legend">Date of Notice</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="date-of-notice-month" aria-hidden="true">
+            <fieldset className="usa-fieldset usa-sans">
+              <legend id="date-of-notice-legend" className="usa-legend">
+                Date of Notice
+              </legend>
+              <div className="usa-memorable-date">
+                <div className="usa-form-group usa-form-group--month">
+                  <label
+                    htmlFor="date-of-notice-month"
+                    className="usa-label"
+                    aria-hidden="true"
+                  >
                     MM
                   </label>
                   <input
                     aria-describedby="date-of-notice-legend"
                     aria-label="month, two digits"
                     className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.irsNoticeDate ? '-error' : '')
+                      'usa-input usa-input--inline ' +
+                      (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
                     }
                     id="date-of-notice-month"
                     max="12"
@@ -132,16 +145,20 @@ export const IRSNotice = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-day">
-                  <label htmlFor="date-of-notice-day" aria-hidden="true">
+                <div className="usa-form-group usa-form-group--day">
+                  <label
+                    htmlFor="date-of-notice-day"
+                    aria-hidden="true"
+                    className="usa-label"
+                  >
                     DD
                   </label>
                   <input
                     aria-describedby="date-of-notice-legend"
                     aria-label="day, two digits"
                     className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.irsNoticeDate ? '-error' : '')
+                      'usa-input usa-input--inline ' +
+                      (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
                     }
                     id="date-of-notice-day"
                     max="31"
@@ -160,16 +177,20 @@ export const IRSNotice = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-year">
-                  <label htmlFor="date-of-notice-year" aria-hidden="true">
+                <div className="usa-form-group usa-form-group--year">
+                  <label
+                    htmlFor="date-of-notice-year"
+                    aria-hidden="true"
+                    className="usa-label"
+                  >
                     YYYY
                   </label>
                   <input
                     aria-describedby="date-of-notice-legend"
                     aria-label="year, four digits"
                     className={
-                      'usa-input-inline' +
-                      (caseDetailErrors.irsNoticeDate ? '-error' : '')
+                      'usa-input usa-input--inline ' +
+                      (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
                     }
                     id="date-of-notice-year"
                     max="2100"
@@ -191,7 +212,7 @@ export const IRSNotice = connect(
               </div>
             </fieldset>
             {caseDetailErrors.irsNoticeDate && (
-              <div className="usa-input-error-message" role="alert">
+              <div className="usa-error-message" role="alert">
                 {caseDetailErrors.irsNoticeDate}
               </div>
             )}
@@ -199,7 +220,7 @@ export const IRSNotice = connect(
         </div>
       );
     };
-
+    // TODO keep going below...
     const renderYearAmounts = () => {
       return (
         <React.Fragment>
@@ -209,12 +230,15 @@ export const IRSNotice = connect(
               className={yearAmount.showError ? ' usa-input-error' : ''}
             >
               <div className="inline-input-year">
-                <label htmlFor="year">Year</label>
+                <label htmlFor="year" className="usa-label">
+                  Year
+                </label>
                 <input
-                  id="year"
-                  type="number"
-                  name="year"
                   aria-label="IRS Notice Year"
+                  className="usa-input"
+                  id="year"
+                  name="year"
+                  type="number"
                   value={yearAmount.year || ''}
                   onChange={e => {
                     updateCaseValueSequence({
@@ -228,12 +252,15 @@ export const IRSNotice = connect(
                 />
               </div>
               <div className="inline-input-amount">
-                <label htmlFor="amount">Amount</label>
+                <label htmlFor="amount" className="usa-label">
+                  Amount
+                </label>
                 <span aria-hidden="true" role="presentation">
                   $
                 </span>
                 <input
                   aria-label="IRS Notice Amount in whole dollars"
+                  className="usa-input"
                   id="amount"
                   name="amount"
                   type="text"
@@ -253,7 +280,7 @@ export const IRSNotice = connect(
                 </span>
                 {idx !== 0 && (
                   <button
-                    className="link"
+                    className="usa-button usa-button--unstyled"
                     type="button"
                     aria-controls="removeYearAmount"
                     onClick={e => {
@@ -271,14 +298,14 @@ export const IRSNotice = connect(
                 )}
               </div>
               {yearAmount.showError && (
-                <div className="usa-input-error-message">
+                <div className="usa-error-message">
                   {yearAmount.errorMessage}
                 </div>
               )}
             </div>
           ))}
           <button
-            className="link"
+            className="usa-button usa-button--unstyled"
             type="button"
             aria-controls="addAnotherYearAmount"
             disabled={!formattedCaseDetail.canAddYearAmount}

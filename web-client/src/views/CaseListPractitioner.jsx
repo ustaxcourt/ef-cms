@@ -11,7 +11,7 @@ export const CaseListPractitioner = connect(
   },
   ({ caseList, helper }) => {
     const renderTable = () => (
-      <table className="responsive-table dashboard" id="case-list">
+      <table className="usa-table responsive-table dashboard" id="case-list">
         <thead>
           <tr>
             <th>Docket Number</th>
@@ -68,11 +68,13 @@ export const CaseListPractitioner = connect(
 
     const renderNonEmptyState = () => (
       <React.Fragment>
-        <div className="usa-grid-full case-list-header">
-          <div className="usa-width-one-half hide-on-mobile">
-            <h2>Your Cases</h2>
+        <div className="grid-container padding-x-0 case-list-header">
+          <div className="grid-row">
+            <div className="tablet:grid-col-6 hide-on-mobile">
+              <h2>Your Cases</h2>
+            </div>
+            <div className="tablet:grid-col-6">{renderStartButton()}</div>
           </div>
-          <div className="usa-width-one-half">{renderStartButton()}</div>
         </div>
         <div className="show-on-mobile">
           <h2>Your Cases</h2>
@@ -83,12 +85,14 @@ export const CaseListPractitioner = connect(
 
     return (
       <>
-        <div className="usa-grid-full subsection">
-          <div className="usa-width-one-third push-right">
-            {helper.showCaseSearch && <CaseSearchBox />}
-          </div>
-          <div className="usa-width-two-thirds">
-            {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
+        <div className="grid-container padding-x-0 subsection">
+          <div className="grid-row">
+            <div className="tablet:grid-col-4 push-right">
+              {helper.showCaseSearch && <CaseSearchBox />}
+            </div>
+            <div className="tablet:grid-col-8">
+              {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
+            </div>
           </div>
         </div>
       </>

@@ -22,17 +22,17 @@ describe('File a petition', function() {
 
   describe('USA Banner', () => {
     it('shows header and hides content', () => {
-      cy.contains('.usa-banner-header', 'how you know');
-      cy.get('.usa-banner-content').should('not.exist');
+      cy.contains('.usa-banner__header', 'how you know');
+      cy.get('.usa-banner__content').should('not.exist');
     });
     it('shows reveals content when clicked, hides when clicked again', () => {
-      cy.get('.usa-banner-button').click();
+      cy.get('.usa-banner__button').click();
       cy.contains(
-        '.usa-banner-content',
+        '.usa-banner__content',
         'you are connecting to the official website',
       );
-      cy.get('.usa-banner-button').click();
-      cy.get('.usa-banner-content').should('not.exist');
+      cy.get('.usa-banner__button').click();
+      cy.get('.usa-banner__content').should('not.exist');
     });
   });
 });
@@ -166,7 +166,7 @@ describe('creation form', () => {
     cy.get('form button#submit-case')
       .scrollIntoView()
       .click();
-    cy.get('.usa-alert.usa-alert-error').should('exist');
+    cy.get('.usa-alert.usa-alert--error').should('exist');
   });
 
   it('check the signature', () => {
@@ -187,7 +187,7 @@ describe('creation form', () => {
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
-    cy.get('.usa-alert-success', { timeout: 10000 }).should(
+    cy.get('.usa-alert--success', { timeout: 10000 }).should(
       'contain',
       'successfully submitted',
     );
@@ -201,6 +201,7 @@ describe('creation form', () => {
 
 describe('can view case detail', () => {
   before(() => {
+    cy.viewport(1200, 900);
     cy.get('#search-field').type(createdDocketNumber);
     cy.get('#search-input').submit();
     cy.url().should('include', 'case-detail');

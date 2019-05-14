@@ -107,10 +107,6 @@ iframe {
   display: block;
 }
 
-.float-right {
-  float: right;
-}
-
 .subsection {
   margin-bottom: 30px;
 }
@@ -159,7 +155,7 @@ select[disabled] {
   padding: 20px;
   margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
-  .ustc-form-group:last-of-type {
+  .usa-form-group:last-of-type {
     margin: 0;
   }
 
@@ -192,9 +188,10 @@ select[disabled] {
   }
 }
 
+/* big screens */
 @media only screen and (min-width: $medium-screen) {
   .push-right {
-    margin-right: 0;
+    order: 1;
     float: right;
   }
 }
@@ -211,7 +208,7 @@ select[disabled] {
 .usa-accordion.document-category {
   margin-bottom: 2rem;
 
-  .usa-accordion-button {
+  .usa-accordion__button {
     display: inline-block;
     padding-left: 0;
     border: 0;
@@ -224,18 +221,22 @@ select[disabled] {
     }
   }
 
-  .usa-accordion-button:hover {
+  .usa-accordion__button:hover {
     color: $color-primary-darker;
   }
 
-  .usa-accordion-button:focus {
+  .usa-accordion__button:focus {
     outline: none;
   }
 
-  .usa-accordion-content {
+  .usa-accordion__content {
     border: 1px solid $color-primary;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 4px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .usa-banner__button-text {
+    text-decoration: none;
   }
 }
 
@@ -285,7 +286,7 @@ select[disabled] {
   }
 
   .document-feature {
-    min-height: 27rem;
+    min-height: 15rem;
     padding: 20px 18px 2px;
     border: 1px solid $color-gray-lighter;
     box-shadow: inset 0 -10px 0 $color-primary-alt-dark;
@@ -305,6 +306,10 @@ select[disabled] {
   svg {
     margin-right: 5px;
   }
+}
+
+.usa-hint {
+  color: $color-gray;
 }
 
 .alert-gold {
@@ -330,15 +335,15 @@ select[disabled] {
 .usa-label-uploading {
   padding: 0.3rem 0.7rem;
   margin-right: 0.5rem;
-  background-color: #5b616b;
+  background-color: $color-gray;
   border-radius: 2px;
-  color: #ffffff;
+  color: $color-white;
   font-size: 1.3rem;
   text-transform: uppercase;
 }
 
 .fa-spinner {
-  color: #5b616b;
+  color: $color-gray;
 }
 
 .icon-column {
@@ -464,16 +469,18 @@ select.ustc-input-error {
 
 .ustc-create-message-modal,
 .forward-form {
-  .usa-input-error input,
-  .usa-input-error textarea,
-  .usa-input-error select {
-    width: calc(100% + 1.9rem);
-    border: 3px solid #cd2026;
+  .usa-form-group--error input,
+  .usa-form-group--error textarea,
+  .usa-form-group--error select {
+    width: 100%;
+    border-color: $color-red-dark;
+    box-shadow: 0 0 0 2px $color-red-dark;
   }
 }
 
 textarea#case-caption {
   height: 6em;
+  margin-bottom: 0;
 }
 
 .filed-by {
@@ -483,10 +490,11 @@ textarea#case-caption {
 
 .header-with-link-button {
   display: inline-block;
-  margin-right: 20px;
+  margin-right: 10px;
 
-  + .link {
+  + .usa-button--unstyled {
     width: auto;
+    margin-right: 0;
   }
 }
 
@@ -523,7 +531,26 @@ textarea#case-caption {
   color: $color-white;
 }
 
-.unread {
+.action-section {
+  padding-top: 20px;
+  padding-bottom: 10px;
+
+  .assign-work-item-count {
+    top: 50%;
+    width: 70px;
+    padding: 8px;
+    margin-top: 10px;
+    margin-right: 20px;
+    float: left;
+  }
+
+  .usa-select {
+    width: 230px;
+    height: 42px;
+  }
+}
+
+.unread, .assign-work-item-count {
   display: inline-block;
   min-width: 35px;
   background: $color-primary;
@@ -531,6 +558,10 @@ textarea#case-caption {
   color: $color-white;
   font-weight: $font-bold;
   text-align: center;
+}
+
+.assign-work-item-count svg {
+  margin-right: 10px;
 }
 
 #work-queue-title {
@@ -552,25 +583,63 @@ button.link.mobile-sort-docket-button {
 }
 
 header.usa-header {
+  display: flex;
   height: 115px;
+  flex-direction: row;
   border-bottom: none;
 
-  nav.usa-nav-primary {
-    display: block;
-    padding-top: 43px;
+  .main-navigation {
+    display: none;
+    margin-top: 3.5rem;
+
+    @media (min-width: 64em) {
+      display: block;
+    }
+
+    li {
+      &.active {
+        a {
+          color: $color-gray;
+        }
+      }
+
+      &.active,
+      &:hover {
+        padding-bottom: 5px;
+        border-bottom: 2px solid $color-primary;
+      }
+    }
+
+    a {
+      padding: 0 0 6px 0;
+      background: none;
+      color: $color-primary;
+      font-size: 20px;
+      font-weight: $font-semibold;
+      :hover {
+        background: none;
+        color: $color-primary;
+      }
+    }
+  }
+
+  .usa-menu-btn {
+    margin-right: -1rem;
+    float: right;
   }
 }
 
 nav.usa-nav {
   .usa-nav-close {
-    width: auto;
-    color: $color-white;
+    display: none;
   }
-  .usa-nav-primary {
-    position: absolute;
-    top: -9.75rem;
-    left: 140px;
 
+  .header-search-container {
+    margin-top: 2.5rem;
+  }
+
+  .mobile-account-menu-container {
+    display: none;
     a {
       padding: 0px;
       background: none;
@@ -580,28 +649,20 @@ nav.usa-nav {
       font-weight: $font-bold;
     }
     :hover {
-      color: $color-cool-blue;
+      color: $color-primary-darker;
     }
-
-    .usa-nav__primary {
-      li.active {
-        a {
-          color: $color-gray;
-        }
-      }
-      li.active,
-      li:hover {
-        padding-bottom: 5px;
-        border-bottom: 2px solid $color-primary;
-      }
-    }
-  }
-  .usa-nav-secondary {
-    margin-top: -24px;
   }
 
   .usa-search {
+    width: auto;
     max-width: 320px;
+    margin: 0;
+    float: none;
+
+    @media (min-width: 64em) {
+      float: none;
+    }
+
     input#search-field {
       width: 220px;
     }
@@ -613,10 +674,11 @@ nav.usa-nav {
   }
 
   .user-dropdown {
-    margin-top: -11px;
+    margin: -4px 0 0 50px;
   }
 
   .button-account-login {
+    border: none;
     background: none;
     color: $color-primary;
     font-weight: $font-semibold;
@@ -628,16 +690,62 @@ nav.usa-nav {
   }
 
   &.mobile-menu {
-    background: $color-cool-blue;
+    background: $color-primary-darker;
     font-family: $font-source-sans;
 
-    .usa-nav-primary {
-      position: inherit;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #fff;
-      margin-top: 10rem;
-      margin-bottom: 3rem;
+    .usa-nav-close {
+      display: block;
+      width: auto;
+      border: none;
+      background: none;
+      color: $color-white;
+      float: right;
+    }
 
+    .header-search-container {
+      .usa-unstyled-list {
+        padding: 0;
+
+        li {
+          border: none;
+          &.usa-search {
+            button {
+              background: $color-gray;
+            }
+
+            button:active {
+              background: $color-primary-darker;
+            }
+          }
+        }
+        a {
+          padding: 0px;
+          color: $color-white;
+          font-family: $font-source-sans;
+          text-decoration: none;
+          &:active {
+            text-decoration: underline;
+          }
+          &:hover {
+            background: none;
+            text-decoration: underline;
+          }
+        }
+        .user-dropdown {
+          display: none;
+        }
+      }
+      .account-menu-items {
+        padding: 0;
+        border-top: 2px solid $color-white;
+      }
+    }
+
+    .mobile-account-menu-container {
+      display: block;
+    }
+
+    .usa-nav-primary {
       .usa-nav__primary {
         li.active,
         li:hover {
@@ -647,37 +755,12 @@ nav.usa-nav {
 
       a {
         color: $color-white;
-        font-family: $font-source-sans;
       }
       a:hover {
         text-decoration: underline;
       }
     }
 
-    .usa-nav-secondary {
-      li.usa-search {
-        position: absolute;
-        top: 8rem;
-
-        button {
-          background: $color-gray;
-        }
-
-        button:active {
-          background: $color-primary-darker;
-        }
-      }
-      li.user-dropdown {
-        display: none;
-      }
-      a {
-        color: $color-white;
-        text-decoration: none;
-      }
-      a:active {
-        text-decoration: underline;
-      }
-    }
     .button-account-login {
       background: none;
       color: $color-white;
@@ -715,7 +798,7 @@ nav.usa-nav {
   .account-button-container {
     button.button-account-menu {
       padding: 12px;
-      margin: 0;
+      border: none;
       background: none;
       color: $color-primary;
     }
@@ -752,7 +835,7 @@ nav.usa-nav {
   }
   .account-menu-content {
     position: absolute;
-    right: 30px;
+    right: 0px;
     width: 109px;
     padding: 10px 0;
     background-color: $color-primary;

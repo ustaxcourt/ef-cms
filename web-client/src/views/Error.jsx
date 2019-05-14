@@ -8,7 +8,7 @@ export const Error = connect(
   },
   ({ alertHelper }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <h1 tabIndex="-1">We can’t find the page you requested</h1>
         <hr />
         <h2>Where do you go from here?</h2>
@@ -30,7 +30,7 @@ export const Error = connect(
           )}
 
           <a
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             href="https://www.ustaxcourt.gov/"
             id="us-tax-court"
           >

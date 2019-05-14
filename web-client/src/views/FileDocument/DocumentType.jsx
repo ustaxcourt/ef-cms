@@ -25,13 +25,18 @@ export const DocumentType = connect(
     return (
       <div className="blue-container">
         <div
-          className={`ustc-form-group ${
-            validationErrors.category ? 'usa-input-error' : ''
+          className={`usa-form-group ${
+            validationErrors.category ? 'usa-form-group--error' : ''
           }`}
         >
-          <label htmlFor="document-category">Document Category</label>
+          <label className="usa-label" htmlFor="document-category">
+            Document Category
+          </label>
           <select
             name="category"
+            className={`usa-select ${
+              validationErrors.category ? 'usa-select--error' : ''
+            }`}
             id="document-category"
             aria-label="category"
             onChange={e => {
@@ -53,22 +58,26 @@ export const DocumentType = connect(
             })}
           </select>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind="validationErrors.category"
           />
         </div>
         {form.category && (
           <>
             <div
-              className={`ustc-form-group only-large-screens ${
-                validationErrors.documentType ? 'usa-input-error' : ''
+              className={`usa-form-group only-large-screens ${
+                validationErrors.documentType ? 'usa-form-group--error' : ''
               }`}
             >
-              <label htmlFor="document-type">Document Type</label>
+              <label className="usa-label" htmlFor="document-type">
+                Document Type
+              </label>
               <select
                 id="document-type"
                 name="documentType"
-                className="documentType"
+                className={`usa-select documentType ${
+                  validationErrors.category ? 'usa-select--error' : ''
+                }`}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
@@ -86,42 +95,46 @@ export const DocumentType = connect(
                 ))}
               </select>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.documentType"
               />
             </div>
-            <div className="ustc-form-group only-small-screens">
-              <fieldset className="usa-fieldset-inputs usa-sans">
+            <div className="usa-form-group only-small-screens">
+              <fieldset className="usa-fieldset">
                 <legend>Document Type</legend>
-                <ul className="ustc-vertical-option-list ustc-hide-radio-buttons documentType">
-                  {(constants.CATEGORY_MAP[form.category] || []).map(
-                    (entry, index) => (
-                      <li key={entry.documentType}>
-                        <input
-                          id={`documentType-${index}`}
-                          type="radio"
-                          name="documentType"
-                          value={entry.documentType}
-                          onClick={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            selectDocumentSequence();
-                          }}
-                        />
-                        <label htmlFor={`documentType-${index}`}>
-                          {entry.documentType}
-                        </label>
-                      </li>
-                    ),
-                  )}
-                </ul>
+                {(constants.CATEGORY_MAP[form.category] || []).map(
+                  (entry, index) => (
+                    <div
+                      key={entry.documentType}
+                      className="usa-radio ustc-hide-radio-button"
+                    >
+                      <input
+                        id={`documentType-${index}`}
+                        type="radio"
+                        name="documentType"
+                        value={entry.documentType}
+                        onClick={e => {
+                          updateFileDocumentWizardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          selectDocumentSequence();
+                        }}
+                      />
+                      <label
+                        htmlFor={`documentType-${index}`}
+                        className="usa-label"
+                      >
+                        {entry.documentType}
+                      </label>
+                    </div>
+                  ),
+                )}
               </fieldset>
             </div>
           </>
         )}
-        <div className="ustc-form-group only-large-screens">
+        <div className="only-large-screens">
           <button
             type="submit"
             className="usa-button"

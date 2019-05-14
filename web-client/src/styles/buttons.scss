@@ -1,5 +1,4 @@
-.usa-button,
-.usa-button-secondary {
+.usa-button {
   margin: 0 20px 20px 0;
 }
 
@@ -69,7 +68,6 @@ button.text-style {
     font-weight: $font-bold;
     text-align: left;
   }
-
 }
 
 .recall-button-box {
@@ -100,6 +98,11 @@ button.text-style {
 .new-case {
   margin: 0;
   float: right;
+}
+
+.button-icon {
+  border: none;
+  background: transparent;
 }
 
 .sign-out {

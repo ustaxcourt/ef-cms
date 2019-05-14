@@ -13,13 +13,15 @@ export const IndividualWorkQueueInbox = connect(
     return (
       <React.Fragment>
         <table
-          className="work-queue subsection"
+          className="usa-table work-queue subsection"
           id="my-work-queue"
           aria-describedby="tab-my-queue"
         >
           <thead>
             <tr>
-              <th aria-hidden="true">&nbsp;</th>
+              <th aria-hidden="true" className="collapse-header">
+                &nbsp;
+              </th>
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
@@ -42,7 +44,7 @@ export const IndividualWorkQueueInbox = connect(
               <tr>
                 <td className="focus-toggle">
                   <button
-                    className="focus-button"
+                    className="focus-button usa-button usa-button--unstyled"
                     aria-label="Expand message detail"
                     aria-expanded={item.isFocused}
                     aria-controls={`detail-${item.workItemId}`}
@@ -104,7 +106,7 @@ export const IndividualWorkQueueInbox = connect(
                 <tr className="queue-message">
                   <td className="focus-toggle">
                     <button
-                      className="focus-button"
+                      className="focus-button usa-button usa-button--unstyled"
                       tabIndex="-1"
                       aria-disabled="true"
                     />

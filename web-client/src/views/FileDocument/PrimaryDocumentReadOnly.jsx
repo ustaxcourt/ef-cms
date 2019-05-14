@@ -15,7 +15,7 @@ export const PrimaryDocumentReadOnly = connect(
         <div>
           <h3 className="header-with-link-button">{form.documentTitle}</h3>
           <button
-            className="link push-right"
+            className="link push-right usa-button usa-button--unstyled"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
           >
@@ -25,15 +25,17 @@ export const PrimaryDocumentReadOnly = connect(
         </div>
 
         <div className="blue-container">
-          <div className="ustc-form-group">
-            <label htmlFor="primary-filing">{form.documentTitle}</label>
+          <div className="usa-form-group">
+            <label htmlFor="primary-filing" className="usa-label">
+              {form.documentTitle}
+            </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             {form.primaryDocumentFile.name}
           </div>
 
           {form.supportingDocumentFile && (
-            <div className="ustc-form-group">
-              <label htmlFor="supporting-documents">
+            <div className="usa-form-group">
+              <label htmlFor="supporting-documents" className="usa-label">
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -42,8 +44,10 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingIncludes && (
-            <div className="ustc-form-group">
-              <label htmlFor="filing-includes">Filing Includes</label>
+            <div className="usa-form-group">
+              <label htmlFor="filing-includes" className="usa-label">
+                Filing Includes
+              </label>
               <ul className="ustc-unstyled-list without-margins">
                 {form.certificateOfServiceDate && (
                   <li>
@@ -58,8 +62,8 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingNotIncludes && (
-            <div className="ustc-form-group">
-              <label htmlFor="filing-not-includes">
+            <div className="usa-form-group">
+              <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>
               <ul className="ustc-unstyled-list without-margins">
@@ -72,8 +76,8 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showObjection && (
-            <div className="ustc-form-group">
-              <label htmlFor="objections">
+            <div className="usa-form-group">
+              <label htmlFor="objections" className="usa-label">
                 Are There Any Objections to This Document?
               </label>
               {form.objections}

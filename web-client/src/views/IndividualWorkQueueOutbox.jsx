@@ -19,7 +19,7 @@ export const IndividualWorkQueueOutbox = connect(
     return (
       <React.Fragment>
         <table
-          className="work-queue subsection"
+          className="usa-table work-queue subsection"
           id="my-work-queue"
           aria-describedby="tab-my-queue"
         >
@@ -49,7 +49,7 @@ export const IndividualWorkQueueOutbox = connect(
               <tr>
                 <td className="focus-toggle">
                   <button
-                    className="focus-button"
+                    className="focus-button usa-button usa-button--unstyled"
                     aria-label="Expand message detail"
                     aria-expanded={item.isFocused}
                     aria-controls={`detail-${item.workItemId}`}
@@ -88,7 +88,7 @@ export const IndividualWorkQueueOutbox = connect(
                 <tr className="queue-message">
                   <td className="focus-toggle">
                     <button
-                      className="focus-button"
+                      className="focus-button usa-button usa-button--unstyled"
                       tabIndex="-1"
                       aria-disabled="true"
                     />

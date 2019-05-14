@@ -1,9 +1,19 @@
+.grid-container {
+  max-width: 1440px;
+}
+
+.usa-header + .usa-section,
+.usa-header + main {
+  border: none;
+}
+
 .usa-header {
   margin-bottom: 3rem;
 
   .usa-logo {
-    width: 75px;
-    margin: 20px 20px 0 0;
+    width: 100%;
+    max-width: 75px;
+    margin: 20px 0 0 0;
 
     img {
       width: 100%;
@@ -24,11 +34,20 @@
 .usa-form-group {
   margin-bottom: 25px;
 
-  label {
+  label:not(.usa-checkbox__label, .usa-radio__label) {
     margin: 0 0 5px;
   }
 }
 
+.usa-button {
+  &.usa-button--unstyled {
+    padding: 2px;
+    margin: 0;
+    &:disabled {
+      color: $color-gray;
+    }
+  }
+}
 option:first-child {
   font-weight: initial;
 }
@@ -41,7 +60,7 @@ option:first-child {
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
     position: relative;
-    padding-left: 3rem;
+    padding-left: 2rem;
     svg {
       position: absolute;
       top: 2px;
@@ -97,36 +116,54 @@ option:first-child {
   }
 }
 
-.usa-date-of-birth {
+.usa-memorable-date {
   label {
     margin: 0 0 5px;
     font-weight: $font-normal;
   }
 }
 
-.usa-input-error {
+.subsection .usa-form-group .usa-fieldset .usa-memorable-date {
+  .usa-form-group--day,
+  .usa-form-group--month,
+  .usa-form-group--year {
+    margin-bottom: 0;
+  }
+}
+
+.usa-input--error {
   padding-top: unset;
   padding-bottom: 0;
   margin-top: auto;
   margin-bottom: 20px;
 }
 
-.usa-input-error-message {
+.usa-error-message {
   padding: 15px 0 0 0;
   margin: 0;
   clear: left;
   line-height: 1;
 }
 
-.usa-alert-error,
-.usa-alert-success,
-.usa-alert-warning {
+.usa-alert--error,
+.usa-alert--success,
+.usa-alert--warning {
   max-width: 700px;
   min-height: 75px;
 
-  .usa-alert-heading {
+  .usa-alert__heading {
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  .usa-alert__body {
+    display: block;
+  }
+
+  .usa-alert__action {
+    button {
+      margin: 0;
+    }
   }
 
   &.usa-alert-success-message-only {

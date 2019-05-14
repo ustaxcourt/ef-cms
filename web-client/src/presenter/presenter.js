@@ -26,6 +26,7 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
+import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
@@ -158,6 +159,7 @@ export const presenter = {
     dismissModalSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
+    fetchUserNotificationsSequence,
     formCancelToggleCancelSequence,
     getUsersInSectionSequence,
     gotoAddDocketEntrySequence,

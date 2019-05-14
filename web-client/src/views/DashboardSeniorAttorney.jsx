@@ -4,7 +4,7 @@ import { WorkQueue } from './WorkQueue';
 import React from 'react';
 
 export const DashboardSeniorAttorney = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <SuccessNotification />
     <ErrorNotification />
     <WorkQueue />

@@ -80,6 +80,7 @@ export const state = {
     isVisible: false,
   },
   modal: {},
+  notifications: {},
   path: '/',
 
   paymentInfo: {
