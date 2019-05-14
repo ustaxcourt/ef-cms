@@ -52,6 +52,7 @@ export const state = {
   completeForm: {},
   contactsHelper,
   currentPage: 'Interstitial',
+  currentPageHeader: '',
   currentTab: '',
   dashboardPetitionerHelper,
   dashboardRespondentHelper,
