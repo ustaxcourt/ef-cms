@@ -136,6 +136,7 @@ workflows:
       - deploy:
           requires:
             - build
+            - e2e
           filters:
             branches:
               only: 
