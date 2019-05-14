@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 import close from '../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
@@ -19,7 +19,18 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/">Messages</a>
+          <a href="/">
+            Messages{' '}
+            {helper.showMessagesIcon && (
+              <FontAwesomeIcon
+                icon={['fas', 'envelope']}
+                className="iconStatusUnread"
+                aria-label="unread message"
+                size="sm"
+                aria-hidden="false"
+              />
+            )}
+          </a>
         </li>
       )}
       {helper.showDocumentQC && (
@@ -51,6 +62,7 @@ const NavigationItems = helper => {
 export const Header = connect(
   {
     betaBar: state.betaBar,
+    fetchUserNotificationsSequence: sequences.fetchUserNotificationsSequence,
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
@@ -65,10 +77,15 @@ export const Header = connect(
     loginSequence,
     mobileMenu,
     signOutSequence,
+    fetchUserNotificationsSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
   }) => {
+    useEffect(() => {
+      fetchUserNotificationsSequence();
+    }, []);
+
     return (
       <>
         {betaBar.isVisible && (
