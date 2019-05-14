@@ -557,9 +557,9 @@ button.link.mobile-sort-docket-button {
 header.usa-header {
   display: flex;
   height: 115px;
-  margin-bottom: 0px;
   flex-direction: row;
   border-bottom: none;
+  margin-bottom: 0px;
 
   .main-navigation {
     display: none;
@@ -852,4 +852,5 @@ nav.usa-nav {
   background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
   color: #fff;
   font-size: 14px;
+  font-weight: $font-semibold;
 }
