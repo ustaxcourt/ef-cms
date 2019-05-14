@@ -13,6 +13,11 @@ import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
 import {
+  createISODateString,
+  formatDateString,
+} from '../../shared/src/business/utilities/DateHandler';
+
+import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
@@ -257,6 +262,12 @@ const applicationContext = {
     return uuidv4();
   },
   getUseCases: () => allUseCases,
+  getUtilities: () => {
+    return {
+      createISODateString,
+      formatDateString,
+    };
+  },
   setCurrentUser,
   setCurrentUserToken,
 };

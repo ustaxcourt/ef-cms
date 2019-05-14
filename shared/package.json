@@ -50,6 +50,7 @@
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.25",
     "pdf-lib": "^0.6.2",
     "s3-zip": "^3.0.0",
     "sanitize-filename": "^1.6.1",
