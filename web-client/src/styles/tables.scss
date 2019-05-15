@@ -76,12 +76,12 @@ table.dashboard {
 
 table.messages {
   thead {
-    border-bottom: 2px solid $color-base-lighter;
+    border-bottom: 2px solid color($theme-color-base-lighter);
 
     th {
       padding-top: 10px;
       padding-bottom: 10px;
-      background-color: $color-base-lightest;
+      background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;
 
       &.header-fixed-width {
