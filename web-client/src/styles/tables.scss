@@ -73,7 +73,10 @@ table.work-queue {
     font-size: 17px;
 
     &.message-select-control {
-      vertical-align: middle;
+      label {
+        left: 5px;
+        padding-top: 10px;
+      }
     }
 
     &.message-queue-row {
