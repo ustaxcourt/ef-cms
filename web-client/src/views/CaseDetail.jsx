@@ -102,7 +102,7 @@ export const CaseDetail = connect(
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            Pay now
+                            Pay Now
                           </a>
 
                           <h3 className="margin-top-1">Mail in payment</h3>
