@@ -1,19 +1,23 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
-import moment from 'moment';
 
-export const formatDocument = document => {
+const formatDocument = (document, applicationContext) => {
   const result = _.cloneDeep(document);
-  result.createdAtFormatted = moment.utc(result.createdAt).format('L');
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.createdAt, 'MMDDYYYY');
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
   return result;
 };
 
-export const formatDocketRecord = docketRecord => {
+const formatDocketRecord = (docketRecord, applicationContext) => {
   const result = _.cloneDeep(docketRecord);
-  result.createdAtFormatted = moment.utc(result.filingDate).format('L');
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.filingDate)
+    .format('MMDDYYYY');
 
   return result;
 };
@@ -42,11 +46,13 @@ const processDuplicateError = (caseDetail, caseDetailErrors) => {
   });
 };
 
-const formatYearAmount = (caseDetailErrors, caseDetail) => (
+const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
   yearAmount,
   idx,
 ) => {
-  const formattedYear = moment.utc(yearAmount.year, 'YYYY').format('YYYY');
+  const formattedYear = applicationContext
+    .getUtilities()
+    .formatDateString(yearAmount.year, 'YYYY');
   yearAmount.formattedYear = formattedYear;
   yearAmount.showError = false;
   yearAmount.amountFormatted = yearAmount.amount
@@ -86,6 +92,7 @@ const formatDocketRecordWithDocument = (
   caseDetail,
   docketRecords = [],
   documents = [],
+  applicationContext,
 ) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
@@ -101,9 +108,9 @@ const formatDocketRecordWithDocument = (
       document = documentMap[record.documentId];
 
       if (document.certificateOfServiceDate) {
-        document.certificateOfServiceDateFormatted = moment
-          .utc(document.certificateOfServiceDate)
-          .format('L');
+        document.certificateOfServiceDateFormatted = applicationContext
+          .getUtilities()
+          .formatDateString(document.certificateOfServiceDate, 'L');
       }
 
       //filings and proceedings string
@@ -145,13 +152,19 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
-  if (result.documents) result.documents = result.documents.map(formatDocument);
+  if (result.documents)
+    result.documents = result.documents.map(d =>
+      formatDocument(d, applicationContext),
+    );
   if (result.docketRecord) {
-    result.docketRecord = result.docketRecord.map(formatDocketRecord);
+    result.docketRecord = result.docketRecord.map(d =>
+      formatDocketRecord(d, applicationContext),
+    );
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
       caseDetail,
       result.docketRecord,
       result.documents,
+      applicationContext,
     );
   }
 
@@ -173,20 +186,27 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
     result.practitioner.formattedName = formattedName;
   }
 
-  result.createdAtFormatted = moment.utc(result.createdAt).format('L');
-  result.receivedAtFormatted = moment.utc(result.receivedAt).format('L');
-  result.irsDateFormatted = moment
-    .utc(result.irsSendDate)
-    .local()
-    .format('L LT');
-  result.payGovDateFormatted = moment.utc(result.payGovDate).format('L');
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.createdAt, 'MMDDYYYY');
+  result.receivedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.receivedAt, 'MMDDYYYY');
+  result.irsDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.irsSendDate, 'DATE_TIME');
+  result.payGovDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.payGovDate, 'MMDDYYYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
   }${result.docketNumberSuffix || ''}`;
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
-    ? moment.utc(result.irsNoticeDate).format('L')
+    ? applicationContext
+        .getUtilities()
+        .formatDateString(result.irsNoticeDate, 'MMDDYYYY')
     : 'No notice provided';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
