@@ -146,7 +146,10 @@ export const SectionWorkQueueInbox = connect(
                       {item.document.documentType}
                     </a>
                   </div>
-                  <div className="message-document-detail">
+                  <div
+                    id={`detail-${item.workItemId}`}
+                    className="message-document-detail"
+                  >
                     {item.currentMessage.message}
                   </div>
                 </td>
