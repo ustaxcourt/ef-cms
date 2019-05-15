@@ -13,42 +13,41 @@ export const CaseDetailHeader = connect(
   },
   ({ caseDetail, caseHelper, showModal, openCaseCaptionModalSequence }) => {
     return (
-      <React.Fragment>
-        <div>
-          <h1 className="heading-2 captioned" tabIndex="-1">
-            <a href={'/case-detail/' + caseDetail.docketNumber}>
-              Docket Number: {caseDetail.docketNumberWithSuffix}
-            </a>
-          </h1>
-          <span
-            className="usa-tag case-status-label"
-            aria-label={`status: ${caseDetail.status}`}
-          >
-            <span aria-hidden="true">{caseDetail.status}</span>
-          </span>
-        </div>
-        <p id="case-title" className="float-left no-bottom-margin margin-y-0">
-          {caseDetail.caseTitle}
-        </p>
-        {caseHelper.showCaptionEditButton && (
-          <p className="float-left no-bottom-margin margin-y-0">
-            <button
-              className="usa-button usa-button--unstyled"
-              id="caption-edit-button"
-              onClick={() => {
-                openCaseCaptionModalSequence();
-              }}
+      <div className="big-blue-header">
+        <div className="grid-container">
+          <div>
+            <h1 className="heading-2 captioned" tabIndex="-1">
+              <a href={'/case-detail/' + caseDetail.docketNumber}>
+                Docket Number: {caseDetail.docketNumberWithSuffix}
+              </a>
+            </h1>
+            <span
+              className="usa-tag"
+              aria-label={`status: ${caseDetail.status}`}
             >
-              <FontAwesomeIcon icon="edit" size="sm" />
-              Edit
-            </button>
+              <span aria-hidden="true">{caseDetail.status}</span>
+            </span>
+          </div>
+          <p id="case-title" className="margin-y-0">
+            <span className="padding-right-2">{caseDetail.caseTitle}</span>
+            {caseHelper.showCaptionEditButton && (
+              <button
+                className="usa-button usa-button--unstyled "
+                id="caption-edit-button"
+                onClick={() => {
+                  openCaseCaptionModalSequence();
+                }}
+              >
+                <FontAwesomeIcon icon="edit" size="sm" />
+                Edit
+              </button>
+            )}
           </p>
-        )}
-        {showModal == 'UpdateCaseCaptionModalDialog' && (
-          <UpdateCaseCaptionModalDialog />
-        )}
-        <div className="clear-both" />
-      </React.Fragment>
+          {showModal == 'UpdateCaseCaptionModalDialog' && (
+            <UpdateCaseCaptionModalDialog />
+          )}
+        </div>
+      </div>
     );
   },
 );

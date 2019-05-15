@@ -34,19 +34,11 @@ export const CaseDetailInternal = connect(
     updateFormValueSequence,
   }) => {
     return (
-      <React.Fragment>
-        <div className="grid-container breadcrumb">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back to dashboard
-          </a>
-        </div>
+      <>
+        <CaseDetailHeader />
         <section className="usa-section grid-container">
-          <CaseDetailHeader />
-          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-
           <div>
             <h2>Messages In Progress</h2>
             {extractedPendingMessages.length === 0 && (
@@ -92,7 +84,6 @@ export const CaseDetailInternal = connect(
               </tbody>
             </table>
           </div>
-
           <Tabs className="classic-horizontal" bind="documentDetail.tab">
             <Tab
               tabName="docketRecord"
@@ -104,7 +95,6 @@ export const CaseDetailInternal = connect(
             <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
               <CaseInformationInternal />
               <PartyInformation />
-
               <div>
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Petition fee</legend>
@@ -133,7 +123,7 @@ export const CaseDetailInternal = connect(
                           Paid by pay.gov
                         </label>
                         {caseHelper.showPayGovIdInput && (
-                          <React.Fragment>
+                          <>
                             <label htmlFor="paygovid" className="usa-label">
                               Payment ID
                             </label>
@@ -155,7 +145,7 @@ export const CaseDetailInternal = connect(
                             >
                               Save updates
                             </button>
-                          </React.Fragment>
+                          </>
                         )}
                       </li>
                     </ul>
@@ -182,7 +172,7 @@ export const CaseDetailInternal = connect(
             </a>
           )}
         </section>
-      </React.Fragment>
+      </>
     );
   },
 );
