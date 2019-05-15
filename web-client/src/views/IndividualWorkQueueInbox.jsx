@@ -29,15 +29,7 @@ export const IndividualWorkQueueInbox = connect(
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
-            <tbody
-              key={idx}
-              onClick={() =>
-                setFocusedWorkItem({
-                  queueType: 'workQueue',
-                  uiKey: item.uiKey,
-                })
-              }
-            >
+            <tbody key={idx}>
               <tr>
                 <td className="message-queue-row">
                   {item.docketNumberWithSuffix}
