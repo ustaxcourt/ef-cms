@@ -1,5 +1,6 @@
 import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
@@ -57,6 +58,7 @@ export const submitDocketEntrySequence = [
               getDocketEntryAlertSuccessAction,
               setAlertSuccessAction,
               set(state.saveAlertsForNavigation, true),
+              clearCurrentPageHeaderAction,
               navigateToCaseDetailAction,
             ],
             supportingDocument: [
@@ -66,6 +68,7 @@ export const submitDocketEntrySequence = [
               clearFormAction,
               set(state.wizardStep, 'SupportingDocumentForm'),
               setCurrentPageAction('Interstitial', { force: true }),
+              clearCurrentPageHeaderAction,
               setCurrentPageAction('AddDocketEntry'),
             ],
           },

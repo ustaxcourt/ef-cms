@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -19,6 +20,7 @@ import { state } from 'cerebral';
 
 export const gotoDocumentDetailSequence = [
   setCurrentPageAction('Interstitial'),
+  clearCurrentPageHeaderAction,
   clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
