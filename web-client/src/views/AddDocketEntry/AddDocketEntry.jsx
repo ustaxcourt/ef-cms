@@ -28,14 +28,8 @@ export const AddDocketEntry = connect(
   }) => {
     return (
       <>
-        <div className="grid-container breadcrumb">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back
-          </a>
-        </div>
+        <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
-          <CaseDetailHeader />
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-container padding-x-0 add-bottom-margin">
