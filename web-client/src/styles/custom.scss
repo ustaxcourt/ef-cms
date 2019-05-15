@@ -325,7 +325,7 @@ select[disabled] {
   max-width: 700px;
   padding: 10px;
   border-left: 5px solid $color-gold;
-  background: #FAF3D1;
+  background: $color-alert-background;
   color: $color-base;
 
   .usa-form-hint {
@@ -889,7 +889,7 @@ nav.usa-nav {
 }
 
 .title {
-  border-bottom: 1px solid #DCDEE0;
+  border-bottom: 1px solid $color-bg-base-lighter;
   margin-bottom: 40px;
 
   h1 {
@@ -897,7 +897,7 @@ nav.usa-nav {
     top: 2px;
     display: inline-block; 
     padding-bottom: 20px;
-    border-bottom: 3px solid #005EA2;
+    border-bottom: 3px solid $color-primary;
     margin-top: -2px;
     margin-bottom: 0px;
   }
