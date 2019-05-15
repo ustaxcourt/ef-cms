@@ -55,7 +55,7 @@ nav.horizontal-tabs,
   }
 
   li button:hover {
-    border-bottom: 3px $theme-color-primary-darker solid;
+    border-bottom: 3px color($theme-color-primary-darker) solid;
     color: color($theme-color-primary-darker);
   }
 }
@@ -194,7 +194,7 @@ nav.horizontal-tabs,
               line-height: 1.3em;
 
               &:hover {
-                border-bottom: 3px $theme-color-primary-darker solid;
+                border-bottom: 3px color($theme-color-primary-darker) solid;
                 color: color($theme-color-primary-darker);
               }
             }

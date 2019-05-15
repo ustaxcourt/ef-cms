@@ -353,7 +353,7 @@ label.ustc-upload {
   }
 
   .select-react-element__control--menu-is-open {
-    outline: 2px dotted $theme-color-base-light !important;
+    outline: 2px dotted color($theme-color-base-light) !important;
     outline-offset: 3px;
   }
 }
