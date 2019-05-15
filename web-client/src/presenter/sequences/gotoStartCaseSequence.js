@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPetitionAction } from '../actions/clearPetitionAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
@@ -15,6 +16,7 @@ import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { state } from 'cerebral';
 
 export const gotoStartCaseSequence = [
+  clearCurrentPageHeaderAction,
   clearAlertsAction,
   clearPetitionAction,
   clearFormAction,
