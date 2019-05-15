@@ -13,12 +13,12 @@ const USTC_TZ = 'America/New_York';
  * @param {string} dateString a date string to be sent to persistence
  * @returns {string} a formatted ISO date string
  */
-module.exports.createISODateString = dateString => {
+module.exports.createISODateString = (dateString, inputFormat) => {
   let result;
   if (!dateString) {
     result = moment();
   } else {
-    result = moment.tz(dateString, USTC_TZ);
+    result = moment.tz(dateString, inputFormat, USTC_TZ);
   }
 
   return result.toISOString();

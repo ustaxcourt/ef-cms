@@ -1,6 +1,9 @@
 import { runCompute } from 'cerebral/test';
 
-import { extractedDocument } from './extractDocument';
+import { extractedDocument as extractedDocumentComputed } from './extractDocument';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 
 describe('extractedDocument', () => {
   it('should return an empty object if no document was found', async () => {

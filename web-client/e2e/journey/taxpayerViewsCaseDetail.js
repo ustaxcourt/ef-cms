@@ -2,7 +2,7 @@ import { runCompute } from 'cerebral/test';
 
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { withAppContextDecorator } from '../util/withAppContext';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default test => {
   return it('Taxpayer views case detail', async () => {

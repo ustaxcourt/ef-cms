@@ -48,6 +48,7 @@ import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
+import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -64,13 +65,9 @@ const app = {
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
-    const applicationContextDecorator = f => {
-      return get => f(get, applicationContext);
-    };
-
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
-        return applicationContextDecorator(value);
+        return withAppContextDecorator(value, applicationContext);
       }
       return value;
     });

@@ -7,6 +7,16 @@ describe('DateHandler', () => {
       expect(myDate).toBeDefined();
     });
 
+    it('creates a date from a year', () => {
+      const myDate = createISODateString('2000', 'YYYY');
+      expect(myDate).toBe('2000-01-01T05:00:00.000Z');
+    });
+
+    it('creates a date from a two-digit year', () => {
+      const myDate = createISODateString('89', 'YYYY');
+      expect(myDate).toBe('1989-01-01T05:00:00.000Z');
+    });
+
     it('creates an EST-set UTC date from a YYYY-MM-DD string', () => {
       const myDate = createISODateString('2001-01-01'); // Jan 1, 2001 at the stroke of midnight, EST
       expect(myDate).toBe('2001-01-01T05:00:00.000Z');
@@ -25,7 +35,7 @@ describe('DateHandler', () => {
         dateRetrievedFromStorage,
         'YYYY-MM-DD hh:mm a',
       );
-      expect(result).toBe('2019-03-01 11:40 am');
+      expect(result).toBe('2019-03-01 11:40 pm');
     });
   });
 });
