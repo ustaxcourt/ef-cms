@@ -1,21 +1,14 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
-    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
-    documentHelper,
-    setFocusedWorkItem,
-    workQueue,
-    workQueueSectionHelper,
-  }) => {
+  ({ documentHelper, workQueue, workQueueSectionHelper }) => {
     return (
       <React.Fragment>
         <table
