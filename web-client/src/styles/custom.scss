@@ -525,7 +525,7 @@ textarea#case-caption {
 
 .beta {
   padding: 20px;
-  background-color: $color-gold-lighter;
+  background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
   a {
     color: color($theme-color-base-darkest);
