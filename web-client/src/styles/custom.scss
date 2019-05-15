@@ -532,7 +532,7 @@ textarea#case-caption {
 }
 
 .action-section {
-  padding-top: 20px;
+  padding-top: 6px;
   padding-bottom: 10px;
 
   .assign-work-item-count {
@@ -541,6 +541,7 @@ textarea#case-caption {
     padding: 8px;
     margin-top: 10px;
     margin-right: 20px;
+    background-color: $color-blue-dark;
     float: left;
   }
 
