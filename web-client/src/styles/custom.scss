@@ -204,6 +204,15 @@ select[disabled] {
   font-weight: $font-semibold;
 }
 
+.usa-accordion__button.font-normal {
+  font-weight: normal;
+}
+
+.usa-accordion__button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .usa-accordion.start-a-case,
 .usa-accordion.document-category {
   margin-bottom: 2rem;
@@ -214,7 +223,7 @@ select[disabled] {
     border: 0;
     background: none;
     color: color($theme-color-primary);
-    font-weight: inherit;
+    font-weight: normal;
 
     .svg-inline--fa {
       margin-left: 0.5rem;
@@ -855,12 +864,22 @@ nav.usa-nav {
   padding: 25px 0;
   margin-bottom: 40px;
   background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  color: $color-white; // TODO: Replace with USWDSv2 var when available;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
     color: $color-white;
   }
-
+  a,
+  a:hover,
+  button,
+  button:hover {
+    color: $color-white;
+  }
+  .usa-tag {
+    background: $color-white;
+    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  }
   .unread {
     position: relative;
     top: -3px;
@@ -878,4 +897,19 @@ nav.usa-nav {
   color: #fff;
   font-size: 14px;
   font-weight: $font-semibold;
+}
+
+.title {
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  margin-bottom: 40px;
+
+  h1 {
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    padding-bottom: 20px;
+    border-bottom: 3px solid color($theme-color-primary);
+    margin-top: -2px;
+    margin-bottom: 0px;
+  }
 }

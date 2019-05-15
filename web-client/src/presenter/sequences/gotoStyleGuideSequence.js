@@ -1,3 +1,7 @@
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-export const gotoStyleGuideSequence = [setCurrentPageAction('StyleGuide')];
+export const gotoStyleGuideSequence = [
+  clearCurrentPageHeaderAction,
+  setCurrentPageAction('StyleGuide'),
+];

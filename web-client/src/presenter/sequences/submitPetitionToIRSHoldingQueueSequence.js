@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
@@ -11,6 +12,7 @@ export const submitPetitionToIRSHoldingQueueSequence = [
   clearAlertsAction,
   clearModalAction,
   setCurrentPageAction('Interstitial'),
+  clearCurrentPageHeaderAction,
   sendPetitionToIRSHoldingQueueAction,
   setAlertSuccessAction,
   getCaseAction,

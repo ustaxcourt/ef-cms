@@ -1,5 +1,6 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getCasesForRespondentAction } from '../actions/getCasesForRespondentAction';
@@ -15,6 +16,7 @@ import { setUsersAction } from '../actions/setUsersAction';
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
+  clearCurrentPageHeaderAction,
   clearErrorAlertsAction,
   getUserRoleAction,
   {
