@@ -93,6 +93,7 @@ export const state = {
   requestAccessHelper,
   screenMetadata: {},
   searchTerm: '',
+  sectionInboxCount: 0,
   selectDocumentTypeHelper,
   selectedWorkItems: [],
   sessionMetadata: {},
