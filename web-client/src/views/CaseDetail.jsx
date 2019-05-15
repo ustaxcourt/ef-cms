@@ -104,8 +104,17 @@ export const CaseDetail = connect(
                           >
                             Pay now
                           </a>
-
-                          <h3 className="margin-top-1">Mail in payment</h3>
+                        </div>
+                        <div className="tablet:grid-col-6">
+                          <Hint>
+                            It may take up to X days for your payment to appear
+                            online.
+                          </Hint>
+                        </div>
+                      </div>
+                      <div className="grid-row">
+                        <div className="tablet:grid-col-6 margin-bottom-2">
+                          <h3 className="margin-top-2">Mail in payment</h3>
                           <p>Make checks/money order payable to:</p>
                           <address>
                             Clerk, United States Tax Court
@@ -117,13 +126,6 @@ export const CaseDetail = connect(
                           </address>
                         </div>
                         <div className="tablet:grid-col-6">
-                          <div className="margin-bottom-8 margin-top-2">
-                            <Hint>
-                              It may take up to X days for your payment to
-                              appear online.
-                            </Hint>
-                          </div>
-
                           <h3>Canʼt afford to pay the fee?</h3>
                           <p>
                             You may be eligible for a filing fee waiver.{' '}

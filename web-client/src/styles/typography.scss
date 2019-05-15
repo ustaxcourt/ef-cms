@@ -82,7 +82,7 @@ h5,
 h6 {
   &.underlined {
     padding-bottom: 1rem;
-    border-bottom: 1px solid $color-gray-lighter;
+    border-bottom: 1px solid color($theme-color-base-lighter);
   }
 }
 
@@ -116,5 +116,5 @@ p.semi-bold {
 }
 
 a {
-  color: $color-primary;
+  color: color($theme-color-primary);
 }
