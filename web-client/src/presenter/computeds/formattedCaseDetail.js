@@ -1,4 +1,3 @@
-import { applicationContext } from '../../applicationContext';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
@@ -135,7 +134,7 @@ const formatDocketRecordWithDocument = (
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
   if (_.isEmpty(caseDetail)) {
     return {};
   }
@@ -260,12 +259,12 @@ const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   return result;
 };
 
-export const formattedCases = get => {
+export const formattedCases = (get, applicationContext) => {
   const cases = get(state.cases);
-  return cases.map(formatCase);
+  return cases.map(myCase => formatCase(myCase, undefined, applicationContext));
 };
 
-export const formattedCaseDetail = get => {
+export const formattedCaseDetail = (get, applicationContext) => {
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
   const caseId = get(state.caseDetail.caseId);
@@ -273,7 +272,7 @@ export const formattedCaseDetail = get => {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
   const caseDetailErrors = get(state.caseDetailErrors);
-  const result = formatCase(caseDetail, caseDetailErrors);
+  const result = formatCase(caseDetail, caseDetailErrors, applicationContext);
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,

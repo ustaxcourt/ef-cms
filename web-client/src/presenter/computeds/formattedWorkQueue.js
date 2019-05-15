@@ -2,8 +2,6 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
 
-import { applicationContext } from '../../applicationContext';
-
 const DATE_FORMAT_LONG = 'MM/DD/YYYY hh:mm a';
 const DATE_TODAY_TIME = 'LT';
 const DATE_MMDDYYYY = 'L';
