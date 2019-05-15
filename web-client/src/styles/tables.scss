@@ -63,6 +63,17 @@ table.dashboard {
   }
 }
 
+.usa-table td {
+  &.padding-extra {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .message-detail {
+    font-size: 15px;
+  }
+}
+
 table.messages {
   thead {
     border-bottom: 2px solid $color-base-lighter;

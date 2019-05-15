@@ -40,7 +40,10 @@ export const CaseDetailInternal = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <h2>Messages In Progress</h2>
+            <div className="title">
+              <h1>Messages In Progress</h1>
+            </div>
+
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
@@ -57,12 +60,16 @@ export const CaseDetailInternal = connect(
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
-                    <td className="responsive-title">
+                    <td className="responsive-title padding-extra">
                       {workItem.assigneeName}
                     </td>
-                    <td>{workItem.messages[0].from}</td>
-                    <td>{workItem.messages[0].createdAtTimeFormatted}</td>
-                    <td>
+                    <td className="padding-extra">
+                      {workItem.messages[0].from}
+                    </td>
+                    <td className="padding-extra">
+                      {workItem.messages[0].createdAtTimeFormatted}
+                    </td>
+                    <td className="padding-extra">
                       <p className="margin-y-0">
                         <a
                           href={documentHelper({
@@ -75,7 +82,7 @@ export const CaseDetailInternal = connect(
                           {workItem.document.documentType}
                         </a>
                       </p>
-                      <p className="margin-y-0">
+                      <p className="message-detail margin-y-0">
                         {workItem.messages[0].message}
                       </p>
                     </td>
