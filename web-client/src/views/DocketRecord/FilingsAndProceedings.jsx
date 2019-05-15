@@ -128,10 +128,3 @@ export const FilingsAndProceedings = connect(
     );
   },
 );
-
-//internal - document detail link
-//external - no access to case (show description only)
-//external - access to case (direct download link)
-//entry does not have a document
-//processing/complete
-//isPaper icon
