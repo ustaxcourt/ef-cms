@@ -76,7 +76,7 @@ table.work-queue {
       vertical-align: middle;
     }
 
-    .message-queue-row {
+    &.message-queue-row {
       padding-top: 14px;
     }
 
@@ -84,14 +84,18 @@ table.work-queue {
       max-width: units('tablet');
     }
 
-    div.message-document-title {
+    &.has-icon {
+      width: 44px;
+    }
+
+    .message-document-title {
       overflow: hidden;
       max-width: units('tablet');
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
-    div.message-document-detail {
+    .message-document-detail {
       display: -webkit-box;
       overflow: hidden;
       height: 100%;
@@ -102,10 +106,6 @@ table.work-queue {
       -webkit-line-clamp: 3; /* number of lines to show */
       line-height: 19px; /* fallback */
       text-overflow: ellipsis;
-    }
-
-    .has-icon {
-      width: 44px;
     }
 
     label {
