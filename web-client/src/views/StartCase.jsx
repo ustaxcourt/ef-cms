@@ -6,6 +6,7 @@ import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCity } from './StartCase/TrialCity';
@@ -83,20 +84,10 @@ export const StartCase = connect(
           <div className="blue-container grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="mobile-lg:grid-col-7 push-right">
-                <div
-                  id="petition-upload-hint"
-                  className="alert-gold add-bottom-margin"
-                >
-                  <span className="usa-form-hint ustc-form-hint-with-svg">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="lg"
-                    />
-                    This should include your Petition form and any IRS notice
-                    <span aria-hidden="true">(s)</span> you received.
-                  </span>
-                </div>
+                <Hint>
+                  This should include your Petition form and any IRS notice
+                  <span aria-hidden="true">(s)</span> you received.
+                </Hint>
               </div>
               <div className="mobile-lg:grid-col-5">
                 <div
@@ -212,24 +203,14 @@ export const StartCase = connect(
           <div className="blue-container grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="mobile-lg:grid-col-7 push-right">
-                <div
-                  id="petition-hint"
-                  className="alert-gold add-bottom-margin"
-                >
-                  <span className="usa-form-hint ustc-form-hint-with-svg">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="lg"
-                    />
-                    To file a case on behalf of another taxpayer, you must be
-                    authorized to litigate in this Court as provided by the Tax
-                    Court Rules of Practice and Procedure (Rule 60). Enrolled
-                    agents, certified public accountants, and powers of attorney
-                    who are not admitted to practice before the Court are not
-                    eligible to represent taxpayers.
-                  </span>
-                </div>
+                <Hint>
+                  To file a case on behalf of another taxpayer, you must be
+                  authorized to litigate in this Court as provided by the Tax
+                  Court Rules of Practice and Procedure (Rule 60). Enrolled
+                  agents, certified public accountants, and powers of attorney
+                  who are not admitted to practice before the Court are not
+                  eligible to represent taxpayers.
+                </Hint>
               </div>
               <div className="mobile-lg:grid-col-5">
                 <div
