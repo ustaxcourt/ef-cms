@@ -2,11 +2,13 @@ import { CaseInformationPublic } from './CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const CaseDetail = connect(
@@ -115,16 +117,11 @@ export const CaseDetail = connect(
                           </address>
                         </div>
                         <div className="tablet:grid-col-6">
-                          <div className="alert-gold margin-bottom-8 margin-top-2">
-                            <span className="usa-form-hint ustc-form-hint-with-svg">
-                              <FontAwesomeIcon
-                                icon="arrow-alt-circle-left"
-                                className="fa-icon-gold"
-                                size="lg"
-                              />
+                          <div className="margin-bottom-8 margin-top-2">
+                            <Hint>
                               It may take up to X days for your payment to
                               appear online.
-                            </span>
+                            </Hint>
                           </div>
 
                           <h3>Canʼt afford to pay the fee?</h3>
