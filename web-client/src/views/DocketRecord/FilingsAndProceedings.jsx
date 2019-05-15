@@ -5,6 +5,7 @@ import React from 'react';
 
 export const FilingsAndProceedings = connect(
   {
+    arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseDetailHelper: state.caseDetailHelper,
@@ -16,13 +17,14 @@ export const FilingsAndProceedings = connect(
     token: state.token,
   },
   ({
-    record,
-    document,
+    arrayIndex,
     baseUrl,
-    caseDetailHelper,
     caseDetail,
-    showDocketRecordDetailModalSequence,
+    caseDetailHelper,
+    document,
     documentHelper,
+    record,
+    showDocketRecordDetailModalSequence,
     token,
   }) => {
     function renderDocumentLink(
@@ -79,6 +81,7 @@ export const FilingsAndProceedings = connect(
             record.description,
             document.isPaper,
             document.additionalInfo,
+            arrayIndex,
           )}
         {document &&
           caseDetailHelper.showDirectDownloadLink &&
@@ -116,6 +119,7 @@ export const FilingsAndProceedings = connect(
             record.description,
             false,
             document.additionalInfo,
+            arrayIndex,
           )}
         {!document && !record.documentId && record.description}
         <span className="filings-and-proceedings">
