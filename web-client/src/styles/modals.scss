@@ -67,14 +67,14 @@
   }
 
   .usa-button,
-  .usa-button-secondary {
+  .usa-button--outline {
     min-width: 150px;
   }
 }
 
 .app-timeout-modal {
   > .modal-header,
-  .usa-button-secondary {
+  .usa-button--outline {
     display: none;
   }
   padding: 60px 0;
@@ -151,7 +151,7 @@
     font-weight: $font-semibold;
   }
 
-  button.usa-button-secondary {
+  button.usa-button--outline {
     background-color: $color-primary;
     color: $color-white;
   }

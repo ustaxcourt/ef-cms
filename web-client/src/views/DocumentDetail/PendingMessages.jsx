@@ -44,7 +44,7 @@ export const PendingMessages = connect(
           type="button"
           id="create-message-button"
           onClick={() => openCreateMessageModalSequence()}
-          className="usa-button-secondary"
+          className="usa-button usa-button--outline"
         >
           Create Message
         </button>
@@ -96,7 +96,7 @@ export const PendingMessages = connect(
                       workItem.workItemId,
                     )}
                     aria-controls={`history-card-${idx}`}
-                    className={`${
+                    className={`usa-button ${
                       documentDetailHelper.showAction(
                         'history',
                         workItem.workItemId,
@@ -123,7 +123,7 @@ export const PendingMessages = connect(
                         workItem.workItemId,
                       )}
                       aria-controls={`history-card-${idx}`}
-                      className={`${
+                      className={`usa-button ${
                         documentDetailHelper.showAction(
                           'complete',
                           workItem.workItemId,
@@ -155,7 +155,7 @@ export const PendingMessages = connect(
                       )}
                       aria-controls={`forward-card-${idx}`}
                       data-workitemid={workItem.workItemId}
-                      className={`send-to ${
+                      className={`usa-button send-to ${
                         documentDetailHelper.showAction(
                           'forward',
                           workItem.workItemId,
@@ -199,10 +199,14 @@ export const PendingMessages = connect(
                         });
                       }}
                     >
-                      <label htmlFor={`complete-message-${idx}`}>
+                      <label
+                        htmlFor={`complete-message-${idx}`}
+                        className="usa-label"
+                      >
                         Add Message (optional)
                       </label>
                       <textarea
+                        className="usa-textarea"
                         name="completeMessage"
                         id={`complete-message-${idx}`}
                         onChange={e => {
@@ -298,10 +302,11 @@ export const PendingMessages = connect(
                             : '')
                         }
                       >
-                        <label htmlFor={`section-${idx}`}>Select Section</label>
-
+                        <label htmlFor={`section-${idx}`} className="usa-label">
+                          Select Section
+                        </label>
                         <select
-                          className="usa-input-inline"
+                          className="usa-select"
                           id={`section-${idx}`}
                           name="section"
                           onChange={e => {
@@ -342,12 +347,15 @@ export const PendingMessages = connect(
                               : '')
                           }
                         >
-                          <label htmlFor={`chambers-${idx}`}>
+                          <label
+                            htmlFor={`chambers-${idx}`}
+                            className="usa-label"
+                          >
                             Select Chambers
                           </label>
 
                           <select
-                            className="usa-input-inline"
+                            className="usa-select"
                             id={`chambers-${idx}`}
                             name="chambers"
                             onChange={e => {
@@ -391,11 +399,14 @@ export const PendingMessages = connect(
                             : '')
                         }
                       >
-                        <label htmlFor={`assignee-id-${idx}`}>
+                        <label
+                          htmlFor={`assignee-id-${idx}`}
+                          className="usa-label"
+                        >
                           Select Recipient
                         </label>
                         <select
-                          className="usa-input-inline"
+                          className="usa-select"
                           id={`assignee-id-${idx}`}
                           name="assigneeId"
                           disabled={
@@ -441,11 +452,15 @@ export const PendingMessages = connect(
                             : '')
                         }
                       >
-                        <label htmlFor={`forward-message-${idx}`}>
+                        <label
+                          htmlFor={`forward-message-${idx}`}
+                          className="usa-label"
+                        >
                           Add Message
                         </label>
                         <textarea
                           aria-labelledby={`message-label-${idx}`}
+                          className="usa-textarea"
                           name="forwardMessage"
                           id={`forward-message-${idx}`}
                           onChange={e => {

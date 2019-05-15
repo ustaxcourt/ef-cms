@@ -18,7 +18,7 @@ export const SectionWorkQueueOutbox = connect(
   }) => {
     return (
       <table
-        className="work-queue subsection"
+        className="usa-table work-queue subsection"
         id="section-work-queue"
         aria-describedby="tab-work-queue"
       >
@@ -49,7 +49,7 @@ export const SectionWorkQueueOutbox = connect(
             <tr>
               <td className="focus-toggle">
                 <button
-                  className="focus-button"
+                  className="focus-button usa-button usa-button--unstyled"
                   aria-label="Expand message detail"
                   aria-expanded={item.isFocused}
                   aria-controls={`detail-${item.workItemId}`}
@@ -89,7 +89,7 @@ export const SectionWorkQueueOutbox = connect(
               <tr className="queue-focus queue-message">
                 <td className="focus-toggle">
                   <button
-                    className="focus-button"
+                    className="focus-button usa-button usa-button--unstyled"
                     tabIndex="-1"
                     aria-disabled="true"
                   />

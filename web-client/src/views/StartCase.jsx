@@ -59,7 +59,7 @@ export const StartCase = connect(
     validationErrors,
   }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <form
           role="form"
           aria-labelledby="start-case-header"
@@ -68,6 +68,7 @@ export const StartCase = connect(
             e.preventDefault();
             submitFilePetitionSequence();
           }}
+          className="usa-form usa-form--large"
         >
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
@@ -79,9 +80,9 @@ export const StartCase = connect(
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
 
-          <div className="blue-container">
-            <div className="usa-grid-full">
-              <div className="usa-width-seven-twelfths push-right">
+          <div className="blue-container grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="mobile-lg:grid-col-7 push-right">
                 <div
                   id="petition-upload-hint"
                   className="alert-gold add-bottom-margin"
@@ -97,17 +98,16 @@ export const StartCase = connect(
                   </span>
                 </div>
               </div>
-
-              <div className="usa-width-five-twelfths">
+              <div className="mobile-lg:grid-col-5">
                 <div
-                  className={`ustc-form-group ${
-                    validationErrors.petitionFile ? 'usa-input-error' : ''
+                  className={`usa-form-group ${
+                    validationErrors.petitionFile ? 'usa-form-group--error' : ''
                   }`}
                 >
                   <label
                     htmlFor="petition-file"
                     className={
-                      'ustc-upload-petition with-hint ' +
+                      'usa-label ustc-upload-petition with-hint ' +
                       (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                     }
                   >
@@ -126,6 +126,7 @@ export const StartCase = connect(
                     accept=".pdf"
                     aria-describedby="petition-hint"
                     name="petitionFile"
+                    className="usa-input"
                     onChange={e => {
                       limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                         updatePetitionValueSequence({
@@ -141,11 +142,11 @@ export const StartCase = connect(
                     }}
                   />
                   <Text
-                    className="usa-input-error-message"
+                    className="usa-error-message"
                     bind="validationErrors.petitionFile"
                   />
                   <Text
-                    className="usa-input-error-message"
+                    className="usa-error-message"
                     bind="validationErrors.petitionFileSize"
                   />
                 </div>
@@ -156,14 +157,14 @@ export const StartCase = connect(
           <h2>Upload Your Statement of Taxpayer Identification</h2>
           <div className="blue-container">
             <div
-              className={`ustc-form-group ${
-                validationErrors.stinFile ? 'usa-input-error' : ''
+              className={`usa-form-group ${
+                validationErrors.stinFile ? 'usa-form-group--error' : ''
               }`}
             >
               <label
                 htmlFor="stin-file"
                 className={
-                  'ustc-upload-stin with-hint ' +
+                  'usa-label ustc-upload-stin with-hint ' +
                   (startCaseHelper.showStinFileValid ? 'validated' : '')
                 }
               >
@@ -181,6 +182,7 @@ export const StartCase = connect(
                 type="file"
                 accept=".pdf"
                 name="stinFile"
+                className="usa-input"
                 onChange={e => {
                   limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                     updatePetitionValueSequence({
@@ -196,20 +198,20 @@ export const StartCase = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.stinFile"
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.stinFileSize"
               />
             </div>
           </div>
 
           <h2>Who is Filing This Case?</h2>
-          <div className="blue-container">
-            <div className="usa-grid-full">
-              <div className="usa-width-seven-twelfths push-right">
+          <div className="blue-container grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="mobile-lg:grid-col-7 push-right">
                 <div
                   id="petition-hint"
                   className="alert-gold add-bottom-margin"
@@ -229,45 +231,47 @@ export const StartCase = connect(
                   </span>
                 </div>
               </div>
-              <div className="usa-width-five-twelfths">
+              <div className="mobile-lg:grid-col-5">
                 <div
                   className={
-                    'ustc-form-group ' +
-                    (validationErrors.filingType ? 'usa-input-error' : '')
+                    validationErrors.filingType ? 'usa-form-group--error' : ''
                   }
                 >
                   <fieldset
                     id="filing-type-radios"
-                    className="usa-fieldset-inputs usa-sans"
+                    className="usa-fieldset usa-sans"
                   >
                     <legend htmlFor="filing-type-radios">
                       I am filing this petition on behalf of …
                     </legend>
-                    <ul className="ustc-unstyled-list">
-                      {filingTypes.map((filingType, idx) => (
-                        <li key={filingType}>
-                          <input
-                            id={filingType}
-                            data-type={filingType}
-                            type="radio"
-                            name="filingType"
-                            value={filingType}
-                            onChange={e => {
-                              updateStartCaseFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validateStartCaseSequence();
-                            }}
-                          />
-                          <label id={`filing-type-${idx}`} htmlFor={filingType}>
-                            {filingType}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
+                    {filingTypes.map((filingType, idx) => (
+                      <div className="usa-radio" key={filingType}>
+                        <input
+                          id={filingType}
+                          data-type={filingType}
+                          type="radio"
+                          name="filingType"
+                          value={filingType}
+                          className="usa-radio__input"
+                          onChange={e => {
+                            updateStartCaseFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateStartCaseSequence();
+                          }}
+                        />
+                        <label
+                          id={`filing-type-${idx}`}
+                          htmlFor={filingType}
+                          className="usa-radio__label"
+                        >
+                          {filingType}
+                        </label>
+                      </div>
+                    ))}
                     <Text
-                      className="usa-input-error-message"
+                      className="usa-error-message"
                       bind="validationErrors.partyType"
                     />
                   </fieldset>
@@ -279,89 +283,88 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input-error' : '')
+                  (validationErrors.partyType ? 'usa-form-group--error' : '')
                 }
               >
                 <fieldset
                   id="deceased-spouse-radios"
-                  className="usa-fieldset-inputs usa-sans"
+                  className="usa-fieldset usa-sans"
                 >
                   <legend htmlFor="deceased-spouse-radios">
                     {startCaseHelper.deceasedSpouseLegend}
                   </legend>
-                  <ul className="usa-unstyled-list">
-                    {['Yes', 'No'].map((isSpouseDeceased, idx) => (
-                      <li key={isSpouseDeceased}>
-                        <input
-                          id={`isSpouseDeceased-${isSpouseDeceased}`}
-                          type="radio"
-                          name="isSpouseDeceased"
-                          value={isSpouseDeceased}
-                          onChange={e => {
-                            updateStartCaseFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            validateStartCaseSequence();
-                          }}
-                        />
-                        <label
-                          id={`is-spouse-deceased-${idx}`}
-                          htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
-                        >
-                          {isSpouseDeceased}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+                  {['Yes', 'No'].map((isSpouseDeceased, idx) => (
+                    <div
+                      className="usa-radio usa-radio__inline"
+                      key={isSpouseDeceased}
+                    >
+                      <input
+                        id={`isSpouseDeceased-${isSpouseDeceased}`}
+                        type="radio"
+                        name="isSpouseDeceased"
+                        className="usa-radio__input"
+                        value={isSpouseDeceased}
+                        onChange={e => {
+                          updateStartCaseFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          validateStartCaseSequence();
+                        }}
+                      />
+                      <label
+                        id={`is-spouse-deceased-${idx}`}
+                        htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
+                        className="usa-radio__label"
+                      >
+                        {isSpouseDeceased}
+                      </label>
+                    </div>
+                  ))}
                 </fieldset>
               </div>
             )}
-
             {startCaseHelper.showBusinessFilingTypeOptions && (
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input-error' : '')
+                  (validationErrors.partyType ? 'usa-form-group--error' : '')
                 }
               >
-                <fieldset
-                  id="business-type-radios"
-                  className="usa-fieldset-inputs usa-sans"
-                >
+                <fieldset id="business-type-radios" className="usa-fieldset">
                   <legend htmlFor="business-type-radios">
                     What type of business are you filing for?
                   </legend>
-                  <ul className="ustc-unstyled-list">
-                    {[
-                      constants.BUSINESS_TYPES.corporation,
-                      constants.BUSINESS_TYPES.partnershipAsTaxMattersPartner,
-                      constants.BUSINESS_TYPES.partnershipOtherThanTaxMatters,
-                      constants.BUSINESS_TYPES.partnershipBBA,
-                    ].map((businessType, idx) => (
-                      <li key={businessType}>
-                        <input
-                          id={`businessType-${businessType}`}
-                          type="radio"
-                          name="businessType"
-                          value={businessType}
-                          onChange={e => {
-                            updateStartCaseFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                            validateStartCaseSequence();
-                          }}
-                        />
-                        <label
-                          id={`is-business-type-${idx}`}
-                          htmlFor={`businessType-${businessType}`}
-                        >
-                          {businessType}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
+                  {[
+                    constants.BUSINESS_TYPES.corporation,
+                    constants.BUSINESS_TYPES.partnershipAsTaxMattersPartner,
+                    constants.BUSINESS_TYPES.partnershipOtherThanTaxMatters,
+                    constants.BUSINESS_TYPES.partnershipBBA,
+                  ].map((businessType, idx) => (
+                    <div className="usa-radio" key={businessType}>
+                      <input
+                        id={`businessType-${businessType}`}
+                        type="radio"
+                        name="businessType"
+                        value={businessType}
+                        className="usa-radio__input"
+                        onChange={e => {
+                          updateStartCaseFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          validateStartCaseSequence();
+                        }}
+                      />
+                      <label
+                        id={`is-business-type-${idx}`}
+                        htmlFor={`businessType-${businessType}`}
+                        className="usa-radio__label"
+                      >
+                        {businessType}
+                      </label>
+                    </div>
+                  ))}
                 </fieldset>
               </div>
             )}
@@ -369,30 +372,74 @@ export const StartCase = connect(
               <div
                 className={
                   'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-input-error' : '')
+                  (validationErrors.partyType ? 'usa-form-group--error' : '')
                 }
               >
-                <fieldset
-                  id="other-type-radios"
-                  className="usa-fieldset-inputs usa-sans"
-                >
+                <fieldset id="other-type-radios" className="usa-fieldset">
                   <legend htmlFor="other-type-radios">
                     What other type of taxpayer are you filing for?
                   </legend>
-                  <ul className="ustc-unstyled-list">
+                  {[
+                    'An estate or trust',
+                    'A minor or legally incompetent person',
+                    'Donor',
+                    'Transferee',
+                    'Deceased Spouse',
+                  ].map((otherType, idx) => (
+                    <div className="usa-radio" key={otherType}>
+                      <input
+                        id={`otherType-${otherType}`}
+                        type="radio"
+                        name="otherType"
+                        value={otherType}
+                        className="usa-radio__input"
+                        onChange={e => {
+                          updateStartCaseFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          validateStartCaseSequence();
+                        }}
+                      />
+                      <label
+                        id={`is-other-type-${idx}`}
+                        htmlFor={`otherType-${otherType}`}
+                        className="usa-radio__label"
+                      >
+                        {otherType}
+                      </label>
+                    </div>
+                  ))}
+                </fieldset>
+              </div>
+            )}
+            {startCaseHelper.showOtherFilingTypeOptions &&
+              startCaseHelper.showEstateFilingOptions && (
+                <div
+                  className={
+                    'ustc-secondary-question ' +
+                    (validationErrors.partyType ? 'usa-form-group--error' : '')
+                  }
+                >
+                  <fieldset
+                    id="estate-type-radios"
+                    className="usa-fieldset usa-sans"
+                  >
+                    <legend htmlFor="estate-type-radios">
+                      What type of estate or trust are you filing for?
+                    </legend>
                     {[
-                      'An estate or trust',
-                      'A minor or legally incompetent person',
-                      'Donor',
-                      'Transferee',
-                      'Deceased Spouse',
-                    ].map((otherType, idx) => (
-                      <li key={otherType}>
+                      constants.ESTATE_TYPES.estate,
+                      constants.ESTATE_TYPES.estateWithoutExecutor,
+                      constants.ESTATE_TYPES.trust,
+                    ].map((estateType, idx) => (
+                      <div className="usa-radio" key={estateType}>
                         <input
-                          id={`otherType-${otherType}`}
+                          id={`estateType-${estateType}`}
                           type="radio"
-                          name="otherType"
-                          value={otherType}
+                          name="estateType"
+                          className="usa-radio__input"
+                          value={estateType}
                           onChange={e => {
                             updateStartCaseFormValueSequence({
                               key: e.target.name,
@@ -402,112 +449,63 @@ export const StartCase = connect(
                           }}
                         />
                         <label
-                          id={`is-other-type-${idx}`}
-                          htmlFor={`otherType-${otherType}`}
+                          id={`is-estate-type-${idx}`}
+                          htmlFor={`estateType-${estateType}`}
+                          className="usa-radio__label"
                         >
-                          {otherType}
+                          {estateType}
                         </label>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
-                </fieldset>
-              </div>
-            )}
-
-            {startCaseHelper.showOtherFilingTypeOptions &&
-              startCaseHelper.showEstateFilingOptions && (
-                <div
-                  className={
-                    'ustc-secondary-question ' +
-                    (validationErrors.partyType ? 'usa-input-error' : '')
-                  }
-                >
-                  <fieldset
-                    id="estate-type-radios"
-                    className="usa-fieldset-inputs usa-sans"
-                  >
-                    <legend htmlFor="estate-type-radios">
-                      What type of estate or trust are you filing for?
-                    </legend>
-                    <ul className="ustc-unstyled-list">
-                      {[
-                        constants.ESTATE_TYPES.estate,
-                        constants.ESTATE_TYPES.estateWithoutExecutor,
-                        constants.ESTATE_TYPES.trust,
-                      ].map((estateType, idx) => (
-                        <li key={estateType}>
-                          <input
-                            id={`estateType-${estateType}`}
-                            type="radio"
-                            name="estateType"
-                            value={estateType}
-                            onChange={e => {
-                              updateStartCaseFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validateStartCaseSequence();
-                            }}
-                          />
-                          <label
-                            id={`is-estate-type-${idx}`}
-                            htmlFor={`estateType-${estateType}`}
-                          >
-                            {estateType}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
                   </fieldset>
                 </div>
               )}
-
             {startCaseHelper.showOtherFilingTypeOptions &&
               startCaseHelper.showMinorIncompetentFilingOptions && (
                 <div
                   className={
                     'ustc-secondary-question ' +
-                    (validationErrors.partyType ? 'usa-input-error' : '')
+                    (validationErrors.partyType ? 'usa-form-group--error' : '')
                   }
                 >
                   <fieldset
                     id="minorIncompetent-type-radios"
-                    className="usa-fieldset-inputs usa-sans"
+                    className="usa-fieldset"
                   >
                     <legend htmlFor="minorIncompetent-type-radios">
                       {startCaseHelper.minorIncompetentLegend}
                     </legend>
-                    <ul className="ustc-unstyled-list">
-                      {[
-                        constants.OTHER_TYPES.conservator,
-                        constants.OTHER_TYPES.guardian,
-                        constants.OTHER_TYPES.custodian,
-                        constants.OTHER_TYPES.nextFriendForMinor,
-                        constants.OTHER_TYPES.nextFriendForIncompetentPerson,
-                      ].map((minorIncompetentType, idx) => (
-                        <li key={minorIncompetentType}>
-                          <input
-                            id={`minorIncompetentType-${minorIncompetentType}`}
-                            type="radio"
-                            name="minorIncompetentType"
-                            value={minorIncompetentType}
-                            onChange={e => {
-                              updateStartCaseFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                              validateStartCaseSequence();
-                            }}
-                          />
-                          <label
-                            id={`is-minorIncompetent-type-${idx}`}
-                            htmlFor={`minorIncompetentType-${minorIncompetentType}`}
-                          >
-                            {minorIncompetentType}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
+                    {[
+                      constants.OTHER_TYPES.conservator,
+                      constants.OTHER_TYPES.guardian,
+                      constants.OTHER_TYPES.custodian,
+                      constants.OTHER_TYPES.nextFriendForMinor,
+                      constants.OTHER_TYPES.nextFriendForIncompetentPerson,
+                    ].map((minorIncompetentType, idx) => (
+                      <div className="usa-radio" key={minorIncompetentType}>
+                        <input
+                          id={`minorIncompetentType-${minorIncompetentType}`}
+                          type="radio"
+                          name="minorIncompetentType"
+                          className="usa-radio__input"
+                          value={minorIncompetentType}
+                          onChange={e => {
+                            updateStartCaseFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateStartCaseSequence();
+                          }}
+                        />
+                        <label
+                          id={`is-minorIncompetent-type-${idx}`}
+                          htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                          className="usa-radio__label"
+                        >
+                          {minorIncompetentType}
+                        </label>
+                      </div>
+                    ))}
                   </fieldset>
                 </div>
               )}
@@ -546,7 +544,7 @@ export const StartCase = connect(
                 <label
                   htmlFor="ownership-disclosure-file"
                   className={
-                    'ustc-upload-ods with-hint ' +
+                    'ustc-upload-ods usa-label with-hint ' +
                     (startCaseHelper.showOwnershipDisclosureValid
                       ? 'validated'
                       : '')
@@ -581,11 +579,11 @@ export const StartCase = connect(
                   }}
                 />
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.ownershipDisclosureFile"
                 />
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.ownershipDisclosureFileSize"
                 />
               </div>
@@ -598,14 +596,19 @@ export const StartCase = connect(
               <fieldset
                 id="irs-notice-radios"
                 className={
-                  'usa-form-group usa-fieldset-inputs usa-sans ' +
-                  (validationErrors.hasIrsNotice ? 'usa-input-error' : '')
+                  'usa-fieldset ' +
+                  (validationErrors.hasIrsNotice ? 'usa-form-group--error' : '')
                 }
               >
-                <legend>{startCaseHelper.noticeLegend}</legend>
-                <ul className="usa-unstyled-list">
+                <legend className="usa-legend">
+                  {startCaseHelper.noticeLegend}
+                </legend>
+                <div className="usa-form-group">
                   {['Yes', 'No'].map((hasIrsNotice, idx) => (
-                    <li key={hasIrsNotice}>
+                    <div
+                      className="usa-radio usa-radio__inline"
+                      key={hasIrsNotice}
+                    >
                       <input
                         id={`hasIrsNotice-${hasIrsNotice}`}
                         type="radio"
@@ -618,20 +621,22 @@ export const StartCase = connect(
                           });
                           validateStartCaseSequence();
                         }}
+                        className="usa-radio__input"
                       />
                       <label
                         id={`hasIrsNotice-${idx}`}
                         htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                        className="usa-radio__label"
                       >
                         {hasIrsNotice}
                       </label>
-                    </li>
+                    </div>
                   ))}
-                </ul>
-                <Text
-                  className="usa-input-error-message"
-                  bind="validationErrors.hasIrsNotice"
-                />
+                  <Text
+                    className="usa-error-message"
+                    bind="validationErrors.hasIrsNotice"
+                  />
+                </div>
               </fieldset>
 
               {startCaseHelper.showHasIrsNoticeOptions && (
@@ -645,14 +650,18 @@ export const StartCase = connect(
                   />
                   <div
                     className={
-                      'usa-form-group ' +
-                      (validationErrors.irsNoticeDate ? 'usa-input-error' : '')
+                      'usa-form-group' +
+                      (validationErrors.irsNoticeDate
+                        ? ' usa-form-group--error'
+                        : '')
                     }
                   >
-                    <fieldset>
-                      <legend id="date-of-notice-legend">Date of Notice</legend>
-                      <div className="usa-date-of-birth">
-                        <div className="usa-form-group usa-form-group-month">
+                    <fieldset className="usa-fieldset">
+                      <legend id="date-of-notice-legend" className="usa-legend">
+                        Date of Notice
+                      </legend>
+                      <div className="usa-memorable-date">
+                        <div className="usa-form-group usa-form-group--month">
                           <label
                             htmlFor="date-of-notice-month"
                             aria-hidden="true"
@@ -660,7 +669,7 @@ export const StartCase = connect(
                             MM
                           </label>
                           <input
-                            className="usa-input-inline"
+                            className="usa-input usa-input--inline"
                             aria-describedby="date-of-notice-legend"
                             id="date-of-notice-month"
                             name="month"
@@ -679,7 +688,7 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-form-group usa-form-group-day">
+                        <div className="usa-form-group usa-form-group--day">
                           <label
                             htmlFor="date-of-notice-day"
                             aria-hidden="true"
@@ -687,7 +696,7 @@ export const StartCase = connect(
                             DD
                           </label>
                           <input
-                            className="usa-input-inline"
+                            className="usa-input usa-input--inline"
                             aria-describedby="date-of-notice-legend"
                             aria-label="day, two digits"
                             id="date-of-notice-day"
@@ -706,7 +715,7 @@ export const StartCase = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-form-group usa-form-group-year">
+                        <div className="usa-form-group usa-form-group--year">
                           <label
                             htmlFor="date-of-notice-year"
                             aria-hidden="true"
@@ -714,7 +723,7 @@ export const StartCase = connect(
                             YYYY
                           </label>
                           <input
-                            className="usa-input-inline"
+                            className="usa-input usa-input--inline"
                             aria-describedby="date-of-notice-legend"
                             aria-label="year, four digits"
                             id="date-of-notice-year"
@@ -734,7 +743,7 @@ export const StartCase = connect(
                           />
                         </div>
                         <Text
-                          className="usa-input-error-message"
+                          className="usa-error-message"
                           bind="validationErrors.irsNoticeDate"
                         />
                       </div>
@@ -765,12 +774,12 @@ export const StartCase = connect(
           <div className="usa-accordion start-a-case">
             <button
               type="button"
-              className="usa-accordion-button case-difference"
+              className="usa-accordion__button case-difference"
               aria-expanded={!!screenMetadata.showCaseDifference}
               aria-controls="case-difference-container"
               onClick={() => toggleCaseDifferenceSequence()}
             >
-              <span className="usa-banner-button-text">
+              <span className="usa-accordion__heading usa-banner__button-text">
                 <FontAwesomeIcon icon="question-circle" size="lg" />
                 How is a small case different than a regular case, and do I
                 qualify?
@@ -783,7 +792,7 @@ export const StartCase = connect(
             </button>
             <div
               id="case-difference-container"
-              className="usa-accordion-content"
+              className="usa-accordion__content"
               aria-hidden={!screenMetadata.showCaseDifference}
             >
               <CaseDifferenceExplained />
@@ -827,12 +836,12 @@ export const StartCase = connect(
               />
             )}
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.procedureType"
             />
             {!validationErrors.procedureType && (
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.preferredTrialCity"
               />
             )}
@@ -844,7 +853,7 @@ export const StartCase = connect(
           </p>
           <div className="blue-container">
             <h3>Your Case is Ready to Submit If&nbsp;…</h3>
-            <ol>
+            <ol className="usa-list">
               <li>You have confirmed the timeliness of your Petition.</li>
               <li>
                 You have redacted all personal information from your documents.
@@ -858,8 +867,8 @@ export const StartCase = connect(
 
             <div
               className={
-                'ustc-form-group ' +
-                (validationErrors.signature ? 'usa-input-error' : '')
+                'usa-checkbox ' +
+                (validationErrors.signature ? 'usa-form-group--error' : '')
               }
             >
               <legend>Review and Sign</legend>
@@ -867,6 +876,7 @@ export const StartCase = connect(
                 id="signature"
                 type="checkbox"
                 name="signature"
+                className="usa-checkbox__input"
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -877,13 +887,13 @@ export const StartCase = connect(
                   validateStartCaseSequence();
                 }}
               />
-              <label htmlFor="signature">
+              <label htmlFor="signature" className="usa-checkbox__label">
                 Checking this box acts as your digital signature, acknowledging
                 that you’ve verified all information is correct. You won’t be
                 able to edit your case once it’s submitted.
               </label>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.signature"
               />
             </div>
@@ -894,7 +904,7 @@ export const StartCase = connect(
           </button>
           <button
             type="button"
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

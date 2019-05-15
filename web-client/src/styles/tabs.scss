@@ -78,6 +78,10 @@ nav.horizontal-tabs,
   }
 }
 
+.tab-border nav {
+  border-bottom: 3px solid $color-gray-lightest;
+}
+
 .ustc-ui-tabs {
   position: relative;
 
@@ -145,7 +149,7 @@ nav.horizontal-tabs,
               background-color: transparent;
               border-radius: 5px;
               color: $color-blue;
-              font-family: Noto Serif JP, $georgia, serif;
+              font-family: $font-serif;
               font-style: normal;
               &:hover {
                 border: 1px solid $color-gray-lighter;
@@ -153,7 +157,7 @@ nav.horizontal-tabs,
             }
             &.active {
               button {
-                background-color: $color-blue-darker;
+                background-color: $color-primary-darker;
                 color: $color-white;
               }
             }
@@ -168,6 +172,10 @@ nav.horizontal-tabs,
     &.classic-horizontal-header3 {
       > nav {
         ul {
+          position: relative;
+          top: 2px;
+          margin-top: -2px;
+
           li {
             &.active {
               button {
@@ -177,7 +185,7 @@ nav.horizontal-tabs,
 
             button {
               padding-bottom: 10px;
-              border-bottom: 3px $color-white solid;
+              border: none;
               margin: 0 45px 0 0;
               border-radius: 0;
               font-family: $font-serif;

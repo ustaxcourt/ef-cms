@@ -101,7 +101,7 @@ export class ModalDialog extends React.Component {
             <div className="modal-header">
               <button
                 type="button"
-                className="modal-close-button text-style"
+                className="modal-close-button text-style usa-button usa-button--unstyled"
                 onClick={this.runCancelSequence}
               >
                 Close <FontAwesomeIcon icon="times-circle" />
@@ -123,7 +123,7 @@ export class ModalDialog extends React.Component {
               <button
                 type="button"
                 onClick={this.runCancelSequence}
-                className="usa-button-secondary"
+                className="usa-button usa-button--outline"
               >
                 {modal.cancelLabel}
               </button>

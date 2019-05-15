@@ -35,13 +35,13 @@ export const CaseDetailInternal = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="usa-grid breadcrumb">
+        <div className="grid-container breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
             Back to dashboard
           </a>
         </div>
-        <section className="usa-section usa-grid">
+        <section className="usa-section grid-container">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
           <SuccessNotification />
@@ -52,22 +52,22 @@ export const CaseDetailInternal = connect(
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
-            <table className="row-border-only subsection">
+            <table className="usa-table row-border-only subsection">
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
                     <td className="responsive-title">
-                      <p>
+                      <p className="margin-y-0">
                         <span className="label-inline">To</span>
                         {workItem.assigneeName}
                       </p>
-                      <p>
+                      <p className="margin-y-0">
                         <span className="label-inline">From</span>
                         {workItem.messages[0].from}
                       </p>
                     </td>
                     <td>
-                      <p>
+                      <p className="margin-y-0">
                         <a
                           href={documentHelper({
                             docketNumber: workItem.docketNumber,
@@ -79,7 +79,9 @@ export const CaseDetailInternal = connect(
                           {workItem.document.documentType}
                         </a>
                       </p>
-                      <p>{workItem.messages[0].message}</p>
+                      <p className="margin-y-0">
+                        {workItem.messages[0].message}
+                      </p>
                     </td>
                     <td>
                       <span className="label-inline">Received</span>
@@ -127,10 +129,14 @@ export const CaseDetailInternal = connect(
                             });
                           }}
                         />
-                        <label htmlFor="paygov">Paid by pay.gov</label>
+                        <label htmlFor="paygov" className="usa-label">
+                          Paid by pay.gov
+                        </label>
                         {caseHelper.showPayGovIdInput && (
                           <React.Fragment>
-                            <label htmlFor="paygovid">Payment ID</label>
+                            <label htmlFor="paygovid" className="usa-label">
+                              Payment ID
+                            </label>
                             <input
                               id="paygovid"
                               type="text"

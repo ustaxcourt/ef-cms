@@ -8,7 +8,7 @@ export const DocumentType = connect(
   ({ addDocketEntryHelper }) => {
     return (
       <React.Fragment>
-        <input type="text" name="eventCode" onChange="" />
+        <input type="text" name="eventCode" onChange="" className="usa-input" />
         <button type="button">Search</button>
         <br />
         <Select options={addDocketEntryHelper.internalDocumentTypes} />

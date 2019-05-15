@@ -54,7 +54,7 @@ export function TabsComponent({
         <button
           role="tab"
           type="button"
-          className="tab-link"
+          className="tab-link usa-button"
           id={id}
           aria-controls={tabContentId}
           aria-selected={isActiveTab}

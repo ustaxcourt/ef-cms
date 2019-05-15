@@ -8,6 +8,7 @@ const {
   NotFoundError,
 } = require('../../errors/errors');
 const { Case, STATUS_TYPES } = require('../entities/Case');
+const { Document } = require('../entities/Document');
 
 const {
   createMappingRecord,
@@ -45,7 +46,8 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   const caseEntity = new Case(caseRecord).validate();
 
   const petitionDocument = caseEntity.documents.find(
-    document => document.documentType === Case.documentTypes.petitionFile,
+    document =>
+      document.documentType === Document.initialDocumentTypes.petitionFile,
   );
 
   const initializeCaseWorkItem = petitionDocument.workItems.find(
