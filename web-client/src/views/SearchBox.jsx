@@ -33,7 +33,7 @@ export const SearchBox = connect(
             });
           }}
         />
-        <button type="submit">
+        <button type="submit" className="usa-button">
           <span className="usa-search-submit-text">Search</span>
         </button>
       </form>

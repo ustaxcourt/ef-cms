@@ -20,7 +20,7 @@ export const FileDocumentWizard = connect(
   ({ caseDetail, chooseWizardStepSequence, showModal }) => {
     return (
       <>
-        <div className="usa-grid breadcrumb">
+        <div className="grid-container breadcrumb">
           <Tabs asSwitch bind="wizardStep">
             <Tab tabName="SelectDocumentType">
               <FontAwesomeIcon icon="caret-left" />
@@ -34,7 +34,7 @@ export const FileDocumentWizard = connect(
             <Tab tabName="FileDocument">
               <FontAwesomeIcon icon="caret-left" />
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="queue-nav"
                 type="button"
                 onClick={() =>
@@ -47,7 +47,7 @@ export const FileDocumentWizard = connect(
             <Tab tabName="FileDocumentReview">
               <FontAwesomeIcon icon="caret-left" />
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="queue-nav"
                 type="button"
                 onClick={() =>
@@ -59,7 +59,7 @@ export const FileDocumentWizard = connect(
             </Tab>
           </Tabs>
         </div>
-        <section className="usa-section usa-grid">
+        <section className="usa-section grid-container">
           <CaseDetailHeader />
           <hr aria-hidden="true" />
           {showModal == 'FormCancelModalDialogComponent' && (

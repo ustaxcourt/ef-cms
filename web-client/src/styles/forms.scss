@@ -1,4 +1,7 @@
-label {
+.usa-label,
+.usa-legend,
+label,
+legend {
   max-width: 100%;
   margin: 0 0 15px;
   font-size: 17px;
@@ -7,24 +10,11 @@ label {
   .usa-form-hint {
     margin: 0;
   }
-}
-
-label.with-hint,
-legend.with-hint {
-  margin-bottom: 2px;
-}
-
-label p.usa-form-hint {
-  display: block;
-}
-
-legend {
-  margin-bottom: 15px;
-  font-size: 17px;
-  font-weight: $font-semibold;
-  line-height: 1;
-  .usa-form-hint {
-    margin: 0;
+  p.usa-form-hint {
+    display: block;
+  }
+  &.with-hint {
+    margin-bottom: 2px;
   }
 }
 
@@ -39,7 +29,7 @@ input[type='tel'],
 input[type='text'],
 textarea,
 select {
-  margin: 0;
+  margin: 0 0 20px 0;
 }
 
 textarea.caption {
@@ -48,34 +38,13 @@ textarea.caption {
   margin-bottom: 5px;
 }
 
-input[type='email']:hover,
-input[type='email']:focus,
-input[type='number']:hover,
-input[type='number']:focus,
-input[type='tel']:hover,
-input[type='tel']:focus,
-input[type='text']:hover,
-input[type='text']:focus,
-textarea:hover,
-textarea:focus,
-select:hover,
-select:focus {
-  &:not([disabled]) {
-    border: 1px solid $color-primary;
-    box-shadow: 0 0 0 1px $color-primary;
-    transition-duration: 0.1s;
-    transition-property: all;
+div.usa-radio.usa-radio__inline {
+  display: inline;
+
+  .usa-radio__label {
+    padding-right: 2rem;
+    padding-left: 0;
   }
-}
-
-[type='radio']:hover + label::before,
-[type='radio']:focus + label::before {
-  box-shadow: 0 0 0 2px $color-white, 0 0 0 3px $color-primary;
-}
-
-[type='checkbox']:hover + label::before,
-[type='checkbox']:focus + label::before {
-  box-shadow: 0 0 0 1px $color-primary;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -100,15 +69,15 @@ input:focus::placeholder {
   }
 }
 
-.ustc-hide-radio-buttons {
-  li label {
-    padding-bottom: 10px;
+div.ustc-hide-radio-button {
+  padding-bottom: 10px;
+
+  input {
+    display: none;
+  }
+  label {
     color: $color-primary;
     text-decoration: underline;
-
-    &::before {
-      display: none;
-    }
   }
 }
 
@@ -190,7 +159,7 @@ label.validated::after {
     text-align: right;
   }
 
-  button {
+  button.usa-button--unstyled {
     display: inline-block;
     margin-left: 10px;
   }
@@ -206,18 +175,18 @@ label.validated::after {
 }
 
 .ustc-form-group-city {
-  width: 25rem;
-  margin-right: 3rem;
+  width: 20rem;
   clear: none;
   float: left;
 }
 
 .ustc-form-group-state {
-  width: 18rem;
+  width: 12rem;
   clear: none;
   float: left;
-  &.usa-form-group {
-    margin-bottom: 25px;
+
+  select {
+    margin-top: 0;
   }
 }
 
@@ -269,6 +238,23 @@ label.validated::after {
   }
 }
 
+.usa-form--large {
+  @media only screen and (min-width: $medium-screen) {
+    max-width: units('desktop');
+  }
+
+  .contact-group {
+    input,
+    select {
+      max-width: units('mobile') + 5;
+    }
+
+    .grid-row.grid-gap.state-and-city {
+      max-width: units('mobile') + 7;
+    }
+  }
+}
+
 .clear-both {
   clear: both;
 }
@@ -277,7 +263,7 @@ label.validated::after {
   width: 25rem;
 }
 
-.usa-grid-full {
+.grid-container {
   &.ustc-secondary-question {
     margin-top: 20px;
   }
@@ -328,9 +314,9 @@ label.ustc-upload {
       display: none;
     }
 
-    .usa-input-error.usa-input-group {
-      border-left: 4px solid $color-secondary-dark;
-    }
+    // .usa-input-error.usa-input-group {
+    //   border-left: 4px solid $color-secondary-dark;
+    // }
 
     .usa-input-group {
       border-left: 4px solid transparent;
@@ -340,33 +326,35 @@ label.ustc-upload {
       background-image: none;
     }
 
-    .usa-input-error #docket-search-field-mobile {
-      width: calc(100% - 45px);
-      border-width: 1px;
-      box-shadow: 0px 0 0px 2px $color-secondary-dark;
-    }
+    // .usa-input-error #docket-search-field-mobile {
+    //   width: calc(100% - 45px);
+    //   border-width: 1px;
+    //   box-shadow: 0px 0 0px 2px $color-secondary-dark;
+    // }
   }
 
   min-width: 200px;
 
-  .usa-input-error-message {
-    display: none;
-  }
+  // .usa-input-error-message {
+  //   display: none;
+  // }
 
   .usa-input-group {
     margin-bottom: 10px;
-    &.usa-input-error {
-      padding-left: 9px;
-      margin-left: 6px;
-      .usa-input-error-message {
-        display: block;
-      }
-    }
+    //   &.usa-input-error {
+    //     padding-left: 9px;
+    //     margin-left: 6px;
+    //     .usa-input-error-message {
+    //       display: block;
+    //     }
+    //   }
   }
 }
 
 .select-react-element {
   .select-react-element__control {
+    padding-top: 4px;
+    padding-bottom: 4px;
     border: 1px solid $color-gray;
     border-radius: 0;
 
@@ -381,8 +369,9 @@ label.ustc-upload {
       }
 
       .select-react-element__input input {
-        height: 3.4rem;
         border: none;
+        margin-top: auto;
+        margin-bottom: auto;
         box-shadow: none;
       }
     }
@@ -394,9 +383,19 @@ label.ustc-upload {
   }
 }
 
-.usa-input-error .select-react-element {
-  width: calc(100% + 1.9rem);
+.date-received {
+  .usa-form-group {
+    margin-bottom: 0px;
+
+    input[type='number'] {
+      margin-bottom: 5px;
+    }
+  }
 }
+
+// .usa-input-error .select-react-element {
+//   width: calc(100% + 1.9rem);
+// }
 
 .docket-entry-form {
   .service-date {

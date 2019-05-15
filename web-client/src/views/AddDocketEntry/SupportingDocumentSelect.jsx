@@ -23,13 +23,13 @@ export const SupportingDocumentSelect = connect(
     return (
       <React.Fragment>
         <div
-          className={`ustc-form-group ${
+          className={`usa-form-group ${
             validationErrors && validationErrors.previousDocument
               ? 'usa-input-error'
               : ''
           }`}
         >
-          <label htmlFor={'previous-document'}>
+          <label htmlFor={'previous-document'} className="usa-label">
             Which Document is This Supporting?
           </label>
           <select

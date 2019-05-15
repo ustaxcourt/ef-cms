@@ -21,19 +21,19 @@ export const CaseDetailHeader = connect(
             </a>
           </h1>
           <span
-            className="usa-label case-status-label"
+            className="usa-tag case-status-label"
             aria-label={`status: ${caseDetail.status}`}
           >
             <span aria-hidden="true">{caseDetail.status}</span>
           </span>
         </div>
-        <p id="case-title" className="float-left no-bottom-margin">
+        <p id="case-title" className="float-left no-bottom-margin margin-y-0">
           {caseDetail.caseTitle}
         </p>
         {caseHelper.showCaptionEditButton && (
-          <p className="float-left no-bottom-margin">
+          <p className="float-left no-bottom-margin margin-y-0">
             <button
-              className="link"
+              className="usa-button usa-button--unstyled"
               id="caption-edit-button"
               onClick={() => {
                 openCaseCaptionModalSequence();

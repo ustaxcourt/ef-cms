@@ -5,7 +5,7 @@ import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
 import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
 
 export const BeforeStartingCase = () => (
-  <section className="usa-section usa-grid before-starting-case">
+  <section className="usa-section before-starting-case grid-container">
     <h1 tabIndex="-1">Before you begin …</h1>
     <p>
       There are a few things you need to do to prepare your documents before
@@ -148,7 +148,7 @@ export const BeforeStartingCase = () => (
       <a className="usa-button" href="/start-a-case">
         Got It, Letʼs Start My Case
       </a>
-      <a className="usa-button usa-button-secondary" href="/">
+      <a className="usa-button usa-button--outline" href="/">
         Cancel
       </a>
     </div>

@@ -9,6 +9,7 @@ import {
   CASE_CAPTION_POSTFIX,
   Case,
 } from '../../shared/src/business/entities/Case';
+import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
@@ -216,7 +217,7 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES,
-    DOCUMENT_TYPES_MAP: Case.documentTypes,
+    DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
     ESTATE_TYPES,
     INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,

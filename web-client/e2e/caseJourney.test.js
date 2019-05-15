@@ -7,7 +7,7 @@ import {
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-import { Case } from '../../shared/src/business/entities/Case';
+import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 
 import { applicationContext } from '../src/applicationContext';
@@ -110,7 +110,7 @@ describe('Case journey', () => {
       CATEGORIES,
       CATEGORY_MAP,
       COUNTRY_TYPES,
-      DOCUMENT_TYPES_MAP: Case.documentTypes,
+      DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
       TRIAL_CITIES,

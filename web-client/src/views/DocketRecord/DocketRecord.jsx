@@ -64,7 +64,7 @@ export const DocketRecord = connect(
                 {description} {additionalInfo}
               </a>
               <button
-                className="show-on-mobile link"
+                className="show-on-mobile link border-0"
                 aria-roledescription="button to view document details"
                 onClick={() => {
                   showDocketRecordDetailModalSequence({
@@ -87,7 +87,7 @@ export const DocketRecord = connect(
         <DocketRecordHeader />
 
         <table
-          className="docket-record responsive-table row-border-only"
+          className="usa-table docket-record responsive-table row-border-only"
           aria-label="docket record"
         >
           <thead>

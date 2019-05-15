@@ -28,13 +28,13 @@ export const TrialCity = connect(
     return (
       <div
         className={
-          'ustc-form-group ' +
-          (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
+          'usa-form-group ' +
+          (validationErrors.preferredTrialCity ? 'usa-form-group--error' : '')
         }
       >
         <label
           htmlFor="preferred-trial-city"
-          className={showHint && 'with-hint'}
+          className={"usa-label ${showHint && 'with-hint'}"}
         >
           {label}
         </label>
@@ -58,6 +58,7 @@ export const TrialCity = connect(
         <select
           name="preferredTrialCity"
           id="preferred-trial-city"
+          className="usa-select"
           onChange={onChange}
           value={value}
         >

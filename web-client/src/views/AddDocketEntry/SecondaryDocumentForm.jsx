@@ -29,7 +29,7 @@ export const SecondaryDocumentForm = connect(
         <h2>Add Entry for {form.secondaryDocument.documentType}</h2>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
+            className={`usa-form-group ${
               validationErrors.secondaryDocumentFile ? 'usa-input-error' : ''
             }`}
           >
@@ -37,7 +37,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
               className={
-                'ustc-upload with-hint' +
+                'usa-label ustc-upload with-hint' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
@@ -76,8 +76,9 @@ export const SecondaryDocumentForm = connect(
             />
           )}
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="secondary-additional-info"
               id="secondary-additional-info-label"
             >
@@ -101,7 +102,7 @@ export const SecondaryDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
+          <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="secondary-add-to-coversheet"
               type="checkbox"
@@ -115,15 +116,16 @@ export const SecondaryDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="secondary-add-to-coversheet">
+            <label htmlFor="secondary-add-to-coversheet" className="usa-label">
               Add to Cover Sheet
             </label>
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label
               htmlFor="secondary-additional-info2"
               id="secondary-additional-info2-label"
+              className="usa-label"
             >
               Additional Info 2
             </label>

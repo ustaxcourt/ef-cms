@@ -29,23 +29,29 @@ export const CaseInfo = connect(
         {caseDetail.isPaper && (
           <div className="subsection">
             <div
-              className={`ustc-form-group ${
-                caseDetailErrors.receivedAt ? 'usa-input-error' : ''
+              className={`usa-form-group ${
+                caseDetailErrors.receivedAt ? 'usa-form-group--error' : ''
               }`}
             >
-              <fieldset>
-                <legend id="received-at-legend">Date Received</legend>
-                <div className="usa-date-of-birth">
-                  <div className="usa-form-group usa-form-group-month">
-                    <label htmlFor="received-at-month" aria-hidden="true">
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend" id="received-at-legend">
+                  Date Received
+                </legend>
+                <div className="usa-memorable-date">
+                  <div className="usa-form-group usa-form-group--month">
+                    <label
+                      className="usa-label"
+                      htmlFor="received-at-month"
+                      aria-hidden="true"
+                    >
                       MM
                     </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="month, two digits"
                       className={
-                        'usa-input-inline' +
-                        (caseDetailErrors.receivedAt ? 'usa-input-error' : '')
+                        'usa-input usa-input--inline' +
+                        (caseDetailErrors.receivedAt ? 'usa-error' : '')
                       }
                       id="received-at-month"
                       max="12"
@@ -64,16 +70,20 @@ export const CaseInfo = connect(
                       }}
                     />
                   </div>
-                  <div className="usa-form-group usa-form-group-day">
-                    <label htmlFor="received-at-day" aria-hidden="true">
+                  <div className="usa-form-group usa-form-group--day">
+                    <label
+                      className="usa-label"
+                      htmlFor="received-at-day"
+                      aria-hidden="true"
+                    >
                       DD
                     </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="day, two digits"
                       className={
-                        'usa-input-inline' +
-                        (caseDetailErrors.receivedAt ? 'usa-input-error' : '')
+                        'usa-input usa-input--inline' +
+                        (caseDetailErrors.receivedAt ? 'usa-error' : '')
                       }
                       id="received-at-day"
                       max="31"
@@ -92,16 +102,20 @@ export const CaseInfo = connect(
                       }}
                     />
                   </div>
-                  <div className="usa-form-group usa-form-group-year">
-                    <label htmlFor="received-at-year" aria-hidden="true">
+                  <div className="usa-form-group usa-form-group--year">
+                    <label
+                      className="usa-label"
+                      htmlFor="received-at-year"
+                      aria-hidden="true"
+                    >
                       YYYY
                     </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="year, four digits"
                       className={
-                        'usa-input-inline' +
-                        (caseDetailErrors.receivedAt ? 'usa-input-error' : '')
+                        'usa-input usa-input--inline' +
+                        (caseDetailErrors.receivedAt ? 'usa-error' : '')
                       }
                       id="received-at-year"
                       max="2100"
@@ -122,7 +136,7 @@ export const CaseInfo = connect(
                   </div>
                 </div>
                 {caseDetailErrors.receivedAt && (
-                  <div className="usa-input-error-message" role="alert">
+                  <div className="usa-error-message" role="alert">
                     {caseDetailErrors.receivedAt}
                   </div>
                 )}
@@ -132,7 +146,7 @@ export const CaseInfo = connect(
         )}
 
         <div className="subsection">
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <ProcedureType
               value={caseDetail.procedureType}
               onChange={e => {
@@ -151,6 +165,7 @@ export const CaseInfo = connect(
 
             <div className="order-checkbox">
               <input
+                className="usa-checkbox__input"
                 id="order-to-show-cause"
                 type="checkbox"
                 name="orderToShowCause"
@@ -163,7 +178,12 @@ export const CaseInfo = connect(
                   autoSaveCaseSequence();
                 }}
               />
-              <label htmlFor="order-to-show-cause">Order to Show Cause</label>
+              <label
+                htmlFor="order-to-show-cause"
+                className="usa-checkbox__label"
+              >
+                Order to Show Cause
+              </label>
             </div>
           </div>
         </div>
@@ -191,22 +211,28 @@ export const CaseInfo = connect(
 
         <div className="subsection">
           <div
-            className={`ustc-form-group ${
-              caseDetailErrors.payGovDate ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              caseDetailErrors.payGovDate ? 'usa-form-group--error' : ''
             }`}
           >
-            <fieldset>
-              <legend id="fee-payment-date-legend">Fee Payment Date</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
-                  <label htmlFor="fee-payment-date-month" aria-hidden="true">
+            <fieldset className="usa-fieldset">
+              <legend id="fee-payment-date-legend" className="usa-legend">
+                Fee Payment Date
+              </legend>
+              <div className="usa-memorable-date">
+                <div className="usa-form-group usa-form-group--month">
+                  <label
+                    className="usa-legend"
+                    htmlFor="fee-payment-date-month"
+                    aria-hidden="true"
+                  >
                     MM
                   </label>
                   <input
                     aria-describedby="fee-payment-date-legend"
                     aria-label="month, two digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input usa-input--inline' +
                       (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
                     }
                     id="fee-payment-date-month"
@@ -226,7 +252,7 @@ export const CaseInfo = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-day">
+                <div className="usa-form-group usa-form-group--day">
                   <label htmlFor="fee-payment-date-day" aria-hidden="true">
                     DD
                   </label>
@@ -234,7 +260,7 @@ export const CaseInfo = connect(
                     aria-describedby="fee-payment-date-legend"
                     aria-label="day, two digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input usa-input--inline' +
                       (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
                     }
                     id="fee-payment-date-day"
@@ -254,7 +280,7 @@ export const CaseInfo = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-year">
+                <div className="usa-form-group usa-form-group--year">
                   <label htmlFor="fee-payment-date-year" aria-hidden="true">
                     YYYY
                   </label>
@@ -262,7 +288,7 @@ export const CaseInfo = connect(
                     aria-describedby="fee-payment-date-legend"
                     aria-label="year, four digits"
                     className={
-                      'usa-input-inline' +
+                      'usa-input usa-input--inline' +
                       (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
                     }
                     id="fee-payment-date-year"
@@ -284,7 +310,7 @@ export const CaseInfo = connect(
                 </div>
               </div>
               {caseDetailErrors.payGovDate && (
-                <div className="usa-input-error-message" role="alert">
+                <div className="usa-error-message" role="alert">
                   {caseDetailErrors.payGovDate}
                 </div>
               )}
@@ -293,10 +319,13 @@ export const CaseInfo = connect(
         </div>
 
         <div className="subsection">
-          <div className="ustc-form-group">
-            <label htmlFor="fee-payment-id">Fee Payment ID</label>
+          <div className="usa-form-group">
+            <label htmlFor="fee-payment-id" className="usa-label">
+              Fee Payment ID
+            </label>
             <input
               id="fee-payment-id"
+              className="usa-input"
               name="payGovId"
               type="number"
               value={caseDetail.payGovId || ''}
@@ -313,6 +342,7 @@ export const CaseInfo = connect(
 
             <div className="order-checkbox">
               <input
+                className="usa-checkbox__input"
                 id="order-for-filing-fee"
                 type="checkbox"
                 name="orderForFilingFee"
@@ -325,7 +355,12 @@ export const CaseInfo = connect(
                   autoSaveCaseSequence();
                 }}
               />
-              <label htmlFor="order-for-filing-fee">Order for Filing Fee</label>
+              <label
+                htmlFor="order-for-filing-fee"
+                className="usa-checkbox__label"
+              >
+                Order for Filing Fee
+              </label>
             </div>
           </div>
         </div>
@@ -336,8 +371,9 @@ export const CaseInfo = connect(
           role="list"
           aria-labelledby="orders-needed"
         >
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
+              className="usa-checkbox__input"
               id="order-for-ratification"
               type="checkbox"
               name="orderForRatification"
@@ -350,12 +386,16 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-ratification">
+            <label
+              htmlFor="order-for-ratification"
+              className="usa-checkbox__label"
+            >
               Order for Ratification of Petition
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
+              className="usa-checkbox__input"
               id="notice-of-attachments"
               type="checkbox"
               name="noticeOfAttachments"
@@ -368,12 +408,16 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="notice-of-attachments">
+            <label
+              htmlFor="notice-of-attachments"
+              className="usa-checkbox__label"
+            >
               Notice of Attachments in the Nature of Evidence
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
+              className="usa-checkbox__input"
               id="order-for-amended-petition"
               type="checkbox"
               name="orderForAmendedPetition"
@@ -386,12 +430,16 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-amended-petition">
+            <label
+              htmlFor="order-for-amended-petition"
+              className="usa-checkbox__label"
+            >
               Order for Amended Petition
             </label>
           </div>
-          <div className="ustc-form-group" role="listitem">
+          <div className="usa-form-group" role="listitem">
             <input
+              className="usa-checkbox__input"
               id="order-for-amended-petition-and-filing-fee"
               type="checkbox"
               name="orderForAmendedPetitionAndFilingFee"
@@ -404,7 +452,10 @@ export const CaseInfo = connect(
                 autoSaveCaseSequence();
               }}
             />
-            <label htmlFor="order-for-amended-petition-and-filing-fee">
+            <label
+              htmlFor="order-for-amended-petition-and-filing-fee"
+              className="usa-checkbox__label"
+            >
               Order for Amended Petition and Filing Fee
             </label>
           </div>

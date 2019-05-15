@@ -1,26 +1,23 @@
+const documentMapExternal = require('../../tools/externalFilingEvents.json');
+const documentMapInternal = require('../../tools/internalFilingEvents.json');
+
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { Case } = require('./Case');
-const { getDocumentTypes } = Case;
-
 const uuidVersions = {
   version: ['uuidv4'],
 };
+const { flatten } = require('lodash');
+const { WorkItem } = require('./WorkItem');
 
 const petitionDocumentTypes = ['Petition'];
 
-const { WorkItem } = require('./WorkItem');
+module.exports.CATEGORIES = Object.keys(documentMapExternal);
+module.exports.CATEGORY_MAP = documentMapExternal;
 
-const documentMap = require('../../tools/externalFilingEvents.json');
-const internalDocumentMap = require('../../tools/internalFilingEvents.json');
-
-module.exports.CATEGORIES = Object.keys(documentMap);
-module.exports.CATEGORY_MAP = documentMap;
-
-module.exports.INTERNAL_CATEGORIES = Object.keys(internalDocumentMap);
-module.exports.INTERNAL_CATEGORY_MAP = internalDocumentMap;
+module.exports.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
+module.exports.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
 /**
  * constructor
@@ -38,6 +35,36 @@ function Document(rawDocument) {
 }
 
 Document.name = 'Document';
+
+const practitionerAssociationDocumentTypes = [
+  'Entry of Appearance',
+  'Substitution of Counsel',
+];
+
+/**
+ * documentTypes
+ * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
+ */
+Document.initialDocumentTypes = {
+  ownershipDisclosure: 'Ownership Disclosure Statement',
+  petitionFile: 'Petition',
+  stin: 'Statement of Taxpayer Identification',
+};
+
+Document.getDocumentTypes = () => {
+  const allFilingEvents = flatten([
+    ...Object.values(documentMapExternal),
+    ...Object.values(documentMapInternal),
+  ]);
+  const filingEventTypes = allFilingEvents.map(t => t.documentType);
+  const documentTypes = [
+    ...Object.values(Document.initialDocumentTypes),
+    ...practitionerAssociationDocumentTypes,
+    ...filingEventTypes,
+  ];
+
+  return documentTypes;
+};
 
 /**
  *
@@ -60,7 +87,7 @@ joiValidationDecorator(
       .required(),
     documentType: joi
       .string()
-      .valid(getDocumentTypes())
+      .valid(Document.getDocumentTypes())
       .required(),
     eventCode: joi.string().optional(),
     filedBy: joi
