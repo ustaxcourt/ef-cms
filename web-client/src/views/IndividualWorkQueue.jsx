@@ -13,7 +13,7 @@ export const IndividualWorkQueue = connect(
   ({ chooseWorkQueueSequence }) => {
     return (
       <Tabs
-        className="subsection-container-tabs"
+        className="classic-horizontal-header3 tab-border"
         bind="workQueueToDisplay.box"
         onSelect={() => chooseWorkQueueSequence()}
       >

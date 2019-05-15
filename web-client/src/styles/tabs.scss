@@ -78,6 +78,10 @@ nav.horizontal-tabs,
   }
 }
 
+.tab-border nav {
+  border-bottom: 3px solid $color-gray-lightest;
+}
+
 .ustc-ui-tabs {
   position: relative;
 
