@@ -96,7 +96,7 @@ export const SectionWorkQueueInbox = connect(
                     aria-controls={`detail-${item.workItemId}`}
                   />{' '}
                 </td>
-                <td className="has-icon">
+                <td className="message-select-control has-icon">
                   <input
                     id={item.workItemId}
                     type="checkbox"
@@ -116,7 +116,7 @@ export const SectionWorkQueueInbox = connect(
                     className="usa-checkbox__label padding-top-05"
                   />
                 </td>
-                <td className="section-queue-row has-icon">
+                <td className="message-queue-row has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
@@ -125,54 +125,41 @@ export const SectionWorkQueueInbox = connect(
                     />
                   )}
                 </td>
-                <td className="section-queue-row">
+                <td className="message-queue-row">
                   {item.docketNumberWithSuffix}
                 </td>
-                <td className="section-queue-row">
+                <td className="message-queue-row">
                   {item.currentMessage.createdAtFormatted}
                 </td>
-                <td className="section-queue-row">
-                  <a
-                    onClick={e => {
-                      e.stopPropagation();
-                    }}
-                    href={documentHelper({
-                      docketNumber: item.docketNumber,
-                      documentId: item.document.documentId,
-                    })}
-                    className="case-link"
-                  >
-                    {item.document.documentType}
-                  </a>
-                </td>
-                <td className="section-queue-row">{item.caseStatus}</td>
-                <td className="to section-queue-row">{item.assigneeName}</td>
-                <td className="section-queue-row">
-                  {item.currentMessage.from}
-                </td>
-                <td className="section-queue-row">{item.sentBySection}</td>
-              </tr>
-              {item.isFocused && (
-                <tr className="queue-focus queue-message">
-                  <td className="focus-toggle">
-                    <button
-                      className="focus-button usa-button usa-button--unstyled"
-                      tabIndex="-1"
-                      aria-disabled="true"
-                    />
-                  </td>
-                  <td colSpan="4" aria-hidden="true" />
-                  <td
-                    colSpan="5"
-                    className="message-detail"
-                    aria-label="Message detail"
-                    aria-live="polite"
+                <td className="message-queue-row message-queue-document">
+                  <div className="message-document-title">
+                    <a
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                      href={documentHelper({
+                        docketNumber: item.docketNumber,
+                        documentId: item.document.documentId,
+                      })}
+                      className="case-link"
+                    >
+                      {item.document.documentType}
+                    </a>
+                  </div>
+                  <div
                     id={`detail-${item.workItemId}`}
+                    className="message-document-detail"
                   >
                     {item.currentMessage.message}
-                  </td>
-                </tr>
-              )}
+                  </div>
+                </td>
+                <td className="message-queue-row">{item.caseStatus}</td>
+                <td className="to message-queue-row">{item.assigneeName}</td>
+                <td className="message-queue-row">
+                  {item.currentMessage.from}
+                </td>
+                <td className="message-queue-row">{item.sentBySection}</td>
+              </tr>
             </tbody>
           ))}
         </table>

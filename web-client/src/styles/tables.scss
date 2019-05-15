@@ -64,29 +64,56 @@ table.dashboard {
 }
 
 table.work-queue {
-  td,
   th {
-    border: none;
-  }
-
-  th.collapse-header {
-    padding: 0;
+    border: 0;
   }
 
   td {
-    font-size: 14px;
+    border: none;
+    font-size: 17px;
+
+    &.message-select-control {
+      label {
+        left: 5px;
+        padding-top: 10px;
+      }
+    }
+
+    &.message-queue-row {
+      padding-top: 14px;
+    }
+
+    &.message-queue-document {
+      max-width: units('tablet');
+    }
+
+    &.has-icon {
+      width: 44px;
+    }
+
+    .message-document-title {
+      overflow: hidden;
+      max-width: units('tablet');
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .message-document-detail {
+      display: -webkit-box;
+      overflow: hidden;
+      height: 100%;
+      max-height: 57px; /* fallback */
+      /* autoprefixer: ignore next */
+      -webkit-box-orient: vertical;
+      font-size: 15px;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-height: 19px; /* fallback */
+      text-overflow: ellipsis;
+    }
 
     label {
       margin: 0;
     }
-  }
-
-  td.section-queue-row {
-    padding-top: 14px;
-  }
-
-  td.has-icon {
-    width: 44px;
   }
 
   tr {
@@ -95,8 +122,6 @@ table.work-queue {
 
   tbody:not(.action-bar) {
     &:hover {
-      cursor: pointer;
-
       td.focus-toggle {
         button.focus-button {
           background-color: color($theme-color-primary);
@@ -152,8 +177,12 @@ table.work-queue {
     border-bottom: 2px solid color($theme-color-base-light);
 
     th {
-      background-color: $color-white;
+      background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;
+
+      .collapse-header {
+        padding: 0;
+      }
     }
   }
 

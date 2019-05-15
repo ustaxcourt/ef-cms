@@ -4,7 +4,6 @@ const {
   getWorkItemCheckboxLabel,
   getSectionUsersSelect,
   getWorkItemRow,
-  getSendButton,
   getWorkItemMessage,
   navigateTo: navigateToDashboard,
 } = require('../support/pages/dashboard');
