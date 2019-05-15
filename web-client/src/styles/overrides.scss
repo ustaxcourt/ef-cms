@@ -44,7 +44,7 @@
     padding: 2px;
     margin: 0;
     &:disabled {
-      color: $color-gray;
+      color: color($theme-color-base);
     }
   }
 }
@@ -55,7 +55,7 @@ option:first-child {
 .usa-form-hint {
   display: inline-block;
   margin-bottom: 15px;
-  color: $color-gray;
+  color: color($theme-color-base-darkest);
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
