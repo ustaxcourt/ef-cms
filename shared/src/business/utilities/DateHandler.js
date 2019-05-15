@@ -1,5 +1,12 @@
 const moment = require('moment-timezone');
 
+const dateFormats = {
+  LONG_DATE_TIME: 'MM/DD/YYYY hh:mm a',
+  MMDDYY: 'MM/DD/YY',
+  MMDDYYYY: 'L',
+  TIME: 'LT',
+};
+
 const USTC_TZ = 'America/New_York';
 
 /**
@@ -23,6 +30,6 @@ module.exports.createISODateString = dateString => {
  * @returns {string} a formatted date string
  */
 module.exports.formatDateString = (dateString, formatStr) => {
-  let result = moment.tz(dateString, USTC_TZ).format(formatStr);
-  return result;
+  formatStr = dateFormats[formatStr] || formatStr;
+  return moment.tz(dateString, USTC_TZ).format(formatStr);
 };
