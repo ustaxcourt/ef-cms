@@ -76,33 +76,8 @@ div.ustc-hide-radio-button {
     display: none;
   }
   label {
-    color: $color-primary;
+    color: color($theme-color-primary);
     text-decoration: underline;
-  }
-}
-
-@media only screen and (min-width: $medium-screen) {
-  .ustc-select-multi {
-    height: 300px;
-    padding: 0;
-    background: none;
-    overflow-y: auto;
-    option {
-      overflow: hidden;
-      max-width: 100%;
-      padding: 10px;
-      margin: 0;
-      font-weight: $font-semibold;
-      white-space: normal;
-      /*Altered two below to make word wrap work */
-      word-wrap: normal !important;
-      &:hover {
-        background-color: $color-gray-cool-light;
-      }
-      &:first-child {
-        font-weight: $font-semibold;
-      }
-    }
   }
 }
 
@@ -297,7 +272,7 @@ label.ustc-upload {
   @media only screen and (min-width: $medium-screen) {
     padding: 14px;
     margin: 10px;
-    background-color: $color-gray-lightest;
+    background-color: color($theme-color-base-lightest);
     button {
       min-width: 130px;
       margin-bottom: 5px;
@@ -355,12 +330,12 @@ label.ustc-upload {
   .select-react-element__control {
     padding-top: 4px;
     padding-bottom: 4px;
-    border: 1px solid $color-gray;
+    border: 1px solid color($theme-color-base);
     border-radius: 0;
 
     &:hover {
-      border: 1px solid $color-primary;
-      box-shadow: 0 0 0 1px $color-primary;
+      border: 1px solid color($theme-color-primary);
+      box-shadow: 0 0 0 1px color($theme-color-primary);
     }
 
     .select-react-element__value-container {
@@ -378,7 +353,7 @@ label.ustc-upload {
   }
 
   .select-react-element__control--menu-is-open {
-    outline: 2px dotted $color-gray-light !important;
+    outline: 2px dotted $theme-color-base-light !important;
     outline-offset: 3px;
   }
 }
