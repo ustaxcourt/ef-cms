@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearCurrentPageHeaderAction } from '../actions/clearCurrentPageHeaderAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
@@ -11,6 +12,7 @@ import { state } from 'cerebral';
 
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
+  clearCurrentPageHeaderAction,
   clearAlertsAction,
   clearScreenMetadataAction,
   getCaseAction,
