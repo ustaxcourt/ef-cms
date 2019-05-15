@@ -62,11 +62,13 @@ export const CaseDetail = connect(
 
           {caseHelper.showActionRequired && (
             <div className="subsection">
-              <h2>Action Required</h2>
+              <div className="title">
+                <h1>Action Required</h1>
+              </div>
               <ul className="usa-accordion">
                 <li>
                   <button
-                    className="usa-accordion__button"
+                    className="usa-accordion__button font-normal"
                     aria-expanded={showDetails}
                     aria-controls="paymentInfo"
                     id="actions-button"
@@ -78,7 +80,7 @@ export const CaseDetail = connect(
                         className="action-flag"
                         size="sm"
                       />{' '}
-                      Pay $60.00 filing fee.
+                      Pay $60.00 Filing Fee
                     </span>
                   </button>
                   {showDetails && (
@@ -89,43 +91,19 @@ export const CaseDetail = connect(
                     >
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
-                          <h3>Pay by debit card/credit card.</h3>
+                          <h3>Pay by Debit / Credit Card</h3>
                           <p>Copy your docket number(s) and pay online.</p>
-                          <div id="paygov-link-container">
-                            <a
-                              className="usa-button"
-                              href="https://pay.gov/public/form/start/60485840"
-                              aria-label="pay.gov u.s. tax court filing fees"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Pay now
-                            </a>
-                          </div>
-                          <p>
-                            <i>
-                              Note: it may take up to X days for your payment to
-                              appear online.
-                            </i>
-                          </p>
-                        </div>
-                        <div className="tablet:grid-col-6">
-                          <h4>Canʼt afford to pay the fee?</h4>
-                          <p>
-                            You may be eligible for a filing fee waiver. File an
-                            application to request a waiver.
-                          </p>
-                          <p>
-                            <a
-                              href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
-                              aria-label="View download application pdf"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Download application
-                            </a>
-                          </p>
-                          <h4>Mail in payment</h4>
+                          <a
+                            className="usa-button"
+                            href="https://pay.gov/public/form/start/60485840"
+                            aria-label="pay.gov u.s. tax court filing fees"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Pay now
+                          </a>
+
+                          <h3 className="margin-top-1">Mail in payment</h3>
                           <p>Make checks/money order payable to:</p>
                           <address>
                             Clerk, United States Tax Court
@@ -135,6 +113,33 @@ export const CaseDetail = connect(
                             Washington, DC 20217
                             <br />
                           </address>
+                        </div>
+                        <div className="tablet:grid-col-6">
+                          <div className="alert-gold margin-bottom-8 margin-top-2">
+                            <span className="usa-form-hint ustc-form-hint-with-svg">
+                              <FontAwesomeIcon
+                                icon="arrow-alt-circle-left"
+                                className="fa-icon-gold"
+                                size="lg"
+                              />
+                              It may take up to X days for your payment to
+                              appear online.
+                            </span>
+                          </div>
+
+                          <h3>Canʼt afford to pay the fee?</h3>
+                          <p>
+                            You may be eligible for a filing fee waiver.{' '}
+                            <a
+                              href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                              aria-label="View download application pdf"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              File an application
+                            </a>{' '}
+                            to request a waiver.
+                          </p>
                         </div>
                       </div>
                     </div>
