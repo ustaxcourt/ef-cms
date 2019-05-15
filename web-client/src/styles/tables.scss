@@ -92,18 +92,16 @@ table.work-queue {
     }
 
     div.message-document-detail {
-      .message-content {
-        display: -webkit-box;
-        overflow: hidden;
-        height: 100%;
-        max-height: 57px; /* fallback */
-        /* autoprefixer: ignore next */
-        -webkit-box-orient: vertical;
-        font-size: 15px;
-        -webkit-line-clamp: 3; /* number of lines to show */
-        line-height: 19px; /* fallback */
-        text-overflow: ellipsis;
-      }
+      display: -webkit-box;
+      overflow: hidden;
+      height: 100%;
+      max-height: 57px; /* fallback */
+      /* autoprefixer: ignore next */
+      -webkit-box-orient: vertical;
+      font-size: 15px;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-height: 19px; /* fallback */
+      text-overflow: ellipsis;
     }
 
     .has-icon {
