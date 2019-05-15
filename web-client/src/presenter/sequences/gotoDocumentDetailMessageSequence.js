@@ -4,6 +4,7 @@ import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapA
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
+import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
 import { parallel } from 'cerebral/factories';
 import { set } from 'cerebral/factories';
@@ -15,6 +16,7 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
 import { setMessageIdFromUrlAction } from '../actions/setMessageIdFromUrlAction';
+import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { setWorkItemIdFromMessageIdAction } from '../actions/setWorkItemIdFromMessageIdAction';
@@ -35,6 +37,8 @@ export const gotoDocumentDetailMessageSequence = [
       setWorkItemIdFromMessageIdAction,
       setFormForCaseAction,
       setWorkItemAsReadAction,
+      getNotificationsAction,
+      setNotificationsAction,
     ],
     [getInternalUsersAction, setInternalUsersAction],
   ]),
