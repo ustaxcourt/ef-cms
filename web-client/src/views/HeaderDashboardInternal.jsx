@@ -18,7 +18,7 @@ export const HeaderDashboardInternal = connect(
       <div className="big-blue-header">
         <div className="grid-container">
           <h1 tabIndex="-1">{currentQueueTitle}</h1>
-          <span className="unread" aria-label="undread work item count">
+          <span className="unread" aria-label="unread work item count">
             {unreadCount}
           </span>
           {workQueueHelper.showIndividualWorkQueue && (
