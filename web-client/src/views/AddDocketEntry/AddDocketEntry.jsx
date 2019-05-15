@@ -27,7 +27,7 @@ export const AddDocketEntry = connect(
     showModal,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <div className="grid-container breadcrumb">
           <FontAwesomeIcon icon="caret-left" />
           <a href="/" id="queue-nav">
@@ -36,11 +36,8 @@ export const AddDocketEntry = connect(
         </div>
         <section className="usa-section grid-container DocumentDetail">
           <CaseDetailHeader />
-          <hr aria-hidden="true" />
-
           <SuccessNotification />
           <ErrorNotification />
-
           <div className="grid-container padding-x-0 add-bottom-margin">
             <div className="grid-row">
               <div className="mobile-lg:grid-col-4">
@@ -105,7 +102,7 @@ export const AddDocketEntry = connect(
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal confirmSequence={submitDocketEntrySequence} />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );
