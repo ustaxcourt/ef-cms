@@ -19,9 +19,6 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-hidden="true" className="collapse-header">
-                &nbsp;
-              </th>
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
@@ -42,17 +39,13 @@ export const IndividualWorkQueueInbox = connect(
               }
             >
               <tr>
-                <td className="focus-toggle">
-                  <button
-                    className="focus-button usa-button usa-button--unstyled"
-                    aria-label="Expand message detail"
-                    aria-expanded={item.isFocused}
-                    aria-controls={`detail-${item.workItemId}`}
-                  />
+                <td className="message-queue-row">
+                  {item.docketNumberWithSuffix}
                 </td>
-                <td>{item.docketNumberWithSuffix}</td>
-                <td>{item.currentMessage.createdAtFormatted}</td>
-                <td className="has-icon">
+                <td className="message-queue-row">
+                  {item.currentMessage.createdAtFormatted}
+                </td>
+                <td className="message-queue-row has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
@@ -81,48 +74,34 @@ export const IndividualWorkQueueInbox = connect(
                     />
                   )}
                 </td>
-                <td>
-                  <a
-                    onClick={e => {
-                      e.stopPropagation();
-                    }}
-                    href={documentHelper({
-                      docketNumber: item.docketNumber,
-                      documentId: item.document.documentId,
-                      messageId: item.currentMessage.messageId,
-                    })}
-                    className={
-                      item.isRead ? 'case-link' : 'link case-link-bold'
-                    }
-                  >
-                    {item.document.documentType}
-                  </a>
-                </td>
-                <td>{item.caseStatus}</td>
-                <td className="from">{item.currentMessage.from}</td>
-                <td>{item.sentBySection}</td>
-              </tr>
-              {item.isFocused && (
-                <tr className="queue-message">
-                  <td className="focus-toggle">
-                    <button
-                      className="focus-button usa-button usa-button--unstyled"
-                      tabIndex="-1"
-                      aria-disabled="true"
-                    />
-                  </td>
-                  <td colSpan="3" aria-hidden="true" />
-                  <td
-                    colSpan="5"
-                    className="message-detail"
-                    aria-label="Message detail"
-                    aria-live="polite"
-                    id={`detail-${item.workItemId}`}
-                  >
+                <td className="message-queue-row message-queue-document">
+                  <div className="message-document-title">
+                    <a
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                      href={documentHelper({
+                        docketNumber: item.docketNumber,
+                        documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
+                      })}
+                      className={
+                        item.isRead ? 'case-link' : 'link case-link-bold'
+                      }
+                    >
+                      {item.document.documentType}
+                    </a>
+                  </div>
+                  <div className="message-document-detail">
                     {item.currentMessage.message}
-                  </td>
-                </tr>
-              )}
+                  </div>
+                </td>
+                <td className="message-queue-row">{item.caseStatus}</td>
+                <td className="message-queue-row from">
+                  {item.currentMessage.from}
+                </td>
+                <td className="message-queue-row">{item.sentBySection}</td>
+              </tr>
             </tbody>
           ))}
         </table>

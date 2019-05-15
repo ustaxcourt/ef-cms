@@ -64,29 +64,40 @@ table.dashboard {
 }
 
 table.work-queue {
-  td,
   th {
-    border: none;
-  }
-
-  th.collapse-header {
-    padding: 0;
+    border: 0;
   }
 
   td {
-    font-size: 14px;
+    border: none;
+    font-size: 17px;
+
+    &.message-select-control {
+      vertical-align: middle;
+    }
+
+    .message-queue-row {
+      padding-top: 14px;
+    }
+
+    .message-document-title {
+      overflow: hidden;
+      max-width: 35rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .message-document-detail {
+      font-size: 15px;
+    }
+
+    .has-icon {
+      width: 44px;
+    }
 
     label {
       margin: 0;
     }
-  }
-
-  td.section-queue-row {
-    padding-top: 14px;
-  }
-
-  td.has-icon {
-    width: 44px;
   }
 
   tr {
@@ -95,8 +106,6 @@ table.work-queue {
 
   tbody:not(.action-bar) {
     &:hover {
-      cursor: pointer;
-
       td.focus-toggle {
         button.focus-button {
           background-color: $color-blue;
@@ -149,11 +158,15 @@ table.work-queue {
   }
 
   thead {
-    border-bottom: 2px solid $color-gray-light;
+    border-bottom: 2px solid $color-base-lighter;
 
     th {
-      background-color: $color-white;
+      background-color: $color-base-lightest;
       font-weight: $font-semibold;
+
+      .collapse-header {
+        padding: 0;
+      }
     }
   }
 
