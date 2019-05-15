@@ -128,6 +128,10 @@ const formatDocketRecordWithDocument = (
       record.filingsAndProceedings = filingsAndProceedingsArray
         .filter(item => item !== '')
         .join(' ');
+
+      if (document.additionalInfo) {
+        record.description += ` ${document.additionalInfo}`;
+      }
     }
 
     return { document, index, record };
