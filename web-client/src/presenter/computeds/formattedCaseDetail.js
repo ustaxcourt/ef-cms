@@ -16,8 +16,7 @@ const formatDocketRecord = (docketRecord, applicationContext) => {
   const result = _.cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate)
-    .format('MMDDYYYY');
+    .formatDateString(result.filingDate, 'MMDDYYYY');
 
   return result;
 };
