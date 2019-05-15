@@ -6,27 +6,22 @@ import React from 'react';
 export const HeaderDashboardInternal = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
-    unreadCount: state.notifications.unreadCount,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence, unreadCount, workQueueHelper }) => {
-    const currentQueueTitle = `${
-      workQueueHelper.showIndividualWorkQueue ? 'My' : 'Section'
-    } Messages`;
-    const currentBoxView = workQueueHelper.showInbox ? 'inbox' : 'outbox';
+  ({ chooseWorkQueueSequence, workQueueHelper }) => {
     return (
       <div className="big-blue-header">
         <div className="grid-container">
-          <h1 tabIndex="-1">{currentQueueTitle}</h1>
+          <h1 tabIndex="-1">{workQueueHelper.workQueueTitle}</h1>
           <span className="unread" aria-label="unread work item count">
-            {unreadCount}
+            {workQueueHelper.inboxCount}
           </span>
           {workQueueHelper.showIndividualWorkQueue && (
             <button
               className="button-switch-box"
               onClick={() => {
                 chooseWorkQueueSequence({
-                  box: currentBoxView,
+                  box: workQueueHelper.currentBoxView,
                   queue: 'section',
                 });
               }}
@@ -40,7 +35,7 @@ export const HeaderDashboardInternal = connect(
               className="button-switch-box"
               onClick={() => {
                 chooseWorkQueueSequence({
-                  box: currentBoxView,
+                  box: workQueueHelper.currentBoxView,
                   queue: 'my',
                 });
               }}
