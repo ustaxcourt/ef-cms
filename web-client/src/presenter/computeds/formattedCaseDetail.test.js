@@ -1,14 +1,13 @@
 import { applicationContext } from '../../applicationContext';
-import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
+import {
+  formatYearAmounts,
+  formattedCaseDetail as formattedCaseDetailComputed,
+} from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-const withAppContextDecorator = (f, appContext) => {
-  return get => f(get, appContext);
-};
-
-const formattedCaseDetailWithAppContext = withAppContextDecorator(
-  formattedCaseDetail,
-  applicationContext,
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
 );
 
 const constants = {
@@ -34,7 +33,7 @@ describe('formattedCaseDetail', () => {
           },
         ],
       };
-      formatYearAmounts(caseDetail);
+      formatYearAmounts(caseDetail, undefined, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -70,7 +69,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: [{ index: 1, year: 'year can not be in future' }],
       };
-      formatYearAmounts(caseDetail, caseDetailErrors);
+      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -107,7 +106,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: 'Duplicate years are bad',
       };
-      formatYearAmounts(caseDetail, caseDetailErrors);
+      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '1000',
@@ -134,7 +133,7 @@ describe('formattedCaseDetail', () => {
         hasVerifiedIrsNotice: undefined,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -151,7 +150,7 @@ describe('formattedCaseDetail', () => {
         hasVerifiedIrsNotice: true,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -169,7 +168,7 @@ describe('formattedCaseDetail', () => {
         hasVerifiedIrsNotice: undefined,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -187,7 +186,7 @@ describe('formattedCaseDetail', () => {
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -213,7 +212,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
-    const result = await runCompute(formattedCaseDetailWithAppContext, {
+    const result = await runCompute(formattedCaseDetail, {
       state: {
         caseDetail,
         caseDetailErrors: {},
@@ -247,7 +246,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
-    const result = await runCompute(formattedCaseDetailWithAppContext, {
+    const result = await runCompute(formattedCaseDetail, {
       state: {
         caseDetail,
         caseDetailErrors: {},
@@ -385,7 +384,7 @@ describe('formattedCaseDetail', () => {
       petitioners: [{ name: 'bob' }],
       practitioner: { name: 'Test Practitioner' },
     };
-    const result = await runCompute(formattedCaseDetailWithAppContext, {
+    const result = await runCompute(formattedCaseDetail, {
       state: {
         caseDetail,
         caseDetailErrors: {},
@@ -472,7 +471,7 @@ describe('formattedCaseDetail', () => {
     });
     it('sorts the docket record in the expected default order (ascending date)', async () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -502,7 +501,7 @@ describe('formattedCaseDetail', () => {
     });
     it('sorts the docket record by descending date', async () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -536,7 +535,7 @@ describe('formattedCaseDetail', () => {
 
     it('sorts the docket record by ascending index', async () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -569,7 +568,7 @@ describe('formattedCaseDetail', () => {
     });
     it('sorts the docket record by descending index', async () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -607,7 +606,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -622,7 +621,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -637,7 +636,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: 'Sisqo and friends,  Petitioners ',
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -652,7 +651,7 @@ describe('formattedCaseDetail', () => {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -670,7 +669,7 @@ describe('formattedCaseDetail', () => {
         petitioners: [{ name: 'bob' }],
         practitioner: { barNumber: '9999', name: 'Jackie Chan' },
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -685,7 +684,7 @@ describe('formattedCaseDetail', () => {
         petitioners: [{ name: 'bob' }],
         practitioner: { name: 'Jackie Chan' },
       };
-      const result = await runCompute(formattedCaseDetailWithAppContext, {
+      const result = await runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},

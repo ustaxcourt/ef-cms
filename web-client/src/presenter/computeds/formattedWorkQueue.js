@@ -26,6 +26,9 @@ export const formatWorkItem = (
 ) => {
   const result = _.cloneDeep(workItem);
 
+  if (!applicationContext) {
+    console.trace('oh crap');
+  }
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYYYY');

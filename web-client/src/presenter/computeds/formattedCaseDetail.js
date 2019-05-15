@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
 
-const formatDocument = (document, applicationContext) => {
+export const formatDocument = (document, applicationContext) => {
   const result = _.cloneDeep(document);
   result.createdAtFormatted = applicationContext
     .getUtilities()
@@ -49,9 +49,12 @@ const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
   yearAmount,
   idx,
 ) => {
+  const isoYear = applicationContext
+    .getUtilities()
+    .createISODateString(yearAmount.year, 'YYYY');
   const formattedYear = applicationContext
     .getUtilities()
-    .formatDateString(yearAmount.year, 'YYYY');
+    .formatDateString(isoYear, 'YYYY');
   yearAmount.formattedYear = formattedYear;
   yearAmount.showError = false;
   yearAmount.amountFormatted = yearAmount.amount
@@ -72,7 +75,11 @@ const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
   };
 };
 
-export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
+export const formatYearAmounts = (
+  caseDetail,
+  caseDetailErrors = {},
+  applicationContext,
+) => {
   caseDetail.canAddYearAmount =
     (caseDetail.yearAmounts || []).filter(yearAmount => {
       return !yearAmount.year;
@@ -82,7 +89,7 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
     caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
   } else {
     caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
-      formatYearAmount(caseDetailErrors, caseDetail),
+      formatYearAmount(caseDetailErrors, caseDetail, applicationContext),
     );
   }
 };
