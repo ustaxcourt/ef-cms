@@ -26,12 +26,6 @@ export const CaseDetail = connect(
   }) {
     return (
       <React.Fragment>
-        <div className="breadcrumb grid-container">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back to dashboard
-          </a>
-        </div>
         <section className="usa-section grid-container">
           <div className="grid-container padding-x-0">
             <div className="grid-row">
