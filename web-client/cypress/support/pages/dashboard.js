@@ -45,5 +45,5 @@ exports.getSendButton = () => {
 };
 
 exports.getWorkItemMessage = workItemId => {
-  return cy.get(`td#detail-${workItemId}`);
+  return cy.get(`div#detail-${workItemId}`);
 };
