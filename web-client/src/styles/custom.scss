@@ -551,7 +551,8 @@ textarea#case-caption {
   }
 }
 
-.unread, .assign-work-item-count {
+.unread,
+.assign-work-item-count {
   display: inline-block;
   min-width: 35px;
   background: $color-primary;
@@ -854,12 +855,22 @@ nav.usa-nav {
   padding: 25px 0;
   margin-bottom: 40px;
   background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  color: $color-white; // TODO: Replace with USWDSv2 var when available;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
     color: $color-white;
   }
-
+  a,
+  a:hover,
+  button,
+  button:hover {
+    color: $color-white;
+  }
+  .usa-tag {
+    background: $color-white;
+    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  }
   .unread {
     position: relative;
     top: -3px;
