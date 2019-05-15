@@ -63,6 +63,23 @@ table.dashboard {
   }
 }
 
+table.messages {
+  thead {
+    border-bottom: 2px solid $color-base-lighter;
+
+    th {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      background-color: $color-base-lightest;
+      font-weight: $font-semibold;
+
+      &.header-fixed-width {
+        width: 200px;
+      }
+    }
+  }
+}
+
 table.work-queue {
   th {
     border: 0;

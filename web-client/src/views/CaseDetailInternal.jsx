@@ -52,20 +52,24 @@ export const CaseDetailInternal = connect(
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
-            <table className="usa-table row-border-only subsection">
+            <table className="usa-table row-border-only subsection messages">
+              <thead>
+                <tr>
+                  <th className="header-fixed-width">To</th>
+                  <th className="header-fixed-width">From</th>
+                  <th className="header-fixed-width">Received</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
                     <td className="responsive-title">
-                      <p className="margin-y-0">
-                        <span className="label-inline">To</span>
-                        {workItem.assigneeName}
-                      </p>
-                      <p className="margin-y-0">
-                        <span className="label-inline">From</span>
-                        {workItem.messages[0].from}
-                      </p>
+                      {workItem.assigneeName}
                     </td>
+                    <td>{workItem.messages[0].from}</td>
+                    <td>{workItem.messages[0].createdAtTimeFormatted}</td>
                     <td>
                       <p className="margin-y-0">
                         <a
@@ -82,10 +86,6 @@ export const CaseDetailInternal = connect(
                       <p className="margin-y-0">
                         {workItem.messages[0].message}
                       </p>
-                    </td>
-                    <td>
-                      <span className="label-inline">Received</span>
-                      {workItem.messages[0].createdAtTimeFormatted}
                     </td>
                   </tr>
                 ))}
