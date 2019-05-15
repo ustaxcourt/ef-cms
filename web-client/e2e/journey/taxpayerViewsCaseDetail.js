@@ -1,7 +1,8 @@
 import { runCompute } from 'cerebral/test';
 
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { withAppContextDecorator } from '../util/withAppContext';
 
 export default test => {
   return it('Taxpayer views case detail', async () => {
@@ -10,9 +11,12 @@ export default test => {
     });
 
     const caseDetail = test.getState('caseDetail');
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual('W');

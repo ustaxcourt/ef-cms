@@ -1,5 +1,15 @@
+import { applicationContext } from '../../applicationContext';
 import { formattedWorkQueue } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
+
+const withAppContextDecorator = (f, appContext) => {
+  return get => f(get, appContext);
+};
+
+const formattedWorkQueueWithAppContext = withAppContextDecorator(
+  formattedWorkQueue,
+  applicationContext,
+);
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: null,
@@ -92,7 +102,7 @@ describe('formatted work queue computed', () => {
 
   let result;
   beforeEach(() => {
-    result = runCompute(formattedWorkQueue, {
+    result = runCompute(formattedWorkQueueWithAppContext, {
       state: {
         selectedWorkItems: [workItem],
         workQueue: [workItem],
@@ -119,7 +129,7 @@ describe('formatted work queue computed', () => {
 
   it('sets showSendTo and showComplete', () => {
     workItem.isInitializeCase = true;
-    const result2 = runCompute(formattedWorkQueue, {
+    const result2 = runCompute(formattedWorkQueueWithAppContext, {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
@@ -130,7 +140,7 @@ describe('formatted work queue computed', () => {
   });
   it('sets showBatchedStatusIcon when false', () => {
     workItem.isInitializeCase = true;
-    const result2 = runCompute(formattedWorkQueue, {
+    const result2 = runCompute(formattedWorkQueueWithAppContext, {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
@@ -141,7 +151,7 @@ describe('formatted work queue computed', () => {
   it('sets showBatchedStatusIcon when true', () => {
     workItem.isInitializeCase = true;
     workItem.caseStatus = 'Batched for IRS';
-    const result2 = runCompute(formattedWorkQueue, {
+    const result2 = runCompute(formattedWorkQueueWithAppContext, {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
@@ -153,7 +163,7 @@ describe('formatted work queue computed', () => {
   it('sets showBatchedStatusIcon to recalled', () => {
     workItem.isInitializeCase = true;
     workItem.caseStatus = 'Recalled';
-    const result2 = runCompute(formattedWorkQueue, {
+    const result2 = runCompute(formattedWorkQueueWithAppContext, {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],

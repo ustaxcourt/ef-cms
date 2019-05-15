@@ -1,11 +1,26 @@
 import { runCompute } from 'cerebral/test';
 
 import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { applicationContext } from '../../applicationContext';
 import { formattedCaseDetail, formattedCases } from './formattedCaseDetail';
+
+const withAppContextDecorator = (f, appContext) => {
+  return get => f(get, appContext);
+};
+
+const formattedCaseDetailWithAppContext = withAppContextDecorator(
+  formattedCaseDetail,
+  applicationContext,
+);
+
+const formattedCasesWithAppContext = withAppContextDecorator(
+  formattedCases,
+  applicationContext,
+);
 
 describe('formatted case details computed', () => {
   it('formats the date', () => {
-    const result = runCompute(formattedCaseDetail, {
+    const result = runCompute(formattedCaseDetailWithAppContext, {
       state: {
         caseDetail: {
           caseCaption: 'Brett Osborne, Petitioner',
@@ -31,7 +46,7 @@ describe('formatted case details computed', () => {
   });
 
   it('formats the date in a list of cases', () => {
-    const result = runCompute(formattedCases, {
+    const result = runCompute(formattedCasesWithAppContext, {
       state: {
         cases: [
           {
@@ -57,7 +72,7 @@ describe('formatted case details computed', () => {
   });
 
   it('formats the respondent name to include barnumber', () => {
-    const result = runCompute(formattedCases, {
+    const result = runCompute(formattedCasesWithAppContext, {
       state: {
         cases: [
           {
