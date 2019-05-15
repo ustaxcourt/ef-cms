@@ -31,7 +31,6 @@ export const FilingsAndProceedings = connect(
       documentId,
       description,
       isPaper,
-      additionalInfo,
       docketRecordIndex = 0,
     ) {
       return (
@@ -50,7 +49,7 @@ export const FilingsAndProceedings = connect(
                     <FontAwesomeIcon icon={['fas', 'file-alt']} />
                   </span>
                 )}
-                {description} {additionalInfo}
+                {description}
               </a>
               <button
                 className="show-on-mobile link border-0"
@@ -62,7 +61,7 @@ export const FilingsAndProceedings = connect(
                   });
                 }}
               >
-                {description} {additionalInfo}
+                {description}
               </button>
             </React.Fragment>
           )}
@@ -80,9 +79,9 @@ export const FilingsAndProceedings = connect(
             document.documentId,
             record.description,
             document.isPaper,
-            document.additionalInfo,
             arrayIndex,
           )}
+
         {document &&
           caseDetailHelper.showDirectDownloadLink &&
           document.processingStatus !== 'complete' && (
@@ -93,9 +92,10 @@ export const FilingsAndProceedings = connect(
               >
                 <span aria-hidden="true">Uploading</span>
               </span>
-              {record.description} {document && document.additionalInfo}
+              {record.description}
             </React.Fragment>
           )}
+
         {document && caseDetailHelper.showDocumentDetailLink && (
           <a
             href={documentHelper({
@@ -109,19 +109,12 @@ export const FilingsAndProceedings = connect(
                 <FontAwesomeIcon icon={['fas', 'file-alt']} />
               </span>
             )}
-            {record.description} {document && document.additionalInfo}
+            {record.description}
           </a>
         )}
-        {!document &&
-          record.documentId &&
-          renderDocumentLink(
-            record.documentId,
-            record.description,
-            false,
-            document.additionalInfo,
-            arrayIndex,
-          )}
-        {!document && !record.documentId && record.description}
+
+        {!document && record.description}
+
         <span className="filings-and-proceedings">
           {record.filingsAndProceedings && ` ${record.filingsAndProceedings}`}
           {document &&
