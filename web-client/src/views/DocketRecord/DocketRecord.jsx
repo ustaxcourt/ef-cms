@@ -50,7 +50,7 @@ export const DocketRecord = connect(
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ record, document, index }) => (
+              ({ record, document, index }, arrayIndex) => (
                 <tr key={index}>
                   <td className="center-column hide-on-mobile">{index}</td>
                   <td>{record.createdAtFormatted}</td>
@@ -77,6 +77,7 @@ export const DocketRecord = connect(
                     <FilingsAndProceedings
                       record={record}
                       document={document}
+                      arrayIndex={arrayIndex}
                     />
                   </td>
                   <td className="hide-on-mobile">
