@@ -1,6 +1,14 @@
+import { applicationContext } from '../../applicationContext';
+import {
+  formatYearAmounts,
+  formattedCaseDetail as formattedCaseDetailComputed,
+} from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const constants = {
   DOCUMENT_TYPES_MAP: {
@@ -25,7 +33,7 @@ describe('formattedCaseDetail', () => {
           },
         ],
       };
-      formatYearAmounts(caseDetail);
+      formatYearAmounts(caseDetail, undefined, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -61,7 +69,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: [{ index: 1, year: 'year can not be in future' }],
       };
-      formatYearAmounts(caseDetail, caseDetailErrors);
+      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -98,7 +106,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: 'Duplicate years are bad',
       };
-      formatYearAmounts(caseDetail, caseDetailErrors);
+      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '1000',
