@@ -17,6 +17,7 @@ export const CaseDetailInternal = connect(
     caseHelper: state.caseDetailHelper,
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
+    setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -28,6 +29,7 @@ export const CaseDetailInternal = connect(
     caseHelper,
     documentHelper,
     extractedPendingMessages,
+    setDocumentDetailTabSequence,
     submitUpdateCaseSequence,
     token,
     updateCaseValueSequence,
@@ -90,85 +92,104 @@ export const CaseDetailInternal = connect(
               </tbody>
             </table>
           </div>
-          <Tabs
-            className="classic-horizontal-header3 tab-border"
-            bind="documentDetail.tab"
-          >
-            <Tab
-              tabName="docketRecord"
-              title="Docket Record"
-              id="tab-docket-record"
-              large
+          <div className="only-small-screens">
+            <select
+              className="usa-select"
+              id="mobile-document-detail-tab-selector"
+              name="partyType"
+              aria-label="additional case info"
+              value={caseHelper.documentDetailTab}
+              onChange={e => {
+                setDocumentDetailTabSequence({
+                  tab: e.target.value,
+                });
+              }}
             >
-              <DocketRecord />
-            </Tab>
-            <Tab
-              large
-              tabName="caseInfo"
-              title="Case Information"
-              id="tab-case-info"
+              <option value="docketRecord">Docket Record</option>
+              <option value="caseInfo">Case Information</option>
+            </select>
+          </div>
+          <div className="mobile-document-detail-tabs">
+            <Tabs
+              className="classic-horizontal-header3 tab-border"
+              bind="documentDetail.tab"
             >
-              <CaseInformationInternal />
-              <PartyInformation />
-              <div>
-                <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>Petition fee</legend>
-                  {caseHelper.showPaymentRecord && (
-                    <React.Fragment>
-                      <p className="label">Paid by pay.gov</p>
-                      <p>{caseDetail.payGovId}</p>
-                    </React.Fragment>
-                  )}
-                  {caseHelper.showPaymentOptions && (
-                    <ul className="usa-unstyled-list">
-                      <li>
-                        <input
-                          id="paygov"
-                          type="radio"
-                          name="paymentType"
-                          value="payGov"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                        <label htmlFor="paygov" className="usa-label">
-                          Paid by pay.gov
-                        </label>
-                        {caseHelper.showPayGovIdInput && (
-                          <>
-                            <label htmlFor="paygovid" className="usa-label">
-                              Payment ID
-                            </label>
-                            <input
-                              id="paygovid"
-                              type="text"
-                              name="payGovId"
-                              value={caseDetail.payGovId || ''}
-                              onChange={e => {
-                                updateCaseValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                            <button
-                              id="update-case-page-end"
-                              onClick={() => submitUpdateCaseSequence()}
-                            >
-                              Save updates
-                            </button>
-                          </>
-                        )}
-                      </li>
-                    </ul>
-                  )}
-                </fieldset>
-              </div>
-            </Tab>
-          </Tabs>
+              <Tab
+                tabName="docketRecord"
+                title="Docket Record"
+                id="tab-docket-record"
+                large
+              >
+                <DocketRecord />
+              </Tab>
+              <Tab
+                large
+                tabName="caseInfo"
+                title="Case Information"
+                id="tab-case-info"
+              >
+                <CaseInformationInternal />
+                <PartyInformation />
+                <div>
+                  <fieldset className="usa-fieldset-inputs usa-sans">
+                    <legend>Petition fee</legend>
+                    {caseHelper.showPaymentRecord && (
+                      <React.Fragment>
+                        <p className="label">Paid by pay.gov</p>
+                        <p>{caseDetail.payGovId}</p>
+                      </React.Fragment>
+                    )}
+                    {caseHelper.showPaymentOptions && (
+                      <ul className="usa-unstyled-list">
+                        <li>
+                          <input
+                            id="paygov"
+                            type="radio"
+                            name="paymentType"
+                            value="payGov"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label htmlFor="paygov" className="usa-label">
+                            Paid by pay.gov
+                          </label>
+                          {caseHelper.showPayGovIdInput && (
+                            <>
+                              <label htmlFor="paygovid" className="usa-label">
+                                Payment ID
+                              </label>
+                              <input
+                                id="paygovid"
+                                type="text"
+                                name="payGovId"
+                                value={caseDetail.payGovId || ''}
+                                onChange={e => {
+                                  updateCaseValueSequence({
+                                    key: e.target.name,
+                                    value: e.target.value,
+                                  });
+                                }}
+                              />
+                              <button
+                                id="update-case-page-end"
+                                onClick={() => submitUpdateCaseSequence()}
+                              >
+                                Save updates
+                              </button>
+                            </>
+                          )}
+                        </li>
+                      </ul>
+                    )}
+                  </fieldset>
+                </div>
+              </Tab>
+            </Tabs>
+          </div>
         </section>
         {/* This section below will be removed in a future story */}
         <section>
