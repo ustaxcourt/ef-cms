@@ -23,7 +23,6 @@ input[type='file'] {
 }
 
 input[type='email'],
-input[type='file'],
 input[type='number'],
 input[type='tel'],
 input[type='text'],
@@ -34,6 +33,10 @@ select {
   &:hover {
     border: 1px solid color($theme-color-primary);
   }
+}
+
+input[type='file'] {
+  margin: 0 0 20px 0;
 }
 
 textarea.caption {
