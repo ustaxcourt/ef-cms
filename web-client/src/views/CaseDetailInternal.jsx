@@ -42,55 +42,78 @@ export const CaseDetailInternal = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <div className="title margin-bottom-5">
-              <h1>Messages In Progress</h1>
+            <div className="only-small-screens">
+              <select
+                className="usa-select"
+                id="mobile-messages-in-progress-tab-selector"
+                name="caseDetail"
+                value="messagesInProgress"
+                aria-label="case detail messages in progress"
+                onChange={e => {
+                  e.preventDefault();
+                }}
+              >
+                <option value="messagesInProgress">Messages In Progress</option>
+              </select>
             </div>
+            <div className="mobile-document-detail-tabs">
+              <Tabs
+                className="classic-horizontal-header3 tab-border"
+                bind="caseDetail.tab"
+              >
+                <Tab
+                  tabName="messagesInProgress"
+                  title="Messages In Progress"
+                  id="tab-messages-in-progress"
+                >
+                  {extractedPendingMessages.length === 0 && (
+                    <p>No Messages In Progress</p>
+                  )}
+                  <table className="usa-table row-border-only subsection messages">
+                    <thead>
+                      <tr>
+                        <th className="header-fixed-width">To</th>
+                        <th className="header-fixed-width">From</th>
+                        <th className="header-fixed-width">Received</th>
+                        <th>Message</th>
+                      </tr>
+                    </thead>
 
-            {extractedPendingMessages.length === 0 && (
-              <p>No Messages In Progress</p>
-            )}
-            <table className="usa-table row-border-only subsection messages">
-              <thead>
-                <tr>
-                  <th className="header-fixed-width">To</th>
-                  <th className="header-fixed-width">From</th>
-                  <th className="header-fixed-width">Received</th>
-                  <th>Message</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {extractedPendingMessages.map((workItem, idx) => (
-                  <tr key={idx}>
-                    <td className="responsive-title padding-extra">
-                      {workItem.assigneeName}
-                    </td>
-                    <td className="padding-extra">
-                      {workItem.messages[0].from}
-                    </td>
-                    <td className="padding-extra">
-                      {workItem.messages[0].createdAtTimeFormatted}
-                    </td>
-                    <td className="padding-extra">
-                      <p className="margin-y-0">
-                        <a
-                          href={documentHelper({
-                            docketNumber: workItem.docketNumber,
-                            documentId: workItem.document.documentId,
-                          })}
-                          className="case-link"
-                        >
-                          {workItem.document.documentType}
-                        </a>
-                      </p>
-                      <p className="message-detail margin-y-0">
-                        {workItem.messages[0].message}
-                      </p>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    <tbody>
+                      {extractedPendingMessages.map((workItem, idx) => (
+                        <tr key={idx}>
+                          <td className="responsive-title padding-extra">
+                            {workItem.assigneeName}
+                          </td>
+                          <td className="padding-extra">
+                            {workItem.messages[0].from}
+                          </td>
+                          <td className="padding-extra">
+                            {workItem.messages[0].createdAtTimeFormatted}
+                          </td>
+                          <td className="padding-extra">
+                            <p className="margin-y-0">
+                              <a
+                                href={documentHelper({
+                                  docketNumber: workItem.docketNumber,
+                                  documentId: workItem.document.documentId,
+                                })}
+                                className="case-link"
+                              >
+                                {workItem.document.documentType}
+                              </a>
+                            </p>
+                            <p className="message-detail margin-y-0">
+                              {workItem.messages[0].message}
+                            </p>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Tab>
+              </Tabs>
+            </div>
           </div>
           <div className="only-small-screens">
             <select
