@@ -1,6 +1,10 @@
+import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCaseDetailComputed } from './extractPendingMessagesFromCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-import { extractedPendingMessagesFromCaseDetail } from './extractPendingMessagesFromCaseDetail';
+const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
+  extractPendingMessagesFromCaseDetailComputed,
+);
 
 describe('extractPendingMessagesFromCaseDetail', () => {
   it('should no fail if work items is not defined', async () => {
