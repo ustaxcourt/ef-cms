@@ -102,7 +102,7 @@ export const CaseDetail = connect(
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            Pay now
+                            Pay Now
                           </a>
                         </div>
                         <div className="tablet:grid-col-6">
