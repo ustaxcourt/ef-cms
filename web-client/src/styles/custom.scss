@@ -863,8 +863,8 @@ nav.usa-nav {
 .big-blue-header {
   padding: 25px 0;
   margin-bottom: 40px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: $color-white; // TODO: Replace with USWDSv2 var when available;
+  background-color: color('primary-darker');
+  color: $color-white;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
@@ -878,13 +878,13 @@ nav.usa-nav {
   }
   .usa-tag {
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color('primary-darker');
   }
   .unread {
     position: relative;
     top: -3px;
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color('primary-darker');
   }
 }
 
@@ -893,8 +893,8 @@ nav.usa-nav {
   top: -3px;
   border: none;
   margin-left: 5px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: #fff;
+  background-color: color('primary-darker');
+  color: $color-white;
   font-size: 14px;
   font-weight: $font-semibold;
 }
