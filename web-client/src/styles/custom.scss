@@ -5,10 +5,6 @@ body.no-scroll {
   touch-action: none;
 }
 
-a:hover {
-  color: color($theme-color-primary-darker);
-}
-
 hr {
   z-index: 1;
   display: block;

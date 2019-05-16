@@ -118,3 +118,7 @@ p.semi-bold {
 a {
   color: color($theme-color-primary);
 }
+
+a:hover {
+  color: color($theme-color-primary-darker);
+}
