@@ -59,7 +59,7 @@ export function TabsComponent({
           aria-selected={isActiveTab}
           onClick={() => setTab(tabName)}
         >
-          {title}
+          <span>{title}</span>
         </button>
       </li>
     );

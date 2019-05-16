@@ -1,8 +1,13 @@
 import { runCompute } from 'cerebral/test';
 
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
-import { documentDetailHelper } from '../../src/presenter/computeds/documentDetailHelper';
+import { documentDetailHelper as documentDetailHelperComputed } from '../../src/presenter/computeds/documentDetailHelper';
 
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const documentDetailHelper = withAppContextDecorator(
+  documentDetailHelperComputed,
+);
 /**
  * This is needed because some sequences run router.route which runs another test.runSequence which
  * adds an new entry on the node event loop and causes the tests to continue running even though the sequence is

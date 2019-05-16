@@ -15,10 +15,6 @@ hr {
   margin: 20px 0;
 }
 
-.mr-1 {
-  margin-right: 10px;
-}
-
 .inline-block {
   display: inline-block;
 }
@@ -125,16 +121,13 @@ select[disabled] {
   }
 }
 
-.gray-header {
-  background-color: color($theme-color-base-lightest);
-}
-
 .completed-card {
   margin-bottom: 20px;
   color: color($theme-color-base);
 
   .completed-icon {
     padding-top: 2px;
+    color: $color-green;
     float: left;
   }
 
@@ -153,7 +146,6 @@ select[disabled] {
 
 .blue-container {
   padding: 20px;
-  margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
   .usa-form-group:last-of-type {
     margin: 0;
@@ -438,33 +430,43 @@ select.ustc-input-error {
   }
 }
 
+#tab-pending-messages-panel {
+  border: 1px solid color($theme-color-base-lighter);
+}
+
 #case-detail-tabs {
+  border: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
-  > nav {
-    li {
-      width: percentage(1/3);
-      button {
-        width: 100%;
-        padding: 1rem;
-      }
-    }
-  }
-  > .tabcontent {
-    > h3 {
-      padding-left: 20px;
-    }
-
-    .blue-container:last-child {
-      margin-bottom: 0;
-    }
-  }
 }
 
-#case-detail-messages-tabs {
-  > .tabcontent {
-    padding: 15px;
-  }
-}
+// #case-detail-tabs {
+//   margin-bottom: 20px;
+//   > nav {
+//     li {
+//       width: percentage(1/3);
+//       button {
+//         width: 100%;
+//         padding: 1rem;
+//       }
+//     }
+//   }
+//   > .tabcontent {
+//     > h3 {
+//       padding-left: 20px;
+//     }
+
+//     .blue-container:last-child {
+//       margin-bottom: 0;
+//     }
+//   }
+// }
+
+// #case-detail-messages-tabs {
+//   > .tabcontent {
+//     padding: 20px;
+//     padding-top: 10px;
+//   }
+// }
 
 .ustc-horizontal-list * {
   display: inline-block;
@@ -670,6 +672,10 @@ nav.usa-nav {
       float: none;
     }
 
+    .usa-button {
+      min-width: auto;
+    }
+
     input#search-field {
       width: 220px;
     }
@@ -863,28 +869,30 @@ nav.usa-nav {
 .big-blue-header {
   padding: 25px 0;
   margin-bottom: 40px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: $color-white; // TODO: Replace with USWDSv2 var when available;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
     color: $color-white;
   }
   a,
-  a:hover,
-  button,
-  button:hover {
+  button {
     color: $color-white;
+  }
+  a:hover,
+  button:hover {
+    color: $color-primary-alt;
   }
   .usa-tag {
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color($theme-color-primary-darker);
   }
   .unread {
     position: relative;
     top: -3px;
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color($theme-color-primary-darker);
   }
 }
 
@@ -893,8 +901,8 @@ nav.usa-nav {
   top: -3px;
   border: none;
   margin-left: 5px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: #fff;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
   font-size: 14px;
   font-weight: $font-semibold;
 }

@@ -29,8 +29,7 @@ export const DocketRecordHeader = connect(
                   }/add-docket-entry`}
                   id="button-add-record"
                 >
-                  <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Docket
-                  Entry
+                  <FontAwesomeIcon icon="plus-circle" /> Add Docket Entry
                 </a>
               )}
               {helper.showFileDocumentButton && (
@@ -41,8 +40,7 @@ export const DocketRecordHeader = connect(
                   }/file-a-document`}
                   id="button-file-document"
                 >
-                  <FontAwesomeIcon icon="plus-circle" size="sm" /> File a
-                  Document
+                  <FontAwesomeIcon icon="plus-circle" /> File a Document
                 </a>
               )}
             </div>

@@ -1,9 +1,9 @@
 import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseInformationInternal } from './CaseInformationInternal';
+import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PartyInformation } from './PartyInformation';
+import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';

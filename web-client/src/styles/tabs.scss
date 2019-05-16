@@ -1,12 +1,9 @@
 .ustc-ui-tabs {
+
   ul {
     padding-left: 0px;
     border-bottom: 1px solid color($theme-color-base-lighter);
     list-style-type: none;
-
-    &.no-full-border-bottom {
-      border-bottom: none;
-    }
 
     li {
       display: inline-block;
@@ -49,9 +46,65 @@
     }
   }
 
+  &.no-full-border-bottom {
+    ul {
+      border-bottom: none;
+    }
+  }
+
   &.container-tabs {
-    button {
-      font-size: 17px;
+    nav {
+      border-bottom: 2px solid color($theme-color-base-lighter);
+
+      ul {
+        margin: 0px;
+        
+        li {
+          border-right: 1px solid color($theme-color-base-lighter);
+          margin-right: 0px;
+
+          button {
+            padding-top: 10px;
+            padding-right: 30px;
+            padding-bottom: 15px;
+            padding-left: 30px;
+            border-bottom: 2px solid color($theme-color-base-lighter);
+            margin-right: 0px;
+            font-size: 17px;
+
+            &:hover {
+              border-bottom: 2px solid color($theme-color-base-lighter);
+              background-color: none;
+              color: color($theme-color-primary-darker);
+
+              span {
+                border-bottom: 3px solid color($theme-color-primary-darker);
+              }
+            }
+
+            span {
+              padding-bottom: 12px;
+            }
+          }
+
+          &.active {
+            background-color: $color-primary-alt-lightest;
+
+            button {
+              border-bottom: 2px solid $color-primary-alt-lightest;
+              background-color: $color-primary-alt-lightest;
+
+              &:hover {
+                color: color($theme-color-primary-darker);
+              }
+
+              span {
+                border-bottom: 3px solid color($theme-color-primary);
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
