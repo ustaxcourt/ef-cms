@@ -35,7 +35,7 @@ export const DocketRecordHeader = connect(
               )}
               {helper.showFileDocumentButton && (
                 <a
-                  className="usa-button tablet-full-width"
+                  className="usa-button tablet-full-width only-large-screens"
                   href={`/case-detail/${
                     caseDetail.docketNumber
                   }/file-a-document`}
