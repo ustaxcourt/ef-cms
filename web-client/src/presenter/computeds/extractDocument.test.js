@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 
 import { extractedDocument as extractedDocumentComputed } from './extractDocument';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { withAppContextDecorator } from '../../../src/withAppContext';
 
 const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 

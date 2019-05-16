@@ -52,9 +52,9 @@ const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
   const isoYear = applicationContext
     .getUtilities()
     .createISODateString(yearAmount.year, 'YYYY');
-  const formattedYear = applicationContext
-    .getUtilities()
-    .formatDateString(isoYear, 'YYYY');
+  const formattedYear = yearAmount.year
+    ? applicationContext.getUtilities().formatDateString(isoYear, 'YYYY')
+    : 'Invalid date';
   yearAmount.formattedYear = formattedYear;
   yearAmount.showError = false;
   yearAmount.amountFormatted = yearAmount.amount
