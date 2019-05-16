@@ -120,10 +120,6 @@ select[disabled] {
   }
 }
 
-.gray {
-  background-color: color($theme-color-base-lightest);
-}
-
 .completed-card {
   margin-bottom: 20px;
   color: color($theme-color-base);
@@ -149,7 +145,6 @@ select[disabled] {
 
 .blue-container {
   padding: 20px;
-  margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
   .usa-form-group:last-of-type {
     margin: 0;
@@ -434,33 +429,13 @@ select.ustc-input-error {
   }
 }
 
-#case-detail-tabs {
-  margin-bottom: 20px;
-  > nav {
-    li {
-      width: percentage(1/3);
-      button {
-        width: 100%;
-        padding: 1rem;
-      }
-    }
-  }
-  > .tabcontent {
-    > h3 {
-      padding-left: 20px;
-    }
-
-    .blue-container:last-child {
-      margin-bottom: 0;
-    }
-  }
+#tab-pending-messages-panel {
+  border: 1px solid color($theme-color-base-lighter);
 }
 
-#case-detail-messages-tabs {
-  > .tabcontent {
-    padding: 20px;
-    padding-top: 10px;
-  }
+#case-detail-tabs {
+  border: 1px solid color($theme-color-base-lighter);
+  margin-bottom: 20px;
 }
 
 .ustc-horizontal-list * {
