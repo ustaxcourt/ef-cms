@@ -15,12 +15,14 @@ export const CaseDetail = connect(
   {
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
   },
   function CaseDetail({
     caseDetail,
     caseHelper,
+    setDocumentDetailTabSequence,
     showDetails,
     togglePaymentDetailsSequence,
   }) {
@@ -139,24 +141,47 @@ export const CaseDetail = connect(
               </ul>
             </div>
           )}
-          <Tabs
-            className="classic-horizontal-header3 tab-border"
-            bind="documentDetail.tab"
-          >
-            <Tab
-              tabName="docketRecord"
-              title="Docket Record"
-              id="tab-docket-record"
+          <div className="only-small-screens">
+            <select
+              className="usa-select"
+              id="mobile-document-detail-tab-selector"
+              name="partyType"
+              aria-label="additional case info"
+              value={caseHelper.documentDetailTab}
+              onChange={e => {
+                setDocumentDetailTabSequence({
+                  tab: e.target.value,
+                });
+              }}
             >
-              <DocketRecord />
-            </Tab>
-            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
-              {caseHelper.showCaseInformationPublic && (
-                <CaseInformationPublic />
-              )}
-              <PartyInformation />
-            </Tab>
-          </Tabs>
+              <option value="docketRecord">Docket Record</option>
+              <option value="caseInfo">Case Information</option>
+            </select>
+          </div>
+          <div className="mobile-document-detail-tabs">
+            <Tabs
+              className="classic-horizontal-header3 tab-border"
+              bind="documentDetail.tab"
+            >
+              <Tab
+                tabName="docketRecord"
+                title="Docket Record"
+                id="tab-docket-record"
+              >
+                <DocketRecord />
+              </Tab>
+              <Tab
+                tabName="caseInfo"
+                title="Case Information"
+                id="tab-case-info"
+              >
+                {caseHelper.showCaseInformationPublic && (
+                  <CaseInformationPublic />
+                )}
+                <PartyInformation />
+              </Tab>
+            </Tabs>
+          </div>
         </section>
       </React.Fragment>
     );
