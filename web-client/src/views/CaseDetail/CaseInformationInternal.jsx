@@ -11,7 +11,7 @@ export const CaseInformationInternal = connect(
     return (
       <div className="subsection internal-information">
         <div className="grid-container padding-x-0">
-          <div className="grid-row">
+          <div className="grid-row grid-gap">
             <div className="grid-col-6">
               <h3 className="underlined">Petition Details</h3>
               <div className="grid-container padding-x-0">
