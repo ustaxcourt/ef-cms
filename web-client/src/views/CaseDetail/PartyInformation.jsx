@@ -8,7 +8,7 @@ export const PartyInformation = connect(
     constants: state.constants,
   },
   ({ caseDetail, constants }) => {
-    const mainPartyInformation = () => (
+    const mainPartyInformation = instance => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
           <div className="tablet:grid-col-2">
