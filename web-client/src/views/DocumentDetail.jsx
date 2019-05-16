@@ -35,19 +35,11 @@ export const DocumentDetail = connect(
   }) => {
     return (
       <>
-        <div className="grid-container breadcrumb">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back
-          </a>
-        </div>
+        <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
-          <CaseDetailHeader />
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
-
           <SuccessNotification />
           <ErrorNotification />
-
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
