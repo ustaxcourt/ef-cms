@@ -46,8 +46,10 @@ import { route, router } from './router';
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
+import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -63,6 +65,14 @@ const app = {
         .getItem({ applicationContext, key: 'user' })) || presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
+
+    // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
+    presenter.state = mapValues(presenter.state, value => {
+      if (isFunction(value)) {
+        return withAppContextDecorator(value, applicationContext);
+      }
+      return value;
+    });
 
     const token =
       (await applicationContext

@@ -1,5 +1,8 @@
-import { formattedWorkQueue } from './formattedWorkQueue';
+import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: null,
