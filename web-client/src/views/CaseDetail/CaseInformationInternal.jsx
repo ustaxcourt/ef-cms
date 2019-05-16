@@ -69,10 +69,10 @@ export const CaseInformationInternal = connect(
   },
   ({ helper, caseDetail }) => {
     return (
-      <div className="subsection internal-information">
+      <div className="internal-information">
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="grid-col-6">
+            <div className="tablet:grid-col-6 chunk hide-on-mobile">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Petition Details</h3>
@@ -83,12 +83,27 @@ export const CaseInformationInternal = connect(
                 </div>
               </div>
             </div>
-            <div className="grid-col-6">
+            <div className="tablet:grid-col-6 chunk show-on-mobile">
+              <div className="case-info-card">
+                <h3>Petition Details</h3>
+                <PetitionDetails
+                  caseDetail={caseDetail}
+                  showPaymentRecord={helper.showPaymentRecord}
+                />
+              </div>
+            </div>
+            <div className="tablet:grid-col-6 chunk hide-on-mobile">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Trial Information</h3>
                   <TrialInformation caseDetail={caseDetail} />
                 </div>
+              </div>
+            </div>
+            <div className="tablet:grid-col-6 chunk show-on-mobile">
+              <div className="case-info-card">
+                <h3>Trial Information</h3>
+                <TrialInformation caseDetail={caseDetail} />
               </div>
             </div>
           </div>
