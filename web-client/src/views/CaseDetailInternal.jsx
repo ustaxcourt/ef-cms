@@ -99,16 +99,10 @@ export const CaseDetailInternal = connect(
               tabName="docketRecord"
               title="Docket Record"
               id="tab-docket-record"
-              large
             >
               <DocketRecord />
             </Tab>
-            <Tab
-              large
-              tabName="caseInfo"
-              title="Case Information"
-              id="tab-case-info"
-            >
+            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
               <CaseInformationInternal />
               <PartyInformation />
               <div>
