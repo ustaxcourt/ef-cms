@@ -1,5 +1,4 @@
 .ustc-ui-tabs {
-
   ul {
     padding-left: 0px;
     border-bottom: 1px solid color($theme-color-base-lighter);
@@ -14,6 +13,7 @@
         padding: 0px;
         border: none;
         margin-right: 45px;
+        background: none;
         color: color($theme-color-primary);
         cursor: pointer;
         font-family: $font-serif;
@@ -58,7 +58,7 @@
 
       ul {
         margin: 0px;
-        
+
         li {
           border-right: 1px solid color($theme-color-base-lighter);
           margin-right: 0px;
