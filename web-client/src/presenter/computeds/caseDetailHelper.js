@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
+  const documentDetailTab = get(state.documentDetail.tab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
@@ -39,6 +40,7 @@ export const caseDetailHelper = get => {
   }
 
   return {
+    documentDetailTab,
     showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
     showAddDocketEntryButton,
     showCaptionEditButton:

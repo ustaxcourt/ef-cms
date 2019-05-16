@@ -83,7 +83,9 @@ export const Header = connect(
     user,
   }) => {
     useEffect(() => {
-      fetchUserNotificationsSequence();
+      if (user && user.userId) {
+        fetchUserNotificationsSequence();
+      }
     }, []);
 
     return (
@@ -102,7 +104,7 @@ export const Header = connect(
                 </div>
                 <div className="grid-col-2">
                   <button
-                    className="button-icon float-right"
+                    className="button-icon float-right usa-button usa-button--unstyled"
                     onClick={() => toggleBetaBarSequence()}
                   >
                     <img src={close} alt="close" />

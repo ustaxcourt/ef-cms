@@ -23,26 +23,24 @@ export const DocketRecordHeader = connect(
             <div className="tablet:grid-col-8">
               {helper.showAddDocketEntryButton && (
                 <a
-                  className="usa-button tablet-full-width"
+                  className="usa-button tablet-full-width larger-icon"
                   href={`/case-detail/${
                     caseDetail.docketNumber
                   }/add-docket-entry`}
                   id="button-add-record"
                 >
-                  <FontAwesomeIcon icon="plus-circle" size="sm" /> Add Docket
-                  Entry
+                  <FontAwesomeIcon icon="plus-circle" /> Add Docket Entry
                 </a>
               )}
               {helper.showFileDocumentButton && (
                 <a
-                  className="usa-button tablet-full-width"
+                  className="usa-button tablet-full-width only-large-screens larger-icon"
                   href={`/case-detail/${
                     caseDetail.docketNumber
                   }/file-a-document`}
                   id="button-file-document"
                 >
-                  <FontAwesomeIcon icon="plus-circle" size="sm" /> File a
-                  Document
+                  <FontAwesomeIcon icon="plus-circle" /> File a Document
                 </a>
               )}
             </div>
@@ -87,7 +85,7 @@ export const DocketRecordHeader = connect(
               <div className="only-small-screens">
                 <button
                   aria-label="docket record sort"
-                  className="link mobile-sort-docket-button border-0"
+                  className="usa-button usa-button--unstyled mobile-sort-docket-button"
                   onClick={() => {
                     toggleMobileDocketSortSequence();
                   }}

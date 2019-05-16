@@ -15,10 +15,6 @@ hr {
   margin: 20px 0;
 }
 
-.mr-1 {
-  margin-right: 10px;
-}
-
 .inline-block {
   display: inline-block;
 }
@@ -124,16 +120,13 @@ select[disabled] {
   }
 }
 
-.gray-header {
-  background-color: color($theme-color-base-lightest);
-}
-
 .completed-card {
   margin-bottom: 20px;
   color: color($theme-color-base);
 
   .completed-icon {
     padding-top: 2px;
+    color: $color-green;
     float: left;
   }
 
@@ -152,7 +145,6 @@ select[disabled] {
 
 .blue-container {
   padding: 20px;
-  margin-bottom: 20px;
   background-color: $color-primary-alt-lightest;
   .usa-form-group:last-of-type {
     margin: 0;
@@ -437,32 +429,13 @@ select.ustc-input-error {
   }
 }
 
-#case-detail-tabs {
-  margin-bottom: 20px;
-  > nav {
-    li {
-      width: percentage(1/3);
-      button {
-        width: 100%;
-        padding: 1rem;
-      }
-    }
-  }
-  > .tabcontent {
-    > h3 {
-      padding-left: 20px;
-    }
-
-    .blue-container:last-child {
-      margin-bottom: 0;
-    }
-  }
+#tab-pending-messages-panel {
+  border: 1px solid color($theme-color-base-lighter);
 }
 
-#case-detail-messages-tabs {
-  > .tabcontent {
-    padding: 15px;
-  }
+#case-detail-tabs {
+  border: 1px solid color($theme-color-base-lighter);
+  margin-bottom: 20px;
 }
 
 .ustc-horizontal-list * {
@@ -493,7 +466,9 @@ textarea#case-caption {
 
 .filed-by {
   display: inline-block;
-  padding-top: 20px;
+  padding: 0px;
+  margin-bottom: 40px;
+  font-size: 17px;
 }
 
 .header-with-link-button {
@@ -578,14 +553,6 @@ textarea#case-caption {
   padding-right: 45px;
   padding-left: 45px;
 }
-button.link.mobile-sort-docket-button {
-  color: color($theme-color-base-darkest);
-  text-decoration: none;
-  svg {
-    margin-left: 5px;
-    color: color($theme-color-primary);
-  }
-}
 
 header.usa-header {
   display: flex;
@@ -620,8 +587,9 @@ header.usa-header {
       padding: 0 0 6px 0;
       background: none;
       color: color($theme-color-primary);
+      font-family: $font-serif;
       font-size: 20px;
-      font-weight: $font-semibold;
+      font-weight: $font-bold;
       :hover {
         background: none;
         color: color($theme-color-primary);
@@ -866,40 +834,32 @@ nav.usa-nav {
 .big-blue-header {
   padding: 25px 0;
   margin-bottom: 40px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: $color-white; // TODO: Replace with USWDSv2 var when available;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
     color: $color-white;
   }
   a,
-  a:hover,
-  button,
-  button:hover {
+  button {
     color: $color-white;
+  }
+  a:hover,
+  button:hover {
+    color: $color-primary-alt;
   }
   .usa-tag {
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color($theme-color-primary-darker);
+    font-weight: $font-bold;
   }
   .unread {
     position: relative;
     top: -3px;
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color($theme-color-primary-darker);
   }
-}
-
-.button-switch-box {
-  position: relative;
-  top: -3px;
-  border: none;
-  margin-left: 5px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: #fff;
-  font-size: 14px;
-  font-weight: $font-semibold;
 }
 
 .title {
@@ -914,5 +874,13 @@ nav.usa-nav {
     border-bottom: 3px solid color($theme-color-primary);
     margin-top: -2px;
     margin-bottom: 0px;
+  }
+}
+
+.mobile-document-detail-tabs {
+  @media only screen and (max-width: $medium-screen) {
+    nav {
+      display: none;
+    }
   }
 }

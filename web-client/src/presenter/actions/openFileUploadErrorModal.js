@@ -4,8 +4,7 @@ import { state } from 'cerebral';
  * show the file upload status modal
  *
  * @param {Object} providers the providers object
- * @param {Object} providers.router the riot.router object that is used for changing the route
- * @param {Function} providers.get the cerebral get function used for getting the path to navigate to in state.path
+ * @param {Object} providers.store the store where we register our modal request
  */
 export const openFileUploadErrorModal = async ({ store }) => {
   store.set(state.showModal, 'FileUploadErrorModal');

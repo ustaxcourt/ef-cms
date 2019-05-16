@@ -3,7 +3,7 @@ import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
 
-export const documentDetailHelper = get => {
+export const documentDetailHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
 
   const documentId = get(state.documentId);
@@ -12,7 +12,7 @@ export const documentDetailHelper = get => {
   );
   let formattedDocument = {};
   if (selectedDocument) {
-    formattedDocument = formatDocument(selectedDocument);
+    formattedDocument = formatDocument(selectedDocument, applicationContext);
     const allWorkItems = _.orderBy(
       formattedDocument.workItems,
       'createdAt',
@@ -20,11 +20,11 @@ export const documentDetailHelper = get => {
     );
     formattedDocument.workItems = (allWorkItems || [])
       .filter(items => !items.completedAt)
-      .map(items => formatWorkItem(items));
+      .map(items => formatWorkItem(items, undefined, applicationContext));
     formattedDocument.completedWorkItems = (allWorkItems || [])
       .filter(items => items.completedAt)
       .map(items => {
-        const formatted = formatWorkItem(items);
+        const formatted = formatWorkItem(items, undefined, applicationContext);
         formatted.messages = formatted.messages.filter(
           message => message.message.indexOf('Served on IRS') === -1,
         );
