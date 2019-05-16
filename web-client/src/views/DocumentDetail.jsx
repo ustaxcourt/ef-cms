@@ -38,12 +38,16 @@ export const DocumentDetail = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
+          <span className="filed-by">
+            Filed {helper.formattedDocument.createdAtFormatted} by{' '}
+            {helper.formattedDocument.filedBy}
+          </span>
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-4">
-                <Tabs className="classic-horizontal-header3" bind="currentTab">
+              <div className="grid-col-5">
+                <Tabs className="no-full-border-bottom" bind="currentTab">
                   {helper.showDocumentInfoTab && (
                     <Tab
                       tabName="Document Info"
@@ -69,7 +73,7 @@ export const DocumentDetail = connect(
                       aria-labelledby="tab-pending-messages"
                     >
                       <Tabs
-                        className="container-tabs"
+                        className="container-tabs no-full-border-bottom"
                         id="case-detail-messages-tabs"
                         bind="documentDetail.messagesTab"
                       >
@@ -92,13 +96,9 @@ export const DocumentDetail = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-8">
+              <div className="grid-col-7">
                 <div className="top-bar clear-both">
                   <div className="full-width">
-                    <span className="filed-by">
-                      Filed {helper.formattedDocument.createdAtFormatted} by{' '}
-                      {helper.formattedDocument.filedBy}
-                    </span>
                     <span className="float-right">
                       {caseHelper.showServeToIrsButton &&
                         helper.formattedDocument.isPetition && (

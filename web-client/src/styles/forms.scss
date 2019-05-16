@@ -30,6 +30,10 @@ input[type='text'],
 textarea,
 select {
   margin: 0 0 20px 0;
+
+  &:hover {
+    border: 1px solid color($theme-color-primary);
+  }
 }
 
 textarea.caption {
@@ -328,6 +332,7 @@ label.ustc-upload {
 
 .select-react-element {
   .select-react-element__control {
+    box-sizing: border-box;
     padding-top: 4px;
     padding-bottom: 4px;
     border: 1px solid color($theme-color-base);

@@ -162,3 +162,15 @@
   font-size: 30px;
   text-align: center;
 }
+
+.mobile-document-details-overlay {
+  .usa-button.heading-2.usa-button--unstyled {
+    color: color($theme-color-base-darkest);
+    text-decoration: none;
+
+    svg {
+      margin-right: 15px;
+      font-size: 20px;
+    }
+  }
+}

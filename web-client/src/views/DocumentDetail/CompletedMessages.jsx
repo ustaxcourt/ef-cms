@@ -9,7 +9,7 @@ export const CompletedMessages = connect(
   },
   ({ documentDetailHelper }) => {
     return (
-      <div>
+      <div className="blue-container">
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.completedWorkItems ||
           !documentDetailHelper.formattedDocument.completedWorkItems
