@@ -144,8 +144,9 @@ export const CaseDetail = connect(
           <div className="only-small-screens">
             <select
               className="usa-select"
-              id="party-type"
+              id="mobile-document-detail-tab-selector"
               name="partyType"
+              aria-label="additional case info"
               value={caseHelper.documentDetailTab}
               onChange={e => {
                 setDocumentDetailTabSequence({
@@ -156,12 +157,8 @@ export const CaseDetail = connect(
               <option value="docketRecord">Docket Record</option>
               <option value="caseInfo">Case Information</option>
             </select>
-            {caseHelper.documentDetailTab == 'docketRecord' && <DocketRecord />}
-            {caseHelper.documentDetailTab == 'caseInfo' && (
-              <CaseInformationPublic />
-            )}
           </div>
-          <div className="only-large-screens">
+          <div className="mobile-document-detail-tabs">
             <Tabs
               className="classic-horizontal-header3 tab-border"
               bind="documentDetail.tab"
