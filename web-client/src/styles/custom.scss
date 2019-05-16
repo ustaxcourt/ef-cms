@@ -563,13 +563,16 @@ header.usa-header {
 
   .main-navigation {
     display: none;
-    margin-top: 3.5rem;
+    margin-top: 3.0rem;
+    font-family: $font-serif;
 
     @media (min-width: 64em) {
       display: block;
     }
 
     li {
+      margin-right: 60px;
+
       &.active {
         a {
           color: color($theme-color-base);
@@ -628,6 +631,8 @@ nav.usa-nav {
   }
 
   .usa-search {
+    position: relative;
+    top: -4px;
     width: auto;
     max-width: 320px;
     margin: 0;
@@ -643,6 +648,11 @@ nav.usa-nav {
 
     input#search-field {
       width: 220px;
+      height: 34px;
+    }
+
+    input#search-field + button {
+      height: 34px;
     }
   }
 
@@ -652,6 +662,8 @@ nav.usa-nav {
   }
 
   .user-dropdown {
+    position: relative;
+    top: -4px;
     margin: -4px 0 0 50px;
   }
 
