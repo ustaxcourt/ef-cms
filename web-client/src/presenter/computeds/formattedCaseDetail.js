@@ -232,7 +232,7 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
     caseDetail.caseCaption || '',
   );
 
-  formatYearAmounts(result, caseDetailErrors);
+  formatYearAmounts(result, caseDetailErrors, applicationContext);
 
   return result;
 };
