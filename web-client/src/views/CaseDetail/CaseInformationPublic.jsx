@@ -12,7 +12,7 @@ export const CaseInformationPublic = connect(
       <div className="petitions-details">
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-6">
+            <div className="chunk tablet:grid-col-6">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Petition Details</h3>
@@ -31,22 +31,24 @@ export const CaseInformationPublic = connect(
                 </div>
               </div>
             </div>
-            <div className="tablet:grid-col-6">
+            <div className="chunk tablet:grid-col-6">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Trial Information</h3>
                   <div className="grid-row">
-                    <div className="tablet:grid-col-4">
+                    <div className="tablet:grid-col-6">
                       <p className="label">Place of Trial</p>
                       <p>{caseDetail.preferredTrialCity}</p>
                     </div>
-                    <div className="tablet:grid-col-4">
-                      <p className="label">Assigned Judge</p>
-                      <p>Not assigned</p>
-                    </div>
-                    <div className="tablet:grid-col-4">
+                    <div className="tablet:grid-col-6">
                       <p className="label">Trial Date</p>
                       <p>Not scheduled</p>
+                    </div>
+                  </div>
+                  <div className="grid-row">
+                    <div className="tablet:grid-col-6">
+                      <p className="label">Assigned Judge</p>
+                      <p>Not assigned</p>
                     </div>
                   </div>
                 </div>
