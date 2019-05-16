@@ -35,7 +35,7 @@ describe('formatted case details computed', () => {
         form: {},
       },
     });
-    expect(result.irsDateFormatted).toContain('11/21/2018');
+    expect(result.irsDateFormatted).toContain('11/21/18');
     expect(result.documents[0].isPetition).toEqual(true);
   });
 
@@ -62,7 +62,7 @@ describe('formatted case details computed', () => {
         },
       },
     });
-    expect(result[0].irsDateFormatted).toContain('11/21/2018');
+    expect(result[0].irsDateFormatted).toContain('11/21/18');
   });
 
   it('formats the respondent name to include barnumber', () => {

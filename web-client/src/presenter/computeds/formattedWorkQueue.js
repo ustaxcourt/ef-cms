@@ -4,10 +4,10 @@ import _ from 'lodash';
 const formatDateIfToday = (date, applicationContext) => {
   const now = applicationContext
     .getUtilities()
-    .formatDateString(undefined, 'MMDDYYYY');
+    .formatDateString(undefined, 'MMDDYY');
   const then = applicationContext
     .getUtilities()
-    .formatDateString(date, 'MMDDYYYY');
+    .formatDateString(date, 'MMDDYY');
   let formattedDate;
   if (now == then) {
     formattedDate = applicationContext
@@ -28,7 +28,7 @@ export const formatWorkItem = (
 
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYYYY');
+    .formatDateString(result.createdAt, 'MMDDYY');
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
