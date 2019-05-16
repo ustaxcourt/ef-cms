@@ -18,12 +18,7 @@ legend {
   }
 }
 
-input[type='file'] {
-  height: auto;
-}
-
 input[type='email'],
-input[type='file'],
 input[type='number'],
 input[type='tel'],
 input[type='text'],
@@ -34,6 +29,11 @@ select {
   &:hover {
     border: 1px solid color($theme-color-primary);
   }
+}
+
+input[type='file'] {
+  height: auto;
+  margin: 0 0 20px 0;
 }
 
 textarea.caption {
