@@ -23,7 +23,7 @@ export const DocketRecordHeader = connect(
             <div className="tablet:grid-col-8">
               {helper.showAddDocketEntryButton && (
                 <a
-                  className="usa-button tablet-full-width larger-icon"
+                  className="usa-button larger-icon"
                   href={`/case-detail/${
                     caseDetail.docketNumber
                   }/add-docket-entry`}
@@ -34,7 +34,7 @@ export const DocketRecordHeader = connect(
               )}
               {helper.showFileDocumentButton && (
                 <a
-                  className="usa-button tablet-full-width only-large-screens larger-icon"
+                  className="usa-button hide-on-mobile larger-icon"
                   href={`/case-detail/${
                     caseDetail.docketNumber
                   }/file-a-document`}
