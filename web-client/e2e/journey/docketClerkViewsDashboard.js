@@ -1,7 +1,8 @@
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
-import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
-
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 export default test => {
   return it('Docket clerk views dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
