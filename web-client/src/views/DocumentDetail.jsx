@@ -106,7 +106,7 @@ export const DocumentDetail = connect(
                             className="usa-button serve-to-irs"
                             onClick={() => clickServeToIrsSequence()}
                           >
-                            <FontAwesomeIcon icon={['far', 'clock']} />
+                            <FontAwesomeIcon icon={['fas', 'clock']} />
                             Serve to IRS
                           </button>
                         )}
