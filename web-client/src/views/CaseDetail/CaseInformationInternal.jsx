@@ -18,13 +18,13 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
     <div className="grid-row">
       <div className="grid-col-6">
         <p className="label">IRS Notice Date</p>
-        <p id="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
+        <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
       <div className="grid-col-6">
         {showPaymentRecord && (
           <React.Fragment>
             <p className="label">Petition Fee Paid</p>
-            <p id="pay-gov-id-display">{caseDetail.payGovId}</p>
+            <p className="pay-gov-id-display">{caseDetail.payGovId}</p>
           </React.Fragment>
         )}
       </div>
