@@ -39,7 +39,7 @@ export const PendingMessages = connect(
     workQueueSectionHelper,
   }) => {
     return (
-      <>
+      <div className="blue-container">
         <button
           type="button"
           id="create-message-button"
@@ -509,7 +509,7 @@ export const PendingMessages = connect(
               </div>
             ),
           )}
-      </>
+      </div>
     );
   },
 );
