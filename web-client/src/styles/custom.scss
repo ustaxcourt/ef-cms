@@ -84,9 +84,8 @@ iframe {
 }
 
 .petitions-details {
-  margin-bottom: 15px;
-  @media only screen and (min-width: $medium-screen) {
-    margin-bottom: 120px;
+  .chunk {
+    margin-bottom: 30px;
   }
 }
 
