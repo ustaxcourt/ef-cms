@@ -18,7 +18,7 @@ export const DocketRecordHeader = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="grid-container add-bottom-margin padding-0">
+        <div className="grid-container padding-0">
           <div className="grid-row">
             <div className="tablet:grid-col-8">
               {helper.showAddDocketEntryButton && (
