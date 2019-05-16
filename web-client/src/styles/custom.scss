@@ -121,7 +121,7 @@ select[disabled] {
   }
 }
 
-.gray-header {
+.gray {
   background-color: color($theme-color-base-lightest);
 }
 
@@ -131,6 +131,7 @@ select[disabled] {
 
   .completed-icon {
     padding-top: 2px;
+    color: $color-green;
     float: left;
   }
 
@@ -458,7 +459,8 @@ select.ustc-input-error {
 
 #case-detail-messages-tabs {
   > .tabcontent {
-    padding: 15px;
+    padding: 20px;
+    padding-top: 10px;
   }
 }
 
@@ -664,6 +666,10 @@ nav.usa-nav {
 
     @media (min-width: 64em) {
       float: none;
+    }
+
+    .usa-button {
+      min-width: auto;
     }
 
     input#search-field {

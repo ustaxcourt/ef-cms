@@ -1,5 +1,10 @@
+import { extractedPendingMessagesFromCaseDetail as extractedPendingMessagesFromCaseDetailComputed } from '../../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
 import { runCompute } from 'cerebral/test';
-import { extractedPendingMessagesFromCaseDetail } from '../../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
+  extractedPendingMessagesFromCaseDetailComputed,
+);
 
 export default test => {
   return it('Senior Attorney views case detail', async () => {
