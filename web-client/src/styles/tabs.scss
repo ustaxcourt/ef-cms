@@ -86,7 +86,7 @@ nav.horizontal-tabs,
   position: relative;
 
   > nav {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 
     ul {
       padding: 0;
@@ -190,26 +190,16 @@ nav.horizontal-tabs,
               border-radius: 0;
               font-family: $font-serif;
               font-size: 24px;
-              font-weight: $font-medium;
+              font-weight: $font-bold;
               line-height: 1.3em;
 
               &:hover {
-                border-bottom: 3px color($theme-color-primary-darker) solid;
-                color: color($theme-color-primary-darker);
+                border-bottom: 3px solid color($theme-color-primary-dark) ;
+                color: color($theme-color-primary-dark);
               }
-            }
-          }
-        }
-      }
-    }
-
-    &.classic-horizontal-header3 {
-      > nav {
-        ul {
-          li {
-            &.active {
-              button {
-                font-weight: $font-bold;
+              
+              &.large {
+                font-size: 32px;
               }
             }
           }

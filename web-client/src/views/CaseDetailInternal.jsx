@@ -1,9 +1,9 @@
 import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseInformationInternal } from './CaseInformationInternal';
+import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PartyInformation } from './PartyInformation';
+import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -40,7 +40,7 @@ export const CaseDetailInternal = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <div className="title">
+            <div className="title margin-bottom-5">
               <h1>Messages In Progress</h1>
             </div>
 
@@ -91,15 +91,24 @@ export const CaseDetailInternal = connect(
               </tbody>
             </table>
           </div>
-          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+          <Tabs
+            className="classic-horizontal-header3 tab-border"
+            bind="documentDetail.tab"
+          >
             <Tab
               tabName="docketRecord"
               title="Docket Record"
               id="tab-docket-record"
+              large
             >
               <DocketRecord />
             </Tab>
-            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
+            <Tab
+              large
+              tabName="caseInfo"
+              title="Case Information"
+              id="tab-case-info"
+            >
               <CaseInformationInternal />
               <PartyInformation />
               <div>

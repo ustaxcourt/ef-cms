@@ -271,6 +271,7 @@ table.row-border-only {
 
 table.docket-record {
   thead th {
+    background-color: color($theme-color-base-lightest);
     font-weight: $font-semibold;
   }
 
