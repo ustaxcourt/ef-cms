@@ -147,7 +147,8 @@ select[disabled] {
   padding: 20px;
   background-color: $color-primary-alt-lightest;
   .usa-form-group:last-of-type {
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   &.gray-background {
@@ -563,7 +564,7 @@ header.usa-header {
 
   .main-navigation {
     display: none;
-    margin-top: 3.0rem;
+    margin-top: 3rem;
     font-family: $font-serif;
 
     @media (min-width: 64em) {
@@ -887,6 +888,10 @@ nav.usa-nav {
     margin-top: -2px;
     margin-bottom: 0px;
   }
+}
+
+.doc-detail-pane {
+  padding-top: 19px;
 }
 
 .mobile-document-detail-tabs {
