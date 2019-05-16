@@ -1,21 +1,26 @@
-$font-path: '../node_modules/uswds/dist/fonts';
-$image-path: '../node_modules/uswds/dist/img';
-$site-max-width: 1440px;
+$theme-font-path: '../node_modules/uswds/dist/fonts';
+$theme-image-path: '../node_modules/uswds/dist/img';
 
 $font-bold: 700;
-$font-source-sans: 'Source Sans Pro', sans-serif;
 $font-regular: 400;
 $font-medium: 500;
 $font-normal: 400;
 $font-regular: 400;
 $font-semibold: 600;
-$font-serif: 'Noto Serif';
 
-$small-screen: 576px;
-$medium-screen: 768px;
+$theme-font-weight-semibold: 600;
+$theme-font-sans-custom-stack: 'Source Sans Pro', Helvetica, Arial, sans;
+$theme-font-serif-custom-stack: 'Noto Serif', Helvetica, Arial, sans;
+
+$font-serif: 'Noto Serif', serif;
+$font-source-sans: 'Source Sans Pro', sans-serif;
 
 /* custom colors */
 $color-primary-alt: #61e5ff;
 $color-primary-alt-lightest: #f1f9fc;
 $color-white: #fff;
 $color-green: #538200;
+
+// TODO: replace these with USWDS variables
+$small-screen: 576px;
+$medium-screen: 768px;
