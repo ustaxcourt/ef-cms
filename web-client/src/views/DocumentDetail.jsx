@@ -50,7 +50,7 @@ export const DocumentDetail = connect(
 
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
+              <div className="grid-col-4">
                 <Tabs className="classic-horizontal-header3" bind="currentTab">
                   {helper.showDocumentInfoTab && (
                     <Tab
@@ -100,7 +100,7 @@ export const DocumentDetail = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-7">
+              <div className="grid-col-8">
                 <div className="top-bar clear-both">
                   <div className="full-width">
                     <span className="filed-by">

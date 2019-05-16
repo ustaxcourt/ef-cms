@@ -44,8 +44,13 @@ export const PendingMessages = connect(
           type="button"
           id="create-message-button"
           onClick={() => openCreateMessageModalSequence()}
-          className="usa-button usa-button--outline"
+          className="usa-button usa-button"
         >
+          <FontAwesomeIcon
+            icon="plus-circle"
+            size="lg"
+            className="margin-right-1"
+          />
           Create Message
         </button>
 
@@ -70,109 +75,123 @@ export const PendingMessages = connect(
                 key={idx}
               >
                 <div className="content-wrapper">
-                  <p>
+                  <div className="margin-bottom-1">
                     <span className="label-inline">To</span>
                     {workItem.currentMessage.to}
-                  </p>
-                  <p>
+                  </div>
+                  <div className="margin-bottom-1">
                     <span className="label-inline">From</span>
                     {workItem.currentMessage.from}
-                  </p>
-                  <p>
+                  </div>
+                  <div className="margin-bottom-1">
                     <span className="label-inline">Received</span>
                     {workItem.currentMessage.createdAtTimeFormatted}
-                  </p>
+                  </div>
                   <p>{workItem.currentMessage.message}</p>
                 </div>
+
                 <div
                   className="content-wrapper toggle-button-wrapper actions-wrapper"
                   role="tablist"
                 >
-                  <button
-                    role="tab"
-                    id={`history-tab-${idx}`}
-                    aria-selected={documentDetailHelper.showAction(
-                      'history',
-                      workItem.workItemId,
-                    )}
-                    aria-controls={`history-card-${idx}`}
-                    className={`usa-button ${
-                      documentDetailHelper.showAction(
-                        'history',
-                        workItem.workItemId,
-                      )
-                        ? 'selected'
-                        : 'unselected'
-                    }`}
-                    onClick={() =>
-                      setWorkItemActionSequence({
-                        action: 'history',
-                        workItemId: workItem.workItemId,
-                      })
-                    }
-                  >
-                    <FontAwesomeIcon icon="list-ul" size="sm" />
-                    View History
-                  </button>
-                  {workItem.showComplete && (
-                    <button
-                      role="tab"
-                      id={`complete-tab-${idx}`}
-                      aria-selected={documentDetailHelper.showAction(
-                        'complete',
-                        workItem.workItemId,
-                      )}
-                      aria-controls={`history-card-${idx}`}
-                      className={`usa-button ${
-                        documentDetailHelper.showAction(
-                          'complete',
-                          workItem.workItemId,
-                        )
-                          ? 'selected'
-                          : 'unselected'
-                      }`}
-                      onClick={() =>
-                        setWorkItemActionSequence({
-                          action: 'complete',
-                          workItemId: workItem.workItemId,
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon
-                        icon={['far', 'check-circle']}
-                        size="sm"
-                      />
-                      Complete
-                    </button>
-                  )}
-                  {workItem.showSendTo && (
-                    <button
-                      role="tab"
-                      id={`forward-tab-${idx}`}
-                      aria-selected={documentDetailHelper.showAction(
-                        'forward',
-                        workItem.workItemId,
-                      )}
-                      aria-controls={`forward-card-${idx}`}
-                      data-workitemid={workItem.workItemId}
-                      className={`usa-button send-to ${
-                        documentDetailHelper.showAction(
-                          'forward',
-                          workItem.workItemId,
-                        )
-                          ? 'selected'
-                          : 'unselected'
-                      }`}
-                      onClick={() =>
-                        setWorkItemActionSequence({
-                          action: 'forward',
-                          workItemId: workItem.workItemId,
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon icon="share-square" size="sm" /> Send To
-                    </button>
-                  )}
+                  <div className="grid-container padding-x-0">
+                    <div className="grid-row">
+                      <div className="grid-col-4 padding-x-0">
+                        <button
+                          role="tab"
+                          id={`history-tab-${idx}`}
+                          aria-selected={documentDetailHelper.showAction(
+                            'history',
+                            workItem.workItemId,
+                          )}
+                          aria-controls={`history-card-${idx}`}
+                          className={`usa-button ${
+                            documentDetailHelper.showAction(
+                              'history',
+                              workItem.workItemId,
+                            )
+                              ? 'selected'
+                              : 'unselected'
+                          }`}
+                          onClick={() =>
+                            setWorkItemActionSequence({
+                              action: 'history',
+                              workItemId: workItem.workItemId,
+                            })
+                          }
+                        >
+                          <FontAwesomeIcon icon="list-ul" size="sm" />
+                          View History
+                        </button>
+                      </div>
+
+                      <div className="grid-col-4 padding-x-0">
+                        {workItem.showComplete && (
+                          <button
+                            role="tab"
+                            id={`complete-tab-${idx}`}
+                            aria-selected={documentDetailHelper.showAction(
+                              'complete',
+                              workItem.workItemId,
+                            )}
+                            aria-controls={`history-card-${idx}`}
+                            className={`usa-button ${
+                              documentDetailHelper.showAction(
+                                'complete',
+                                workItem.workItemId,
+                              )
+                                ? 'selected'
+                                : 'unselected'
+                            }`}
+                            onClick={() =>
+                              setWorkItemActionSequence({
+                                action: 'complete',
+                                workItemId: workItem.workItemId,
+                              })
+                            }
+                          >
+                            <FontAwesomeIcon
+                              icon={['far', 'check-circle']}
+                              size="sm"
+                            />
+                            Complete
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid-col-4 padding-x-0">
+                        {workItem.showSendTo && (
+                          <button
+                            role="tab"
+                            id={`forward-tab-${idx}`}
+                            aria-selected={documentDetailHelper.showAction(
+                              'forward',
+                              workItem.workItemId,
+                            )}
+                            aria-controls={`forward-card-${idx}`}
+                            data-workitemid={workItem.workItemId}
+                            className={`usa-button send-to ${
+                              documentDetailHelper.showAction(
+                                'forward',
+                                workItem.workItemId,
+                              )
+                                ? 'selected'
+                                : 'unselected'
+                            }`}
+                            onClick={() =>
+                              setWorkItemActionSequence({
+                                action: 'forward',
+                                workItemId: workItem.workItemId,
+                              })
+                            }
+                          >
+                            <FontAwesomeIcon icon="share-square" size="sm" />{' '}
+                            Send To
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 {documentDetailHelper.showAction(
                   'complete',
@@ -250,18 +269,18 @@ export const PendingMessages = connect(
                     >
                       {workItem.historyMessages.map((message, mIdx) => (
                         <div key={mIdx}>
-                          <p>
+                          <div className="margin-bottom-1">
                             <span className="label-inline">To</span>
                             {message.to}
-                          </p>
-                          <p>
+                          </div>
+                          <div className="margin-bottom-1">
                             <span className="label-inline">From</span>
                             {message.from}
-                          </p>
-                          <p>
+                          </div>
+                          <div className="margin-bottom-1">
                             <span className="label-inline">Received</span>
                             {message.createdAtTimeFormatted}
-                          </p>
+                          </div>
                           <p>{message.message}</p>
                           {workItem.historyMessages.length - 1 !== mIdx && (
                             <hr aria-hidden="true" />
