@@ -7,31 +7,23 @@ import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailInternal = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
-    submitUpdateCaseSequence: sequences.submitUpdateCaseSequence,
     token: state.token,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
     baseUrl,
     caseDetail,
-    caseHelper,
     documentHelper,
     extractedPendingMessages,
-    submitUpdateCaseSequence,
     token,
-    updateCaseValueSequence,
-    updateFormValueSequence,
   }) => {
     return (
       <>
@@ -104,63 +96,6 @@ export const CaseDetailInternal = connect(
             <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
               <CaseInformationInternal />
               <PartyInformation />
-              <div>
-                <fieldset className="usa-fieldset-inputs usa-sans">
-                  <legend>Petition fee</legend>
-                  {caseHelper.showPaymentRecord && (
-                    <React.Fragment>
-                      <p className="label">Paid by pay.gov</p>
-                      <p>{caseDetail.payGovId}</p>
-                    </React.Fragment>
-                  )}
-                  {caseHelper.showPaymentOptions && (
-                    <ul className="usa-unstyled-list">
-                      <li>
-                        <input
-                          id="paygov"
-                          type="radio"
-                          name="paymentType"
-                          value="payGov"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                        <label htmlFor="paygov" className="usa-label">
-                          Paid by pay.gov
-                        </label>
-                        {caseHelper.showPayGovIdInput && (
-                          <>
-                            <label htmlFor="paygovid" className="usa-label">
-                              Payment ID
-                            </label>
-                            <input
-                              id="paygovid"
-                              type="text"
-                              name="payGovId"
-                              value={caseDetail.payGovId || ''}
-                              onChange={e => {
-                                updateCaseValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                            <button
-                              id="update-case-page-end"
-                              onClick={() => submitUpdateCaseSequence()}
-                            >
-                              Save updates
-                            </button>
-                          </>
-                        )}
-                      </li>
-                    </ul>
-                  )}
-                </fieldset>
-              </div>
             </Tab>
           </Tabs>
         </section>

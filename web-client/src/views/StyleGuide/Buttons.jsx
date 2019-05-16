@@ -13,7 +13,7 @@ export const Buttons = () => (
       Primary Disabled
     </button>
     <button className="usa-button">
-      <FontAwesomeIcon icon="check-circle" size="sm" />
+      <FontAwesomeIcon icon="check-circle" size="1x" />
       Primary Icon
     </button>
     <button className="usa-button usa-button--outline">

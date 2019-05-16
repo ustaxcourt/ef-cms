@@ -17,7 +17,9 @@ export const SectionWorkQueueOutbox = connect(
       >
         <thead>
           <tr>
-            <th aria-label="Docket Number">Docket</th>
+            <th aria-label="Docket Number" colSpan="2">
+              Docket
+            </th>
             <th>Sent</th>
             <th>Document</th>
             <th>Status</th>
@@ -29,6 +31,14 @@ export const SectionWorkQueueOutbox = connect(
         {sectionWorkQueue.map((item, idx) => (
           <tbody key={idx}>
             <tr>
+              <td className="focus-toggle">
+                <button
+                  className="focus-button usa-button usa-button--unstyled"
+                  aria-label="Expand message detail"
+                  aria-expanded={item.isFocused}
+                  aria-controls={`detail-${item.workItemId}`}
+                />{' '}
+              </td>
               <td className="message-queue-row">
                 {item.docketNumberWithSuffix}
               </td>

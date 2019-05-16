@@ -144,6 +144,9 @@ table.work-queue {
 
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
+    &:hover td {
+      background: $color-primary-alt-lightest;
+    }
   }
 
   tbody:not(.action-bar) {
@@ -200,8 +203,6 @@ table.work-queue {
   }
 
   thead {
-    border-bottom: 2px solid color($theme-color-base-light);
-
     th {
       background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;

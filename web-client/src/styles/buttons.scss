@@ -2,15 +2,8 @@
   min-width: 132px;
   margin: 0 20px 20px 0;
 
-  svg {
-    margin-right: 10px;
-  }
-
-  &.larger-icon .svg-inline--fa {
-    margin-top: -2px;
+  .svg-inline--fa {
     margin-right: 5px;
-    font-size: 20px;
-    vertical-align: middle;
   }
 
   &.float-right {
@@ -36,15 +29,4 @@
   svg {
     margin-right: 5px;
   }
-}
-
-button.tab-link {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: color($theme-color-base-darkest);
-  cursor: pointer;
-  font-weight: normal;
-  text-align: left;
-  text-decoration: none;
 }
