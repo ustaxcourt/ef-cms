@@ -60,7 +60,7 @@ export const CaseInformationPublic = connect(
       <div className="petitions-details">
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="chunk tablet:grid-col-6">
+            <div className="chunk tablet:grid-col-6 hide-on-mobile">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Petition Details</h3>
@@ -71,12 +71,27 @@ export const CaseInformationPublic = connect(
                 </div>
               </div>
             </div>
-            <div className="chunk tablet:grid-col-6">
+            <div className="tablet:grid-col-6 show-on-mobile">
+              <div className="case-info-card">
+                <h3>Petition Details</h3>
+                <PetitionDetails
+                  caseDetail={caseDetail}
+                  showPaymentRecord={helper.showPaymentRecord}
+                />
+              </div>
+            </div>
+            <div className="chunk tablet:grid-col-6 hide-on-mobile">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Trial Information</h3>
                   <TrialInformation caseDetail={caseDetail} />
                 </div>
+              </div>
+            </div>
+            <div className="tablet:grid-col-6 show-on-mobile">
+              <div className="case-info-card">
+                <h3>Trial Information</h3>
+                <TrialInformation caseDetail={caseDetail} />
               </div>
             </div>
           </div>
