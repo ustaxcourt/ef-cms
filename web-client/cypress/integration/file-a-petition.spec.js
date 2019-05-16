@@ -208,11 +208,12 @@ describe('can view case detail', () => {
   });
 
   it('shows docket record table and data', () => {
-    cy.get('table.docket-record tbody tr').should('exist');
+    cy.get('#tab-docket-record').click();
+    cy.get('table.case-detail.docket-record tbody tr').should('exist');
   });
 
   it('accordion header expands/collapses', () => {
-    cy.get('#tab-case-info').click();
+    cy.get('#tab-action-required').click();
     cy.get('#actions-button').should('exist');
     cy.get('#actions-button').click();
     cy.get('#paymentInfo').should('be.visible');
