@@ -26,14 +26,8 @@ export const CaseDetail = connect(
   }) {
     return (
       <React.Fragment>
-        <div className="breadcrumb grid-container">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back to dashboard
-          </a>
-        </div>
-        <section className="usa-section grid-container">
-          <div className="grid-container padding-x-0">
+        <div className="big-blue-header">
+          <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <h1 className="captioned" tabIndex="-1">
@@ -56,12 +50,10 @@ export const CaseDetail = connect(
               </div>
             </div>
           </div>
-
-          <hr aria-hidden="true" />
-
+        </div>
+        <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           {caseHelper.showActionRequired && (
             <div className="subsection">
               <div className="title">
@@ -102,7 +94,7 @@ export const CaseDetail = connect(
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            Pay now
+                            Pay Now
                           </a>
                         </div>
                         <div className="tablet:grid-col-6">
@@ -147,7 +139,10 @@ export const CaseDetail = connect(
               </ul>
             </div>
           )}
-          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+          <Tabs
+            className="classic-horizontal-header3 tab-border"
+            bind="documentDetail.tab"
+          >
             <Tab
               tabName="docketRecord"
               title="Docket Record"
