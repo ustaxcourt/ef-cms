@@ -40,25 +40,36 @@ export const CaseDetailInternal = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <h2>Messages In Progress</h2>
+            <div className="title">
+              <h1>Messages In Progress</h1>
+            </div>
+
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
-            <table className="usa-table row-border-only subsection">
+            <table className="usa-table row-border-only subsection messages">
+              <thead>
+                <tr>
+                  <th className="header-fixed-width">To</th>
+                  <th className="header-fixed-width">From</th>
+                  <th className="header-fixed-width">Received</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
-                    <td className="responsive-title">
-                      <p className="margin-y-0">
-                        <span className="label-inline">To</span>
-                        {workItem.assigneeName}
-                      </p>
-                      <p className="margin-y-0">
-                        <span className="label-inline">From</span>
-                        {workItem.messages[0].from}
-                      </p>
+                    <td className="responsive-title padding-extra">
+                      {workItem.assigneeName}
                     </td>
-                    <td>
+                    <td className="padding-extra">
+                      {workItem.messages[0].from}
+                    </td>
+                    <td className="padding-extra">
+                      {workItem.messages[0].createdAtTimeFormatted}
+                    </td>
+                    <td className="padding-extra">
                       <p className="margin-y-0">
                         <a
                           href={documentHelper({
@@ -71,13 +82,9 @@ export const CaseDetailInternal = connect(
                           {workItem.document.documentType}
                         </a>
                       </p>
-                      <p className="margin-y-0">
+                      <p className="message-detail margin-y-0">
                         {workItem.messages[0].message}
                       </p>
-                    </td>
-                    <td>
-                      <span className="label-inline">Received</span>
-                      {workItem.messages[0].createdAtTimeFormatted}
                     </td>
                   </tr>
                 ))}

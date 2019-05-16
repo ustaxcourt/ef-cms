@@ -63,6 +63,34 @@ table.dashboard {
   }
 }
 
+.usa-table td {
+  &.padding-extra {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .message-detail {
+    font-size: 15px;
+  }
+}
+
+table.messages {
+  thead {
+    border-bottom: 2px solid color($theme-color-base-lighter);
+
+    th {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+
+      &.header-fixed-width {
+        width: 200px;
+      }
+    }
+  }
+}
+
 table.work-queue {
   th {
     border: 0;
