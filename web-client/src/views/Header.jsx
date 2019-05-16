@@ -83,7 +83,9 @@ export const Header = connect(
     user,
   }) => {
     useEffect(() => {
-      fetchUserNotificationsSequence();
+      if (user && user.userId) {
+        fetchUserNotificationsSequence();
+      }
     }, []);
 
     return (
