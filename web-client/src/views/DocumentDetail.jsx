@@ -69,7 +69,7 @@ export const DocumentDetail = connect(
                       aria-labelledby="tab-pending-messages"
                     >
                       <Tabs
-                        className="container-tabs"
+                        className="container-tabs no-full-border-bottom"
                         id="case-detail-messages-tabs"
                         bind="documentDetail.messagesTab"
                       >

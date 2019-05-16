@@ -1,6 +1,11 @@
 import { runCompute } from 'cerebral/test';
 
-import { documentDetailHelper } from './documentDetailHelper';
+import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
+import { withAppContextDecorator } from '../../../src/withAppContext';
+
+const documentDetailHelper = withAppContextDecorator(
+  documentDetailHelperComputed,
+);
 
 describe('formatted work queue computed', () => {
   it('formats the workitems', () => {

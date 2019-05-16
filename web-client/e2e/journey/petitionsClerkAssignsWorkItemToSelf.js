@@ -1,6 +1,8 @@
-import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 export default test => {
   return it('Petitions clerk assigns work item to self', async () => {
     // find the work item that is part of an Petition upload
