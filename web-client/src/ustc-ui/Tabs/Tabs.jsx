@@ -36,7 +36,7 @@ export function TabsComponent({
   setTab = decorateWithPostCallback(setTab, onSelect);
 
   function renderTab(child) {
-    const { title, tabName, id, large } = child.props;
+    const { title, tabName, id } = child.props;
 
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
@@ -54,7 +54,6 @@ export function TabsComponent({
         <button
           role="tab"
           type="button"
-          className={`tab-link usa-button ${large ? 'large' : ''} `}
           id={id}
           aria-controls={tabContentId}
           aria-selected={isActiveTab}

@@ -43,7 +43,7 @@ export const DocumentDetail = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <Tabs className="classic-horizontal-header3" bind="currentTab">
+                <Tabs className="no-full-border-bottom" bind="currentTab">
                   {helper.showDocumentInfoTab && (
                     <Tab
                       tabName="Document Info"
