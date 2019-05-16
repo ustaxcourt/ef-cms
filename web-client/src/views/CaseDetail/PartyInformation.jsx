@@ -19,11 +19,11 @@ export const PartyInformation = connect(
           <div className="tablet:grid-col-2">
             {caseDetail.contactPrimary && (
               <React.Fragment>
-                <p className="label" id="primary-label">
+                <p className="label" id={`primary-label${instance}`}>
                   Primary Contact
                 </p>
                 <div>
-                  <address aria-labelledby="primary-label">
+                  <address aria-labelledby={`primary-label${instance}`}>
                     {addressDisplay(caseDetail.contactPrimary)}
                   </address>
                 </div>
@@ -35,11 +35,11 @@ export const PartyInformation = connect(
             {caseDetail.contactSecondary &&
               caseDetail.contactSecondary.name && (
                 <React.Fragment>
-                  <p className="label" id="secondary-label">
+                  <p className="label" id={`secondary-label${instance}`}>
                     Secondary Contact
                   </p>
                   <div>
-                    <address aria-labelledby="secondary-label">
+                    <address araria-labelledby={`secondary-label${instance}`}>
                       {caseDetail.contactSecondary.name &&
                         addressDisplay(caseDetail.contactSecondary)}
                     </address>
@@ -52,12 +52,12 @@ export const PartyInformation = connect(
             caseDetail.practitioners.map((practitioner, index) => (
               <div className="tablet:grid-col-2" key={index}>
                 {index === 0 && (
-                  <p className="label" id="petitioner-label">
+                  <p className="label" id={`petitioner-label${instance}`}>
                     Petitioner Counsel
                   </p>
                 )}
                 <div>
-                  <address aria-labelledby="petitioner-label">
+                  <address aria-labelledby={`petitioner-label${instance}`}>
                     {practitioner.name &&
                       addressDisplay({
                         ...practitioner,
@@ -73,10 +73,10 @@ export const PartyInformation = connect(
           <div className="tablet:grid-col-2">
             {caseDetail.respondent && (
               <React.Fragment>
-                <p className="label" id="respondent-label">
+                <p className="label" id={`respondent-label${instance}`}>
                   Respondent Information
                 </p>
-                <address aria-labelledby="respondent-label">
+                <address aria-labelledby={`respondent-label${instance}`}>
                   {addressDisplay({
                     ...caseDetail.respondent,
                     name: caseDetail.respondent.formattedName,
@@ -122,12 +122,12 @@ export const PartyInformation = connect(
         <div className="card hide-on-mobile">
           <div className="content-wrapper">
             <h3 className="underlined">Party Information</h3>
-            {mainPartyInformation()}
+            {mainPartyInformation('-desktop')}
           </div>
         </div>
         <div className="show-on-mobile">
           <h3>Party Information</h3>
-          {mainPartyInformation()}
+          {mainPartyInformation('-mobile')}
         </div>
       </div>
     );
