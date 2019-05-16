@@ -610,8 +610,9 @@ header.usa-header {
       padding: 0 0 6px 0;
       background: none;
       color: color($theme-color-primary);
+      font-family: $font-serif;
       font-size: 20px;
-      font-weight: $font-semibold;
+      font-weight: $font-bold;
       :hover {
         background: none;
         color: color($theme-color-primary);
@@ -874,6 +875,7 @@ nav.usa-nav {
   .usa-tag {
     background: $color-white;
     color: color($theme-color-primary-darker);
+    font-weight: $font-bold;
   }
   .unread {
     position: relative;
