@@ -5,7 +5,7 @@ export const Forms = () => (
     <h1>Forms</h1>
     <hr />
     <form className="usa-form usa-form--large">
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-text" className="usa-label">
             Text input
@@ -14,7 +14,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label className="usa-label with-hint" htmlFor="input-text-hint">
             Text input with hint text
@@ -43,7 +43,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-email" className="usa-label">
             Email input
@@ -69,7 +69,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-number-error" className="usa-label">
             Number input with error
@@ -83,7 +83,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-tel" className="usa-label">
             Phone input
@@ -92,7 +92,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-tel-error" className="usa-label">
             Phone input with error
@@ -106,7 +106,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-file" className="usa-label">
             File input
@@ -115,7 +115,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-file-error" className="usa-label">
             File input with error
@@ -125,7 +125,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="options">Dropdown label</label>
           <select className="usa-select" id="options">
@@ -137,7 +137,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="options-error">Dropdown label with error</label>
           <select className="usa-select usa-select--error" id="options-error">
@@ -150,7 +150,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="textarea" className="usa-label">
             Text Area
@@ -158,7 +158,7 @@ export const Forms = () => (
           <textarea id="textarea" className="usa-textarea" />
         </div>
       </div>
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="textarea-error" className="usa-label">
             Text Area with error
@@ -171,7 +171,7 @@ export const Forms = () => (
         </div>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
           <legend>Checkboxes</legend>
           <div className="usa-checkbox">
@@ -225,7 +225,7 @@ export const Forms = () => (
         </fieldset>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
           <legend>Radio Buttons</legend>
           <div className="usa-radio">
@@ -268,7 +268,7 @@ export const Forms = () => (
         </fieldset>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
           <legend>Inline Radio Buttons</legend>
           <div className="usa-radio usa-radio__inline">
@@ -311,7 +311,7 @@ export const Forms = () => (
         </fieldset>
       </div>
 
-      <div className="blue-container">
+      <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
           <legend className="usa-legend">Date of birth</legend>
           <div className="usa-memorable-date">

@@ -96,7 +96,7 @@ export const DocumentDetail = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-7">
+              <div className="grid-col-7 doc-detail-pane">
                 <div className="top-bar clear-both">
                   <div className="full-width">
                     <span className="float-right">

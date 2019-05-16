@@ -18,7 +18,9 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number">Docket</th>
+              <th aria-label="Docket Number" colSpan="2">
+                Docket
+              </th>
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
@@ -30,6 +32,14 @@ export const IndividualWorkQueueInbox = connect(
           {workQueue.map((item, idx) => (
             <tbody key={idx}>
               <tr>
+                <td className="focus-toggle">
+                  <button
+                    className="focus-button usa-button usa-button--unstyled"
+                    aria-label="Expand message detail"
+                    aria-expanded={item.isFocused}
+                    aria-controls={`detail-${item.workItemId}`}
+                  />{' '}
+                </td>
                 <td className="message-queue-row">
                   {item.docketNumberWithSuffix}
                 </td>
