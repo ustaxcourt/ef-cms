@@ -1,6 +1,11 @@
-import { extractedPendingMessagesFromCaseDetail } from '../../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
+import { extractedPendingMessagesFromCaseDetail as extractedPendingMessagesFromCaseDetailComputed } from '../../src/presenter/computeds/extractPendingMessagesFromCaseDetail';
 import { orderBy } from 'lodash';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
+  extractedPendingMessagesFromCaseDetailComputed,
+);
 
 export default test => {
   return it('Docketclerk views case detail', async () => {

@@ -5,6 +5,10 @@ body.no-scroll {
   touch-action: none;
 }
 
+a:hover {
+  color: color($theme-color-primary-darker);
+}
+
 hr {
   z-index: 1;
   display: block;
@@ -13,10 +17,6 @@ hr {
   border: 0;
   border-top: 1px solid color($theme-color-base-light);
   margin: 20px 0;
-}
-
-.mr-1 {
-  margin-right: 10px;
 }
 
 .inline-block {
@@ -125,7 +125,7 @@ select[disabled] {
   }
 }
 
-.gray-header {
+.gray {
   background-color: color($theme-color-base-lightest);
 }
 
@@ -135,6 +135,7 @@ select[disabled] {
 
   .completed-icon {
     padding-top: 2px;
+    color: $color-green;
     float: left;
   }
 
@@ -462,7 +463,8 @@ select.ustc-input-error {
 
 #case-detail-messages-tabs {
   > .tabcontent {
-    padding: 15px;
+    padding: 20px;
+    padding-top: 10px;
   }
 }
 
@@ -867,28 +869,30 @@ nav.usa-nav {
 .big-blue-header {
   padding: 25px 0;
   margin-bottom: 40px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: $color-white; // TODO: Replace with USWDSv2 var when available;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
     color: $color-white;
   }
   a,
-  a:hover,
-  button,
-  button:hover {
+  button {
     color: $color-white;
+  }
+  a:hover,
+  button:hover {
+    color: $color-primary-alt;
   }
   .usa-tag {
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color($theme-color-primary-darker);
   }
   .unread {
     position: relative;
     top: -3px;
     background: $color-white;
-    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+    color: color($theme-color-primary-darker);
   }
 }
 
@@ -897,8 +901,8 @@ nav.usa-nav {
   top: -3px;
   border: none;
   margin-left: 5px;
-  background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
-  color: #fff;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
   font-size: 14px;
   font-weight: $font-semibold;
 }
