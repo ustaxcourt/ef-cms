@@ -1,4 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Select } from '../../ustc-ui/Select/Select';
+import { TextArea } from '../../ustc-ui/TextArea/TextArea';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -249,7 +251,7 @@ export const PendingMessages = connect(
                   !workItem.historyMessages.length && (
                     <div
                       id={`history-card-${idx}`}
-                      className="content-wrapper"
+                      className="content-wrapper actions-wrapper"
                       role="tabpanel"
                       aria-labelledby={`history-tab-${idx}`}
                     >
@@ -311,23 +313,43 @@ export const PendingMessages = connect(
                         });
                       }}
                     >
-                      <div
-                        className={
-                          'usa-form-group ' +
-                          (validationErrors[workItem.workItemId] &&
-                          validationErrors[workItem.workItemId].section &&
-                          !workItemMetadata.showChambersSelect
-                            ? 'usa-input-error'
-                            : '')
+                      <Select
+                        id={`section-${idx}`}
+                        name="section"
+                        label="Select Section"
+                        values={constants.SECTIONS}
+                        keys={v => v}
+                        formatter={workQueueSectionHelper.sectionDisplay}
+                        error={
+                          validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].section
                         }
-                      >
-                        <label htmlFor={`section-${idx}`} className="usa-label">
-                          Select Section
-                        </label>
-                        <select
-                          className="usa-select"
-                          id={`section-${idx}`}
-                          name="section"
+                        onChange={e => {
+                          updateForwardFormValueSequence({
+                            form: `form.${workItem.workItemId}`,
+                            key: e.target.name,
+                            section: e.target.value,
+                            value: e.target.value,
+                            workItemId: workItem.workItemId,
+                          });
+                          validateForwardMessageSequence({
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                      />
+
+                      {workItemMetadata.showChambersSelect && (
+                        <Select
+                          id={`chambers-${idx}`}
+                          name="chambers"
+                          label="Select Chambers"
+                          values={constants.CHAMBERS_SECTIONS}
+                          keys={v => v}
+                          formatter={workQueueSectionHelper.chambersDisplay}
+                          error={
+                            validationErrors[workItem.workItemId] &&
+                            validationErrors[workItem.workItemId].section
+                          }
                           onChange={e => {
                             updateForwardFormValueSequence({
                               form: `form.${workItem.workItemId}`,
@@ -340,165 +362,62 @@ export const PendingMessages = connect(
                               workItemId: workItem.workItemId,
                             });
                           }}
-                        >
-                          <option value="">- Select -</option>
-                          {constants.SECTIONS.map(section => (
-                            <option key={section} value={section}>
-                              {workQueueSectionHelper.sectionDisplay(section)}
-                            </option>
-                          ))}
-                        </select>
-                        {!workItemMetadata.showChambersSelect && (
-                          <div className="usa-input-error-message beneath">
-                            {validationErrors[workItem.workItemId] &&
-                              validationErrors[workItem.workItemId].section}
-                          </div>
-                        )}
-                      </div>
-
-                      {workItemMetadata.showChambersSelect && (
-                        <div
-                          className={
-                            'usa-form-group ' +
-                            (validationErrors[workItem.workItemId] &&
-                            validationErrors[workItem.workItemId].section
-                              ? 'usa-input-error'
-                              : '')
-                          }
-                        >
-                          <label
-                            htmlFor={`chambers-${idx}`}
-                            className="usa-label"
-                          >
-                            Select Chambers
-                          </label>
-
-                          <select
-                            className="usa-select"
-                            id={`chambers-${idx}`}
-                            name="chambers"
-                            onChange={e => {
-                              updateForwardFormValueSequence({
-                                form: `form.${workItem.workItemId}`,
-                                key: e.target.name,
-                                section: e.target.value,
-                                value: e.target.value,
-                                workItemId: workItem.workItemId,
-                              });
-                              validateForwardMessageSequence({
-                                workItemId: workItem.workItemId,
-                              });
-                            }}
-                          >
-                            <option value="">- Select -</option>
-                            {constants.CHAMBERS_SECTIONS.map(section => (
-                              <option key={section} value={section}>
-                                {workQueueSectionHelper.chambersDisplay(
-                                  section,
-                                )}
-                              </option>
-                            ))}
-                          </select>
-
-                          {validationErrors[workItem.workItemId] &&
-                            validationErrors[workItem.workItemId].section && (
-                              <div className="usa-input-error-message beneath">
-                                Chambers is required.
-                              </div>
-                            )}
-                        </div>
+                        />
                       )}
 
-                      <div
-                        className={
-                          'usa-form-group ' +
-                          (validationErrors[workItem.workItemId] &&
+                      <Select
+                        id={`assignee-id-${idx}`}
+                        name="assigneeId"
+                        values={users}
+                        label="Select Recipient"
+                        disabled={
+                          !form[workItem.workItemId] ||
+                          !form[workItem.workItemId].section
+                        }
+                        aria-disabled={
+                          !form[workItem.workItemId] ||
+                          !form[workItem.workItemId].section
+                            ? 'true'
+                            : 'false'
+                        }
+                        onChange={e => {
+                          updateForwardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                            workItemId: workItem.workItemId,
+                          });
+                          validateForwardMessageSequence({
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                        keys={user => user.userId}
+                        formatter={user => user.name}
+                        error={
+                          validationErrors[workItem.workItemId] &&
                           validationErrors[workItem.workItemId].assigneeId
-                            ? 'usa-input-error'
-                            : '')
                         }
-                      >
-                        <label
-                          htmlFor={`assignee-id-${idx}`}
-                          className="usa-label"
-                        >
-                          Select Recipient
-                        </label>
-                        <select
-                          className="usa-select"
-                          id={`assignee-id-${idx}`}
-                          name="assigneeId"
-                          disabled={
-                            !form[workItem.workItemId] ||
-                            !form[workItem.workItemId].section
-                          }
-                          aria-disabled={
-                            !form[workItem.workItemId] ||
-                            !form[workItem.workItemId].section
-                              ? 'true'
-                              : 'false'
-                          }
-                          onChange={e => {
-                            updateForwardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                              workItemId: workItem.workItemId,
-                            });
-                            validateForwardMessageSequence({
-                              workItemId: workItem.workItemId,
-                            });
-                          }}
-                        >
-                          <option value="">- Select -</option>
-                          {users.map(user => (
-                            <option key={user.userId} value={user.userId}>
-                              {user.name}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="usa-input-error-message beneath">
-                          {validationErrors[workItem.workItemId] &&
-                            validationErrors[workItem.workItemId].assigneeId}
-                        </div>
-                      </div>
+                      />
 
-                      <div
-                        className={
-                          'usa-form-group ' +
-                          (validationErrors[workItem.workItemId] &&
+                      <TextArea
+                        label="Add Message"
+                        error={
+                          validationErrors[workItem.workItemId] &&
                           validationErrors[workItem.workItemId].forwardMessage
-                            ? 'usa-input-error'
-                            : '')
                         }
-                      >
-                        <label
-                          htmlFor={`forward-message-${idx}`}
-                          className="usa-label"
-                        >
-                          Add Message
-                        </label>
-                        <textarea
-                          aria-labelledby={`message-label-${idx}`}
-                          className="usa-textarea"
-                          name="forwardMessage"
-                          id={`forward-message-${idx}`}
-                          onChange={e => {
-                            updateForwardFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                              workItemId: workItem.workItemId,
-                            });
-                            validateForwardMessageSequence({
-                              workItemId: workItem.workItemId,
-                            });
-                          }}
-                        />{' '}
-                        <div className="usa-input-error-message beneath">
-                          {validationErrors[workItem.workItemId] &&
-                            validationErrors[workItem.workItemId]
-                              .forwardMessage}
-                        </div>
-                      </div>
+                        aria-labelledby={`message-label-${idx}`}
+                        id={`forward-message-${idx}`}
+                        name="forwardMessage"
+                        onChange={e => {
+                          updateForwardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                            workItemId: workItem.workItemId,
+                          });
+                          validateForwardMessageSequence({
+                            workItemId: workItem.workItemId,
+                          });
+                        }}
+                      />
 
                       <button type="submit" className="usa-button">
                         Send
