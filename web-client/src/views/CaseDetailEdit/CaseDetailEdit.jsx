@@ -41,15 +41,12 @@ export const CaseDetailEdit = connect(
           bind="documentDetail.tab"
         >
           <Tab tabName="partyInfo" title="Parties" id="tab-parties">
-            <h3>Party Information</h3>
             <PartyInformation />
           </Tab>
           <Tab tabName="caseInfo" title="Case Info" id="tab-case-info">
-            <h3>Case Information</h3>
             <CaseInfo />
           </Tab>
           <Tab tabName="irsNotice" title="IRS Notice" id="tab-irs-notice">
-            <h3>IRS Notice Information</h3>
             <IRSNotice />
           </Tab>
         </Tabs>

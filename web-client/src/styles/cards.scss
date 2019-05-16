@@ -13,6 +13,11 @@
 
   .content-wrapper {
     padding: 15px;
+    background-color: $color-white;
+
+    &.gray {
+      background-color: color($theme-color-base-lightest);
+    }
   }
 
   .actions-wrapper {
