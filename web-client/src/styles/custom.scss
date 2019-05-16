@@ -582,6 +582,7 @@ textarea#case-caption {
   padding-left: 45px;
 }
 button.link.mobile-sort-docket-button {
+  margin-bottom: 12px;
   color: color($theme-color-base-darkest);
   text-decoration: none;
   svg {
@@ -919,5 +920,13 @@ nav.usa-nav {
     border-bottom: 3px solid color($theme-color-primary);
     margin-top: -2px;
     margin-bottom: 0px;
+  }
+}
+
+.mobile-document-detail-tabs {
+  @media only screen and (max-width: $medium-screen) {
+    nav {
+      display: none;
+    }
   }
 }
