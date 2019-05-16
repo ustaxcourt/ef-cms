@@ -61,7 +61,6 @@ export const FileDocumentWizard = connect(
         </div>
         <section className="usa-section grid-container">
           <CaseDetailHeader />
-          <hr aria-hidden="true" />
           {showModal == 'FormCancelModalDialogComponent' && (
             <FormCancelModalDialog />
           )}

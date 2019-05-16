@@ -2,11 +2,13 @@ import { CaseInformationPublic } from './CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { PartyInformation } from './PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const CaseDetail = connect(
@@ -24,14 +26,8 @@ export const CaseDetail = connect(
   }) {
     return (
       <React.Fragment>
-        <div className="breadcrumb grid-container">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back to dashboard
-          </a>
-        </div>
-        <section className="usa-section grid-container">
-          <div className="grid-container padding-x-0">
+        <div className="big-blue-header">
+          <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <h1 className="captioned" tabIndex="-1">
@@ -54,19 +50,19 @@ export const CaseDetail = connect(
               </div>
             </div>
           </div>
-
-          <hr aria-hidden="true" />
-
+        </div>
+        <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           {caseHelper.showActionRequired && (
             <div className="subsection">
-              <h2>Action Required</h2>
+              <div className="title">
+                <h1>Action Required</h1>
+              </div>
               <ul className="usa-accordion">
                 <li>
                   <button
-                    className="usa-accordion__button"
+                    className="usa-accordion__button font-normal"
                     aria-expanded={showDetails}
                     aria-controls="paymentInfo"
                     id="actions-button"
@@ -78,7 +74,7 @@ export const CaseDetail = connect(
                         className="action-flag"
                         size="sm"
                       />{' '}
-                      Pay $60.00 filing fee.
+                      Pay $60.00 Filing Fee
                     </span>
                   </button>
                   {showDetails && (
@@ -89,43 +85,28 @@ export const CaseDetail = connect(
                     >
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
-                          <h3>Pay by debit card/credit card.</h3>
+                          <h3>Pay by Debit / Credit Card</h3>
                           <p>Copy your docket number(s) and pay online.</p>
-                          <div id="paygov-link-container">
-                            <a
-                              className="usa-button"
-                              href="https://pay.gov/public/form/start/60485840"
-                              aria-label="pay.gov u.s. tax court filing fees"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Pay now
-                            </a>
-                          </div>
-                          <p>
-                            <i>
-                              Note: it may take up to X days for your payment to
-                              appear online.
-                            </i>
-                          </p>
+                          <a
+                            className="usa-button"
+                            href="https://pay.gov/public/form/start/60485840"
+                            aria-label="pay.gov u.s. tax court filing fees"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Pay Now
+                          </a>
                         </div>
                         <div className="tablet:grid-col-6">
-                          <h4>Canʼt afford to pay the fee?</h4>
-                          <p>
-                            You may be eligible for a filing fee waiver. File an
-                            application to request a waiver.
-                          </p>
-                          <p>
-                            <a
-                              href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
-                              aria-label="View download application pdf"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              Download application
-                            </a>
-                          </p>
-                          <h4>Mail in payment</h4>
+                          <Hint>
+                            It may take up to X days for your payment to appear
+                            online.
+                          </Hint>
+                        </div>
+                      </div>
+                      <div className="grid-row">
+                        <div className="tablet:grid-col-6 margin-bottom-2">
+                          <h3 className="margin-top-2">Mail in payment</h3>
                           <p>Make checks/money order payable to:</p>
                           <address>
                             Clerk, United States Tax Court
@@ -136,6 +117,21 @@ export const CaseDetail = connect(
                             <br />
                           </address>
                         </div>
+                        <div className="tablet:grid-col-6">
+                          <h3>Canʼt afford to pay the fee?</h3>
+                          <p>
+                            You may be eligible for a filing fee waiver.{' '}
+                            <a
+                              href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                              aria-label="View download application pdf"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              File an application
+                            </a>{' '}
+                            to request a waiver.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -143,7 +139,10 @@ export const CaseDetail = connect(
               </ul>
             </div>
           )}
-          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+          <Tabs
+            className="classic-horizontal-header3 tab-border"
+            bind="documentDetail.tab"
+          >
             <Tab
               tabName="docketRecord"
               title="Docket Record"

@@ -11,7 +11,7 @@ hr {
   height: 1px;
   padding: 0;
   border: 0;
-  border-top: 1px solid $color-gray-light;
+  border-top: 1px solid color($theme-color-base-light);
   margin: 20px 0;
 }
 
@@ -61,7 +61,7 @@ hr {
 }
 
 .flagged-name {
-  color: $color-red-dark;
+  color: color($theme-color-secondary)-dark;
 }
 
 #paygov-link-container {
@@ -72,7 +72,7 @@ hr {
 iframe {
   width: 100%;
   height: 1000px;
-  border: 1px solid $color-gray-lightest;
+  border: 1px solid color($theme-color-base-lightest);
 }
 
 .link.case-link-bold {
@@ -112,13 +112,13 @@ iframe {
 }
 
 select[disabled] {
-  background-color: $color-gray-lightest;
+  background-color: color($theme-color-base-lightest);
 }
 
 .grey-container {
   padding: 20px;
   margin-bottom: 20px;
-  background-color: $color-gray-lightest;
+  background-color: color($theme-color-base-lightest);
 
   *:last-child {
     margin-bottom: 0;
@@ -126,12 +126,12 @@ select[disabled] {
 }
 
 .gray-header {
-  background-color: $color-gray-lightest;
+  background-color: color($theme-color-base-lightest);
 }
 
 .completed-card {
   margin-bottom: 20px;
-  color: $color-gray;
+  color: color($theme-color-base);
 
   .completed-icon {
     padding-top: 2px;
@@ -160,7 +160,7 @@ select[disabled] {
   }
 
   &.gray-background {
-    background-color: $color-gray-lightest;
+    background-color: color($theme-color-base-lightest);
   }
 
   .push-right {
@@ -204,6 +204,15 @@ select[disabled] {
   font-weight: $font-semibold;
 }
 
+.usa-accordion__button.font-normal {
+  font-weight: normal;
+}
+
+.usa-accordion__button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .usa-accordion.start-a-case,
 .usa-accordion.document-category {
   margin-bottom: 2rem;
@@ -213,8 +222,8 @@ select[disabled] {
     padding-left: 0;
     border: 0;
     background: none;
-    color: $color-primary;
-    font-weight: inherit;
+    color: color($theme-color-primary);
+    font-weight: normal;
 
     .svg-inline--fa {
       margin-left: 0.5rem;
@@ -222,7 +231,7 @@ select[disabled] {
   }
 
   .usa-accordion__button:hover {
-    color: $color-primary-darker;
+    color: color($theme-color-primary-dark);
   }
 
   .usa-accordion__button:focus {
@@ -230,7 +239,7 @@ select[disabled] {
   }
 
   .usa-accordion__content {
-    border: 1px solid $color-primary;
+    border: 1px solid color($theme-color-primary);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 4px 4px rgba(0, 0, 0, 0.15);
   }
@@ -251,7 +260,7 @@ select[disabled] {
     left: 0;
     width: 30px;
     height: 30px;
-    background: $color-primary-darker;
+    background: color($theme-color-primary-dark);
     border-radius: 30px;
     color: $color-white;
     font-size: 20px;
@@ -264,32 +273,32 @@ select[disabled] {
 .small-case-features,
 .document-category-features {
   h4 {
-    color: $color-base;
+    color: color($theme-color-base-darkest);
   }
 
   .warning {
     .fa-exclamation-triangle {
       margin-right: 0.5rem;
-      color: $color-gold;
+      color: color($theme-color-warning);
     }
 
     &.feature {
-      box-shadow: inset 0 -10px 0 $color-gold;
+      box-shadow: inset 0 -10px 0 color($theme-color-warning);
     }
   }
 
   .feature {
     min-height: 20rem;
     padding: 20px 18px 2px;
-    border: 1px solid $color-gray-lighter;
-    box-shadow: inset 0 -10px 0 $color-primary-alt-dark;
+    border: 1px solid color($theme-color-base-lighter);
+    box-shadow: inset 0 -10px 0 color($theme-color-accent-cool-dark);
   }
 
   .document-feature {
     min-height: 15rem;
     padding: 20px 18px 2px;
-    border: 1px solid $color-gray-lighter;
-    box-shadow: inset 0 -10px 0 $color-primary-alt-dark;
+    border: 1px solid color($theme-color-base-lighter);
+    box-shadow: inset 0 -10px 0 color($theme-color-accent-cool-dark);
 
     ul {
       padding-left: 2rem;
@@ -299,8 +308,8 @@ select[disabled] {
 
 .alert-dark {
   padding: 10px;
-  border-left: 5px solid $color-primary-alt-dark;
-  background: $color-primary-alt-darkest;
+  border-left: 5px solid color($theme-color-accent-cool-dark);
+  background: color($theme-color-accent-cool-darker);
   color: $color-white;
 
   svg {
@@ -309,15 +318,15 @@ select[disabled] {
 }
 
 .usa-hint {
-  color: $color-gray;
+  color: color($theme-color-base);
 }
 
 .alert-gold {
   max-width: 700px;
   padding: 10px;
-  border-left: 5px solid $color-gold;
-  background: $color-gold-lightest;
-  color: $color-base;
+  border-left: 5px solid color($theme-color-warning);
+  background: color($theme-color-warning-lighter);
+  color: color($theme-color-base-darkest);
 
   .usa-form-hint {
     margin: 0;
@@ -335,7 +344,7 @@ select[disabled] {
 .usa-label-uploading {
   padding: 0.3rem 0.7rem;
   margin-right: 0.5rem;
-  background-color: $color-gray;
+  background-color: color($theme-color-base);
   border-radius: 2px;
   color: $color-white;
   font-size: 1.3rem;
@@ -343,7 +352,7 @@ select[disabled] {
 }
 
 .fa-spinner {
-  color: $color-gray;
+  color: color($theme-color-base);
 }
 
 .icon-column {
@@ -411,7 +420,7 @@ select[disabled] {
 
 input.ustc-input-error,
 select.ustc-input-error {
-  border: 3px solid $color-red !important;
+  border: 3px solid color($theme-color-secondary) !important;
 }
 
 .tabs-and-buttons-wrapper {
@@ -473,8 +482,8 @@ select.ustc-input-error {
   .usa-form-group--error textarea,
   .usa-form-group--error select {
     width: 100%;
-    border-color: $color-red-dark;
-    box-shadow: 0 0 0 2px $color-red-dark;
+    border-color: color($theme-color-secondary)-dark;
+    box-shadow: 0 0 0 2px color($theme-color-secondary)-dark;
   }
 }
 
@@ -516,10 +525,10 @@ textarea#case-caption {
 
 .beta {
   padding: 20px;
-  background-color: $color-gold-lighter;
+  background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
   a {
-    color: $color-black;
+    color: color($theme-color-base-darkest);
   }
 }
 
@@ -541,7 +550,7 @@ textarea#case-caption {
     padding: 8px;
     margin-top: 10px;
     margin-right: 20px;
-    background-color: $color-blue-dark;
+    background-color: color($theme-color-primary-dark);
     float: left;
   }
 
@@ -551,10 +560,11 @@ textarea#case-caption {
   }
 }
 
-.unread, .assign-work-item-count {
+.unread,
+.assign-work-item-count {
   display: inline-block;
   min-width: 35px;
-  background: $color-primary;
+  background: color($theme-color-primary);
   border-radius: 20px;
   color: $color-white;
   font-weight: $font-bold;
@@ -570,11 +580,11 @@ textarea#case-caption {
   padding-left: 45px;
 }
 button.link.mobile-sort-docket-button {
-  color: $color-black;
+  color: color($theme-color-base-darkest);
   text-decoration: none;
   svg {
     margin-left: 5px;
-    color: $color-primary;
+    color: color($theme-color-primary);
   }
 }
 
@@ -596,26 +606,26 @@ header.usa-header {
     li {
       &.active {
         a {
-          color: $color-gray;
+          color: color($theme-color-base);
         }
       }
 
       &.active,
       &:hover {
         padding-bottom: 5px;
-        border-bottom: 2px solid $color-primary;
+        border-bottom: 2px solid color($theme-color-primary);
       }
     }
 
     a {
       padding: 0 0 6px 0;
       background: none;
-      color: $color-primary;
+      color: color($theme-color-primary);
       font-size: 20px;
       font-weight: $font-semibold;
       :hover {
         background: none;
-        color: $color-primary;
+        color: color($theme-color-primary);
       }
     }
   }
@@ -640,13 +650,13 @@ nav.usa-nav {
     a {
       padding: 0px;
       background: none;
-      color: $color-primary;
+      color: color($theme-color-primary);
       font-family: $font-serif;
       font-size: 20px;
       font-weight: $font-bold;
     }
     :hover {
-      color: $color-primary-darker;
+      color: color($theme-color-primary-dark);
     }
   }
 
@@ -677,7 +687,7 @@ nav.usa-nav {
   .button-account-login {
     border: none;
     background: none;
-    color: $color-primary;
+    color: color($theme-color-primary);
     font-weight: $font-semibold;
   }
 
@@ -687,7 +697,7 @@ nav.usa-nav {
   }
 
   &.mobile-menu {
-    background: $color-primary-darker;
+    background: color($theme-color-primary-dark);
     font-family: $font-source-sans;
 
     .usa-nav-close {
@@ -707,11 +717,11 @@ nav.usa-nav {
           border: none;
           &.usa-search {
             button {
-              background: $color-gray;
+              background: color($theme-color-base);
             }
 
             button:active {
-              background: $color-primary-darker;
+              background: color($theme-color-primary-dark);
             }
           }
         }
@@ -797,7 +807,7 @@ nav.usa-nav {
       padding: 12px;
       border: none;
       background: none;
-      color: $color-primary;
+      color: color($theme-color-primary);
     }
 
     .caret {
@@ -807,13 +817,13 @@ nav.usa-nav {
 
   &.closed {
     .account-menu-icon {
-      color: $color-primary;
+      color: color($theme-color-primary);
     }
     .account-button-container {
       background: none;
 
       :hover {
-        background-color: $color-primary;
+        background-color: color($theme-color-primary);
         border-radius: 0;
 
         .account-menu-icon {
@@ -827,7 +837,7 @@ nav.usa-nav {
       color: $color-white;
     }
     .account-button-container {
-      background-color: $color-primary;
+      background-color: color($theme-color-primary);
     }
   }
   .account-menu-content {
@@ -835,7 +845,7 @@ nav.usa-nav {
     right: 0px;
     width: 109px;
     padding: 10px 0;
-    background-color: $color-primary;
+    background-color: color($theme-color-primary);
 
     ul li {
       display: block;
@@ -854,12 +864,22 @@ nav.usa-nav {
   padding: 25px 0;
   margin-bottom: 40px;
   background-color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  color: $color-white; // TODO: Replace with USWDSv2 var when available;
   h1 {
     display: inline-block;
     margin: 0 10px 0 0;
     color: $color-white;
   }
-
+  a,
+  a:hover,
+  button,
+  button:hover {
+    color: $color-white;
+  }
+  .usa-tag {
+    background: $color-white;
+    color: #162e51; // TODO: Replace with USWDSv2 var when available;
+  }
   .unread {
     position: relative;
     top: -3px;
@@ -877,4 +897,19 @@ nav.usa-nav {
   color: #fff;
   font-size: 14px;
   font-weight: $font-semibold;
+}
+
+.title {
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  margin-bottom: 40px;
+
+  h1 {
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    padding-bottom: 20px;
+    border-bottom: 3px solid color($theme-color-primary);
+    margin-top: -2px;
+    margin-bottom: 0px;
+  }
 }

@@ -34,39 +34,42 @@ export const CaseDetailInternal = connect(
     updateFormValueSequence,
   }) => {
     return (
-      <React.Fragment>
-        <div className="grid-container breadcrumb">
-          <FontAwesomeIcon icon="caret-left" />
-          <a href="/" id="queue-nav">
-            Back to dashboard
-          </a>
-        </div>
+      <>
+        <CaseDetailHeader />
         <section className="usa-section grid-container">
-          <CaseDetailHeader />
-          <hr aria-hidden="true" />
           <SuccessNotification />
           <ErrorNotification />
-
           <div>
-            <h2>Messages In Progress</h2>
+            <div className="title margin-bottom-5">
+              <h1>Messages In Progress</h1>
+            </div>
+
             {extractedPendingMessages.length === 0 && (
               <p>No Messages In Progress</p>
             )}
-            <table className="usa-table row-border-only subsection">
+            <table className="usa-table row-border-only subsection messages">
+              <thead>
+                <tr>
+                  <th className="header-fixed-width">To</th>
+                  <th className="header-fixed-width">From</th>
+                  <th className="header-fixed-width">Received</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
-                    <td className="responsive-title">
-                      <p className="margin-y-0">
-                        <span className="label-inline">To</span>
-                        {workItem.assigneeName}
-                      </p>
-                      <p className="margin-y-0">
-                        <span className="label-inline">From</span>
-                        {workItem.messages[0].from}
-                      </p>
+                    <td className="responsive-title padding-extra">
+                      {workItem.assigneeName}
                     </td>
-                    <td>
+                    <td className="padding-extra">
+                      {workItem.messages[0].from}
+                    </td>
+                    <td className="padding-extra">
+                      {workItem.messages[0].createdAtTimeFormatted}
+                    </td>
+                    <td className="padding-extra">
                       <p className="margin-y-0">
                         <a
                           href={documentHelper({
@@ -79,32 +82,35 @@ export const CaseDetailInternal = connect(
                           {workItem.document.documentType}
                         </a>
                       </p>
-                      <p className="margin-y-0">
+                      <p className="message-detail margin-y-0">
                         {workItem.messages[0].message}
                       </p>
-                    </td>
-                    <td>
-                      <span className="label-inline">Received</span>
-                      {workItem.messages[0].createdAtTimeFormatted}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-
-          <Tabs className="classic-horizontal" bind="documentDetail.tab">
+          <Tabs
+            className="classic-horizontal-header3 tab-border"
+            bind="documentDetail.tab"
+          >
             <Tab
               tabName="docketRecord"
               title="Docket Record"
               id="tab-docket-record"
+              large
             >
               <DocketRecord />
             </Tab>
-            <Tab tabName="caseInfo" title="Case Information" id="tab-case-info">
+            <Tab
+              large
+              tabName="caseInfo"
+              title="Case Information"
+              id="tab-case-info"
+            >
               <CaseInformationInternal />
               <PartyInformation />
-
               <div>
                 <fieldset className="usa-fieldset-inputs usa-sans">
                   <legend>Petition fee</legend>
@@ -133,7 +139,7 @@ export const CaseDetailInternal = connect(
                           Paid by pay.gov
                         </label>
                         {caseHelper.showPayGovIdInput && (
-                          <React.Fragment>
+                          <>
                             <label htmlFor="paygovid" className="usa-label">
                               Payment ID
                             </label>
@@ -155,7 +161,7 @@ export const CaseDetailInternal = connect(
                             >
                               Save updates
                             </button>
-                          </React.Fragment>
+                          </>
                         )}
                       </li>
                     </ul>
@@ -182,7 +188,7 @@ export const CaseDetailInternal = connect(
             </a>
           )}
         </section>
-      </React.Fragment>
+      </>
     );
   },
 );

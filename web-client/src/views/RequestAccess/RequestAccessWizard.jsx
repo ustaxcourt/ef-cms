@@ -47,7 +47,6 @@ export const RequestAccessWizard = connect(
         </div>
         <section className="usa-section grid-container">
           <CaseDetailHeader />
-          <hr aria-hidden="true" />
           {showModal == 'FormCancelModalDialogComponent' && (
             <FormCancelModalDialog />
           )}

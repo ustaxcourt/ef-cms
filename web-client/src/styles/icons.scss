@@ -1,6 +1,6 @@
 .fa-file-pdf {
   margin-right: 0.5em;
-  color: $color-blue;
+  color: color($theme-color-primary);
 }
 button .fa-file-pdf {
   color: $color-white;
@@ -8,39 +8,39 @@ button .fa-file-pdf {
 
 .fa-caret-left {
   margin-right: 0.5rem;
-  color: $color-blue;
+  color: color($theme-color-primary);
 }
 
 .action-flag {
-  color: $color-red;
+  color: color($theme-color-secondary);
 }
 
 .iconStatusBatched {
-  color: $color-gold;
+  color: color($theme-color-warning);
 }
 
 .iconStatusRecalled {
-  color: $color-red;
+  color: color($theme-color-secondary);
 }
 
 .iconStatusUnread {
-  color: $color-primary;
+  color: color($theme-color-primary);
 }
 
 .fa-icon-gold {
   margin-right: 6px;
-  color: $color-gold;
+  color: color($theme-color-warning);
 }
 
 .fa-icon-blue {
   margin-left: 0.5em;
-  color: $color-blue;
+  color: color($theme-color-primary);
 }
 
 .fa-file-alt {
   display: inline-block;
   margin-right: 0.5em;
-  color: $color-blue;
+  color: color($theme-color-primary);
 }
 
 .icon-list {

@@ -28,7 +28,7 @@
   display: block;
   min-height: 145px;
   padding: 13px 30px 10px 20px;
-  border-top: 10px solid $color-gold;
+  border-top: 10px solid color($theme-color-warning);
   margin: auto;
   background: $color-white;
 
@@ -78,7 +78,7 @@
     display: none;
   }
   padding: 60px 0;
-  background-color: $color-gold;
+  background-color: color($theme-color-warning);
   font-size: 30px;
   text-align: center;
 }
@@ -111,7 +111,7 @@
 
   .progress-bar-fill {
     height: 100%;
-    background: $color-green-light;
+    background: color($theme-color-success);
     border-radius: 5px;
   }
 
@@ -125,7 +125,7 @@
 
   padding: 60px 0;
   border-top: none;
-  background-color: $color-primary;
+  background-color: color($theme-color-primary);
   color: $color-white;
   font-family: $font-source-sans;
   font-size: 30px;
@@ -138,7 +138,7 @@
   }
 
   .uhoh {
-    color: $color-base;
+    color: color($theme-color-base-darkest);
     font-size: 48px;
     font-weight: $font-semibold;
   }
@@ -146,19 +146,19 @@
   .message {
     width: 80%;
     margin: auto;
-    color: $color-base;
+    color: color($theme-color-base-darkest);
     font-size: 30px;
     font-weight: $font-semibold;
   }
 
   button.usa-button--outline {
-    background-color: $color-primary;
+    background-color: color($theme-color-primary);
     color: $color-white;
   }
 
   padding: 60px 0;
-  background-color: $color-gold;
-  color: $color-base;
+  background-color: color($theme-color-warning);
+  color: color($theme-color-base-darkest);
   font-size: 30px;
   text-align: center;
 }
