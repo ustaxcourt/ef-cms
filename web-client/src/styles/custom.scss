@@ -563,7 +563,7 @@ header.usa-header {
 
   .main-navigation {
     display: none;
-    margin-top: 3.0rem;
+    margin-top: 3rem;
     font-family: $font-serif;
 
     @media (min-width: 64em) {
@@ -677,6 +677,7 @@ nav.usa-nav {
   .user-icon {
     width: 25px;
     height: 25px;
+    margin-right: 5px;
   }
 
   &.mobile-menu {
