@@ -52,7 +52,7 @@ export const FilingsAndProceedings = connect(
                 {description}
               </a>
               <button
-                className="show-on-mobile link border-0"
+                className="show-on-mobile usa-button usa-button--unstyled border-0"
                 aria-roledescription="button to view document details"
                 onClick={() => {
                   showDocketRecordDetailModalSequence({

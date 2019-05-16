@@ -1,39 +1,37 @@
 .usa-button {
   min-width: 132px;
   margin: 0 20px 20px 0;
+
+  &.larger-icon .svg-inline--fa {
+    margin-top: -2px;
+    margin-right: 5px;
+    font-size: 20px;
+    vertical-align: middle;
+  }
+
+  &.float-right {
+    text-align: right;
+  }
+
+  &.mobile-sort-docket-button.usa-button--unstyled {
+    margin-bottom: 12px;
+    color: color($theme-color-base-darkest);
+    text-decoration: none;
+
+    svg {
+      margin-left: 5px;
+      color: color($theme-color-primary);
+    }
+  }
 }
 
-button,
-a {
+.button-switch-box {
+  font-size: 14px;
+  font-weight: $font-semibold;
+
   svg {
     margin-right: 5px;
   }
-}
-
-button.pdf-link,
-button.link {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: color($theme-color-primary);
-  cursor: pointer;
-  font-weight: normal;
-  text-align: left;
-  text-decoration: underline;
-  svg {
-    margin-right: 5px;
-  }
-  &:active,
-  &:hover {
-    border: none;
-    background: none;
-    color: color($theme-color-primary-dark);
-    text-decoration: underline;
-  }
-}
-
-button.pdf-link:hover {
-  color: color($theme-color-primary);
 }
 
 button.tab-link {
@@ -43,65 +41,6 @@ button.tab-link {
   color: color($theme-color-base-darkest);
   cursor: pointer;
   font-weight: normal;
+  text-align: left;
   text-decoration: none;
-}
-
-button.text-style {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: color($theme-color-primary);
-  cursor: pointer;
-  font-weight: normal;
-  text-decoration: none;
-
-  &:hover,
-  &:active {
-    background: inherit;
-    background-color: transparent;
-    color: inherit;
-  }
-  &.heading-1 {
-    svg {
-      margin-right: 12px;
-    }
-    color: color($theme-color-base-darkest);
-    font-weight: $font-bold;
-    text-align: left;
-  }
-}
-
-.recall-button-box {
-  padding: 2px;
-  border: 1px solid color($theme-color-warning);
-  margin-right: 2px;
-  margin-bottom: 4px;
-  float: right;
-  font-family: $font-serif;
-  svg {
-    margin: 0 2rem;
-    color: color($theme-color-warning);
-  }
-  button {
-    margin-left: 2rem;
-  }
-}
-
-.serve-to-irs {
-  margin: 0 0 26px 0;
-  float: right;
-}
-
-.button-container {
-  margin-top: 20px;
-}
-
-.new-case {
-  margin: 0;
-  float: right;
-}
-
-.button-icon {
-  border: none;
-  background: transparent;
 }

@@ -69,7 +69,10 @@ class DocketRecordOverlayComponent extends React.Component {
     const { baseUrl, token } = this.props;
     return (
       <FocusLock>
-        <dialog open className="modal-screen overlay">
+        <dialog
+          open
+          className="modal-screen overlay mobile-document-details-overlay"
+        >
           <div
             className={'modal-overlay'}
             data-aria-live="assertive"
@@ -77,15 +80,15 @@ class DocketRecordOverlayComponent extends React.Component {
             role="dialog"
           >
             <button
-              className="heading-1 text-style usa-button usa-button--unstyled"
+              className="heading-2 usa-button usa-button--unstyled"
               onClick={() => closeFunc()}
               aria-roledescription="button to return to docket record"
             >
               <FontAwesomeIcon icon="caret-left" />
               Document Details
             </button>
-            <hr />
-            <h2 tabIndex="-1">{record.description}</h2>
+            <hr className="margin-top-1 margin-bottom-2" />
+            <h3 tabIndex="-1">{record.description}</h3>
             <a
               className="usa-button view-pdf-button tablet-full-width"
               href={`${baseUrl}/documents/${

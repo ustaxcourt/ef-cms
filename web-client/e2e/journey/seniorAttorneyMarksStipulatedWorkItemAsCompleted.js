@@ -1,5 +1,9 @@
 import { runCompute } from 'cerebral/test';
-import { extractedDocument } from '../../src/presenter/computeds/extractDocument';
+
+import { extractedDocument as extractedDocumentComputed } from '../../src/presenter/computeds/extractDocument';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 
 export default test => {
   return it('Senior Attorney marks the work item as completed', async () => {
