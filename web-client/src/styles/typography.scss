@@ -86,14 +86,16 @@ h6 {
   }
 }
 
-#main-content {
+#main-content, #modal-root {
   h1[tabIndex='-1'],
   h2[tabIndex='-1'],
   h3[tabIndex='-1'],
   h4[tabIndex='-1'],
   h5[tabIndex='-1'],
-  h6[tabIndex='-1']:focus {
-    outline: none;
+  h6[tabIndex='-1'] {
+    &:focus {
+      outline: none;
+    }
   }
 }
 
