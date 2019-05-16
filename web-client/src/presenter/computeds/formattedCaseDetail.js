@@ -5,7 +5,7 @@ export const formatDocument = (document, applicationContext) => {
   const result = _.cloneDeep(document);
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYYYY');
+    .formatDateString(result.createdAt, 'MMDDYY');
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
@@ -16,7 +16,7 @@ const formatDocketRecord = (docketRecord, applicationContext) => {
   const result = _.cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYYYY');
+    .formatDateString(result.filingDate, 'MMDDYY');
 
   return result;
 };
@@ -116,7 +116,7 @@ const formatDocketRecordWithDocument = (
       if (document.certificateOfServiceDate) {
         document.certificateOfServiceDateFormatted = applicationContext
           .getUtilities()
-          .formatDateString(document.certificateOfServiceDate, 'L');
+          .formatDateString(document.certificateOfServiceDate, 'MMDDYY');
       }
 
       //filings and proceedings string
@@ -194,16 +194,16 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
 
   result.createdAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYYYY');
+    .formatDateString(result.createdAt, 'MMDDYY');
   result.receivedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.receivedAt, 'MMDDYYYY');
+    .formatDateString(result.receivedAt, 'MMDDYY');
   result.irsDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
   result.payGovDateFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.payGovDate, 'MMDDYYYY');
+    .formatDateString(result.payGovDate, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
@@ -212,7 +212,7 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
   result.irsNoticeDateFormatted = result.irsNoticeDate
     ? applicationContext
         .getUtilities()
-        .formatDateString(result.irsNoticeDate, 'MMDDYYYY')
+        .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
