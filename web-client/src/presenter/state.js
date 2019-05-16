@@ -40,9 +40,7 @@ export const state = {
     isVisible: true,
   },
   caseCaption: '',
-  caseDetail: {
-    tab: '',
-  },
+  caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailErrors: {},
