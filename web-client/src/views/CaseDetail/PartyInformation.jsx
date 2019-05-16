@@ -119,11 +119,15 @@ export const PartyInformation = connect(
     };
     return (
       <div className="subsection party-information">
-        <div className="card">
+        <div className="card hide-on-mobile">
           <div className="content-wrapper">
             <h3 className="underlined">Party Information</h3>
             {mainPartyInformation()}
           </div>
+        </div>
+        <div className="show-on-mobile">
+          <h3>Party Information</h3>
+          {mainPartyInformation()}
         </div>
       </div>
     );
