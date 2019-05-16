@@ -13,12 +13,15 @@ export const HeaderDashboardInternal = connect(
       <div className="big-blue-header">
         <div className="grid-container">
           <h1 tabIndex="-1">{workQueueHelper.workQueueTitle}</h1>
-          <span className="unread" aria-label="unread work item count">
+          <span
+            className="unread margin-right-2"
+            aria-label="unread work item count"
+          >
             {workQueueHelper.inboxCount}
           </span>
           {workQueueHelper.showIndividualWorkQueue && (
             <button
-              className="button-switch-box"
+              className="button-switch-box usa-button usa-button--unstyled"
               onClick={() => {
                 chooseWorkQueueSequence({
                   box: workQueueHelper.currentBoxView,
@@ -32,7 +35,7 @@ export const HeaderDashboardInternal = connect(
           )}
           {workQueueHelper.showSectionWorkQueue && (
             <button
-              className="button-switch-box"
+              className="button-switch-box usa-button usa-button--unstyled"
               onClick={() => {
                 chooseWorkQueueSequence({
                   box: workQueueHelper.currentBoxView,
