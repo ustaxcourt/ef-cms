@@ -12,7 +12,7 @@ export const Buttons = () => (
     <button className="usa-button" disabled>
       Primary Disabled
     </button>
-    <button className="usa-button larger-icon">
+    <button className="usa-button">
       <FontAwesomeIcon icon="check-circle" size="sm" />
       Primary Icon
     </button>

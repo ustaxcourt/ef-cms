@@ -2,11 +2,8 @@
   min-width: 132px;
   margin: 0 20px 20px 0;
 
-  &.larger-icon .svg-inline--fa {
-    margin-top: -2px;
+  .svg-inline--fa {
     margin-right: 5px;
-    font-size: 20px;
-    vertical-align: middle;
   }
 
   &.float-right {
