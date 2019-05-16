@@ -914,3 +914,11 @@ nav.usa-nav {
     margin-bottom: 0px;
   }
 }
+
+.mobile-document-detail-tabs {
+  @media only screen and (max-width: $medium-screen) {
+    nav {
+      display: none;
+    }
+  }
+}
