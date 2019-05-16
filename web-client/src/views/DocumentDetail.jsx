@@ -38,6 +38,10 @@ export const DocumentDetail = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
+          <span className="filed-by">
+            Filed {helper.formattedDocument.createdAtFormatted} by{' '}
+            {helper.formattedDocument.filedBy}
+          </span>
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-container padding-x-0">
@@ -95,10 +99,6 @@ export const DocumentDetail = connect(
               <div className="grid-col-8">
                 <div className="top-bar clear-both">
                   <div className="full-width">
-                    <span className="filed-by">
-                      Filed {helper.formattedDocument.createdAtFormatted} by{' '}
-                      {helper.formattedDocument.filedBy}
-                    </span>
                     <span className="float-right">
                       {caseHelper.showServeToIrsButton &&
                         helper.formattedDocument.isPetition && (
