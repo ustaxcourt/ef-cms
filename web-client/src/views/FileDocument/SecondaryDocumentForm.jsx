@@ -1,6 +1,7 @@
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -32,21 +33,11 @@ export const SecondaryDocumentForm = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-7 push-right">
-                <div
-                  id="document-secondary-upload-hint"
-                  className="alert-gold add-bottom-margin"
-                >
-                  <span className="usa-form-hint ustc-form-hint-with-svg">
-                    <FontAwesomeIcon
-                      icon={['far', 'arrow-alt-circle-left']}
-                      className="fa-icon-gold"
-                      size="lg"
-                    />
-                    Remember to remove or redact all personal information (such
-                    as Social Security Numbers, Taxpayer Identification Numbers,
-                    or Employer Identification Numbers) from your documents.
-                  </span>
-                </div>
+                <Hint>
+                  Remember to remove or redact all personal information (such as
+                  Social Security Numbers, Taxpayer Identification Numbers, or
+                  Employer Identification Numbers) from your documents.
+                </Hint>
               </div>
 
               <div className="tablet:grid-col-5">

@@ -1,7 +1,7 @@
 import { queryStringDecoder } from './queryStringDecoder';
 
 import {
-  faArrowAltCircleLeft,
+  faArrowAltCircleLeft as faArrowAltCircleLeftRegular,
   faCheckCircle as faCheckCircleRegular,
   faClock,
   faClone,
@@ -13,6 +13,7 @@ import {
   faUser,
 } from '@fortawesome/free-regular-svg-icons';
 import {
+  faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -93,7 +94,8 @@ const app = {
     presenter.state.constants = applicationContext.getConstants();
 
     library.add(
-      faArrowAltCircleLeft,
+      faArrowAltCircleLeftSolid,
+      faArrowAltCircleLeftRegular,
       faCaretDown,
       faCaretLeft,
       faCaretUp,
