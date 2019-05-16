@@ -39,7 +39,7 @@ export const PartyInformation = connect(
                     Secondary Contact
                   </p>
                   <div>
-                    <address araria-labelledby={`secondary-label${instance}`}>
+                    <address aria-labelledby={`secondary-label${instance}`}>
                       {caseDetail.contactSecondary.name &&
                         addressDisplay(caseDetail.contactSecondary)}
                     </address>
