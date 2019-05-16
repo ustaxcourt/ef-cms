@@ -12,6 +12,15 @@
   &.float-right {
     text-align: right;
   }
+
+  &.mobile-sort-docket-button {
+    color: color($theme-color-base-darkest);
+    text-decoration: none;
+    svg {
+      margin-left: 5px;
+      color: color($theme-color-primary);
+    }
+  }
 }
 
 button.tab-link {
