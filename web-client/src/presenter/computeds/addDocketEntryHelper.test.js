@@ -93,7 +93,7 @@ describe('addDocketEntryHelper', () => {
   it('generates correctly formatted service date', async () => {
     state.form.certificateOfServiceDate = '2012-05-31';
     const result = await runCompute(addDocketEntryHelper, { state });
-    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/2012');
+    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
   it('does not generate a formatted service date if a service date is not entered on the form', async () => {
