@@ -78,7 +78,6 @@ export const CaseDetailInternal = connect(
                           })}
                           className="case-link"
                         >
-                          <FontAwesomeIcon icon={['far', 'file-pdf']} />
                           {workItem.document.documentType}
                         </a>
                       </p>
