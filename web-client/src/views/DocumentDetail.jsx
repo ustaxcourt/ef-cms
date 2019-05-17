@@ -47,7 +47,7 @@ export const DocumentDetail = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <Tabs className="no-full-border-bottom" bind="currentTab">
+                <Tabs className="no-full-border-bottom tab-button-h2" bind="currentTab">
                   {helper.showDocumentInfoTab && (
                     <Tab
                       tabName="Document Info"
@@ -114,10 +114,15 @@ export const DocumentDetail = connect(
                       {caseHelper.showRecallButton &&
                         helper.formattedDocument.isPetition && (
                           <span className="recall-button-box">
-                            <FontAwesomeIcon icon={['far', 'clock']} />
-                            Batched for IRS
+                            <FontAwesomeIcon
+                              icon={['far', 'clock']}
+                              size="lg"
+                            />
+                            <span className="batched-message">
+                              Batched for IRS
+                            </span>
                             <button
-                              className="recall-petition"
+                              className="usa-button recall-petition"
                               onClick={() =>
                                 setModalDialogNameSequence({
                                   showModal: 'RecallPetitionModalDialog',
