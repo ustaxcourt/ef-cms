@@ -3,7 +3,16 @@ table,
   width: 100%;
   margin: 0 0 2em 0;
 
+  tr:hover {
+    background: $color-primary-alt-lightest;
+    box-shadow: 5px 0 0 0 color($theme-color-primary) inset;
+    transition-duration: 0.2s;
+    transition-property: all;
+  }
+
   td {
+    padding: 15px 20px;
+    background-color: transparent;
     vertical-align: top;
   }
 
@@ -13,7 +22,7 @@ table,
 }
 
 table.small-case-qualifications-table {
-  margin-bottom: 2rem;
+  margin-bottom: 2em;
 
   th,
   td {
@@ -58,17 +67,12 @@ table.dashboard {
   @media only screen and (max-width: $medium-screen - 1px) {
     margin-bottom: 20px;
     td {
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.5em;
     }
   }
 }
 
 .usa-table td {
-  &.padding-extra {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
   .message-detail {
     font-size: 15px;
   }
@@ -146,9 +150,6 @@ table.work-queue {
 
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
-    &:hover td {
-      background: $color-primary-alt-lightest;
-    }
   }
 
   tbody:not(.action-bar) {
@@ -227,7 +228,7 @@ table.work-queue {
     select {
       display: inline-block;
       width: auto;
-      margin: 0 1rem;
+      margin: 0 1em;
     }
 
     button {
@@ -344,7 +345,7 @@ table.case-list tbody tr:nth-child(even) td {
 .responsive-table {
   /* stylelint-disable */
   label {
-    margin: 1rem 0 !important;
+    margin: 1em 0 !important;
   }
   /* stylelint-enable */
 
@@ -394,7 +395,7 @@ table.case-list tbody tr:nth-child(even) td {
 
     .responsive-label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.5em;
       font-weight: $font-bold;
     }
   }
