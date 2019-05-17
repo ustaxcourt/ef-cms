@@ -12,8 +12,8 @@ export const Buttons = () => (
     <button className="usa-button" disabled>
       Primary Disabled
     </button>
-    <button className="usa-button larger-icon">
-      <FontAwesomeIcon icon="check-circle" size="sm" />
+    <button className="usa-button">
+      <FontAwesomeIcon icon="check-circle" size="1x" />
       Primary Icon
     </button>
     <button className="usa-button usa-button--outline">

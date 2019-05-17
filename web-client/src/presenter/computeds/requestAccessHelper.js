@@ -1,7 +1,6 @@
 import { state } from 'cerebral';
-import moment from 'moment';
 
-export const requestAccessHelper = get => {
+export const requestAccessHelper = (get, applicationContext) => {
   const { PARTY_TYPES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
@@ -13,9 +12,9 @@ export const requestAccessHelper = get => {
   const certificateOfServiceDate = form.certificateOfServiceDate;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
-    certificateOfServiceDateFormatted = moment
-      .utc(certificateOfServiceDate)
-      .format('L');
+    certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
   const partyValidationError =

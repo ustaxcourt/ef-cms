@@ -219,7 +219,7 @@ describe('formattedCaseDetail', () => {
         constants,
       },
     });
-    expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
+    expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/19');
   });
 
   it('maps docket record documents', async () => {
@@ -399,7 +399,7 @@ describe('formattedCaseDetail', () => {
     ).toEqual('(Exhibit(s))');
     expect(
       result.docketRecordWithDocument[2].record.filingsAndProceedings,
-    ).toEqual('(C/S 06/07/2018) (Exhibit(s)) (Attachment(s)) (Objection)');
+    ).toEqual('(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)');
     expect(
       result.docketRecordWithDocument[3].record.filingsAndProceedings,
     ).toEqual('(Lodged)');

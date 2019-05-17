@@ -460,6 +460,10 @@ select.ustc-input-error {
   }
 }
 
+.usa-form-group--error {
+  margin-top: 0px;
+}
+
 textarea#case-caption {
   height: 6em;
   margin-bottom: 0;
@@ -583,7 +587,7 @@ header.usa-header {
       &.active,
       &:hover {
         padding-bottom: 5px;
-        border-bottom: 2px solid color($theme-color-primary);
+        border-bottom: 3px solid color($theme-color-primary);
       }
     }
 
@@ -678,6 +682,7 @@ nav.usa-nav {
   .user-icon {
     width: 25px;
     height: 25px;
+    margin-right: 5px;
   }
 
   &.mobile-menu {
