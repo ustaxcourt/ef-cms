@@ -1,8 +1,10 @@
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
+import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
 
 const state = {
   caseDetail: MOCK_CASE,
@@ -14,7 +16,9 @@ const state = {
   validationErrors: {},
 };
 
-import { requestAccessHelper } from './requestAccessHelper';
+const requestAccessHelper = withAppContextDecorator(
+  requestAccessHelperComputed,
+);
 
 describe('requestAccessHelper', () => {
   beforeEach(() => {
@@ -47,7 +51,7 @@ describe('requestAccessHelper', () => {
   it('generates correctly formatted service date', async () => {
     state.form.certificateOfServiceDate = '2012-05-31';
     const result = await runCompute(requestAccessHelper, { state });
-    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/2012');
+    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
   it('does not generate a formatted service date if a service date is not entered on the form', async () => {
