@@ -7,10 +7,10 @@ legend {
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
-  .usa-form-hint {
+  .usa-hint {
     margin: 0;
   }
-  p.usa-form-hint {
+  p.usa-hint {
     display: block;
   }
   &.with-hint {
@@ -186,7 +186,7 @@ label.validated::after {
   .email-input {
     margin-bottom: 25px;
   }
-  .usa-form-hint {
+  .usa-hint {
     margin-bottom: 0;
   }
   .ustc-form-group-city input,
