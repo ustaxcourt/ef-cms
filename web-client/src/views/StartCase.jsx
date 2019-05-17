@@ -107,7 +107,7 @@ export const StartCase = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>
                   </label>
-                  <span className="usa-form-hint">
+                  <span className="usa-hint">
                     File must be in PDF format (.pdf). Max file size{' '}
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
@@ -164,7 +164,7 @@ export const StartCase = connect(
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
-              <span className="usa-form-hint">
+              <span className="usa-hint">
                 File must be in PDF format (.pdf). Max file size{' '}
                 {constants.MAX_FILE_SIZE_MB}MB.
               </span>
@@ -536,7 +536,7 @@ export const StartCase = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <span className="usa-form-hint">
+                <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>

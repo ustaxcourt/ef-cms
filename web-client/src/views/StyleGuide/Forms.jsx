@@ -19,13 +19,13 @@ export const Forms = () => (
           <label className="usa-label with-hint" htmlFor="input-text-hint">
             Text input with hint text
           </label>
-          <span className="usa-form-hint">This is your hint!</span>
+          <span className="usa-hint">This is your hint!</span>
           <input id="input-text-hint" className="usa-input" type="text" />
         </div>
 
         <div className="usa-form-group">
           <label htmlFor="input-text-optional" className="usa-label">
-            Text input <span className="usa-form-hint">(optional)</span>
+            Text input <span className="usa-hint">(optional)</span>
           </label>
           <input id="input-text-optional" className="usa-input" type="text" />
         </div>
@@ -376,7 +376,7 @@ export const Forms = () => (
           />
 
           <label className="usa-label" htmlFor="mailing-address-2">
-            Street address 2 <span className="usa-form-hint">(optional)</span>
+            Street address 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"

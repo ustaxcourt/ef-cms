@@ -65,7 +65,7 @@ export const StartCaseInternal = connect(
                   className="usa-legend"
                 >
                   Date Received{' '}
-                  <span className="usa-form-hint">(required)</span>
+                  <span className="usa-hint">(required)</span>
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month">
@@ -167,7 +167,7 @@ export const StartCaseInternal = connect(
               }
             >
               <label htmlFor="case-caption" className="usa-label">
-                Case Caption <span className="usa-form-hint">(required)</span>
+                Case Caption <span className="usa-hint">(required)</span>
               </label>
               <textarea
                 id="case-caption"
@@ -203,7 +203,7 @@ export const StartCaseInternal = connect(
                 }
               >
                 Upload the Petition{' '}
-                <span className="usa-form-hint">(required)</span>
+                <span className="usa-hint">(required)</span>
                 <span className="success-message">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
