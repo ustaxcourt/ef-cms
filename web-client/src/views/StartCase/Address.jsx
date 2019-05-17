@@ -95,7 +95,7 @@ export const Address = connect(
         />
         <div
           className={
-            'usa-form-group' + validationErrors &&
+            'usa-form-group ' + validationErrors &&
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-form-group--error'
@@ -220,6 +220,16 @@ export const Address = connect(
               bind={`validationErrors.${type}.state`}
             />
           </div>
+        </div>
+        <div
+          className={
+            'usa-form-group ' + validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].postalCode
+              ? 'usa-form-group--error'
+              : ''
+          }
+        >
           <label
             htmlFor={`${type}.postalCode`}
             className="usa-label"

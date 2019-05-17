@@ -96,8 +96,7 @@ export const InternationalAddress = connect(
           }}
         />
         <label htmlFor={`${type}.state`} className="usa-label">
-          State/Province/Region{' '}
-          <span className="usa-hint">(optional)</span>
+          State/Province/Region <span className="usa-hint">(optional)</span>
         </label>
         <input
           id={`${type}.state`}

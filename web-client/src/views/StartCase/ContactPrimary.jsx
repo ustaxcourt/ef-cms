@@ -181,7 +181,9 @@ export const ContactPrimary = connect(
                 : '')
             }
           >
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone" className="usa-label">
+              Phone Number
+            </label>
             <input
               id="phone"
               type="tel"
