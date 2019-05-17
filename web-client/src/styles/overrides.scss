@@ -20,22 +20,14 @@
       max-height: 100%;
     }
 
-    @media only screen and (max-width: 950px) {
-      width: 35px;
+    @media only screen and (max-width: units('desktop')) {
+      width: 46px;
       margin: 0;
     }
   }
 
   .usa-nav {
     border: none;
-  }
-}
-
-.usa-form-group {
-  margin-bottom: 25px;
-
-  label:not(.usa-checkbox__label, .usa-radio__label) {
-    margin: 0 0 5px;
   }
 }
 
@@ -52,10 +44,10 @@ option:first-child {
   font-weight: initial;
 }
 
-.usa-form-hint {
+.usa-hint {
   display: inline-block;
   margin-bottom: 15px;
-  color: color($theme-color-base-darkest);
+  color: color($theme-color-base-dark);
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {

@@ -2,7 +2,8 @@
   ul {
     padding-left: 0px;
     border-bottom: 1px solid color($theme-color-base-lighter);
-    margin-bottom: 40px;
+    margin-top: 0;
+    margin-bottom: 20px;
     list-style-type: none;
 
     li {
@@ -55,8 +56,6 @@
 
   &.container-tabs {
     nav {
-      // border-bottom: 2px solid color($theme-color-base-lighter);
-
       ul {
         margin: 0px;
 
@@ -86,7 +85,8 @@
               color: color($theme-color-primary-darker);
 
               span {
-                border-bottom: 3px solid color($theme-color-primary-darker);
+                padding-bottom: 0;
+                border-bottom: 1px solid color($theme-color-primary-darker);
               }
             }
 
@@ -101,10 +101,14 @@
 
             button {
               border-bottom: none;
-              background-color: $color-primary-alt-lightest;
+              color: inherit;
+              cursor: default;
 
               &:hover {
-                color: color($theme-color-primary-darker);
+                span {
+                  padding-bottom: 5px;
+                  border-bottom: 3px solid color($theme-color-primary);
+                }
               }
 
               span {
@@ -114,6 +118,18 @@
           }
         }
       }
+    }
+  }
+
+  &.tab-button-h2 {
+    nav ul li button {
+      font-size: 24px;
+    }
+  }
+
+  &.tab-button-h3 {
+    nav ul li button {
+      font-size: 17px;
     }
   }
 }

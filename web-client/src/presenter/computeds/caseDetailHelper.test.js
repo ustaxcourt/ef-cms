@@ -132,36 +132,4 @@ describe('case detail computed', () => {
     });
     expect(result.userHasAccessToCase).toEqual(false);
   });
-
-  it('should show the action required tab for a petitioner and no payment', () => {
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        caseDetail: { practitioners: [{ userId: '234' }] },
-        currentPage: 'CaseDetail',
-        form: {},
-        user: {
-          role: 'petitioner',
-          userId: '123',
-        },
-      },
-    });
-
-    expect(result.documentDetailTab).toEqual('actionRequired');
-  });
-
-  it('should not show the action required tab for a non-petitioner', () => {
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        caseDetail: { practitioners: [{ userId: '234' }] },
-        currentPage: 'CaseDetail',
-        form: {},
-        user: {
-          role: 'docketclerk',
-          userId: '123',
-        },
-      },
-    });
-
-    expect(result.documentDetailTab).toEqual('docketRecord');
-  });
 });

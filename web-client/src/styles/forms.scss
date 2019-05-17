@@ -1,3 +1,7 @@
+.usa-form-group {
+  margin-bottom: 20px;
+}
+
 .usa-label,
 .usa-legend,
 label,
@@ -7,10 +11,10 @@ legend {
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
-  .usa-form-hint {
+  .usa-hint {
     margin: 0;
   }
-  p.usa-form-hint {
+  p.usa-hint {
     display: block;
   }
   &.with-hint {
@@ -24,11 +28,50 @@ input[type='tel'],
 input[type='text'],
 textarea,
 select {
-  margin: 0 0 20px 0;
+  margin: 0 0 15px 0;
 
   &:hover {
-    border: 1px solid color($theme-color-primary);
+    border: 2px solid color($theme-color-primary);
   }
+}
+
+.usa-error-message {
+  padding: 0;
+}
+
+.usa-select {
+  margin: 0 0 20px;
+}
+
+.usa-checkbox__label,
+.usa-radio__label {
+  &::before {
+    box-shadow: 0 0 0 1px color($theme-color-base);
+  }
+
+  &:hover::before {
+    box-shadow: 0 0 0 1px color($theme-color-primary);
+  }
+}
+
+.usa-checkbox__label {
+  margin-bottom: 20px;
+}
+.usa-radio__label {
+  margin-bottom: 15px;
+}
+
+.usa-checkbox__input:disabled + .usa-checkbox__label {
+  &::before {
+    box-shadow: 0 0 0 1px color($theme-color-base-lighter);
+  }
+}
+
+.usa-input,
+.usa-textarea,
+.usa-select,
+.usa-range {
+  border: 1px solid color($theme-color-base);
 }
 
 input[type='file'] {
@@ -186,7 +229,7 @@ label.validated::after {
   .email-input {
     margin-bottom: 25px;
   }
-  .usa-form-hint {
+  .usa-hint {
     margin-bottom: 0;
   }
   .ustc-form-group-city input,
