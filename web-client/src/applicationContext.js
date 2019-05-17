@@ -16,6 +16,7 @@ import uuidv4 from 'uuid/v4';
 import {
   createISODateString,
   formatDateString,
+  prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 
 import {
@@ -267,6 +268,7 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
+      prepareDateFromString,
     };
   },
   setCurrentUser,
