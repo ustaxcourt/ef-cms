@@ -120,13 +120,8 @@ export function TabsComponent({
   return (
     <div {...baseProps}>
       {hasNav && (
-        <nav
-          className={classNames(
-            boxed && 'grid-container',
-            boxed && 'padding-x-0',
-          )}
-        >
-          <ul role="tablist" className={classNames(boxed && 'grid-row')}>
+        <nav className={classNames({ 'grid-container padding-x-0': boxed })}>
+          <ul role="tablist" className={classNames({ 'grid-row': boxed })}>
             {map(children, renderTab)}
           </ul>
         </nav>
