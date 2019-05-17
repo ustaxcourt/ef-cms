@@ -56,6 +56,10 @@ select {
 
 .usa-checkbox__label {
   margin-bottom: 20px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 }
 .usa-radio__label {
   margin-bottom: 15px;
