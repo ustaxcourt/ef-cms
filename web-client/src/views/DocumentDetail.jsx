@@ -76,6 +76,7 @@ export const DocumentDetail = connect(
                         className="container-tabs no-full-border-bottom"
                         id="case-detail-messages-tabs"
                         bind="documentDetail.messagesTab"
+                        boxed
                       >
                         <Tab
                           tabName="inProgress"
