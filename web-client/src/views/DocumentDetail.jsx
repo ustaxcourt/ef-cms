@@ -76,7 +76,7 @@ export const DocumentDetail = connect(
                       aria-labelledby="tab-pending-messages"
                     >
                       <Tabs
-                        className="container-tabs no-full-border-bottom"
+                        className="container-tabs no-full-border-bottom tab-button-h3"
                         id="case-detail-messages-tabs"
                         bind="documentDetail.messagesTab"
                         boxed

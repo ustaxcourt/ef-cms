@@ -56,7 +56,7 @@ export const InternationalAddress = connect(
           />
         </div>
         <label htmlFor={`${type}.address2`} className="usa-label">
-          Address Line 2 <span className="usa-form-hint">(optional)</span>
+          Address Line 2 <span className="usa-hint">(optional)</span>
         </label>
         <input
           id={`${type}.address2`}
@@ -76,7 +76,7 @@ export const InternationalAddress = connect(
           }}
         />
         <label htmlFor={`${type}.address3`} className="usa-label">
-          Address Line 3 <span className="usa-form-hint">(optional)</span>
+          Address Line 3 <span className="usa-hint">(optional)</span>
         </label>
         <input
           id={`${type}.address3`}
@@ -97,7 +97,7 @@ export const InternationalAddress = connect(
         />
         <label htmlFor={`${type}.state`} className="usa-label">
           State/Province/Region{' '}
-          <span className="usa-form-hint">(optional)</span>
+          <span className="usa-hint">(optional)</span>
         </label>
         <input
           id={`${type}.state`}

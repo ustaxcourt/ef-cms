@@ -315,10 +315,6 @@ select[disabled] {
   }
 }
 
-.usa-hint {
-  color: color($theme-color-base);
-}
-
 .alert-gold {
   max-width: 700px;
   padding: 10px;
@@ -326,7 +322,7 @@ select[disabled] {
   background: color($theme-color-warning-lighter);
   color: color($theme-color-base-darkest);
 
-  .usa-form-hint {
+  .usa-hint {
     margin: 0;
   }
 
@@ -452,7 +448,7 @@ select.ustc-input-error {
 #tabContent-completed,
 #tabContent-inProgress {
   max-height: 931px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .ustc-create-message-modal,
@@ -923,7 +919,7 @@ nav.usa-nav {
 }
 
 .document-detail__action-buttons {
-  margin-bottom: 7px;
+  margin-bottom: -4px;
 }
 
 .DocumentDetail {

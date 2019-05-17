@@ -36,7 +36,7 @@ export const CaseDetailEdit = connect(
         }}
       >
         <Tabs
-          className="container-tabs"
+          className="container-tabs tab-button-h3"
           id="case-detail-tabs"
           bind="documentDetail.tab"
           boxed

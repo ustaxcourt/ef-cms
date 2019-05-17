@@ -58,6 +58,16 @@ jobs:
           name: UI - SonarQube
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
 
+  e2e:
+    machine:
+      docker_layer_caching: true
+
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: docker build -t efcms -f Dockerfile .
+
       - run: 
           name: Pa11y
           command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev &) && ../wait-until.sh http://localhost:1234 && npm run test:pa11y'
@@ -121,9 +131,11 @@ workflows:
   build-and-deploy:
     jobs:
       - build
+      - e2e
       - deploy:
           requires:
             - build
+            - e2e
           filters:
             branches:
               only: 
