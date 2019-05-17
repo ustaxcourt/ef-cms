@@ -34,7 +34,7 @@ export const CaseDetailInternal = connect(
           <ErrorNotification />
           <div>
             <div className="title">
-              <h1>Messages In Progress</h1>
+              <h1>Messages in Progress</h1>
             </div>
             <MessagesInProgress />
           </div>
