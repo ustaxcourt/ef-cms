@@ -9,6 +9,18 @@ const dateFormats = {
 const USTC_TZ = 'America/New_York';
 
 /**
+ *
+ * @param {string} dateString a string representing a date
+ * @param {string} inputFormat optional parameter containing hints on how to parse dateString
+ * @returns {moment} a moment-timezone object
+ */
+const prepareDateFromString = (dateString, inputFormat) => {
+  return moment.tz(dateString, inputFormat, USTC_TZ);
+};
+
+module.exports.prepareDateFromString = prepareDateFromString;
+
+/**
  * @param {string} dateString a date string to be sent to persistence
  * @param {string} inputFormat
  * @returns {string} a formatted ISO date string
@@ -18,7 +30,7 @@ module.exports.createISODateString = (dateString, inputFormat) => {
   if (!dateString) {
     result = moment();
   } else {
-    result = moment.tz(dateString, inputFormat, USTC_TZ);
+    result = prepareDateFromString(dateString, inputFormat, USTC_TZ);
   }
 
   return result.toISOString();
@@ -31,5 +43,5 @@ module.exports.createISODateString = (dateString, inputFormat) => {
  */
 module.exports.formatDateString = (dateString, formatStr) => {
   formatStr = dateFormats[formatStr] || formatStr;
-  return moment.tz(dateString, USTC_TZ).format(formatStr);
+  return prepareDateFromString(dateString).format(formatStr);
 };
