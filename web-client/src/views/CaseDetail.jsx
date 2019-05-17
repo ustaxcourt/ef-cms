@@ -54,9 +54,7 @@ export const CaseDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div className="subsection">
-            <div className="title">
-              <h1>Action Required</h1>
-            </div>
+            <h1>Action Required</h1>
             <ActionRequired />
           </div>
           <div className="only-small-screens">
