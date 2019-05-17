@@ -48,7 +48,7 @@ export const PartyInformation = connect(
                 autoSaveCaseSequence();
               }}
             />
-            {constants.CASE_CAPTION_POSTFIX}
+          <span className="display-inline-block margin-top-1">{constants.CASE_CAPTION_POSTFIX}</span>
           </div>
         </div>
         <div className="subsection">
