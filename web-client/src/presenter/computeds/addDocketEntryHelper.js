@@ -1,6 +1,5 @@
 import { find, includes, orderBy } from 'lodash';
 import { state } from 'cerebral';
-import moment from 'moment';
 
 import {
   getOptionsForCategory,
@@ -19,7 +18,7 @@ const getInternalDocumentTypes = typeMap => {
   return orderBy(filteredTypeList, ['label'], ['asc']);
 };
 
-export const addDocketEntryHelper = get => {
+export const addDocketEntryHelper = (get, applicationContext) => {
   const { PARTY_TYPES, INTERNAL_CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
@@ -61,9 +60,9 @@ export const addDocketEntryHelper = get => {
   const certificateOfServiceDate = form.certificateOfServiceDate;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
-    certificateOfServiceDateFormatted = moment
-      .utc(certificateOfServiceDate)
-      .format('L');
+    certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
   const previouslyFiledWizardDocuments = getPreviouslyFiledDocuments(
