@@ -48,7 +48,9 @@ export const PartyInformation = connect(
                 autoSaveCaseSequence();
               }}
             />
-          <span className="display-inline-block margin-top-1">{constants.CASE_CAPTION_POSTFIX}</span>
+            <span className="display-inline-block margin-top-1">
+              {constants.CASE_CAPTION_POSTFIX}
+            </span>
           </div>
         </div>
         <div className="subsection">
@@ -123,18 +125,21 @@ export const PartyInformation = connect(
             </div>
           </div>
         )}
-        <div className="subsection">
-          <Contacts
-            parentView="CaseDetail"
-            bind="caseDetail"
-            emailBind="caseDetail.contactPrimary"
-            onChange="updateCaseValueSequence"
-            onBlur="autoSaveCaseSequence"
-            contactsHelper="caseDetailEditContactsHelper"
-            showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
-            showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
-          />
-        </div>
+        {(caseDetailEditHelper.showPrimaryContact ||
+          caseDetailEditHelper.showSecondaryContact) && (
+          <div className="subsection">
+            <Contacts
+              parentView="CaseDetail"
+              bind="caseDetail"
+              emailBind="caseDetail.contactPrimary"
+              onChange="updateCaseValueSequence"
+              onBlur="autoSaveCaseSequence"
+              contactsHelper="caseDetailEditContactsHelper"
+              showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
+              showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
+            />
+          </div>
+        )}
       </div>
     );
   },
