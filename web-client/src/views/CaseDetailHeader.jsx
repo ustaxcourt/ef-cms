@@ -15,7 +15,7 @@ export const CaseDetailHeader = connect(
     return (
       <div className="big-blue-header">
         <div className="grid-container">
-          <div className="margin-bottom-2">
+          <div className="margin-bottom-1">
             <h1 className="heading-2 captioned" tabIndex="-1">
               <a href={'/case-detail/' + caseDetail.docketNumber}>
                 Docket Number: {caseDetail.docketNumberWithSuffix}
