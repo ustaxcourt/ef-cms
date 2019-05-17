@@ -1,9 +1,8 @@
 const moment = require('moment-timezone');
 
 const dateFormats = {
-  DATE_TIME: 'MM/DD/YYYY hh:mm a',
+  DATE_TIME: 'MM/DD/YY hh:mm a',
   MMDDYY: 'MM/DD/YY',
-  MMDDYYYY: 'L',
   TIME: 'LT',
 };
 
@@ -11,6 +10,7 @@ const USTC_TZ = 'America/New_York';
 
 /**
  * @param {string} dateString a date string to be sent to persistence
+ * @param {string} inputFormat
  * @returns {string} a formatted ISO date string
  */
 module.exports.createISODateString = (dateString, inputFormat) => {
