@@ -8,7 +8,12 @@
   }
 
   p {
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+
+    &.label {
+      margin-bottom: 5px;
+    }
   }
 
   .content-wrapper {
