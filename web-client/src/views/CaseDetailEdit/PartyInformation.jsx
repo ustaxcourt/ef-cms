@@ -51,7 +51,7 @@ export const PartyInformation = connect(
           <span className="display-inline-block margin-top-1">{constants.CASE_CAPTION_POSTFIX}</span>
           </div>
         </div>
-        <div className="subsection">
+        <div className="subsection party-type">
           <div className="usa-form-group">
             <label htmlFor="party-type" className="usa-label">
               Party Type
@@ -123,7 +123,7 @@ export const PartyInformation = connect(
             </div>
           </div>
         )}
-        <div className="subsection">
+        <div className="subsection contacts">
           <Contacts
             parentView="CaseDetail"
             bind="caseDetail"
