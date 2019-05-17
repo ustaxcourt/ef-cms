@@ -35,66 +35,56 @@ export const IRSNotice = connect(
     const renderIrsNoticeRadios = () => {
       return (
         <div className="subsection">
-          <div className="usa-form-group">
-            <fieldset
-              id="irs-verified-notice-radios"
-              className="usa-fieldset usa-sans"
-            >
-              <legend
-                htmlFor="irs-verified-notice-radios"
-                className="usa-legend"
+          <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
+            <legend htmlFor="irs-verified-notice-radios">
+              Notice Attached to Petition?
+            </legend>
+            <div className="usa-radio usa-radio__inline">
+              <input
+                className="usa-radio__input"
+                id="hasVerifiedIrsNotice-yes"
+                type="radio"
+                name="hasVerifiedIrsNotice"
+                checked={caseDetail.hasVerifiedIrsNotice === true}
+                value="Yes"
+                onChange={e => {
+                  updateCaseValueSequence({
+                    key: e.target.name,
+                    value: true,
+                  });
+                  autoSaveCaseSequence();
+                }}
+              />
+              <label
+                id="has-irs-verified-notice-yes"
+                htmlFor="hasVerifiedIrsNotice-yes"
+                className="usa-radio__label"
               >
-                Notice Attached to Petition?
-              </legend>
-              <ul className="usa-list usa-unstyled-list">
-                <li>
-                  <input
-                    className="usa-radio__input"
-                    id="hasVerifiedIrsNotice-yes"
-                    type="radio"
-                    name="hasVerifiedIrsNotice"
-                    checked={caseDetail.hasVerifiedIrsNotice === true}
-                    value="Yes"
-                    onChange={e => {
-                      updateCaseValueSequence({
-                        key: e.target.name,
-                        value: true,
-                      });
-                      autoSaveCaseSequence();
-                    }}
-                  />
-                  <label
-                    id="has-irs-verified-notice-yes"
-                    htmlFor="hasVerifiedIrsNotice-yes"
-                    className="usa-radio__label"
-                  >
-                    Yes
-                  </label>
-                </li>
-                <li>
-                  <input
-                    className="usa-radio__input"
-                    id="hasVerifiedIrsNotice-no"
-                    type="radio"
-                    name="hasVerifiedIrsNotice"
-                    checked={caseDetail.hasVerifiedIrsNotice === false}
-                    value="No"
-                    onChange={() => {
-                      setIrsNoticeFalseSequence();
-                      autoSaveCaseSequence();
-                    }}
-                  />
-                  <label
-                    id="has-irs-verified-notice-no"
-                    htmlFor="hasVerifiedIrsNotice-no"
-                    className="usa-radio__label"
-                  >
-                    No
-                  </label>
-                </li>
-              </ul>
-            </fieldset>
-          </div>
+                Yes
+              </label>
+            </div>
+            <div className="usa-radio usa-radio__inline">
+              <input
+                className="usa-radio__input"
+                id="hasVerifiedIrsNotice-no"
+                type="radio"
+                name="hasVerifiedIrsNotice"
+                checked={caseDetail.hasVerifiedIrsNotice === false}
+                value="No"
+                onChange={() => {
+                  setIrsNoticeFalseSequence();
+                  autoSaveCaseSequence();
+                }}
+              />
+              <label
+                id="has-irs-verified-notice-no"
+                htmlFor="hasVerifiedIrsNotice-no"
+                className="usa-radio__label"
+              >
+                No
+              </label>
+            </div>
+          </fieldset>
         </div>
       );
     };
@@ -108,10 +98,8 @@ export const IRSNotice = connect(
               (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
             }
           >
-            <fieldset className="usa-fieldset usa-sans">
-              <legend id="date-of-notice-legend" className="usa-legend">
-                Date of Notice
-              </legend>
+            <fieldset className="usa-fieldset">
+              <legend id="date-of-notice-legend">Date of Notice</legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
                   <label
@@ -220,7 +208,7 @@ export const IRSNotice = connect(
         </div>
       );
     };
-    // TODO keep going below...
+
     const renderYearAmounts = () => {
       return (
         <React.Fragment>
