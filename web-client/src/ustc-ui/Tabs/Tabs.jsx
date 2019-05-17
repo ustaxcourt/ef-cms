@@ -20,6 +20,7 @@ export function TabsComponent({
   children,
   defaultActiveTab,
   className,
+  boxed,
 }) {
   let activeKey, setTab;
 
@@ -43,6 +44,7 @@ export function TabsComponent({
 
     var liClass = classNames({
       active: isActiveTab,
+      'grid-col': boxed,
     });
 
     if (!title) {
@@ -118,8 +120,15 @@ export function TabsComponent({
   return (
     <div {...baseProps}>
       {hasNav && (
-        <nav>
-          <ul role="tablist">{map(children, renderTab)}</ul>
+        <nav
+          className={classNames(
+            boxed && 'grid-container',
+            boxed && 'padding-x-0',
+          )}
+        >
+          <ul role="tablist" className={classNames(boxed && 'grid-row')}>
+            {map(children, renderTab)}
+          </ul>
         </nav>
       )}
       {map(children, renderNonTab)}
@@ -131,6 +140,7 @@ export function TabsComponent({
 TabsComponent.propTypes = {
   asSwitch: PropTypes.bool,
   bind: PropTypes.string,
+  boxed: PropTypes.bool,
   children: PropTypes.node,
   className: PropTypes.string,
   defaultActiveTab: PropTypes.string,

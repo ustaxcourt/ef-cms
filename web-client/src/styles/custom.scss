@@ -460,6 +460,10 @@ select.ustc-input-error {
   }
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 .usa-form-group--error {
   margin-top: 0px;
 }
@@ -904,5 +908,11 @@ nav.usa-nav {
     nav {
       display: none;
     }
+  }
+}
+
+.DocumentDetail {
+  .heading-1 {
+    margin-bottom: 15px;
   }
 }

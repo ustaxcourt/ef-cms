@@ -30,7 +30,7 @@ export const DocketRecord = connect(
         <DocketRecordHeader />
 
         <table
-          className="usa-table docket-record responsive-table row-border-only"
+          className="usa-table case-detail docket-record responsive-table row-border-only"
           aria-label="docket record"
         >
           <thead>
@@ -53,7 +53,9 @@ export const DocketRecord = connect(
               ({ record, document, index }, arrayIndex) => (
                 <tr key={index}>
                   <td className="center-column hide-on-mobile">{index}</td>
-                  <td>{record.createdAtFormatted}</td>
+                  <td>
+                    <span className="no-wrap">{record.createdAtFormatted}</span>
+                  </td>
                   <td className="center-column hide-on-mobile">
                     {document && document.eventCode}
                   </td>

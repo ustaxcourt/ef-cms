@@ -2,6 +2,7 @@
   ul {
     padding-left: 0px;
     border-bottom: 1px solid color($theme-color-base-lighter);
+    margin-bottom: 40px;
     list-style-type: none;
 
     li {
@@ -54,26 +55,29 @@
 
   &.container-tabs {
     nav {
-      border-bottom: 2px solid color($theme-color-base-lighter);
+      // border-bottom: 2px solid color($theme-color-base-lighter);
 
       ul {
         margin: 0px;
 
         li {
           border-right: 1px solid color($theme-color-base-lighter);
+          border-bottom: 1px solid color($theme-color-base-lighter);
           margin-right: 0px;
+          text-align: center;
 
           button {
+            display: inline-block;
             padding-top: 10px;
             padding-right: 30px;
             padding-bottom: 15px;
             padding-left: 30px;
-            border-bottom: 2px solid color($theme-color-base-lighter);
             margin-right: 0px;
             font-size: 17px;
+            text-align: center;
 
             &:hover {
-              border-bottom: 2px solid color($theme-color-base-lighter);
+              border-bottom: none;
               background-color: none;
               color: color($theme-color-primary-darker);
 
@@ -83,15 +87,16 @@
             }
 
             span {
-              padding-bottom: 12px;
+              padding-bottom: 5px;
             }
           }
 
           &.active {
+            border-bottom: 2px solid $color-primary-alt-lightest;
             background-color: $color-primary-alt-lightest;
 
             button {
-              border-bottom: 2px solid $color-primary-alt-lightest;
+              border-bottom: none;
               background-color: $color-primary-alt-lightest;
 
               &:hover {
