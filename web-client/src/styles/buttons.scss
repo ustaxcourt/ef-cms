@@ -30,3 +30,26 @@
     margin-right: 5px;
   }
 }
+
+.recall-button-box {
+  padding: 8px 10px;
+  border: 1px solid color($theme-color-warning);
+  margin-bottom: 30px;
+  float: left;
+  font-family: $font-serif;
+
+  svg {
+    color: color($theme-color-warning);
+  }
+
+  .batched-message {
+    margin: 17px 31px 19px 14px;
+    font-size: 20px;
+    line-height: 34px;
+  }
+
+  .recall-petition {
+    min-width: 100px;
+    margin: 0;
+  }
+}
