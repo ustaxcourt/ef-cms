@@ -5,9 +5,7 @@ export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
   const userRole = get(state.user.role);
   const showActionRequired = !caseDetail.payGovId && userRole === 'petitioner';
-  const documentDetailTab =
-    get(state.documentDetail.tab) ||
-    (showActionRequired === true ? 'actionRequired' : 'docketRecord');
+  const documentDetailTab = get(state.documentDetail.tab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
