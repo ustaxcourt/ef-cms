@@ -126,10 +126,12 @@ export const SectionWorkQueueInbox = connect(
                   )}
                 </td>
                 <td className="message-queue-row">
-                  {item.docketNumberWithSuffix}
+                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
                 <td className="message-queue-row">
-                  {item.currentMessage.createdAtFormatted}
+                  <span className="no-wrap">
+                    {item.currentMessage.createdAtFormatted}
+                  </span>
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">

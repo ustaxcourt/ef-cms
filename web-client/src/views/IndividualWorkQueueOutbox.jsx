@@ -40,9 +40,11 @@ export const IndividualWorkQueueOutbox = connect(
                   />{' '}
                 </td>
                 <td className="message-queue-row">
-                  {item.docketNumberWithSuffix}
+                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
-                <td className="message-queue-row">{item.sentDateFormatted}</td>
+                <td className="message-queue-row">
+                  <span className="no-wrap">{item.sentDateFormatted}</span>
+                </td>
                 <td className="message-queue-row">
                   <div className="message-document-title">
                     <a
