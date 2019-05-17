@@ -112,10 +112,10 @@ export const DocumentDetail = connect(
                   {caseHelper.showRecallButton &&
                     helper.formattedDocument.isPetition && (
                       <span className="recall-button-box">
-                        <FontAwesomeIcon icon={['far', 'clock']} />
-                        Batched for IRS
+                        <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
+                        <span className="batched-message">Batched for IRS</span>
                         <button
-                          className="recall-petition"
+                          className="usa-button recall-petition"
                           onClick={() =>
                             setModalDialogNameSequence({
                               showModal: 'RecallPetitionModalDialog',
