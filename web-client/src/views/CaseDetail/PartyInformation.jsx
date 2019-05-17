@@ -95,7 +95,7 @@ export const PartyInformation = connect(
     const addressDisplay = contact => {
       return (
         <React.Fragment>
-          <p>{contact.name}</p>
+          <p className="margin-top-0">{contact.name}</p>
           {contact.title && <p>{contact.title}</p>}
           <p>
             <span className="address-line">{contact.address1}</span>
