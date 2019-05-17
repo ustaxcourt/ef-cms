@@ -99,7 +99,9 @@ export const IRSNotice = connect(
             }
           >
             <fieldset className="usa-fieldset">
-              <legend id="date-of-notice-legend">Date of Notice</legend>
+              <legend id="date-of-notice-legend" className="usa-legend">
+                Date of Notice
+              </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
                   <label
