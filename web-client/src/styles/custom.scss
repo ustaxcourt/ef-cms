@@ -570,12 +570,16 @@ header.usa-header {
   border-bottom: none;
   margin-bottom: 0px;
 
+  @media (max-width: units('desktop')) {
+    height: auto;
+  }
+
   .main-navigation {
     display: none;
     margin-top: 3rem;
     font-family: $font-serif;
 
-    @media (min-width: 64em) {
+    @media (min-width: units('desktop')) {
       display: block;
     }
 
@@ -647,7 +651,7 @@ nav.usa-nav {
     margin: 0;
     float: none;
 
-    @media (min-width: 64em) {
+    @media (min-width: units('desktop')) {
       float: none;
     }
 
