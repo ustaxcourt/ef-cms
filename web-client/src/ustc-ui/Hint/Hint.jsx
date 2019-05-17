@@ -7,7 +7,7 @@ export const Hint = connect(props => {
 
   return (
     <div className="alert-gold add-bottom-margin">
-      <span className="usa-form-hint ustc-form-hint-with-svg">
+      <span className="usa-hint ustc-form-hint-with-svg">
         <FontAwesomeIcon
           icon="arrow-alt-circle-left"
           className="fa-icon-gold"

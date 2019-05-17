@@ -44,10 +44,10 @@ option:first-child {
   font-weight: initial;
 }
 
-.usa-form-hint {
+.usa-hint {
   display: inline-block;
   margin-bottom: 15px;
-  color: color($theme-color-base-darkest);
+  color: color($theme-color-base-dark);
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
