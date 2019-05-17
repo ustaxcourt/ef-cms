@@ -32,7 +32,9 @@ export const MessagesInProgress = connect(
                 </td>
                 <td className="padding-extra">{workItem.messages[0].from}</td>
                 <td className="padding-extra">
-                  {workItem.messages[0].createdAtTimeFormatted}
+                  <span className="no-wrap">
+                    {workItem.messages[0].createdAtTimeFormatted}
+                  </span>
                 </td>
                 <td className="padding-extra">
                   <p className="margin-y-0">
