@@ -52,16 +52,16 @@ export const CaseDetailInternal = connect(
               <tbody>
                 {extractedPendingMessages.map((workItem, idx) => (
                   <tr key={idx}>
-                    <td className="responsive-title padding-extra">
+                    <td className="responsive-title ">
                       {workItem.assigneeName}
                     </td>
-                    <td className="padding-extra">
+                    <td className="">
                       {workItem.messages[0].from}
                     </td>
-                    <td className="padding-extra">
+                    <td className="">
                       {workItem.messages[0].createdAtTimeFormatted}
                     </td>
-                    <td className="padding-extra">
+                    <td className="">
                       <p className="margin-y-0">
                         <a
                           href={documentHelper({
