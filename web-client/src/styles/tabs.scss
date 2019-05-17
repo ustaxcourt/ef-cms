@@ -66,6 +66,10 @@
           margin-right: 0px;
           text-align: center;
 
+          &:last-child {
+            border-right-width: 0;
+          }
+
           button {
             display: inline-block;
             padding-top: 10px;
