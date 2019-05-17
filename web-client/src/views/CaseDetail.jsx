@@ -53,6 +53,12 @@ export const CaseDetail = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <div className="subsection">
+            <div className="title">
+              <h1>Action Required</h1>
+            </div>
+            <ActionRequired />
+          </div>
           <div className="only-small-screens">
             <select
               className="usa-select"
@@ -68,9 +74,6 @@ export const CaseDetail = connect(
             >
               <option value="docketRecord">Docket Record</option>
               <option value="caseInfo">Case Information</option>
-              {caseHelper.showActionRequired && (
-                <option value="actionRequired">Action Required</option>
-              )}
             </select>
           </div>
           <div className="mobile-document-detail-tabs">
@@ -78,15 +81,6 @@ export const CaseDetail = connect(
               className="classic-horizontal-header3 tab-border"
               bind="documentDetail.tab"
             >
-              {caseHelper.showActionRequired && (
-                <Tab
-                  tabName="actionRequired"
-                  title="Action Required"
-                  id="tab-action-required"
-                >
-                  <ActionRequired />
-                </Tab>
-              )}
               <Tab
                 tabName="docketRecord"
                 title="Docket Record"
