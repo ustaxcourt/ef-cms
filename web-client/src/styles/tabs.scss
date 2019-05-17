@@ -120,9 +120,16 @@
       }
     }
   }
+
   &.tab-button-h2 {
     nav ul li button {
-      font-size:24px;
+      font-size: 24px;
+    }
+  }
+
+  &.tab-button-h3 {
+    nav ul li button {
+      font-size: 17px;
     }
   }
 }
