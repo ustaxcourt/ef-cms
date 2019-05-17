@@ -39,6 +39,7 @@ export const CaseDetailEdit = connect(
           className="container-tabs"
           id="case-detail-tabs"
           bind="documentDetail.tab"
+          boxed
         >
           <Tab tabName="partyInfo" title="Parties" id="tab-parties">
             <PartyInformation />
