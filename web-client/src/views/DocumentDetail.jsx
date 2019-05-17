@@ -47,7 +47,10 @@ export const DocumentDetail = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <Tabs className="no-full-border-bottom tab-button-h2" bind="currentTab">
+                <Tabs
+                  className="no-full-border-bottom tab-button-h2"
+                  bind="currentTab"
+                >
                   {helper.showDocumentInfoTab && (
                     <Tab
                       tabName="Document Info"
@@ -73,7 +76,7 @@ export const DocumentDetail = connect(
                       aria-labelledby="tab-pending-messages"
                     >
                       <Tabs
-                        className="container-tabs no-full-border-bottom"
+                        className="container-tabs no-full-border-bottom tab-button-h3"
                         id="case-detail-messages-tabs"
                         bind="documentDetail.messagesTab"
                         boxed
