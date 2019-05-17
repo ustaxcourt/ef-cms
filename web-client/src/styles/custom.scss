@@ -930,4 +930,14 @@ nav.usa-nav {
   .heading-1 {
     margin-bottom: 15px;
   }
+
+  .subsection {
+    &.party-type {
+      margin-bottom: 20px;
+    }
+
+    &.contacts:empty {
+      display: none;
+    }
+  }
 }
