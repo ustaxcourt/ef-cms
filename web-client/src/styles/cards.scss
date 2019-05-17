@@ -47,6 +47,10 @@
       font-size: 14px;
       font-weight: $font-semibold;
       text-decoration: underline;
+      
+      &:hover {
+        cursor: pointer;
+      }
 
       svg {
         margin-right: 5px;
@@ -56,9 +60,14 @@
         outline: 2px dotted color($theme-color-base-light);
       }
 
+      
       &.unselected {
         background-color: transparent;
         color: color($theme-color-primary);
+
+        &:hover {
+          color: color($theme-color-primary-dark)
+        }
       }
     }
   }
