@@ -97,45 +97,37 @@ export const DocumentDetail = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-7 doc-detail-pane">
-                <div className="top-bar clear-both">
-                  <div className="full-width">
-                    <span className="float-right">
-                      {caseHelper.showServeToIrsButton &&
-                        helper.formattedDocument.isPetition && (
-                          <button
-                            className="usa-button serve-to-irs margin-right-0"
-                            onClick={() => clickServeToIrsSequence()}
-                          >
-                            <FontAwesomeIcon icon={['fas', 'clock']} />
-                            Serve to IRS
-                          </button>
-                        )}
-                      {caseHelper.showRecallButton &&
-                        helper.formattedDocument.isPetition && (
-                          <span className="recall-button-box">
-                            <FontAwesomeIcon
-                              icon={['far', 'clock']}
-                              size="lg"
-                            />
-                            <span className="batched-message">
-                              Batched for IRS
-                            </span>
-                            <button
-                              className="usa-button recall-petition"
-                              onClick={() =>
-                                setModalDialogNameSequence({
-                                  showModal: 'RecallPetitionModalDialog',
-                                })
-                              }
-                            >
-                              Recall
-                            </button>
-                          </span>
-                        )}
-                    </span>
-                  </div>
+              <div className="grid-col-7">
+                <div className="document-detail__action-buttons float-right">
+                  {caseHelper.showServeToIrsButton &&
+                    helper.formattedDocument.isPetition && (
+                      <button
+                        className="usa-button serve-to-irs margin-right-0"
+                        onClick={() => clickServeToIrsSequence()}
+                      >
+                        <FontAwesomeIcon icon={['fas', 'clock']} />
+                        Serve to IRS
+                      </button>
+                    )}
+                  {caseHelper.showRecallButton &&
+                    helper.formattedDocument.isPetition && (
+                      <span className="recall-button-box">
+                        <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
+                        <span className="batched-message">Batched for IRS</span>
+                        <button
+                          className="usa-button recall-petition"
+                          onClick={() =>
+                            setModalDialogNameSequence({
+                              showModal: 'RecallPetitionModalDialog',
+                            })
+                          }
+                        >
+                          Recall
+                        </button>
+                      </span>
+                    )}
                 </div>
+
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CYPRESS && (
                   <iframe
