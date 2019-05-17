@@ -32,6 +32,12 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <div className="subsection">
+            <div className="title">
+              <h1>Messages In Progress</h1>
+            </div>
+            <MessagesInProgress />
+          </div>
           <div className="only-small-screens">
             <select
               className="usa-select"
@@ -45,7 +51,6 @@ export const CaseDetailInternal = connect(
                 });
               }}
             >
-              <option value="messagesInProgress">Messages In Progress</option>
               <option value="docketRecord">Docket Record</option>
               <option value="caseInfo">Case Information</option>
             </select>
@@ -55,13 +60,6 @@ export const CaseDetailInternal = connect(
               className="classic-horizontal-header3 tab-border"
               bind="documentDetail.tab"
             >
-              <Tab
-                tabName="messagesInProgress"
-                title="Messages In Progress"
-                id="tab-messages-in-progress"
-              >
-                <MessagesInProgress />
-              </Tab>
               <Tab
                 tabName="docketRecord"
                 title="Docket Record"

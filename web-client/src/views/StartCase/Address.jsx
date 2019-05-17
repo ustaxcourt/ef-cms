@@ -19,8 +19,7 @@ export const Address = connect(
     validationErrors,
   }) => {
     return (
-      <fieldset className="usa-fieldset">
-        <legend className="usa-legend">Mailing Address</legend>
+      <React.Fragment>
         <div
           className={
             'usa-form-group' +
@@ -30,7 +29,7 @@ export const Address = connect(
           }
         >
           <label htmlFor={`${type}.address1`} className="usa-label">
-            Address Line 1
+            Mailing Address Line 1
           </label>
           <input
             id={`${type}.address1`}
@@ -250,7 +249,7 @@ export const Address = connect(
             bind={`validationErrors.${type}.postalCode`}
           />
         </div>
-      </fieldset>
+      </React.Fragment>
     );
   },
 );
