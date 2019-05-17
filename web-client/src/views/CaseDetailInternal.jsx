@@ -8,7 +8,7 @@ import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailInternal = connect(
@@ -25,8 +25,6 @@ export const CaseDetailInternal = connect(
     caseDetail,
     caseHelper,
     setDocumentDetailTabSequence,
-    documentHelper,
-    extractedPendingMessages,
     token,
   }) => {
     return (
