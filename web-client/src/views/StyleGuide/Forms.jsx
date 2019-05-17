@@ -111,7 +111,7 @@ export const Forms = () => (
           <label htmlFor="input-file" className="usa-label">
             File input
           </label>
-          <input id="input-file" className="usa-input" type="file" />
+          <input id="input-file" type="file" />
         </div>
       </div>
 

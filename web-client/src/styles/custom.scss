@@ -354,7 +354,7 @@ select[disabled] {
 }
 
 .mini-success {
-  color: $color-green;
+  color: $color-success;
 
   svg {
     margin-right: 5px;
@@ -928,7 +928,8 @@ nav.usa-nav {
   }
 
   .subsection {
-    &.party-type {
+    &.party-type,
+    &.contacts {
       margin-bottom: 20px;
     }
 
