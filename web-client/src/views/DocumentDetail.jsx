@@ -104,7 +104,7 @@ export const DocumentDetail = connect(
                       {caseHelper.showServeToIrsButton &&
                         helper.formattedDocument.isPetition && (
                           <button
-                            className="usa-button serve-to-irs"
+                            className="usa-button serve-to-irs margin-right-0"
                             onClick={() => clickServeToIrsSequence()}
                           >
                             <FontAwesomeIcon icon={['fas', 'clock']} />
