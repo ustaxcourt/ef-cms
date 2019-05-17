@@ -50,7 +50,7 @@ export const DocketRecordHeader = connect(
               <div className="only-large-screens">
                 <select
                   name={`docketRecordSort.${caseDetail.caseId}`}
-                  className="usa-select"
+                  className="usa-select margin-top-0"
                   aria-label="docket record sort"
                   value={caseDetail.docketRecordSort}
                   onChange={e => {
