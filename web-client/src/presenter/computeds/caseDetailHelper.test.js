@@ -146,7 +146,7 @@ describe('case detail computed', () => {
       },
     });
 
-    expect(result.documentDetail.tab).toEqual('actionRequired');
+    expect(result.documentDetailTab).toEqual('actionRequired');
   });
 
   it('should not show the action required tab for a non-petitioner', () => {
@@ -162,6 +162,6 @@ describe('case detail computed', () => {
       },
     });
 
-    expect(result.documentDetail.tab).toEqual('docketRecord');
+    expect(result.documentDetailTab).toEqual('docketRecord');
   });
 });
