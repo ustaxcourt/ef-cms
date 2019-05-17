@@ -32,7 +32,7 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div className="subsection">
+          <div>
             <div className="title">
               <h1>Messages In Progress</h1>
             </div>
