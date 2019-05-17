@@ -178,6 +178,12 @@ select[disabled] {
       margin-bottom: 15px;
     }
   }
+  input:last-child,
+  select:last-child,
+  textarea:last-child,
+  .subsection:last-child {
+    margin-bottom: 0px;
+  }
 }
 
 /* big screens */
@@ -888,7 +894,7 @@ nav.usa-nav {
   }
   #case-title {
     span {
-      margin-right:15px;
+      margin-right: 15px;
     }
   }
 }
