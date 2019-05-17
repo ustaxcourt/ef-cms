@@ -53,7 +53,9 @@ export const DocketRecord = connect(
               ({ record, document, index }, arrayIndex) => (
                 <tr key={index}>
                   <td className="center-column hide-on-mobile">{index}</td>
-                  <td>{record.createdAtFormatted}</td>
+                  <td>
+                    <span className="no-wrap">{record.createdAtFormatted}</span>
+                  </td>
                   <td className="center-column hide-on-mobile">
                     {document && document.eventCode}
                   </td>
