@@ -87,7 +87,8 @@
               color: color($theme-color-primary-darker);
 
               span {
-                border-bottom: 3px solid color($theme-color-primary-darker);
+                padding-bottom: 0;
+                border-bottom: 1px solid color($theme-color-primary-darker);
               }
             }
 
@@ -102,10 +103,17 @@
 
             button {
               border-bottom: none;
-              background-color: $color-primary-alt-lightest;
+              cursor: default;
+              color: inherit;
+              // background-color: $color-primary-alt-lightest;
 
               &:hover {
-                color: color($theme-color-primary-darker);
+                // color: color($theme-color-primary-darker);
+
+                span {
+                  padding-bottom: 5px;
+                  border-bottom: 3px solid color($theme-color-primary);
+                }
               }
 
               span {
