@@ -12,7 +12,7 @@ export const MessagesInProgress = connect(
     return (
       <>
         {extractedPendingMessages.length === 0 && (
-          <p>No Messages In Progress</p>
+          <p>No Messages in Progress</p>
         )}
         <table className="usa-table row-border-only subsection messages">
           <thead>
