@@ -72,6 +72,16 @@
   }
 }
 
+.party-information,
+.petitions-details,
+.internal-information {
+  .card {
+    .content-wrapper {
+      padding: 20px;
+    }
+  }
+}
+
 .case-info-card {
   border-bottom: 1px solid #dcdee0;
 }
