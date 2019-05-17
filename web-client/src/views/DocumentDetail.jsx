@@ -117,7 +117,7 @@ export const DocumentDetail = connect(
                             <FontAwesomeIcon icon={['far', 'clock']} />
                             Batched for IRS
                             <button
-                              className="recall-petition"
+                              className="usa-button recall-petition"
                               onClick={() =>
                                 setModalDialogNameSequence({
                                   showModal: 'RecallPetitionModalDialog',
