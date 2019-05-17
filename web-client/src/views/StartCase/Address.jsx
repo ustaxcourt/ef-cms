@@ -19,7 +19,7 @@ export const Address = connect(
     validationErrors,
   }) => {
     return (
-      <fieldset className="usa-fieldset">
+      <React.Fragment>
         <div
           className={
             'usa-form-group' +
@@ -249,7 +249,7 @@ export const Address = connect(
             bind={`validationErrors.${type}.postalCode`}
           />
         </div>
-      </fieldset>
+      </React.Fragment>
     );
   },
 );
