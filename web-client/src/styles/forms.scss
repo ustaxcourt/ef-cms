@@ -24,6 +24,7 @@ input[type='tel'],
 input[type='text'],
 textarea,
 select {
+  border: 1px solid color($theme-color-base);
   margin: 0 0 20px 0;
 
   &:hover {

@@ -20,7 +20,6 @@ export const Address = connect(
   }) => {
     return (
       <fieldset className="usa-fieldset">
-        <legend className="usa-legend">Mailing Address</legend>
         <div
           className={
             'usa-form-group' +
@@ -30,7 +29,7 @@ export const Address = connect(
           }
         >
           <label htmlFor={`${type}.address1`} className="usa-label">
-            Address Line 1
+            Mailing Address Line 1
           </label>
           <input
             id={`${type}.address1`}
