@@ -32,6 +32,13 @@ select {
   }
 }
 
+.usa-input,
+.usa-textarea,
+.usa-select,
+.usa-range {
+  border: 1px solid color($theme-color-base);
+}
+
 input[type='file'] {
   height: auto;
   margin: 0 0 20px 0;
