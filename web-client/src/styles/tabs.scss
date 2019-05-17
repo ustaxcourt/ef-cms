@@ -56,8 +56,6 @@
 
   &.container-tabs {
     nav {
-      // border-bottom: 2px solid color($theme-color-base-lighter);
-
       ul {
         margin: 0px;
 
@@ -103,13 +101,10 @@
 
             button {
               border-bottom: none;
-              cursor: default;
               color: inherit;
-              // background-color: $color-primary-alt-lightest;
+              cursor: default;
 
               &:hover {
-                // color: color($theme-color-primary-darker);
-
                 span {
                   padding-bottom: 5px;
                   border-bottom: 3px solid color($theme-color-primary);
