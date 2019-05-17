@@ -1,5 +1,5 @@
 .card {
-  border: 1px solid color($theme-color-base-light);
+  border: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -8,7 +8,12 @@
   }
 
   p {
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+
+    &.label {
+      margin-bottom: 5px;
+    }
   }
 
   .content-wrapper {
@@ -69,6 +74,16 @@
 .internal-information {
   .chunk {
     margin-bottom: 1rem;
+  }
+}
+
+.party-information,
+.petitions-details,
+.internal-information {
+  .card {
+    .content-wrapper {
+      padding: 20px;
+    }
   }
 }
 
