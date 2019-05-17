@@ -15,8 +15,7 @@ export const CaseDetailInternal = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
-    documentHelper: state.documentHelper,
-    extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
+    caseHelper: state.caseDetailHelper,
     setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     token: state.token,
   },
