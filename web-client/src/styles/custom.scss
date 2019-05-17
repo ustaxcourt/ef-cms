@@ -570,12 +570,16 @@ header.usa-header {
   border-bottom: none;
   margin-bottom: 0px;
 
+  @media (max-width: units('desktop')) {
+    height: auto;
+  }
+
   .main-navigation {
     display: none;
     margin-top: 3rem;
     font-family: $font-serif;
 
-    @media (min-width: 64em) {
+    @media (min-width: units('desktop')) {
       display: block;
     }
 
@@ -647,7 +651,7 @@ nav.usa-nav {
     margin: 0;
     float: none;
 
-    @media (min-width: 64em) {
+    @media (min-width: units('desktop')) {
       float: none;
     }
 
@@ -860,7 +864,7 @@ nav.usa-nav {
   color: $color-white;
   h1 {
     display: inline-block;
-    margin: 0 10px 0 0;
+    margin: 0 15px 0 0;
     color: $color-white;
   }
   a,
@@ -881,6 +885,11 @@ nav.usa-nav {
     top: -3px;
     background: $color-white;
     color: color($theme-color-primary-darker);
+  }
+  #case-title {
+    span {
+      margin-right:15px;
+    }
   }
 }
 

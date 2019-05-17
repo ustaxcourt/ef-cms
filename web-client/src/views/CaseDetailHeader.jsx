@@ -29,7 +29,7 @@ export const CaseDetailHeader = connect(
             </span>
           </div>
           <p id="case-title" className="margin-y-0">
-            <span className="padding-right-2">{caseDetail.caseTitle}</span>
+            <span>{caseDetail.caseTitle}</span>
             {caseHelper.showCaptionEditButton && (
               <button
                 className="usa-button usa-button--unstyled "
