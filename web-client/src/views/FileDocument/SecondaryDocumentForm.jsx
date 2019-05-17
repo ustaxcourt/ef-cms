@@ -63,10 +63,10 @@ export const SecondaryDocumentForm = connect(
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>{' '}
                     {fileDocumentHelper.isSecondaryDocumentUploadOptional && (
-                      <span className="usa-form-hint">(optional)</span>
+                      <span className="usa-hint">(optional)</span>
                     )}
                   </label>
-                  <span className="usa-form-hint">
+                  <span className="usa-hint">
                     File must be in PDF format (.pdf). Max file size{' '}
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
@@ -267,7 +267,7 @@ export const SecondaryDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
-                <span className="usa-form-hint">
+                <span className="usa-hint">
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>

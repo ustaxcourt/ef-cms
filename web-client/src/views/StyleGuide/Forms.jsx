@@ -19,13 +19,13 @@ export const Forms = () => (
           <label className="usa-label with-hint" htmlFor="input-text-hint">
             Text input with hint text
           </label>
-          <span className="usa-form-hint">This is your hint!</span>
+          <span className="usa-hint">This is your hint!</span>
           <input id="input-text-hint" className="usa-input" type="text" />
         </div>
 
         <div className="usa-form-group">
           <label htmlFor="input-text-optional" className="usa-label">
-            Text input <span className="usa-form-hint">(optional)</span>
+            Text input <span className="usa-hint">(optional)</span>
           </label>
           <input id="input-text-optional" className="usa-input" type="text" />
         </div>
@@ -127,7 +127,9 @@ export const Forms = () => (
 
       <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
-          <label htmlFor="options">Dropdown label</label>
+          <label htmlFor="options" className="usa-label">
+            Dropdown label
+          </label>
           <select className="usa-select" id="options">
             <option value>- Select -</option>
             <option value="value1">Option A</option>
@@ -139,7 +141,9 @@ export const Forms = () => (
 
       <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="options-error">Dropdown label with error</label>
+          <label htmlFor="options-error" className="usa-label">
+            Dropdown label with error
+          </label>
           <select className="usa-select usa-select--error" id="options-error">
             <option value>- Select -</option>
             <option value="value1">Option A</option>
@@ -173,7 +177,7 @@ export const Forms = () => (
 
       <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
-          <legend>Checkboxes</legend>
+          <legend className="usa-legend">Checkboxes</legend>
           <div className="usa-checkbox">
             <input
               className="usa-checkbox__input"
@@ -227,7 +231,7 @@ export const Forms = () => (
 
       <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
-          <legend>Radio Buttons</legend>
+          <legend className="usa-legend">Radio Buttons</legend>
           <div className="usa-radio">
             <input
               className="usa-radio__input"
@@ -270,7 +274,7 @@ export const Forms = () => (
 
       <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
-          <legend>Inline Radio Buttons</legend>
+          <legend className="usa-legend">Inline Radio Buttons</legend>
           <div className="usa-radio usa-radio__inline">
             <input
               className="usa-radio__input"
@@ -376,7 +380,7 @@ export const Forms = () => (
           />
 
           <label className="usa-label" htmlFor="mailing-address-2">
-            Street address 2 <span className="usa-form-hint">(optional)</span>
+            Street address 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"

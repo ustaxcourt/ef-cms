@@ -309,10 +309,6 @@ select[disabled] {
   }
 }
 
-.usa-hint {
-  color: color($theme-color-base);
-}
-
 .alert-gold {
   max-width: 700px;
   padding: 10px;
@@ -320,7 +316,7 @@ select[disabled] {
   background: color($theme-color-warning-lighter);
   color: color($theme-color-base-darkest);
 
-  .usa-form-hint {
+  .usa-hint {
     margin: 0;
   }
 
@@ -446,7 +442,7 @@ select.ustc-input-error {
 #tabContent-completed,
 #tabContent-inProgress {
   max-height: 931px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .ustc-create-message-modal,
@@ -570,12 +566,16 @@ header.usa-header {
   border-bottom: none;
   margin-bottom: 0px;
 
+  @media (max-width: units('desktop')) {
+    height: auto;
+  }
+
   .main-navigation {
     display: none;
     margin-top: 3rem;
     font-family: $font-serif;
 
-    @media (min-width: 64em) {
+    @media (min-width: units('desktop')) {
       display: block;
     }
 
@@ -647,7 +647,7 @@ nav.usa-nav {
     margin: 0;
     float: none;
 
-    @media (min-width: 64em) {
+    @media (min-width: units('desktop')) {
       float: none;
     }
 
@@ -860,7 +860,7 @@ nav.usa-nav {
   color: $color-white;
   h1 {
     display: inline-block;
-    margin: 0 10px 0 0;
+    margin: 0 15px 0 0;
     color: $color-white;
   }
   a,
@@ -882,6 +882,11 @@ nav.usa-nav {
     background: $color-white;
     color: color($theme-color-primary-darker);
   }
+  #case-title {
+    span {
+      margin-right: 15px;
+    }
+  }
 }
 
 .title {
@@ -892,15 +897,11 @@ nav.usa-nav {
     position: relative;
     top: 2px;
     display: inline-block;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     border-bottom: 3px solid color($theme-color-primary);
     margin-top: -2px;
     margin-bottom: 0px;
   }
-}
-
-.doc-detail-pane {
-  padding-top: 43px;
 }
 
 .mobile-document-detail-tabs {
@@ -911,8 +912,22 @@ nav.usa-nav {
   }
 }
 
+.document-detail__action-buttons {
+  margin-bottom: -4px;
+}
+
 .DocumentDetail {
   .heading-1 {
     margin-bottom: 15px;
+  }
+
+  .subsection {
+    &.party-type {
+      margin-bottom: 20px;
+    }
+
+    &.contacts:empty {
+      display: none;
+    }
   }
 }
