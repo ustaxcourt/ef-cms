@@ -86,7 +86,7 @@ export const ContactPrimary = connect(
             <div className="usa-form-group">
               <label htmlFor="title" className="usa-label">
                 Title
-                <p className="usa-form-hint">For example, Executor, PR, etc.</p>
+                <p className="usa-hint">For example, Executor, PR, etc.</p>
               </label>
               <input
                 id="title"
@@ -119,14 +119,14 @@ export const ContactPrimary = connect(
                   <span>
                     {contactsHelper.contactPrimary.inCareOfLabel}{' '}
                     {contactsHelper.contactPrimary.inCareOfLabelHint && (
-                      <span className="usa-form-hint">
+                      <span className="usa-hint">
                         ({contactsHelper.contactPrimary.inCareOfLabelHint})
                       </span>
                     )}
                   </span>
                 ) : (
                   <span>
-                    In Care Of <span className="usa-form-hint">(optional)</span>
+                    In Care Of <span className="usa-hint">(optional)</span>
                   </span>
                 )}
               </label>

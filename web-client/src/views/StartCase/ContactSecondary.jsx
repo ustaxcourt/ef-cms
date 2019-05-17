@@ -94,14 +94,14 @@ export const ContactSecondary = connect(
                   <span>
                     {contactsHelper.contactSecondary.inCareOfLabel}{' '}
                     {contactsHelper.contactSecondary.inCareOfLabelHint && (
-                      <span className="usa-form-hint">
+                      <span className="usa-hint">
                         ({contactsHelper.contactSecondary.inCareOfLabelHint})
                       </span>
                     )}
                   </span>
                 ) : (
                   <span>
-                    In Care Of <span className="usa-form-hint">(optional)</span>
+                    In Care Of <span className="usa-hint">(optional)</span>
                   </span>
                 )}
               </label>

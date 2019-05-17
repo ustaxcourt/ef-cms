@@ -39,7 +39,7 @@ export const TrialCity = connect(
           {label}
         </label>
         {showHint && (
-          <span className="usa-form-hint">
+          <span className="usa-hint">
             {showSmallTrialCitiesHint && (
               <React.Fragment>
                 Trial locations are unavailable in the following states: DE, NH,
