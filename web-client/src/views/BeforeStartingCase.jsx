@@ -101,7 +101,7 @@ export const BeforeStartingCase = () => (
         <div className="tablet:grid-col-6">
           <div role="listitem">
             <div className="fa-before" role="display">
-              <FontAwesomeIcon icon={['far', 'eye-slash']} />
+              <FontAwesomeIcon icon={['fa', 'shield-alt']} />
             </div>
             <div className="before-explanation">
               <h3>
