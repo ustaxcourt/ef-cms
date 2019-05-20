@@ -70,8 +70,8 @@ resource "aws_cognito_user_pool_client" "client" {
   allowed_oauth_flows_user_pool_client = true
 
   callback_urls          = [
-    "http://localhost:1234",
-    "https://ui-${var.environment}.${var.dns_domain}"
+    "http://localhost:1234/log-in",
+    "https://ui-${var.environment}.${var.dns_domain}/log-in"
   ]
 
   allowed_oauth_flows    = ["code", "implicit"]

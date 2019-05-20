@@ -138,8 +138,20 @@ option:first-child {
 }
 
 .usa-error-message {
-  margin: 0;
+  margin: 15px 0 0 0;
   line-height: 1;
+}
+
+.usa-alert--warning {
+  background-image: url('images/alerts/warning.svg');
+}
+
+.usa-alert--success {
+  background-image: url('images/alerts/success.svg');
+}
+
+.usa-alert--error {
+  background-image: url('images/alerts/error.svg');
 }
 
 .usa-alert--error,
@@ -151,6 +163,10 @@ option:first-child {
   .usa-alert__heading {
     margin-top: 0;
     margin-bottom: 0;
+    font-family: $font-serif;
+    font-size: 20px;
+    font-weight: $font-bold;
+    line-height: 1.3em;
   }
 
   .usa-alert__body {
