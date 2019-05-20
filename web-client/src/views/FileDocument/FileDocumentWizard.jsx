@@ -20,8 +20,8 @@ export const FileDocumentWizard = connect(
   ({ caseDetail, chooseWizardStepSequence, showModal }) => {
     return (
       <>
+        <CaseDetailHeader />
         <section className="usa-section grid-container">
-          <CaseDetailHeader />
           {showModal == 'FormCancelModalDialogComponent' && (
             <FormCancelModalDialog />
           )}
