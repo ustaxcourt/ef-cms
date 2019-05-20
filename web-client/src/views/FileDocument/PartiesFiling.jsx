@@ -21,7 +21,9 @@ export const PartiesFiling = connect(
   }) => {
     return (
       <React.Fragment>
-        <h3>Tell Us About the Parties Filing This Document</h3>
+        <h3 className="margin-top-4">
+          Tell Us About the Parties Filing This Document
+        </h3>
         <div className="blue-container">
           <div
             className={`usa-form-group ${

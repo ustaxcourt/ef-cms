@@ -30,7 +30,7 @@ export const FileDocument = connect(
         </Focus>
         <p>All fields required unless otherwise noted</p>
         <div>
-          <h3 className="header-with-link-button">
+          <h3 className="header-with-link-button margin-top-4">
             Type of Document You’re Filing
           </h3>
           <button
@@ -55,7 +55,7 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        <div className="button-box-container">
+        <div className="button-box-container margin-top-4">
           <button
             id="submit-document"
             type="submit"

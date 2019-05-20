@@ -33,6 +33,11 @@ select {
     border: 1px solid color($theme-color-primary);
     box-shadow: inset 0 0 1px color($theme-color-primary);
   }
+
+  &::placeholder {
+    color: color($theme-color-base-dark);
+    opacity: 1;
+  }
 }
 
 .usa-error-message {
