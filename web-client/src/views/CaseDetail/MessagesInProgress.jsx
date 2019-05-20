@@ -12,7 +12,7 @@ export const MessagesInProgress = connect(
     return (
       <>
         {extractedPendingMessages.length === 0 && (
-          <p className="heading-2">There are no messages.</p>
+          <p className="heading-2 margin-bottom-10">There are no messages.</p>
         )}
         {extractedPendingMessages.length > 0 && (
           <table className="usa-table row-border-only subsection messages">
