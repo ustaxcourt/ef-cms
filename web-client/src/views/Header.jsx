@@ -62,7 +62,6 @@ const NavigationItems = helper => {
 export const Header = connect(
   {
     betaBar: state.betaBar,
-    fetchUserNotificationsSequence: sequences.fetchUserNotificationsSequence,
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
@@ -77,17 +76,10 @@ export const Header = connect(
     loginSequence,
     mobileMenu,
     signOutSequence,
-    fetchUserNotificationsSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
   }) => {
-    useEffect(() => {
-      if (user && user.userId) {
-        fetchUserNotificationsSequence();
-      }
-    }, []);
-
     return (
       <>
         {betaBar.isVisible && (

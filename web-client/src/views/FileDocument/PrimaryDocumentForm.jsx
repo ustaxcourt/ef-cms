@@ -27,7 +27,7 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h3>Tell Us About the {form.documentTitle}</h3>
+        <h3 className="margin-top-4">Tell Us About the {form.documentTitle}</h3>
         <div className="blue-container">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">

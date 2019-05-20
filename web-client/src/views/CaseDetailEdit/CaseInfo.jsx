@@ -221,13 +221,6 @@ export const CaseInfo = connect(
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
-                  <label
-                    className="usa-legend"
-                    htmlFor="fee-payment-date-month"
-                    aria-hidden="true"
-                  >
-                    MM
-                  </label>
                   <input
                     aria-describedby="fee-payment-date-legend"
                     aria-label="month, two digits"
@@ -240,6 +233,7 @@ export const CaseInfo = connect(
                     min="1"
                     name="payGovMonth"
                     type="number"
+                    placeholder="MM"
                     value={form.payGovMonth || ''}
                     onBlur={() => {
                       autoSaveCaseSequence();
@@ -253,9 +247,6 @@ export const CaseInfo = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day">
-                  <label htmlFor="fee-payment-date-day" aria-hidden="true">
-                    DD
-                  </label>
                   <input
                     aria-describedby="fee-payment-date-legend"
                     aria-label="day, two digits"
@@ -268,6 +259,7 @@ export const CaseInfo = connect(
                     min="1"
                     name="payGovDay"
                     type="number"
+                    placeholder="DD"
                     value={form.payGovDay || ''}
                     onBlur={() => {
                       autoSaveCaseSequence();
@@ -281,9 +273,6 @@ export const CaseInfo = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year">
-                  <label htmlFor="fee-payment-date-year" aria-hidden="true">
-                    YYYY
-                  </label>
                   <input
                     aria-describedby="fee-payment-date-legend"
                     aria-label="year, four digits"
@@ -296,6 +285,7 @@ export const CaseInfo = connect(
                     min="1900"
                     name="payGovYear"
                     type="number"
+                    placeholder="YYYY"
                     value={form.payGovYear || ''}
                     onBlur={() => {
                       autoSaveCaseSequence();
