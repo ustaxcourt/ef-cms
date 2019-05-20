@@ -105,6 +105,7 @@ export const SecondaryDocumentForm = connect(
           <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="secondary-add-to-coversheet"
+              className="usa-checkbox__input"
               type="checkbox"
               name="secondaryDocument.addToCoversheet"
               checked={form.secondaryDocument.addToCoversheet}
@@ -116,7 +117,10 @@ export const SecondaryDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="secondary-add-to-coversheet" className="usa-label">
+            <label
+              htmlFor="secondary-add-to-coversheet"
+              className="usa-checkbox__label"
+            >
               Add to Cover Sheet
             </label>
           </div>
