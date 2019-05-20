@@ -18,7 +18,7 @@ export const ActionRequired = connect(
       <ul className="usa-accordion">
         <li>
           <button
-            className="usa-accordion__button font-normal"
+            className="usa-accordion__button"
             aria-expanded={showDetails}
             aria-controls="paymentInfo"
             id="actions-button"
