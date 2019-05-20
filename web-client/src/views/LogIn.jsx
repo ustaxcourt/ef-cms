@@ -43,9 +43,11 @@ export const LogIn = connect(
               />
             </div>
           </div>
-          <button id="log-in-button" className="usa-button" type="submit">
-            Log in
-          </button>
+          <div className="button-box-container">
+            <button id="log-in-button" className="usa-button" type="submit">
+              Log in
+            </button>
+          </div>
         </form>
       </section>
     );

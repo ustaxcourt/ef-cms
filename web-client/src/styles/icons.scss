@@ -1,6 +1,6 @@
 .fa-file-pdf {
   margin-right: 0.5em;
-  color: color($theme-color-primary);
+  color: color($theme-color-base-darkest);
 }
 button .fa-file-pdf {
   color: $color-white;
@@ -12,6 +12,7 @@ button .fa-file-pdf {
 }
 
 .action-flag {
+  margin-right: 0.5rem;
   color: color($theme-color-secondary);
 }
 

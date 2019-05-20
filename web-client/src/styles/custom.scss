@@ -101,10 +101,6 @@ select[disabled] {
   padding: 20px;
   margin-bottom: 20px;
   background-color: color($theme-color-base-lightest);
-
-  *:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .completed-card {
@@ -133,10 +129,6 @@ select[disabled] {
 .blue-container {
   padding: 20px;
   background-color: $color-primary-alt-lightest;
-  .usa-form-group:last-of-type {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
 
   &.gray-background {
     background-color: color($theme-color-base-lightest);
@@ -165,12 +157,6 @@ select[disabled] {
       margin-bottom: 15px;
     }
   }
-  input:last-child,
-  select:last-child,
-  textarea:last-child,
-  .subsection:last-child {
-    margin-bottom: 0px;
-  }
 }
 
 /* big screens */
@@ -194,8 +180,8 @@ select[disabled] {
 }
 
 .usa-accordion__button {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 15px;
+  font-weight: $font-semibold;
 }
 
 .usa-accordion.start-a-case,
@@ -341,7 +327,7 @@ select[disabled] {
 }
 
 .mini-success {
-  color: $color-success;
+  color: $color-green;
 
   svg {
     margin-right: 5px;
@@ -471,7 +457,7 @@ textarea#case-caption {
 
 .header-with-link-button {
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 20px;
 
   + .usa-button--unstyled {
     width: auto;

@@ -24,7 +24,7 @@ export const FileDocument = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 tabIndex="-1" id="file-a-document-header">
+          <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
             File a Document
           </h2>
         </Focus>
