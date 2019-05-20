@@ -26,7 +26,7 @@ export const SelectDocumentType = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2 tabIndex="-1" id="file-a-document-header">
+        <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
           File a Document
         </h2>
         <h3>What Type of Document Are You Filing?</h3>
@@ -43,8 +43,8 @@ export const SelectDocumentType = connect(
             onClick={() => toggleDocumentCategoryAccordionSequence()}
           >
             <span className="usa-accordion__heading usa-banner__button-text">
-              <FontAwesomeIcon icon="question-circle" size="sm" />
-              Need help determining what document category to select?
+              <FontAwesomeIcon icon="question-circle" size="sm" /> Need help
+              determining what document category to select?
               {screenMetadata.showDocumentCategoryAccordion ? (
                 <FontAwesomeIcon icon="caret-up" />
               ) : (
