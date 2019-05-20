@@ -54,7 +54,7 @@ export const CaseDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           {caseHelper.showActionRequired && (
-            <div className="subsection">
+            <div className="padding-y-2">
               <div className="title">
                 <h1>Action Required</h1>
               </div>
