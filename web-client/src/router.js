@@ -79,7 +79,6 @@ const router = {
       app.getSequence('gotoIdleLogoutSequence')();
     });
     route('/log-in...', () => {
-      // TRY: http://localhost:1234/log-in?token=taxpayer&path=/case-detail/101-18
       const { token, code, path } = queryStringDecoder();
       if (code) {
         app.getSequence('loginWithCodeSequence')({ code, path });
