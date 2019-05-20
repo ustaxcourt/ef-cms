@@ -180,8 +180,8 @@ select[disabled] {
 }
 
 .usa-accordion__button {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 15px;
+  font-weight: $font-semibold;
 }
 
 .usa-accordion.start-a-case,
