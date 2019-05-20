@@ -186,8 +186,6 @@ select[disabled] {
 
 .usa-accordion.start-a-case,
 .usa-accordion.document-category {
-  margin-bottom: 2rem;
-
   .usa-accordion__button {
     display: inline-block;
     padding-left: 0;
@@ -197,7 +195,12 @@ select[disabled] {
     font-weight: normal;
 
     .svg-inline--fa {
+      margin-right: 0.5rem;
       margin-left: 0.5rem;
+    }
+
+    .first-icon {
+      margin-left: 0;
     }
   }
 
@@ -211,6 +214,7 @@ select[disabled] {
 
   .usa-accordion__content {
     border: 1px solid color($theme-color-primary);
+    margin-bottom: 2rem;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
       inset 0 4px 4px rgba(0, 0, 0, 0.15);
   }
