@@ -104,13 +104,6 @@ export const IRSNotice = connect(
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
-                  <label
-                    htmlFor="date-of-notice-month"
-                    className="usa-label"
-                    aria-hidden="true"
-                  >
-                    MM
-                  </label>
                   <input
                     aria-describedby="date-of-notice-legend"
                     aria-label="month, two digits"
@@ -123,6 +116,7 @@ export const IRSNotice = connect(
                     min="1"
                     name="irsMonth"
                     type="number"
+                    placeholder="MM"
                     value={form.irsMonth || ''}
                     onBlur={() => {
                       autoSaveCaseSequence();
@@ -136,13 +130,6 @@ export const IRSNotice = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day">
-                  <label
-                    htmlFor="date-of-notice-day"
-                    aria-hidden="true"
-                    className="usa-label"
-                  >
-                    DD
-                  </label>
                   <input
                     aria-describedby="date-of-notice-legend"
                     aria-label="day, two digits"
@@ -155,6 +142,7 @@ export const IRSNotice = connect(
                     min="1"
                     name="irsDay"
                     type="number"
+                    placeholder="DD"
                     value={form.irsDay || ''}
                     onBlur={() => {
                       autoSaveCaseSequence();
@@ -168,13 +156,6 @@ export const IRSNotice = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year">
-                  <label
-                    htmlFor="date-of-notice-year"
-                    aria-hidden="true"
-                    className="usa-label"
-                  >
-                    YYYY
-                  </label>
                   <input
                     aria-describedby="date-of-notice-legend"
                     aria-label="year, four digits"
@@ -187,6 +168,7 @@ export const IRSNotice = connect(
                     min="1900"
                     name="irsYear"
                     type="number"
+                    placeholder="YYYY"
                     value={form.irsYear || ''}
                     onBlur={() => {
                       autoSaveCaseSequence();
