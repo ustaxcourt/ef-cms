@@ -85,12 +85,7 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
-    const { code, token: queryToken } = queryStringDecoder();
-
-    if (process.env.USTC_ENV === 'prod' && (!user && !code && !queryToken)) {
-      window.location.replace(presenter.state.cognitoLoginUrl);
-      return;
-    }
+    const { code, token: queryToken, path } = queryStringDecoder();
 
     presenter.state.constants = applicationContext.getConstants();
 
@@ -139,7 +134,22 @@ const app = {
       route,
     };
     const cerebralApp = App(presenter, debugTools);
+
+    if (code) {
+      await cerebralApp.getSequence('loginWithCodeSequence')({
+        code,
+        path,
+      });
+    } else if (queryToken) {
+      await cerebralApp.getSequence('submitLoginSequence')({
+        path,
+        token: queryToken,
+      });
+    }
+    await cerebralApp.getSequence('fetchUserNotificationsSequence')();
+
     router.initialize(cerebralApp);
+
     ReactDOM.render(
       <Container app={cerebralApp}>
         <IdleActivityMonitor />
