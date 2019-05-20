@@ -15,7 +15,7 @@ export const PrimaryDocumentReadOnly = connect(
         <div>
           <h3 className="header-with-link-button">{form.documentTitle}</h3>
           <button
-            className="link push-right usa-button usa-button--unstyled"
+            className="usa-button usa-button--unstyled"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
           >
