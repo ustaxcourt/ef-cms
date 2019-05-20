@@ -11,13 +11,11 @@ export const DocumentTypeReadOnly = connect(
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     form: state.form,
-    selectDocumentSequence: sequences.selectDocumentSequence,
     selectDocumentTypeHelper: state.selectDocumentTypeHelper,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence,
-    selectDocumentSequence,
     form,
     selectDocumentTypeHelper,
   }) => {
@@ -56,19 +54,6 @@ export const DocumentTypeReadOnly = connect(
               validationErrors="validationErrors"
             />
           )}
-        </div>
-
-        <div className="button-box-container">
-          <button
-            type="button"
-            className="usa-button"
-            id="continue-button"
-            onClick={() => {
-              selectDocumentSequence();
-            }}
-          >
-            Continue
-          </button>
         </div>
       </React.Fragment>
     );
