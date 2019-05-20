@@ -13,7 +13,7 @@ export const BeforeStartingCase = () => (
     </p>
 
     <div className="grid-container padding-x-0" role="list">
-      <div className="grid-row">
+      <div className="grid-row grid-gap">
         <div className="tablet:grid-col-6">
           <div role="listitem">
             <div className="fa-before" role="display">
@@ -36,7 +36,7 @@ export const BeforeStartingCase = () => (
               </p>
             </div>
           </div>
-          <div role="listitem">
+          <div role="listitem" className="margin-bottom-0">
             <div className="fa-before" role="display">
               <FontAwesomeIcon icon={['far', 'edit']} />
             </div>
