@@ -30,7 +30,7 @@ export const SelectDocumentType = connect(
           File a Document
         </h2>
         <h3>What Type of Document Are You Filing?</h3>
-        <p>
+        <p className="margin-0">
           Choose the document category, then you’ll be able to select a document
           type.
         </p>
@@ -43,8 +43,12 @@ export const SelectDocumentType = connect(
             onClick={() => toggleDocumentCategoryAccordionSequence()}
           >
             <span className="usa-accordion__heading usa-banner__button-text">
-              <FontAwesomeIcon icon="question-circle" size="sm" /> Need help
-              determining what document category to select?
+              <FontAwesomeIcon
+                icon="question-circle"
+                className="first-icon"
+                size="sm"
+              />
+              Need help determining what document category to select?
               {screenMetadata.showDocumentCategoryAccordion ? (
                 <FontAwesomeIcon icon="caret-up" />
               ) : (
