@@ -2,8 +2,8 @@
 ENV=$1
 REGION="us-east-1"
 API_URL="https://efcms-${ENV}.${EFCMS_DOMAIN}/v1"
-COGNITO_REDIRECT_URL="https%3A//ui-${ENV}.${EFCMS_DOMAIN}/log-in"
-COGNITO_REDIRECT_URI="https://ui-${ENV}.${EFCMS_DOMAIN}/log-in"
+COGNITO_REDIRECT_URL="https%3A//ui-${ENV}.${EFCMS_DOMAIN}"
+COGNITO_REDIRECT_URI="https://ui-${ENV}.${EFCMS_DOMAIN}"
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"

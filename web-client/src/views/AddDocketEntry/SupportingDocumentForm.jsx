@@ -167,6 +167,7 @@ export const SupportingDocumentForm = connect(
           <div className="usa-form-group add-to-coversheet-checkbox">
             <input
               id="add-to-coversheet"
+              className="usa-checkbox__input"
               type="checkbox"
               name="addToCoversheet"
               checked={form.addToCoversheet}
@@ -178,7 +179,7 @@ export const SupportingDocumentForm = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="add-to-coversheet" className="usa-label">
+            <label htmlFor="add-to-coversheet" className="usa-checkbox__label">
               Add to Cover Sheet
             </label>
           </div>
@@ -218,6 +219,7 @@ export const SupportingDocumentForm = connect(
                   <li>
                     <input
                       id="exhibits"
+                      className="usa-checkbox__input"
                       type="checkbox"
                       name="exhibits"
                       checked={form.exhibits || false}
@@ -229,13 +231,14 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="exhibits" className="usa-label">
+                    <label htmlFor="exhibits" className="usa-checkbox__label">
                       Exhibit(s)
                     </label>
                   </li>
                   <li>
                     <input
                       id="attachments"
+                      className="usa-checkbox__input"
                       type="checkbox"
                       name="attachments"
                       checked={form.attachments || false}
@@ -247,7 +250,10 @@ export const SupportingDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label htmlFor="attachments" className="usa-label">
+                    <label
+                      htmlFor="attachments"
+                      className="usa-checkbox__label"
+                    >
                       Attachment(s)
                     </label>
                   </li>
@@ -255,6 +261,7 @@ export const SupportingDocumentForm = connect(
                     <input
                       id="certificate-of-service"
                       type="checkbox"
+                      className="usa-checkbox__input"
                       name="certificateOfService"
                       checked={form.certificateOfService || false}
                       onChange={e => {
@@ -267,7 +274,7 @@ export const SupportingDocumentForm = connect(
                     />
                     <label
                       htmlFor="certificate-of-service"
-                      className="usa-label"
+                      className="usa-checkbox__label"
                     >
                       Certificate of Service
                     </label>

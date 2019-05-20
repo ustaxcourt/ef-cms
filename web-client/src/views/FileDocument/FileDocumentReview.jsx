@@ -24,7 +24,7 @@ export const FileDocumentReview = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 tabIndex="-1" id="file-a-document-header">
+          <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
             Review Your Filing
           </h2>
         </Focus>

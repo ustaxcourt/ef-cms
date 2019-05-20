@@ -24,13 +24,13 @@ export const FileDocument = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 tabIndex="-1" id="file-a-document-header">
+          <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
             File a Document
           </h2>
         </Focus>
         <p>All fields required unless otherwise noted</p>
         <div>
-          <h3 className="header-with-link-button">
+          <h3 className="header-with-link-button margin-top-4">
             Type of Document You’re Filing
           </h3>
           <button
@@ -55,7 +55,7 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        <div className="button-box-container">
+        <div className="button-box-container margin-top-4">
           <button
             id="submit-document"
             type="submit"
