@@ -53,22 +53,6 @@ export const ActionRequired = connect(
                   <Hint>
                     It may take up to X days for your payment to appear online.
                   </Hint>
-                </div>
-              </div>
-              <div className="grid-row">
-                <div className="tablet:grid-col-6 margin-bottom-2">
-                  <h3 className="margin-top-2">Mail in payment</h3>
-                  <p>Make checks/money order payable to:</p>
-                  <address>
-                    Clerk, United States Tax Court
-                    <br />
-                    400 2nd St NW
-                    <br />
-                    Washington, DC 20217
-                    <br />
-                  </address>
-                </div>
-                <div className="tablet:grid-col-6">
                   <h3>Canʼt afford to pay the fee?</h3>
                   <p>
                     You may be eligible for a filing fee waiver.{' '}
@@ -82,6 +66,20 @@ export const ActionRequired = connect(
                     </a>{' '}
                     to request a waiver.
                   </p>
+                </div>
+              </div>
+              <div className="grid-row">
+                <div className="tablet:grid-col-12 margin-bottom-2">
+                  <h3 className="margin-top-2">Mail in payment</h3>
+                  <p>Make checks/money order payable to:</p>
+                  <address>
+                    Clerk, United States Tax Court
+                    <br />
+                    400 2nd St NW
+                    <br />
+                    Washington, DC 20217
+                    <br />
+                  </address>
                 </div>
               </div>
             </div>
