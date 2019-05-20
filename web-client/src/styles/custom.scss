@@ -213,6 +213,7 @@ select[disabled] {
   }
 
   .usa-accordion__content {
+    padding: 30px;
     border: 1px solid color($theme-color-primary);
     margin-bottom: 2rem;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
@@ -245,6 +246,12 @@ select[disabled] {
   }
 }
 
+.document-category-accordion {
+  p {
+    max-width: 700px;
+  }
+}
+
 .small-case-features,
 .document-category-features {
   h4 {
@@ -271,12 +278,16 @@ select[disabled] {
 
   .document-feature {
     min-height: 15rem;
-    padding: 20px 18px 2px;
     border: 1px solid color($theme-color-base-lighter);
     box-shadow: inset 0 -10px 0 color($theme-color-accent-cool-dark);
 
     ul {
-      padding-left: 2rem;
+      list-style-type: none;
+    }
+    ul li:before {
+      margin-right: 5px;
+      content: '•';
+      font-size: 12pt;
     }
   }
 }
