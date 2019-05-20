@@ -11,9 +11,9 @@ import { state } from 'cerebral';
  */
 export const isLoggedInAction = ({ get, path, router }) => {
   const user = get(state.user);
-  if (!user) {
-    return path['unauthorized']({ path: router.route() });
-  } else {
+  if (user) {
     return path['isLoggedIn']();
+  } else {
+    return path['unauthorized']({ path: router.route() });
   }
 };

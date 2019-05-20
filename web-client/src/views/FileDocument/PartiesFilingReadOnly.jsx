@@ -17,7 +17,7 @@ export const PartiesFilingReadOnly = connect(
           Parties Filing This Document
         </h3>
         <button
-          className="link push-right usa-button usa-button--unstyled"
+          className="usa-button usa-button--unstyled"
           type="button"
           onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
         >

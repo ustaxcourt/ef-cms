@@ -23,7 +23,7 @@ export const DocumentType = connect(
     validationErrors,
   }) => {
     return (
-      <div className="blue-container">
+      <React.Fragment>
         <div
           className={`usa-form-group ${
             validationErrors.category ? 'usa-form-group--error' : ''
@@ -146,7 +146,7 @@ export const DocumentType = connect(
             Select
           </button>
         </div>
-      </div>
+      </React.Fragment>
     );
   },
 );

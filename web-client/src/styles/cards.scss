@@ -25,6 +25,10 @@
     }
   }
 
+  hr {
+    border-top: 1px solid color($theme-color-base-lighter);
+  }
+
   .actions-wrapper {
     background-color: color($theme-color-base-lightest);
 
@@ -35,16 +39,6 @@
     button {
       display: inline-block;
       margin: 0px;
-    }
-
-    hr {
-      border-top: 1px solid color($theme-color-base-lighter);
-    }
-  }
-
-  &.completed-card {
-    hr {
-      border-top: 1px solid color($theme-color-base-lighter);
     }
   }
 
@@ -94,7 +88,8 @@
 
 .party-information,
 .petitions-details,
-.internal-information {
+.internal-information,
+.frequently-used-docs {
   .card {
     margin-bottom: 0;
     .content-wrapper {
