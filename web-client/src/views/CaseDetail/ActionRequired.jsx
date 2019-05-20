@@ -37,7 +37,7 @@ export const ActionRequired = connect(
             >
               <div className="grid-row">
                 <div className="tablet:grid-col-6">
-                  <h3>Pay by Debit / Credit Card</h3>
+                  <h2>Pay by Debit / Credit Card</h2>
                   <p>Copy your docket number(s) and pay online.</p>
                   <a
                     className="usa-button"
