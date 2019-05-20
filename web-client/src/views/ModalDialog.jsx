@@ -73,7 +73,9 @@ export class ModalDialog extends React.Component {
   }
 
   focusModal() {
-    const modalHeader = document.querySelector('.modal-header .title');
+    const modalHeader = document.querySelector(
+      '.modal-header .modal-header__title',
+    );
     modalHeader.focus();
   }
 
@@ -106,7 +108,7 @@ export class ModalDialog extends React.Component {
               >
                 Close <FontAwesomeIcon icon="times-circle" />
               </button>
-              <h3 tabIndex="-1" className="title">
+              <h3 tabIndex="-1" className="modal-header__title">
                 {modal.title}
               </h3>
             </div>
