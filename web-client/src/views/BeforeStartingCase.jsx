@@ -11,7 +11,8 @@ export const BeforeStartingCase = () => (
         <div className="grid-row">
           <div className="tablet:grid-col-6">
             <h1 className="captioned" tabIndex="-1">
-              File a Petition
+              <span className="show-on-mobile">Petition Filing Guide</span>
+              <span className="hide-on-mobile">File a Petition</span>
             </h1>
           </div>
         </div>
