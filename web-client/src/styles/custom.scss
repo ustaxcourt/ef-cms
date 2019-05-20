@@ -101,10 +101,6 @@ select[disabled] {
   padding: 20px;
   margin-bottom: 20px;
   background-color: color($theme-color-base-lightest);
-
-  *:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .completed-card {
@@ -133,10 +129,6 @@ select[disabled] {
 .blue-container {
   padding: 20px;
   background-color: $color-primary-alt-lightest;
-  .usa-form-group:last-of-type {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
 
   &.gray-background {
     background-color: color($theme-color-base-lightest);
@@ -164,12 +156,6 @@ select[disabled] {
       margin-top: 30px;
       margin-bottom: 15px;
     }
-  }
-  input:last-child,
-  select:last-child,
-  textarea:last-child,
-  .subsection:last-child {
-    margin-bottom: 0px;
   }
 }
 
