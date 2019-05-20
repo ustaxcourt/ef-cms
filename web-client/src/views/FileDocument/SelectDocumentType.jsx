@@ -8,6 +8,7 @@ import React from 'react';
 
 export const SelectDocumentType = connect(
   {
+    form: state.form,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
@@ -17,10 +18,11 @@ export const SelectDocumentType = connect(
       sequences.updateFileDocumentWizardFormValueSequence,
   },
   ({
+    form,
+    screenMetadata,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
     updateFileDocumentWizardFormValueSequence,
-    screenMetadata,
   }) => {
     return (
       <React.Fragment>
@@ -58,112 +60,122 @@ export const SelectDocumentType = connect(
             <DocumentCategoryAccordion />
           </div>
         </div>
+        <div className="blue-container">
+          <div className="grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-6">
+                {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
 
-        <div className="grid-container padding-x-0">
-          <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-6">
-              {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
-
-              {screenMetadata.isDocumentTypeSelected && (
-                <DocumentTypeReadOnly />
-              )}
-            </div>
-            <div className="tablet:grid-col-4 tablet:grid-offset-2">
-              <div className="blue-container gray-background">
-                <h3>Frequently Used Documents</h3>
-                <ul className="ustc-unstyled-list">
-                  {[
-                    {
-                      category: 'Motion',
-                      documentType: 'Motion for Judgment on the Pleadings',
-                    },
-                    {
-                      category: 'Application',
-                      documentType: 'Application for Waiver of Filing Fee',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType: 'Motion for a New Trial',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType:
-                        'Motion for Protective Order Pursuant to Rule 103',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType: 'Motion for Continuance',
-                    },
-                    {
-                      category: 'Notice',
-                      documentType: 'Notice of No Objection',
-                      scenario: 'Nonstandard A',
-                    },
-                    {
-                      category: 'Statement',
-                      documentType: 'Statement',
-                      scenario: 'Nonstandard B',
-                    },
-                    {
-                      category: 'Supporting Document',
-                      documentType: 'Affidavit in Support',
-                      scenario: 'Nonstandard C',
-                    },
-                    {
-                      category: 'Miscellaneous',
-                      documentType: 'Certificate of Service',
-                      scenario: 'Nonstandard D',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType:
-                        'Motion to Change Place of Submission of Declaratory Judgment Case',
-                      scenario: 'Nonstandard E',
-                    },
-                    {
-                      category: 'Miscellaneous',
-                      documentType: 'Amended',
-                      scenario: 'Nonstandard F',
-                    },
-                    {
-                      category: 'Request',
-                      documentType: 'Request for Admissions',
-                      scenario: 'Nonstandard G',
-                    },
-                    {
-                      category: 'Motion',
-                      documentType: 'Motion for Leave to File',
-                      scenario: 'Nonstandard H',
-                    },
-                  ].map(document => {
-                    return (
-                      <li
-                        key={document.documentType}
-                        className="margin-bottom-2"
-                      >
-                        <button
-                          className="usa-button usa-button--unstyled"
-                          type="button"
-                          onClick={() => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: 'category',
-                              value: document.category,
-                            });
-                            updateFileDocumentWizardFormValueSequence({
-                              key: 'documentType',
-                              value: document.documentType,
-                            });
-                            selectDocumentSequence();
-                          }}
-                        >
-                          {document.documentType}{' '}
-                          {document.scenario ? `(${document.scenario})` : ''}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
+                {screenMetadata.isDocumentTypeSelected && (
+                  <DocumentTypeReadOnly />
+                )}
               </div>
+              {!form.documentType && (
+                <div className="tablet:grid-col-4 tablet:grid-offset-2 frequently-used-docs">
+                  <div className="card">
+                    <div className="content-wrapper">
+                      <h3>Frequently Used Documents</h3>
+                      <hr />
+                      <ul className="ustc-unstyled-list margin-bottom-0">
+                        {[
+                          {
+                            category: 'Motion',
+                            documentType:
+                              'Motion for Judgment on the Pleadings',
+                          },
+                          {
+                            category: 'Application',
+                            documentType:
+                              'Application for Waiver of Filing Fee',
+                          },
+                          {
+                            category: 'Motion',
+                            documentType: 'Motion for a New Trial',
+                          },
+                          {
+                            category: 'Motion',
+                            documentType:
+                              'Motion for Protective Order Pursuant to Rule 103',
+                          },
+                          {
+                            category: 'Motion',
+                            documentType: 'Motion for Continuance',
+                          },
+                          {
+                            category: 'Notice',
+                            documentType: 'Notice of No Objection',
+                            scenario: 'Nonstandard A',
+                          },
+                          {
+                            category: 'Statement',
+                            documentType: 'Statement',
+                            scenario: 'Nonstandard B',
+                          },
+                          {
+                            category: 'Supporting Document',
+                            documentType: 'Affidavit in Support',
+                            scenario: 'Nonstandard C',
+                          },
+                          {
+                            category: 'Miscellaneous',
+                            documentType: 'Certificate of Service',
+                            scenario: 'Nonstandard D',
+                          },
+                          {
+                            category: 'Motion',
+                            documentType:
+                              'Motion to Change Place of Submission of Declaratory Judgment Case',
+                            scenario: 'Nonstandard E',
+                          },
+                          {
+                            category: 'Miscellaneous',
+                            documentType: 'Amended',
+                            scenario: 'Nonstandard F',
+                          },
+                          {
+                            category: 'Request',
+                            documentType: 'Request for Admissions',
+                            scenario: 'Nonstandard G',
+                          },
+                          {
+                            category: 'Motion',
+                            documentType: 'Motion for Leave to File',
+                            scenario: 'Nonstandard H',
+                          },
+                        ].map(document => {
+                          return (
+                            <li
+                              key={document.documentType}
+                              className="margin-bottom-205"
+                            >
+                              <button
+                                className="usa-button usa-button--unstyled"
+                                type="button"
+                                onClick={() => {
+                                  updateFileDocumentWizardFormValueSequence({
+                                    key: 'category',
+                                    value: document.category,
+                                  });
+                                  updateFileDocumentWizardFormValueSequence({
+                                    key: 'documentType',
+                                    value: document.documentType,
+                                  });
+                                  selectDocumentSequence();
+                                }}
+                              >
+                                {document.documentType}{' '}
+                                {document.scenario
+                                  ? `(${document.scenario})`
+                                  : ''}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
