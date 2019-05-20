@@ -17,7 +17,7 @@ export const BeforeStartingCase = () => (
           <FontAwesomeIcon icon={['far', 'copy']} />
         </div>
         <div className="before-explanation">
-          <h3>Have the IRS Notice(s) Youʼve Received Available to Submit</h3>
+          <h3>1. Have the IRS Notice(s) Youʼve Received Available to Submit</h3>
           <p>
             If you’ve received an IRS notice, such as a Notice of Deficiency or
             Notice of Determination, you’ll need to include a copy with your
@@ -36,7 +36,7 @@ export const BeforeStartingCase = () => (
           <FontAwesomeIcon icon={['far', 'edit']} />
         </div>
         <div className="before-explanation">
-          <h3>Fill Out The Required Forms</h3>
+          <h3>2. Fill Out The Required Forms</h3>
           <p className="label">Petition Form</p>
           <p>
             Complete the Petition form,{' '}
@@ -99,7 +99,7 @@ export const BeforeStartingCase = () => (
         </div>
         <div className="before-explanation">
           <h3>
-            Remove Personal Information From Your Petition and IRS Notice(s)
+            3. Remove Personal Information From Your Petition and IRS Notice(s)
           </h3>
           <p>
             If the IRS notice includes personal information (such as Social
@@ -117,7 +117,7 @@ export const BeforeStartingCase = () => (
           <FontAwesomeIcon icon={['far', 'file-pdf']} />
         </div>
         <div className="before-explanation">
-          <h3>Combine Your Petition and IRS Notice(s) Into a Single PDF</h3>
+          <h3>4. Combine Your Petition and IRS Notice(s) Into a Single PDF</h3>
           <p>
             Scan your Petition and IRS notice into one Petition PDF or combine
             them digitally. This is what youʼll upload to the Court to start
@@ -135,7 +135,7 @@ export const BeforeStartingCase = () => (
           </div>
         </div>
         <div className="before-explanation">
-          <h3>Donʼt Submit Extra Documents With Your Petition</h3>
+          <h3>5. Donʼt Submit Extra Documents With Your Petition</h3>
           <p>
             <strong>Do not</strong> include any additional documents with your
             Petition, except for the IRS notice. Documents that might be
