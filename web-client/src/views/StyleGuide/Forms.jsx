@@ -368,9 +368,9 @@ export const Forms = () => (
         </fieldset>
 
         <fieldset className="usa-fieldset">
-          <legend className="usa-legend">Mailing address</legend>
+          <legend className="usa-legend sr-only">Mailing address</legend>
           <label className="usa-label" htmlFor="mailing-address-1">
-            Street address 1
+            Mailing Address 1
           </label>
           <input
             className="usa-input"
@@ -380,7 +380,7 @@ export const Forms = () => (
           />
 
           <label className="usa-label" htmlFor="mailing-address-2">
-            Street address 2 <span className="usa-hint">(optional)</span>
+            Mailing Address 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"
@@ -400,7 +400,11 @@ export const Forms = () => (
               <label className="usa-label" htmlFor="state">
                 State
               </label>
-              <select className="usa-select" id="state" name="state">
+              <select
+                className="usa-select margin-bottom-3"
+                id="state"
+                name="state"
+              >
                 <option value>- Select -</option>
                 <option value="AL">Alabama</option>
                 <option value="AK">Alaska</option>
