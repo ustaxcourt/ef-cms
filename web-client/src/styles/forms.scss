@@ -29,9 +29,9 @@ input[type='text'],
 textarea,
 select {
   margin: 0 0 15px 0;
-
   &:hover {
-    border: 2px solid color($theme-color-primary);
+    border: 1px solid color($theme-color-primary);
+    box-shadow: inset 0 0 1px color($theme-color-primary);
   }
 }
 
@@ -49,15 +49,13 @@ select {
   &::before {
     box-shadow: 0 0 0 1px color($theme-color-base);
   }
-
   &:hover::before {
-    box-shadow: 0 0 0 1px color($theme-color-primary);
+    box-shadow: 0 0 0 2px color($theme-color-primary);
   }
 }
 
 .usa-checkbox__label {
   margin-bottom: 20px;
-
   &:last-of-type {
     margin-bottom: 0;
   }
@@ -92,7 +90,6 @@ textarea.caption {
 
 div.usa-radio.usa-radio__inline {
   display: inline;
-
   .usa-radio__label {
     padding-right: 2rem;
     padding-left: 0;
@@ -269,13 +266,11 @@ label.validated::after {
   @media only screen and (min-width: $medium-screen) {
     max-width: units('desktop');
   }
-
   .contact-group {
     input,
     select {
       max-width: units('mobile') + 5;
     }
-
     .grid-row.grid-gap.state-and-city {
       max-width: units('mobile') + 7;
     }
@@ -307,12 +302,10 @@ label.ustc-upload {
     display: none;
     color: $color-green;
   }
-
   &.validated {
     &::after {
       display: none;
     }
-
     .success-message {
       display: inline-block;
     }
@@ -385,17 +378,14 @@ label.ustc-upload {
     padding-bottom: 4px;
     border: 1px solid color($theme-color-base);
     border-radius: 0;
-
     &:hover {
       border: 1px solid color($theme-color-primary);
       box-shadow: 0 0 0 1px color($theme-color-primary);
     }
-
     .select-react-element__value-container {
       &:focus {
         border: none;
       }
-
       .select-react-element__input input {
         border: none;
         margin-top: auto;
@@ -414,16 +404,11 @@ label.ustc-upload {
 .date-received {
   .usa-form-group {
     margin-bottom: 0px;
-
     input[type='number'] {
       margin-bottom: 5px;
     }
   }
 }
-
-// .usa-input-error .select-react-element {
-//   width: calc(100% + 1.9rem);
-// }
 
 .docket-entry-form {
   .service-date {
