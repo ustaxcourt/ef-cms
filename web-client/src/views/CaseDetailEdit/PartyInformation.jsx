@@ -107,6 +107,7 @@ export const PartyInformation = connect(
               <div className="order-checkbox">
                 <input
                   id="order-for-ods"
+                  className="usa-checkbox__input"
                   type="checkbox"
                   name="orderForOds"
                   checked={caseDetail.orderForOds}
@@ -118,7 +119,7 @@ export const PartyInformation = connect(
                     autoSaveCaseSequence();
                   }}
                 />
-                <label htmlFor="order-for-ods" className="usa-label">
+                <label htmlFor="order-for-ods" className="usa-checkbox__label">
                   Order for Ownership Disclosure Statement
                 </label>
               </div>
