@@ -13,11 +13,9 @@ import React from 'react';
 
 export const FileDocumentWizard = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     showModal: state.showModal,
   },
-  ({ caseDetail, chooseWizardStepSequence, showModal }) => {
+  ({ showModal }) => {
     return (
       <>
         <CaseDetailHeader />
