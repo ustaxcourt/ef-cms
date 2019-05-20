@@ -179,6 +179,20 @@ export const SelectDocumentType = connect(
             </div>
           </div>
         </div>
+        {screenMetadata.isDocumentTypeSelected && (
+          <div className="button-box-container">
+            <button
+              type="button"
+              className="usa-button"
+              id="continue-button"
+              onClick={() => {
+                selectDocumentSequence();
+              }}
+            >
+              Continue
+            </button>
+          </div>
+        )}
       </React.Fragment>
     );
   },
