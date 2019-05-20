@@ -1,5 +1,3 @@
-import { queryStringDecoder } from './queryStringDecoder';
-
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftRegular,
   faCheckCircle as faCheckCircleRegular,
@@ -85,8 +83,6 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
-    const { code, token: queryToken, path } = queryStringDecoder();
-
     presenter.state.constants = applicationContext.getConstants();
 
     library.add(
@@ -134,19 +130,6 @@ const app = {
       route,
     };
     const cerebralApp = App(presenter, debugTools);
-
-    if (code) {
-      await cerebralApp.getSequence('loginWithCodeSequence')({
-        code,
-        path,
-      });
-    } else if (queryToken) {
-      await cerebralApp.getSequence('submitLoginSequence')({
-        path,
-        token: queryToken,
-      });
-    }
-    await cerebralApp.getSequence('fetchUserNotificationsSequence')();
 
     router.initialize(cerebralApp);
 

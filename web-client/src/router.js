@@ -78,6 +78,14 @@ const router = {
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
+    route('/log-in...', () => {
+      const { token, code, path } = queryStringDecoder();
+      if (code) {
+        app.getSequence('loginWithCodeSequence')({ code, path });
+      } else {
+        app.getSequence('loginWithTokenSequence')({ path, token });
+      }
+    });
     route(
       '/before-starting-a-case',
       checkLoggedIn(() => {
