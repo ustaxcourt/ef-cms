@@ -289,7 +289,7 @@ export const Forms = () => (
       </div>
 
       <div className="blue-container margin-bottom-4">
-        <fieldset className="usa-fieldset">
+        <fieldset className="usa-fieldset margin-bottom-0">
           <legend className="usa-legend">Date of birth</legend>
           <div className="usa-memorable-date">
             <div className="usa-form-group usa-form-group--month">
