@@ -33,6 +33,11 @@ select {
   &:hover {
     border: 2px solid color($theme-color-primary);
   }
+
+  &::placeholder {
+    color: color($theme-color-base-dark);
+    opacity: 1;
+  }
 }
 
 .usa-error-message {
