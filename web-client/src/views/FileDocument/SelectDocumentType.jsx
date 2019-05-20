@@ -24,7 +24,7 @@ export const SelectDocumentType = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2 tabIndex="-1" id="file-a-document-header">
+        <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
           File a Document
         </h2>
         <h3>What Type of Document Are You Filing?</h3>
