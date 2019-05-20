@@ -48,6 +48,11 @@ select {
 .usa-select {
   margin: 0;
   background-image: url('/images/arrow-both-base.svg');
+  &:disabled {
+    border-color: color($theme-color-base-light);
+    background-color: color($theme-color-base-lighter);
+    color: color($theme-color-base-light);
+  }
 }
 
 .usa-checkbox__label,

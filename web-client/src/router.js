@@ -100,13 +100,10 @@ const router = {
         app.getSequence('gotoStartCaseSequence')();
       }),
     );
-    route(
-      '/style-guide',
-      checkLoggedIn(() => {
-        document.title = `Style Guide ${pageTitleSuffix}`;
-        app.getSequence('gotoStyleGuideSequence')();
-      }),
-    );
+    route('/style-guide', () => {
+      document.title = `Style Guide ${pageTitleSuffix}`;
+      app.getSequence('gotoStyleGuideSequence')();
+    });
     route('/mock-login...', () => {
       const { token, path } = queryStringDecoder();
       if (token) {

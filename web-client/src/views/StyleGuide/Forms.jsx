@@ -121,6 +121,17 @@ export const Forms = () => (
             <option value="value3">Option C</option>
           </select>
         </div>
+        <div className="usa-form-group">
+          <label htmlFor="options" className="usa-label">
+            Dropdown label (disabled)
+          </label>
+          <select className="usa-select" id="options" disabled>
+            <option value>- Select -</option>
+            <option value="value1">Option A</option>
+            <option value="value2">Option B</option>
+            <option value="value3">Option C</option>
+          </select>
+        </div>
 
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="options-error" className="usa-label">
