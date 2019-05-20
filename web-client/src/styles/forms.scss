@@ -1,4 +1,5 @@
-.usa-form-group {
+.usa-form-group,
+.usa-fieldset {
   margin-bottom: 20px;
 }
 
@@ -28,7 +29,7 @@ input[type='tel'],
 input[type='text'],
 textarea,
 select {
-  margin: 0 0 15px 0;
+  margin: 0;
   &:hover {
     border: 1px solid color($theme-color-primary);
     box-shadow: inset 0 0 1px color($theme-color-primary);
@@ -41,16 +42,17 @@ select {
 }
 
 .usa-error-message {
-  padding: 0;
+  padding: 15px 0 0 0;
 }
 
 .usa-select {
-  margin: 0 0 20px;
+  margin: 0;
   background-image: url('/images/arrow-both-base.svg');
 }
 
 .usa-checkbox__label,
 .usa-radio__label {
+  margin-bottom: 0;
   &::before {
     box-shadow: 0 0 0 1px color($theme-color-base);
   }
@@ -59,14 +61,12 @@ select {
   }
 }
 
-.usa-checkbox__label {
-  margin-bottom: 20px;
-  &:last-of-type {
+.usa-checkbox,
+.usa-radio {
+  margin-bottom: 15px;
+  &:last-child {
     margin-bottom: 0;
   }
-}
-.usa-radio__label {
-  margin-bottom: 15px;
 }
 
 .usa-checkbox__input:disabled + .usa-checkbox__label {
@@ -84,8 +84,8 @@ select {
 
 input[type='file'] {
   height: auto;
-  border: none;
-  margin: 0 0 20px 0;
+  border: 0;
+  margin: 0;
 }
 
 textarea.caption {
