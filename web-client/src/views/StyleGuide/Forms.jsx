@@ -12,9 +12,7 @@ export const Forms = () => (
           </label>
           <input id="input-text" className="usa-input" type="text" />
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label className="usa-label with-hint" htmlFor="input-text-hint">
             Text input with hint text
@@ -41,9 +39,7 @@ export const Forms = () => (
           />
           <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-email" className="usa-label">
             Email input
@@ -67,9 +63,7 @@ export const Forms = () => (
           </label>
           <input id="input-number" className="usa-input" type="number" />
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-number-error" className="usa-label">
             Number input with error
@@ -81,18 +75,14 @@ export const Forms = () => (
           />
           <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-tel" className="usa-label">
             Phone input
           </label>
           <input id="input-tel" className="usa-input" type="tel" />
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-tel-error" className="usa-label">
             Phone input with error
@@ -104,18 +94,14 @@ export const Forms = () => (
           />
           <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="input-file" className="usa-label">
             File input
           </label>
           <input id="input-file" type="file" />
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="input-file-error" className="usa-label">
             File input with error
@@ -123,9 +109,7 @@ export const Forms = () => (
           <input id="input-file-error" type="file" />
           <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="options" className="usa-label">
             Dropdown label
@@ -137,9 +121,7 @@ export const Forms = () => (
             <option value="value3">Option C</option>
           </select>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="options-error" className="usa-label">
             Dropdown label with error
@@ -152,17 +134,14 @@ export const Forms = () => (
           </select>
           <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
           <label htmlFor="textarea" className="usa-label">
             Text Area
           </label>
           <textarea id="textarea" className="usa-textarea" />
         </div>
-      </div>
-      <div className="blue-container margin-bottom-4">
+
         <div className="usa-form-group usa-form-group--error">
           <label htmlFor="textarea-error" className="usa-label">
             Text Area with error
@@ -173,9 +152,7 @@ export const Forms = () => (
           />
           <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
           <legend className="usa-legend">Checkboxes</legend>
           <div className="usa-checkbox">
@@ -227,9 +204,7 @@ export const Forms = () => (
             </label>
           </div>
         </fieldset>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
         <fieldset className="usa-fieldset">
           <legend className="usa-legend">Radio Buttons</legend>
           <div className="usa-radio">
@@ -270,10 +245,8 @@ export const Forms = () => (
             </label>
           </div>
         </fieldset>
-      </div>
 
-      <div className="blue-container margin-bottom-4">
-        <fieldset className="usa-fieldset">
+        <fieldset className="usa-fieldset margin-bottom-0">
           <legend className="usa-legend">Inline Radio Buttons</legend>
           <div className="usa-radio usa-radio__inline">
             <input
@@ -367,61 +340,71 @@ export const Forms = () => (
           </div>
         </fieldset>
 
-        <fieldset className="usa-fieldset">
+        <fieldset className="usa-fieldset margin-bottom-0">
           <legend className="usa-legend sr-only">Mailing address</legend>
-          <label className="usa-label" htmlFor="mailing-address-1">
-            Mailing Address 1
-          </label>
-          <input
-            className="usa-input"
-            id="mailing-address-1"
-            name="mailing-address-1"
-            type="text"
-          />
-
-          <label className="usa-label" htmlFor="mailing-address-2">
-            Mailing Address 2 <span className="usa-hint">(optional)</span>
-          </label>
-          <input
-            className="usa-input"
-            id="mailing-address-2"
-            name="mailing-address-2"
-            type="text"
-          />
+          <div className="usa-form-group">
+            <label className="usa-label" htmlFor="mailing-address-1">
+              Mailing Address 1
+            </label>
+            <input
+              className="usa-input"
+              id="mailing-address-1"
+              name="mailing-address-1"
+              type="text"
+            />
+          </div>
+          <div className="usa-form-group">
+            <label className="usa-label" htmlFor="mailing-address-2">
+              Mailing Address 2 <span className="usa-hint">(optional)</span>
+            </label>
+            <input
+              className="usa-input"
+              id="mailing-address-2"
+              name="mailing-address-2"
+              type="text"
+            />
+          </div>
 
           <div className="grid-row grid-gap">
             <div className="mobile-lg:grid-col-8">
-              <label className="usa-label" htmlFor="city">
-                City
-              </label>
-              <input className="usa-input" id="city" name="city" type="text" />
+              <div className="usa-form-group">
+                <label className="usa-label" htmlFor="city">
+                  City
+                </label>
+                <input
+                  className="usa-input"
+                  id="city"
+                  name="city"
+                  type="text"
+                />
+              </div>
             </div>
             <div className="mobile-lg:grid-col-4">
-              <label className="usa-label" htmlFor="state">
-                State
-              </label>
-              <select
-                className="usa-select margin-bottom-3"
-                id="state"
-                name="state"
-              >
-                <option value>- Select -</option>
-                <option value="AL">Alabama</option>
-                <option value="AK">Alaska</option>
-              </select>
+              <div className="usa-form-group">
+                <label className="usa-label" htmlFor="state">
+                  State
+                </label>
+                <select className="usa-select" id="state" name="state">
+                  <option value>- Select -</option>
+                  <option value="AL">Alabama</option>
+                  <option value="AK">Alaska</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <label className="usa-label" htmlFor="zip">
-            ZIP
-          </label>
-          <input
-            className="usa-input usa-input--medium"
-            id="zip"
-            name="zip"
-            type="text"
-            pattern="[\d]{5}(-[\d]{4})?"
-          />
+          <div className="usa-form-group margin-bottom-0">
+            <label className="usa-label" htmlFor="zip">
+              ZIP
+            </label>
+            <input
+              className="usa-input usa-input--medium"
+              id="zip"
+              name="zip"
+              type="text"
+              pattern="[\d]{5}(-[\d]{4})?"
+            />
+          </div>
         </fieldset>
       </div>
     </form>
