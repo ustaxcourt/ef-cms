@@ -29,6 +29,7 @@
       "Sid": "Cognito",
       "Effect": "Allow",
       "Action": [
+        "cognito-idp:UpdateUserPoolClient",
         "cognito-idp:CreateUserPool",
         "cognito-idp:AdminRespondToAuthChallenge",
         "cognito-idp:AdminConfirmSignUp",
