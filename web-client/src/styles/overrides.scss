@@ -105,6 +105,10 @@ option:first-child {
       margin-bottom: 0px;
     }
   }
+
+  li:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
 .usa-memorable-date {
