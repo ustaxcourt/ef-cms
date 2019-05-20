@@ -58,7 +58,7 @@ export const DocumentTypeReadOnly = connect(
           )}
         </div>
 
-        <div className="usa-form-group">
+        <div className="button-box-container">
           <button
             type="button"
             className="usa-button"
