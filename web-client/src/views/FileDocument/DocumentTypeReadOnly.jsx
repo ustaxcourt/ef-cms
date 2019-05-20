@@ -23,7 +23,7 @@ export const DocumentTypeReadOnly = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="blue-container" role="alert" aria-live="polite">
+        <div role="alert" aria-live="polite">
           <div className="usa-form-group">
             <div>
               <Focus className="header-with-link-button">
