@@ -73,7 +73,7 @@ export const CaseDetailInternal = connect(
                 id="tab-case-info"
               >
                 <CaseInformationInternal />
-                <div className="margin-top-2">
+                <div className="case-detail-party-info">
                   <PartyInformation />
                 </div>
               </Tab>
