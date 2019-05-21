@@ -27,7 +27,7 @@ export const RequestAccessDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h3>Tell Us About This Document</h3>
+        <h2 className="margin-top-4">Tell Us About This Document</h2>
         <div className="blue-container">
           <div className="grid-container padding-x-0">
             <div className="tablet:grid-col-7 push-right">

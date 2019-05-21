@@ -28,7 +28,7 @@ export const SecondaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h3>Tell Us About the {form.secondaryDocument.documentTitle}</h3>
+        <h2>Tell Us About the {form.secondaryDocument.documentTitle}</h2>
         <div className="blue-container">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
