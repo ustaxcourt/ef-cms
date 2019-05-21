@@ -23,6 +23,7 @@ export const SearchBox = connect(
           Search term
         </label>
         <input
+          className="usa-input"
           id="search-field"
           type="search"
           name="searchTerm"
