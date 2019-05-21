@@ -24,7 +24,7 @@ export const SupportingDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Add Supporting Document</h2>
+        <h1>Add Supporting Document</h1>
         <div className="blue-container docket-entry-form">
           <div
             className={`usa-form-group ${
