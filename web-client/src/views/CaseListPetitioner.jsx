@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -9,18 +10,18 @@ export const CaseListPetitioner = connect(
   ({ caseList }) => {
     return (
       <>
-        <div className="grid-container padding-x-0 subsection">
+        <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
               <h2 className="margin-0">Your Cases</h2>
             </div>
             <div className="tablet:grid-col-6">
               <a
-                className="usa-button new-case tablet-full-width"
+                className="usa-button new-case tablet-full-width float-right"
                 href="/before-starting-a-case"
                 id="init-file-petition"
               >
-                Start a New Case
+                <FontAwesomeIcon icon="file" size="1x" /> File a Petition
               </a>
             </div>
           </div>
