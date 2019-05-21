@@ -33,6 +33,7 @@ export const SupportingDocumentSelect = connect(
             Which Document is This Supporting?
           </label>
           <select
+            className="usa-select"
             name="previousDocument"
             id="previous-document"
             value={get(form, 'previousDocument', '')}
