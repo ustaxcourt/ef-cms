@@ -3,8 +3,12 @@ const sinon = require('sinon');
 const { deleteWorkItemFromSection } = require('./deleteWorkItemFromSection');
 
 describe('deleteWorkItemFromSection', () => {
+  let deleteStub;
+
   beforeEach(() => {
-    sinon.stub(client, 'delete').resolves(null);
+    deleteStub = sinon.stub().returns({
+      promise: async () => null,
+    });
   });
 
   it('invokes the peristence layer with pk of irsHoldingQueue|workItem and other expected params', async () => {
@@ -12,17 +16,21 @@ describe('deleteWorkItemFromSection', () => {
       environment: {
         stage: 'dev',
       },
+      getDocumentClient: () => ({
+        delete: deleteStub,
+      }),
     };
     await deleteWorkItemFromSection({
       applicationContext,
-      section: 'irsHoldingQueue',
-      workItemId: '123',
+      workItem: {
+        section: 'irsHoldingQueue',
+        workItemId: '123',
+      },
     });
-    expect(client.delete.getCall(0).args[0]).toEqual({
-      applicationContext: { environment: { stage: 'dev' } },
-      key: {
-        pk: 'irsHoldingQueue|workItem',
-        sk: '123',
+    expect(deleteStub.getCall(0).args[0]).toMatchObject({
+      Key: {
+        pk: 'section-irsHoldingQueue',
+        sk: 'workitem-123',
       },
     });
   });

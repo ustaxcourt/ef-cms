@@ -3,25 +3,15 @@ const sinon = require('sinon');
 const { putWorkItemInOutbox } = require('./putWorkItemInOutbox');
 
 describe('putWorkItemInOutbox', () => {
-  let getCurrentUserStub;
+  let putStub;
 
   beforeEach(() => {
-    sinon.stub(client, 'put').resolves([
-      {
-        pk: 'abc',
-        sk: 'abc',
-        workItemId: 'abc',
-      },
-    ]);
-
-    getCurrentUserStub = sinon.stub().returns({
-      section: 'docket',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    putStub = sinon.stub().returns({
+      promise: async () => ({
+        section: 'docket',
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
     });
-  });
-
-  afterEach(() => {
-    client.put.restore();
   });
 
   it('invokes the peristence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
@@ -29,7 +19,13 @@ describe('putWorkItemInOutbox', () => {
       environment: {
         stage: 'dev',
       },
-      getCurrentUser: getCurrentUserStub,
+      getCurrentUser: () => ({
+        section: 'docket',
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+      getDocumentClient: () => ({
+        put: putStub,
+      }),
     };
     await putWorkItemInOutbox({
       applicationContext,
@@ -37,19 +33,17 @@ describe('putWorkItemInOutbox', () => {
         workItemId: '123',
       },
     });
-    expect(client.put.getCall(0).args[0]).toMatchObject({
+    expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: '1805d1ab-18d0-43ec-bafb-654e83405416|outbox',
+        pk: 'user-outbox-1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
     });
-    expect(client.put.getCall(1).args[0]).toMatchObject({
+    expect(putStub.getCall(1).args[0]).toMatchObject({
       Item: {
-        pk: 'docket|outbox',
+        pk: 'section-outbox-docket',
         workItemId: '123',
       },
-      applicationContext: { environment: { stage: 'dev' } },
     });
   });
 });
