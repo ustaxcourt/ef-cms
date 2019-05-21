@@ -36,10 +36,12 @@ table.small-case-qualifications-table {
 
 table.dashboard {
   thead {
-    border-bottom: 2px solid color($theme-color-base-lighter);
+    min-height: 50px;
+    border-bottom: 1px solid color($theme-color-base-lighter);
+
     th {
       border: none;
-      background-color: $color-white;
+      background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;
     }
   }
@@ -51,7 +53,6 @@ table.dashboard {
   td {
     display: table-cell;
     border: none;
-    font-size: 14px;
 
     label {
       margin: 0;
@@ -288,7 +289,6 @@ table.docket-record {
     }
 
     .filing-type-icon {
-      padding: 0;
       text-align: right;
 
       svg {
@@ -306,7 +306,6 @@ table.docket-record {
 
     tbody td {
       height: 65px;
-      vertical-align: middle;
     }
   }
 

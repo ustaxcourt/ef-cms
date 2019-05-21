@@ -26,7 +26,9 @@ export const SecondaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Add Entry for {form.secondaryDocument.documentType}</h2>
+        <h2 className="margin-top-4">
+          Add Entry for {form.secondaryDocument.documentType}
+        </h2>
         <div className="blue-container">
           <div
             className={`usa-form-group ${
@@ -85,6 +87,7 @@ export const SecondaryDocumentForm = connect(
               Additional Info 1
             </label>
             <input
+              className="usa-input"
               id="secondary-additional-info"
               type="text"
               aria-describedby="secondary-additional-info-label"
@@ -136,6 +139,7 @@ export const SecondaryDocumentForm = connect(
               Additional Info 2
             </label>
             <input
+              className="usa-input"
               id="secondary-additional-info2"
               type="text"
               aria-describedby="secondary-additional-info2-label"

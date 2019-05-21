@@ -12,7 +12,9 @@ export const PartiesRepresentingReadOnly = connect(
   ({ caseDetail, chooseWizardStepSequence, form }) => {
     return (
       <React.Fragment>
-        <h3 className="header-with-link-button">Parties You’re Representing</h3>
+        <h2 className="header-with-link-button margin-top-4">
+          Parties You’re Representing
+        </h2>
         <button
           className="link push-right usa-button usa-button--unstyled"
           type="button"

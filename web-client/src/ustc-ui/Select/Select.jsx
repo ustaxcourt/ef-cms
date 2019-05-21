@@ -35,7 +35,7 @@ export const Select = connect(props => {
           </option>
         ))}
       </select>
-      <div className="usa-error-message beneath">{error}</div>
+      {error && <div className="usa-error-message beneath">{error}</div>}
     </div>
   );
 });
