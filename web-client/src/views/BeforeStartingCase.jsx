@@ -30,14 +30,14 @@ export const BeforeStartingCase = () => (
       <div className="grid-container padding-x-0" role="list">
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">
-            <div role="listitem">
-              <div className="fa-before" role="display">
+            <div role="listitem" className="caseItem">
+              <div className="fa-before caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </div>
-              <div className="before-explanation">
-                <h3>
-                  1. Have the IRS Notice(s) Youʼve Received Available to Submit
-                </h3>
+              <h3 className="caseItem__heading">
+                1. Have the IRS Notice(s) Youʼve Received Available to Submit
+              </h3>
+              <div className="caseItem__content">
                 <p>
                   If you’ve received an IRS notice, such as a Notice of
                   Deficiency or Notice of Determination, you’ll need to include
@@ -52,12 +52,14 @@ export const BeforeStartingCase = () => (
                 </p>
               </div>
             </div>
-            <div role="listitem" className="margin-bottom-0">
-              <div className="fa-before" role="display">
+            <div role="listitem" className="margin-bottom-0 caseItem">
+              <div className="fa-before caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'edit']} />
               </div>
-              <div className="before-explanation">
-                <h3>2. Fill Out The Required Forms</h3>
+              <h3 className="caseItem__heading">
+                2. Fill Out The Required Forms
+              </h3>
+              <div className="caseItem__content">
                 <p className="label">Petition Form</p>
                 <p>
                   Complete the Petition form,{' '}
@@ -115,15 +117,15 @@ export const BeforeStartingCase = () => (
             </div>
           </div>
           <div className="tablet:grid-col-6">
-            <div role="listitem">
-              <div className="fa-before" role="display">
+            <div role="listitem" className="caseItem">
+              <div className="fa-before caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['fa', 'shield-alt']} />
               </div>
-              <div className="before-explanation">
-                <h3>
-                  3. Remove Personal Information From Your Petition and IRS
-                  Notice(s)
-                </h3>
+              <h3 className="caseItem__heading">
+                3. Remove Personal Information From Your Petition and IRS
+                Notice(s)
+              </h3>
+              <div className="caseItem__content">
                 <p>
                   If the IRS notice includes personal information (such as
                   Social Security Numbers, Taxpayer Identification Numbers, or
@@ -136,14 +138,14 @@ export const BeforeStartingCase = () => (
               </div>
             </div>
 
-            <div role="listitem">
-              <div className="fa-before" role="display">
+            <div role="listitem" className="caseItem">
+              <div className="fa-before caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'file-pdf']} />
               </div>
-              <div className="before-explanation">
-                <h3>
-                  4. Combine Your Petition and IRS Notice(s) Into a Single PDF
-                </h3>
+              <h3 className="caseItem__heading">
+                4. Combine Your Petition and IRS Notice(s) Into a Single PDF
+              </h3>
+              <div className="caseItem__content">
                 <p>
                   Scan your Petition and IRS notice into one Petition PDF or
                   combine them digitally. This is what youʼll upload to the
@@ -159,8 +161,8 @@ export const BeforeStartingCase = () => (
                 </p>
               </div>
             </div>
-            <div role="listitem">
-              <div className="fa-before" role="display">
+            <div role="listitem" className="caseItem">
+              <div className="fa-before caseItem__icon" role="display">
                 <div className="svg-wrapper">
                   <img
                     src={paperclipSlashIcon}
@@ -169,8 +171,10 @@ export const BeforeStartingCase = () => (
                   />
                 </div>
               </div>
-              <div className="before-explanation">
-                <h3>5. Donʼt Submit Extra Documents With Your Petition</h3>
+              <h3 className="caseItem__heading">
+                5. Donʼt Submit Extra Documents With Your Petition
+              </h3>
+              <div className="caseItem__content">
                 <p>
                   <strong>Do not</strong> include any additional documents with
                   your Petition, except for the IRS notice. Documents that might
