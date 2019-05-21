@@ -51,7 +51,7 @@ export const DashboardPetitioner = connect(
                   <FontAwesomeIcon
                     icon="external-link-alt"
                     size="sm"
-                    className="fa-icon-blue margin-left-1"
+                    className="fa-icon-blue margin-left-05"
                   />
                 </p>
                 <p>
@@ -65,7 +65,7 @@ export const DashboardPetitioner = connect(
                   <FontAwesomeIcon
                     icon="external-link-alt"
                     size="sm"
-                    className="fa-icon-blue margin-left-1"
+                    className="fa-icon-blue margin-left-05"
                   />
                 </p>
               </div>
@@ -81,7 +81,7 @@ export const DashboardPetitioner = connect(
                   <FontAwesomeIcon
                     icon="external-link-alt"
                     size="sm"
-                    className="fa-icon-blue margin-left-1"
+                    className="fa-icon-blue margin-left-05"
                   />
                 </p>
               </div>
