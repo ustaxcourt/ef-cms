@@ -18,8 +18,8 @@ exports.saveWorkItemForPaper = async ({ workItem, applicationContext }) => {
   return Promise.all([
     put({
       Item: {
-        pk: workItem.workItemId,
-        sk: workItem.workItemId,
+        pk: `workitem-${workItem.workItemId}`,
+        sk: `workitem-${workItem.workItemId}`,
         ...workItem,
       },
       applicationContext,
