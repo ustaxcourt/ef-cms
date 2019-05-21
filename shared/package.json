@@ -56,7 +56,6 @@
     "qs": "^6.7.0",
     "s3-zip": "^3.0.0",
     "sanitize-filename": "^1.6.1",
-    "snyk": "^1.165.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
