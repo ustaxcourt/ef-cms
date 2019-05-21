@@ -33,12 +33,12 @@ export const CaseInfo = connect(
                 caseDetailErrors.receivedAt ? 'usa-form-group--error' : ''
               }`}
             >
-              <fieldset className="usa-fieldset">
+              <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="received-at-legend">
                   Date Received
                 </legend>
                 <div className="usa-memorable-date">
-                  <div className="usa-form-group usa-form-group--month">
+                  <div className="usa-form-group usa-form-group--month margin-bottom-0">
                     <label
                       className="usa-label"
                       htmlFor="received-at-month"
@@ -70,7 +70,7 @@ export const CaseInfo = connect(
                       }}
                     />
                   </div>
-                  <div className="usa-form-group usa-form-group--day">
+                  <div className="usa-form-group usa-form-group--day margin-bottom-0">
                     <label
                       className="usa-label"
                       htmlFor="received-at-day"
@@ -102,7 +102,7 @@ export const CaseInfo = connect(
                       }}
                     />
                   </div>
-                  <div className="usa-form-group usa-form-group--year">
+                  <div className="usa-form-group usa-form-group--year margin-bottom-0">
                     <label
                       className="usa-label"
                       htmlFor="received-at-year"
