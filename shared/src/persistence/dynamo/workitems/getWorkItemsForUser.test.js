@@ -1,50 +1,28 @@
-const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const { getWorkItemsForUser } = require('./getWorkItemsForUser');
 
 const MOCK_ITEM = {
+  caseStatus: 'New',
   docketNumber: '123-19',
-  status: 'New',
 };
 
 describe('getWorkItemsForUser', () => {
-  let getStub;
+  let queryStub;
 
   beforeEach(() => {
-    getStub = sinon.stub().returns({
+    queryStub = sinon.stub().returns({
       promise: () =>
         Promise.resolve({
-          Item: {
-            'aws:rep:deleting': 'a',
-            'aws:rep:updateregion': 'b',
-            'aws:rep:updatetime': 'c',
-            ...MOCK_ITEM,
-          },
+          Items: [
+            {
+              'aws:rep:deleting': 'a',
+              'aws:rep:updateregion': 'b',
+              'aws:rep:updatetime': 'c',
+              ...MOCK_ITEM,
+            },
+          ],
         }),
     });
-
-    sinon.stub(client, 'query').resolves([
-      {
-        pk: 'abc',
-        sk: 'abc',
-        workItemId: 'abc',
-      },
-    ]);
-    sinon
-      .stub(client, 'batchGet')
-      .onFirstCall()
-      .resolves([
-        {
-          caseId: '123',
-          pk: 'abc',
-          sk: 'abc',
-          workItemId: 'abc',
-        },
-      ]);
-  });
-
-  afterEach(() => {
-    client.query.restore();
   });
 
   it('makes a post request to the expected endpoint with the expected data', async () => {
@@ -53,7 +31,7 @@ describe('getWorkItemsForUser', () => {
         stage: 'dev',
       },
       getDocumentClient: () => ({
-        get: getStub,
+        query: queryStub,
       }),
       isAuthorizedForWorkItems: () => {
         return true;
@@ -62,11 +40,6 @@ describe('getWorkItemsForUser', () => {
     const result = await getWorkItemsForUser({
       applicationContext,
     });
-    expect(result).toMatchObject([
-      {
-        caseId: '123',
-        workItemId: 'abc',
-      },
-    ]);
+    expect(result).toMatchObject([MOCK_ITEM]);
   });
 });
