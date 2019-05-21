@@ -101,13 +101,13 @@ class DocketRecordOverlayComponent extends React.Component {
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               View PDF
             </a>
-            <p className="semi-bold label">Date</p>
+            <p className="semi-bold label margin-top-3">Date</p>
             <p className="margin-top-0">{document.createdAtFormatted}</p>
-            <p className="semi-bold label">Filed By</p>
+            <p className="semi-bold label margin-top-3">Filed By</p>
             <p className="margin-top-0">{document && document.filedBy}</p>
-            <p className="semi-bold label">Action</p>
+            <p className="semi-bold label margin-top-3">Action</p>
             <p className="margin-top-0">{record.action}</p>
-            <p className="semi-bold label">Served</p>
+            <p className="semi-bold label margin-top-3">Served</p>
             <p className="margin-top-0">
               {document && document.isStatusServed && (
                 <span>
@@ -118,7 +118,7 @@ class DocketRecordOverlayComponent extends React.Component {
                 <span>{document.status}</span>
               )}
             </p>
-            <p className="semi-bold label">Parties</p>
+            <p className="semi-bold label margin-top-3">Parties</p>
             <p className="margin-top-0">{record.servedParties}</p>
           </div>
         </dialog>
