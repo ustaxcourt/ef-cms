@@ -72,6 +72,7 @@ export const SupportingDocumentForm = connect(
               Document Type
             </label>
             <select
+              className="usa-select"
               name="eventCode"
               id="event-code"
               aria-describedby="event-code-label"
@@ -113,6 +114,7 @@ export const SupportingDocumentForm = connect(
                 Supporting Document Signed By
               </label>
               <input
+                className="usa-input"
                 id="free-text"
                 type="text"
                 aria-describedby="free-text-label"
@@ -147,6 +149,7 @@ export const SupportingDocumentForm = connect(
               Additional Info 1
             </label>
             <input
+              className="usa-input"
               id="additional-info"
               type="text"
               aria-describedby="additional-info-label"
@@ -193,6 +196,7 @@ export const SupportingDocumentForm = connect(
               Additional Info 2
             </label>
             <input
+              className="usa-input"
               id="additional-info2"
               type="text"
               aria-describedby="additional-info2-label2"
