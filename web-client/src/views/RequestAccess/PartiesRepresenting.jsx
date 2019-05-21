@@ -21,7 +21,9 @@ export const PartiesRepresenting = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2 className="margin-top-4">Tell Us About the Parties You’re Representing</h3>
+        <h2 className="margin-top-4">
+          Tell Us About the Parties You’re Representing
+        </h2>
         <div className="blue-container">
           <div
             className={`usa-form-group ${
