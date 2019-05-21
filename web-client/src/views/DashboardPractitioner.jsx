@@ -9,12 +9,18 @@ export const DashboardPractitioner = connect(
   { helper: state.dashboardPetitionerHelper, user: state.user },
   ({ user }) => {
     return (
-      <section className="usa-section grid-container">
-        <h1 tabIndex="-1">Welcome, {user.name}</h1>
-        <SuccessNotification />
-        <ErrorNotification />
-        <CaseListPractitioner />
-      </section>
+      <React.Fragment>
+        <div className="big-blue-header">
+          <div className="grid-container">
+            <h1 tabIndex="-1">Welcome, {user.name}</h1>
+          </div>
+        </div>
+        <section className="usa-section grid-container">
+          <SuccessNotification />
+          <ErrorNotification />
+          <CaseListPractitioner />
+        </section>
+      </React.Fragment>
     );
   },
 );
