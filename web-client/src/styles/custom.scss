@@ -342,12 +342,12 @@ select[disabled] {
     clear: left;
   }
 
-  .fa-before {
+  .caseItem__icon {
     position: absolute;
     top: 0;
     display: inline-block;
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     padding: 20px;
     background-color: color($theme-color-primary-dark);
     border-radius: 55px;
@@ -361,21 +361,33 @@ select[disabled] {
 
     .svg-wrapper img.svg {
       width: 54px;
-      height: 54px;
+      height: 35px;
+    }
+
+    @media only screen and (min-width: $medium-screen) {
+      width: 100px;
+      height: 100px;
+      padding: 20px;
+
+      .svg-wrapper img.svg {
+        width: 54px;
+        height: 62px;
+      }
     }
   }
 
-  .before-explanation {
-    position: relative;
-    top: 0;
-    display: inline-block;
-    padding-left: 150px;
-    .before-label {
-      display: block;
-      margin-bottom: 14px;
-      font-family: $font-serif;
-      font-size: 20px;
-      font-weight: $font-bold;
+  .caseItem__heading {
+    min-height: 80px;
+    padding-left: 86px;
+    @media only screen and (min-width: $medium-screen) {
+      min-height: 0;
+      padding-left: 150px;
+    }
+  }
+
+  .caseItem__content {
+    @media only screen and (min-width: $medium-screen) {
+      padding-left: 150px;
     }
   }
 }
