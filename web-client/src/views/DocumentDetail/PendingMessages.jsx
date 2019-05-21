@@ -238,9 +238,11 @@ export const PendingMessages = connect(
                           });
                         }}
                       />
-                      <button type="submit" className="usa-button">
-                        <span>Complete</span>
-                      </button>
+                      <div className="button-box-container">
+                        <button type="submit" className="usa-button">
+                          <span>Complete</span>
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}
