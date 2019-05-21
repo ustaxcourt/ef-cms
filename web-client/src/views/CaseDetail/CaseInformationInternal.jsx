@@ -72,7 +72,7 @@ export const CaseInformationInternal = connect(
       <div className="internal-information">
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-6 chunk hide-on-mobile">
+            <div className="tablet:grid-col-6 hide-on-mobile">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Petition Details</h3>
@@ -83,7 +83,7 @@ export const CaseInformationInternal = connect(
                 </div>
               </div>
             </div>
-            <div className="tablet:grid-col-6 chunk show-on-mobile">
+            <div className="tablet:grid-col-6 show-on-mobile">
               <div className="case-info-card">
                 <h3>Petition Details</h3>
                 <PetitionDetails
@@ -92,7 +92,7 @@ export const CaseInformationInternal = connect(
                 />
               </div>
             </div>
-            <div className="tablet:grid-col-6 chunk hide-on-mobile">
+            <div className="tablet:grid-col-6 hide-on-mobile">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">Trial Information</h3>
@@ -100,7 +100,7 @@ export const CaseInformationInternal = connect(
                 </div>
               </div>
             </div>
-            <div className="tablet:grid-col-6 chunk show-on-mobile">
+            <div className="tablet:grid-col-6 show-on-mobile margin-top-2">
               <div className="case-info-card">
                 <h3>Trial Information</h3>
                 <TrialInformation caseDetail={caseDetail} />
