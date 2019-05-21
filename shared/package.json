@@ -5,14 +5,17 @@
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "test": "jest",
+    "test": "snyk test && jest",
+    "test:snyk": "snyk test",
     "test:watch": "jest --watch",
     "docker:init": "./docker-init.sh",
     "docker:lint": "./docker-lint.sh",
     "docker:shellcheck": "./docker-shellcheck.sh",
     "docker:audit": "./docker-audit.sh",
     "docker:sonarqube": "./docker-sonarqube.sh",
-    "docker:test": "CONTAINER_NAME=shared-test ./docker-test.sh"
+    "docker:test": "CONTAINER_NAME=shared-test ./docker-test.sh",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -54,6 +57,7 @@
     "pdf-lib": "^0.6.2",
     "s3-zip": "^3.0.0",
     "sanitize-filename": "^1.6.1",
+    "snyk": "^1.165.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -69,5 +73,6 @@
     "prettier": "^1.17.1",
     "proxyquire": "^2.1.0",
     "sinon": "^7.3.2"
-  }
+  },
+  "snyk": true
 }
