@@ -62,8 +62,8 @@ export const CaseListPractitioner = connect(
     const renderEmptyState = () => (
       <React.Fragment>
         {renderTitle()}
-        <p>You have not started any cases.</p>
-        {renderStartButton()}
+        <p>You are not associated with any cases.</p>
+        <div className="button-box-container">{renderStartButton()}</div>
       </React.Fragment>
     );
 
