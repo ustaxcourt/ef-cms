@@ -25,6 +25,7 @@
     "docker:init": "./docker-init.sh",
     "nightwatch": "nightwatch -e chrome,firefox,safari,ie,edge",
     "snyk-protect": "snyk protect",
+    "snyk:auth": "snyk auth",
     "prepare": "npm run snyk-protect"
   },
   "repository": {
