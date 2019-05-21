@@ -75,16 +75,6 @@ iframe {
   font-weight: $font-bold;
 }
 
-.case-list-header {
-  margin-bottom: 20px;
-}
-
-.petitions-details {
-  .chunk {
-    margin-bottom: 30px;
-  }
-}
-
 .address-line {
   display: block;
 }
@@ -105,7 +95,7 @@ select[disabled] {
 
 .completed-card {
   margin-bottom: 20px;
-  color: color($theme-color-base);
+  color: color($theme-color-base-darkest);
 
   .completed-icon {
     padding-top: 2px;
@@ -417,6 +407,14 @@ select.ustc-input-error {
 #case-detail-tabs {
   border: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
+}
+
+.case-detail-party-info {
+  margin-top: 2rem;
+
+  @media (max-width: units('desktop')) {
+    margin-top: 1rem;
+  }
 }
 
 .ustc-horizontal-list * {

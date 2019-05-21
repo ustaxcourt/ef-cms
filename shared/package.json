@@ -53,6 +53,7 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
     "pdf-lib": "^0.6.2",
+    "qs": "^6.7.0",
     "s3-zip": "^3.0.0",
     "sanitize-filename": "^1.6.1",
     "snyk": "^1.165.2",

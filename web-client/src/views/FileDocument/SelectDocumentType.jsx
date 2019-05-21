@@ -29,7 +29,7 @@ export const SelectDocumentType = connect(
         <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
           File a Document
         </h2>
-        <h3>What Type of Document Are You Filing?</h3>
+        <h2>What Type of Document Are You Filing?</h2>
         <p className="margin-0">
           Choose the document category, then you’ll be able to select a document
           type.

@@ -145,7 +145,9 @@ export const StartCase = connect(
             </div>
           </div>
 
-          <h2>Upload Your Statement of Taxpayer Identification</h2>
+          <h2 className="margin-top-4">
+            Upload Your Statement of Taxpayer Identification
+          </h2>
           <div className="blue-container">
             <div
               className={`usa-form-group ${
@@ -199,7 +201,7 @@ export const StartCase = connect(
             </div>
           </div>
 
-          <h2>Who is Filing This Case?</h2>
+          <h2 className="margin-top-4">Who is Filing This Case?</h2>
           <div className="blue-container grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="mobile-lg:grid-col-7 push-right">
@@ -506,7 +508,7 @@ export const StartCase = connect(
           {/*start ods*/}
           {startCaseHelper.showOwnershipDisclosure && (
             <div className="usa-form-group">
-              <h2>Ownership Disclosure Statement</h2>
+              <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
               <p>
                 Tax Court Rules of Practice and Procedure (Rule 60) requires a
                 corporation, partnership, or limited liability company, filing a
@@ -572,7 +574,7 @@ export const StartCase = connect(
           )}
 
           <div className="usa-form-group">
-            <h2>What Kind of Case Are You Filing?</h2>
+            <h2 className="margin-top-4">What Kind of Case Are You Filing?</h2>
             <div className="blue-container">
               <fieldset
                 id="irs-notice-radios"
@@ -744,7 +746,7 @@ export const StartCase = connect(
               )}
             </div>
           </div>
-          <h2>How Do You Want This Case Handled?</h2>
+          <h2 className="margin-top-4">How Do You Want This Case Handled?</h2>
           <p>
             Tax laws allow you to file your case as a “small case,” which means
             it’s handled a bit differently than a regular case. If you choose to
@@ -827,7 +829,7 @@ export const StartCase = connect(
               />
             )}
           </div>
-          <h2>Review Your Information</h2>
+          <h2 className="margin-top-4">Review Your Information</h2>
           <p>
             You can’t edit your case once you submit it. Please make sure all
             your information appears the way you want it to.

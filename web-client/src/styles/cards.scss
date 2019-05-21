@@ -89,7 +89,8 @@
 .party-information,
 .petitions-details,
 .internal-information,
-.frequently-used-docs {
+.frequently-used-docs,
+.case-search {
   .card {
     margin-bottom: 0;
     .content-wrapper {
@@ -98,6 +99,51 @@
   }
 }
 
+.taxpayer-tools {
+  .card {
+    margin-bottom: 30px;
+
+    .content-wrapper {
+      padding: 20px;
+
+      hr {
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      p {
+        margin-top: 15px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.case-search {
+  .card {
+    .content-wrapper {
+      hr {
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      p {
+        color: color($theme-color-base-dark);
+      }
+
+      button {
+        background-color: $color-white;
+      }
+
+      /* little screens */
+      @media only screen and (max-width: $medium-screen - 1px) {
+        button {
+          width: 132px;
+        }
+      }
+    }
+  }
+}
 .case-info-card {
   border-bottom: 1px solid color($theme-color-base-lighter);
 }
