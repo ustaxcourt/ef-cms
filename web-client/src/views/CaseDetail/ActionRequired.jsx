@@ -55,7 +55,7 @@ export const ActionRequired = connect(
                   <h2>Pay by Debit / Credit Card</h2>
                   <p>Copy your docket number(s) and pay online.</p>
                   <a
-                    className="usa-button"
+                    className="usa-button tablet-full-width"
                     href="https://pay.gov/public/form/start/60485840"
                     aria-label="pay.gov u.s. tax court filing fees"
                     target="_blank"
