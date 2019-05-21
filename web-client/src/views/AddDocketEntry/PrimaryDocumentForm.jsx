@@ -462,7 +462,7 @@ export const PrimaryDocumentForm = connect(
                 </label>
                 {form.certificateOfService && (
                   <fieldset
-                    className={`usa-fieldset service-date
+                    className={`margin-bottom-0 usa-fieldset service-date
                         ${
                           validationErrors.certificateOfServiceDate
                             ? 'usa-form-group--error'
@@ -475,7 +475,7 @@ export const PrimaryDocumentForm = connect(
                     >
                       Certificate of Service
                     </legend>
-                    <div className="usa-memorable-date">
+                    <div className="usa-memorable-date margin-top-2">
                       <div className="usa-form-group usa-form-group--month">
                         <input
                           className="usa-input usa-input--inline"
