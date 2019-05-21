@@ -73,7 +73,8 @@ describe('fileUploadStatusHelper', () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
         isUploading: true,
-        timeRemaining: 3600 * 4 + 60 * 21,
+        // prettier-ignore
+        timeRemaining: (3600 * 4) + (60 * 21)
       },
     });
 
