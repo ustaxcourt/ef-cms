@@ -98,6 +98,26 @@
   }
 }
 
+.taxpayer-tools {
+  .card {
+    margin-bottom: 30px;
+
+    .content-wrapper {
+      padding: 20px;
+
+      hr {
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      p {
+        margin-top: 15px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
 .case-info-card {
   border-bottom: 1px solid color($theme-color-base-lighter);
 }
