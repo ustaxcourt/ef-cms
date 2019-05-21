@@ -69,7 +69,6 @@ const createMockDocumentClient = () => {
           const [pk, sk] = key.split(' ');
 
           if (prefix) {
-            // console.log('we are here', prefix, sk);
             if (pk === value && sk.indexOf(prefix) === 0) {
               arr.push(data[key]);
             }
