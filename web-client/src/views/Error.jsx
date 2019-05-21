@@ -17,7 +17,7 @@ export const Error = connect(
           States Tax Court website for information on court services and contact
           information.
         </p>
-        <div>
+        <div className="button-box-container">
           {alertHelper.showLogIn && (
             <a className="usa-button" href="/" id="home">
               Back to Dashboard

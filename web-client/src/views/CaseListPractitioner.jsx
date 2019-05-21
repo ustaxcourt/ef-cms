@@ -87,12 +87,12 @@ export const CaseListPractitioner = connect(
     return (
       <>
         <div className="grid-container padding-x-0">
-          <div className="grid-row">
-            <div className="tablet:grid-col-4 push-right">
-              {helper.showCaseSearch && <CaseSearchBox />}
-            </div>
+          <div className="grid-row grid-gap-6">
             <div className="tablet:grid-col-8">
               {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
+            </div>
+            <div className="tablet:grid-col-4">
+              {helper.showCaseSearch && <CaseSearchBox />}
             </div>
           </div>
         </div>

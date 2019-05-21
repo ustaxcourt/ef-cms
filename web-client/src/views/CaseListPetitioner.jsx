@@ -33,8 +33,8 @@ export const CaseListPetitioner = connect(
           <thead>
             <tr>
               <th>Docket Number</th>
+              <th>Petitioner Name</th>
               <th>Date Filed</th>
-              <th>Case Name</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +45,6 @@ export const CaseListPetitioner = connect(
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
-                <td>{item.createdAtFormatted}</td>
                 <td>
                   <div className="show-on-mobile">
                     <a href={'/case-detail/' + item.docketNumber}>
@@ -54,6 +53,7 @@ export const CaseListPetitioner = connect(
                   </div>
                   {item.caseName}
                 </td>
+                <td>{item.createdAtFormatted}</td>
               </tr>
             ))}
           </tbody>
