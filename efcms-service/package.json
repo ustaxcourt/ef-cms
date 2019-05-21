@@ -12,11 +12,11 @@
   "devDependencies": {
     "artillery": "^1.6.0-28",
     "artillery-plugin-fuzzer": "^1.0.1",
-    "aws-sdk": "^2.455.0",
+    "aws-sdk": "^2.459.0",
     "aws-sdk-mock": "^4.4.0",
     "dynamodb-admin": "^3.1.3",
     "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.2.0",
+    "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-cypress": "^2.2.1",
     "eslint-plugin-jest": "^22.5.1",
     "eslint-plugin-jsdoc": "^4.8.4",
@@ -31,14 +31,14 @@
     "parcel-bundler": "^1.12.3",
     "prettier": "^1.17.1",
     "proxyquire": "^2.1.0",
-    "serverless": "^1.42.3",
+    "serverless": "^1.43.0",
     "serverless-domain-manager": "2.6.13",
     "serverless-dynamodb-local": "github:sutt0n/serverless-dynamodb-local#new-master",
-    "serverless-offline": "^4.9.0",
+    "serverless-offline": "^4.10.5",
     "serverless-plugin-aws-alerts": "^1.2.4",
     "serverless-plugin-bind-deployment-id": "github:ustaxcourt/serverless-plugin-bind-deployment-id#update_lodash",
     "serverless-plugin-git-variables": "^3.3.1",
-    "serverless-plugin-split-stacks": "^1.7.2",
+    "serverless-plugin-split-stacks": "^1.7.3",
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.3.2",
     "serverless-s3-local": "github:ustaxcourt/serverless-s3-local",
@@ -61,6 +61,7 @@
     "lint:fix": "eslint ./src --fix",
     "truffleHog": "if [ $(trufflehog --regex --entropy=True https://github.com/flexion/ustc-case-mgmt.git | grep 'Filepath:' | grep -v 'package-lock.json' | wc -l) -ne '0' ]; then echo 'WARNING! A secret key was found in the git repo!'; exit 1; fi",
     "test": "jest .*test\\.js$",
+    "test:snyk": "snyk test",
     "test:watch": "jest --watch .*test\\.js$",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "create-tables": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop node create-dynamo-tables.js",
@@ -87,5 +88,6 @@
         "statements": 95
       }
     }
-  }
+  },
+  "snyk": true
 }
