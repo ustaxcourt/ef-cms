@@ -102,13 +102,13 @@ class DocketRecordOverlayComponent extends React.Component {
               View PDF
             </a>
             <p className="semi-bold label">Date</p>
-            <p>{document.createdAtFormatted}</p>
+            <p className="margin-top-0">{document.createdAtFormatted}</p>
             <p className="semi-bold label">Filed By</p>
-            <p>{document && document.filedBy}</p>
+            <p className="margin-top-0">{document && document.filedBy}</p>
             <p className="semi-bold label">Action</p>
-            <p>{record.action}</p>
+            <p className="margin-top-0">{record.action}</p>
             <p className="semi-bold label">Served</p>
-            <p>
+            <p className="margin-top-0">
               {document && document.isStatusServed && (
                 <span>
                   {this.props.caseDetail.datePetitionSentToIrsMessage}
@@ -119,7 +119,7 @@ class DocketRecordOverlayComponent extends React.Component {
               )}
             </p>
             <p className="semi-bold label">Parties</p>
-            {record.servedParties}
+            <p className="margin-top-0">{record.servedParties}</p>
           </div>
         </dialog>
       </FocusLock>
