@@ -21,12 +21,14 @@ export const CaseDetailHeader = connect(
                 Docket Number: {caseDetail.docketNumberWithSuffix}
               </a>
             </h1>
-            <span
-              className="usa-tag"
-              aria-label={`status: ${caseDetail.status}`}
-            >
-              <span aria-hidden="true">{caseDetail.status}</span>
-            </span>
+            {caseHelper.showCaptionEditButton && (
+              <span
+                className="usa-tag"
+                aria-label={`status: ${caseDetail.status}`}
+              >
+                <span aria-hidden="true">{caseDetail.status}</span>
+              </span>
+            )}
           </div>
           <p id="case-title" className="margin-y-0">
             <span>{caseDetail.caseTitle}</span>

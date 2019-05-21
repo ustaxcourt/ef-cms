@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -48,27 +49,27 @@ export const CaseListPractitioner = connect(
     const renderStartButton = () => (
       <a
         className={
-          'usa-button tablet-full-width ' +
+          'usa-button tablet-full-width float-right ' +
           (helper.showCaseList ? 'new-case' : '')
         }
         href="/start-a-case"
         id="init-file-petition"
       >
-        Start a New Case
+        <FontAwesomeIcon icon="file" size="1x" /> File a Petition
       </a>
     );
 
     const renderEmptyState = () => (
       <React.Fragment>
         {renderTitle()}
-        <p>You have not started any cases.</p>
-        {renderStartButton()}
+        <p>You are not associated with any cases.</p>
+        <div className="button-box-container">{renderStartButton()}</div>
       </React.Fragment>
     );
 
     const renderNonEmptyState = () => (
       <React.Fragment>
-        <div className="grid-container padding-x-0 case-list-header">
+        <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
               <h2>Your Cases</h2>
@@ -85,13 +86,13 @@ export const CaseListPractitioner = connect(
 
     return (
       <>
-        <div className="grid-container padding-x-0 subsection">
-          <div className="grid-row">
-            <div className="tablet:grid-col-4 push-right">
-              {helper.showCaseSearch && <CaseSearchBox />}
-            </div>
+        <div className="grid-container padding-x-0">
+          <div className="grid-row grid-gap-6">
             <div className="tablet:grid-col-8">
               {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
+            </div>
+            <div className="tablet:grid-col-4">
+              {helper.showCaseSearch && <CaseSearchBox />}
             </div>
           </div>
         </div>

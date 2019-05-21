@@ -5,6 +5,20 @@ import { sequences, state } from 'cerebral';
 
 import React from 'react';
 
+const MailPayment = () => (
+  <div className="tablet:grid-col-12">
+    <h3>Mail in payment</h3>
+    <p>Make checks/money order payable to:</p>
+    <address>
+      Clerk, United States Tax Court
+      <br />
+      400 2nd St NW
+      <br />
+      Washington, DC 20217
+    </address>
+  </div>
+);
+
 export const ActionRequired = connect(
   {
     caseDetail: state.formattedCaseDetail,
@@ -32,7 +46,7 @@ export const ActionRequired = connect(
           {showDetails && (
             <div
               id="paymentInfo"
-              className="usa-accordion-content grid-container padding-x-0 padding-y-205"
+              className="usa-accordion-content grid-container padding-x-0 margin-top-3"
               aria-hidden="false"
             >
               <div className="grid-row">
@@ -40,7 +54,7 @@ export const ActionRequired = connect(
                   <h2>Pay by Debit / Credit Card</h2>
                   <p>Copy your docket number(s) and pay online.</p>
                   <a
-                    className="usa-button"
+                    className="usa-button tablet-full-width"
                     href="https://pay.gov/public/form/start/60485840"
                     aria-label="pay.gov u.s. tax court filing fees"
                     target="_blank"
@@ -53,35 +67,35 @@ export const ActionRequired = connect(
                   <Hint>
                     It may take up to X days for your payment to appear online.
                   </Hint>
-                  <h3>Canʼt afford to pay the fee?</h3>
-                  <p>
-                    You may be eligible for a filing fee waiver.{' '}
-                    <a
-                      href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
-                      aria-label="View download application pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      File an application
-                    </a>{' '}
-                    to request a waiver.
-                  </p>
+
+                  <section className="only-small-screens">
+                    <div className="margin-top-3 margin-bottom-neg-2">
+                      <MailPayment />
+                    </div>
+                  </section>
+
+                  <div className="margin-top-5">
+                    <h3>Canʼt afford to pay the fee?</h3>
+                    <p>
+                      You may be eligible for a filing fee waiver.{' '}
+                      <a
+                        href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
+                        aria-label="View download application pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        File an application
+                      </a>{' '}
+                      to request a waiver.
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="grid-row">
-                <div className="tablet:grid-col-12 margin-bottom-2">
-                  <h3 className="margin-top-2">Mail in payment</h3>
-                  <p>Make checks/money order payable to:</p>
-                  <address>
-                    Clerk, United States Tax Court
-                    <br />
-                    400 2nd St NW
-                    <br />
-                    Washington, DC 20217
-                    <br />
-                  </address>
+              <section className="only-large-screens margin-top-neg-3">
+                <div className="grid-row">
+                  <MailPayment />
                 </div>
-              </div>
+              </section>
             </div>
           )}
         </li>

@@ -1,6 +1,6 @@
 .usa-button {
   min-width: 132px;
-  margin: 0 20px 20px 0;
+  margin: 0 0 20px 0;
 
   &.margin-right-0 {
     margin-right: 0;
@@ -38,10 +38,10 @@
 .recall-button-box {
   padding: 8px 10px;
   border: 1px solid color($theme-color-warning);
-  margin-bottom: 5px;
+  margin-top: -17px;
+  margin-bottom: 20px;
   float: left;
   font-family: $font-serif;
-
   svg {
     color: color($theme-color-warning);
   }
@@ -59,9 +59,18 @@
 }
 
 .serve-to-irs {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .button-box-container {
   margin-top: 40px;
+
+  .usa-button {
+    margin-right: 20px;
+  }
+
+  #init-file-petition {
+    float: left;
+    text-align: left;
+  }
 }
