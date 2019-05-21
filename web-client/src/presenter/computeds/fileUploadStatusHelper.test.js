@@ -25,7 +25,7 @@ describe('fileUploadStatusHelper', () => {
     expect(result.statusMessage).toEqual('Less Than 1 Minute Left');
   });
 
-  it('returns `1 Minutes Left` for time remaining being something between 60 and 3600 seconds', async () => {
+  it('returns `X Minutes Left` for time remaining being something between 60 and 3600 seconds', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
         isUploading: true,
@@ -47,7 +47,7 @@ describe('fileUploadStatusHelper', () => {
     expect(result.statusMessage).toEqual('1 Minutes Left');
   });
 
-  it('returns `59 Minutes Left` for time remaining for 119 seconds remaining', async () => {
+  it('returns `59 Minutes Left` for time remaining for 3599 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
         isUploading: true,
@@ -58,7 +58,7 @@ describe('fileUploadStatusHelper', () => {
     expect(result.statusMessage).toEqual('59 Minutes Left');
   });
 
-  it('returns `1 Hour Left` for time remaining for 119 seconds remaining', async () => {
+  it('returns `1 Hour Left` for time remaining for 3600 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
         isUploading: true,
@@ -69,7 +69,7 @@ describe('fileUploadStatusHelper', () => {
     expect(result.statusMessage).toEqual('1 Hours 0 Minutes Left');
   });
 
-  it('returns `5 Hour Left` for time remaining for 119 seconds remaining', async () => {
+  it('returns `4 Hours 21 Minutes Left` for time remaining for 15,660 seconds remaining', async () => {
     const result = await runCompute(fileUploadStatusHelper, {
       state: {
         isUploading: true,
