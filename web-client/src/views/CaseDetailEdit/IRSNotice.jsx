@@ -34,161 +34,157 @@ export const IRSNotice = connect(
   }) => {
     const renderIrsNoticeRadios = () => {
       return (
-        <div className="subsection">
-          <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
-            <legend htmlFor="irs-verified-notice-radios">
-              Notice Attached to Petition?
-            </legend>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                className="usa-radio__input"
-                id="hasVerifiedIrsNotice-yes"
-                type="radio"
-                name="hasVerifiedIrsNotice"
-                checked={caseDetail.hasVerifiedIrsNotice === true}
-                value="Yes"
-                onChange={e => {
-                  updateCaseValueSequence({
-                    key: e.target.name,
-                    value: true,
-                  });
-                  autoSaveCaseSequence();
-                }}
-              />
-              <label
-                id="has-irs-verified-notice-yes"
-                htmlFor="hasVerifiedIrsNotice-yes"
-                className="usa-radio__label"
-              >
-                Yes
-              </label>
-            </div>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                className="usa-radio__input"
-                id="hasVerifiedIrsNotice-no"
-                type="radio"
-                name="hasVerifiedIrsNotice"
-                checked={caseDetail.hasVerifiedIrsNotice === false}
-                value="No"
-                onChange={() => {
-                  setIrsNoticeFalseSequence();
-                  autoSaveCaseSequence();
-                }}
-              />
-              <label
-                id="has-irs-verified-notice-no"
-                htmlFor="hasVerifiedIrsNotice-no"
-                className="usa-radio__label"
-              >
-                No
-              </label>
-            </div>
-          </fieldset>
-        </div>
+        <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
+          <legend htmlFor="irs-verified-notice-radios">
+            Notice Attached to Petition?
+          </legend>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="hasVerifiedIrsNotice-yes"
+              type="radio"
+              name="hasVerifiedIrsNotice"
+              checked={caseDetail.hasVerifiedIrsNotice === true}
+              value="Yes"
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: true,
+                });
+                autoSaveCaseSequence();
+              }}
+            />
+            <label
+              id="has-irs-verified-notice-yes"
+              htmlFor="hasVerifiedIrsNotice-yes"
+              className="usa-radio__label"
+            >
+              Yes
+            </label>
+          </div>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="hasVerifiedIrsNotice-no"
+              type="radio"
+              name="hasVerifiedIrsNotice"
+              checked={caseDetail.hasVerifiedIrsNotice === false}
+              value="No"
+              onChange={() => {
+                setIrsNoticeFalseSequence();
+                autoSaveCaseSequence();
+              }}
+            />
+            <label
+              id="has-irs-verified-notice-no"
+              htmlFor="hasVerifiedIrsNotice-no"
+              className="usa-radio__label"
+            >
+              No
+            </label>
+          </div>
+        </fieldset>
       );
     };
 
     const renderIrsNoticeDate = () => {
       return (
-        <div className="subsection">
-          <div
-            className={
-              'usa-form-group ' +
-              (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
-            }
-          >
-            <fieldset className="usa-fieldset">
-              <legend id="date-of-notice-legend" className="usa-legend">
-                Date of Notice
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month">
-                  <input
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="month, two digits"
-                    className={
-                      'usa-input usa-input--inline ' +
-                      (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
-                    }
-                    id="date-of-notice-month"
-                    max="12"
-                    min="1"
-                    name="irsMonth"
-                    type="number"
-                    placeholder="MM"
-                    value={form.irsMonth || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--day">
-                  <input
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="day, two digits"
-                    className={
-                      'usa-input usa-input--inline ' +
-                      (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
-                    }
-                    id="date-of-notice-day"
-                    max="31"
-                    min="1"
-                    name="irsDay"
-                    type="number"
-                    placeholder="DD"
-                    value={form.irsDay || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year">
-                  <input
-                    aria-describedby="date-of-notice-legend"
-                    aria-label="year, four digits"
-                    className={
-                      'usa-input usa-input--inline ' +
-                      (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
-                    }
-                    id="date-of-notice-year"
-                    max="2100"
-                    min="1900"
-                    name="irsYear"
-                    type="number"
-                    placeholder="YYYY"
-                    value={form.irsYear || ''}
-                    onBlur={() => {
-                      autoSaveCaseSequence();
-                    }}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
+        <div
+          className={
+            'usa-form-group margin-bottom-0 ' +
+            (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
+          }
+        >
+          <fieldset className="usa-fieldset margin-bottom-0">
+            <legend id="date-of-notice-legend" className="usa-legend">
+              Date of Notice
+            </legend>
+            <div className="usa-memorable-date">
+              <div className="usa-form-group usa-form-group--month margin-bottom-0">
+                <input
+                  aria-describedby="date-of-notice-legend"
+                  aria-label="month, two digits"
+                  className={
+                    'usa-input usa-input--inline ' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
+                  }
+                  id="date-of-notice-month"
+                  max="12"
+                  min="1"
+                  name="irsMonth"
+                  type="number"
+                  placeholder="MM"
+                  value={form.irsMonth || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
               </div>
-            </fieldset>
-            {caseDetailErrors.irsNoticeDate && (
-              <div className="usa-error-message" role="alert">
-                {caseDetailErrors.irsNoticeDate}
+              <div className="usa-form-group usa-form-group--day margin-bottom-0">
+                <input
+                  aria-describedby="date-of-notice-legend"
+                  aria-label="day, two digits"
+                  className={
+                    'usa-input usa-input--inline ' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
+                  }
+                  id="date-of-notice-day"
+                  max="31"
+                  min="1"
+                  name="irsDay"
+                  type="number"
+                  placeholder="DD"
+                  value={form.irsDay || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
               </div>
-            )}
-          </div>
+              <div className="usa-form-group usa-form-group--year margin-bottom-0">
+                <input
+                  aria-describedby="date-of-notice-legend"
+                  aria-label="year, four digits"
+                  className={
+                    'usa-input usa-input--inline ' +
+                    (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
+                  }
+                  id="date-of-notice-year"
+                  max="2100"
+                  min="1900"
+                  name="irsYear"
+                  type="number"
+                  placeholder="YYYY"
+                  value={form.irsYear || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </fieldset>
+          {caseDetailErrors.irsNoticeDate && (
+            <div className="usa-error-message" role="alert">
+              {caseDetailErrors.irsNoticeDate}
+            </div>
+          )}
         </div>
       );
     };
