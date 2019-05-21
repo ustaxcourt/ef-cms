@@ -13,7 +13,7 @@ describe('setWorkItemAsRead', () => {
     client.update.restore();
   });
 
-  it('invokes the peristence layer with pk of {userId}|unread-message and other expected params', async () => {
+  it('invokes the peristence layer with pk of {userId}|workItem and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
