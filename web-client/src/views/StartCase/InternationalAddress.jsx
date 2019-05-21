@@ -55,70 +55,76 @@ export const InternationalAddress = connect(
             bind={`validationErrors.${type}.address1`}
           />
         </div>
-        <label htmlFor={`${type}.address2`} className="usa-label">
-          Address Line 2 <span className="usa-hint">(optional)</span>
-        </label>
-        <input
-          id={`${type}.address2`}
-          type="text"
-          name={`${type}.address2`}
-          className="usa-input"
-          autoCapitalize="none"
-          value={data[type].address2 || ''}
-          onChange={e => {
-            updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-          onBlur={() => {
-            validateStartCaseSequence();
-          }}
-        />
-        <label htmlFor={`${type}.address3`} className="usa-label">
-          Address Line 3 <span className="usa-hint">(optional)</span>
-        </label>
-        <input
-          id={`${type}.address3`}
-          type="text"
-          name={`${type}.address3`}
-          className="usa-input"
-          autoCapitalize="none"
-          value={data[type].address3 || ''}
-          onChange={e => {
-            updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-          onBlur={() => {
-            validateStartCaseSequence();
-          }}
-        />
-        <label htmlFor={`${type}.state`} className="usa-label">
-          State/Province/Region <span className="usa-hint">(optional)</span>
-        </label>
-        <input
-          id={`${type}.state`}
-          type="text"
-          name={`${type}.state`}
-          className="usa-input"
-          autoCapitalize="none"
-          value={data[type].state || ''}
-          onChange={e => {
-            updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-          onBlur={() => {
-            validateStartCaseSequence();
-          }}
-        />
-        <Text
-          className="usa-error-message"
-          bind={`validationErrors.${type}.state`}
-        />
+        <div className="usa-form-group">
+          <label htmlFor={`${type}.address2`} className="usa-label">
+            Address Line 2 <span className="usa-hint">(optional)</span>
+          </label>
+          <input
+            id={`${type}.address2`}
+            type="text"
+            name={`${type}.address2`}
+            className="usa-input"
+            autoCapitalize="none"
+            value={data[type].address2 || ''}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
+          />
+        </div>{' '}
+        <div className="usa-form-group">
+          <label htmlFor={`${type}.address3`} className="usa-label">
+            Address Line 3 <span className="usa-hint">(optional)</span>
+          </label>
+          <input
+            id={`${type}.address3`}
+            type="text"
+            name={`${type}.address3`}
+            className="usa-input"
+            autoCapitalize="none"
+            value={data[type].address3 || ''}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
+          />
+        </div>
+        <div className="usa-form-group">
+          <label htmlFor={`${type}.state`} className="usa-label">
+            State/Province/Region <span className="usa-hint">(optional)</span>
+          </label>
+          <input
+            id={`${type}.state`}
+            type="text"
+            name={`${type}.state`}
+            className="usa-input"
+            autoCapitalize="none"
+            value={data[type].state || ''}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
+          />
+          <Text
+            className="usa-error-message"
+            bind={`validationErrors.${type}.state`}
+          />
+        </div>
         <div
           className={
             'usa-form-group ' +
