@@ -76,7 +76,7 @@ export const Header = connect(
             <div className="usa-grid">
               <div className="usa-width-five-sixths">
                 This is a testing site for the U.S. Tax Court and not intended
-                public use. To learn more about starting a case, visit the{' '}
+                for public use. To learn more about starting a case, visit the{' '}
                 <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>
                 .
               </div>
