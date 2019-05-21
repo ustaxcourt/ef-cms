@@ -53,53 +53,58 @@ export const Address = connect(
             bind={`validationErrors.${type}.address1`}
           />
         </div>
-        <label htmlFor={`${type}.address2`} className="usa-label">
-          Address Line 2 <span className="usa-hint">(optional)</span>
-        </label>
-        <input
-          id={`${type}.address2`}
-          type="text"
-          name={`${type}.address2`}
-          className="usa-input"
-          autoCapitalize="none"
-          value={data[type].address2 || ''}
-          onChange={e => {
-            updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-          onBlur={() => {
-            validateStartCaseSequence();
-          }}
-        />
-        <label htmlFor={`${type}.address3`} className="usa-label">
-          Address Line 3 <span className="usa-hint">(optional)</span>
-        </label>
-        <input
-          id={`${type}.address3`}
-          type="text"
-          name={`${type}.address3`}
-          autoCapitalize="none"
-          className="usa-input"
-          value={data[type].address3 || ''}
-          onChange={e => {
-            updateFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-          onBlur={() => {
-            validateStartCaseSequence();
-          }}
-        />
+        <div className="usa-form-group">
+          <label htmlFor={`${type}.address2`} className="usa-label">
+            Address Line 2 <span className="usa-hint">(optional)</span>
+          </label>
+          <input
+            id={`${type}.address2`}
+            type="text"
+            name={`${type}.address2`}
+            className="usa-input"
+            autoCapitalize="none"
+            value={data[type].address2 || ''}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
+          />
+        </div>
+        <div className="usa-form-group">
+          <label htmlFor={`${type}.address3`} className="usa-label">
+            Address Line 3 <span className="usa-hint">(optional)</span>
+          </label>
+          <input
+            id={`${type}.address3`}
+            type="text"
+            name={`${type}.address3`}
+            autoCapitalize="none"
+            className="usa-input"
+            value={data[type].address3 || ''}
+            onChange={e => {
+              updateFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
+          />
+        </div>
         <div
           className={
-            'usa-form-group ' + validationErrors &&
+            'usa-form-group ' +
+            (validationErrors &&
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
               ? 'usa-form-group--error'
-              : ''
+              : '')
           }
         >
           <div className="grid-row grid-gap state-and-city">
@@ -223,11 +228,12 @@ export const Address = connect(
         </div>
         <div
           className={
-            'usa-form-group ' + validationErrors &&
+            'usa-form-group ' +
+            (validationErrors &&
             validationErrors[type] &&
             validationErrors[type].postalCode
               ? 'usa-form-group--error'
-              : ''
+              : '')
           }
         >
           <label
