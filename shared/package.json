@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "test": "snyk test && jest",
+    "test": "jest",
     "test:snyk": "snyk test",
     "test:watch": "jest --watch",
     "docker:init": "./docker-init.sh",
