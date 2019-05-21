@@ -103,7 +103,7 @@ export const PartyInformation = connect(
                 </a>
               )}
               {!caseDetailEditHelper.ownershipDisclosureStatementDocumentId &&
-                'No file uploaded.'}
+                'No file uploaded'}
               <div className="order-checkbox">
                 <input
                   id="order-for-ods"
