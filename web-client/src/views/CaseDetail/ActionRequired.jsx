@@ -32,7 +32,7 @@ export const ActionRequired = connect(
           {showDetails && (
             <div
               id="paymentInfo"
-              className="usa-accordion-content grid-container padding-x-0 padding-y-205"
+              className="usa-accordion-content grid-container padding-x-0 margin-top-3"
               aria-hidden="false"
             >
               <div className="grid-row">
@@ -69,7 +69,7 @@ export const ActionRequired = connect(
                 </div>
               </div>
               <div className="grid-row">
-                <div className="tablet:grid-col-12 margin-bottom-2">
+                <div className="tablet:grid-col-12">
                   <h3 className="margin-top-2">Mail in payment</h3>
                   <p>Make checks/money order payable to:</p>
                   <address>
@@ -78,7 +78,6 @@ export const ActionRequired = connect(
                     400 2nd St NW
                     <br />
                     Washington, DC 20217
-                    <br />
                   </address>
                 </div>
               </div>
