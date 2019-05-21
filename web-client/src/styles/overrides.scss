@@ -188,8 +188,6 @@ option:first-child {
   }
 
   button {
-    float: right;
-
     @media only screen and (max-width: $medium-screen - 1px) {
       width: 100%;
       padding-left: 5rem;
