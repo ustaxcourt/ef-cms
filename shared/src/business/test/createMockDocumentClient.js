@@ -55,12 +55,27 @@ const createMockDocumentClient = () => {
         promise: async () => null,
       };
     },
-    query: ({ ExpressionAttributeValues }) => {
+    query: ({ IndexName, ExpressionAttributeValues }) => {
       const arr = [];
       for (let key in data) {
-        const value = ExpressionAttributeValues[':pk'];
-        if (key.split(' ')[0].indexOf(value) !== -1) {
-          arr.push(data[key]);
+        if (IndexName === 'gsi1') {
+          const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
+          if (data[key].gsi1pk === gsi1pk) {
+            arr.push(data[key]);
+          }
+        } else {
+          const value = ExpressionAttributeValues[':pk'];
+          const prefix = ExpressionAttributeValues[':prefix'];
+          const [pk, sk] = key.split(' ');
+
+          if (prefix) {
+            // console.log('we are here', prefix, sk);
+            if (pk === value && sk.indexOf(prefix) === 0) {
+              arr.push(data[key]);
+            }
+          } else if (pk.indexOf(value) !== -1) {
+            arr.push(data[key]);
+          }
         }
       }
       return {
@@ -100,6 +115,7 @@ const createMockDocumentClient = () => {
         }
       }
       if (hasSet) {
+        console.log('obj', obj);
         data[`${Key.pk} ${Key.sk}`] = {
           ...data[`${Key.pk} ${Key.sk}`],
           ...obj,

@@ -28,6 +28,13 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
     applicationContext,
   });
 
+  await createMappingRecord({
+    applicationContext,
+    pkId: workItem.caseId,
+    skId: workItem.workItemId,
+    type: 'workItem',
+  });
+
   await createUserInboxRecord({
     applicationContext,
     workItem,
