@@ -54,7 +54,7 @@ export const CaseDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           {caseHelper.showActionRequired && (
-            <div className="padding-y-2">
+            <div className="margin-bottom-6">
               <div className="title">
                 <h1>Action Required</h1>
               </div>
@@ -98,7 +98,9 @@ export const CaseDetail = connect(
                 {caseHelper.showCaseInformationPublic && (
                   <CaseInformationPublic />
                 )}
-                <PartyInformation />
+                <div className="case-detail-party-info">
+                  <PartyInformation />
+                </div>
               </Tab>
             </Tabs>
           </div>
