@@ -32,7 +32,8 @@ select {
   margin: 0;
   &:hover {
     border: 1px solid color($theme-color-primary);
-    box-shadow: inset 0 0 1px color($theme-color-primary);
+    box-shadow: inset 0 0 0 1px color($theme-color-primary);
+    cursor: pointer;
   }
 
   &::placeholder {
@@ -236,14 +237,11 @@ label.validated::after {
   max-height: 890px;
   overflow-y: scroll;
   .phone-input {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     clear: both;
   }
   .email-input {
-    margin-bottom: 25px;
-  }
-  .usa-hint {
-    margin-bottom: 0;
+    margin-bottom: 30px;
   }
   .ustc-form-group-city input,
   .ustc-form-group-state select {
@@ -371,6 +369,7 @@ label.ustc-upload {
     &:hover {
       border: 1px solid color($theme-color-primary);
       box-shadow: 0 0 0 1px color($theme-color-primary);
+      cursor: pointer;
     }
     .select-react-element__value-container {
       &:focus {

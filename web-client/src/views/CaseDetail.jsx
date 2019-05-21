@@ -29,7 +29,7 @@ export const CaseDetail = connect(
           <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-6">
-                <h1 className="captioned" tabIndex="-1">
+                <h1 className="heading-2 captioned" tabIndex="-1">
                   Docket Number: {caseDetail.docketNumberWithSuffix}
                 </h1>
                 <p className="margin-0">{caseDetail.caseTitle}</p>
@@ -54,7 +54,7 @@ export const CaseDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           {caseHelper.showActionRequired && (
-            <div className="padding-y-2">
+            <div className="margin-bottom-6">
               <div className="title">
                 <h1>Action Required</h1>
               </div>
@@ -98,7 +98,9 @@ export const CaseDetail = connect(
                 {caseHelper.showCaseInformationPublic && (
                   <CaseInformationPublic />
                 )}
-                <PartyInformation />
+                <div className="case-detail-party-info">
+                  <PartyInformation />
+                </div>
               </Tab>
             </Tabs>
           </div>

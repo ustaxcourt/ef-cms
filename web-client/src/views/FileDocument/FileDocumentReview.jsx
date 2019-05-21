@@ -24,9 +24,9 @@ export const FileDocumentReview = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
+          <h1 className="heading-1" tabIndex="-1" id="file-a-document-header">
             Review Your Filing
-          </h2>
+          </h1>
         </Focus>
         <p>
           You can’t edit your filing once you submit it. Please make sure your

@@ -73,7 +73,9 @@ export const CaseDetailInternal = connect(
                 id="tab-case-info"
               >
                 <CaseInformationInternal />
-                <PartyInformation />
+                <div className="case-detail-party-info">
+                  <PartyInformation />
+                </div>
               </Tab>
             </Tabs>
           </div>
