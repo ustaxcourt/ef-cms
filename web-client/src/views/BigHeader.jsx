@@ -1,16 +1,16 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
 
-export const WelcomeHeader = connect(
+export const BigHeader = connect(
   {
-    user: state.user,
+    text: props.text,
   },
-  ({ user }) => {
+  ({ text }) => {
     return (
       <div className="big-blue-header">
         <div className="grid-container">
-          <h1 tabIndex="-1">Welcome, {user.name}</h1>
+          <h1 tabIndex="-1">{text}</h1>
         </div>
       </div>
     );
