@@ -17,9 +17,6 @@ jobs:
           name: Shared - Lint
           command: docker run --rm efcms /bin/sh -c 'cd shared && npm run lint'
       - run:
-          name: Shared - Audit
-          command: docker run --rm -e "SNYK_TOKEN=${SHARED_SNYK_TOKEN}" efcms /bin/sh -c 'cd shared && npm run snyk:auth ${SNYK_TOKEN} && npm run test:snyk'
-      - run:
           name: Shared - Test
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'cd shared && npm run test'
       - run:
@@ -33,9 +30,6 @@ jobs:
           name: Service - Lint
           command: docker run --rm efcms /bin/sh -c 'cd efcms-service && npm run lint'
       - run:
-          name: Service - Audit
-          command: docker run --rm -e "SNYK_TOKEN=${SHARED_SNYK_TOKEN}" efcms /bin/sh -c 'cd efcms-service && npm run snyk:auth ${SNYK_TOKEN} && npm run test:snyk'
-      - run:
           name: Service - Test
           command: docker run -v $(pwd)/efcms-service/coverage:/home/app/efcms-service/coverage --rm efcms /bin/sh -c 'cd efcms-service && npm run test'
       - run:
@@ -48,9 +42,6 @@ jobs:
       - run:
           name: UI - Lint
           command: docker run --rm efcms /bin/sh -c 'cd web-client && npm run lint'
-      - run:
-          name: UI - Audit
-          command: docker run --rm -e "SNYK_TOKEN=${SHARED_SNYK_TOKEN}" efcms /bin/sh -c 'cd web-client && npm run snyk:auth ${SNYK_TOKEN} && npm run test:snyk'
       - run:
           name: UI - Test
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage-unit --rm efcms /bin/sh -c 'cd web-client && npm run test:unit'
