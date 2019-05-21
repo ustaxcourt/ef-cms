@@ -1,6 +1,8 @@
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
+const { createSectionInboxRecord } = require('./createSectionInboxRecord');
+const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
 
 /**
@@ -28,17 +30,13 @@ exports.saveWorkItemForPaper = async ({ workItem, applicationContext }) => {
       skId: workItem.workItemId,
       type: 'workItem',
     }),
-    createMappingRecord({
+    createUserInboxRecord({
       applicationContext,
-      pkId: workItem.assigneeId,
-      skId: workItem.workItemId,
-      type: 'workItem',
+      workItem,
     }),
-    createMappingRecord({
+    createSectionInboxRecord({
       applicationContext,
-      pkId: workItem.section,
-      skId: workItem.workItemId,
-      type: 'workItem',
+      workItem,
     }),
   ]);
 };

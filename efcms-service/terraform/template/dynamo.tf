@@ -17,6 +17,11 @@ resource "aws_dynamodb_table" "efcms-east" {
     type = "S"
   }
 
+  attribute {
+    name = "gsi1pk"
+    type = "S"
+  }
+
   point_in_time_recovery {
     enabled = true
   }
@@ -56,6 +61,11 @@ resource "aws_dynamodb_table" "efcms-west" {
 
   attribute {
     name = "sk"
+    type = "S"
+  }
+
+  attribute {
+    name = "gsi1pk"
     type = "S"
   }
   
