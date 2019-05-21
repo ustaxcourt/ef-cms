@@ -31,7 +31,7 @@ export const BeforeStartingCase = () => (
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">
             <div role="listitem" className="caseItem">
-              <div className="fa-before caseItem__icon" role="display">
+              <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </div>
               <h3 className="caseItem__heading">
@@ -53,7 +53,7 @@ export const BeforeStartingCase = () => (
               </div>
             </div>
             <div role="listitem" className="margin-bottom-0 caseItem">
-              <div className="fa-before caseItem__icon" role="display">
+              <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'edit']} />
               </div>
               <h3 className="caseItem__heading">
@@ -118,7 +118,7 @@ export const BeforeStartingCase = () => (
           </div>
           <div className="tablet:grid-col-6">
             <div role="listitem" className="caseItem">
-              <div className="fa-before caseItem__icon" role="display">
+              <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['fa', 'shield-alt']} />
               </div>
               <h3 className="caseItem__heading">
@@ -139,7 +139,7 @@ export const BeforeStartingCase = () => (
             </div>
 
             <div role="listitem" className="caseItem">
-              <div className="fa-before caseItem__icon" role="display">
+              <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'file-pdf']} />
               </div>
               <h3 className="caseItem__heading">
@@ -162,7 +162,7 @@ export const BeforeStartingCase = () => (
               </div>
             </div>
             <div role="listitem" className="caseItem">
-              <div className="fa-before caseItem__icon" role="display">
+              <div className="caseItem__icon" role="display">
                 <div className="svg-wrapper">
                   <img
                     src={paperclipSlashIcon}
