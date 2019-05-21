@@ -11,10 +11,12 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -39,10 +41,12 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });
@@ -68,10 +72,12 @@ describe('Petition', () => {
         partyType:
           'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });

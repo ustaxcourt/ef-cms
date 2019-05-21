@@ -10,10 +10,12 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         partyType: 'Corporation',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.isValid()).toEqual(false);
     });
@@ -37,6 +39,7 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         partyType: 'Corporation',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
@@ -64,10 +67,12 @@ describe('Petition', () => {
         irsNoticeDate: '2009-10-13',
         partyType: 'Corporation',
         petitionFile: {},
+        petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
+        stinFileSize: 1,
       });
       expect(petition.getFormattedValidationErrors()).toEqual(null);
     });

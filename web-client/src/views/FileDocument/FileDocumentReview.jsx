@@ -1,3 +1,5 @@
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
+import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFilingReadOnly } from './PartiesFilingReadOnly';
 import { PrimaryDocumentReadOnly } from './PrimaryDocumentReadOnly';
@@ -10,11 +12,13 @@ export const FileDocumentReview = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    showModal: state.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
   ({
     form,
     formCancelToggleCancelSequence,
+    showModal,
     submitExternalDocumentSequence,
   }) => {
     return (
@@ -67,6 +71,12 @@ export const FileDocumentReview = connect(
             Cancel
           </button>
         </div>
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal
+            confirmSequence={submitExternalDocumentSequence}
+          />
+        )}
       </React.Fragment>
     );
   },

@@ -20,7 +20,8 @@
         "dynamodb:ListTables",
         "dynamodb:ListTagsOfResource",
         "dynamodb:TagResource",
-        "dynamodb:DescribeTimeToLive"
+        "dynamodb:DescribeTimeToLive",
+        "dynamodb:UpdateContinuousBackups"
       ],
       "Resource": "*"
     },
@@ -98,6 +99,8 @@
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [
+        "dynamodb:Scan",
+        "dynamodb:BatchWriteItem",
         "dynamodb:PutItem",
         "dynamodb:DeleteItem",
         "dynamodb:CreateTable",

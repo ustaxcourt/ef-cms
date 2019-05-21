@@ -7,6 +7,7 @@ import React from 'react';
 
 export const RequestAccessDocumentForm = connect(
   {
+    constants: state.constants,
     form: state.form,
     requestAccessHelper: state.requestAccessHelper,
     updateCaseAssociationFormValueSequence:
@@ -21,6 +22,7 @@ export const RequestAccessDocumentForm = connect(
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
+    constants,
   }) => {
     return (
       <React.Fragment>
@@ -55,7 +57,7 @@ export const RequestAccessDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                   className={
-                    'ustc-upload ' +
+                    'ustc-upload with-hint' +
                     (requestAccessHelper.showPrimaryDocumentValid
                       ? 'validated'
                       : '')
@@ -66,6 +68,10 @@ export const RequestAccessDocumentForm = connect(
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
+                <span className="usa-form-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
                 <StateDrivenFileInput
                   id="primary-document"
                   name="primaryDocumentFile"

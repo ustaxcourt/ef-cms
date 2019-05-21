@@ -85,8 +85,18 @@ async function createCase(test) {
   });
 
   await test.runSequence('updatePetitionValueSequence', {
+    key: 'petitionFileSize',
+    value: 1,
+  });
+
+  await test.runSequence('updatePetitionValueSequence', {
     key: 'stinFile',
     value: fakeFile,
+  });
+
+  await test.runSequence('updatePetitionValueSequence', {
+    key: 'stinFileSize',
+    value: 1,
   });
 
   await test.runSequence('submitFilePetitionSequence');

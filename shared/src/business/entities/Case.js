@@ -1,4 +1,6 @@
-const documentMap = require('../../tools/externalFilingEvents.json');
+const documentMapExternal = require('../../tools/externalFilingEvents.json');
+const documentMapInternal = require('../../tools/internalFilingEvents.json');
+
 const joi = require('joi-browser');
 const moment = require('moment');
 const uuid = require('uuid');
@@ -6,9 +8,9 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
+const { flatten, uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { uniqBy, reduce } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -64,7 +66,7 @@ exports.CASE_CAPTION_POSTFIX =
  * @constructor
  */
 function Case(rawCase) {
-  const { Document } = require('./Document');
+  const { Document } = require('./Document'); // circular reference back to Case, hence located here
 
   Object.assign(
     this,
@@ -719,17 +721,18 @@ Case.areYearsUnique = yearAmounts => {
  * @returns {*|Array}
  */
 Case.getDocumentTypes = () => {
-  return Object.keys(Case.documentTypes)
-    .map(key => Case.documentTypes[key])
-    .concat(
-      reduce(
-        documentMap,
-        (acc, section) => {
-          return acc.concat(section.map(item => item.documentType));
-        },
-        practitionerAssociationDocumentType,
-      ),
-    );
+  const allFilingEvents = flatten([
+    ...Object.values(documentMapExternal),
+    ...Object.values(documentMapInternal),
+  ]);
+  const filingEventTypes = allFilingEvents.map(t => t.documentType);
+  const documentTypes = [
+    ...Object.values(Case.documentTypes),
+    ...practitionerAssociationDocumentType,
+    ...filingEventTypes,
+  ];
+
+  return documentTypes;
 };
 
 /**

@@ -74,14 +74,11 @@ joiValidationDecorator(
       .optional(),
     document: joi.object().required(),
     isInitializeCase: joi.boolean().optional(),
+    isRead: joi.boolean().optional(),
     messages: joi
       .array()
       .items(joi.object())
       .required(),
-    readAt: joi
-      .date()
-      .iso()
-      .optional(),
     section: joi.string().required(),
     sentBy: joi.string().required(),
     sentBySection: joi.string().optional(),
@@ -147,6 +144,10 @@ WorkItem.prototype.assignToUser = function({
   return this;
 };
 
+WorkItem.prototype.setStatus = function(status) {
+  this.caseStatus = status;
+};
+
 /**
  *
  * @param userId
@@ -180,6 +181,14 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
  * @param user
  */
 WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
+  const message = new Message({
+    from: 'IRS Holding Queue',
+    fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+    message: 'Petition recalled from IRS Holding Queue',
+    to: user.name,
+    toUserId: user.userId,
+  });
+
   this.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
@@ -189,15 +198,8 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
     sentByUserRole: user.role,
   });
   this.section = PETITIONS_SECTION;
-  this.addMessage(
-    new Message({
-      from: 'IRS Holding Queue',
-      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
-      message: 'Petition recalled from IRS Holding Queue',
-      to: user.name,
-      toUserId: user.userId,
-    }),
-  );
+  this.addMessage(message);
+  return message;
 };
 
 /**

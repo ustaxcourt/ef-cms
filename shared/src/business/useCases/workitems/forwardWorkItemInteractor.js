@@ -41,6 +41,18 @@ exports.forwardWorkItem = async ({
       workItemId: workItemId,
     });
 
+  const newMessage = new Message({
+    createdAt: new Date().toISOString(),
+    from: user.name,
+    fromUserId: user.userId,
+    message,
+    to: userToForwardTo.name,
+    toUserId: userToForwardTo.userId,
+  });
+
+  const latestMessageId = new WorkItem(fullWorkItem).getLatestMessageEntity()
+    .messageId;
+
   const workItemToForward = new WorkItem(fullWorkItem)
     .assignToUser({
       assigneeId: userToForwardTo.userId,
@@ -50,16 +62,7 @@ exports.forwardWorkItem = async ({
       sentByUserId: user.userId,
       sentByUserRole: user.role,
     })
-    .addMessage(
-      new Message({
-        createdAt: new Date().toISOString(),
-        from: user.name,
-        fromUserId: user.userId,
-        message,
-        to: userToForwardTo.name,
-        toUserId: userToForwardTo.userId,
-      }),
-    );
+    .addMessage(newMessage);
 
   const caseObject = await applicationContext
     .getPersistenceGateway()
@@ -72,6 +75,7 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
+    messageId: latestMessageId,
     workItem: fullWorkItem,
   });
 
@@ -91,6 +95,7 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
     applicationContext,
+    messageId: newMessage.messageId,
     workItem: workItemToForward.validate().toRawObject(),
   });
 

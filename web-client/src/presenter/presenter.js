@@ -7,6 +7,7 @@ import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
+import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
@@ -14,6 +15,7 @@ import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
+import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
@@ -26,6 +28,7 @@ import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSe
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
+import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -67,6 +70,7 @@ import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAsso
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
+import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
@@ -76,8 +80,11 @@ import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetit
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitSearchSequence } from './sequences/submitSearchSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
+import { toggleAccountMenuSequence } from './sequences/toggleAccountMenuSequence';
+import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleDocumentCategoryAccordionSequence } from './sequences/toggleDocumentCategoryAccordionSequence';
+import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
@@ -91,6 +98,7 @@ import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByInd
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
+import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
@@ -98,10 +106,13 @@ import { updateForwardFormValueSequence } from './sequences/updateForwardFormVal
 import { updateHasIrsNoticeFormValueSequence } from './sequences/updateHasIrsNoticeFormValueSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
+import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
+import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
@@ -128,6 +139,7 @@ export const presenter = {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
+    cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
@@ -135,6 +147,7 @@ export const presenter = {
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
     clickServeToIrsSequence,
+    closeAccountMenuSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
     confirmStayLoggedInSequence,
@@ -147,6 +160,7 @@ export const presenter = {
     editSelectedSecondaryDocumentSequence,
     formCancelToggleCancelSequence,
     getUsersInSectionSequence,
+    gotoAddDocketEntrySequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
@@ -185,6 +199,7 @@ export const presenter = {
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,
+    submitDocketEntrySequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
@@ -194,8 +209,11 @@ export const presenter = {
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
     submitUpdateCaseSequence,
+    toggleAccountMenuSequence,
+    toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
     toggleDocumentCategoryAccordionSequence,
+    toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
     toggleUsaBannerDetailsSequence,
@@ -209,6 +227,7 @@ export const presenter = {
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
     updateCurrentTabSequence,
+    updateDocketEntryFormValueSequence,
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormValueSequence,
@@ -216,10 +235,13 @@ export const presenter = {
     updateHasIrsNoticeFormValueSequence,
     updateMessageValueSequence,
     updatePetitionValueSequence,
+    updateScreenMetadataSequence,
     updateSearchTermSequence,
+    updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
     validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
+    validateDocketEntrySequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,

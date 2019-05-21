@@ -40,7 +40,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     window.Date.prototype.toISOString.restore();
   });
 
-  it('should create the expected work items and update their status', async () => {
+  it('should create the expected work items and update their status when a petition is sent to the irs holding queue', async () => {
     await createCase({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
@@ -115,13 +115,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
 
     await assignWorkItems({
       applicationContext,
-      workItems: [
-        {
-          assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          assigneeName: 'Test Petitionsclerk',
-          workItemId,
-        },
-      ],
+      assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+      assigneeName: 'Test Petitionsclerk',
+      workItemId,
     });
     const petitionsUserInbox = await getWorkItemsForUser({
       applicationContext,
@@ -248,6 +244,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     const petitionsclerkInboxAfterIRSHoldingQueue = await getWorkItemsForUser({
       applicationContext,
     });
+
     expect(petitionsclerkInboxAfterIRSHoldingQueue).toEqual([]);
 
     const petitionSectionInboxAfterIRSHoldingQueue = await getWorkItemsBySection(
@@ -364,6 +361,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     const docketClerkInboxAfterIRSQueue = await getWorkItemsForUser({
       applicationContext,
     });
+
     expect(docketClerkInboxAfterIRSQueue).toMatchObject([
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
