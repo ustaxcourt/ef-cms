@@ -98,7 +98,9 @@ export const CaseDetail = connect(
                 {caseHelper.showCaseInformationPublic && (
                   <CaseInformationPublic />
                 )}
-                <PartyInformation />
+                <div className="case-detail-party-info">
+                  <PartyInformation />
+                </div>
               </Tab>
             </Tabs>
           </div>
