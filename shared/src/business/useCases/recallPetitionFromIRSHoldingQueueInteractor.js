@@ -17,9 +17,6 @@ const {
   createSectionInboxRecord,
 } = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
 const {
-  deleteMappingRecord,
-} = require('../../persistence/dynamo/helpers/deleteMappingRecord');
-const {
   deleteSectionOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {

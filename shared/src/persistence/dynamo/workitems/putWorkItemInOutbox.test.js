@@ -1,4 +1,3 @@
-const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const { putWorkItemInOutbox } = require('./putWorkItemInOutbox');
 

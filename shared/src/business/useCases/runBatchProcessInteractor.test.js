@@ -96,8 +96,10 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
-      section: 'irsBatchSection',
-      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
     });
     expect(zipDocumentsStub.getCall(0).args[0]).toMatchObject({
       fileNames: [
@@ -152,8 +154,10 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
-      section: 'irsBatchSection',
-      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
     });
     expect(zipDocumentsStub.getCall(1).args[0]).toMatchObject({
       fileNames: [
@@ -209,8 +213,10 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(2).args[0]).toMatchObject({
-      section: 'irsBatchSection',
-      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
     });
     expect(zipDocumentsStub.getCall(2).args[0]).toMatchObject({
       fileNames: [

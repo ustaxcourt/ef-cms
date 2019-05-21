@@ -115,7 +115,6 @@ const createMockDocumentClient = () => {
         }
       }
       if (hasSet) {
-        console.log('obj', obj);
         data[`${Key.pk} ${Key.sk}`] = {
           ...data[`${Key.pk} ${Key.sk}`],
           ...obj,
