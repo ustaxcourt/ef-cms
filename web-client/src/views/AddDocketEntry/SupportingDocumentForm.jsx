@@ -164,24 +164,29 @@ export const SupportingDocumentForm = connect(
               }}
             />
           </div>
-          <div className="usa-form-group add-to-coversheet-checkbox">
-            <input
-              id="add-to-coversheet"
-              className="usa-checkbox__input"
-              type="checkbox"
-              name="addToCoversheet"
-              checked={form.addToCoversheet}
-              onChange={e => {
-                updateDocketEntryFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                validateDocketEntrySequence();
-              }}
-            />
-            <label htmlFor="add-to-coversheet" className="usa-checkbox__label">
-              Add to Cover Sheet
-            </label>
+          <div className="usa-form-group">
+            <div className="usa-checkbox">
+              <input
+                id="add-to-coversheet"
+                className="usa-checkbox__input"
+                type="checkbox"
+                name="addToCoversheet"
+                checked={form.addToCoversheet}
+                onChange={e => {
+                  updateDocketEntryFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  validateDocketEntrySequence();
+                }}
+              />
+              <label
+                htmlFor="add-to-coversheet"
+                className="usa-checkbox__label"
+              >
+                Add to Cover Sheet
+              </label>
+            </div>
           </div>
 
           <div className="usa-form-group">
