@@ -6,7 +6,6 @@
     "aws-xray-sdk": "^2.3.3",
     "eslint-plugin-sort-requires": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
-    "snyk": "^1.165.2",
     "uuid": "^3.3.2"
   },
   "license": "CC0-1.0",
