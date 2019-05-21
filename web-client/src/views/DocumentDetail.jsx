@@ -100,7 +100,14 @@ export const DocumentDetail = connect(
                   </Tab>
                 </Tabs>
               </div>
-              <div className="grid-col-7">
+              <div
+                className={`grid-col-7 ${
+                  !caseHelper.showServeToIrsButton ||
+                  !helper.formattedDocument.isPetition
+                    ? 'document-viewer-top-margin'
+                    : ''
+                }`}
+              >
                 <div className="document-detail__action-buttons float-right">
                   {caseHelper.showServeToIrsButton &&
                     helper.formattedDocument.isPetition && (

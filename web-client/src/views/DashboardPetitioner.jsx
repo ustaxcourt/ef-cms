@@ -1,3 +1,4 @@
+import { BigHeader } from './BigHeader';
 import { CaseListPetitioner } from './CaseListPetitioner';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,14 +11,10 @@ import howToPrepareYourDocuments from '../pdfs/how-to-prepare-your-documents.pdf
 
 export const DashboardPetitioner = connect(
   { helper: state.dashboardPetitionerHelper, user: state.user },
-  ({ user, helper }) => {
+  ({ helper, user }) => {
     return (
       <React.Fragment>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <h1 tabIndex="-1">Welcome, {user.name}</h1>
-          </div>
-        </div>
+        <BigHeader text={`Welcome, ${user.name}`} />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
