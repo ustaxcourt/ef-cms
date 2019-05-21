@@ -13,9 +13,9 @@ export const PartiesFilingReadOnly = connect(
   ({ caseDetail, chooseWizardStepSequence, fileDocumentHelper, form }) => {
     return (
       <React.Fragment>
-        <h3 className="header-with-link-button margin-top-4">
+        <h2 className="header-with-link-button margin-top-4">
           Parties Filing This Document
-        </h3>
+        </h2>
         <button
           className="usa-button usa-button--unstyled"
           type="button"

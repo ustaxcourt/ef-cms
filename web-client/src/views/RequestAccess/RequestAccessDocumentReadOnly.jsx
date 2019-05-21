@@ -13,7 +13,7 @@ export const RequestAccessDocumentReadOnly = connect(
     return (
       <React.Fragment>
         <div>
-          <h3 className="header-with-link-button">{form.documentTitle}</h3>
+          <h2 className="header-with-link-button">{form.documentTitle}</h2>
           <button
             className="link push-right usa-button usa-button--unstyled"
             type="button"

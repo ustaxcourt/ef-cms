@@ -29,15 +29,15 @@ export const RequestAccess = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 tabIndex="-1" id="file-a-document-header">
+          <h1 tabIndex="-1" id="file-a-document-header">
             Request Access to This Case
-          </h2>
+          </h1>
         </Focus>
         <p>All fields required unless otherwise noted</p>
         <div>
-          <h3 className="header-with-link-button">
+          <h2 className="header-with-link-button">
             Type of Document You’re Filing
-          </h3>
+          </h2>
         </div>
         <div className="blue-container">
           <div
