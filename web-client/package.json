@@ -14,6 +14,7 @@
     "lint": "eslint ./src && stylelint ./src/**/*.scss",
     "lint:fix": "eslint ./src --fix && stylelint ./src/**/*.scss --fix",
     "test": "jest --runInBand .*test\\.js$",
+    "test:snyk": "snyk test",
     "test:watch": "jest --runInBand --watch .*test\\.js$",
     "test:unit": "jest --runInBand --config jest-unit.config.js ./src/.*test\\.js$",
     "test:e2e": "jest --runInBand --config jest-e2e.config.js ./e2e/.*test\\.js$",
@@ -21,8 +22,7 @@
     "test:all": "npm run lint && npm run test && npm run test:pa11y && npm run cypress",
     "print:success": "../wait-until.sh http://localhost:1234 && echo 'Build successful. You can access the site at http://localhost:1234/log-in'",
     "start": "npm run dev",
-    "docker:init": "./docker-init.sh",
-    "nightwatch": "nightwatch -e chrome,firefox,safari,ie,edge"
+    "docker:init": "./docker-init.sh"
   },
   "repository": {
     "type": "git",
@@ -90,7 +90,6 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
-    "nightwatch": "^1.0.19",
     "nock": "^10.0.6",
     "node-sass": "^4.12.0",
     "pa11y-ci": "^2.3.0",
@@ -115,5 +114,6 @@
     "uswds": "^2.0.2",
     "webdriver-manager": "^13.0.0",
     "wicg-inert": "^2.1.0"
-  }
+  },
+  "snyk": true
 }
