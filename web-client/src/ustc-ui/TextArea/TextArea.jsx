@@ -17,7 +17,7 @@ export const TextArea = connect(props => {
         onChange={onChange}
         aria-labelledby={ariaLabelledby}
       />
-      <div className="usa-error-message beneath">{error}</div>
+      {error && <div className="usa-error-message beneath">{error}</div>}
     </div>
   );
 });

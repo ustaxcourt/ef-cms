@@ -153,7 +153,7 @@ export const PendingMessages = connect(
                             }
                           >
                             <FontAwesomeIcon
-                              icon={['far', 'check-circle']}
+                              icon={['fas', 'check-circle']}
                               size="sm"
                             />
                             Complete
@@ -421,7 +421,7 @@ export const PendingMessages = connect(
                         }}
                       />
 
-                      <div className="margin-top-2">
+                      <div className="button-box-container">
                         <button type="submit" className="usa-button">
                           Send
                         </button>
