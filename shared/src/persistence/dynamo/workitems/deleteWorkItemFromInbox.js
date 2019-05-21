@@ -6,8 +6,10 @@ exports.deleteWorkItemFromInbox = ({
   applicationContext,
   deleteFromSection = true,
 }) => {
+  console.log('deleteWorkItemFromInbox', workItem.assigneeId);
   const requests = [];
   if (workItem.assigneeId) {
+    console.log('we are here', workItem);
     requests.push(
       deleteUserInboxRecord({
         applicationContext,

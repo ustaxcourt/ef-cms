@@ -35,6 +35,7 @@ exports.createWorkItem = async ({ workItem, applicationContext }) => {
 
   await createUserOutboxRecord({
     applicationContext,
+    userId: user.userId,
     workItem,
   });
 
