@@ -85,23 +85,25 @@ export const DocketRecordHeader = connect(
                 </select>
               </div>
               <div className="only-small-screens">
-                <button
-                  aria-label="docket record sort"
-                  className="usa-button usa-button--unstyled mobile-sort-docket-button"
-                  onClick={() => {
-                    toggleMobileDocketSortSequence();
-                  }}
-                >
-                  {caseDetail.docketRecordSort === 'byDate' &&
-                    'Oldest to Newest'}
-                  {caseDetail.docketRecordSort === 'byDateDesc' &&
-                    'Newest to Oldest'}
-                  {caseDetail.docketRecordSort === 'byIndex' &&
-                    'Order Ascending'}
-                  {caseDetail.docketRecordSort === 'byIndexDesc' &&
-                    'Order Descending'}
-                  <FontAwesomeIcon icon="sort" size="sm" />
-                </button>
+                <div className="margin-top-3 margin-bottom-3">
+                  <button
+                    aria-label="docket record sort"
+                    className="usa-button usa-button--unstyled mobile-sort-docket-button"
+                    onClick={() => {
+                      toggleMobileDocketSortSequence();
+                    }}
+                  >
+                    {caseDetail.docketRecordSort === 'byDate' &&
+                      'Oldest to Newest'}
+                    {caseDetail.docketRecordSort === 'byDateDesc' &&
+                      'Newest to Oldest'}
+                    {caseDetail.docketRecordSort === 'byIndex' &&
+                      'Order Ascending'}
+                    {caseDetail.docketRecordSort === 'byIndexDesc' &&
+                      'Order Descending'}
+                    <FontAwesomeIcon icon="sort" size="sm" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
