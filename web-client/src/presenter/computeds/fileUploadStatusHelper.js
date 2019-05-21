@@ -16,7 +16,6 @@ export const fileUploadStatusHelper = get => {
   } else if (timeRemaining < 60) {
     statusMessage = 'Less Than 1 Minute Left';
   } else if (timeRemaining < 60 * 60) {
-    const minutes = Math.floor(timeRemaining / 60);
     statusMessage = `${Math.floor(timeRemaining / 60)} Minutes Left`;
   } else {
     statusMessage = `${Math.floor(timeRemaining / 3600)} Hours ${Math.floor(
