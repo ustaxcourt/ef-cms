@@ -1,9 +1,6 @@
 const {
   getRecordsViaMapping,
 } = require('../../dynamo/helpers/getRecordsViaMapping');
-const {
-  updateWorkItemsUsingCases,
-} = require('../../dynamo/helpers/updateWorkItemsUsingCases');
 
 exports.getWorkItemsBySection = async ({ section, applicationContext }) => {
   const workItems = await getRecordsViaMapping({
@@ -12,5 +9,5 @@ exports.getWorkItemsBySection = async ({ section, applicationContext }) => {
     type: 'workItem',
   });
 
-  return updateWorkItemsUsingCases({ applicationContext, workItems });
+  return workItems;
 };

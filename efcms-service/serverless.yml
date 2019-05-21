@@ -76,8 +76,8 @@ provider:
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs8.10
-  memorySize: 128
-  timeout: 10
+  memorySize: 768
+  timeout: 30
   logRetentionInDays: 7
   s3Endpoint: s3.${opt:region}.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
@@ -223,11 +223,11 @@ functions:
           method: get
           cors: true
 
-  setMessageAsRead:
-    handler: src/handlers.setMessageAsReadLambda
+  setWorkItemAsRead:
+    handler: src/handlers.setWorkItemAsReadLambda
     events:
       - http:
-          path: v1/messages/{messageId}/read
+          path: v1/workitems/{workItemId}/read
           method: post
           cors: true
 
@@ -359,18 +359,6 @@ functions:
     events:
       - http:
           path: v1/respondents/{respondentId}/cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCasesByStatus:
-    handler: src/handlers.getCasesByStatusLambda
-    events:
-      - http:
-          path: v1/statuses/{status}/cases
           method: get
           cors: true
           authorizer:

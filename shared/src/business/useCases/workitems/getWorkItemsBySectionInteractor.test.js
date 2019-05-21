@@ -50,7 +50,6 @@ describe('getWorkItemsBySection', () => {
         };
       },
       getPersistenceGateway: () => ({
-        getReadMessagesForUser: async () => [],
         getWorkItemsBySection: async () => [],
       }),
     };
@@ -70,7 +69,6 @@ describe('getWorkItemsBySection', () => {
         };
       },
       getPersistenceGateway: () => ({
-        getReadMessagesForUser: async () => [],
         getWorkItemsBySection: async () => [mockWorkItem],
       }),
     };

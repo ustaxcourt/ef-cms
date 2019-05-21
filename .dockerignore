@@ -11,6 +11,8 @@ efcms-service/.dynamodb
 efcms-service/.nyc_output
 efcms-service/.serverless
 efcms-service/coverage
+efcms-service/.cache
+efcms-service/dist
 efcms-service/terraform/main/.terraform
 shared/node_modules
 shared/coverage

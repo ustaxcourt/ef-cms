@@ -14,9 +14,13 @@ const petitionDocumentTypes = ['Petition'];
 const { WorkItem } = require('./WorkItem');
 
 const documentMap = require('../../tools/externalFilingEvents.json');
+const internalDocumentMap = require('../../tools/internalFilingEvents.json');
 
 module.exports.CATEGORIES = Object.keys(documentMap);
 module.exports.CATEGORY_MAP = documentMap;
+
+module.exports.INTERNAL_CATEGORIES = Object.keys(internalDocumentMap);
+module.exports.INTERNAL_CATEGORY_MAP = internalDocumentMap;
 
 /**
  * constructor
@@ -101,12 +105,14 @@ Document.prototype.addWorkItem = function(workItem) {
 Document.prototype.generateFiledBy = function(caseDetail) {
   if (!this.filedBy) {
     let filedByArray = [];
-    if (this.partyRespondent) {
-      filedByArray.push('Resp.');
-    }
-    if (this.partyPractitioner && this.practitioner) {
-      filedByArray.push(`Counsel ${this.practitioner.name}`);
-    }
+    this.partyRespondent && filedByArray.push('Resp.');
+
+    Array.isArray(this.practitioner) &&
+      this.practitioner.forEach(practitioner => {
+        practitioner.partyPractitioner &&
+          filedByArray.push(`Counsel ${practitioner.name}`);
+      });
+
     if (
       this.partyPrimary &&
       !this.partySecondary &&
@@ -125,6 +131,7 @@ Document.prototype.generateFiledBy = function(caseDetail) {
         }`,
       );
     }
+
     this.filedBy = filedByArray.join(' & ');
   }
 };

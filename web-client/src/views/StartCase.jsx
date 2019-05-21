@@ -2,13 +2,17 @@ import { CaseDifferenceExplained } from './CaseDifferenceExplained';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
+import { FileUploadErrorModal } from './FileUploadErrorModal';
+import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCity } from './StartCase/TrialCity';
 import { connect } from '@cerebral/react';
+import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const StartCase = connect(
@@ -68,7 +72,9 @@ export const StartCase = connect(
           <h1 tabIndex="-1" id="start-case-header">
             Start a Case
           </h1>
-          {showModal && <FormCancelModalDialog />}
+          {showModal === 'FormCancelModalDialogComponent' && (
+            <FormCancelModalDialog />
+          )}
           <ErrorNotification />
           <p className="required-statement">All fields required</p>
           <h2>Upload Your Petition to Start Your Case</h2>
@@ -111,7 +117,8 @@ export const StartCase = connect(
                     </span>
                   </label>
                   <span className="usa-form-hint">
-                    File must be in PDF format (.pdf)
+                    File must be in PDF format (.pdf). Max file size{' '}
+                    {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <input
                     id="petition-file"
@@ -120,16 +127,26 @@ export const StartCase = connect(
                     aria-describedby="petition-hint"
                     name="petitionFile"
                     onChange={e => {
-                      updatePetitionValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
+                      limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                        updatePetitionValueSequence({
+                          key: e.target.name,
+                          value: e.target.files[0],
+                        });
+                        updatePetitionValueSequence({
+                          key: `${e.target.name}Size`,
+                          value: e.target.files[0].size,
+                        });
+                        validateStartCaseSequence();
                       });
-                      validateStartCaseSequence();
                     }}
                   />
                   <Text
                     className="usa-input-error-message"
                     bind="validationErrors.petitionFile"
+                  />
+                  <Text
+                    className="usa-input-error-message"
+                    bind="validationErrors.petitionFileSize"
                   />
                 </div>
               </div>
@@ -156,7 +173,8 @@ export const StartCase = connect(
                 </span>
               </label>
               <span className="usa-form-hint">
-                File must be in PDF format (.pdf)
+                File must be in PDF format (.pdf). Max file size{' '}
+                {constants.MAX_FILE_SIZE_MB}MB.
               </span>
               <input
                 id="stin-file"
@@ -164,16 +182,26 @@ export const StartCase = connect(
                 accept=".pdf"
                 name="stinFile"
                 onChange={e => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
+                  limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                    updatePetitionValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    updatePetitionValueSequence({
+                      key: `${e.target.name}Size`,
+                      value: e.target.files[0].size,
+                    });
+                    validateStartCaseSequence();
                   });
-                  validateStartCaseSequence();
                 }}
               />
               <Text
                 className="usa-input-error-message"
                 bind="validationErrors.stinFile"
+              />
+              <Text
+                className="usa-input-error-message"
+                bind="validationErrors.stinFileSize"
               />
             </div>
           </div>
@@ -530,7 +558,8 @@ export const StartCase = connect(
                   </span>
                 </label>
                 <span className="usa-form-hint">
-                  File must be in PDF format (.pdf).
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <input
                   id="ownership-disclosure-file"
@@ -538,11 +567,26 @@ export const StartCase = connect(
                   accept=".pdf"
                   name="ownershipDisclosureFile"
                   onChange={e => {
-                    updatePetitionValueSequence({
-                      key: e.target.name,
-                      value: e.target.files[0],
+                    limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                      updatePetitionValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                      updatePetitionValueSequence({
+                        key: `${e.target.name}Size`,
+                        value: e.target.files[0].size,
+                      });
+                      validateStartCaseSequence();
                     });
                   }}
+                />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.ownershipDisclosureFile"
+                />
+                <Text
+                  className="usa-input-error-message"
+                  bind="validationErrors.ownershipDisclosureFileSize"
                 />
               </div>
             </div>
@@ -858,6 +902,10 @@ export const StartCase = connect(
             Cancel
           </button>
         </form>
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
+        )}
       </section>
     );
   },
