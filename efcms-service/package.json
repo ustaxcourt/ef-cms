@@ -78,6 +78,7 @@
     "docker:route53": "./docker-route53.sh",
     "docker:globaltables": "./docker-globaltables.sh",
     "snyk-protect": "snyk protect",
+    "snyk:auth": "snyk auth",
     "prepare": "npm run snyk-protect"
   },
   "jest": {
