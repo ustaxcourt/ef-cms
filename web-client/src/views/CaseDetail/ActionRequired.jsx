@@ -5,6 +5,21 @@ import { sequences, state } from 'cerebral';
 
 import React from 'react';
 
+const MailPayment = () => (
+  <div className="tablet:grid-col-12 margin-bottom-2">
+    <h3 className="margin-top-2">Mail in payment</h3>
+    <p>Make checks/money order payable to:</p>
+    <address>
+      Clerk, United States Tax Court
+      <br />
+      400 2nd St NW
+      <br />
+      Washington, DC 20217
+      <br />
+    </address>
+  </div>
+);
+
 export const ActionRequired = connect(
   {
     caseDetail: state.formattedCaseDetail,
@@ -53,6 +68,13 @@ export const ActionRequired = connect(
                   <Hint>
                     It may take up to X days for your payment to appear online.
                   </Hint>
+
+                  <section className="only-small-screens">
+                    <div className="margin-bottom-1">
+                      <MailPayment />
+                    </div>
+                  </section>
+
                   <h3>Canʼt afford to pay the fee?</h3>
                   <p>
                     You may be eligible for a filing fee waiver.{' '}
@@ -68,20 +90,11 @@ export const ActionRequired = connect(
                   </p>
                 </div>
               </div>
-              <div className="grid-row">
-                <div className="tablet:grid-col-12 margin-bottom-2">
-                  <h3 className="margin-top-2">Mail in payment</h3>
-                  <p>Make checks/money order payable to:</p>
-                  <address>
-                    Clerk, United States Tax Court
-                    <br />
-                    400 2nd St NW
-                    <br />
-                    Washington, DC 20217
-                    <br />
-                  </address>
+              <section className="only-large-screens">
+                <div className="grid-row">
+                  <MailPayment />
                 </div>
-              </div>
+              </section>
             </div>
           )}
         </li>
