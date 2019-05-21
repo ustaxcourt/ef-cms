@@ -1,3 +1,4 @@
+import { BigHeader } from './BigHeader';
 import { ErrorNotification } from './ErrorNotification';
 import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -13,11 +14,7 @@ export const DashboardRespondent = connect(
   ({ caseList, helper, user }) => {
     return (
       <React.Fragment>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <h1 tabIndex="-1">Welcome, {user.name}</h1>
-          </div>
-        </div>
+        <BigHeader text={`Welcome, ${user.name}`} />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
