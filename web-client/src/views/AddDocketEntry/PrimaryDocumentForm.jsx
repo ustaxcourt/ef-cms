@@ -32,7 +32,7 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Add Docket Entry</h2>
+        <h1>Add Docket Entry</h1>
         <div className="blue-container docket-entry-form">
           <div
             className={`usa-form-group ${

@@ -29,7 +29,7 @@ export const CaseDetail = connect(
           <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-6">
-                <h1 className="captioned" tabIndex="-1">
+                <h1 className="heading-2 captioned" tabIndex="-1">
                   Docket Number: {caseDetail.docketNumberWithSuffix}
                 </h1>
                 <p className="margin-0">{caseDetail.caseTitle}</p>

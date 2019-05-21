@@ -1,6 +1,6 @@
 .usa-button {
   min-width: 132px;
-  margin: 0 20px 20px 0;
+  margin: 0 0 20px 0;
 
   &.margin-right-0 {
     margin-right: 0;
@@ -59,9 +59,13 @@
 }
 
 .serve-to-irs {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .button-box-container {
   margin-top: 40px;
+
+  .usa-button {
+    margin-right: 20px;
+  }
 }
