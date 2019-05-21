@@ -15,7 +15,6 @@ const MailPayment = () => (
       400 2nd St NW
       <br />
       Washington, DC 20217
-      <br />
     </address>
   </div>
 );
@@ -47,7 +46,7 @@ export const ActionRequired = connect(
           {showDetails && (
             <div
               id="paymentInfo"
-              className="usa-accordion-content grid-container padding-x-0 padding-y-205"
+              className="usa-accordion-content grid-container padding-x-0 margin-top-3"
               aria-hidden="false"
             >
               <div className="grid-row">
