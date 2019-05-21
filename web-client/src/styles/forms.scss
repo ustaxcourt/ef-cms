@@ -32,7 +32,8 @@ select {
   margin: 0;
   &:hover {
     border: 1px solid color($theme-color-primary);
-    box-shadow: inset 0 0 1px color($theme-color-primary);
+    box-shadow: inset 0 0 0 1px color($theme-color-primary);
+    cursor: pointer;
   }
 
   &::placeholder {
@@ -368,6 +369,7 @@ label.ustc-upload {
     &:hover {
       border: 1px solid color($theme-color-primary);
       box-shadow: 0 0 0 1px color($theme-color-primary);
+      cursor: pointer;
     }
     .select-react-element__value-container {
       &:focus {
