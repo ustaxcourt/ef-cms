@@ -13,10 +13,7 @@
     "docker:shellcheck": "./docker-shellcheck.sh",
     "docker:audit": "./docker-audit.sh",
     "docker:sonarqube": "./docker-sonarqube.sh",
-    "docker:test": "CONTAINER_NAME=shared-test ./docker-test.sh",
-    "snyk-protect": "snyk protect",
-    "snyk:auth": "snyk auth",
-    "prepare": "npm run snyk-protect"
+    "docker:test": "CONTAINER_NAME=shared-test ./docker-test.sh"
   },
   "repository": {
     "type": "git",
