@@ -270,4 +270,8 @@ option:first-child {
 
 p {
   max-width: 700px;
+
+  .usa-form & {
+    max-width: inherit;
+  }
 }
