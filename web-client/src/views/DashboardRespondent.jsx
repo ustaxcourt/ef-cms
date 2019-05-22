@@ -27,7 +27,7 @@ export const DashboardRespondent = connect(
           )}
           {helper.showCaseList && (
             <div className="grid-row grid-gap taxpayer-tools">
-              <div className="tablet:grid-col-8">
+              <div className="tablet:grid-col-8 margin-top-2">
                 <table
                   className="usa-table responsive-table dashboard"
                   id="workQueue"

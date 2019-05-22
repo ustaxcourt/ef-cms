@@ -59,7 +59,7 @@ export const SecondaryDocumentForm = connect(
                     }
                   >
                     Upload Your Document{' '}
-                    <span className="success-message">
+                    <span className="success-message padding-left-1">
                       <FontAwesomeIcon icon="check-circle" size="sm" />
                     </span>{' '}
                     {fileDocumentHelper.isSecondaryDocumentUploadOptional && (
