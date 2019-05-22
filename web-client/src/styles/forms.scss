@@ -85,7 +85,7 @@ select {
 
 .usa-label:hover {
   +.usa-hint {
-    +.usa-input,
+    +.usa-input:not([type=file]),
     +.usa-textarea,
     +.usa-select,
     +.usa-range {
@@ -95,7 +95,7 @@ select {
       }
     }
   }
-  +.usa-input,
+  +.usa-input:not([type=file]),
   +.usa-textarea,
   +.usa-select,
   +.usa-range {
