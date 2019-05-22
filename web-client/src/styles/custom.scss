@@ -942,3 +942,10 @@ nav.usa-nav {
 .document-viewer-top-margin {
   margin-top: 57px;
 }
+
+#ustc-start-a-case-form {
+  .blue-container .usa-form-group:last-child,
+  .blue-container .usa-fieldset:last-child {
+    margin-bottom: 0;
+  }
+}
