@@ -37,7 +37,9 @@ export const ContactPrimary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h2>{contactsHelper.contactPrimary.header}</h2>
+          <h2 className="margin-top-4">
+            {contactsHelper.contactPrimary.header}
+          </h2>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}

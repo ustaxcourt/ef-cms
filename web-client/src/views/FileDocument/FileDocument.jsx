@@ -45,7 +45,7 @@ export const FileDocument = connect(
           </button>
         </div>
         <div className="blue-container">
-          <FontAwesomeIcon icon={['far', 'file-alt']} />
+          <FontAwesomeIcon icon={['far', 'file-pdf']} />
           <h4 className="file-name">{form.documentTitle}</h4>
         </div>
 

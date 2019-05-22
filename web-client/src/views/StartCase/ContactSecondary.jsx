@@ -34,7 +34,9 @@ export const ContactSecondary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h2>{contactsHelper.contactSecondary.header}</h2>
+          <h2 className="margin-top-4">
+            {contactsHelper.contactSecondary.header}
+          </h2>
         ) : (
           <h4>{contactsHelper.contactSecondary.header}</h4>
         )}

@@ -94,31 +94,38 @@ export class ModalDialog extends React.Component {
           role="dialog"
         >
           <div
-            className={`modal-dialog ${modal.classNames}`}
+            className={`modal-dialog padding-205 ${modal.classNames}`}
             aria-live={this.ariaLiveMode || 'assertive'}
             aria-modal="true"
             role="status"
             onClick={event => event.stopPropagation()}
           >
-            <div className="modal-header">
-              <button
-                type="button"
-                className="modal-close-button text-no-underline usa-button usa-button--unstyled"
-                onClick={this.runCancelSequence}
-              >
-                Close <FontAwesomeIcon icon="times-circle" />
-              </button>
-              <h3 tabIndex="-1" className="modal-header__title">
-                {modal.title}
-              </h3>
+            <div className="modal-header grid-container padding-x-0">
+              <div className="grid-row">
+                <div className="mobile-lg:grid-col-9">
+                  <h3 tabIndex="-1" className="modal-header__title">
+                    {modal.title}
+                  </h3>
+                </div>
+                <div className="mobile-lg:grid-col-3">
+                  <button
+                    type="button"
+                    className="text-no-underline usa-button usa-button--unstyled hide-on-mobile float-right"
+                    onClick={this.runCancelSequence}
+                  >
+                    Close{' '}
+                    <FontAwesomeIcon className="margin-0" icon="times-circle" />
+                  </button>
+                </div>
+              </div>
             </div>
-            {modal.message && <p>{modal.message}</p>}
+            {modal.message && <p className="margin-0">{modal.message}</p>}
             {this.renderBody && this.renderBody()}
-            <div className="button-container">
+            <div className="button-box-container">
               <button
                 type="button"
                 onClick={this.runConfirmSequence}
-                className="usa-button"
+                className="usa-button margin-right-205"
               >
                 {modal.confirmLabel}
               </button>

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React, { useEffect } from 'react';
+import React from 'react';
 import close from '../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
