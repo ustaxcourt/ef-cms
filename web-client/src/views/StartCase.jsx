@@ -84,7 +84,7 @@ export const StartCase = connect(
             className="usa-form maxw-none"
           >
             <h1 tabIndex="-1" id="start-case-header">
-              Start a Case
+              Tell us about your case
             </h1>
             {showModal === 'FormCancelModalDialogComponent' && (
               <FormCancelModalDialog />
