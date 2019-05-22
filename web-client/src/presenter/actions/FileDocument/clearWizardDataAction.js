@@ -9,7 +9,6 @@ import { state } from 'cerebral';
  */
 export const clearWizardDataAction = ({ store, get, props }) => {
   let pickedDocument;
-  const currentSecondaryFile = get(state.form.supportingDocumentFile);
 
   switch (props.key) {
     case 'category':
@@ -35,10 +34,6 @@ export const clearWizardDataAction = ({ store, get, props }) => {
       break;
     case 'supportingDocument':
       store.set(state.form.supportingDocumentFreeText, null);
-      store.set(
-        state.form.supportingDocumentFile,
-        currentSecondaryFile || null,
-      );
 
       break;
     case 'secondaryDocumentFile':
