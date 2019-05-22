@@ -29,35 +29,40 @@ export const CaseListPetitioner = connect(
         <div className="show-on-mobile">
           <h2>Your Cases</h2>
         </div>
-        <table className="usa-table responsive-table dashboard" id="case-list">
-          <thead>
-            <tr>
-              <th>Docket Number</th>
-              <th>Petitioner Name</th>
-              <th>Date Filed</th>
-            </tr>
-          </thead>
-          <tbody>
-            {caseList.map(item => (
-              <tr key={item.docketNumber}>
-                <td className="hide-on-mobile">
-                  <a href={'/case-detail/' + item.docketNumber}>
-                    {item.docketNumberWithSuffix}
-                  </a>
-                </td>
-                <td>
-                  <div className="show-on-mobile">
+        <div className="margin-top-2">
+          <table
+            className="usa-table responsive-table dashboard"
+            id="case-list"
+          >
+            <thead>
+              <tr>
+                <th>Docket Number</th>
+                <th>Petitioner Name</th>
+                <th>Date Filed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {caseList.map(item => (
+                <tr key={item.docketNumber}>
+                  <td className="hide-on-mobile">
                     <a href={'/case-detail/' + item.docketNumber}>
                       {item.docketNumberWithSuffix}
                     </a>
-                  </div>
-                  {item.caseName}
-                </td>
-                <td>{item.createdAtFormatted}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                  <td>
+                    <div className="show-on-mobile">
+                      <a href={'/case-detail/' + item.docketNumber}>
+                        {item.docketNumberWithSuffix}
+                      </a>
+                    </div>
+                    {item.caseName}
+                  </td>
+                  <td>{item.createdAtFormatted}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </>
     );
   },
