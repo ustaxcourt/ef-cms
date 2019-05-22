@@ -168,7 +168,71 @@
     "updatedAt": "2019-03-01T21:42:29.073Z"
   },
   {
-    "sk": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
-    "pk": "petitions|workItem"
+    "sk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "pk": "section-petitions",
+    "docketNumberSuffix": "P",
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-01T21:42:29.073Z",
+      "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+      "documentType": "Petition",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "assigneeName": null,
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "gsi1pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+        "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
+        "from": "Test Petitioner",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "docketNumber": "102-19",
+    "updatedAt": "2019-03-01T21:42:29.073Z"
+  },
+  {
+    "sk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "gsi1pk": "workitem-4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "docketNumberSuffix": "P",
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-01T21:42:29.073Z",
+      "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
+      "documentType": "Petition",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "4df3fa30-a1ad-45e1-ae1e-05256c538e72",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:42:29.073Z",
+    "assigneeName": null,
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:42:29.073Z",
+        "messageId": "c0302b4c-ad47-4527-ae43-114805333157",
+        "message": "Petition filed by Selma Horn & Cairo Harris is ready for review.",
+        "from": "Test Petitioner",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "docketNumber": "102-19",
+    "updatedAt": "2019-03-01T21:42:29.073Z"
   }
 ]

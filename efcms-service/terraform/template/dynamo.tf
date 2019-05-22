@@ -2,8 +2,7 @@
 resource "aws_dynamodb_table" "efcms-east" {
   provider       = "aws.us-east-1"
   name           = "efcms-${var.environment}"
-  read_capacity  = "10"
-  write_capacity = "10"
+  billing_mode = "PAY_PER_REQUEST"
 
   hash_key = "pk"
   range_key = "sk"
@@ -18,8 +17,20 @@ resource "aws_dynamodb_table" "efcms-east" {
     type = "S"
   }
 
+  attribute {
+    name = "gsi1pk"
+    type = "S"
+  }
+
   point_in_time_recovery {
     enabled = true
+  }
+
+  global_secondary_index {
+    name = "gsi1"
+    hash_key = "gsi1pk"
+    range_key = "pk"
+    projection_type = "ALL"
   }
 
   stream_enabled   = true
@@ -38,8 +49,7 @@ resource "aws_dynamodb_table" "efcms-east" {
 resource "aws_dynamodb_table" "efcms-west" {
   provider       = "aws.us-west-1"
   name           = "efcms-${var.environment}"
-  read_capacity  = "10"
-  write_capacity = "10"
+  billing_mode = "PAY_PER_REQUEST"
 
   hash_key = "pk"
   range_key = "sk"
@@ -53,9 +63,21 @@ resource "aws_dynamodb_table" "efcms-west" {
     name = "sk"
     type = "S"
   }
+
+  attribute {
+    name = "gsi1pk"
+    type = "S"
+  }
   
   point_in_time_recovery {
     enabled = true
+  }
+
+  global_secondary_index {
+    name = "gsi1"
+    hash_key = "gsi1pk"
+    range_key = "pk"
+    projection_type = "ALL"
   }
 
   stream_enabled   = true

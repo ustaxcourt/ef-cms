@@ -1,20 +1,12 @@
-const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const { updateWorkItem } = require('./updateWorkItem');
 
 describe('updateWorkItem', () => {
+  let putStub;
   beforeEach(() => {
-    sinon.stub(client, 'put').resolves([
-      {
-        pk: 'abc',
-        sk: 'abc',
-        workItemId: 'abc',
-      },
-    ]);
-  });
-
-  afterEach(() => {
-    client.put.restore();
+    putStub = sinon.stub().returns({
+      promise: async () => null,
+    });
   });
 
   it('invokes the peristence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
@@ -22,6 +14,9 @@ describe('updateWorkItem', () => {
       environment: {
         stage: 'dev',
       },
+      getDocumentClient: () => ({
+        put: putStub,
+      }),
     };
     await updateWorkItem({
       applicationContext,
@@ -30,11 +25,11 @@ describe('updateWorkItem', () => {
         workItemId: '123',
       },
     });
-    expect(client.put.getCall(0).args[0]).toMatchObject({
+    expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
         assigneeId: 'bob',
-        pk: '123',
-        sk: '123',
+        pk: 'workitem-123',
+        sk: 'workitem-123',
         workItemId: '123',
       },
       applicationContext: { environment: { stage: 'dev' } },

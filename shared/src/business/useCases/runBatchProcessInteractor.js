@@ -42,8 +42,7 @@ exports.runBatchProcess = async ({ applicationContext }) => {
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromSection({
       applicationContext,
-      section: IRS_BATCH_SYSTEM_SECTION,
-      workItemId: workItem.workItemId,
+      workItem,
     });
 
     const s3Ids = caseToBatch.documents.map(document => document.documentId);
