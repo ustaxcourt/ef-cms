@@ -27,7 +27,6 @@
   position: relative;
   display: block;
   min-height: 145px;
-  padding: 13px 30px 0 20px;
   border-top: 10px solid color($theme-color-warning);
   margin: auto;
   background: $color-white;
@@ -46,38 +45,14 @@
     left: 0;
     overflow: auto;
     height: 100%;
-  }
 
-  .modal-header {
-    margin-bottom: 0.75em;
-
-    h3 {
-      margin: 24px 0 14px;
+    button {
+      margin-bottom: 20px;
     }
   }
 
-  .button-container {
-    margin-top: 40px;
-  }
-
-  .modal-close-button {
-    position: absolute;
-    top: 18px;
-    right: 20px;
-    color: color($theme-color-primary);
-    text-align: right;
-    &:hover {
-      color: color($theme-color-base-darkest);
-      text-decoration: none;
-    }
-    svg {
-      margin-right: 0;
-    }
-  }
-
-  .usa-button,
-  .usa-button--outline {
-    min-width: 150px;
+  .svg-inline--fa {
+    margin-right: 0;
   }
 }
 
@@ -94,7 +69,7 @@
 
 .file-upload-status-modal {
   > .modal-header,
-  .button-container {
+  .button-box-container {
     display: none;
   }
 
@@ -120,7 +95,7 @@
 
   .progress-bar-fill {
     height: 100%;
-    background: color($theme-color-success);
+    background: $color-green;
     border-radius: 5px;
   }
 
@@ -132,6 +107,8 @@
     }
   }
 
+  width: 620px;
+  max-width: 100%;
   padding: 60px 0;
   border-top: none;
   background-color: color($theme-color-primary);

@@ -62,7 +62,7 @@ export const CaseSearchBox = connect(
                 </div>
                 <button
                   type="submit"
-                  className="usa-button usa-button--outline"
+                  className="usa-button usa-button--outline margin-top-2"
                 >
                   <span className="usa-search-submit-text">Search</span>
                 </button>
