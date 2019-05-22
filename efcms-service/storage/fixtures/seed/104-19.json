@@ -150,6 +150,9 @@
     "pk": "104-19|case"
   },
   {
+    "sk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "gsi1pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "pk": "section-petitions",
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "document": {
@@ -168,7 +171,6 @@
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "sk": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "messages": [
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
@@ -178,12 +180,41 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
     "docketNumber": "104-19",
     "updatedAt": "2019-03-05T17:34:13.490Z"
   },
   {
-    "sk": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
-    "pk": "petitions|workItem"
+    "sk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "gsi1pk": "workitem-e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "docketNumberSuffix": null,
+    "caseStatus": "New",
+    "document": {
+      "createdAt": "2019-03-05T17:34:13.490Z",
+      "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+      "documentType": "Petition",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "e4d306f3-3d36-4e27-ac22-0f6e8b31b940",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-05T17:34:13.490Z",
+    "assigneeName": null,
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "messages": [
+      {
+        "createdAt": "2019-03-05T17:34:13.490Z",
+        "messageId": "7092457a-33b0-4d0f-a4ba-07b2701196fc",
+        "message": "Petition filed by Mufutau Wade is ready for review.",
+        "from": "Test Petitioner",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "docketNumber": "104-19",
+    "updatedAt": "2019-03-05T17:34:13.490Z"
   }
 ]
