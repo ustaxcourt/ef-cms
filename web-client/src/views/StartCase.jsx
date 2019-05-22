@@ -72,7 +72,10 @@ export const StartCase = connect(
             </div>
           </div>
         </div>
-        <section className="usa-section grid-container">
+        <section
+          id="ustc-start-a-case-form"
+          className="usa-section grid-container"
+        >
           <form
             role="form"
             aria-labelledby="start-case-header"
@@ -81,16 +84,22 @@ export const StartCase = connect(
               e.preventDefault();
               submitFilePetitionSequence();
             }}
-            className="usa-form usa-form--large"
+            className="usa-form maxw-none"
           >
-            <h1 tabIndex="-1" id="start-case-header">
-              Start a Case
-            </h1>
             {showModal === 'FormCancelModalDialogComponent' && (
               <FormCancelModalDialog />
             )}
             <ErrorNotification />
-            <p className="required-statement">All fields required</p>
+            <h1
+              tabIndex="-1"
+              id="start-case-header"
+              className="margin-bottom-05"
+            >
+              Tell us about your case
+            </h1>
+            <p className="required-statement margin-top-05 margin-bottom-5">
+              All fields required
+            </p>
             <h2>Upload Your Petition to Start Your Case</h2>
 
             <div className="blue-container grid-container padding-x-0">
@@ -120,7 +129,7 @@ export const StartCase = connect(
                     >
                       Upload Your Petition{' '}
                       <span className="success-message">
-                        <FontAwesomeIcon icon="check-circle" size="sm" />
+                        <FontAwesomeIcon icon="check-circle" size="1x" />
                       </span>
                     </label>
                     <span className="usa-hint">
@@ -179,7 +188,7 @@ export const StartCase = connect(
                 >
                   Upload Your Statement of Taxpayer Identification
                   <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                    <FontAwesomeIcon icon="check-circle" size="1x" />
                   </span>
                 </label>
                 <span className="usa-hint">
@@ -555,7 +564,7 @@ export const StartCase = connect(
                   >
                     Upload your Ownership Disclosure Statement
                     <span className="success-message">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                      <FontAwesomeIcon icon="check-circle" size="1x" />
                     </span>
                   </label>
                   <span className="usa-hint">
@@ -790,7 +799,6 @@ export const StartCase = connect(
                 onClick={() => toggleCaseDifferenceSequence()}
               >
                 <span className="usa-accordion__heading usa-banner__button-text">
-                  <FontAwesomeIcon icon="question-circle" size="lg" />
                   How is a small case different than a regular case, and do I
                   qualify?
                   {screenMetadata.showCaseDifference ? (

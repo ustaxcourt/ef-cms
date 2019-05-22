@@ -139,7 +139,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: new File([], 'test.pdf'),
@@ -158,7 +158,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
@@ -177,7 +177,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
@@ -194,7 +194,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: new File([], 'testPetitionFile.pdf'),
@@ -214,7 +214,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
@@ -233,7 +233,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
@@ -252,7 +252,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
@@ -269,7 +269,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
@@ -289,7 +289,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         ownershipDisclosureFile: new File([], 'odsFile.pdf'),
         ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
         partyType:
@@ -310,7 +310,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         ownershipDisclosureFile: new File([], 'test.pdf'),
         ownershipDisclosureFileSize: 0,
         partyType:
@@ -329,7 +329,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
@@ -346,7 +346,7 @@ describe('Petition entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
+        irsNoticeDate: '2009-10-13',
         ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',

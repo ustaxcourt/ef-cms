@@ -26,6 +26,6 @@ describe('cancelDelayedLogoutAction', () => {
         shouldIdleLogout: true,
       },
     });
-    expect(result.state.shouldidleLogout).toBeFalsy();
+    expect(result.state.shouldIdleLogout).toBeFalsy();
   });
 });
