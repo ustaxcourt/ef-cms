@@ -12,36 +12,38 @@ export const CaseListPractitioner = connect(
   },
   ({ caseList, helper }) => {
     const renderTable = () => (
-      <table className="usa-table responsive-table dashboard" id="case-list">
-        <thead>
-          <tr>
-            <th>Docket Number</th>
-            <th>Petitioner Name</th>
-            <th>Date Filed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {caseList.map(item => (
-            <tr key={item.docketNumber}>
-              <td className="hide-on-mobile">
-                <a href={'/case-detail/' + item.docketNumber}>
-                  {item.docketNumberWithSuffix}
-                </a>
-              </td>
-              <td className="hide-on-mobile">{item.caseName}</td>
-              <td>{item.createdAtFormatted}</td>
-              <td className="show-on-mobile">
-                <div>
+      <div className="margin-top-2">
+        <table className="usa-table responsive-table dashboard" id="case-list">
+          <thead>
+            <tr>
+              <th>Docket Number</th>
+              <th>Petitioner Name</th>
+              <th>Date Filed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {caseList.map(item => (
+              <tr key={item.docketNumber}>
+                <td className="hide-on-mobile">
                   <a href={'/case-detail/' + item.docketNumber}>
                     {item.docketNumberWithSuffix}
                   </a>
-                </div>
-                {item.caseName}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                </td>
+                <td className="hide-on-mobile">{item.caseName}</td>
+                <td>{item.createdAtFormatted}</td>
+                <td className="show-on-mobile">
+                  <div>
+                    <a href={'/case-detail/' + item.docketNumber}>
+                      {item.docketNumberWithSuffix}
+                    </a>
+                  </div>
+                  {item.caseName}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
 
     const renderTitle = () => <h2>Your Cases</h2>;

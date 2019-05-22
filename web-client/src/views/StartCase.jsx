@@ -129,7 +129,7 @@ export const StartCase = connect(
                     >
                       Upload Your Petition{' '}
                       <span className="success-message">
-                        <FontAwesomeIcon icon="check-circle" size="sm" />
+                        <FontAwesomeIcon icon="check-circle" size="1x" />
                       </span>
                     </label>
                     <span className="usa-hint">
@@ -188,7 +188,7 @@ export const StartCase = connect(
                 >
                   Upload Your Statement of Taxpayer Identification
                   <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                    <FontAwesomeIcon icon="check-circle" size="1x" />
                   </span>
                 </label>
                 <span className="usa-hint">
@@ -564,7 +564,7 @@ export const StartCase = connect(
                   >
                     Upload your Ownership Disclosure Statement
                     <span className="success-message">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
+                      <FontAwesomeIcon icon="check-circle" size="1x" />
                     </span>
                   </label>
                   <span className="usa-hint">

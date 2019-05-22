@@ -38,7 +38,6 @@
 .usa-button {
   &.usa-button--unstyled {
     padding: 2px;
-    margin: 0;
     &:disabled {
       color: color($theme-color-base);
     }
@@ -56,6 +55,7 @@ option:first-child {
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
     position: relative;
+    padding-right: 2rem;
     padding-left: 2rem;
     svg {
       position: absolute;
@@ -274,4 +274,11 @@ p {
   .usa-form & {
     max-width: inherit;
   }
+}
+
+.usa-list li,
+.usa-prose > ul li,
+.usa-prose > ol li {
+  max-width: 700px;
+  line-height: 24px;
 }
