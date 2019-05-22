@@ -58,7 +58,9 @@ select {
 
 .usa-checkbox__label,
 .usa-radio__label {
+  max-width: 700px;
   margin-bottom: 0;
+  line-height: 24px;
   &::before {
     box-shadow: 0 0 0 1px color($theme-color-base);
   }
