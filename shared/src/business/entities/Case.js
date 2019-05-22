@@ -64,18 +64,47 @@ exports.CASE_CAPTION_POSTFIX =
  * @constructor
  */
 function Case(rawCase) {
-  Object.assign(
-    this,
-    rawCase,
-    {
-      caseId: rawCase.caseId || uuid.v4(),
-      createdAt: rawCase.createdAt || new Date().toISOString(),
-      status: rawCase.status || statusMap.new,
-    },
-    {
-      docketNumberSuffix: getDocketNumberSuffix(rawCase),
-    },
-  );
+  Object.assign(this, {
+    caseCaption: rawCase.caseCaption,
+    caseId: rawCase.caseId || uuid.v4(),
+    caseType: rawCase.caseType,
+    contactPrimary: rawCase.contactPrimary,
+    contactSecondary: rawCase.contactSecondary,
+    createdAt: rawCase.createdAt || new Date().toISOString(),
+    currentVersion: rawCase.currentVersion,
+    docketNumber: rawCase.docketNumber,
+    docketNumberSuffix: getDocketNumberSuffix(rawCase),
+    docketRecord: rawCase.docketRecord,
+    documents: rawCase.documents,
+    filingType: rawCase.filingType,
+    hasIrsNotice: rawCase.hasIrsNotice,
+    hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
+    initialDocketNumberSuffix: rawCase.initialDocketNumberSuffix,
+    initialTitle: rawCase.initialTitle,
+    irsNoticeDate: rawCase.irsNoticeDate,
+    irsSendDate: rawCase.irsSendDate,
+    isPaper: rawCase.isPaper,
+    noticeOfAttachments: rawCase.noticeOfAttachments,
+    orderForAmendedPetition: rawCase.orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee:
+      rawCase.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: rawCase.orderForFilingFee,
+    orderForOds: rawCase.orderForOds,
+    orderForRatification: rawCase.orderForRatification,
+    orderToShowCause: rawCase.orderToShowCause,
+    partyType: rawCase.partyType,
+    payGovDate: rawCase.payGovDate,
+    payGovId: rawCase.payGovId,
+    practitioners: rawCase.practitioners,
+    preferredTrialCity: rawCase.preferredTrialCity,
+    procedureType: rawCase.procedureType,
+    receivedAt: rawCase.receivedAt,
+    respondent: rawCase.respondent,
+    status: rawCase.status || statusMap.new,
+    userId: rawCase.userId,
+    workItems: rawCase.workItems,
+    yearAmounts: rawCase.yearAmounts,
+  });
 
   this.initialDocketNumberSuffix =
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
