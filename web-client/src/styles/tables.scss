@@ -41,6 +41,7 @@ table.dashboard {
     border-bottom: 1px solid color($theme-color-base-lighter);
 
     th {
+      padding: 0.5rem 1rem;
       border: none;
       background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;
@@ -53,6 +54,7 @@ table.dashboard {
 
   td {
     display: table-cell;
+    padding: 0.5rem 1rem;
     border: none;
 
     label {
