@@ -159,7 +159,7 @@ option:first-child {
   background-color: $color-primary-alt-lightest;
   background-image: url('images/alerts/info.svg');
 
-  &::before{
+  &::before {
     background-color: color($theme-color-accent-cool-dark);
   }
 }
@@ -182,7 +182,7 @@ option:first-child {
 
   .usa-alert__heading {
     margin-top: 0;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     font-family: $font-serif;
     font-size: 20px;
     font-weight: $font-bold;
