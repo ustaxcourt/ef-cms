@@ -30,7 +30,7 @@ input[type='text'],
 textarea,
 select {
   margin: 0;
-  &:hover {
+  &:hover:not(:disabled) {
     border: 1px solid color($theme-color-primary);
     box-shadow: inset 0 0 0 1px color($theme-color-primary);
     cursor: pointer;
@@ -81,6 +81,28 @@ select {
   }
 }
 
+.usa-label:hover {
+  +.usa-hint {
+    +.usa-input,
+    +.usa-textarea,
+    +.usa-select,
+    +.usa-range {
+      &:not(:disabled) {
+        border: 1px solid color($theme-color-base);
+        box-shadow: 0 0 0 0 transparent;
+      }
+    }
+  }
+  +.usa-input,
+  +.usa-textarea,
+  +.usa-select,
+  +.usa-range {
+    &:not(:disabled) {
+      border: 1px solid color($theme-color-base);
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+}
 .usa-input,
 .usa-textarea,
 .usa-select,

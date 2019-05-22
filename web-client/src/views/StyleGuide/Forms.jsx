@@ -122,10 +122,10 @@ export const Forms = () => (
           </select>
         </div>
         <div className="usa-form-group">
-          <label htmlFor="options" className="usa-label">
+          <label htmlFor="options-disabled" className="usa-label">
             Dropdown label (disabled)
           </label>
-          <select className="usa-select" id="options" disabled>
+          <select className="usa-select" id="options-disabled" disabled>
             <option value>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
@@ -223,7 +223,7 @@ export const Forms = () => (
               className="usa-radio__input"
               id="stanton"
               type="radio"
-              checked
+              defaultChecked
               name="historical-figures-2"
               value="stanton"
             />
@@ -264,7 +264,7 @@ export const Forms = () => (
               className="usa-radio__input"
               id="fieri"
               type="radio"
-              checked
+              defaultChecked
               name="celebrity-chefs-2"
               value="fieri"
             />
@@ -315,7 +315,7 @@ export const Forms = () => (
                 type="number"
                 min="1"
                 max="12"
-                value=""
+                defaultValue=""
               />
             </div>
             <div className="usa-form-group usa-form-group--day">
@@ -330,7 +330,7 @@ export const Forms = () => (
                 type="number"
                 min="1"
                 max="31"
-                value=""
+                defaultValue=""
               />
             </div>
             <div className="usa-form-group usa-form-group--year">
@@ -345,7 +345,7 @@ export const Forms = () => (
                 type="number"
                 min="1900"
                 max="2000"
-                value=""
+                defaultValue=""
               />
             </div>
           </div>
