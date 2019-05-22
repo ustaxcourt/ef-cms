@@ -21,6 +21,9 @@ const {
   assignWorkItems: assignWorkItemsUC,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
+  associateUserWithCase,
+} = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
+const {
   completeWorkItem,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
@@ -35,9 +38,6 @@ const {
 const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
-const {
-  createMappingRecord,
-} = require('../../shared/src/persistence/dynamo/helpers/createMappingRecord');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -202,6 +202,9 @@ const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
+  verifyCaseForUser: verifyCaseForUserUC,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 
@@ -258,9 +261,9 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        associateUserWithCase,
         createCase,
         createDocument,
-        createMappingRecord,
         createUser,
         createWorkItem,
         deleteDocument,
@@ -289,6 +292,7 @@ module.exports = (appContextUser = {}) => {
         updateCase,
         updateDocumentProcessingStatus,
         updateWorkItem,
+        verifyCaseForUser,
         zipDocuments,
       };
     },
@@ -335,7 +339,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         updateCase: updateCaseUC,
-        verifyCaseForUser,
+        verifyCaseForUser: verifyCaseForUserUC,
       };
     },
     irsGateway,

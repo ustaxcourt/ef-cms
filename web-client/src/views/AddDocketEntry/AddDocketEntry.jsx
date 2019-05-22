@@ -2,7 +2,6 @@ import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SuccessNotification } from '../SuccessNotification';
 import { SupportingDocumentForm } from './SupportingDocumentForm';

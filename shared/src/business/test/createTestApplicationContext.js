@@ -51,6 +51,9 @@ const {
 const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
+const {
+  verifyCaseForUser,
+} = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
@@ -96,6 +99,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateWorkItem,
+        verifyCaseForUser,
       };
     },
     isAuthorizedForWorkItems: () => true,

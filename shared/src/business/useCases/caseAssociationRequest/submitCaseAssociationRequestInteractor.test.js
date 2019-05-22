@@ -25,9 +25,9 @@ describe('submitCaseAssociationRequest', () => {
         },
 
         getPersistenceGateway: () => ({
-          createMappingRecord: async () => caseRecord,
           getCaseByCaseId: async () => caseRecord,
           updateCase: async () => caseRecord,
+          verifyCaseForUser: async () => true,
         }),
         getUseCases: () => ({
           verifyCaseForUser: async () => caseRecord,
@@ -45,7 +45,7 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    let createMappingRecordSpy = sinon.spy();
+    let associateUserWithCaseSpy = sinon.spy();
     let verifyCaseForUserSpy = sinon.stub().returns(true);
     let updateCaseSpy = sinon.spy();
 
@@ -59,11 +59,9 @@ describe('submitCaseAssociationRequest', () => {
         };
       },
       getPersistenceGateway: () => ({
-        createMappingRecord: createMappingRecordSpy,
+        createMappingRecord: associateUserWithCaseSpy,
         getCaseByCaseId: async () => caseRecord,
         updateCase: updateCaseSpy,
-      }),
-      getUseCases: () => ({
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
     };
@@ -74,12 +72,12 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(createMappingRecordSpy.called).toEqual(false);
+    expect(associateUserWithCaseSpy.called).toEqual(false);
     expect(updateCaseSpy.called).toEqual(false);
   });
 
   it('should add mapping', async () => {
-    let createMappingRecordSpy = sinon.spy();
+    let associateUserWithCaseSpy = sinon.spy();
     let verifyCaseForUserSpy = sinon.stub().returns(false);
     let updateCaseSpy = sinon.spy();
 
@@ -93,11 +91,9 @@ describe('submitCaseAssociationRequest', () => {
         };
       },
       getPersistenceGateway: () => ({
-        createMappingRecord: createMappingRecordSpy,
+        associateUserWithCase: associateUserWithCaseSpy,
         getCaseByCaseId: async () => caseRecord,
         updateCase: updateCaseSpy,
-      }),
-      getUseCases: () => ({
         verifyCaseForUser: verifyCaseForUserSpy,
       }),
     };
@@ -108,7 +104,7 @@ describe('submitCaseAssociationRequest', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(createMappingRecordSpy.called).toEqual(true);
+    expect(associateUserWithCaseSpy.called).toEqual(true);
     expect(updateCaseSpy.called).toEqual(true);
   });
 });
