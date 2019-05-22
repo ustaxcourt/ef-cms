@@ -160,16 +160,16 @@ option:first-child {
   background-image: url('images/alerts/info.svg');
 
   &::before{
-    background-color: $color-info-darker;
+    background-color: color($theme-color-accent-cool-dark);
   }
 }
 
 .usa-alert--error {
-  background-color: $color-error;
+  background-color: color($theme-color-secondary-lighter);
   background-image: url('images/alerts/error.svg');
 
   &::before {
-    background-color: $color-red;
+    background-color: color($theme-color-secondary);
   }
 }
 
