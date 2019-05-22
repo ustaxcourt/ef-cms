@@ -51,7 +51,7 @@ export const CaseListPractitioner = connect(
     const renderStartButton = () => (
       <a
         className={
-          'usa-button tablet-full-width float-right ' +
+          'usa-button tablet-full-width ' +
           (helper.showCaseList ? 'new-case' : '')
         }
         href="/start-a-case"
@@ -76,10 +76,12 @@ export const CaseListPractitioner = connect(
             <div className="tablet:grid-col-6 hide-on-mobile">
               <h2>Your Cases</h2>
             </div>
-            <div className="tablet:grid-col-6">{renderStartButton()}</div>
+            <div className="tablet:grid-col-6 mobile:grid-col-12 text-right">
+              {renderStartButton()}
+            </div>
           </div>
         </div>
-        <div className="show-on-mobile">
+        <div className="padding-top-205 show-on-mobile">
           <h2>Your Cases</h2>
         </div>
         {renderTable()}
