@@ -83,14 +83,20 @@ export const StartCase = connect(
             }}
             className="usa-form maxw-none"
           >
-            <h1 tabIndex="-1" id="start-case-header">
-              Tell us about your case
-            </h1>
             {showModal === 'FormCancelModalDialogComponent' && (
               <FormCancelModalDialog />
             )}
             <ErrorNotification />
-            <p className="required-statement">All fields required</p>
+            <h1
+              tabIndex="-1"
+              id="start-case-header"
+              className="margin-bottom-05"
+            >
+              Tell us about your case
+            </h1>
+            <p className="required-statement margin-top-05">
+              All fields required
+            </p>
             <h2>Upload Your Petition to Start Your Case</h2>
 
             <div className="blue-container grid-container padding-x-0">
