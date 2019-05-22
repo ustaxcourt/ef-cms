@@ -774,7 +774,7 @@ export const StartCase = connect(
               </div>
             </div>
             <h2 className="margin-top-4">How Do You Want This Case Handled?</h2>
-            <p id="start-a-case-handling">
+            <p>
               Tax laws allow you to file your case as a “small case,” which
               means it’s handled a bit differently than a regular case. If you
               choose to have your case processed as a small case, the Tax Court
