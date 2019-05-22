@@ -147,22 +147,42 @@ option:first-child {
 }
 
 .usa-alert--success {
+  background-color: $color-success;
   background-image: url('images/alerts/success.svg');
+
+  &::before {
+    background-color: $color-green;
+  }
+}
+
+.usa-alert--info {
+  background-color: $color-primary-alt-lightest;
+  background-image: url('images/alerts/info.svg');
+
+  &::before{
+    background-color: color($theme-color-accent-cool-dark);
+  }
 }
 
 .usa-alert--error {
+  background-color: color($theme-color-secondary-lighter);
   background-image: url('images/alerts/error.svg');
+
+  &::before {
+    background-color: color($theme-color-secondary);
+  }
 }
 
 .usa-alert--error,
 .usa-alert--success,
+.usa-alert--info,
 .usa-alert--warning {
   max-width: 700px;
   min-height: 75px;
 
   .usa-alert__heading {
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 4px;
     font-family: $font-serif;
     font-size: 20px;
     font-weight: $font-bold;
@@ -176,6 +196,10 @@ option:first-child {
   .usa-alert__action {
     button {
       margin: 0;
+
+      svg {
+        margin-left: 10px;
+      }
     }
   }
 
