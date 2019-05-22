@@ -1,27 +1,13 @@
-const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const { addWorkItemToSectionInbox } = require('./addWorkItemToSectionInbox');
 
 describe('addWorkItemToSectionInbox', () => {
-  let getCurrentUserStub;
+  let putStub;
 
   beforeEach(() => {
-    sinon.stub(client, 'put').resolves([
-      {
-        pk: 'abc',
-        sk: 'abc',
-        workItemId: 'abc',
-      },
-    ]);
-
-    getCurrentUserStub = sinon.stub().returns({
-      section: 'docket',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    putStub = sinon.stub().returns({
+      promise: async () => true,
     });
-  });
-
-  afterEach(() => {
-    client.put.restore();
   });
 
   it('invokes the peristence layer with pk of {section}|workItem and other expected params', async () => {
@@ -29,7 +15,9 @@ describe('addWorkItemToSectionInbox', () => {
       environment: {
         stage: 'dev',
       },
-      getCurrentUser: getCurrentUserStub,
+      getDocumentClient: () => ({
+        put: putStub,
+      }),
     };
     await addWorkItemToSectionInbox({
       applicationContext,
@@ -38,10 +26,10 @@ describe('addWorkItemToSectionInbox', () => {
         workItemId: '123',
       },
     });
-    expect(client.put.getCall(0).args[0]).toMatchObject({
+    expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
-        pk: 'docket|workItem',
-        sk: '123',
+        pk: 'section-docket',
+        sk: 'workitem-123',
       },
       applicationContext: { environment: { stage: 'dev' } },
     });

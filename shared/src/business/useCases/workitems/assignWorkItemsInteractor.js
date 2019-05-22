@@ -44,7 +44,6 @@ exports.assignWorkItems = async ({
   const caseToUpdate = new Case(caseObject);
   const workItemEntity = new WorkItem(fullWorkItem);
   const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem));
-  const latestMessageId = originalWorkItem.getLatestMessageEntity().messageId;
 
   const newMessage = new Message({
     createdAt: new Date().toISOString(),
@@ -79,7 +78,6 @@ exports.assignWorkItems = async ({
     applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       deleteFromSection: false,
-      messageId: latestMessageId,
       workItem: originalWorkItem,
     }),
     applicationContext.getPersistenceGateway().updateCase({

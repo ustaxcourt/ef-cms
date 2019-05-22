@@ -1,4 +1,7 @@
 const {
+  createUserInboxRecord,
+} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
+const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
@@ -11,11 +14,14 @@ const { Case, STATUS_TYPES } = require('../entities/Case');
 const { Document } = require('../entities/Document');
 
 const {
-  createMappingRecord,
-} = require('../../persistence/dynamo/helpers/createMappingRecord');
+  createSectionInboxRecord,
+} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
 const {
-  deleteMappingRecord,
-} = require('../../persistence/dynamo/helpers/deleteMappingRecord');
+  deleteSectionOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteUserOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
 /**
  *
  * @param caseId
@@ -93,33 +99,26 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       workItemToUpdate: initializeCaseWorkItem.toRawObject(),
     });
 
-    await deleteMappingRecord({
+    await deleteUserOutboxRecord({
       applicationContext,
-      pkId: fromUserId,
-      skId: createdAt,
-      type: 'outbox',
+      createdAt,
+      userId: fromUserId,
     });
 
-    await deleteMappingRecord({
+    await deleteSectionOutboxRecord({
       applicationContext,
-      pkId: 'petitions',
-      skId: createdAt,
-      type: 'outbox',
+      createdAt,
+      section: 'petitions',
     });
 
-    // individual inbox
-    await createMappingRecord({
+    await createUserInboxRecord({
       applicationContext,
-      pkId: initializeCaseWorkItem.assigneeId,
-      skId: initializeCaseWorkItem.workItemId,
-      type: 'workItem',
+      workItem: initializeCaseWorkItem,
     });
 
-    await createMappingRecord({
+    await createSectionInboxRecord({
       applicationContext,
-      pkId: initializeCaseWorkItem.section,
-      skId: initializeCaseWorkItem.workItemId,
-      type: 'workItem',
+      workItem: initializeCaseWorkItem,
     });
 
     return caseEntity.toRawObject();
