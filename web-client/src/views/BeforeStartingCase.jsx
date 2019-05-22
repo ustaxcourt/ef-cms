@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MAX_FILE_SIZE_MB } from '../../../shared/src/persistence/s3/getUploadPolicy';
+import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import React from 'react';
 import howToMergePDFs from '../pdfs/how-to-merge-pdfs.pdf';
 import paperclipSlashIcon from '../images/paperclip-no-icon.svg';
@@ -11,8 +12,8 @@ export const BeforeStartingCase = () => (
         <div className="grid-row">
           <div className="tablet:grid-col-6">
             <h1 className="captioned" tabIndex="-1">
-              <span className="show-on-mobile">Petition Filing Guide</span>
-              <span className="hide-on-mobile">File a Petition</span>
+              <NonMobile>File a Petition</NonMobile>
+              <Mobile>Petition Filing Guide</Mobile>
             </h1>
           </div>
         </div>
