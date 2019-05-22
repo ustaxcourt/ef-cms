@@ -46,7 +46,7 @@ export const PendingMessages = connect(
           type="button"
           id="create-message-button"
           onClick={() => openCreateMessageModalSequence()}
-          className="usa-button usa-button"
+          className="usa-button usa-button margin-bottom-2"
         >
           <FontAwesomeIcon
             icon="plus-circle"
