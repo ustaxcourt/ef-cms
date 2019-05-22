@@ -35,7 +35,7 @@ This is a React-based Javascript application. It’s housed in a [monorepo](http
 - The Javascript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) comments, so documentation can be built by running `jsdoc -r .` locally.
 - The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
 - The deployment process is documented in [`SETUP.md`](SETUP.md).
-- The end-of-sprint code review process is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
+- The end-of-sprint code review process is documented in [`CODE_REVIEW.md`](docs/CODE_REVIEW.md).
 - A [glossary of terminology](https://github.com/flexion/ef-cms/wiki/Glossary) is found on Flexion's wiki.
 - Flexion maintains [a collection of UX documentation](https://github.com/flexion/ef-cms/wiki/UX-Documentation), including [initial onsite user research](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0), [system user flows](https://www.lucidchart.com/invitations/accept/3548e4bf-2677-43ba-9707-c8ee797381eb), [user roles and permissions](https://docs.google.com/spreadsheets/d/1Hh7xMlnW87ospse50CWlwnGBrifrINeCyR2a8E--9wg/edit?usp=sharing), and a [content document](https://docs.google.com/spreadsheets/d/1lDbnSUwi85e-nQ7o1sNLpj2vzRFiTSeav5u3B3z_SZ4/edit?usp=sharing).
 
