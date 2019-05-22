@@ -72,7 +72,10 @@ export const StartCase = connect(
             </div>
           </div>
         </div>
-        <section className="usa-section grid-container">
+        <section
+          id="ustc-start-a-case-form"
+          className="usa-section grid-container"
+        >
           <form
             role="form"
             aria-labelledby="start-case-header"
@@ -94,7 +97,7 @@ export const StartCase = connect(
             >
               Tell us about your case
             </h1>
-            <p className="required-statement margin-top-05">
+            <p className="required-statement margin-top-05 margin-bottom-5">
               All fields required
             </p>
             <h2>Upload Your Petition to Start Your Case</h2>
