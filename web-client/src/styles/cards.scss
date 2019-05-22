@@ -70,12 +70,6 @@
       }
     }
   }
-
-  .usa-button,
-  .usa-button--outline {
-    margin-top: 20px;
-    margin-bottom: 0;
-  }
 }
 
 .petitions-details,
@@ -96,6 +90,12 @@
     .content-wrapper {
       padding: 20px;
     }
+  }
+}
+
+.frequently-used-docs {
+  .usa-button {
+    line-height: 21px;
   }
 }
 
