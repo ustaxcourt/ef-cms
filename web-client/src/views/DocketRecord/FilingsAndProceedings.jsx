@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -37,32 +38,35 @@ export const FilingsAndProceedings = connect(
         <React.Fragment>
           {caseDetailHelper.userHasAccessToCase && (
             <React.Fragment>
-              <a
-                className="hide-on-mobile"
-                href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={`View PDF: ${description}`}
-              >
-                {isPaper && (
-                  <span className="filing-type-icon-mobile">
-                    <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                  </span>
-                )}
-                {description}
-              </a>
-              <button
-                className="show-on-mobile usa-button usa-button--unstyled border-0"
-                aria-roledescription="button to view document details"
-                onClick={() => {
-                  showDocketRecordDetailModalSequence({
-                    docketRecordIndex,
-                    showModal: 'DocketRecordOverlay',
-                  });
-                }}
-              >
-                {description}
-              </button>
+              <NonMobile>
+                <a
+                  href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label={`View PDF: ${description}`}
+                >
+                  {isPaper && (
+                    <span className="filing-type-icon-mobile">
+                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                    </span>
+                  )}
+                  {description}
+                </a>
+              </NonMobile>
+              <Mobile>
+                <button
+                  className="usa-button usa-button--unstyled border-0"
+                  aria-roledescription="button to view document details"
+                  onClick={() => {
+                    showDocketRecordDetailModalSequence({
+                      docketRecordIndex,
+                      showModal: 'DocketRecordOverlay',
+                    });
+                  }}
+                >
+                  {description}
+                </button>
+              </Mobile>
             </React.Fragment>
           )}
           {!caseDetailHelper.userHasAccessToCase && description}
