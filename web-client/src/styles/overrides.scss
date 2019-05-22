@@ -247,3 +247,10 @@ option:first-child {
 p {
   max-width: 700px;
 }
+
+.usa-list li,
+.usa-prose > ul li,
+.usa-prose > ol li {
+  max-width: 700px;
+  line-height: 24px;
+}
