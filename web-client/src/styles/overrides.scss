@@ -56,6 +56,7 @@ option:first-child {
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
     position: relative;
+    padding-right: 2rem;
     padding-left: 2rem;
     svg {
       position: absolute;
