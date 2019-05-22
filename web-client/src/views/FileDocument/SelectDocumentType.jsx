@@ -146,14 +146,13 @@ export const SelectDocumentType = connect(
                             documentType: 'Motion for Leave to File',
                             scenario: 'Nonstandard H',
                           },
-                        ].map(document => {
+                        ].map((document, idx) => {
                           return (
-                            <li
-                              key={document.documentType}
-                              className="margin-bottom-205"
-                            >
+                            <li key={document.documentType}>
                               <button
-                                className="usa-button usa-button--unstyled"
+                                className={`usa-button usa-button--unstyled margin-bottom-2 ${
+                                  idx == 0 ? 'margin-top-0' : ''
+                                }`}
                                 type="button"
                                 onClick={() => {
                                   updateFileDocumentWizardFormValueSequence({
