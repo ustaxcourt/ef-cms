@@ -18,7 +18,7 @@ exports.submitCaseAssociationRequest = async ({
   }
 
   const isAssociated = await applicationContext
-    .getUseCases()
+    .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
       caseId,
@@ -26,11 +26,10 @@ exports.submitCaseAssociationRequest = async ({
     });
 
   if (!isAssociated) {
-    await applicationContext.getPersistenceGateway().createMappingRecord({
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
-      pkId: user.userId,
-      skId: caseId,
-      type: 'case',
+      caseId: caseId,
+      userId: user.userId,
     });
 
     const caseToUpdate = await applicationContext
