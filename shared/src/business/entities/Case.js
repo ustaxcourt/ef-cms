@@ -779,21 +779,25 @@ Case.prototype.checkForReadyForTrial = function() {
     exports.ANSWER_CUTOFF_UNIT,
   );
 
-  this.documents.forEach(document => {
-    const isAnswerDocument = includes(
-      ANSWER_DOCUMENT_CODES,
-      document.eventCode,
-    );
+  const isCaseGeneralDocketNotAtIssue = this.status === statusMap.generalDocket;
 
-    const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
-      docFiledCutoffDate,
-      exports.ANSWER_CUTOFF_UNIT,
-    );
+  if (isCaseGeneralDocketNotAtIssue) {
+    this.documents.forEach(document => {
+      const isAnswerDocument = includes(
+        ANSWER_DOCUMENT_CODES,
+        document.eventCode,
+      );
 
-    if (isAnswerDocument && docFiledBeforeCutoff) {
-      this.status = statusMap.generalDocketReadyForTrial;
-    }
-  });
+      const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
+        docFiledCutoffDate,
+        exports.ANSWER_CUTOFF_UNIT,
+      );
+
+      if (isAnswerDocument && docFiledBeforeCutoff) {
+        this.status = statusMap.generalDocketReadyForTrial;
+      }
+    });
+  }
 
   return this;
 };
