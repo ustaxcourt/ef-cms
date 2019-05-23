@@ -14,7 +14,27 @@ const { instantiateContacts } = require('./contacts/PetitionContact');
  * @constructor
  */
 function Petition(rawPetition) {
-  Object.assign(this, rawPetition);
+  Object.assign(this, {
+    businessType: rawPetition.businessType,
+    caseType: rawPetition.caseType,
+    contactPrimary: rawPetition.contactPrimary,
+    contactSecondary: rawPetition.contactSecondary,
+    countryType: rawPetition.countryType,
+    filingType: rawPetition.filingType,
+    hasIrsNotice: rawPetition.hasIrsNotice,
+    irsNoticeDate: rawPetition.irsNoticeDate,
+    ownershipDisclosureFile: rawPetition.ownershipDisclosureFile,
+    ownershipDisclosureFileSize: rawPetition.ownershipDisclosureFileSize,
+    partyType: rawPetition.partyType,
+    petitionFile: rawPetition.petitionFile,
+    petitionFileSize: rawPetition.petitionFileSize,
+    preferredTrialCity: rawPetition.preferredTrialCity,
+    procedureType: rawPetition.procedureType,
+    signature: rawPetition.signature,
+    stinFile: rawPetition.stinFile,
+    stinFileSize: rawPetition.stinFileSize,
+  });
+
   const contacts = instantiateContacts({
     contactInfo: {
       primary: this.contactPrimary,

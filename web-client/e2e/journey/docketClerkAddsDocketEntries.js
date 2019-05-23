@@ -119,6 +119,10 @@ export default (test, fakeFile) => {
     expect(test.getState('currentPage')).toEqual('AddDocketEntry');
 
     expect(test.getState('form.primaryDocumentFile')).toBeUndefined();
+    expect(test.getState('screenMetadata.supporting')).toEqual(true);
+    expect(test.getState('screenMetadata.filedDocumentIds').length).toEqual(2);
+    expect(test.getState('screenMetadata.primary')).toBeDefined();
+    expect(test.getState('screenMetadata.secondary')).toBeDefined();
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
@@ -148,6 +152,8 @@ export default (test, fakeFile) => {
       key: 'previousDocument',
       value: 'Amendment to Seriatim Opening Brief',
     });
+
+    expect(test.getState('form.partyPrimary')).toEqual(true);
 
     await test.runSequence('updateScreenMetadataSequence', {
       key: 'supportingDocument',
