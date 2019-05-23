@@ -22,7 +22,13 @@ export const DocumentTypeReadOnly = connect(
     return (
       <React.Fragment>
         <div role="alert" aria-live="polite">
-          <div className="usa-form-group">
+          <div
+            className={`usa-form-group ${
+              !selectDocumentTypeHelper.primary.showNonstandardForm
+                ? 'margin-bottom-0'
+                : ''
+            }`}
+          >
             <div>
               <Focus className="header-with-link-button">
                 <label htmlFor="category" tabIndex="-1" className="focusable">
@@ -42,7 +48,9 @@ export const DocumentTypeReadOnly = connect(
               </button>
             </div>
             <div>
-              <p className="margin-top-105">{form.documentType}</p>
+              <p className="margin-top-105 margin-bottom-0">
+                {form.documentType}
+              </p>
             </div>
           </div>
           {selectDocumentTypeHelper.primary.showNonstandardForm && (

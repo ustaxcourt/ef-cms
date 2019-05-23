@@ -25,7 +25,7 @@ export const PartiesFilingReadOnly = connect(
           Edit
         </button>
         <div className="blue-container">
-          <div className="usa-form-group">
+          <div className="usa-form-group margin-bottom-0">
             <label htmlFor="filing-parties" className="usa-label">
               Filing Parties
             </label>
