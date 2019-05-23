@@ -1,6 +1,11 @@
 const assert = require('assert');
 const moment = require('moment');
-const { Case, ANSWER_CUTOFF_AMOUNT, ANSWER_CUTOFF_UNIT } = require('./Case');
+const {
+  Case,
+  ANSWER_CUTOFF_AMOUNT,
+  ANSWER_CUTOFF_UNIT,
+  STATUS_TYPES,
+} = require('./Case');
 const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
@@ -899,16 +904,14 @@ describe('Case entity', () => {
 
   describe('checkForReadyForTrial', () => {
     it('should not change the status is no answer documents have been filed', () => {
-      const status = 'New';
       const caseToCheck = new Case({
         documents: [],
-        status,
+        status: STATUS_TYPES.generalDocket,
       }).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(status);
+      expect(caseToCheck.status).toEqual(STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status is an answer documents has been filed, but the cutoff has not elapsed', () => {
-      const status = 'New';
       const caseToCheck = new Case({
         documents: [
           {
@@ -916,13 +919,12 @@ describe('Case entity', () => {
             eventCode: 'A',
           },
         ],
-        status,
+        status: STATUS_TYPES.generalDocket,
       }).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(status);
+      expect(caseToCheck.status).toEqual(STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status is a non answer documents has been filed before the cutoff', () => {
-      const status = 'New';
       const caseToCheck = new Case({
         documents: [
           {
@@ -932,14 +934,30 @@ describe('Case entity', () => {
             eventCode: 'ZZZs',
           },
         ],
-        status,
+        status: STATUS_TYPES.generalDocket,
       }).checkForReadyForTrial();
-      expect(caseToCheck.status).toEqual(status);
+      expect(caseToCheck.status).toEqual(STATUS_TYPES.generalDocket);
     });
 
-    it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
-      const status = 'New';
+    it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      const caseToCheck = new Case({
+        documents: [
+          {
+            createdAt: moment()
+              .subtract(ANSWER_CUTOFF_AMOUNT, ANSWER_CUTOFF_UNIT)
+              .toISOString(),
+            eventCode: 'A',
+          },
+        ],
+        status: STATUS_TYPES.generalDocket,
+      }).checkForReadyForTrial();
 
+      expect(caseToCheck.status).not.toEqual(
+        STATUS_TYPES.generalDocketReadyForTrial,
+      );
+    });
+
+    it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
       const createdAt = moment()
         .subtract(ANSWER_CUTOFF_AMOUNT + 10, ANSWER_CUTOFF_UNIT)
         .toISOString();
@@ -951,30 +969,29 @@ describe('Case entity', () => {
             eventCode: 'A',
           },
         ],
-        status,
+        status: STATUS_TYPES.new,
       }).checkForReadyForTrial();
 
-      expect(caseToCheck.status).toEqual(
-        'General Docket - At Issue (Ready for Trial)',
-      );
+      expect(caseToCheck.status).toEqual(STATUS_TYPES.new);
     });
 
-    it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
-      const status = 'New';
+    it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
+      const createdAt = moment()
+        .subtract(ANSWER_CUTOFF_AMOUNT + 10, ANSWER_CUTOFF_UNIT)
+        .toISOString();
+
       const caseToCheck = new Case({
         documents: [
           {
-            createdAt: moment()
-              .subtract(ANSWER_CUTOFF_AMOUNT, ANSWER_CUTOFF_UNIT)
-              .toISOString(),
+            createdAt,
             eventCode: 'A',
           },
         ],
-        status,
+        status: STATUS_TYPES.generalDocket,
       }).checkForReadyForTrial();
 
-      expect(caseToCheck.status).not.toEqual(
-        'General Docket - At Issue (Ready for Trial)',
+      expect(caseToCheck.status).toEqual(
+        STATUS_TYPES.generalDocketReadyForTrial,
       );
     });
   });
