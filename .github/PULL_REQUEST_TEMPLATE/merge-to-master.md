@@ -1,11 +1,8 @@
----
-name: Merge to Master
-about: A proposal to merge from staging to master
-title: Merge to Master
-labels: ''
-assignees: ''
+# Overview of changes
 
----
+Explain here, in a paragraph or two, what has changed since the prior merge to master.
+
+# Checklist
 
 - [ ] There are standardized release notes
 - [ ] All dependencies are pinned
