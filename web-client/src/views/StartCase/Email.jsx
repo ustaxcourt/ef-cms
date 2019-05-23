@@ -10,17 +10,15 @@ export const Email = connect(
   ({ email }) => {
     return (
       <React.Fragment>
-        <div className="usa-form-group">
-          <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-7 push-right">
-              <Hint>To change your email, go to your Account Settings.</Hint>
-            </div>
-            <div className="mobile-lg:grid-col-5 email-input">
-              <label htmlFor="email" className="usa-label">
-                Email Address
-              </label>
-              {email}
-            </div>
+        <div className="grid-row grid-gap">
+          <div className="mobile-lg:grid-col-7 push-right">
+            <Hint>To change your email, go to your Account Settings.</Hint>
+          </div>
+          <div className="mobile-lg:grid-col-5 email-input margin-bottom-4">
+            <label htmlFor="email" className="usa-label">
+              Email Address
+            </label>
+            {email}
           </div>
         </div>
       </React.Fragment>
