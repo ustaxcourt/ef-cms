@@ -55,7 +55,7 @@ export const SecondaryDocumentReadOnly = connect(
             'No file attached'}
 
           {fileDocumentHelper.showSecondaryFilingNotIncludes && (
-            <div className="usa-form-group">
+            <div className="usa-form-group margin-bottom-0">
               <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>

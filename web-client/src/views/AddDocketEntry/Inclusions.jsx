@@ -1,25 +1,27 @@
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const Inclusions = connect(
   {
     form: state.form,
+    marginClass: props.marginClass,
     updateDocketEntryFormValueSequence:
       sequences.updateDocketEntryFormValueSequence,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
+    marginClass,
     form,
     updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
   }) => {
     return (
-      <div className="usa-form-group">
-        <fieldset className="usa-fieldset">
+      <div className={`usa-form-group ${marginClass}`}>
+        <fieldset className={`usa-fieldset ${marginClass}`}>
           <legend className="usa-legend">Inclusions</legend>
           <div className="usa-checkbox">
             <input

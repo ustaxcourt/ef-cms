@@ -44,7 +44,11 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingIncludes && (
-            <div className="usa-form-group">
+            <div
+              className={`usa-form-group ${
+                !fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''
+              }`}
+            >
               <label htmlFor="filing-includes" className="usa-label">
                 Filing Includes
               </label>
@@ -62,7 +66,11 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingNotIncludes && (
-            <div className="usa-form-group">
+            <div
+              className={`usa-form-group ${
+                !fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''
+              }`}
+            >
               <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>
@@ -76,7 +84,7 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showObjection && (
-            <div className="usa-form-group">
+            <div className="usa-form-group margin-bottom-0">
               <label htmlFor="objections" className="usa-label">
                 Are There Any Objections to This Document?
               </label>

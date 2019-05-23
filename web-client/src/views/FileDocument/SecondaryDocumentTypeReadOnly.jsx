@@ -22,7 +22,13 @@ export const SecondaryDocumentTypeReadOnly = connect(
   }) => {
     return (
       <>
-        <div className="usa-form-group">
+        <div
+          className={`usa-form-group ${
+            !selectDocumentTypeHelper.secondary.showNonstandardForm
+              ? 'margin-bottom-0'
+              : ''
+          }`}
+        >
           <div>
             <Focus className="header-with-link-button">
               <label htmlFor="category" tabIndex="-1" className="focusable">
@@ -42,7 +48,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
             </button>
           </div>
           <div>
-            <p className="margin-top-105">
+            <p className="margin-top-105 margin-bottom-0">
               {form.secondaryDocument.documentType}
             </p>
           </div>
