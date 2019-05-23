@@ -21,7 +21,7 @@ describe('generatePDFFromPNGData', () => {
   it('creates a pdf document from the specified img data', async () => {
     const newPdfData = await generatePDFFromPNGData([testImg, testImg]);
 
-    fs.writeFile(testOutputPath + 'generatePDFFromPNGData.pdf', newPdfData);
+    fs.writeFileSync(testOutputPath + 'generatePDFFromPNGData.pdf', newPdfData);
 
     const newPdfDoc = PDFDocumentFactory.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
