@@ -1,4 +1,7 @@
 const {
+  createCaseCatalogRecord,
+} = require('../../dynamo/cases/createCaseCatalogRecord');
+const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
@@ -30,6 +33,10 @@ exports.createCase = async ({ caseToCreate, applicationContext }) => {
       pkId: caseToCreate.docketNumber,
       skId: caseToCreate.caseId,
       type: 'case',
+    }),
+    createCaseCatalogRecord({
+      applicationContext,
+      caseId: caseToCreate.caseId,
     }),
   ]);
 
