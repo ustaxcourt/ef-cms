@@ -8,8 +8,15 @@ const {
  * @param docketRecord
  * @constructor
  */
-function DocketRecord(docketRecord) {
-  Object.assign(this, docketRecord);
+function DocketRecord(rawDocketRecord) {
+  Object.assign(this, {
+    description: rawDocketRecord.description,
+    documentId: rawDocketRecord.documentId,
+    filedBy: rawDocketRecord.filedBy,
+    filingDate: rawDocketRecord.filingDate,
+    index: rawDocketRecord.index,
+    status: rawDocketRecord.status,
+  });
 }
 
 joiValidationDecorator(
