@@ -25,9 +25,35 @@ module.exports.INTERNAL_CATEGORY_MAP = documentMapInternal;
  * @constructor
  */
 function Document(rawDocument) {
-  Object.assign(this, rawDocument, {
+  Object.assign(this, {
+    attachments: rawDocument.attachments,
+    certificateOfService: rawDocument.certificateOfService,
     createdAt: rawDocument.createdAt || new Date().toISOString(),
+    documentId: rawDocument.documentId,
+    documentTitle: rawDocument.documentTitle,
+    documentType: rawDocument.documentType,
+    eventCode: rawDocument.eventCode,
+    exhibits: rawDocument.exhibits,
+    filedBy: rawDocument.filedBy,
+    hasSupportingDocuments: rawDocument.hasSupportingDocuments,
+    isPaper: rawDocument.isPaper,
+    lodged: rawDocument.lodged,
+    partyPrimary: rawDocument.partyPrimary,
+    partyRespondent: rawDocument.partyRespondent,
+    partySecondary: rawDocument.partySecondary,
+    practitioner: rawDocument.practitioner,
+    previousDocument: rawDocument.previousDocument,
+    processingStatus: rawDocument.processingStatus,
+    reviewDate: rawDocument.reviewDate,
+    reviewUser: rawDocument.reviewUser,
+    servedDate: rawDocument.servedDate,
+    serviceDate: rawDocument.serviceDate,
+    status: rawDocument.status,
+    userId: rawDocument.userId,
+    validated: rawDocument.validated,
+    workItems: rawDocument.workItems,
   });
+
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem),
