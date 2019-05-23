@@ -1,8 +1,7 @@
 /**
  * validatePetition
+ * @param petition
  * @param applicationContext
- * @param user
- * @param fileHasUploaded
  * @returns {Promise<{petitionFileId}>}
  */
 exports.validatePetition = ({ petition, applicationContext }) => {

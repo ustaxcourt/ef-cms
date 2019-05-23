@@ -193,7 +193,13 @@ export const SupportingDocumentForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group">
+          <div
+            className={`usa-form-group ${
+              !addDocketEntryHelper.showSupportingInclusions
+                ? 'margin-bottom-0'
+                : ''
+            }`}
+          >
             <label
               htmlFor="additional-info2"
               id="additional-info-label2"
@@ -221,7 +227,9 @@ export const SupportingDocumentForm = connect(
             />
           </div>
 
-          {addDocketEntryHelper.showSupportingInclusions && <Inclusions />}
+          {addDocketEntryHelper.showSupportingInclusions && (
+            <Inclusions marginClass="margin-bottom-0" />
+          )}
         </div>
       </React.Fragment>
     );
