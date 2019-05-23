@@ -2,9 +2,7 @@ const { Case } = require('../entities/Case');
 
 /**
  * validateCaseDetail
- * @param applicationContext
- * @param user
- * @param fileHasUploaded
+ * @param caseDetail
  * @returns {Promise<{petitionFileId}>}
  */
 exports.validateCaseDetail = ({ caseDetail }) => {

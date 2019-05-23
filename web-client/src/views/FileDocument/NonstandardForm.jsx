@@ -34,7 +34,7 @@ export const NonstandardForm = connect(
   }) => {
     namespace = namespace ? `${namespace}.` : '';
     return (
-      <React.Fragment>
+      <div className="nonstandard-form">
         {helper[level].showTextInput && (
           <div
             className={`usa-form-group ${
@@ -164,10 +164,10 @@ export const NonstandardForm = connect(
                 : '')
             }
           >
-            <fieldset className="usa-fieldset">
+            <fieldset className="usa-fieldset margin-bottom-0">
               <legend id="date-of-service-legend">Service Date</legend>
               <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month">
+                <div className="usa-form-group usa-form-group--month margin-bottom-0">
                   <label
                     htmlFor={`${namespace}month`}
                     className="usa-label"
@@ -201,7 +201,7 @@ export const NonstandardForm = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group--day">
+                <div className="usa-form-group usa-form-group--day margin-bottom-0">
                   <label
                     htmlFor={`${namespace}day`}
                     className="usa-label"
@@ -235,7 +235,7 @@ export const NonstandardForm = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group--year">
+                <div className="usa-form-group usa-form-group--year margin-bottom-0">
                   <label
                     htmlFor={`${namespace}year`}
                     className="usa-label"
@@ -321,7 +321,7 @@ export const NonstandardForm = connect(
           >
             <fieldset
               id={`${namespace}ordinal-field-radios`}
-              className="usa-fieldset"
+              className="usa-fieldset margin-bottom-0"
             >
               <legend htmlFor={`${namespace}ordinal-field-radios`}>
                 {helper[level].ordinalField}
@@ -370,7 +370,7 @@ export const NonstandardForm = connect(
           screenMetadata.isSecondaryDocumentTypeSelected && (
             <SecondaryDocumentTypeReadOnly />
           )}
-      </React.Fragment>
+      </div>
     );
   },
 );

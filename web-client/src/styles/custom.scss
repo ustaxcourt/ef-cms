@@ -949,3 +949,11 @@ nav.usa-nav {
     margin-bottom: 0;
   }
 }
+
+.document-type-read-only {
+  .nonstandard-form {
+    .usa-form-group:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
