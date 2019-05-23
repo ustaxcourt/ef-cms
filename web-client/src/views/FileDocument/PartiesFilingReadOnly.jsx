@@ -14,16 +14,16 @@ export const PartiesFilingReadOnly = connect(
     return (
       <React.Fragment>
         <h2 className="header-with-link-button margin-top-4">
-          Parties Filing This Document
+          Parties Filing This Document{' '}
+          <button
+            className="usa-button usa-button--unstyled margin-left-205"
+            type="button"
+            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
+          >
+            <FontAwesomeIcon icon="edit" size="sm" />
+            Edit
+          </button>
         </h2>
-        <button
-          className="usa-button usa-button--unstyled"
-          type="button"
-          onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
-        >
-          <FontAwesomeIcon icon="edit" size="sm" />
-          Edit
-        </button>
         <div className="blue-container">
           <div className="usa-form-group margin-bottom-0">
             <label htmlFor="filing-parties" className="usa-label">

@@ -13,17 +13,19 @@ export const SecondaryDocumentReadOnly = connect(
     return (
       <React.Fragment>
         <div>
-          <h3 className="header-with-link-button margin-top-4">
-            {form.secondaryDocument.documentTitle}
-          </h3>
-          <button
-            className="usa-button usa-button--unstyled"
-            type="button"
-            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
-          >
-            <FontAwesomeIcon icon="edit" size="sm" />
-            Edit
-          </button>
+          <h2 className="header-with-link-button margin-top-4">
+            {form.secondaryDocument.documentTitle}{' '}
+            <button
+              className="usa-button usa-button--unstyled margin-left-205"
+              type="button"
+              onClick={() =>
+                chooseWizardStepSequence({ value: 'FileDocument' })
+              }
+            >
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
+            </button>
+          </h2>
         </div>
 
         <div className="blue-container">

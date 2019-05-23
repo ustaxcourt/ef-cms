@@ -279,7 +279,7 @@ export const SecondaryDocumentForm = connect(
                   }
                 >
                   Upload Your Supporting Document{' '}
-                  <span className="success-message">
+                  <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
