@@ -319,11 +319,11 @@ module.exports = (appContextUser = {}) => {
       return {
         addCoverToPDFDocument,
         assignWorkItems: assignWorkItemsUC,
+        checkForReadyForTrialCases,
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
         createUser: createUserUC,
-        checkForReadyForTrialCases,
         createWorkItem: createWorkItemUC,
         fileExternalDocument,
         forwardWorkItem,
