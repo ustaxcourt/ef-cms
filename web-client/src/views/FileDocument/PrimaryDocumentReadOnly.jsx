@@ -13,15 +13,19 @@ export const PrimaryDocumentReadOnly = connect(
     return (
       <React.Fragment>
         <div>
-          <h2 className="header-with-link-button">{form.documentTitle}</h2>
-          <button
-            className="usa-button usa-button--unstyled"
-            type="button"
-            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
-          >
-            <FontAwesomeIcon icon="edit" size="sm" />
-            Edit
-          </button>
+          <h2 className="header-with-link-button">
+            {form.documentTitle}{' '}
+            <button
+              className="usa-button usa-button--unstyled margin-left-205"
+              type="button"
+              onClick={() =>
+                chooseWizardStepSequence({ value: 'FileDocument' })
+              }
+            >
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
+            </button>
+          </h2>
         </div>
 
         <div className="blue-container">
