@@ -1,7 +1,6 @@
 /**
  * validatePetition
  * @param applicationContext
- * @param caseInitiator
  * @param user
  * @param fileHasUploaded
  * @returns {Promise<{petitionFileId}>}
