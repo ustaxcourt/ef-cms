@@ -70,12 +70,12 @@
     "cerebral": "^5.1.1",
     "classnames": "^2.2.6",
     "core-js": "^2.6.8",
-    "cypress": "^3.3.0",
+    "cypress": "^3.3.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-cypress": "^2.2.1",
-    "eslint-plugin-jest": "^22.6.3",
-    "eslint-plugin-jsdoc": "^4.8.4",
+    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-jsdoc": "^6.0.3",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
@@ -113,8 +113,6 @@
     "stylelint-config-idiomatic-order": "^7.0.0",
     "stylelint-config-standard": "^18.3.0",
     "uswds": "^2.0.2",
-    "webdriver-manager": "^13.0.0",
     "wicg-inert": "^2.1.0"
-  },
-  "snyk": true
+  }
 }
