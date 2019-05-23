@@ -921,7 +921,7 @@ export const StartCase = connect(
             <button
               id="submit-case"
               type="submit"
-              className="usa-button margin-right-2"
+              className="usa-button margin-right-205"
             >
               Submit to U.S. Tax Court
             </button>
