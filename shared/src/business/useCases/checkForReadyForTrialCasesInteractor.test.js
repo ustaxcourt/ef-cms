@@ -15,7 +15,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      checkForReadyForTrialCases({
+      await checkForReadyForTrialCases({
         applicationContext,
       });
     } catch (e) {
