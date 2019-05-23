@@ -50,7 +50,7 @@ option:first-child {
 .usa-hint {
   display: inline-block;
   margin-bottom: 15px;
-  color: color($theme-color-base-dark);
+  color: color($theme-color-base-darkest);
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
@@ -272,7 +272,7 @@ p {
   max-width: 700px;
 
   .usa-form & {
-    max-width: inherit;
+    max-width: 700px;
   }
 }
 
