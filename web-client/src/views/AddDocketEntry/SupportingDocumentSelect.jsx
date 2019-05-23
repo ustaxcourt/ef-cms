@@ -25,7 +25,7 @@ export const SupportingDocumentSelect = connect(
         <div
           className={`usa-form-group ${
             validationErrors && validationErrors.previousDocument
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : ''
           }`}
         >
@@ -58,7 +58,7 @@ export const SupportingDocumentSelect = connect(
             )}
           </select>
           <Text
-            className="usa-input-error-message"
+            className="usa-error-message"
             bind="validationErrors.previousDocument"
           />
         </div>
