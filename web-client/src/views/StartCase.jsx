@@ -798,6 +798,7 @@ export const StartCase = connect(
                 onClick={() => toggleCaseDifferenceSequence()}
               >
                 <span className="usa-accordion__heading usa-banner__button-text">
+                  <FontAwesomeIcon icon="question-circle" size="lg" />
                   How is a small case different than a regular case, and do I
                   qualify?
                   {screenMetadata.showCaseDifference ? (
