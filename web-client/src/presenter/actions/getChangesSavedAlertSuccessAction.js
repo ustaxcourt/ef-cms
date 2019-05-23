@@ -1,7 +1,7 @@
 /**
  * creates the default success alert object
  *
- * @returns {Object} the alertSuccess object with default strings
+ * @returns {object} the alertSuccess object with default strings
  */
 export const getChangesSavedAlertSuccessAction = () => {
   return {
