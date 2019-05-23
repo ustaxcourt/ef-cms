@@ -15,9 +15,9 @@ export const CaseListPetitioner = connect(
             <div className="tablet:grid-col-6 hide-on-mobile">
               <h2 className="margin-0">Your Cases</h2>
             </div>
-            <div className="tablet:grid-col-6">
+            <div className="tablet:grid-col-6 mobile:grid-col-12 text-right">
               <a
-                className="usa-button new-case tablet-full-width float-right"
+                className="usa-button new-case tablet-full-width"
                 href="/before-starting-a-case"
                 id="init-file-petition"
               >
@@ -26,7 +26,7 @@ export const CaseListPetitioner = connect(
             </div>
           </div>
         </div>
-        <div className="show-on-mobile">
+        <div className="padding-top-205 show-on-mobile">
           <h2>Your Cases</h2>
         </div>
         <div className="margin-top-2">
@@ -49,15 +49,16 @@ export const CaseListPetitioner = connect(
                       {item.docketNumberWithSuffix}
                     </a>
                   </td>
-                  <td>
-                    <div className="show-on-mobile">
+                  <td className="hide-on-mobile">{item.caseName}</td>
+                  <td>{item.createdAtFormatted}</td>
+                  <td className="show-on-mobile">
+                    <div>
                       <a href={'/case-detail/' + item.docketNumber}>
                         {item.docketNumberWithSuffix}
                       </a>
                     </div>
                     {item.caseName}
                   </td>
-                  <td>{item.createdAtFormatted}</td>
                 </tr>
               ))}
             </tbody>
