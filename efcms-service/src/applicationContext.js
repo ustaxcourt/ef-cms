@@ -24,6 +24,9 @@ const {
   associateUserWithCase,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
 const {
+  checkForReadyForTrialCases,
+} = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
+const {
   completeWorkItem,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
@@ -246,7 +249,9 @@ module.exports = (appContextUser = {}) => {
           endpoint: useMasterRegion
             ? environment.masterDynamoDbEndpoint
             : environment.dynamoDbEndpoint,
-          region: useMasterRegion ? environment.masterRegion : environment.region,
+          region: useMasterRegion
+            ? environment.masterRegion
+            : environment.region,
         });
       }
       return dynamoClientCache[type];
@@ -314,6 +319,7 @@ module.exports = (appContextUser = {}) => {
       return {
         addCoverToPDFDocument,
         assignWorkItems: assignWorkItemsUC,
+        checkForReadyForTrialCases,
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
