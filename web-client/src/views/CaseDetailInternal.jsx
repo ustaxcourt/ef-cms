@@ -39,21 +39,23 @@ export const CaseDetailInternal = connect(
             <MessagesInProgress />
           </div>
           <div className="only-small-screens">
-            <select
-              className="usa-select"
-              id="mobile-document-detail-tab-selector"
-              name="partyType"
-              aria-label="additional case info"
-              value={caseHelper.documentDetailTab}
-              onChange={e => {
-                setDocumentDetailTabSequence({
-                  tab: e.target.value,
-                });
-              }}
-            >
-              <option value="docketRecord">Docket Record</option>
-              <option value="caseInfo">Case Information</option>
-            </select>
+            <div className="margin-bottom-3">
+              <select
+                className="usa-select"
+                id="mobile-document-detail-tab-selector"
+                name="partyType"
+                aria-label="additional case info"
+                value={caseHelper.documentDetailTab}
+                onChange={e => {
+                  setDocumentDetailTabSequence({
+                    tab: e.target.value,
+                  });
+                }}
+              >
+                <option value="docketRecord">Docket Record</option>
+                <option value="caseInfo">Case Information</option>
+              </select>
+            </div>
           </div>
           <div className="mobile-document-detail-tabs">
             <Tabs
