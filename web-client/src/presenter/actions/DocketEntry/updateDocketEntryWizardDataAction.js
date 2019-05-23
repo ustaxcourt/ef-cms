@@ -4,10 +4,10 @@ import { state } from 'cerebral';
 /**
  * clears data in the state.form based on which field is being updated
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.get the cerebral get function
- * @param {Object} providers.store the cerebral store object
- * @param {Object} providers.props the cerebral props object
+ * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store object
+ * @param {object} providers.props the cerebral props object
  * @returns {void}
  */
 export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {

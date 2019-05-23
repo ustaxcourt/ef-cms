@@ -4,8 +4,8 @@ import { state } from 'cerebral';
  * returns the alertSuccess object to display an alert message based
  * on the next step the user chose
  *
- * @param {Object} providers the providers object
- * @returns {Object} the alertSuccess object with default strings
+ * @param {object} providers the providers object
+ * @returns {object} the alertSuccess object with default strings
  */
 export const getDocketEntryAlertSuccessAction = ({ get }) => {
   const supportingDocument = get(state.screenMetadata.supportingDocument);

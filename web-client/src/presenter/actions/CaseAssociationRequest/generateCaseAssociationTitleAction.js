@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * Set document title.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
- * @param {Object} providers.props the cerebral props object
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
  */
 export const generateCaseAssociationTitleAction = ({
   store,
