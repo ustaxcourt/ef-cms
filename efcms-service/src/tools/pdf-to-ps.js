@@ -12,26 +12,17 @@ const gs = require('ghostscript4js');
 
 */
 
-// these don't work.
-// const ps2pdf = '-psconv -q -dNOPAUSE -sDEVICE=pdfwrite -o out.pdf -f example.ps';
-// const pdf2ps = '-psconv -q -dNOPAUSE -sDEVICE=pdfwrite -o out.pdf -f in.ps';
-
-/*
-Works on the command-line, converts ps to pdf
-gs -o output.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -c ".setpdfwrite <</NeverEmbed [ ]>> setdistillerparams" -f example.ps
-
-
-This works, also.
-gs -o output.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f example.ps
-*/
-
-const pstopdf = '-dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=output.pdf -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f example.ps';
+const pdf2ps = '-dBATCH -dSAFER -dNOPAUSE -q -sDEVICE=ps2write -sOutputFile=step1.ps -f example.pdf';
+const ps2pdf = '-dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=step2.pdf -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f step1.ps';
 
 try {
   // Take decision based on Ghostscript version
   const version = gs.version();
   console.log('GS Version', version);
-  gs.executeSync(pstopdf);
+  gs.executeSync(pdf2ps);
+  console.log('Created PS step1.ps');
+  gs.executeSync(ps2pdf);
+  console.log('Created PDF step2.pdf');
 } catch (err) {
   console.log(err, err.message);
   throw err;
