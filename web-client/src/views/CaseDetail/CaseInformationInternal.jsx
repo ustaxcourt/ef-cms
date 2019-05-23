@@ -1,3 +1,4 @@
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -72,40 +73,48 @@ export const CaseInformationInternal = connect(
       <div className="internal-information">
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-6 hide-on-mobile">
-              <div className="card height-full">
-                <div className="content-wrapper">
-                  <h3 className="underlined">Petition Details</h3>
+            <NonMobile>
+              <div className="tablet:grid-col-6">
+                <div className="card height-full">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">Petition Details</h3>
+                    <PetitionDetails
+                      caseDetail={caseDetail}
+                      showPaymentRecord={helper.showPaymentRecord}
+                    />
+                  </div>
+                </div>
+              </div>
+            </NonMobile>
+            <Mobile>
+              <div className="tablet:grid-col-6">
+                <div className="case-info-card">
+                  <h3>Petition Details</h3>
                   <PetitionDetails
                     caseDetail={caseDetail}
                     showPaymentRecord={helper.showPaymentRecord}
                   />
                 </div>
               </div>
-            </div>
-            <div className="tablet:grid-col-6 show-on-mobile">
-              <div className="case-info-card">
-                <h3>Petition Details</h3>
-                <PetitionDetails
-                  caseDetail={caseDetail}
-                  showPaymentRecord={helper.showPaymentRecord}
-                />
+            </Mobile>
+            <NonMobile>
+              <div className="tablet:grid-col-6">
+                <div className="card height-full">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">Trial Information</h3>
+                    <TrialInformation caseDetail={caseDetail} />
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="tablet:grid-col-6 hide-on-mobile">
-              <div className="card height-full">
-                <div className="content-wrapper">
-                  <h3 className="underlined">Trial Information</h3>
+            </NonMobile>
+            <Mobile>
+              <div className="tablet:grid-col-6 margin-top-2">
+                <div className="case-info-card">
+                  <h3>Trial Information</h3>
                   <TrialInformation caseDetail={caseDetail} />
                 </div>
               </div>
-            </div>
-            <div className="tablet:grid-col-6 show-on-mobile margin-top-2">
-              <div className="case-info-card">
-                <h3>Trial Information</h3>
-                <TrialInformation caseDetail={caseDetail} />
-              </div>
-            </div>
+            </Mobile>
           </div>
         </div>
       </div>
