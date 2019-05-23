@@ -365,11 +365,15 @@ export const PrimaryDocumentForm = connect(
             <div
               className={`usa-form-group ${
                 validationErrors.hasSupportingDocuments
-                  ? 'usa-form-group--error'
+                  ? 'usa-form-group--error '
                   : ''
-              }`}
+              } ${!form.hasSupportingDocuments ? 'margin-bottom-0' : ''}`}
             >
-              <fieldset className="usa-fieldset">
+              <fieldset
+                className={`usa-fieldset ${
+                  !form.hasSupportingDocuments ? 'margin-bottom-0 ' : ''
+                }`}
+              >
                 <legend id="support-docs-legend">
                   Do You Have Any Supporting Documents for This Filing?
                 </legend>
@@ -412,9 +416,9 @@ export const PrimaryDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.supportingDocument
-                    ? 'usa-form-group--error'
+                    ? 'usa-form-group--error '
                     : ''
-                }`}
+                } ${!form.supportingDocument ? 'margin-bottom-0 ' : ''} `}
               >
                 <label
                   htmlFor="supporting-document"
@@ -518,7 +522,7 @@ export const PrimaryDocumentForm = connect(
 
             {fileDocumentHelper.showSupportingDocumentUpload && (
               <div
-                className={`usa-form-group ${
+                className={`usa-form-group margin-bottom-0 ${
                   validationErrors.supportingDocumentFile
                     ? 'usa-form-group--error'
                     : ''
@@ -528,7 +532,7 @@ export const PrimaryDocumentForm = connect(
                   htmlFor="supporting-document-file"
                   id="supporting-document-file-label"
                   className={
-                    'usa-label ustc-upload ' +
+                    'usa-label ustc-upload with-hint ' +
                     (fileDocumentHelper.showSupportingDocumentValid
                       ? 'validated'
                       : '')

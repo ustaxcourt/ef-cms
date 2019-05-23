@@ -411,9 +411,13 @@ export const PrimaryDocumentForm = connect(
               addDocketEntryHelper.partyValidationError
                 ? 'usa-form-group--error'
                 : ''
-            }`}
+            } ${!addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''}`}
           >
-            <fieldset className="usa-fieldset">
+            <fieldset
+              className={`usa-fieldset ${
+                !addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''
+              }`}
+            >
               <legend className="usa-legend">
                 Who Is Filing This Document?
               </legend>
@@ -528,11 +532,11 @@ export const PrimaryDocumentForm = connect(
           </div>
           {addDocketEntryHelper.showObjection && (
             <div
-              className={`usa-form-group ${
+              className={`usa-form-group margin-bottom-0 ${
                 validationErrors.objections ? 'usa-form-group--error' : ''
               }`}
             >
-              <fieldset className="usa-fieldset">
+              <fieldset className="usa-fieldset margin-bottom-0">
                 <legend id="objections-legend" className="usa-legend">
                   Are There Any Objections to This Document?
                 </legend>
