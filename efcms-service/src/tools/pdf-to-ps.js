@@ -21,18 +21,17 @@ Works on the command-line, converts ps to pdf
 gs -o output.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -c ".setpdfwrite <</NeverEmbed [ ]>> setdistillerparams" -f example.ps
 
 
-This owrks, also.
+This works, also.
 gs -o output.pdf -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f example.ps
-
-But doesn't work as args to gs below.
 */
-const pdftops = '-sDEVICE=pdfwrite -sOutputFile=output.pdf -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f example.ps';
+
+const pstopdf = '-dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=output.pdf -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f example.ps';
 
 try {
   // Take decision based on Ghostscript version
   const version = gs.version();
   console.log('GS Version', version);
-  gs.executeSync(pdftops);
+  gs.executeSync(pstopdf);
 } catch (err) {
   console.log(err, err.message);
   throw err;
