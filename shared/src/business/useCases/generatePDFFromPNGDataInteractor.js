@@ -8,20 +8,18 @@ const { PDFDocumentFactory, PDFDocumentWriter, drawImage } = pdflib;
  */
 
 exports.generatePDFFromPNGData = imgData => {
-  const dimensionsX = 2550;
-  const dimensionsY = 3300;
-  const dimensions = [dimensionsX, dimensionsY];
-
   const pdfDoc = PDFDocumentFactory.create();
 
   function addImageToPage(img) {
-    const [imgRef] = pdfDoc.embedPNG(img);
-    const page = pdfDoc.createPage(dimensions).addImageObject('imgObj', imgRef);
+    const [imgRef, imgDim] = pdfDoc.embedPNG(img);
+    const page = pdfDoc
+      .createPage([imgDim.width, imgDim.height])
+      .addImageObject('imgObj', imgRef);
 
     const pageContentStream = pdfDoc.createContentStream(
       drawImage('imgObj', {
-        height: dimensionsY,
-        width: dimensionsX,
+        height: imgDim.height,
+        width: imgDim.width,
         x: 0,
         y: 0,
       }),
