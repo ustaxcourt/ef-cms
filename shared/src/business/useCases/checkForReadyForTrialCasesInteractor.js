@@ -25,7 +25,7 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
     const caseEntity = new Case(caseToCheck);
 
     if (caseEntity.status === STATUS_TYPES.generalDocket) {
-      caseEntity.checkForReadyForTrialCases();
+      caseEntity.checkForReadyForTrial();
 
       if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
         await applicationContext.getPersistenceGateway().updateCase({
