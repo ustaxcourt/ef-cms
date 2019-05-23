@@ -64,8 +64,7 @@ export const StartCaseInternal = connect(
                   id="date-received-legend with-hint"
                   className="usa-legend"
                 >
-                  Date Received{' '}
-                  <span className="usa-hint">(required)</span>
+                  Date Received <span className="usa-hint">(required)</span>
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month">
@@ -202,8 +201,7 @@ export const StartCaseInternal = connect(
                   (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                 }
               >
-                Upload the Petition{' '}
-                <span className="usa-hint">(required)</span>
+                Upload the Petition <span className="usa-hint">(required)</span>
                 <span className="success-message">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
@@ -240,7 +238,7 @@ export const StartCaseInternal = connect(
             </div>
           </div>
 
-          <h2>Statement of Taxpayer Identification</h2>
+          <h2 className="margin-top-4">Statement of Taxpayer Identification</h2>
           <div className="blue-container">
             <div
               className={`usa-form-group ${
@@ -290,7 +288,7 @@ export const StartCaseInternal = connect(
             </div>
           </div>
 
-          <h2>Ownership Disclosure Statement</h2>
+          <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
           <div className="blue-container">
             <label
               htmlFor="ownership-disclosure-file"
@@ -330,19 +328,25 @@ export const StartCaseInternal = connect(
               bind="validationErrors.ownershipDisclosureFileSize"
             />
           </div>
-          <button id="submit-case" type="submit" className="usa-button">
-            Create Case
-          </button>
-          <button
-            type="button"
-            className="usa-button usa-button--outline"
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </button>
+          <div className="margin-top-4">
+            <button
+              id="submit-case"
+              type="submit"
+              className="usa-button margin-bottom-2"
+            >
+              Create Case
+            </button>
+            <button
+              type="button"
+              className="usa-button usa-button--outline"
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

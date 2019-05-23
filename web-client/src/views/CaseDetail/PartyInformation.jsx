@@ -1,3 +1,4 @@
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -8,7 +9,7 @@ export const PartyInformation = connect(
     constants: state.constants,
   },
   ({ caseDetail, constants }) => {
-    const mainPartyInformation = instance => (
+    const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
           <div className="tablet:grid-col-2">
@@ -19,11 +20,11 @@ export const PartyInformation = connect(
           <div className="tablet:grid-col-2">
             {caseDetail.contactPrimary && (
               <React.Fragment>
-                <p className="label" id={`primary-label${instance}`}>
+                <p className="label" id={'primary-label'}>
                   Primary Contact
                 </p>
                 <div>
-                  <address aria-labelledby={`primary-label${instance}`}>
+                  <address aria-labelledby={'primary-label'}>
                     {addressDisplay(caseDetail.contactPrimary)}
                   </address>
                 </div>
@@ -35,11 +36,11 @@ export const PartyInformation = connect(
             {caseDetail.contactSecondary &&
               caseDetail.contactSecondary.name && (
                 <React.Fragment>
-                  <p className="label" id={`secondary-label${instance}`}>
+                  <p className="label" id={'secondary-label'}>
                     Secondary Contact
                   </p>
                   <div>
-                    <address aria-labelledby={`secondary-label${instance}`}>
+                    <address aria-labelledby={'secondary-label'}>
                       {caseDetail.contactSecondary.name &&
                         addressDisplay(caseDetail.contactSecondary)}
                     </address>
@@ -52,12 +53,12 @@ export const PartyInformation = connect(
             caseDetail.practitioners.map((practitioner, index) => (
               <div className="tablet:grid-col-2" key={index}>
                 {index === 0 && (
-                  <p className="label" id={`petitioner-label${instance}`}>
+                  <p className="label" id={'petitioner-label'}>
                     Petitioner Counsel
                   </p>
                 )}
                 <div>
-                  <address aria-labelledby={`petitioner-label${instance}`}>
+                  <address aria-labelledby={'petitioner-label'}>
                     {practitioner.name &&
                       addressDisplay({
                         ...practitioner,
@@ -73,10 +74,10 @@ export const PartyInformation = connect(
           <div className="tablet:grid-col-2">
             {caseDetail.respondent && (
               <React.Fragment>
-                <p className="label" id={`respondent-label${instance}`}>
+                <p className="label" id={'respondent-label'}>
                   Respondent Information
                 </p>
-                <address aria-labelledby={`respondent-label${instance}`}>
+                <address aria-labelledby={'respondent-label'}>
                   {addressDisplay({
                     ...caseDetail.respondent,
                     name: caseDetail.respondent.formattedName,
@@ -119,16 +120,18 @@ export const PartyInformation = connect(
     };
     return (
       <div className="subsection party-information">
-        <div className="card hide-on-mobile">
-          <div className="content-wrapper">
-            <h3 className="underlined">Party Information</h3>
-            {mainPartyInformation('-desktop')}
+        <NonMobile>
+          <div className="card">
+            <div className="content-wrapper">
+              <h3 className="underlined">Party Information</h3>
+              {mainPartyInformation()}
+            </div>
           </div>
-        </div>
-        <div className="show-on-mobile">
+        </NonMobile>
+        <Mobile>
           <h3>Party Information</h3>
-          {mainPartyInformation('-mobile')}
-        </div>
+          {mainPartyInformation()}
+        </Mobile>
       </div>
     );
   },
