@@ -74,7 +74,7 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 ### Prerequisites
 
-- Node v10.16.3
+- Node v10.15.3
 - npm 6.4.1
 
 ### Setup
