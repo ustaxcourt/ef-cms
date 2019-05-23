@@ -20,7 +20,7 @@ export const DocumentTypeReadOnly = connect(
     selectDocumentTypeHelper,
   }) => {
     return (
-      <React.Fragment>
+      <div className="document-type-read-only">
         <div role="alert" aria-live="polite">
           <div
             className={`usa-form-group ${
@@ -63,7 +63,7 @@ export const DocumentTypeReadOnly = connect(
             />
           )}
         </div>
-      </React.Fragment>
+      </div>
     );
   },
 );

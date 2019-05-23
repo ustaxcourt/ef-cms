@@ -21,7 +21,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
     selectDocumentTypeHelper,
   }) => {
     return (
-      <>
+      <div className="document-type-read-only">
         <div
           className={`usa-form-group ${
             !selectDocumentTypeHelper.secondary.showNonstandardForm
@@ -63,7 +63,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
             validationErrors="validationErrors.secondaryDocument"
           />
         )}
-      </>
+      </div>
     );
   },
 );
