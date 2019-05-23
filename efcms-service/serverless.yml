@@ -562,6 +562,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  checkForReadyForTrialCases:
+    handler: src/handlers.checkForReadyForTrialCases
+    events:
+      - schedule: cron(0 * * * ? *)
+
   swagger:
     handler: src/handlers.swaggerLambda
     events:
