@@ -1,5 +1,6 @@
 const assert = require('assert');
-const { Case } = require('./Case');
+const moment = require('moment');
+const { Case, ANSWER_CUTOFF_AMOUNT, ANSWER_CUTOFF_UNIT } = require('./Case');
 const { DocketRecord } = require('./DocketRecord');
 const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
@@ -893,6 +894,88 @@ describe('Case entity', () => {
           sentBy: 'bob',
         },
       ]);
+    });
+  });
+
+  describe('checkForReadyForTrial', () => {
+    it('should not change the status is no answer documents have been filed', () => {
+      const status = 'New';
+      const caseToCheck = new Case({
+        documents: [],
+        status,
+      }).checkForReadyForTrial();
+      expect(caseToCheck.status).toEqual(status);
+    });
+
+    it('should not change the status is an answer documents has been filed, but the cutoff has not elapsed', () => {
+      const status = 'New';
+      const caseToCheck = new Case({
+        documents: [
+          {
+            createdAt: moment().toISOString(),
+            eventCode: 'A',
+          },
+        ],
+        status,
+      }).checkForReadyForTrial();
+      expect(caseToCheck.status).toEqual(status);
+    });
+
+    it('should not change the status is a non answer documents has been filed before the cutoff', () => {
+      const status = 'New';
+      const caseToCheck = new Case({
+        documents: [
+          {
+            createdAt: moment()
+              .subtract(1, 'year')
+              .toISOString(),
+            eventCode: 'ZZZs',
+          },
+        ],
+        status,
+      }).checkForReadyForTrial();
+      expect(caseToCheck.status).toEqual(status);
+    });
+
+    it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
+      const status = 'New';
+
+      const createdAt = moment()
+        .subtract(ANSWER_CUTOFF_AMOUNT + 10, ANSWER_CUTOFF_UNIT)
+        .toISOString();
+
+      const caseToCheck = new Case({
+        documents: [
+          {
+            createdAt,
+            eventCode: 'A',
+          },
+        ],
+        status,
+      }).checkForReadyForTrial();
+
+      expect(caseToCheck.status).toEqual(
+        'General Docket - At Issue (Ready for Trial)',
+      );
+    });
+
+    it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
+      const status = 'New';
+      const caseToCheck = new Case({
+        documents: [
+          {
+            createdAt: moment()
+              .subtract(ANSWER_CUTOFF_AMOUNT, ANSWER_CUTOFF_UNIT)
+              .toISOString(),
+            eventCode: 'A',
+          },
+        ],
+        status,
+      }).checkForReadyForTrial();
+
+      expect(caseToCheck.status).not.toEqual(
+        'General Docket - At Issue (Ready for Trial)',
+      );
     });
   });
 });
