@@ -8,8 +8,11 @@ const {
  * @param yearAmount
  * @constructor
  */
-function YearAmount(yearAmount) {
-  Object.assign(this, yearAmount);
+function YearAmount(rawYearAmount) {
+  Object.assign(this, {
+    amount: rawYearAmount.amount,
+    year: rawYearAmount.year,
+  });
 }
 
 joiValidationDecorator(
