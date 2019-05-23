@@ -14,6 +14,7 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
+import { completeScanSequence } from './sequences/completeScanSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
@@ -49,6 +50,7 @@ import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSe
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
+import { startScanSequence } from './sequences/startScanSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -153,8 +155,10 @@ export const presenter = {
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
     confirmStayLoggedInSequence,
+    completeScanSequence,
     createWorkItemSequence,
     dismissAlertSequence,
+    startScanSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,

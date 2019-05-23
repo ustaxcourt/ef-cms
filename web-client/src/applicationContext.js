@@ -47,6 +47,7 @@ import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFr
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
+import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
 import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
@@ -143,6 +144,7 @@ const allUseCases = {
   forwardWorkItem,
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
+  generatePDFFromPNGData,
   getCase,
   getCaseTypes,
   getCasesByUser,

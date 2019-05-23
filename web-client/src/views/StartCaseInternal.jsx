@@ -3,18 +3,22 @@ import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
+import { Scan } from '../ustc-ui/Scan/Scan';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const StartCaseInternal = connect(
   {
+    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
+    startScanSequence: sequences.startScanSequence,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
@@ -25,6 +29,8 @@ export const StartCaseInternal = connect(
   ({
     constants,
     showModal,
+    startScanSequence,
+    completeScanSequence,
     formCancelToggleCancelSequence,
     startCaseHelper,
     submitPetitionFromPaperSequence,
@@ -236,6 +242,26 @@ export const StartCaseInternal = connect(
                 bind="validationErrors.petitionFileSize"
               />
             </div>
+            <Scan
+              onScanClicked={() => startScanSequence()}
+              onDoneClicked={() =>
+                completeScanSequence({
+                  onComplete: file => {
+                    limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                      updatePetitionValueSequence({
+                        key: 'petitionFile',
+                        value: file,
+                      });
+                      updatePetitionValueSequence({
+                        key: 'petitionFileSize',
+                        value: file.size,
+                      });
+                      validatePetitionFromPaperSequence();
+                    });
+                  },
+                })
+              }
+            />
           </div>
 
           <h2 className="margin-top-4">Statement of Taxpayer Identification</h2>

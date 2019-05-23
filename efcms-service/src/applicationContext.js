@@ -69,8 +69,8 @@ const {
   forwardWorkItem,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
-  generatePDFFromJPGData,
-} = require('../../shared/src/business/useCases/workitems/generatePDFFromJPGData');
+  generatePDFFromPNGData,
+} = require('../../shared/src/business/useCases/generatePDFFromPNGDataInteractor');
 const {
   getCase,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
@@ -330,7 +330,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItem: createWorkItemUC,
         fileExternalDocument,
         forwardWorkItem,
-        generatePDFFromJPGData,
+        generatePDFFromPNGData,
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
