@@ -216,6 +216,7 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -286,6 +287,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCasesByUser,
         getCasesForRespondent,
+        getDocument,
         getDownloadPolicyUrl,
         getInternalUsers,
         getSentWorkItemsForSection,
