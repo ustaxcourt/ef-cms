@@ -9,7 +9,11 @@ const {
  * @constructor
  */
 function ExternalDocumentStandard(rawProps) {
-  Object.assign(this, rawProps);
+  Object.assign(this, {
+    category: rawProps.category,
+    documentTitle: rawProps.documentTitle,
+    documentType: rawProps.documentType,
+  });
 }
 
 ExternalDocumentStandard.prototype.getDocumentTitle = function() {
