@@ -17,7 +17,7 @@ const uuidVersions = {
 
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
-  generalDocket: 'General Docket - Not At Issue',
+  generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
   recalled: 'Recalled',

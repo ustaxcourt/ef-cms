@@ -8,7 +8,7 @@ const FORMATTED_WORK_ITEM = {
   assigneeId: null,
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: 'General Docket - Not At Issue',
+  caseStatus: 'General Docket - Not at Issue',
   createdAtFormatted: '12/27/18',
   currentMessage: {
     createdAtFormatted: '12/27/18',
@@ -63,7 +63,7 @@ describe('formatted work queue computed', () => {
     assigneeId: null,
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'General Docket - Not At Issue',
+    caseStatus: 'General Docket - Not at Issue',
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     document: {
