@@ -13,15 +13,19 @@ export const PrimaryDocumentReadOnly = connect(
     return (
       <React.Fragment>
         <div>
-          <h2 className="header-with-link-button">{form.documentTitle}</h2>
-          <button
-            className="usa-button usa-button--unstyled"
-            type="button"
-            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
-          >
-            <FontAwesomeIcon icon="edit" size="sm" />
-            Edit
-          </button>
+          <h2 className="header-with-link-button">
+            {form.documentTitle}{' '}
+            <button
+              className="usa-button usa-button--unstyled margin-left-205"
+              type="button"
+              onClick={() =>
+                chooseWizardStepSequence({ value: 'FileDocument' })
+              }
+            >
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
+            </button>
+          </h2>
         </div>
 
         <div className="blue-container">
@@ -44,7 +48,11 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingIncludes && (
-            <div className="usa-form-group">
+            <div
+              className={`usa-form-group ${
+                !fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''
+              }`}
+            >
               <label htmlFor="filing-includes" className="usa-label">
                 Filing Includes
               </label>
@@ -62,7 +70,11 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showFilingNotIncludes && (
-            <div className="usa-form-group">
+            <div
+              className={`usa-form-group ${
+                !fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''
+              }`}
+            >
               <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>
@@ -76,7 +88,7 @@ export const PrimaryDocumentReadOnly = connect(
           )}
 
           {fileDocumentHelper.showObjection && (
-            <div className="usa-form-group">
+            <div className="usa-form-group margin-bottom-0">
               <label htmlFor="objections" className="usa-label">
                 Are There Any Objections to This Document?
               </label>

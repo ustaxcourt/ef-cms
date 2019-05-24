@@ -93,9 +93,9 @@ export const StartCase = connect(
             <h1
               tabIndex="-1"
               id="start-case-header"
-              className="margin-bottom-05"
+              className="margin-bottom-2"
             >
-              Tell us about your case
+              Start a Case
             </h1>
             <p className="required-statement margin-top-05 margin-bottom-5">
               All fields required
@@ -574,6 +574,7 @@ export const StartCase = connect(
                   <input
                     id="ownership-disclosure-file"
                     type="file"
+                    className="usa-input"
                     accept=".pdf"
                     name="ownershipDisclosureFile"
                     onChange={e => {
@@ -602,11 +603,9 @@ export const StartCase = connect(
               </div>
             )}
 
-            <div className="usa-form-group">
-              <h2 className="margin-top-4">
-                What Kind of Case Are You Filing?
-              </h2>
-              <div className="blue-container">
+            <h2 className="margin-top-4">What Kind of Case Are You Filing?</h2>
+            <div className="blue-container">
+              <div className="usa-form-group">
                 <fieldset
                   id="irs-notice-radios"
                   className={
@@ -799,6 +798,7 @@ export const StartCase = connect(
                 onClick={() => toggleCaseDifferenceSequence()}
               >
                 <span className="usa-accordion__heading usa-banner__button-text">
+                  <FontAwesomeIcon icon="question-circle" size="lg" />
                   How is a small case different than a regular case, and do I
                   qualify?
                   {screenMetadata.showCaseDifference ? (
@@ -918,7 +918,11 @@ export const StartCase = connect(
               </div>
             </div>
 
-            <button id="submit-case" type="submit" className="usa-button">
+            <button
+              id="submit-case"
+              type="submit"
+              className="usa-button margin-right-205"
+            >
               Submit to U.S. Tax Court
             </button>
             <button

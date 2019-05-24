@@ -13,7 +13,11 @@ const uuidVersions = {
  * @constructor
  */
 function ForwardMessage(rawMessage) {
-  Object.assign(this, rawMessage);
+  Object.assign(this, {
+    assigneeId: rawMessage.assigneeId,
+    forwardMessage: rawMessage.forwardMessage,
+    section: rawMessage.section,
+  });
 }
 
 joiValidationDecorator(

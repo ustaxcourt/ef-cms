@@ -15,11 +15,18 @@ joiValidationDecorator(
 );
 /**
  * constructor
- * @param user
+ * @param rawUser
  * @constructor
  */
-function User(user) {
-  Object.assign(this, user);
+function User(rawUser) {
+  Object.assign(this, {
+    email: rawUser.email,
+    name: rawUser.name,
+    role: rawUser.role,
+    section: rawUser.section,
+    token: rawUser.token,
+    userId: rawUser.userId,
+  });
   this.section = getSectionForRole(this.role);
   this.role = this.role || 'petitioner';
 }

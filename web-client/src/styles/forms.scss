@@ -1,5 +1,6 @@
 .usa-form-group,
 .usa-fieldset {
+  max-width: 30rem;
   margin-bottom: 30px;
 }
 
@@ -84,21 +85,21 @@ select {
 }
 
 .usa-label:hover {
-  +.usa-hint {
-    +.usa-input:not([type=file]),
-    +.usa-textarea,
-    +.usa-select,
-    +.usa-range {
+  + .usa-hint {
+    + .usa-input:not([type='file']),
+    + .usa-textarea,
+    + .usa-select,
+    + .usa-range {
       &:not(:disabled) {
         border: 1px solid color($theme-color-base);
         box-shadow: 0 0 0 0 transparent;
       }
     }
   }
-  +.usa-input:not([type=file]),
-  +.usa-textarea,
-  +.usa-select,
-  +.usa-range {
+  + .usa-input:not([type='file']),
+  + .usa-textarea,
+  + .usa-select,
+  + .usa-range {
     &:not(:disabled) {
       border: 1px solid color($theme-color-base);
       box-shadow: 0 0 0 0 transparent;
@@ -319,7 +320,8 @@ label.validated::after {
 }
 
 .grid-container {
-  &.ustc-secondary-question {
+  &.ustc-secondary-question,
+  .ustc-secondary-question {
     margin-top: 20px;
   }
   &.add-bottom-margin {
