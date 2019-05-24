@@ -10,6 +10,7 @@ import { state } from 'cerebral';
 export const startScanAction = ({ props, store, get }) => {
   return new Promise((resolve, reject) => {
     Dynamsoft.WebTwainEnv.ScanDirectly = true;
+    store.set(state.isScanning, true);
     let DWObject = get(state.DWObject);
 
     if (!DWObject) {
