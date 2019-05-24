@@ -93,12 +93,12 @@ export const StartCase = connect(
             <h1
               tabIndex="-1"
               id="start-case-header"
-              className="margin-bottom-2"
+              className="margin-bottom-05"
             >
               Start a Case
             </h1>
             <p className="required-statement margin-top-05 margin-bottom-5">
-              All fields required
+              All fields required unless otherwise noted
             </p>
             <h2>Upload Your Petition to Start Your Case</h2>
 
