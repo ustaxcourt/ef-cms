@@ -37,7 +37,7 @@ export const CaseDetail = connect(
               <div className="tablet:grid-col-6">
                 {caseHelper.showRequestAccessToCaseButton && (
                   <a
-                    className="usa-button tablet-full-width push-right"
+                    className="usa-button tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${
                       caseDetail.docketNumber
                     }/request-access`}

@@ -31,19 +31,21 @@ export const CaseDetailHeader = connect(
             )}
           </div>
           <p id="case-title" className="margin-y-0">
-            <span>{caseDetail.caseTitle}</span>
-            {caseHelper.showCaptionEditButton && (
-              <button
-                className="usa-button usa-button--unstyled "
-                id="caption-edit-button"
-                onClick={() => {
-                  openCaseCaptionModalSequence();
-                }}
-              >
-                <FontAwesomeIcon icon="edit" size="sm" />
-                Edit
-              </button>
-            )}
+            <span>
+              {caseDetail.caseTitle}{' '}
+              {caseHelper.showCaptionEditButton && (
+                <button
+                  className="usa-button usa-button--unstyled margin-left-105"
+                  id="caption-edit-button"
+                  onClick={() => {
+                    openCaseCaptionModalSequence();
+                  }}
+                >
+                  <FontAwesomeIcon icon="edit" size="sm" />
+                  Edit
+                </button>
+              )}
+            </span>
           </p>
           {showModal == 'UpdateCaseCaptionModalDialog' && (
             <UpdateCaseCaptionModalDialog />
