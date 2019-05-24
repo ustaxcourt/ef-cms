@@ -62,7 +62,7 @@ export const formatWorkItem = (
       result.showRecalledStatusIcon = true;
       result.showUnreadStatusIcon = false;
       break;
-    case 'General Docket - Not At Issue':
+    case 'General Docket - Not at Issue':
     case 'New':
     default:
       result.showBatchedStatusIcon = false;
