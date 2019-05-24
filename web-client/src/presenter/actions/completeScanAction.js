@@ -52,5 +52,9 @@ export const completeScanAction = ({
     .catch(err => {
       console.log('err', err);
     })
-    .finally();
+    .finally(() => {
+      store.set(state.isScanning, false);
+      DWObject.RemoveAllImages();
+      DWObject.CloseSource();
+    });
 };
