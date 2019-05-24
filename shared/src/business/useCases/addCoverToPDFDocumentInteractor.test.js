@@ -151,6 +151,6 @@ describe('addCoverToPDFDocument', () => {
     const newPdfDoc = PDFDocumentFactory.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(saveDocumentStub.calledOnce).toBeTruthy();
-    expect(newPdfDocPages.length).toEqual(2);
+    expect(newPdfDocPages.length).toEqual(1);
   });
 });
