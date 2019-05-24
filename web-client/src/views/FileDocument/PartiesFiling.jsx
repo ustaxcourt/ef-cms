@@ -36,7 +36,7 @@ export const PartiesFiling = connect(
               <legend className="with-hint" id="who-legend">
                 Who Is Filing This Document?
               </legend>
-              <span className="usa-hint">Check all that apply.</span>
+              <span className="usa-hint">Check all that apply</span>
               {fileDocumentHelper.showPractitionerParty && (
                 <div className="usa-checkbox">
                   <input
