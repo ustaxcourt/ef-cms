@@ -323,6 +323,12 @@ label.validated::after {
   &.ustc-secondary-question,
   .ustc-secondary-question {
     margin-top: 20px;
+
+    fieldset,
+    legend,
+    label {
+      max-width: 100%;
+    }
   }
   &.add-bottom-margin {
     margin-bottom: 20px;
