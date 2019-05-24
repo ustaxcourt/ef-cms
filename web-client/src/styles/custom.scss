@@ -861,7 +861,7 @@ nav.usa-nav {
   button {
     color: $color-white;
   }
-  a:hover,
+  a:not(.usa-button):hover,
   button:hover {
     color: $color-primary-alt;
   }
