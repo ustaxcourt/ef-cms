@@ -13,7 +13,7 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           documents: [],
-          status: 'General Docket - Not At Issue',
+          status: 'General Docket - Not at Issue',
         },
         documentId: 'abc',
         workItemActions: {
@@ -29,7 +29,7 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           documents: [],
-          status: 'General Docket - Not At Issue',
+          status: 'General Docket - Not at Issue',
         },
         documentId: 'abc',
         workItemActions: {
@@ -125,7 +125,7 @@ describe('formatted work queue computed', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'General Docket - Not At Issue',
+            status: 'General Docket - Not at Issue',
           },
           documentId: 'abc',
           workItemActions: {

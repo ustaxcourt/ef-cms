@@ -84,7 +84,7 @@ export const CaseDetailInternal = connect(
         </section>
         {/* This section below will be removed in a future story */}
         <section>
-          {caseDetail.status === 'General Docket - Not At Issue' && (
+          {caseDetail.status === 'General Docket - Not at Issue' && (
             <a
               href={`${baseUrl}/documents/${
                 caseDetail.docketNumber
