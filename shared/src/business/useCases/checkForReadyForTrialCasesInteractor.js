@@ -22,16 +22,18 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
         caseId,
       });
 
-    const caseEntity = new Case(caseToCheck);
+    if (caseToCheck) {
+      const caseEntity = new Case(caseToCheck);
 
-    if (caseEntity.status === STATUS_TYPES.generalDocket) {
-      caseEntity.checkForReadyForTrial();
+      if (caseEntity.status === STATUS_TYPES.generalDocket) {
+        caseEntity.checkForReadyForTrial();
 
-      if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
-        await applicationContext.getPersistenceGateway().updateCase({
-          applicationContext,
-          caseToUpdate: caseEntity.validate().toRawObject(),
-        });
+        if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
+          await applicationContext.getPersistenceGateway().updateCase({
+            applicationContext,
+            caseToUpdate: caseEntity.validate().toRawObject(),
+          });
+        }
       }
     }
   }

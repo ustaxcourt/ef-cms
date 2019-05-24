@@ -36,6 +36,33 @@ describe('checkForReadyForTrialCases', () => {
     expect(getAllCatalogCasesSpy.called).toEqual(true);
   });
 
+  it('should not check case if no case is found', async () => {
+    const getAllCatalogCasesSpy = sinon.stub().returns([]);
+    applicationContext = {
+      getPersistenceGateway: () => ({
+        getAllCatalogCases: getAllCatalogCasesSpy,
+        getCaseByCaseId: () => undefined,
+        updateCase: () => {},
+      }),
+      logger: {
+        info: () => {},
+      },
+    };
+
+    let error;
+
+    try {
+      await checkForReadyForTrialCases({
+        applicationContext,
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeUndefined();
+    expect(getAllCatalogCasesSpy.called).toEqual(true);
+  });
+
   it("should only check cases that are 'general docket not at issue'", async () => {
     updateCaseSpy = sinon.spy();
     applicationContext = {
