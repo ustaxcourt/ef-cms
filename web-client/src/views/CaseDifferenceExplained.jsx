@@ -4,7 +4,7 @@ import React from 'react';
 export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
     <h3 id="small-case-qualifications">
-      Do I Qualify for a Small Tax Case Procedure?
+      Do I qualify for a small tax case procedure?
     </h3>
     <p>
       Small cases must adhere to the following dollar limits depending on the

@@ -9,7 +9,11 @@ const {
  * @constructor
  */
 function PetitionFromPaperWithoutFiles(rawPetition) {
-  Object.assign(this, rawPetition);
+  Object.assign(this, {
+    caseCaption: rawPetition.caseCaption,
+    petitionFileId: rawPetition.petitionFileId,
+    receivedAt: rawPetition.receivedAt,
+  });
 }
 
 PetitionFromPaperWithoutFiles.errorToMessageMap = {

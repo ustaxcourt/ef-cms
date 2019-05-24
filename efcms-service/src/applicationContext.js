@@ -36,6 +36,9 @@ const {
   createCase: createCaseUC,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseCatalogRecord,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
+const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
@@ -68,6 +71,9 @@ const {
 const {
   forwardWorkItem,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
+const {
+  getAllCatalogCases,
+} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
   getCase,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
@@ -269,12 +275,14 @@ module.exports = (appContextUser = {}) => {
         addWorkItemToSectionInbox,
         associateUserWithCase,
         createCase,
+        createCaseCatalogRecord,
         createDocument,
         createUser,
         createWorkItem,
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        getAllCatalogCases,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,

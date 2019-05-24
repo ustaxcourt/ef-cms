@@ -8,7 +8,7 @@ const { DocketRecord } = require('./DocketRecord');
 const { Document } = require('./Document');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { uniqBy } = require('lodash');
+const { uniqBy, includes } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -17,12 +17,16 @@ const uuidVersions = {
 
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
-  generalDocket: 'General Docket',
+  generalDocket: 'General Docket - Not at Issue',
+  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
   recalled: 'Recalled',
 };
 
 exports.STATUS_TYPES = statusMap;
+
+exports.ANSWER_CUTOFF_AMOUNT = 5; //Should be 45
+exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'days'
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -750,3 +754,50 @@ Case.prototype.getWorkItems = function() {
 };
 
 exports.Case = Case;
+
+/**
+ *
+ * @returns {Case}
+ */
+Case.prototype.checkForReadyForTrial = function() {
+  const ANSWER_DOCUMENT_CODES = [
+    'A',
+    'AAPN',
+    'ATAP',
+    'AAAP',
+    'AATP',
+    'APA',
+    'ATSP',
+    'AATS',
+    'ASUP',
+    'ASAP',
+    'AATT',
+  ];
+
+  let docFiledCutoffDate = moment().subtract(
+    exports.ANSWER_CUTOFF_AMOUNT,
+    exports.ANSWER_CUTOFF_UNIT,
+  );
+
+  const isCaseGeneralDocketNotAtIssue = this.status === statusMap.generalDocket;
+
+  if (isCaseGeneralDocketNotAtIssue) {
+    this.documents.forEach(document => {
+      const isAnswerDocument = includes(
+        ANSWER_DOCUMENT_CODES,
+        document.eventCode,
+      );
+
+      const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
+        docFiledCutoffDate,
+        exports.ANSWER_CUTOFF_UNIT,
+      );
+
+      if (isAnswerDocument && docFiledBeforeCutoff) {
+        this.status = statusMap.generalDocketReadyForTrial;
+      }
+    });
+  }
+
+  return this;
+};

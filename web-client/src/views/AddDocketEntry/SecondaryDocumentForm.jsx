@@ -64,7 +64,7 @@ export const SecondaryDocumentForm = connect(
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.secondaryDocumentFile"
             />
           </div>
