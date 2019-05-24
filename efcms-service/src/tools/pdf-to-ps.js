@@ -12,17 +12,22 @@ const gs = require('ghostscript4js');
 
 */
 
-const pdf2ps = '-dBATCH -dSAFER -dNOPAUSE -q -sDEVICE=ps2write -sOutputFile=step1.ps -f example.pdf';
-const ps2pdf = '-dBATCH -dSAFER -DNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=step2.pdf -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f step1.ps';
+const args = process.argv.slice(2);
+const [inputFile, outputFile='output.pdf'] = args;
+
+const pdf2ps = `-dBATCH -dSAFER -dNOPAUSE -q -sDEVICE=ps2write -sOutputFile=intermediate.ps -f ${inputFile}`;
+const ps2pdf = `-dBATCH -dSAFER -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=${outputFile} -dPDFSETTINGS=/prepress -dHaveTrueTypes=true -dEmbedAllFonts=true -dSubsetFonts=false -f intermediate.ps`;
 
 try {
   // Take decision based on Ghostscript version
   const version = gs.version();
   console.log('GS Version', version);
+
   gs.executeSync(pdf2ps);
-  console.log('Created PS step1.ps');
+  console.log('Created PS intermediate.ps');
+
   gs.executeSync(ps2pdf);
-  console.log('Created PDF step2.pdf');
+  console.log(`Created PDF ${outputFile}`);
 } catch (err) {
   console.log(err, err.message);
   throw err;
