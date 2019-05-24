@@ -10,7 +10,20 @@ const { instantiateContacts } = require('./contacts/PetitionContact');
  * @constructor
  */
 function PetitionWithoutFiles(rawPetition) {
-  Object.assign(this, rawPetition);
+  Object.assign(this, {
+    businessType: rawPetition.businessType,
+    caseType: rawPetition.caseType,
+    contactPrimary: rawPetition.contactPrimary,
+    contactSecondary: rawPetition.contactSecondary,
+    countryType: rawPetition.countryType,
+    filingType: rawPetition.filingType,
+    hasIrsNotice: rawPetition.hasIrsNotice,
+    irsNoticeDate: rawPetition.irsNoticeDate,
+    partyType: rawPetition.partyType,
+    preferredTrialCity: rawPetition.preferredTrialCity,
+    procedureType: rawPetition.procedureType,
+  });
+
   const contacts = instantiateContacts({
     contactInfo: {
       primary: this.contactPrimary,
@@ -33,13 +46,9 @@ PetitionWithoutFiles.errorToMessageMap = {
     },
     'Notice Date is a required field.',
   ],
-  // ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
   partyType: 'Party Type is a required field.',
-  // petitionFile: 'The Petition file was not selected.',
   preferredTrialCity: 'Preferred Trial City is a required field.',
   procedureType: 'Procedure Type is a required field.',
-  // signature: 'You must review the form before submitting.',
-  // stinFile: 'Statement of Taxpayer Identification Number is required.',
 };
 
 joiValidationDecorator(
@@ -66,17 +75,9 @@ joiValidationDecorator(
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       }),
-    // ownershipDisclosureFile: joi.object().when('filingType', {
-    //   is: 'A business',
-    //   otherwise: joi.optional().allow(null),
-    //   then: joi.required(),
-    // }),
     partyType: joi.string().required(),
-    // petitionFile: joi.object().required(),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
-    // signature: joi.boolean().required(),
-    // stinFile: joi.object().required(),
   }),
   function() {
     return !this.getFormattedValidationErrors();
