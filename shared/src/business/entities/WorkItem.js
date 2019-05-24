@@ -17,8 +17,27 @@ const uuidVersions = {
  * @constructor
  */
 function WorkItem(rawWorkItem) {
-  Object.assign(this, rawWorkItem, {
+  Object.assign(this, {
+    assigneeId: rawWorkItem.assigneeId,
+    assigneeName: rawWorkItem.assigneeName,
+    caseId: rawWorkItem.caseId,
+    caseStatus: rawWorkItem.caseStatus,
+    caseTitle: rawWorkItem.caseTitle,
+    completedAt: rawWorkItem.completedAt,
+    completedBy: rawWorkItem.completedBy,
+    completedByUserId: rawWorkItem.completedByUserId,
+    completedMessage: rawWorkItem.completedMessage,
     createdAt: rawWorkItem.createdAt || new Date().toISOString(),
+    docketNumber: rawWorkItem.docketNumber,
+    docketNumberSuffix: rawWorkItem.docketNumberSuffix,
+    document: rawWorkItem.document,
+    isInitializeCase: rawWorkItem.isInitializeCase,
+    isRead: rawWorkItem.isRead,
+    messages: rawWorkItem.messages,
+    section: rawWorkItem.section,
+    sentBy: rawWorkItem.sentBy,
+    sentBySection: rawWorkItem.sentBySection,
+    sentByUserId: rawWorkItem.sentByUserId,
     updatedAt: rawWorkItem.updatedAt || new Date().toISOString(),
     workItemId: rawWorkItem.workItemId || uuid.v4(),
   });

@@ -131,6 +131,10 @@
         color: color($theme-color-base-dark);
       }
 
+      .usa-error-message {
+        color: color($theme-color-secondary-dark);
+      }
+
       button {
         background-color: $color-white;
       }

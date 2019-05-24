@@ -20,7 +20,33 @@ function ExternalDocumentInformationFactory() {}
  */
 ExternalDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
-    Object.assign(this, rawProps);
+    Object.assign(this, {
+      attachments: rawProps.attachments,
+      certificateOfService: rawProps.certificateOfService,
+      certificateOfServiceDate: rawProps.certificateOfServiceDate,
+      documentType: rawProps.documentType,
+      eventCode: rawProps.eventCode,
+      exhibits: rawProps.exhibits,
+      freeText: rawProps.freeText,
+      hasSecondarySupportingDocuments: rawProps.hasSecondarySupportingDocuments,
+      hasSupportingDocuments: rawProps.hasSupportingDocuments,
+      lodged: rawProps.lodged,
+      objections: rawProps.objections,
+      ordinalValue: rawProps.ordinalValue,
+      partyPrimary: rawProps.partyPrimary,
+      partyRespondent: rawProps.partyRespondent,
+      partySecondary: rawProps.partySecondary,
+      previousDocument: rawProps.previousDocument,
+      primaryDocumentFile: rawProps.primaryDocumentFile,
+      secondaryDocumentFile: rawProps.secondaryDocumentFile,
+      secondarySupportingDocument: rawProps.secondarySupportingDocument,
+      secondarySupportingDocumentFile: rawProps.secondarySupportingDocumentFile,
+      secondarySupportingDocumentFreeText:
+        rawProps.secondarySupportingDocumentFreeText,
+      supportingDocument: rawProps.supportingDocument,
+      supportingDocumentFile: rawProps.supportingDocumentFile,
+      supportingDocumentFreeText: rawProps.supportingDocumentFreeText,
+    });
   };
 
   let schema = {
