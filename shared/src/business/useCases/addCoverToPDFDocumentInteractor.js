@@ -12,7 +12,7 @@ const { flattenDeep } = require('lodash');
 /**
  * addCoverToPDFDocument
  *
- * @param pdfData // Uint8Array
+ * @param pdfData {Uint8Array}
  * @param coverSheetData
  */
 exports.addCoverToPDFDocument = async ({
@@ -109,6 +109,9 @@ exports.addCoverToPDFDocument = async ({
       Key: documentId,
     })
     .promise();
+
+  pdfData = applicationContext.getUseCases().sanitizePdf({ pdfData }); // TODO
+
   applicationContext.logger.timeEnd('Fetching S3 File');
 
   // Dimensions of cover page - 8.5"x11" @ 300dpi

@@ -210,6 +210,7 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const { sanitizePdf } = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
 
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -341,6 +342,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
+        sanitizePdf,
         sendPetitionToIRSHoldingQueue,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
