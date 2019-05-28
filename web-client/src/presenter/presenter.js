@@ -14,11 +14,11 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
-import { completeScanSequence } from './sequences/completeScanSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
@@ -50,11 +50,12 @@ import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSe
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
-import { startScanSequence } from './sequences/startScanSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
+import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
+import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
@@ -69,6 +70,7 @@ import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequen
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
+import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
@@ -154,11 +156,10 @@ export const presenter = {
     closeAccountMenuSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
-    confirmStayLoggedInSequence,
     completeScanSequence,
+    confirmStayLoggedInSequence,
     createWorkItemSequence,
     dismissAlertSequence,
-    startScanSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
@@ -190,6 +191,8 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runBatchProcessSequence,
+    scannerShutdownSequence,
+    scannerStartupSequence,
     selectAssigneeSequence,
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
@@ -203,6 +206,7 @@ export const presenter = {
     setWorkItemActionSequence,
     showDocketRecordDetailModalSequence,
     signOutSequence,
+    startScanSequence,
     submitCaseAssociationRequestSequence,
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
