@@ -26,7 +26,7 @@ const statusMap = {
 exports.STATUS_TYPES = statusMap;
 
 exports.ANSWER_CUTOFF_AMOUNT = 5; //Should be 45
-exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'days'
+exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'day'
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -756,7 +756,9 @@ Case.prototype.getWorkItems = function() {
 exports.Case = Case;
 
 /**
- *
+ * checkForReadyForTrial
+ * check a case to check whether is should change to ready for trial.
+ * 
  * @returns {Case}
  */
 Case.prototype.checkForReadyForTrial = function() {
