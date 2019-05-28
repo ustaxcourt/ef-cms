@@ -757,8 +757,8 @@ exports.Case = Case;
 
 /**
  * checkForReadyForTrial
- * check a case to check whether is should change to ready for trial.
- * 
+ * check a case to see whether it should change to ready for trial.
+ *
  * @returns {Case}
  */
 Case.prototype.checkForReadyForTrial = function() {
