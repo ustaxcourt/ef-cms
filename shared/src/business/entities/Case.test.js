@@ -903,7 +903,7 @@ describe('Case entity', () => {
   });
 
   describe('checkForReadyForTrial', () => {
-    it('should not change the status is no answer documents have been filed', () => {
+    it('should not change the status if no answer documents have been filed', () => {
       const caseToCheck = new Case({
         documents: [],
         status: STATUS_TYPES.generalDocket,
@@ -911,7 +911,7 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(STATUS_TYPES.generalDocket);
     });
 
-    it('should not change the status is an answer documents has been filed, but the cutoff has not elapsed', () => {
+    it('should not change the status if an answer document has been filed, but the cutoff has not elapsed', () => {
       const caseToCheck = new Case({
         documents: [
           {
@@ -924,7 +924,7 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(STATUS_TYPES.generalDocket);
     });
 
-    it('should not change the status is a non answer documents has been filed before the cutoff', () => {
+    it('should not change the status if a non answer document has been filed before the cutoff', () => {
       const caseToCheck = new Case({
         documents: [
           {
