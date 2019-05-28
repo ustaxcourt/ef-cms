@@ -24,13 +24,19 @@ export const FileDocument = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h1 className="heading-1" tabIndex="-1" id="file-a-document-header">
+          <h1
+            className="margin-bottom-05"
+            tabIndex="-1"
+            id="file-a-document-header"
+          >
             File a Document
           </h1>
         </Focus>
-        <p>All fields required unless otherwise noted</p>
+        <p className="margin-bottom-5 required-statement margin-top-05 ">
+          All fields required unless otherwise noted
+        </p>
         <div>
-          <h2 className="header-with-link-button margin-top-4">
+          <h2 className="header-with-link-button">
             Type of Document You’re Filing
           </h2>
           <button
@@ -61,7 +67,7 @@ export const FileDocument = connect(
           <button
             id="submit-document"
             type="submit"
-            className="usa-button"
+            className="usa-button margin-right-205"
             onClick={() => {
               reviewExternalDocumentInformationSequence();
             }}

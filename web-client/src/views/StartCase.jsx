@@ -93,12 +93,12 @@ export const StartCase = connect(
             <h1
               tabIndex="-1"
               id="start-case-header"
-              className="margin-bottom-2"
+              className="margin-bottom-05"
             >
               Start a Case
             </h1>
             <p className="required-statement margin-top-05 margin-bottom-5">
-              All fields required
+              All fields required unless otherwise noted
             </p>
             <h2>Upload Your Petition to Start Your Case</h2>
 
@@ -536,7 +536,7 @@ export const StartCase = connect(
 
             {/*start ods*/}
             {startCaseHelper.showOwnershipDisclosure && (
-              <div className="usa-form-group">
+              <>
                 <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
                 <p>
                   Tax Court Rules of Practice and Procedure (Rule 60) requires a
@@ -600,7 +600,7 @@ export const StartCase = connect(
                     bind="validationErrors.ownershipDisclosureFileSize"
                   />
                 </div>
-              </div>
+              </>
             )}
 
             <h2 className="margin-top-4">What Kind of Case Are You Filing?</h2>

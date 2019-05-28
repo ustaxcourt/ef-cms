@@ -13,7 +13,7 @@ describe('updateCase', () => {
     sinon.stub(client, 'put').resolves(null);
     sinon.stub(client, 'get').resolves({
       docketNumberSuffix: null,
-      status: 'General Docket',
+      status: 'General Docket - Not at Issue',
     });
     sinon.stub(client, 'query').resolves([]);
   });
@@ -32,7 +32,7 @@ describe('updateCase', () => {
         currentVersion: '10',
         docketNumber: '101-18',
         docketNumberSuffix: null,
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
         userId: 'taxpayer',
       },
     });

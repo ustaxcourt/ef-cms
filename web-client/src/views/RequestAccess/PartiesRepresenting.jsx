@@ -36,7 +36,7 @@ export const PartiesRepresenting = connect(
               <legend className="with-hint" id="who-legend">
                 Who Are You Representing?
               </legend>
-              <span className="usa-hint">Check all that apply.</span>
+              <span className="usa-hint">Check all that apply</span>
               <div className="usa-checkbox">
                 <input
                   id="party-primary"
