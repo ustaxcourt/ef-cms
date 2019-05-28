@@ -110,7 +110,7 @@ exports.addCoverToPDFDocument = async ({
     })
     .promise();
 
-  pdfData = applicationContext.getUseCases().sanitizePdf({ pdfData }); // TODO
+  pdfData = await applicationContext.getUseCases().sanitizePdf({ pdfData }); // TODO
 
   applicationContext.logger.timeEnd('Fetching S3 File');
 

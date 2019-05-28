@@ -96,6 +96,9 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+        getUseCases: () => ({
+          sanitizePdf: ({ pdfData }) => pdfData,
+        }),
         logger: {
           time: () => null,
           timeEnd: () => null,
@@ -136,7 +139,9 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
-
+        getUseCases: () => ({
+          sanitizePdf: ({ pdfData }) => pdfData,
+        }),
         logger: {
           time: () => null,
           timeEnd: () => null,
@@ -151,6 +156,6 @@ describe('addCoverToPDFDocument', () => {
     const newPdfDoc = PDFDocumentFactory.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(saveDocumentStub.calledOnce).toBeTruthy();
-    expect(newPdfDocPages.length).toEqual(1);
+    expect(newPdfDocPages.length).toEqual(2);
   });
 });
