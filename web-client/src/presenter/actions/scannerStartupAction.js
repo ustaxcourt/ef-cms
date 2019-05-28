@@ -1,5 +1,12 @@
 import { state } from 'cerebral';
 
+/**
+ * injects third-party scanner scripts into the DOM and sets associated state
+ *
+ * @param {Object} providers the providers object
+ * @param {Object} providers.store the cerebral store used for setting state.scanner
+ */
+
 export const scannerStartupAction = async ({ store }) => {
   const dynanScriptClass = 'dynam-scanner-injection';
 
