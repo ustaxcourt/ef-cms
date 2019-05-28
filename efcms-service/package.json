@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-xray-sdk": "^2.3.3",
+    "clamscan": "^1.0.3",
     "eslint-plugin-sort-requires": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "uuid": "^3.3.2"
