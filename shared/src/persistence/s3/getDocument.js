@@ -19,7 +19,7 @@ exports.getDocument = async ({ applicationContext, documentId, protocol }) => {
   if (protocol === 'S3') {
     // TODO: should this be in the persistence gateway?
     const S3 = applicationContext.getStorageClient();
-    return S3.getOject({
+    return S3.getObject({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: documentId,
     });
