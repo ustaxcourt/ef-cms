@@ -5,8 +5,8 @@ import { state } from 'cerebral';
  * date is not required if there is no notice, and the case types
  * are not always the same if there is or is not a notice
  *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store
+ * @param {Object} providers the providers object
+ * @param {Object} providers.store the cerebral store
  */
 export const updateHasIrsNoticeAction = async ({ store }) => {
   store.set(state.form.caseType, undefined);

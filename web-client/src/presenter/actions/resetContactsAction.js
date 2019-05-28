@@ -6,9 +6,9 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  * clears primary and secondary contact in caseDetail depending on
  * party type (except email); also defaults countryType to domestic
  *
- * @param {object} providers the providers object
+ * @param {Object} providers the providers object
  * @param {Function} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store
+ * @param {Object} providers.store the cerebral store
  */
 export const resetContactsAction = async ({ get, store }) => {
   const partyType = get(state.caseDetail.partyType);

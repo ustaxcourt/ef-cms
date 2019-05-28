@@ -3,8 +3,8 @@ import _ from 'lodash';
 /**
  * sets the docketNumber and  petition documentId which is used for routing to the newly created case.
  *
- * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object containing the props.caseDetail
+ * @param {Object} providers the providers object
+ * @param {Object} providers.props the cerebral props object containing the props.caseDetail
  */
 export const setPetitionIdAction = ({ props }) => {
   const docketNumber = props.caseDetail.docketNumber;
