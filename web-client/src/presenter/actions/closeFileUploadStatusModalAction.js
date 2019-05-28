@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object used for setting showModal
+ * @param {Object} providers the providers object
+ * @param {Object} providers.store the cerebral store object used for setting showModal
  */
 export const closeFileUploadStatusModalAction = async ({ store }) => {
   await new Promise(resolve => {

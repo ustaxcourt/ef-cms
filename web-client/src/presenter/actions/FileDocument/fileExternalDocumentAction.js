@@ -4,10 +4,10 @@ import { state } from 'cerebral';
 /**
  * Set document title.
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
- * @returns {object} the next path based on if creation was successful or error
+ * @param {Object} providers the providers object
+ * @param {Object} providers.applicationContext the application context
+ * @param {Object} providers.props the cerebral props object
+ * @returns {Object} the next path based on if creation was successful or error
  */
 export const fileExternalDocumentAction = async ({
   get,
