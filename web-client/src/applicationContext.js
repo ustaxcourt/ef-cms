@@ -262,6 +262,11 @@ const applicationContext = {
       uploadPdf,
     };
   },
+  getScannerResourceUri: () => {
+    return (
+      process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
+    );
+  },
   getUniqueId: () => {
     return uuidv4();
   },
