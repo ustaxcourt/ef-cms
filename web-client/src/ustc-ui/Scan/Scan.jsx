@@ -1,10 +1,19 @@
+import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const Scan = connect(
-  { isScanning: state.isScanning },
-  ({ isScanning, onDoneClicked, onScanClicked }) => {
+class ScanComponent extends React.Component {
+  componentWillMount() {
+    this.props.scannerStartup();
+  }
+
+  componentWillUnmount() {
+    this.props.scannerShutdown();
+  }
+  render() {
+    const { isScanning, onDoneClicked, onScanClicked } = this.props;
     return (
       <>
         <button
@@ -31,5 +40,22 @@ export const Scan = connect(
         )}
       </>
     );
+  }
+}
+
+ScanComponent.propTypes = {
+  isScanning: PropTypes.bool,
+  onDoneClicked: PropTypes.func,
+  onScanClicked: PropTypes.func,
+  scannerShutdown: PropTypes.func,
+  scannerStartup: PropTypes.func,
+};
+
+export const Scan = connect(
+  {
+    isScanning: state.isScanning,
+    scannerShutdown: sequences.scannerShutdownSequence,
+    scannerStartup: sequences.scannerStartupSequence,
   },
+  ScanComponent,
 );
