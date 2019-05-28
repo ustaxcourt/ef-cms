@@ -93,6 +93,7 @@ export const state = {
   procedureTypes: [],
   requestAccessHelper,
   scanHelper,
+  scanner: {},
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
