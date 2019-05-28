@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Object} providers.store the cerebral store used for setting state.scanner
  */
 
-export const scannerStartupAction = async ({ applicationContext, store }) => {
+export const scannerStartupAction = ({ applicationContext, store }) => {
   const dynanScriptClass = 'dynam-scanner-injection';
 
   // Create a script element to inject into the header
@@ -25,6 +25,7 @@ export const scannerStartupAction = async ({ applicationContext, store }) => {
 
   // Set some state when the scripts are loaded
   script1.onload = function() {
+    console.log('onload called!');
     store.set(state.scanner.initiateScriptLoaded, true);
   };
 
