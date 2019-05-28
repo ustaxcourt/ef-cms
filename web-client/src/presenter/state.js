@@ -24,6 +24,7 @@ import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -91,6 +92,7 @@ export const state = {
   petition: {},
   procedureTypes: [],
   requestAccessHelper,
+  scanHelper,
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
