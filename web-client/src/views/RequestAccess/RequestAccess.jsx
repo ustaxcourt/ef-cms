@@ -33,7 +33,9 @@ export const RequestAccess = connect(
             Request Access to This Case
           </h1>
         </Focus>
-        <p>All fields required unless otherwise noted</p>
+        <p className="required-statement margin-top-05 margin-bottom-5">
+          All fields required unless otherwise noted
+        </p>
         <div>
           <h2 className="header-with-link-button">
             Type of Document You’re Filing
@@ -106,11 +108,8 @@ export const RequestAccess = connect(
             />
           </div>
         </div>
-
         <RequestAccessDocumentForm />
-
         <PartiesRepresenting />
-
         <div className="button-box-container">
           <button
             id="submit-document"
