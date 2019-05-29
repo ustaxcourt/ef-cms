@@ -33,6 +33,7 @@ This is a React-based Javascript application. It’s housed in a [monorepo](http
 
 - There is an HTML style guide available at http://localhost:1234/style-guide.
 - There is a visual style guide in [style-guide.pdf](docs/style-guide.pdf).
+- User personas are documented in [user-personas.pdf](docs/user-personas.pdf).
 - The Javascript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) comments, so documentation can be built by running `jsdoc -r .` locally.
 - The API is documented via Swagger, and can be reviewed at http://localhost:3000/v1/swagger.
 - The deployment process is documented in [`SETUP.md`](SETUP.md).
