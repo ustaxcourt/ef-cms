@@ -48,6 +48,28 @@ exports.getScannerInterface = () => {
 
     const getScanCount = () => DWObject.HowManyImagesInBuffer;
 
+    const getSources = () => {
+      var count = DWObject.SourceCount;
+      const sources = [];
+      for (var i = 0; i < count; i++) {
+        sources.push(DWObject.GetSourceNameItems(i));
+      }
+    };
+
+    const setSourceByIndex = index => {
+      DWObject.SelectSourceByIndex(index);
+    };
+
+    const setSourceByName = sourceName => {
+      const sources = getSources();
+      const index = sources.indexOf(sourceName);
+      if (index > -1) {
+        setSourceByIndex(index);
+      } else {
+        // Handle case where a named sources isn't found
+      }
+    };
+
     const startScanSession = () => {
       return new Promise((resolve, reject) => {
         DWObject.SelectSource(
@@ -70,6 +92,9 @@ exports.getScannerInterface = () => {
       changeSource: null,
       completeScanSession,
       getScanCount,
+      getSources,
+      setSourceByIndex,
+      setSourceByName,
       startScanSession,
     };
   }
