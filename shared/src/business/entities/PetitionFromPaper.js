@@ -13,7 +13,15 @@ const {
  * @constructor
  */
 function PetitionFromPaper(rawPetition) {
-  Object.assign(this, rawPetition);
+  Object.assign(this, {
+    caseCaption: rawPetition.caseCaption,
+    ownershipDisclosureFile: rawPetition.ownershipDisclosureFile,
+    petitionFile: rawPetition.petitionFile,
+    petitionFileSize: rawPetition.petitionFileSize,
+    receivedAt: rawPetition.receivedAt,
+    stinFile: rawPetition.stinFile,
+    stinFileSize: rawPetition.stinFileSize,
+  });
 }
 
 PetitionFromPaper.errorToMessageMap = {

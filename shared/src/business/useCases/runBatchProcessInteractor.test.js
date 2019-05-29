@@ -121,7 +121,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
       },
     });
   });
@@ -179,7 +179,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
       },
     });
   });
@@ -234,7 +234,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     expect(deleteDocumentStub.getCall(2)).toEqual(null);
     expect(updateCaseStub.getCall(2).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
       },
     });
   });

@@ -55,9 +55,9 @@ export const CaseSearchBox = connect(
                   </div>
 
                   {form.searchError && (
-                    <p className="usa-error-message">
+                    <div className="usa-error-message">
                       No case was found. Check your docket number and try again.
-                    </p>
+                    </div>
                   )}
                 </div>
                 <button

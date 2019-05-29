@@ -32,14 +32,16 @@ export const SecondaryDocumentForm = connect(
         <div className="blue-container">
           <div
             className={`usa-form-group ${
-              validationErrors.secondaryDocumentFile ? 'usa-input-error' : ''
+              validationErrors.secondaryDocumentFile
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <label
               htmlFor="secondary-document"
               id="secondary-document-label"
               className={
-                'usa-label ustc-upload with-hint' +
+                'usa-label ustc-upload with-hint ' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
@@ -62,7 +64,7 @@ export const SecondaryDocumentForm = connect(
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.secondaryDocumentFile"
             />
           </div>
@@ -130,7 +132,7 @@ export const SecondaryDocumentForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group">
+          <div className="usa-form-group margin-bottom-0">
             <label
               htmlFor="secondary-additional-info2"
               id="secondary-additional-info2-label"

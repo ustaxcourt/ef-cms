@@ -14,9 +14,14 @@ const uuidVersions = {
  * @constructor
  */
 function Message(rawMessage) {
-  Object.assign(this, rawMessage, {
+  Object.assign(this, {
     createdAt: rawMessage.createdAt || new Date().toISOString(),
+    from: rawMessage.from,
+    fromUserId: rawMessage.fromUserId,
+    message: rawMessage.message,
     messageId: rawMessage.messageId || uuid.v4(),
+    to: rawMessage.to,
+    toUserId: rawMessage.toUserId,
   });
 }
 
