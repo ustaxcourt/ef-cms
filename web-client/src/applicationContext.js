@@ -87,6 +87,7 @@ import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkI
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
+import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
@@ -107,6 +108,8 @@ import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserPro
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
+
+const MINUTES = 60 * 1000;
 
 let user;
 
@@ -163,6 +166,7 @@ const allUseCases = {
   refreshToken,
   removeItem: removeItemUC,
   runBatchProcess,
+  sanitizePdf,
   sendPetitionToIRSHoldingQueue,
   setItem: setItemUC,
   setWorkItemAsRead,
@@ -225,13 +229,13 @@ const applicationContext = {
     MAX_FILE_SIZE_MB,
     OTHER_TYPES,
     PARTY_TYPES,
-    REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
+    REFRESH_INTERVAL: 20 * MINUTES,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 5000 * 60, // 5 minutes
+    SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
-      1000 * 60 * 55, // 55 minutes
+      55 * MINUTES, // 55 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,
