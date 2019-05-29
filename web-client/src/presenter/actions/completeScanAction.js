@@ -14,13 +14,17 @@ export const completeScanAction = async ({
   store,
 }) => {
   const scanner = applicationContext.getScanner();
-  const scannedBuffer = await scanner.completeScanSession();
-  const pdfBlob = await applicationContext
-    .getUseCases()
-    .generatePDFFromPNGData(scannedBuffer);
+  const { error, scannedBuffer } = await scanner.completeScanSession();
+  if (error) {
+    // let's handle the error
+  } else {
+    const pdfBlob = await applicationContext
+      .getUseCases()
+      .generatePDFFromPNGData(scannedBuffer);
 
-  const pdfFile = new File([pdfBlob], 'myfile.pdf');
+    const pdfFile = new File([pdfBlob], 'myfile.pdf');
 
-  props.onComplete(pdfFile);
-  store.set(state.isScanning, false);
+    props.onComplete(pdfFile);
+    store.set(state.isScanning, false);
+  }
 };
