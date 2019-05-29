@@ -3,12 +3,12 @@ import { state } from 'cerebral';
 /**
  *
  *
- * @param {object} providers the providers object
- * @param {Function} providers.props the cerebral props object used for getting the props.path
+ * @param {Object} providers the providers object
  * @param {Function} providers.store the cerebral store used for setting state.path
  */
-export const startScanAction = ({ props, store, get }) => {
+export const startScanAction = ({ store, get }) => {
   return new Promise((resolve, reject) => {
+    let Dynamsoft = window.Dynamsoft;
     Dynamsoft.WebTwainEnv.ScanDirectly = true;
     store.set(state.isScanning, true);
     let DWObject = get(state.DWObject);
