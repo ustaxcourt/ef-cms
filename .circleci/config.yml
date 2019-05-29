@@ -7,9 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: (Temporary) clear circle's docker cache
-          command: docker images --no-trunc --format '{{.ID}}' | xargs docker rmi
-      - run:
           name: Build Docker Image
           command: docker build -t efcms -f Dockerfile .
 
