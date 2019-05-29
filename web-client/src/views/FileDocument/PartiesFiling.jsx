@@ -26,17 +26,17 @@ export const PartiesFiling = connect(
         </h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
+            className={`usa-form-group margin-bottom-0 ${
               fileDocumentHelper.partyValidationError
                 ? 'usa-form-group--error'
                 : ''
             }`}
           >
-            <fieldset className="usa-fieldset">
+            <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
                 Who Is Filing This Document?
               </legend>
-              <span className="usa-hint">Check all that apply.</span>
+              <span className="usa-hint">Check all that apply</span>
               {fileDocumentHelper.showPractitionerParty && (
                 <div className="usa-checkbox">
                   <input

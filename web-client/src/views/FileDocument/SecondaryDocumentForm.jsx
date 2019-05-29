@@ -28,7 +28,9 @@ export const SecondaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Tell Us About the {form.secondaryDocument.documentTitle}</h2>
+        <h2 className="margin-top-4">
+          Tell Us About the {form.secondaryDocument.documentTitle}
+        </h2>
         <div className="blue-container">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
@@ -45,6 +47,10 @@ export const SecondaryDocumentForm = connect(
                   className={`usa-form-group ${
                     validationErrors.secondaryDocumentFile
                       ? 'usa-form-group--error'
+                      : ''
+                  } ${
+                    !fileDocumentHelper.showSecondaryDocumentValid
+                      ? 'margin-bottom-0'
                       : ''
                   }`}
                 >
@@ -92,9 +98,17 @@ export const SecondaryDocumentForm = connect(
                   validationErrors.hasSecondarySupportingDocuments
                     ? 'usa-form-group--error'
                     : ''
+                } ${
+                  !form.hasSecondarySupportingDocuments ? 'margin-bottom-0' : ''
                 }`}
               >
-                <fieldset className="usa-fieldset">
+                <fieldset
+                  className={`usa-fieldset ${
+                    !form.hasSecondarySupportingDocuments
+                      ? 'margin-bottom-0'
+                      : ''
+                  }`}
+                >
                   <legend id="secondary-support-docs">
                     Do You Have Any Supporting Documents for This Filing?
                   </legend>
@@ -141,6 +155,8 @@ export const SecondaryDocumentForm = connect(
                   validationErrors.secondarySupportingDocument
                     ? 'usa-form-group--error'
                     : ''
+                } ${
+                  !form.secondarySupportingDocument ? 'margin-bottom-0' : ''
                 }`}
               >
                 <label
@@ -246,7 +262,7 @@ export const SecondaryDocumentForm = connect(
 
             {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
               <div
-                className={`usa-form-group ${
+                className={`usa-form-group margin-bottom-0 ${
                   validationErrors.secondarySupportingDocumentFile
                     ? 'usa-form-group--error'
                     : ''
@@ -263,7 +279,7 @@ export const SecondaryDocumentForm = connect(
                   }
                 >
                   Upload Your Supporting Document{' '}
-                  <span className="success-message">
+                  <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>

@@ -12,7 +12,20 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
 function CaseAssociationRequestFactory(rawProps) {
   let entityConstructor = function(rawProps) {
     rawProps.partyPractitioner = true;
-    Object.assign(this, rawProps);
+    Object.assign(this, {
+      certificateOfService: rawProps.certificateOfService,
+      certificateOfServiceDate: rawProps.certificateOfServiceDate,
+      documentTitle: rawProps.documentTitle,
+      documentTitleTemplate: rawProps.documentTitleTemplate,
+      documentType: rawProps.documentType,
+      eventCode: rawProps.eventCode,
+      objections: rawProps.objections,
+      partyPractitioner: rawProps.partyPractitioner,
+      primaryDocumentFile: rawProps.primaryDocumentFile,
+      representingPrimary: rawProps.representingPrimary,
+      representingSecondary: rawProps.representingSecondary,
+      scenario: rawProps.scenario,
+    });
   };
 
   entityConstructor.prototype.getDocumentTitle = function(

@@ -11,7 +11,11 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @constructor
  */
 function ExternalDocumentNonStandardH(rawProps, ExternalDocumentFactory) {
-  Object.assign(this, rawProps);
+  Object.assign(this, {
+    category: rawProps.category,
+    documentTitle: rawProps.documentTitle,
+    documentType: rawProps.documentType,
+  });
   const { secondaryDocument } = rawProps;
   this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument || {});
 }

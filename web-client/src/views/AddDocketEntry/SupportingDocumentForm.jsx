@@ -29,7 +29,9 @@ export const SupportingDocumentForm = connect(
         <div className="blue-container docket-entry-form">
           <div
             className={`usa-form-group ${
-              validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
+              validationErrors.primaryDocumentFile
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <label
@@ -55,14 +57,14 @@ export const SupportingDocumentForm = connect(
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.primaryDocumentFile"
             />
           </div>
 
           <div
             className={`usa-form-group ${
-              validationErrors.documentType ? 'usa-input-error' : ''
+              validationErrors.documentType ? 'usa-form-group--error' : ''
             }`}
           >
             <label
@@ -96,7 +98,7 @@ export const SupportingDocumentForm = connect(
               })}
             </select>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.documentType"
             />
           </div>
@@ -104,7 +106,7 @@ export const SupportingDocumentForm = connect(
           {addDocketEntryHelper.showSupportingDocumentFreeText && (
             <div
               className={`usa-form-group ${
-                validationErrors.freeText ? 'usa-input-error' : ''
+                validationErrors.freeText ? 'usa-form-group--error' : ''
               }`}
             >
               <label
@@ -133,7 +135,7 @@ export const SupportingDocumentForm = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.freeText"
               />
             </div>
@@ -193,7 +195,13 @@ export const SupportingDocumentForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group">
+          <div
+            className={`usa-form-group ${
+              !addDocketEntryHelper.showSupportingInclusions
+                ? 'margin-bottom-0'
+                : ''
+            }`}
+          >
             <label
               htmlFor="additional-info2"
               id="additional-info-label2"
@@ -221,7 +229,9 @@ export const SupportingDocumentForm = connect(
             />
           </div>
 
-          {addDocketEntryHelper.showSupportingInclusions && <Inclusions />}
+          {addDocketEntryHelper.showSupportingInclusions && (
+            <Inclusions marginClass="margin-bottom-0" />
+          )}
         </div>
       </React.Fragment>
     );
