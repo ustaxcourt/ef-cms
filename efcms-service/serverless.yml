@@ -190,6 +190,13 @@ resources:
             ResourcePath: '/*'
             MetricsEnabled: true
 
+layers:
+  clamav:
+    path: runtimes/clamav
+    exclude:
+      - build.sh
+      - freshclam.conf
+
 functions:
   createDocument:
     handler: src/handlers.createDocumentLambda
@@ -589,6 +596,8 @@ functions:
 
   virusScan:
     handler: src/handlers.virusScan
+    layers:
+      - { Ref: ClamavLambdaLayer }
     events:
       - http:
           path: v1/documents/{documentId}/virus-scan
