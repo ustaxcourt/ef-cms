@@ -7,8 +7,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: (Temporary) clear circle's docker cache
+          command: docker images --no-trunc --format '{{.ID}}' | xargs docker rmi
+      - run:
           name: Build Docker Image
-          command: docker build --no-cache -t efcms -f Dockerfile .
+          command: docker build -t efcms -f Dockerfile .
 
       - run:
           name: Shared - Shellcheck
@@ -57,7 +60,7 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: docker build --no-cache -t efcms -f Dockerfile .
+          command: docker build -t efcms -f Dockerfile .
 
       - run:
           name: Pa11y
