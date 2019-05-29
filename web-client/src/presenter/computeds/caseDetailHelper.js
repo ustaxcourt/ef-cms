@@ -3,10 +3,12 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
+  const userRole = get(state.user.role);
+  const showActionRequired = !caseDetail.payGovId && userRole === 'petitioner';
+  const documentDetailTab = get(state.documentDetail.tab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
-  const userRole = get(state.user.role);
   const userId = get(state.user.userId);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
@@ -39,7 +41,8 @@ export const caseDetailHelper = get => {
   }
 
   return {
-    showActionRequired: !caseDetail.payGovId && userRole === 'petitioner',
+    documentDetailTab,
+    showActionRequired,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' &&

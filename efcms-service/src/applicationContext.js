@@ -21,6 +21,12 @@ const {
   assignWorkItems: assignWorkItemsUC,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
+  associateUserWithCase,
+} = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
+const {
+  checkForReadyForTrialCases,
+} = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
+const {
   completeWorkItem,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
@@ -30,14 +36,14 @@ const {
   createCase: createCaseUC,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseCatalogRecord,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
+const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
-const {
-  createMappingRecord,
-} = require('../../shared/src/persistence/dynamo/helpers/createMappingRecord');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -65,6 +71,9 @@ const {
 const {
   forwardWorkItem,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
+const {
+  getAllCatalogCases,
+} = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
   getCase,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
@@ -202,6 +211,9 @@ const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
+  verifyCaseForUser: verifyCaseForUserUC,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 
@@ -243,7 +255,9 @@ module.exports = (appContextUser = {}) => {
           endpoint: useMasterRegion
             ? environment.masterDynamoDbEndpoint
             : environment.dynamoDbEndpoint,
-          region: useMasterRegion ? environment.masterRegion : environment.region,
+          region: useMasterRegion
+            ? environment.masterRegion
+            : environment.region,
         });
       }
       return dynamoClientCache[type];
@@ -258,14 +272,16 @@ module.exports = (appContextUser = {}) => {
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
+        associateUserWithCase,
         createCase,
+        createCaseCatalogRecord,
         createDocument,
-        createMappingRecord,
         createUser,
         createWorkItem,
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        getAllCatalogCases,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
@@ -289,6 +305,7 @@ module.exports = (appContextUser = {}) => {
         updateCase,
         updateDocumentProcessingStatus,
         updateWorkItem,
+        verifyCaseForUser,
         zipDocuments,
       };
     },
@@ -310,6 +327,7 @@ module.exports = (appContextUser = {}) => {
       return {
         addCoverToPDFDocument,
         assignWorkItems: assignWorkItemsUC,
+        checkForReadyForTrialCases,
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
@@ -335,7 +353,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         updateCase: updateCaseUC,
-        verifyCaseForUser,
+        verifyCaseForUser: verifyCaseForUserUC,
       };
     },
     irsGateway,

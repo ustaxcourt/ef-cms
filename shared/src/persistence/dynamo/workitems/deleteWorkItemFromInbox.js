@@ -1,4 +1,5 @@
-const { deleteMappingRecord } = require('../helpers/deleteMappingRecord');
+const { deleteSectionInboxRecord } = require('./deleteSectionInboxRecord');
+const { deleteUserInboxRecord } = require('./deleteUserInboxRecord');
 
 exports.deleteWorkItemFromInbox = ({
   workItem,
@@ -8,22 +9,18 @@ exports.deleteWorkItemFromInbox = ({
   const requests = [];
   if (workItem.assigneeId) {
     requests.push(
-      deleteMappingRecord({
+      deleteUserInboxRecord({
         applicationContext,
-        pkId: workItem.assigneeId,
-        skId: workItem.workItemId,
-        type: 'workItem',
+        workItem,
       }),
     );
   }
 
   if (deleteFromSection) {
     requests.push(
-      deleteMappingRecord({
+      deleteSectionInboxRecord({
         applicationContext,
-        pkId: workItem.section,
-        skId: workItem.workItemId,
-        type: 'workItem',
+        workItem,
       }),
     );
   }

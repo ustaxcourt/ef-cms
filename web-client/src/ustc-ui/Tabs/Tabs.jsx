@@ -20,6 +20,7 @@ export function TabsComponent({
   children,
   defaultActiveTab,
   className,
+  boxed,
 }) {
   let activeKey, setTab;
 
@@ -43,6 +44,7 @@ export function TabsComponent({
 
     var liClass = classNames({
       active: isActiveTab,
+      'grid-col': boxed,
     });
 
     if (!title) {
@@ -54,13 +56,12 @@ export function TabsComponent({
         <button
           role="tab"
           type="button"
-          className="tab-link"
           id={id}
           aria-controls={tabContentId}
           aria-selected={isActiveTab}
           onClick={() => setTab(tabName)}
         >
-          {title}
+          <span>{title}</span>
         </button>
       </li>
     );
@@ -119,8 +120,10 @@ export function TabsComponent({
   return (
     <div {...baseProps}>
       {hasNav && (
-        <nav>
-          <ul role="tablist">{map(children, renderTab)}</ul>
+        <nav className={classNames({ 'grid-container padding-x-0': boxed })}>
+          <ul role="tablist" className={classNames({ 'grid-row': boxed })}>
+            {map(children, renderTab)}
+          </ul>
         </nav>
       )}
       {map(children, renderNonTab)}
@@ -132,6 +135,7 @@ export function TabsComponent({
 TabsComponent.propTypes = {
   asSwitch: PropTypes.bool,
   bind: PropTypes.string,
+  boxed: PropTypes.bool,
   children: PropTypes.node,
   className: PropTypes.string,
   defaultActiveTab: PropTypes.string,

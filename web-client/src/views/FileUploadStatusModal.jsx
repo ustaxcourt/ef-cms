@@ -33,7 +33,7 @@ class FileUploadStatusComponent extends ModalDialog {
                 e.stopPropagation();
                 cancelUploadSequence();
               }}
-              className="link"
+              className="usa-button usa-button--unstyled"
             >
               Cancel Upload
             </button>

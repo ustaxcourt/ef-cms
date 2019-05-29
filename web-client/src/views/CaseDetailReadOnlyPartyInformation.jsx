@@ -42,14 +42,16 @@ export const CaseDetailReadOnlyPartyInformation = connect(
     return (
       <div className="blue-container read-only-party-information">
         <h3>Party Information</h3>
-        <span className="label">Party Type</span>
-        <p>{caseDetail.partyType || 'My Party Type'}</p>
+        <div>
+          <span className="label">Party Type</span>
+          <p>{caseDetail.partyType || 'My Party Type'}</p>
+        </div>
 
         {caseDetailEditHelper.showPrimaryContact && (
           <div className="read-only-contact-information">
-            <h4 className="label" id="primary-label">
+            <span className="label" id="primary-label">
               {caseDetailEditContactsHelper.contactPrimary.header}
-            </h4>
+            </span>
             <div>
               <address aria-labelledby="primary-label">
                 {addressDisplay(caseDetail.contactPrimary)}
@@ -59,9 +61,9 @@ export const CaseDetailReadOnlyPartyInformation = connect(
         )}
         {caseDetailEditHelper.showSecondaryContact && (
           <div className="read-only-contact-information">
-            <h4 className="label" id="secondary-label">
+            <span className="label" id="secondary-label">
               {caseDetailEditContactsHelper.contactSecondary.header}
-            </h4>
+            </span>
             <div>
               <address aria-labelledby="secondary-label">
                 {caseDetail.contactSecondary.name &&

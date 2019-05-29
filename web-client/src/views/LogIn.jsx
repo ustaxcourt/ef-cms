@@ -11,7 +11,7 @@ export const LogIn = connect(
   },
   ({ form, updateFormValueSequence, submitLoginSequence }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <h1 tabIndex="-1">Log in</h1>
         <ErrorNotification />
         <form
@@ -23,10 +23,13 @@ export const LogIn = connect(
           }}
         >
           <div className="blue-container">
-            <div className="ustc-form-group">
-              <label htmlFor="name">Name</label>
+            <div className="usa-form-group">
+              <label htmlFor="name" className="usa-label">
+                Name
+              </label>
               <input
                 autoCapitalize="none"
+                className="usa-input"
                 id="name"
                 name="name"
                 type="text"
@@ -40,9 +43,11 @@ export const LogIn = connect(
               />
             </div>
           </div>
-          <button id="log-in-button" className="usa-button" type="submit">
-            Log in
-          </button>
+          <div className="button-box-container">
+            <button id="log-in-button" className="usa-button" type="submit">
+              Log in
+            </button>
+          </div>
         </form>
       </section>
     );

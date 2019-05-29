@@ -1,14 +1,8 @@
-const { deleteMappingRecord } = require('../helpers/deleteMappingRecord');
+const { deleteSectionInboxRecord } = require('./deleteSectionInboxRecord');
 
-exports.deleteWorkItemFromSection = ({
-  applicationContext,
-  workItemId,
-  section,
-}) => {
-  return deleteMappingRecord({
+exports.deleteWorkItemFromSection = ({ applicationContext, workItem }) => {
+  return deleteSectionInboxRecord({
     applicationContext,
-    pkId: section,
-    skId: workItemId,
-    type: 'workItem',
+    workItem,
   });
 };

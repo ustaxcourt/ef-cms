@@ -1,6 +1,11 @@
 import { runCompute } from 'cerebral/test';
 
-import { documentDetailHelper } from './documentDetailHelper';
+import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
+import { withAppContextDecorator } from '../../../src/withAppContext';
+
+const documentDetailHelper = withAppContextDecorator(
+  documentDetailHelperComputed,
+);
 
 describe('formatted work queue computed', () => {
   it('formats the workitems', () => {
@@ -8,7 +13,7 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           documents: [],
-          status: 'General Docket',
+          status: 'General Docket - Not at Issue',
         },
         documentId: 'abc',
         workItemActions: {
@@ -24,7 +29,7 @@ describe('formatted work queue computed', () => {
       state: {
         caseDetail: {
           documents: [],
-          status: 'General Docket',
+          status: 'General Docket - Not at Issue',
         },
         documentId: 'abc',
         workItemActions: {
@@ -120,7 +125,7 @@ describe('formatted work queue computed', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'General Docket',
+            status: 'General Docket - Not at Issue',
           },
           documentId: 'abc',
           workItemActions: {

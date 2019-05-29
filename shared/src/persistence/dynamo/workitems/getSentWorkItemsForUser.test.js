@@ -68,7 +68,7 @@ describe('getSentWorkItemsForUser', () => {
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
-        ':pk': 'docketclerk|outbox',
+        ':pk': 'user-outbox-docketclerk',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
       applicationContext: { environment: { stage: 'dev' } },

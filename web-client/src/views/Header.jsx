@@ -19,7 +19,18 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/">Messages</a>
+          <a href="/">
+            Messages{' '}
+            {helper.showMessagesIcon && (
+              <FontAwesomeIcon
+                icon={['fas', 'envelope']}
+                className="iconStatusUnread"
+                aria-label="unread message"
+                size="sm"
+                aria-hidden="false"
+              />
+            )}
+          </a>
         </li>
       )}
       {helper.showDocumentQC && (
@@ -73,101 +84,119 @@ export const Header = connect(
       <>
         {betaBar.isVisible && (
           <div className="beta">
-            <div className="usa-grid">
-              <div className="usa-width-five-sixths">
-                This is a testing site for the U.S. Tax Court and not intended
-                public use. To learn more about starting a case, visit the{' '}
-                <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>
-                .
-              </div>
-              <div className="usa-width-one-sixth">
-                <button
-                  className="usa-button usa-button-outline usa-button-unstyled"
-                  onClick={() => toggleBetaBarSequence()}
-                >
-                  <img src={close} alt="close" />
-                </button>
+            <div className="grid-container">
+              <div className="grid-row">
+                <div className="grid-col-10">
+                  This is a testing site for the U.S. Tax Court and not intended
+                  for public use. To learn more about starting a case, visit the{' '}
+                  <a href="https://www.ustaxcourt.gov/">
+                    U.S. Tax Court website
+                  </a>
+                  .
+                </div>
+                <div className="grid-col-2">
+                  <button
+                    className="button-icon float-right usa-button usa-button--unstyled"
+                    onClick={() => toggleBetaBarSequence()}
+                  >
+                    <img src={close} alt="close" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
-        <header className="usa-header usa-header-extended" role="banner">
-          <div className="usa-navbar">
+
+        <header
+          className="usa-header usa-header-extended grid-container"
+          role="banner"
+        >
+          <div className="grid-col-1">
             <div className="usa-logo" id="extended-logo">
               <a href="/">
                 <img src={seal} alt="USTC Seal" />
               </a>
             </div>
+          </div>
+          <div className="grid-col-5">
+            <nav role="navigation" className="main-navigation">
+              {user && NavigationItems(helper)}
+            </nav>
+          </div>
+          <div className="grid-col-6">
             <button
               className="usa-menu-btn"
               onClick={() => toggleMobileMenuSequence()}
             >
               Menu
             </button>
-          </div>
-
-          <nav
-            role="navigation"
-            className={
-              mobileMenu.isVisible
-                ? 'usa-nav mobile-menu is-visible'
-                : 'usa-nav'
-            }
-          >
-            <div className="usa-nav-inner">
-              <button
-                className="usa-nav-close"
-                onClick={() => toggleMobileMenuSequence()}
-              >
-                Close{' '}
-                <FontAwesomeIcon
-                  icon={['fa', 'times-circle']}
-                  className="account-menu-icon"
-                />
-              </button>
-              <div className="usa-nav-primary">{NavigationItems(helper)}</div>
-              {user && (
-                <div className="usa-nav-secondary">
-                  <ul className="usa-unstyled-list usa-nav-secondary-links">
+            <nav
+              role="navigation"
+              className={
+                mobileMenu.isVisible
+                  ? 'usa-nav mobile-menu is-visible'
+                  : 'usa-nav'
+              }
+            >
+              <div className="usa-nav-inner">
+                <button
+                  className="usa-nav-close"
+                  onClick={() => toggleMobileMenuSequence()}
+                >
+                  Close{' '}
+                  <FontAwesomeIcon
+                    icon={['fa', 'times-circle']}
+                    className="account-menu-icon"
+                  />
+                </button>
+                <div className="header-search-container">
+                  <ul className="usa-unstyled-list">
                     {helper.showSearchInHeader && (
                       <li role="search" className="usa-search">
                         <SearchBox />
+                        {user && user.userId && (
+                          <div className="mobile-account-menu-container">
+                            {NavigationItems(helper)}
+                          </div>
+                        )}
                       </li>
                     )}
-                    {user.userId && (
+                    {user && user.userId && (
                       <li className="user-dropdown">
                         <AccountMenu />
                       </li>
                     )}
                   </ul>
-                  {mobileMenu.isVisible && user.userId && (
-                    <AccountMenuItems signOut={signOutSequence} />
-                  )}
+                  <div className="account-menu-items">
+                    {mobileMenu.isVisible && user && user.userId && (
+                      <AccountMenuItems signOut={signOutSequence} />
+                    )}
+                  </div>
                 </div>
-              )}
-              {!user && (
-                <div className="usa-nav-secondary">
-                  <ul className="usa-unstyled-list usa-nav-secondary-links">
-                    <li>
-                      <button
-                        title="Login"
-                        type="button"
-                        className="button-account-login"
-                        aria-label="login"
-                        onClick={() => loginSequence()}
-                      >
-                        <FontAwesomeIcon
-                          icon={['far', 'user']}
-                          className="account-menu-icon user-icon"
-                        />{' '}
-                        Log In
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          </nav>
+                {!user && (
+                  <div className="">
+                    <ul className="usa-unstyled-list">
+                      <li>
+                        <button
+                          title="Login"
+                          type="button"
+                          className="button-account-login"
+                          aria-label="login"
+                          onClick={() => loginSequence()}
+                        >
+                          <FontAwesomeIcon
+                            icon={['far', 'user']}
+                            className="account-menu-icon user-icon"
+                          />{' '}
+                          Log In
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
         </header>
       </>
     );

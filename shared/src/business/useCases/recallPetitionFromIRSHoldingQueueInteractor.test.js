@@ -3,6 +3,7 @@ const {
   recallPetitionFromIRSHoldingQueue,
 } = require('./recallPetitionFromIRSHoldingQueueInteractor');
 const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
 const { getCase } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
@@ -20,7 +21,7 @@ const MOCK_WORK_ITEMS = [
     document: {
       createdAt: '2018-12-27T18:06:02.968Z',
       documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-      documentType: Case.documentTypes.petitionFile,
+      documentType: Document.initialDocumentTypes.petitionFile,
     },
     isInitializeCase: true,
     messages: [
