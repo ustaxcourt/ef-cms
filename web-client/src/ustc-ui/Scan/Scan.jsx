@@ -13,30 +13,34 @@ class ScanComponent extends React.Component {
     this.props.scannerShutdown();
   }
   render() {
-    const { isScanning, onDoneClicked, onScanClicked } = this.props;
+    const { isScanning, scanHelper, onDoneClicked, onScanClicked } = this.props;
     return (
       <>
-        <button
-          className="usa-button"
-          type="buttom"
-          onClick={e => {
-            e.preventDefault();
-            onScanClicked();
-          }}
-        >
-          {isScanning ? 'Scan More' : 'Scan'}
-        </button>
-        {isScanning && (
-          <button
-            className="usa-button"
-            type="buttom"
-            onClick={e => {
-              e.preventDefault();
-              onDoneClicked();
-            }}
-          >
-            Complete Scan
-          </button>
+        {scanHelper.hasLoadedScanDependencies && (
+          <>
+            <button
+              className="usa-button"
+              type="buttom"
+              onClick={e => {
+                e.preventDefault();
+                onScanClicked();
+              }}
+            >
+              {isScanning ? 'Scan More' : 'Scan'}
+            </button>
+            {isScanning && (
+              <button
+                className="usa-button"
+                type="buttom"
+                onClick={e => {
+                  e.preventDefault();
+                  onDoneClicked();
+                }}
+              >
+                Complete Scan
+              </button>
+            )}
+          </>
         )}
       </>
     );
@@ -47,6 +51,7 @@ ScanComponent.propTypes = {
   isScanning: PropTypes.bool,
   onDoneClicked: PropTypes.func,
   onScanClicked: PropTypes.func,
+  scanHelper: PropTypes.object,
   scannerShutdown: PropTypes.func,
   scannerStartup: PropTypes.func,
 };
@@ -54,6 +59,7 @@ ScanComponent.propTypes = {
 export const Scan = connect(
   {
     isScanning: state.isScanning,
+    scanHelper: state.scanHelper,
     scannerShutdown: sequences.scannerShutdownSequence,
     scannerStartup: sequences.scannerStartupSequence,
   },

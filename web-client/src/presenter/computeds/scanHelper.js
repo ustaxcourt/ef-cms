@@ -1,17 +1,13 @@
 import { state } from 'cerebral';
 
 export const scanHelper = get => {
+  const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
   const user = get(state.user);
-  let hasScanFeature = false;
-
-  if (user && user.role) {
-    const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
-    if (user && user.role && internalRoles.includes(user.role)) {
-      hasScanFeature = true;
-    }
-  }
+  const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
+  const configScriptLoaded = get(state.scanner.configScriptLoaded);
 
   return {
-    hasScanFeature,
+    hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
+    hasScanFeature: !!(user && user.role && internalRoles.includes(user.role)),
   };
 };
