@@ -25,7 +25,6 @@ export const scannerStartupAction = ({ applicationContext, store }) => {
 
   // Set some state when the scripts are loaded
   script1.onload = function() {
-    console.log('onload called!');
     store.set(state.scanner.initiateScriptLoaded, true);
   };
 
