@@ -1,22 +1,23 @@
-const client = require('../../dynamodbClientService');
+const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
+const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 
 exports.putWorkItemInOutbox = async ({ workItem, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
   const createdAt = new Date().toISOString();
-  await client.put({
-    Item: {
-      pk: `${user.userId}|outbox`,
-      sk: createdAt,
-      ...workItem,
-    },
+  await createUserOutboxRecord({
     applicationContext,
+    userId: user.userId,
+    workItem: {
+      ...workItem,
+      createdAt,
+    },
   });
-  await client.put({
-    Item: {
-      pk: `${user.section}|outbox`,
-      sk: createdAt,
-      ...workItem,
-    },
+  await createSectionOutboxRecord({
     applicationContext,
+    section: user.section,
+    workItem: {
+      ...workItem,
+      createdAt,
+    },
   });
 };

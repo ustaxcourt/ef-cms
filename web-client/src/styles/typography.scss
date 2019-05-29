@@ -82,27 +82,22 @@ h5,
 h6 {
   &.underlined {
     padding-bottom: 1rem;
-    border-bottom: 1px solid $color-gray-lighter;
+    border-bottom: 1px solid color($theme-color-base-lighter);
   }
 }
 
-#main-content {
+#main-content,
+#modal-root {
   h1[tabIndex='-1'],
   h2[tabIndex='-1'],
   h3[tabIndex='-1'],
   h4[tabIndex='-1'],
   h5[tabIndex='-1'],
-  h6[tabIndex='-1']:focus {
-    outline: none;
+  h6[tabIndex='-1'] {
+    &:focus {
+      outline: none;
+    }
   }
-}
-
-p {
-  max-width: 700px;
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-weight: $font-regular;
-  line-height: 1.45em;
 }
 
 p.lead {
@@ -121,4 +116,12 @@ p.semi-bold {
   &.label {
     margin-bottom: 5px;
   }
+}
+
+a {
+  color: color($theme-color-primary);
+}
+
+a:hover {
+  color: color($theme-color-primary-darker);
 }

@@ -27,8 +27,7 @@
   position: relative;
   display: block;
   min-height: 145px;
-  padding: 13px 30px 10px 20px;
-  border-top: 10px solid $color-gold;
+  border-top: 10px solid color($theme-color-warning);
   margin: auto;
   background: $color-white;
 
@@ -46,46 +45,31 @@
     left: 0;
     overflow: auto;
     height: 100%;
-  }
 
-  .modal-header {
-    margin-bottom: 0.75em;
-
-    h3 {
-      display: inline;
+    button {
+      margin-bottom: 20px;
     }
   }
 
-  .modal-close-button {
-    margin-right: -10px;
-    float: right;
-    text-align: right;
-
-    svg {
-      margin-right: 0;
-    }
-  }
-
-  .usa-button,
-  .usa-button-secondary {
-    min-width: 150px;
+  .svg-inline--fa {
+    margin-right: 0;
   }
 }
 
 .app-timeout-modal {
   > .modal-header,
-  .usa-button-secondary {
+  .usa-button--outline {
     display: none;
   }
   padding: 60px 0;
-  background-color: $color-gold;
+  background-color: color($theme-color-warning);
   font-size: 30px;
   text-align: center;
 }
 
 .file-upload-status-modal {
   > .modal-header,
-  .button-container {
+  .button-box-container {
     display: none;
   }
 
@@ -111,7 +95,7 @@
 
   .progress-bar-fill {
     height: 100%;
-    background: $color-green-light;
+    background: $color-green;
     border-radius: 5px;
   }
 
@@ -123,9 +107,11 @@
     }
   }
 
+  width: 620px;
+  max-width: 100%;
   padding: 60px 0;
   border-top: none;
-  background-color: $color-primary;
+  background-color: color($theme-color-primary);
   color: $color-white;
   font-family: $font-source-sans;
   font-size: 30px;
@@ -138,7 +124,7 @@
   }
 
   .uhoh {
-    color: $color-base;
+    color: color($theme-color-base-darkest);
     font-size: 48px;
     font-weight: $font-semibold;
   }
@@ -146,19 +132,31 @@
   .message {
     width: 80%;
     margin: auto;
-    color: $color-base;
+    color: color($theme-color-base-darkest);
     font-size: 30px;
     font-weight: $font-semibold;
   }
 
-  button.usa-button-secondary {
-    background-color: $color-primary;
+  button.usa-button--outline {
+    background-color: color($theme-color-primary);
     color: $color-white;
   }
 
   padding: 60px 0;
-  background-color: $color-gold;
-  color: $color-base;
+  background-color: color($theme-color-warning);
+  color: color($theme-color-base-darkest);
   font-size: 30px;
   text-align: center;
+}
+
+.mobile-document-details-overlay {
+  .usa-button.heading-2.usa-button--unstyled {
+    color: color($theme-color-base-darkest);
+    text-decoration: none;
+
+    svg {
+      margin-right: 15px;
+      font-size: 20px;
+    }
+  }
 }

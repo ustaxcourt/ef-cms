@@ -1,6 +1,11 @@
 const client = require('../../dynamodbClientService');
+const {
+  updateWorkItemCaseStatus,
+} = require('../workitems/updateWorkItemCaseStatus');
+const {
+  updateWorkItemDocketNumberSuffix,
+} = require('../workitems/updateWorkItemDocketNumberSuffix');
 const { saveVersionedCase } = require('./saveCase');
-
 /**
  * createWorkItem
  *
@@ -36,21 +41,17 @@ exports.updateCase = async ({ caseToUpdate, applicationContext }) => {
     });
     for (let mapping of workItemMappings) {
       requests.push(
-        client.update({
-          ExpressionAttributeNames: {
-            '#caseStatus': 'caseStatus',
-            '#docketNumberSuffix': 'docketNumberSuffix',
-          },
-          ExpressionAttributeValues: {
-            ':caseStatus': caseToUpdate.status,
-            ':docketNumberSuffix': caseToUpdate.docketNumberSuffix,
-          },
-          Key: {
-            pk: mapping.sk,
-            sk: mapping.sk,
-          },
-          UpdateExpression: `SET #caseStatus = :caseStatus, #docketNumberSuffix = :docketNumberSuffix`,
+        updateWorkItemCaseStatus({
           applicationContext,
+          caseStatus: caseToUpdate.status,
+          workItemId: mapping.sk,
+        }),
+      );
+      requests.push(
+        updateWorkItemDocketNumberSuffix({
+          applicationContext,
+          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+          workItemId: mapping.sk,
         }),
       );
     }

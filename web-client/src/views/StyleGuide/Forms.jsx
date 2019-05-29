@@ -1,468 +1,422 @@
 import React from 'react';
 
 export const Forms = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <h1>Forms</h1>
     <hr />
-    <form>
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="input-text">Text input</label>
-          <input id="input-text" type="text" />
+    <form className="usa-form usa-form--large">
+      <div className="blue-container margin-bottom-4">
+        <div className="usa-form-group">
+          <label htmlFor="input-text" className="usa-label">
+            Text input
+          </label>
+          <input id="input-text" className="usa-input" type="text" />
         </div>
-      </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label className="with-hint" htmlFor="input-text-hint">
+        <div className="usa-form-group">
+          <label className="usa-label with-hint" htmlFor="input-text-hint">
             Text input with hint text
           </label>
-          <span className="usa-form-hint">This is your hint!</span>
-          <input id="input-text-hint" type="text" />
+          <span className="usa-hint">This is your hint!</span>
+          <input id="input-text-hint" className="usa-input" type="text" />
         </div>
-        <div className="ustc-form-group">
-          <label htmlFor="input-text-optional">
-            Text input <span className="usa-form-hint">(optional)</span>
+
+        <div className="usa-form-group">
+          <label htmlFor="input-text-optional" className="usa-label">
+            Text input <span className="usa-hint">(optional)</span>
           </label>
-          <input id="input-text-optional" type="text" />
+          <input id="input-text-optional" className="usa-input" type="text" />
         </div>
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="input-text-error">Text input with error</label>
-          <input id="input-text-error" type="text" />
-          <span className="usa-input-error-message">Error message</span>
-        </div>
-      </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="input-email">Email input</label>
-          <input id="input-email" type="email" />
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="input-text-error" className="usa-label">
+            Text input with error
+          </label>
+          <input
+            id="input-text-error"
+            className="usa-input usa-input--error"
+            type="text"
+          />
+          <span className="usa-error-message">Error message</span>
         </div>
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="input-email-error">Email input with error</label>
-          <input id="input-email-error" type="email" />
-          <span className="usa-input-error-message">Error message</span>
-        </div>
-        <div className="ustc-form-group">
-          <label htmlFor="input-number">Number input</label>
-          <input id="input-number" type="number" />
-        </div>
-      </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="input-number-error">Number input with error</label>
-          <input id="input-number-error" type="number" />
-          <span className="usa-input-error-message">Error message</span>
+        <div className="usa-form-group">
+          <label htmlFor="input-email" className="usa-label">
+            Email input
+          </label>
+          <input id="input-email" className="usa-input" type="email" />
         </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="input-tel">Phone input</label>
-          <input id="input-tel" type="tel" />
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="input-email-error" className="usa-label">
+            Email input with error
+          </label>
+          <input
+            id="input-email-error"
+            className="usa-input usa-input--error"
+            type="email"
+          />
+          <span className="usa-error-message">Error message</span>
         </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="input-tel-error">Phone input with error</label>
-          <input id="input-tel-error" type="tel" />
-          <span className="usa-input-error-message">Error message</span>
+        <div className="usa-form-group">
+          <label htmlFor="input-number" className="usa-label">
+            Number input
+          </label>
+          <input id="input-number" className="usa-input" type="number" />
         </div>
-      </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="input-file">File input</label>
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="input-number-error" className="usa-label">
+            Number input with error
+          </label>
+          <input
+            id="input-number-error"
+            className="usa-input usa-input--error"
+            type="number"
+          />
+          <span className="usa-error-message">Error message</span>
+        </div>
+
+        <div className="usa-form-group">
+          <label htmlFor="input-tel" className="usa-label">
+            Phone input
+          </label>
+          <input id="input-tel" className="usa-input" type="tel" />
+        </div>
+
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="input-tel-error" className="usa-label">
+            Phone input with error
+          </label>
+          <input
+            id="input-tel-error"
+            className="usa-input usa-input--error"
+            type="tel"
+          />
+          <span className="usa-error-message">Error message</span>
+        </div>
+
+        <div className="usa-form-group">
+          <label htmlFor="input-file" className="usa-label">
+            File input
+          </label>
           <input id="input-file" type="file" />
         </div>
-      </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="input-file-error">File input with error</label>
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="input-file-error" className="usa-label">
+            File input with error
+          </label>
           <input id="input-file-error" type="file" />
-          <span className="usa-input-error-message">Error message</span>
+          <span className="usa-error-message">Error message</span>
         </div>
-      </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="options">Dropdown label</label>
-          <select id="options">
+        <div className="usa-form-group">
+          <label htmlFor="options" className="usa-label">
+            Dropdown label
+          </label>
+          <select className="usa-select" id="options">
             <option value>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
           </select>
         </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="options-error">Dropdown label with error</label>
-          <select id="options-error">
+        <div className="usa-form-group">
+          <label htmlFor="options-disabled" className="usa-label">
+            Dropdown label (disabled)
+          </label>
+          <select className="usa-select" id="options-disabled" disabled>
             <option value>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
           </select>
-          <span className="usa-input-error-message">Error message</span>
         </div>
+
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="options-error" className="usa-label">
+            Dropdown label with error
+          </label>
+          <select className="usa-select usa-select--error" id="options-error">
+            <option value>- Select -</option>
+            <option value="value1">Option A</option>
+            <option value="value2">Option B</option>
+            <option value="value3">Option C</option>
+          </select>
+          <span className="usa-error-message">Error message</span>
+        </div>
+
+        <div className="usa-form-group">
+          <label htmlFor="textarea" className="usa-label">
+            Text Area
+          </label>
+          <textarea id="textarea" className="usa-textarea" />
+        </div>
+
+        <div className="usa-form-group usa-form-group--error">
+          <label htmlFor="textarea-error" className="usa-label">
+            Text Area with error
+          </label>
+          <textarea
+            id="textarea-error"
+            className="usa-textarea usa-textarea--error"
+          />
+          <span className="usa-error-message">Error message</span>
+        </div>
+
+        <fieldset className="usa-fieldset">
+          <legend className="usa-legend">Checkboxes</legend>
+          <div className="usa-checkbox">
+            <input
+              className="usa-checkbox__input"
+              id="truth"
+              type="checkbox"
+              name="historical-figures-1"
+              value="truth"
+            />
+            <label htmlFor="truth" className="usa-checkbox__label">
+              Sojourner Truth
+            </label>
+          </div>
+          <div className="usa-checkbox">
+            <input
+              className="usa-checkbox__input"
+              id="douglass"
+              type="checkbox"
+              name="historical-figures-1"
+              value="douglass"
+            />
+            <label htmlFor="douglass" className="usa-checkbox__label">
+              Frederick Douglass
+            </label>
+          </div>
+          <div className="usa-checkbox">
+            <input
+              className="usa-checkbox__input"
+              id="washington"
+              type="checkbox"
+              name="historical-figures-1"
+              value="washington"
+            />
+            <label htmlFor="washington" className="usa-checkbox__label">
+              Booker T. Washington
+            </label>
+          </div>
+          <div className="usa-checkbox">
+            <input
+              className="usa-checkbox__input"
+              id="carver"
+              type="checkbox"
+              name="historical-figures-1"
+              disabled
+            />
+            <label htmlFor="carver" className="usa-checkbox__label">
+              George Washington Carver
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset className="usa-fieldset">
+          <legend className="usa-legend">Radio Buttons</legend>
+          <div className="usa-radio">
+            <input
+              className="usa-radio__input"
+              id="stanton"
+              type="radio"
+              defaultChecked
+              name="historical-figures-2"
+              value="stanton"
+            />
+            <label className="usa-radio__label" htmlFor="stanton">
+              Elizabeth Cady Stanton
+            </label>
+          </div>
+          <div className="usa-radio">
+            <input
+              className="usa-radio__input"
+              id="anthony"
+              type="radio"
+              name="historical-figures-2"
+              value="anthony"
+            />
+            <label className="usa-radio__label" htmlFor="anthony">
+              Susan B. Anthony
+            </label>
+          </div>
+          <div className="usa-radio">
+            <input
+              className="usa-radio__input"
+              id="tubman"
+              type="radio"
+              name="historical-figures-2"
+              value="tubman"
+            />
+            <label className="usa-radio__label" htmlFor="tubman">
+              Harriet Tubman
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset className="usa-fieldset margin-bottom-0">
+          <legend className="usa-legend">Inline Radio Buttons</legend>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="fieri"
+              type="radio"
+              defaultChecked
+              name="celebrity-chefs-2"
+              value="fieri"
+            />
+            <label className="usa-radio__label" htmlFor="fieri">
+              Guy Fieri
+            </label>
+          </div>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="flay"
+              type="radio"
+              name="celebrity-chefs-2"
+              value="flay"
+            />
+            <label className="usa-radio__label" htmlFor="flay">
+              Bobby Flay
+            </label>
+          </div>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              className="usa-radio__input"
+              id="ramsay"
+              type="radio"
+              name="celebrity-chefs-2"
+              value="ramsay"
+            />
+            <label className="usa-radio__label" htmlFor="ramsay">
+              Gordon Ramsay
+            </label>
+          </div>
+        </fieldset>
       </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <label htmlFor="textarea">Text Area</label>
-          <textarea id="textarea" />
-        </div>
-      </div>
+      <div className="blue-container margin-bottom-4">
+        <fieldset className="usa-fieldset margin-bottom-0">
+          <legend className="usa-legend">Date of birth</legend>
+          <div className="usa-memorable-date">
+            <div className="usa-form-group usa-form-group--month">
+              <label className="usa-label" htmlFor="date_of_birth_1">
+                Month
+              </label>
+              <input
+                className="usa-input usa-input--inline"
+                aria-describedby="dobHint"
+                id="date_of_birth_1"
+                name="date_of_birth_1"
+                type="number"
+                min="1"
+                max="12"
+                defaultValue=""
+              />
+            </div>
+            <div className="usa-form-group usa-form-group--day">
+              <label className="usa-label" htmlFor="date_of_birth_2">
+                Day
+              </label>
+              <input
+                className="usa-input usa-input--inline"
+                aria-describedby="dobHint"
+                id="date_of_birth_2"
+                name="date_of_birth_2"
+                type="number"
+                min="1"
+                max="31"
+                defaultValue=""
+              />
+            </div>
+            <div className="usa-form-group usa-form-group--year">
+              <label className="usa-label" htmlFor="date_of_birth_3">
+                Year
+              </label>
+              <input
+                className="usa-input usa-input--inline"
+                aria-describedby="dobHint"
+                id="date_of_birth_3"
+                name="date_of_birth_3"
+                type="number"
+                min="1900"
+                max="2000"
+                defaultValue=""
+              />
+            </div>
+          </div>
+        </fieldset>
 
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <label htmlFor="textarea-error">Text Area with error</label>
-          <textarea id="textarea-error" />
-          <span className="usa-input-error-message">Error message</span>
-        </div>
-      </div>
+        <fieldset className="usa-fieldset margin-bottom-0">
+          <legend className="usa-legend sr-only">Mailing address</legend>
+          <div className="usa-form-group">
+            <label className="usa-label" htmlFor="mailing-address-1">
+              Mailing Address 1
+            </label>
+            <input
+              className="usa-input"
+              id="mailing-address-1"
+              name="mailing-address-1"
+              type="text"
+            />
+          </div>
+          <div className="usa-form-group">
+            <label className="usa-label" htmlFor="mailing-address-2">
+              Mailing Address 2 <span className="usa-hint">(optional)</span>
+            </label>
+            <input
+              className="usa-input"
+              id="mailing-address-2"
+              name="mailing-address-2"
+              type="text"
+            />
+          </div>
 
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Checkboxes vertical</legend>
-            <ul className="ustc-vertical-option-list">
-              <li>
-                <input
-                  id="truth"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  value="truth"
-                />
-                <label htmlFor="truth">Sojourner Truth</label>
-              </li>
-              <li>
-                <input
-                  id="douglass"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  value="douglass"
-                />
-                <label htmlFor="douglass">Frederick Douglass</label>
-              </li>
-              <li>
-                <input
-                  id="washington"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  value="washington"
-                />
-                <label htmlFor="washington">Booker T. Washington</label>
-              </li>
-              <li>
-                <input
-                  id="carver"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  disabled
-                />
-                <label htmlFor="carver">George Washington Carver</label>
-              </li>
-            </ul>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Checkboxes horizontal</legend>
-            <ul className="usa-unstyled-list">
-              <li>
-                <input
-                  id="truth-horizontal"
-                  type="checkbox"
-                  name="historical-figures-1-horizontal"
-                  value="truth"
-                />
-                <label htmlFor="truth-horizontal">Sojourner Truth</label>
-              </li>
-              <li>
-                <input
-                  id="douglass-horizontal"
-                  type="checkbox"
-                  name="historical-figures-1-horizontal"
-                  value="douglass"
-                />
-                <label htmlFor="douglass">Frederick Douglass</label>
-              </li>
-              <li>
-                <input
-                  id="washington-horizontal"
-                  type="checkbox"
-                  name="historical-figures-1-horizontal"
-                  value="washington"
-                />
-                <label htmlFor="washington-horizontal">
-                  Booker T. Washington
+          <div className="grid-row grid-gap">
+            <div className="mobile-lg:grid-col-8">
+              <div className="usa-form-group">
+                <label className="usa-label" htmlFor="city">
+                  City
                 </label>
-              </li>
-              <li>
                 <input
-                  id="carver-horizontal"
-                  type="checkbox"
-                  name="historical-figures-1-horizontal"
-                  disabled
-                />
-                <label htmlFor="carver-horizontal">
-                  George Washington Carver
-                </label>
-              </li>
-            </ul>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Checkboxes with error</legend>
-            <ul className="ustc-vertical-option-list">
-              <li>
-                <input
-                  id="truth-error"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  value="truth"
-                />
-                <label htmlFor="truth-error">Sojourner Truth</label>
-              </li>
-              <li>
-                <input
-                  id="douglass-error"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  value="douglass"
-                />
-                <label htmlFor="douglass-error">Frederick Douglass</label>
-              </li>
-              <li>
-                <input
-                  id="washington"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  value="washington"
-                />
-                <label htmlFor="washington">Booker T. Washington</label>
-              </li>
-              <li>
-                <input
-                  id="carver-error"
-                  type="checkbox"
-                  name="historical-figures-1"
-                  disabled
-                />
-                <label htmlFor="carver-error">George Washington Carver</label>
-              </li>
-            </ul>
-            <span className="usa-input-error-message">Error message</span>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Radio buttons vertical</legend>
-            <ul className="ustc-vertical-option-list">
-              <li>
-                <input
-                  id="stanton"
-                  type="radio"
-                  name="historical-figures-2"
-                  value="stanton"
-                />
-                <label htmlFor="stanton-error">Elizabeth Cady Stanton</label>
-              </li>
-              <li>
-                <input
-                  id="anthony"
-                  type="radio"
-                  name="historical-figures-2"
-                  value="anthony"
-                />
-                <label htmlFor="anthony-error">Susan B. Anthony</label>
-              </li>
-              <li>
-                <input
-                  id="tubman"
-                  type="radio"
-                  name="historical-figures-2"
-                  value="tubman"
-                />
-                <label htmlFor="tubman-error">Harriet Tubman</label>
-              </li>
-            </ul>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Radio buttons horizontal</legend>
-            <ul className="usa-unstyled-list">
-              <li>
-                <input
-                  id="stanton-horizontal"
-                  type="radio"
-                  name="historical-figures-2-horizontal"
-                  value="stanton"
-                />
-                <label htmlFor="stanton-horizontal">
-                  Elizabeth Cady Stanton
-                </label>
-              </li>
-              <li>
-                <input
-                  id="anthony-horizontal"
-                  type="radio"
-                  name="historical-figures-2-horizontal"
-                  value="anthony"
-                />
-                <label htmlFor="anthony-horizontal">Susan B. Anthony</label>
-              </li>
-              <li>
-                <input
-                  id="tubman-horizontal"
-                  type="radio"
-                  name="historical-figures-2-horizontal"
-                  value="tubman"
-                />
-                <label htmlFor="tubman-horizontal">Harriet Tubman</label>
-              </li>
-            </ul>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <fieldset className="usa-fieldset-inputs usa-sans">
-            <legend>Radio buttons with error</legend>
-            <ul className="ustc-vertical-option-list">
-              <li>
-                <input
-                  id="stanton-error"
-                  type="radio"
-                  name="historical-figures-2"
-                  value="stanton"
-                />
-                <label htmlFor="stanton-error">Elizabeth Cady Stanton</label>
-              </li>
-              <li>
-                <input
-                  id="anthony-error"
-                  type="radio"
-                  name="historical-figures-2"
-                  value="anthony"
-                />
-                <label htmlFor="anthony-error">Susan B. Anthony</label>
-              </li>
-              <li>
-                <input
-                  id="tubman-error"
-                  type="radio"
-                  name="historical-figures-2"
-                  value="tubman"
-                />
-                <label htmlFor="tubman-error">Harriet Tubman</label>
-              </li>
-            </ul>
-            <span className="usa-input-error-message">Error message</span>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group">
-          <fieldset>
-            <legend>Date</legend>
-            <div className="usa-date-of-birth">
-              <div className="usa-form-group usa-form-group-month">
-                <label htmlFor="date_of_birth_1">MM</label>
-                <input
-                  className="usa-input-inline"
-                  id="date_of_birth_1"
-                  type="number"
-                  min="1"
-                  max="12"
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-day">
-                <label htmlFor="date_of_birth_2">DD</label>
-                <input
-                  className="usa-input-inline"
-                  id="date_of_birth_2"
-                  type="number"
-                  min="1"
-                  max="31"
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-year">
-                <label htmlFor="date_of_birth_3">YYYY</label>
-                <input
-                  className="usa-input-inline"
-                  id="date_of_birth_3"
-                  type="number"
-                  min="1900"
-                  max="2000"
+                  className="usa-input"
+                  id="city"
+                  name="city"
+                  type="text"
                 />
               </div>
             </div>
-          </fieldset>
-        </div>
-      </div>
-
-      <div className="blue-container">
-        <div className="ustc-form-group usa-input-error">
-          <fieldset>
-            <legend>Date with error</legend>
-            <div className="usa-date-of-birth">
-              <div className="usa-form-group usa-form-group-month">
-                <label htmlFor="date_of_birth_1-error">MM</label>
-                <input
-                  className="usa-input-inline"
-                  id="date_of_birth_1-error"
-                  type="number"
-                  min="1"
-                  max="12"
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-day">
-                <label htmlFor="date_of_birth_2-error">DD</label>
-                <input
-                  className="usa-input-inline"
-                  id="date_of_birth_2-error"
-                  type="number"
-                  min="1"
-                  max="31"
-                />
-              </div>
-              <div className="usa-form-group usa-form-group-year">
-                <label htmlFor="date_of_birth_3-error">YYYY</label>
-                <input
-                  className="usa-input-inline"
-                  id="date_of_birth_3-error"
-                  type="number"
-                  min="1900"
-                  max="2000"
-                />
+            <div className="mobile-lg:grid-col-4">
+              <div className="usa-form-group">
+                <label className="usa-label" htmlFor="state">
+                  State
+                </label>
+                <select className="usa-select" id="state" name="state">
+                  <option value>- Select -</option>
+                  <option value="AL">Alabama</option>
+                  <option value="AK">Alaska</option>
+                </select>
               </div>
             </div>
-            <span className="usa-input-error-message">Error message</span>
-          </fieldset>
-        </div>
+          </div>
+
+          <div className="usa-form-group margin-bottom-0">
+            <label className="usa-label" htmlFor="zip">
+              ZIP
+            </label>
+            <input
+              className="usa-input usa-input--medium"
+              id="zip"
+              name="zip"
+              type="text"
+              pattern="[\d]{5}(-[\d]{4})?"
+            />
+          </div>
+        </fieldset>
       </div>
     </form>
   </section>

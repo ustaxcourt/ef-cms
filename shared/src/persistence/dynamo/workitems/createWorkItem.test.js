@@ -22,6 +22,7 @@ describe('createWorkItem', () => {
 
     getCurrentUserStub = sinon.stub().returns({
       section: 'docket',
+      userId: '123',
     });
 
     applicationContext = {
@@ -43,15 +44,15 @@ describe('createWorkItem', () => {
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
         caseId: '123',
-        pk: 'a_id',
-        sk: 'a_id',
+        pk: 'workitem-a_id',
+        sk: 'workitem-a_id',
         workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
     });
   });
 
-  it('creates a record for the individual inbox', async () => {
+  it('creates a mapping record between case and work item', async () => {
     await createWorkItem({
       applicationContext,
       workItem,
@@ -65,16 +66,30 @@ describe('createWorkItem', () => {
     });
   });
 
-  it('creates a record for the individual outbox', async () => {
+  it('creates a record for the individual inbox', async () => {
     await createWorkItem({
       applicationContext,
       workItem,
     });
     expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
-        pk: 'a_user|outbox',
-        sk: '100',
+        pk: 'user-123',
+        sk: 'workitem-a_id',
         workItemId: 'a_id',
+      },
+      TableName: 'efcms-dev',
+    });
+  });
+
+  it('creates a record for the individual outbox', async () => {
+    await createWorkItem({
+      applicationContext,
+      workItem,
+    });
+    expect(putStub.getCall(3).args[0]).toMatchObject({
+      Item: {
+        pk: 'user-outbox-123',
+        sk: '100',
       },
       TableName: 'efcms-dev',
     });
@@ -85,10 +100,11 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(3).args[0]).toMatchObject({
+    expect(putStub.getCall(4).args[0]).toMatchObject({
       Item: {
-        pk: 'docket|workItem',
-        sk: 'a_id',
+        pk: 'section-docket',
+        sk: 'workitem-a_id',
+        workItemId: 'a_id',
       },
       TableName: 'efcms-dev',
     });
@@ -99,9 +115,9 @@ describe('createWorkItem', () => {
       applicationContext,
       workItem,
     });
-    expect(putStub.getCall(4).args[0]).toMatchObject({
+    expect(putStub.getCall(5).args[0]).toMatchObject({
       Item: {
-        pk: 'docket|outbox',
+        pk: 'section-outbox-docket',
         sk: '100',
         workItemId: 'a_id',
       },

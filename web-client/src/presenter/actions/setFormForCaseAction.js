@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import moment from 'moment';
 
 /**
  * sets the form's irs notice date and pay gov date based on the caseDetail provided in state.caseDetail
@@ -8,9 +7,11 @@ import moment from 'moment';
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
  * @param {Object} providers.store the cerebral store used for setting the state.form
  */
-export const setFormForCaseAction = ({ get, store }) => {
+export const setFormForCaseAction = ({ applicationContext, get, store }) => {
   const caseDetail = get(state.caseDetail);
-  const irsNoticeDate = moment.utc(caseDetail.irsNoticeDate, 'YYYY/MM/DD');
+  const irsNoticeDate = applicationContext
+    .getUtilities()
+    .prepareDateFromString(caseDetail.irsNoticeDate, 'YYYY/MM/DD');
   if (
     irsNoticeDate &&
     irsNoticeDate.toDate() instanceof Date &&
@@ -21,7 +22,9 @@ export const setFormForCaseAction = ({ get, store }) => {
     store.set(state.form.irsYear, irsNoticeDate.format('YYYY'));
   }
 
-  const receivedAt = moment.utc(caseDetail.receivedAt, 'YYYY/MM/DD');
+  const receivedAt = applicationContext
+    .getUtilities()
+    .prepareDateFromString(caseDetail.receivedAt, 'YYYY/MM/DD');
   if (
     receivedAt &&
     receivedAt.toDate() instanceof Date &&
@@ -32,7 +35,9 @@ export const setFormForCaseAction = ({ get, store }) => {
     store.set(state.form.receivedAtYear, receivedAt.format('YYYY'));
   }
 
-  const payGovDate = moment.utc(caseDetail.payGovDate, 'YYYY/MM/DD');
+  const payGovDate = applicationContext
+    .getUtilities()
+    .prepareDateFromString(caseDetail.payGovDate, 'YYYY/MM/DD');
   if (
     payGovDate &&
     payGovDate.toDate() instanceof Date &&

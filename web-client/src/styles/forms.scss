@@ -1,44 +1,121 @@
-label {
+.usa-form-group,
+.usa-fieldset {
+  max-width: 30rem;
+  margin-bottom: 30px;
+}
+
+.usa-label,
+.usa-legend,
+label,
+legend {
   max-width: 100%;
   margin: 0 0 15px;
   font-size: 17px;
   font-weight: $font-semibold;
   line-height: 1;
-  .usa-form-hint {
+  .usa-hint {
     margin: 0;
   }
-}
-
-label.with-hint,
-legend.with-hint {
-  margin-bottom: 2px;
-}
-
-label p.usa-form-hint {
-  display: block;
-}
-
-legend {
-  margin-bottom: 15px;
-  font-size: 17px;
-  font-weight: $font-semibold;
-  line-height: 1;
-  .usa-form-hint {
-    margin: 0;
+  p.usa-hint {
+    display: block;
   }
-}
-
-input[type='file'] {
-  height: auto;
+  &.with-hint {
+    margin-bottom: 5px;
+  }
 }
 
 input[type='email'],
-input[type='file'],
 input[type='number'],
 input[type='tel'],
 input[type='text'],
 textarea,
 select {
+  margin: 0;
+  &:hover:not(:disabled) {
+    border: 1px solid color($theme-color-primary);
+    box-shadow: inset 0 0 0 1px color($theme-color-primary);
+    cursor: pointer;
+  }
+
+  &::placeholder {
+    color: color($theme-color-base-dark);
+    opacity: 1;
+  }
+}
+
+.usa-error-message {
+  padding: 0;
+}
+
+.usa-select {
+  margin: 0;
+  background-image: url('/images/arrow-both-base.svg');
+  &:disabled {
+    border-color: color($theme-color-base-light);
+    background-color: color($theme-color-base-lighter);
+    color: color($theme-color-base-light);
+  }
+}
+
+.usa-checkbox__label,
+.usa-radio__label {
+  max-width: 700px;
+  margin-bottom: 0;
+  line-height: 24px;
+  &::before {
+    box-shadow: 0 0 0 1px color($theme-color-base);
+  }
+  &:hover::before {
+    box-shadow: 0 0 0 2px color($theme-color-primary);
+  }
+}
+
+.usa-checkbox,
+.usa-radio {
+  margin-bottom: 15px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.usa-checkbox__input:disabled + .usa-checkbox__label {
+  &::before {
+    box-shadow: 0 0 0 1px color($theme-color-base-lighter);
+  }
+}
+
+.usa-label:hover {
+  + .usa-hint {
+    + .usa-input:not([type='file']),
+    + .usa-textarea,
+    + .usa-select,
+    + .usa-range {
+      &:not(:disabled) {
+        border: 1px solid color($theme-color-base);
+        box-shadow: 0 0 0 0 transparent;
+      }
+    }
+  }
+  + .usa-input:not([type='file']),
+  + .usa-textarea,
+  + .usa-select,
+  + .usa-range {
+    &:not(:disabled) {
+      border: 1px solid color($theme-color-base);
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+}
+.usa-input,
+.usa-textarea,
+.usa-select,
+.usa-range {
+  border: 1px solid color($theme-color-base);
+}
+
+input[type='file'] {
+  height: auto;
+  border: 0;
   margin: 0;
 }
 
@@ -48,34 +125,12 @@ textarea.caption {
   margin-bottom: 5px;
 }
 
-input[type='email']:hover,
-input[type='email']:focus,
-input[type='number']:hover,
-input[type='number']:focus,
-input[type='tel']:hover,
-input[type='tel']:focus,
-input[type='text']:hover,
-input[type='text']:focus,
-textarea:hover,
-textarea:focus,
-select:hover,
-select:focus {
-  &:not([disabled]) {
-    border: 1px solid $color-primary;
-    box-shadow: 0 0 0 1px $color-primary;
-    transition-duration: 0.1s;
-    transition-property: all;
+div.usa-radio.usa-radio__inline {
+  display: inline;
+  .usa-radio__label {
+    padding-right: 2rem;
+    padding-left: 0;
   }
-}
-
-[type='radio']:hover + label::before,
-[type='radio']:focus + label::before {
-  box-shadow: 0 0 0 2px $color-white, 0 0 0 3px $color-primary;
-}
-
-[type='checkbox']:hover + label::before,
-[type='checkbox']:focus + label::before {
-  box-shadow: 0 0 0 1px $color-primary;
 }
 
 input[type='number']::-webkit-inner-spin-button,
@@ -100,40 +155,15 @@ input:focus::placeholder {
   }
 }
 
-.ustc-hide-radio-buttons {
-  li label {
-    padding-bottom: 10px;
-    color: $color-primary;
-    text-decoration: underline;
+div.ustc-hide-radio-button {
+  padding-bottom: 10px;
 
-    &::before {
-      display: none;
-    }
+  input {
+    display: none;
   }
-}
-
-@media only screen and (min-width: $medium-screen) {
-  .ustc-select-multi {
-    height: 300px;
-    padding: 0;
-    background: none;
-    overflow-y: auto;
-    option {
-      overflow: hidden;
-      max-width: 100%;
-      padding: 10px;
-      margin: 0;
-      font-weight: $font-semibold;
-      white-space: normal;
-      /*Altered two below to make word wrap work */
-      word-wrap: normal !important;
-      &:hover {
-        background-color: $color-gray-cool-light;
-      }
-      &:first-child {
-        font-weight: $font-semibold;
-      }
-    }
+  label {
+    color: color($theme-color-primary);
+    text-decoration: underline;
   }
 }
 
@@ -190,7 +220,7 @@ label.validated::after {
     text-align: right;
   }
 
-  button {
+  button.usa-button--unstyled {
     display: inline-block;
     margin-left: 10px;
   }
@@ -206,18 +236,18 @@ label.validated::after {
 }
 
 .ustc-form-group-city {
-  width: 25rem;
-  margin-right: 3rem;
+  width: 20rem;
   clear: none;
   float: left;
 }
 
 .ustc-form-group-state {
-  width: 18rem;
+  width: 12rem;
   clear: none;
   float: left;
-  &.usa-form-group {
-    margin-bottom: 25px;
+
+  select {
+    margin-top: 0;
   }
 }
 
@@ -232,14 +262,11 @@ label.validated::after {
   max-height: 890px;
   overflow-y: scroll;
   .phone-input {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     clear: both;
   }
   .email-input {
-    margin-bottom: 25px;
-  }
-  .usa-form-hint {
-    margin-bottom: 0;
+    margin-bottom: 30px;
   }
   .ustc-form-group-city input,
   .ustc-form-group-state select {
@@ -260,12 +287,27 @@ label.validated::after {
 }
 
 #orders-needed {
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
 .orders-needed {
   .usa-form-group {
     margin-bottom: 20px;
+  }
+}
+
+.usa-form--large {
+  @media only screen and (min-width: $medium-screen) {
+    max-width: units('desktop');
+  }
+  .contact-group {
+    input,
+    select {
+      max-width: units('mobile') + 5;
+    }
+    .grid-row.grid-gap.state-and-city {
+      max-width: units('mobile') + 7;
+    }
   }
 }
 
@@ -277,9 +319,16 @@ label.validated::after {
   width: 25rem;
 }
 
-.usa-grid-full {
-  &.ustc-secondary-question {
+.grid-container {
+  &.ustc-secondary-question,
+  .ustc-secondary-question {
     margin-top: 20px;
+
+    fieldset,
+    legend,
+    label {
+      max-width: 100%;
+    }
   }
   &.add-bottom-margin {
     margin-bottom: 20px;
@@ -294,12 +343,10 @@ label.ustc-upload {
     display: none;
     color: $color-green;
   }
-
   &.validated {
     &::after {
       display: none;
     }
-
     .success-message {
       display: inline-block;
     }
@@ -311,7 +358,7 @@ label.ustc-upload {
   @media only screen and (min-width: $medium-screen) {
     padding: 14px;
     margin: 10px;
-    background-color: $color-gray-lightest;
+    background-color: color($theme-color-base-lightest);
     button {
       min-width: 130px;
       margin-bottom: 5px;
@@ -328,10 +375,6 @@ label.ustc-upload {
       display: none;
     }
 
-    .usa-input-error.usa-input-group {
-      border-left: 4px solid $color-secondary-dark;
-    }
-
     .usa-input-group {
       border-left: 4px solid transparent;
     }
@@ -339,63 +382,54 @@ label.ustc-upload {
       width: 45px;
       background-image: none;
     }
-
-    .usa-input-error #docket-search-field-mobile {
-      width: calc(100% - 45px);
-      border-width: 1px;
-      box-shadow: 0px 0 0px 2px $color-secondary-dark;
-    }
   }
 
   min-width: 200px;
 
-  .usa-input-error-message {
-    display: none;
-  }
-
   .usa-input-group {
     margin-bottom: 10px;
-    &.usa-input-error {
-      padding-left: 9px;
-      margin-left: 6px;
-      .usa-input-error-message {
-        display: block;
-      }
-    }
   }
 }
 
 .select-react-element {
   .select-react-element__control {
-    border: 1px solid $color-gray;
+    box-sizing: border-box;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border: 1px solid color($theme-color-base);
     border-radius: 0;
-
     &:hover {
-      border: 1px solid $color-primary;
-      box-shadow: 0 0 0 1px $color-primary;
+      border: 1px solid color($theme-color-primary);
+      box-shadow: 0 0 0 1px color($theme-color-primary);
+      cursor: pointer;
     }
-
     .select-react-element__value-container {
       &:focus {
         border: none;
       }
-
       .select-react-element__input input {
-        height: 3.4rem;
         border: none;
+        margin-top: auto;
+        margin-bottom: auto;
         box-shadow: none;
       }
     }
   }
 
   .select-react-element__control--menu-is-open {
-    outline: 2px dotted $color-gray-light !important;
+    outline: 2px dotted color($theme-color-base-light) !important;
     outline-offset: 3px;
   }
 }
 
-.usa-input-error .select-react-element {
-  width: calc(100% + 1.9rem);
+.date-received,
+.service-date {
+  .usa-form-group {
+    margin-bottom: 0px;
+    input[type='number'] {
+      margin-bottom: 5px;
+    }
+  }
 }
 
 .docket-entry-form {

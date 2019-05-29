@@ -2,14 +2,18 @@ import { runCompute } from 'cerebral/test';
 
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
 
     expect(caseDetailFormatted.yearAmountsFormatted.length).toEqual(1);
 

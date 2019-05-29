@@ -13,20 +13,22 @@ export const PartiesFilingReadOnly = connect(
   ({ caseDetail, chooseWizardStepSequence, fileDocumentHelper, form }) => {
     return (
       <React.Fragment>
-        <h3 className="header-with-link-button">
-          Parties Filing This Document
-        </h3>
-        <button
-          className="link push-right"
-          type="button"
-          onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
-        >
-          <FontAwesomeIcon icon="edit" size="sm" />
-          Edit
-        </button>
+        <h2 className="header-with-link-button margin-top-4">
+          Parties Filing This Document{' '}
+          <button
+            className="usa-button usa-button--unstyled margin-left-205"
+            type="button"
+            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
+          >
+            <FontAwesomeIcon icon="edit" size="sm" />
+            Edit
+          </button>
+        </h2>
         <div className="blue-container">
-          <div className="ustc-form-group">
-            <label htmlFor="filing-parties">Filing Parties</label>
+          <div className="usa-form-group margin-bottom-0">
+            <label htmlFor="filing-parties" className="usa-label">
+              Filing Parties
+            </label>
             <ul className="ustc-unstyled-list without-margins">
               {form.partyPractitioner && (
                 <li>Myself as Petitioner’s Counsel</li>

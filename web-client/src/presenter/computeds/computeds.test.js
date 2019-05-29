@@ -1,7 +1,16 @@
 import { runCompute } from 'cerebral/test';
 
 import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
-import { formattedCaseDetail, formattedCases } from './formattedCaseDetail';
+import {
+  formattedCaseDetail as formattedCaseDetailComputed,
+  formattedCases as formattedCasesComputed,
+} from './formattedCaseDetail';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
+const formattedCases = withAppContextDecorator(formattedCasesComputed);
 
 describe('formatted case details computed', () => {
   it('formats the date', () => {
@@ -26,7 +35,7 @@ describe('formatted case details computed', () => {
         form: {},
       },
     });
-    expect(result.irsDateFormatted).toContain('11/21/2018');
+    expect(result.irsDateFormatted).toContain('11/21/18');
     expect(result.documents[0].isPetition).toEqual(true);
   });
 
@@ -53,7 +62,7 @@ describe('formatted case details computed', () => {
         },
       },
     });
-    expect(result[0].irsDateFormatted).toContain('11/21/2018');
+    expect(result[0].irsDateFormatted).toContain('11/21/18');
   });
 
   it('formats the respondent name to include barnumber', () => {

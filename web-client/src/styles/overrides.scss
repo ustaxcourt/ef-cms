@@ -1,17 +1,31 @@
+.grid-container {
+  max-width: 1440px;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0 !important;
+}
+
+.usa-header + .usa-section,
+.usa-header + main {
+  border: none;
+}
+
 .usa-header {
   margin-bottom: 3rem;
 
   .usa-logo {
-    width: 75px;
-    margin: 20px 20px 0 0;
+    width: 100%;
+    max-width: 75px;
+    margin: 20px 0 0 0;
 
     img {
       width: 100%;
       max-height: 100%;
     }
 
-    @media only screen and (max-width: 950px) {
-      width: 35px;
+    @media only screen and (max-width: units('desktop')) {
+      width: 46px;
       margin: 0;
     }
   }
@@ -21,30 +35,30 @@
   }
 }
 
-.usa-form-group {
-  margin-bottom: 25px;
-
-  label {
-    margin: 0 0 5px;
+.usa-button {
+  &.usa-button--unstyled {
+    padding: 2px;
+    &:disabled {
+      color: color($theme-color-base);
+    }
   }
 }
-
 option:first-child {
   font-weight: initial;
 }
 
-.usa-form-hint {
+.usa-hint {
   display: inline-block;
   margin-bottom: 15px;
-  color: $color-gray;
+  color: color($theme-color-base-dark);
   font-size: 15px;
   font-weight: $font-regular;
   &.ustc-form-hint-with-svg {
     position: relative;
-    padding-left: 3rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
     svg {
       position: absolute;
-      top: 2px;
       left: 0;
     }
   }
@@ -95,38 +109,98 @@ option:first-child {
       margin-bottom: 0px;
     }
   }
+
+  li:last-of-type {
+    margin-bottom: 0;
+  }
 }
 
-.usa-date-of-birth {
+.usa-memorable-date {
   label {
     margin: 0 0 5px;
     font-weight: $font-normal;
   }
 }
 
-.usa-input-error {
+.subsection .usa-form-group .usa-fieldset .usa-memorable-date {
+  .usa-form-group--day,
+  .usa-form-group--month,
+  .usa-form-group--year {
+    margin-bottom: 0;
+  }
+}
+
+.usa-input--error {
   padding-top: unset;
   padding-bottom: 0;
   margin-top: auto;
   margin-bottom: 20px;
 }
 
-.usa-input-error-message {
-  padding: 15px 0 0 0;
-  margin: 0;
-  clear: left;
+.usa-error-message {
+  margin: 15px 0 0 0;
   line-height: 1;
 }
 
-.usa-alert-error,
-.usa-alert-success,
-.usa-alert-warning {
+.usa-alert--warning {
+  background-image: url('images/alerts/warning.svg');
+}
+
+.usa-alert--success {
+  background-color: $color-success;
+  background-image: url('images/alerts/success.svg');
+
+  &::before {
+    background-color: $color-green;
+  }
+}
+
+.usa-alert--info {
+  background-color: $color-primary-alt-lightest;
+  background-image: url('images/alerts/info.svg');
+
+  &::before {
+    background-color: color($theme-color-accent-cool-dark);
+  }
+}
+
+.usa-alert--error {
+  background-color: color($theme-color-secondary-lighter);
+  background-image: url('images/alerts/error.svg');
+
+  &::before {
+    background-color: color($theme-color-secondary);
+  }
+}
+
+.usa-alert--error,
+.usa-alert--success,
+.usa-alert--info,
+.usa-alert--warning {
   max-width: 700px;
   min-height: 75px;
 
-  .usa-alert-heading {
+  .usa-alert__heading {
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 8px;
+    font-family: $font-serif;
+    font-size: 20px;
+    font-weight: $font-bold;
+    line-height: 1.3em;
+  }
+
+  .usa-alert__body {
+    display: block;
+  }
+
+  .usa-alert__action {
+    button {
+      margin: 0;
+
+      svg {
+        margin-left: 10px;
+      }
+    }
   }
 
   &.usa-alert-success-message-only {
@@ -138,8 +212,6 @@ option:first-child {
   }
 
   button {
-    float: right;
-
     @media only screen and (max-width: $medium-screen - 1px) {
       width: 100%;
       padding-left: 5rem;
@@ -186,4 +258,27 @@ option:first-child {
   .hide-on-mobile {
     display: none;
   }
+}
+
+.margin-bottom-2 {
+  margin-bottom: 1rem !important;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 5rem !important;
+}
+
+p {
+  max-width: 700px;
+
+  .usa-form & {
+    max-width: 700px;
+  }
+}
+
+.usa-list li,
+.usa-prose > ul li,
+.usa-prose > ol li {
+  max-width: 700px;
+  line-height: 24px;
 }

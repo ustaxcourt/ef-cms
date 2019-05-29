@@ -1,6 +1,7 @@
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -27,265 +28,279 @@ export const SecondaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h3>Tell Us About the {form.secondaryDocument.documentTitle}</h3>
+        <h2 className="margin-top-4">
+          Tell Us About the {form.secondaryDocument.documentTitle}
+        </h2>
         <div className="blue-container">
-          <div className="usa-grid-full">
-            <div className="usa-width-seven-twelfths push-right">
-              <div
-                id="document-secondary-upload-hint"
-                className="alert-gold add-bottom-margin"
-              >
-                <span className="usa-form-hint ustc-form-hint-with-svg">
-                  <FontAwesomeIcon
-                    icon={['far', 'arrow-alt-circle-left']}
-                    className="fa-icon-gold"
-                    size="lg"
-                  />
+          <div className="grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-7 push-right">
+                <Hint>
                   Remember to remove or redact all personal information (such as
                   Social Security Numbers, Taxpayer Identification Numbers, or
                   Employer Identification Numbers) from your documents.
-                </span>
-              </div>
-            </div>
-
-            <div className="usa-width-five-twelfths">
-              <div
-                className={`ustc-form-group ${
-                  validationErrors.secondaryDocumentFile
-                    ? 'usa-input-error'
-                    : ''
-                }`}
-              >
-                <label
-                  htmlFor="secondary-document"
-                  id="secondary-document-label"
-                  className={
-                    'ustc-upload ' +
-                    (fileDocumentHelper.showSecondaryDocumentValid
-                      ? 'validated'
-                      : '')
-                  }
-                >
-                  Upload Your Document{' '}
-                  <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="sm" />
-                  </span>{' '}
-                  {fileDocumentHelper.isSecondaryDocumentUploadOptional && (
-                    <span className="usa-form-hint">(optional)</span>
-                  )}
-                </label>
-                <span className="usa-form-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
-                </span>
-                <StateDrivenFileInput
-                  id="secondary-document"
-                  name="secondaryDocumentFile"
-                  aria-describedby="secondary-document-label"
-                  updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
-                  validationSequence="validateExternalDocumentInformationSequence"
-                />
-
-                <Text
-                  className="usa-input-error-message"
-                  bind="validationErrors.secondaryDocumentFile"
-                />
+                </Hint>
               </div>
 
-              {fileDocumentHelper.showSecondaryDocumentValid && (
+              <div className="tablet:grid-col-5">
                 <div
-                  className={`ustc-form-group ${
-                    validationErrors.hasSecondarySupportingDocuments
-                      ? 'usa-input-error'
+                  className={`usa-form-group ${
+                    validationErrors.secondaryDocumentFile
+                      ? 'usa-form-group--error'
                       : ''
-                  }`}
-                >
-                  <fieldset className="usa-fieldset-inputs usa-sans">
-                    <legend id="secondary-support-docs">
-                      Do You Have Any Supporting Documents for This Filing?
-                    </legend>
-                    <ul className="usa-unstyled-list">
-                      {['Yes', 'No'].map(option => (
-                        <li key={option}>
-                          <input
-                            id={`secondary-supporting-documents-${option}`}
-                            type="radio"
-                            aria-describedby="secondary-support-docs"
-                            name="hasSecondarySupportingDocuments"
-                            value={option}
-                            checked={
-                              form.hasSecondarySupportingDocuments ===
-                              (option === 'Yes')
-                            }
-                            onChange={e => {
-                              updateFileDocumentWizardFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value === 'Yes',
-                              });
-                              validateExternalDocumentInformationSequence();
-                            }}
-                          />
-                          <label
-                            htmlFor={`secondary-supporting-documents-${option}`}
-                          >
-                            {option}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </fieldset>
-                  <Text
-                    className="usa-input-error-message"
-                    bind="validationErrors.hasSecondarySupportingDocuments"
-                  />
-                </div>
-              )}
-
-              {form.hasSecondarySupportingDocuments && (
-                <div
-                  className={`ustc-form-group ${
-                    validationErrors.secondarySupportingDocument
-                      ? 'usa-input-error'
+                  } ${
+                    !fileDocumentHelper.showSecondaryDocumentValid
+                      ? 'margin-bottom-0'
                       : ''
                   }`}
                 >
                   <label
-                    htmlFor="secondary-supporting-document"
-                    id="secondary-supporting-document-label"
-                  >
-                    Select Supporting Document
-                  </label>
-                  <select
-                    name="secondarySupportingDocument"
-                    id="secondary-supporting-document"
-                    aria-describedby="secondary-supporting-document-label"
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondarySupportingDocumentMetadata.category',
-                        value: 'Supporting Document',
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondarySupportingDocumentMetadata.documentType',
-                        value: e.target.value,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key:
-                          'secondarySupportingDocumentMetadata.previousDocument',
-                        value: form.secondaryDocument.documentTitle,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                    value={form.secondarySupportingDocument || ''}
-                  >
-                    <option value="">- Select -</option>
-                    {fileDocumentHelper.supportingDocumentTypeList.map(
-                      entry => {
-                        return (
-                          <option
-                            key={entry.documentType}
-                            value={entry.documentType}
-                          >
-                            {entry.documentTypeDisplay}
-                          </option>
-                        );
-                      },
-                    )}
-                  </select>
-                  <Text
-                    className="usa-input-error-message"
-                    bind="validationErrors.secondarySupportingDocument"
-                  />
-                </div>
-              )}
-
-              {fileDocumentHelper.showSecondarySupportingDocumentFreeText && (
-                <div
-                  className={`ustc-form-group ${
-                    validationErrors.secondarySupportingDocumentFreeText
-                      ? 'usa-input-error'
-                      : ''
-                  }`}
-                >
-                  <label
-                    htmlFor="secondary-supporting-document-free-text"
-                    id="secondary-supporting-document-free-text-label"
-                  >
-                    Supporting Document Signed By
-                  </label>
-                  <input
-                    id="secondary-supporting-document-free-text"
-                    type="text"
-                    name="secondarySupportingDocumentFreeText"
-                    aria-describedby="secondary-supporting-document-free-text-label"
-                    autoCapitalize="none"
-                    value={form.secondarySupportingDocumentFreeText || ''}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondarySupportingDocumentMetadata.freeText',
-                        value: e.target.value,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                    onBlur={() => {
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <Text
-                    className="usa-input-error-message"
-                    bind="validationErrors.secondarySupportingDocumentFreeText"
-                  />
-                </div>
-              )}
-
-              {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
-                <div
-                  className={`ustc-form-group ${
-                    validationErrors.secondarySupportingDocumentFile
-                      ? 'usa-input-error'
-                      : ''
-                  }`}
-                >
-                  <label
-                    htmlFor="secondary-supporting-document-file"
-                    id="secondary-supporting-document-file-label"
+                    htmlFor="secondary-document"
+                    id="secondary-document-label"
                     className={
-                      'ustc-upload with-hint' +
-                      (fileDocumentHelper.showSecondarySupportingDocumentValid
+                      'usa-label ustc-upload with-hint ' +
+                      (fileDocumentHelper.showSecondaryDocumentValid
                         ? 'validated'
                         : '')
                     }
                   >
-                    Upload Your Supporting Document{' '}
-                    <span className="success-message">
+                    Upload Your Document{' '}
+                    <span className="success-message padding-left-1">
                       <FontAwesomeIcon icon="check-circle" size="sm" />
-                    </span>
+                    </span>{' '}
+                    {fileDocumentHelper.isSecondaryDocumentUploadOptional && (
+                      <span className="usa-hint">(optional)</span>
+                    )}
                   </label>
-                  <span className="usa-form-hint">
+                  <span className="usa-hint">
                     File must be in PDF format (.pdf). Max file size{' '}
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <StateDrivenFileInput
-                    id="secondary-supporting-document-file"
-                    name="secondarySupportingDocumentFile"
-                    aria-describedby="secondary-supporting-document-file-label"
+                    id="secondary-document"
+                    name="secondaryDocumentFile"
+                    aria-describedby="secondary-document-label"
                     updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                     validationSequence="validateExternalDocumentInformationSequence"
                   />
 
                   <Text
-                    className="usa-input-error-message"
-                    bind="validationErrors.secondarySupportingDocumentFile"
+                    className="usa-error-message"
+                    bind="validationErrors.secondaryDocumentFile"
                   />
                 </div>
-              )}
+              </div>
             </div>
+
+            {fileDocumentHelper.showSecondaryDocumentValid && (
+              <div
+                className={`usa-form-group ${
+                  validationErrors.hasSecondarySupportingDocuments
+                    ? 'usa-form-group--error'
+                    : ''
+                } ${
+                  !form.hasSecondarySupportingDocuments ? 'margin-bottom-0' : ''
+                }`}
+              >
+                <fieldset
+                  className={`usa-fieldset ${
+                    !form.hasSecondarySupportingDocuments
+                      ? 'margin-bottom-0'
+                      : ''
+                  }`}
+                >
+                  <legend id="secondary-support-docs">
+                    Do You Have Any Supporting Documents for This Filing?
+                  </legend>
+                  {['Yes', 'No'].map(option => (
+                    <div className="usa-radio usa-radio__inline" key={option}>
+                      <input
+                        id={`secondary-supporting-documents-${option}`}
+                        type="radio"
+                        aria-describedby="secondary-support-docs"
+                        name="hasSecondarySupportingDocuments"
+                        className="usa-radio__input"
+                        value={option}
+                        checked={
+                          form.hasSecondarySupportingDocuments ===
+                          (option === 'Yes')
+                        }
+                        onChange={e => {
+                          updateFileDocumentWizardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value === 'Yes',
+                          });
+                          validateExternalDocumentInformationSequence();
+                        }}
+                      />
+                      <label
+                        htmlFor={`secondary-supporting-documents-${option}`}
+                        className="usa-radio__label"
+                      >
+                        {option}
+                      </label>
+                    </div>
+                  ))}
+                </fieldset>
+                <Text
+                  className="usa-error-message"
+                  bind="validationErrors.hasSecondarySupportingDocuments"
+                />
+              </div>
+            )}
+
+            {form.hasSecondarySupportingDocuments && (
+              <div
+                className={`usa-form-group ${
+                  validationErrors.secondarySupportingDocument
+                    ? 'usa-form-group--error'
+                    : ''
+                } ${
+                  !form.secondarySupportingDocument ? 'margin-bottom-0' : ''
+                }`}
+              >
+                <label
+                  htmlFor="secondary-supporting-document"
+                  id="secondary-supporting-document-label"
+                  className="usa-label"
+                >
+                  Select Supporting Document
+                </label>
+                <select
+                  name="secondarySupportingDocument"
+                  id="secondary-supporting-document"
+                  aria-describedby="secondary-supporting-document-label"
+                  className={`usa-select ${
+                    validationErrors.secondarySupportingDocument
+                      ? 'usa-select--error'
+                      : ''
+                  }`}
+                  onChange={e => {
+                    updateFileDocumentWizardFormValueSequence({
+                      key: 'secondarySupportingDocumentMetadata.category',
+                      value: 'Supporting Document',
+                    });
+                    updateFileDocumentWizardFormValueSequence({
+                      key: 'secondarySupportingDocumentMetadata.documentType',
+                      value: e.target.value,
+                    });
+                    updateFileDocumentWizardFormValueSequence({
+                      key:
+                        'secondarySupportingDocumentMetadata.previousDocument',
+                      value: form.secondaryDocument.documentTitle,
+                    });
+                    updateFileDocumentWizardFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                  value={form.secondarySupportingDocument || ''}
+                >
+                  <option value="">- Select -</option>
+                  {fileDocumentHelper.supportingDocumentTypeList.map(entry => {
+                    return (
+                      <option
+                        key={entry.documentType}
+                        value={entry.documentType}
+                      >
+                        {entry.documentTypeDisplay}
+                      </option>
+                    );
+                  })}
+                </select>
+                <Text
+                  className="usa-error-message"
+                  bind="validationErrors.secondarySupportingDocument"
+                />
+              </div>
+            )}
+
+            {fileDocumentHelper.showSecondarySupportingDocumentFreeText && (
+              <div
+                className={`usa-form-group ${
+                  validationErrors.secondarySupportingDocumentFreeText
+                    ? 'usa-form-group--error'
+                    : ''
+                }`}
+              >
+                <label
+                  htmlFor="secondary-supporting-document-free-text"
+                  id="secondary-supporting-document-free-text-label"
+                  className="usa-label"
+                >
+                  Supporting Document Signed By
+                </label>
+                <input
+                  id="secondary-supporting-document-free-text"
+                  type="text"
+                  name="secondarySupportingDocumentFreeText"
+                  aria-describedby="secondary-supporting-document-free-text-label"
+                  autoCapitalize="none"
+                  className="usa-input"
+                  value={form.secondarySupportingDocumentFreeText || ''}
+                  onChange={e => {
+                    updateFileDocumentWizardFormValueSequence({
+                      key: 'secondarySupportingDocumentMetadata.freeText',
+                      value: e.target.value,
+                    });
+                    updateFileDocumentWizardFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                  onBlur={() => {
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
+                <Text
+                  className="usa-error-message"
+                  bind="validationErrors.secondarySupportingDocumentFreeText"
+                />
+              </div>
+            )}
+
+            {fileDocumentHelper.showSecondarySupportingDocumentUpload && (
+              <div
+                className={`usa-form-group margin-bottom-0 ${
+                  validationErrors.secondarySupportingDocumentFile
+                    ? 'usa-form-group--error'
+                    : ''
+                }`}
+              >
+                <label
+                  htmlFor="secondary-supporting-document-file"
+                  id="secondary-supporting-document-file-label"
+                  className={
+                    'usa-label ustc-upload with-hint ' +
+                    (fileDocumentHelper.showSecondarySupportingDocumentValid
+                      ? 'validated'
+                      : '')
+                  }
+                >
+                  Upload Your Supporting Document{' '}
+                  <span className="success-message padding-left-1">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
+                </label>
+                <span className="usa-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
+                <StateDrivenFileInput
+                  id="secondary-supporting-document-file"
+                  name="secondarySupportingDocumentFile"
+                  aria-describedby="secondary-supporting-document-file-label"
+                  updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
+                  validationSequence="validateExternalDocumentInformationSequence"
+                />
+
+                <Text
+                  className="usa-error-message"
+                  bind="validationErrors.secondarySupportingDocumentFile"
+                />
+              </div>
+            )}
           </div>
         </div>
       </React.Fragment>

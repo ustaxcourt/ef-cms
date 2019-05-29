@@ -1,6 +1,14 @@
+import { applicationContext } from '../../applicationContext';
+import {
+  formatYearAmounts,
+  formattedCaseDetail as formattedCaseDetailComputed,
+} from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-import { formatYearAmounts, formattedCaseDetail } from './formattedCaseDetail';
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const constants = {
   DOCUMENT_TYPES_MAP: {
@@ -25,7 +33,7 @@ describe('formattedCaseDetail', () => {
           },
         ],
       };
-      formatYearAmounts(caseDetail);
+      formatYearAmounts(caseDetail, undefined, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -61,7 +69,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: [{ index: 1, year: 'year can not be in future' }],
       };
-      formatYearAmounts(caseDetail, caseDetailErrors);
+      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -98,7 +106,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: 'Duplicate years are bad',
       };
-      formatYearAmounts(caseDetail, caseDetailErrors);
+      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '1000',
@@ -211,7 +219,7 @@ describe('formattedCaseDetail', () => {
         constants,
       },
     });
-    expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/2019');
+    expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/19');
   });
 
   it('maps docket record documents', async () => {
@@ -391,7 +399,7 @@ describe('formattedCaseDetail', () => {
     ).toEqual('(Exhibit(s))');
     expect(
       result.docketRecordWithDocument[2].record.filingsAndProceedings,
-    ).toEqual('(C/S 06/07/2018) (Exhibit(s)) (Attachment(s)) (Objection)');
+    ).toEqual('(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)');
     expect(
       result.docketRecordWithDocument[3].record.filingsAndProceedings,
     ).toEqual('(Lodged)');
