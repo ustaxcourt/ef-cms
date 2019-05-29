@@ -1,9 +1,8 @@
-import { queryStringDecoder } from './queryStringDecoder';
-
 import {
-  faArrowAltCircleLeft,
+  faArrowAltCircleLeft as faArrowAltCircleLeftRegular,
   faCheckCircle as faCheckCircleRegular,
   faClock,
+  faClone,
   faCopy,
   faEdit,
   faEyeSlash,
@@ -12,15 +11,20 @@ import {
   faUser,
 } from '@fortawesome/free-regular-svg-icons';
 import {
+  faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
+  faCheck,
   faCheckCircle,
+  faClock as faClockSolid,
   faCloudUploadAlt,
   faDollarSign,
   faEdit as faEditSolid,
   faEnvelope as faEnvelopeSolid,
   faExclamationTriangle,
+  faExternalLinkAlt,
+  faFile,
   faFileAlt as faFileAltSolid,
   faFilePdf,
   faFlag,
@@ -31,6 +35,7 @@ import {
   faQuestionCircle,
   faSearch,
   faShareSquare,
+  faShieldAlt,
   faSignOutAlt,
   faSlash,
   faSort,
@@ -43,8 +48,10 @@ import { route, router } from './router';
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
+import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -61,6 +68,14 @@ const app = {
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
+    // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
+    presenter.state = mapValues(presenter.state, value => {
+      if (isFunction(value)) {
+        return withAppContextDecorator(value, applicationContext);
+      }
+      return value;
+    });
+
     const token =
       (await applicationContext
         .getUseCases()
@@ -71,23 +86,20 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
-    const { code, token: queryToken } = queryStringDecoder();
-
-    if (process.env.USTC_ENV === 'prod' && (!user && !code && !queryToken)) {
-      window.location.replace(presenter.state.cognitoLoginUrl);
-      return;
-    }
-
     presenter.state.constants = applicationContext.getConstants();
 
     library.add(
-      faArrowAltCircleLeft,
+      faArrowAltCircleLeftRegular,
+      faArrowAltCircleLeftSolid,
       faCaretDown,
       faCaretLeft,
       faCaretUp,
+      faCheck,
       faCheckCircle,
       faCheckCircleRegular,
       faClock,
+      faClockSolid,
+      faClone,
       faCloudUploadAlt,
       faCopy,
       faDollarSign,
@@ -95,7 +107,9 @@ const app = {
       faEditSolid,
       faEnvelopeSolid,
       faExclamationTriangle,
+      faExternalLinkAlt,
       faEyeSlash,
+      faFile,
       faFileAlt,
       faFileAltSolid,
       faFilePdf,
@@ -108,6 +122,7 @@ const app = {
       faQuestionCircle,
       faSearch,
       faShareSquare,
+      faShieldAlt,
       faSignOutAlt,
       faSlash,
       faSort,
@@ -121,7 +136,9 @@ const app = {
       route,
     };
     const cerebralApp = App(presenter, debugTools);
+
     router.initialize(cerebralApp);
+
     ReactDOM.render(
       <Container app={cerebralApp}>
         <IdleActivityMonitor />

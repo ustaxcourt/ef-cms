@@ -1,7 +1,7 @@
-import { connect } from '@cerebral/react';
-import React from 'react';
-import { state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
+import React from 'react';
 
 export const CompletedMessages = connect(
   {
@@ -9,7 +9,7 @@ export const CompletedMessages = connect(
   },
   ({ documentDetailHelper }) => {
     return (
-      <div>
+      <div className="blue-container">
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.completedWorkItems ||
           !documentDetailHelper.formattedDocument.completedWorkItems
@@ -27,58 +27,58 @@ export const CompletedMessages = connect(
                 aria-labelledby="tab-pending-messages"
                 key={idx}
               >
-                <div className="gray-header">
-                  <div className="content-wrapper">
-                    <div className="completed-icon">
-                      <FontAwesomeIcon icon={['far', 'check-circle']} />
-                    </div>
-                    <div className="completed-content">
-                      {workItem.completedBy && (
-                        <React.Fragment>
-                          <p>
-                            <span className="label-inline">
-                              Closed by {workItem.completedBy}
-                            </span>
-                          </p>
-                          <p>
-                            <span className="label-inline">
-                              {workItem.completedAtFormatted}
-                            </span>
-                          </p>
-                          {workItem.completedMessage && (
-                            <p className="completed-message">
-                              <span>{workItem.completedMessage}</span>
-                            </p>
-                          )}
-                        </React.Fragment>
-                      )}
-                      {workItem.completedMessage === 'Served on IRS' && (
-                        <p>
+                <div className="content-wrapper">
+                  <div className="completed-icon">
+                    <FontAwesomeIcon icon={['fas', 'check-circle']} />
+                  </div>
+                  <div className="completed-content">
+                    {workItem.completedBy && (
+                      <React.Fragment>
+                        <div>
                           <span className="label-inline">
-                            Served on IRS at {workItem.completedAtFormatted}
+                            Closed by {workItem.completedBy}
                           </span>
-                        </p>
-                      )}
-                    </div>
+                        </div>
+                        <div>
+                          <span className="label-inline">
+                            {workItem.completedAtFormatted}
+                          </span>
+                        </div>
+                        {workItem.completedMessage && (
+                          <div className="completed-message">
+                            <span>{workItem.completedMessage}</span>
+                          </div>
+                        )}
+                      </React.Fragment>
+                    )}
+                    {workItem.completedMessage === 'Served on IRS' && (
+                      <p>
+                        <span className="label-inline">
+                          Served on IRS at {workItem.completedAtFormatted}
+                        </span>
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="content-wrapper">
+                <div className="content-wrapper gray">
                   {workItem.messages.map((message, messageIdx) => (
                     <React.Fragment key={messageIdx}>
                       <div>
-                        <p>
+                        <div className="margin-bottom-1">
                           <span className="label-inline">To</span>
                           {message.to}
-                        </p>
-                        <p>
+                        </div>
+                        <div className="margin-bottom-1">
                           <span className="label-inline">From</span>
                           {message.from}
-                        </p>
-                        <p>
+                        </div>
+                        <div className="margin-bottom-1">
                           <span className="label-inline">Received</span>
                           {message.createdAtTimeFormatted}
-                        </p>
-                        <p className="completed-message">{message.message}</p>
+                        </div>
+                        <div className="completed-message">
+                          {message.message}
+                        </div>
                       </div>
                       {messageIdx < workItem.messages.length - 1 && <hr />}
                     </React.Fragment>

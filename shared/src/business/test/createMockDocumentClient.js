@@ -55,12 +55,26 @@ const createMockDocumentClient = () => {
         promise: async () => null,
       };
     },
-    query: ({ ExpressionAttributeValues }) => {
+    query: ({ IndexName, ExpressionAttributeValues }) => {
       const arr = [];
       for (let key in data) {
-        const value = ExpressionAttributeValues[':pk'];
-        if (key.split(' ')[0].indexOf(value) !== -1) {
-          arr.push(data[key]);
+        if (IndexName === 'gsi1') {
+          const gsi1pk = ExpressionAttributeValues[':gsi1pk'];
+          if (data[key].gsi1pk === gsi1pk) {
+            arr.push(data[key]);
+          }
+        } else {
+          const value = ExpressionAttributeValues[':pk'];
+          const prefix = ExpressionAttributeValues[':prefix'];
+          const [pk, sk] = key.split(' ');
+
+          if (prefix) {
+            if (pk === value && sk.indexOf(prefix) === 0) {
+              arr.push(data[key]);
+            }
+          } else if (pk.indexOf(value) !== -1) {
+            arr.push(data[key]);
+          }
         }
       }
       return {

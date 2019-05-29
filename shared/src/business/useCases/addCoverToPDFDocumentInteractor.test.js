@@ -79,7 +79,7 @@ describe('addCoverToPDFDocument', () => {
     const saveDocumentStub = sinon
       .stub()
       .callsFake(({ document: newPdfData }) => {
-        fs.writeFile(
+        fs.writeFileSync(
           testOutputPath + 'addCoverToPDFDocument_1.pdf',
           newPdfData,
         );
@@ -119,7 +119,7 @@ describe('addCoverToPDFDocument', () => {
     const saveDocumentStub = sinon
       .stub()
       .callsFake(({ document: newPdfData }) => {
-        fs.writeFile(
+        fs.writeFileSync(
           testOutputPath + 'addCoverToPDFDocument_2.pdf',
           newPdfData,
         );

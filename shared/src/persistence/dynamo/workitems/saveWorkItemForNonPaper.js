@@ -1,6 +1,6 @@
 const { createMappingRecord } = require('../helpers/createMappingRecord');
+const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { put } = require('../../dynamodbClientService');
-
 /**
  * saveWorkItemForNonPaper
  *
@@ -11,22 +11,19 @@ const { put } = require('../../dynamodbClientService');
  * @returns {*}
  */
 exports.saveWorkItemForNonPaper = async ({ workItem, applicationContext }) => {
-  // create the work item
   await put({
     Item: {
-      pk: workItem.workItemId,
-      sk: workItem.workItemId,
+      pk: `workitem-${workItem.workItemId}`,
+      sk: `workitem-${workItem.workItemId}`,
+      gsi1pk: `workitem-${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,
   });
 
-  // section inbox
-  await createMappingRecord({
+  await createSectionInboxRecord({
     applicationContext,
-    pkId: workItem.section,
-    skId: workItem.workItemId,
-    type: 'workItem',
+    workItem,
   });
 
   await createMappingRecord({

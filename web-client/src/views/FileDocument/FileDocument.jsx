@@ -24,17 +24,23 @@ export const FileDocument = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 tabIndex="-1" id="file-a-document-header">
+          <h1
+            className="margin-bottom-05"
+            tabIndex="-1"
+            id="file-a-document-header"
+          >
             File a Document
-          </h2>
+          </h1>
         </Focus>
-        <p>All fields required unless otherwise noted</p>
+        <p className="margin-bottom-5 required-statement margin-top-05 ">
+          All fields required unless otherwise noted
+        </p>
         <div>
-          <h3 className="header-with-link-button">
+          <h2 className="header-with-link-button">
             Type of Document You’re Filing
-          </h3>
+          </h2>
           <button
-            className="link"
+            className="usa-button usa-button--unstyled"
             type="button"
             onClick={() =>
               chooseWizardStepSequence({ value: 'SelectDocumentType' })
@@ -45,8 +51,10 @@ export const FileDocument = connect(
           </button>
         </div>
         <div className="blue-container">
-          <FontAwesomeIcon icon={['far', 'file-alt']} />
-          <h4 className="file-name">{form.documentTitle}</h4>
+          <h4 className="file-name">
+            <FontAwesomeIcon icon="file-pdf" />
+            {form.documentTitle}
+          </h4>
         </div>
 
         <PrimaryDocumentForm />
@@ -55,11 +63,11 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        <div className="button-box-container">
+        <div className="button-box-container margin-top-4">
           <button
             id="submit-document"
             type="submit"
-            className="usa-button"
+            className="usa-button margin-right-205"
             onClick={() => {
               reviewExternalDocumentInformationSequence();
             }}
@@ -68,7 +76,7 @@ export const FileDocument = connect(
           </button>
           <button
             type="button"
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

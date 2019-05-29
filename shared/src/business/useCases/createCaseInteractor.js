@@ -108,7 +108,7 @@ exports.createCase = async ({
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
-    documentType: Case.documentTypes.petitionFile,
+    documentType: Document.initialDocumentTypes.petitionFile,
     filedBy: user.name,
     practitioner: practitioners[0],
     userId: user.userId,
@@ -131,7 +131,7 @@ exports.createCase = async ({
 
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
-    documentType: Case.documentTypes.stin,
+    documentType: Document.initialDocumentTypes.stin,
     filedBy: user.name,
     practitioner: practitioners[0],
     userId: user.userId,
@@ -142,7 +142,7 @@ exports.createCase = async ({
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
-      documentType: Case.documentTypes.ownershipDisclosure,
+      documentType: Document.initialDocumentTypes.ownershipDisclosure,
       filedBy: user.name,
       practitioner: practitioners[0],
       userId: user.userId,

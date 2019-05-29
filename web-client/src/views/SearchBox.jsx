@@ -23,6 +23,7 @@ export const SearchBox = connect(
           Search term
         </label>
         <input
+          className="usa-input"
           id="search-field"
           type="search"
           name="searchTerm"
@@ -33,7 +34,7 @@ export const SearchBox = connect(
             });
           }}
         />
-        <button type="submit">
+        <button type="submit" className="usa-button">
           <span className="usa-search-submit-text">Search</span>
         </button>
       </form>

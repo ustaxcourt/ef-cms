@@ -9,8 +9,15 @@ import {
   CASE_CAPTION_POSTFIX,
   Case,
 } from '../../shared/src/business/entities/Case';
+import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
+
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 
 import {
   CATEGORIES,
@@ -211,7 +218,7 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES,
-    DOCUMENT_TYPES_MAP: Case.documentTypes,
+    DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
     ESTATE_TYPES,
     INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
@@ -257,6 +264,13 @@ const applicationContext = {
     return uuidv4();
   },
   getUseCases: () => allUseCases,
+  getUtilities: () => {
+    return {
+      createISODateString,
+      formatDateString,
+      prepareDateFromString,
+    };
+  },
   setCurrentUser,
   setCurrentUserToken,
 };

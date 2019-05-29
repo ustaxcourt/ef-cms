@@ -1,8 +1,19 @@
-table {
+table,
+.usa-table {
   width: 100%;
-  margin: 0;
+  margin: 0 0 2em 0;
+
+  tr:hover {
+    background: $color-primary-alt-lightest;
+    box-shadow: 5px 0 0 0 color($theme-color-primary) inset;
+    transition-duration: 0.2s;
+    transition-property: all;
+  }
 
   td {
+    padding: 15px 20px;
+    background-color: transparent;
+    cursor: pointer;
     vertical-align: top;
   }
 
@@ -12,36 +23,40 @@ table {
 }
 
 table.small-case-qualifications-table {
-  margin-bottom: 2rem;
+  margin-bottom: 2em;
 
   th,
   td {
-    border: 1px solid $color-gray-light;
+    border: 1px solid color($theme-color-base-light);
   }
 
   thead th {
     background-color: $color-primary-alt-lightest;
+    font-weight: $font-semibold;
   }
 }
 
 table.dashboard {
   thead {
-    border-bottom: 2px solid $color-gray-lighter;
+    min-height: 50px;
+    border-bottom: 1px solid color($theme-color-base-lighter);
+
     th {
+      padding: 0.5rem 1rem;
       border: none;
-      background-color: $color-white;
+      background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;
     }
   }
 
   tr {
-    border-bottom: 1px solid $color-gray-lighter;
+    border-bottom: 1px solid color($theme-color-base-lighter);
   }
 
   td {
     display: table-cell;
+    padding: 0.5rem 1rem;
     border: none;
-    font-size: 14px;
 
     label {
       margin: 0;
@@ -50,51 +65,102 @@ table.dashboard {
 
   /* only medium up */
   @media only screen and (min-width: $medium-screen) {
-    border: 1px solid $color-gray-lighter;
+    border: 1px solid color($theme-color-base-lighter);
   }
 
   /* small only */
   @media only screen and (max-width: $medium-screen - 1px) {
     margin-bottom: 20px;
     td {
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.5em;
+    }
+  }
+}
+
+.usa-table td {
+  .message-detail {
+    font-size: 15px;
+  }
+}
+
+table.messages {
+  thead {
+    th {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+
+      &.header-fixed-width {
+        width: 200px;
+      }
     }
   }
 }
 
 table.work-queue {
-  td,
   th {
-    border: none;
+    border: 0;
   }
 
   td {
-    font-size: 14px;
+    border: none;
+    font-size: 17px;
+
+    &.message-select-control {
+      label {
+        left: 5px;
+      }
+    }
+
+    &.message-queue-row {
+      padding-top: 14px;
+    }
+
+    &.message-queue-document {
+      max-width: units('tablet');
+    }
+
+    &.has-icon {
+      width: 44px;
+    }
+
+    .message-document-title {
+      overflow: hidden;
+      max-width: units('tablet');
+      padding: 4px;
+      margin: -4px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .message-document-detail {
+      display: -webkit-box;
+      overflow: hidden;
+      height: 100%;
+      max-height: 57px; /* fallback */
+      /* autoprefixer: ignore next */
+      -webkit-box-orient: vertical;
+      font-size: 15px;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-height: 19px; /* fallback */
+      text-overflow: ellipsis;
+    }
 
     label {
       margin: 0;
     }
   }
 
-  td.section-queue-row {
-    padding-top: 14px;
-  }
-
-  td.has-icon {
-    width: 44px;
-  }
-
   tr {
-    border-top: 1px solid $color-gray-lighter;
+    border-top: 1px solid color($theme-color-base-lighter);
   }
 
   tbody:not(.action-bar) {
     &:hover {
-      cursor: pointer;
-
       td.focus-toggle {
         button.focus-button {
-          background-color: $color-blue;
+          background-color: color($theme-color-primary);
         }
       }
     }
@@ -129,7 +195,7 @@ table.work-queue {
             &:hover,
             &:focus,
             &:active {
-              background-color: $color-blue;
+              background-color: color($theme-color-primary);
             }
           }
         }
@@ -144,17 +210,19 @@ table.work-queue {
   }
 
   thead {
-    border-bottom: 2px solid $color-gray-light;
-
     th {
-      background-color: $color-white;
+      background-color: color($theme-color-base-lightest);
       font-weight: $font-semibold;
+
+      .collapse-header {
+        padding: 0;
+      }
     }
   }
 
   .action-bar {
     background-color: $color-primary-alt-lightest;
-    font-size: 1.7rem;
+    font-size: 1em;
 
     label {
       display: inline-block;
@@ -164,7 +232,7 @@ table.work-queue {
     select {
       display: inline-block;
       width: auto;
-      margin: 0 1rem;
+      margin: 0 1em;
     }
 
     button {
@@ -172,16 +240,16 @@ table.work-queue {
     }
 
     .selected-count {
-      margin-right: 3rem;
+      margin-right: 3em;
       font-weight: $font-bold;
     }
   }
 
   width: 100%;
   border-top: none;
-  border-right: 1px solid $color-gray-lighter;
-  border-bottom: 1px solid $color-gray-lighter;
-  border-left: 1px solid $color-gray-lighter;
+  border-right: 1px solid color($theme-color-base-lighter);
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  border-left: 1px solid color($theme-color-base-lighter);
 }
 
 @media only screen and (max-width: $medium-screen - 1px) {
@@ -203,12 +271,13 @@ table.row-border-only {
 
   thead tr,
   tbody tr {
-    border: 1px solid $color-gray-lighter;
+    border: 1px solid color($theme-color-base-lighter);
   }
 }
 
 table.docket-record {
   thead th {
+    background-color: color($theme-color-base-lightest);
     font-weight: $font-semibold;
   }
 
@@ -223,7 +292,6 @@ table.docket-record {
     }
 
     .filing-type-icon {
-      padding: 0;
       text-align: right;
 
       svg {
@@ -241,7 +309,6 @@ table.docket-record {
 
     tbody td {
       height: 65px;
-      vertical-align: middle;
     }
   }
 
@@ -269,18 +336,18 @@ table.docket-record {
 
 table.case-list thead th,
 table.case-list thead td {
-  background-color: $color-gray-light;
-  color: $color-base;
+  background-color: color($theme-color-base-light);
+  color: color($theme-color-base-darkest);
 }
 
 table.case-list tbody tr:nth-child(even) td {
-  background-color: $color-gray-lightest;
+  background-color: color($theme-color-base-lightest);
 }
 
 .responsive-table {
   /* stylelint-disable */
   label {
-    margin: 1rem 0 !important;
+    margin: 1em 0 !important;
   }
   /* stylelint-enable */
 
@@ -323,14 +390,14 @@ table.case-list tbody tr:nth-child(even) td {
     }
 
     .responsive-title {
-      border-bottom: 1px solid $color-gray-light;
-      background: $color-gray-lightest;
+      border-bottom: 1px solid color($theme-color-base-light);
+      background: color($theme-color-base-lightest);
       font-weight: $font-bold;
     }
 
     .responsive-label {
       display: block;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.5em;
       font-weight: $font-bold;
     }
   }

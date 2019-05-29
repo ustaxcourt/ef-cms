@@ -8,6 +8,7 @@ import { getWorkItemsForSectionAction } from '../actions/getWorkItemsForSectionA
 import { parallel } from 'cerebral/factories';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
+import { setSectionInboxCountAction } from '../actions/setSectionInboxCountAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
@@ -31,7 +32,11 @@ export const chooseWorkQueueSequence = [
     sectioninbox: [
       parallel([
         [getNotificationsAction, setNotificationsAction],
-        [getWorkItemsForSectionAction, setWorkItemsAction],
+        [
+          getWorkItemsForSectionAction,
+          setWorkItemsAction,
+          setSectionInboxCountAction,
+        ],
       ]),
     ],
     sectionoutbox: [

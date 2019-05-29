@@ -1,29 +1,52 @@
 .card {
-  border: 1px solid $color-gray-light;
+  border: 1px solid color($theme-color-base-lighter);
   margin-bottom: 20px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
   &.highlight {
-    border: 3px solid $color-primary;
+    border: 3px solid color($theme-color-primary);
   }
 
   p {
-    margin-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+
+    &.label {
+      margin-bottom: 5px;
+    }
   }
 
   .content-wrapper {
     padding: 15px;
+    background-color: $color-white;
+
+    &.gray {
+      background-color: color($theme-color-base-lightest);
+    }
+  }
+
+  hr {
+    border-top: 1px solid color($theme-color-base-lighter);
   }
 
   .actions-wrapper {
-    background-color: $color-primary-alt-lightest;
+    background-color: color($theme-color-base-lightest);
+
+    .grid-col-4 {
+      text-align: center;
+    }
+
+    button {
+      display: inline-block;
+      margin: 0px;
+    }
   }
 
   .toggle-button-wrapper {
     button {
       width: auto;
       padding: 10px;
-      margin: 0 5px 0 0;
+      border-width: 0;
       border-radius: 20px;
       font-size: 14px;
       font-weight: $font-semibold;
@@ -32,17 +55,99 @@
       svg {
         margin-right: 5px;
       }
-    }
 
-    button.unselected {
-      background-color: transparent;
-      color: $color-blue;
+      &:focus {
+        outline: 2px dotted color($theme-color-base-light);
+      }
+
+      &.unselected {
+        background-color: transparent;
+        color: color($theme-color-primary);
+
+        &:hover {
+          color: color($theme-color-primary-dark);
+        }
+      }
     }
   }
+}
 
-  .usa-button,
-  .usa-button-secondary {
-    margin-top: 20px;
+.petitions-details,
+.internal-information {
+  margin-top: 2.5rem;
+  .chunk {
+    margin-bottom: 1rem;
+  }
+}
+
+.party-information,
+.petitions-details,
+.internal-information,
+.frequently-used-docs,
+.case-search {
+  .card {
     margin-bottom: 0;
+    .content-wrapper {
+      padding: 20px;
+    }
   }
+}
+
+.frequently-used-docs {
+  .usa-button {
+    line-height: 21px;
+  }
+}
+
+.taxpayer-tools {
+  .card {
+    margin-bottom: 30px;
+
+    .content-wrapper {
+      padding: 20px;
+
+      hr {
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      p {
+        margin-top: 15px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.case-search {
+  .card {
+    .content-wrapper {
+      hr {
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+
+      p {
+        color: color($theme-color-base-dark);
+      }
+
+      .usa-error-message {
+        color: color($theme-color-secondary-dark);
+      }
+
+      button {
+        background-color: $color-white;
+      }
+
+      /* little screens */
+      @media only screen and (max-width: $medium-screen - 1px) {
+        button {
+          width: 132px;
+        }
+      }
+    }
+  }
+}
+.case-info-card {
+  border-bottom: 1px solid color($theme-color-base-lighter);
 }

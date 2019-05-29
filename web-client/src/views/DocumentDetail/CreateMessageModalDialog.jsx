@@ -1,8 +1,7 @@
-import { sequences, state } from 'cerebral';
-
 import { ModalDialog } from '../ModalDialog';
-import React from 'react';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 class CreateMessageModalDialogComponent extends ModalDialog {
   constructor(props) {
@@ -23,14 +22,16 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             'usa-form-group ' +
             (this.props.validationErrors.section &&
             !this.props.modal.showChambersSelect
-              ? 'usa-input-error'
+              ? 'usa-form-group--error'
               : '')
           }
         >
-          <label htmlFor="section">Select Section</label>
+          <label htmlFor="section" className="usa-label">
+            Select Section
+          </label>
 
           <select
-            className="usa-input-inline"
+            className="usa-select"
             id="section"
             name="section"
             onChange={e => {
@@ -50,23 +51,27 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               </option>
             ))}
           </select>
-          {!this.props.modal.showChambersSelect && (
-            <div className="usa-input-error-message beneath">
-              {this.props.validationErrors.section}
-            </div>
-          )}
+          {!this.props.modal.showChambersSelect &&
+            this.props.validationErrors.section && (
+              <div className="usa-error-message beneath">
+                {this.props.validationErrors.section}
+              </div>
+            )}
         </div>
         {this.props.modal.showChambersSelect && (
           <div
             className={
               'usa-form-group ' +
-              (this.props.validationErrors.section ? 'usa-input-error' : '')
+              (this.props.validationErrors.section
+                ? 'usa-form-group--error'
+                : '')
             }
           >
-            <label htmlFor={'chambers'}>Select Chambers</label>
-
+            <label htmlFor={'chambers'} className="usa-label">
+              Select Chambers
+            </label>
             <select
-              className="usa-input-inline"
+              className="usa-select"
               id={'chambers'}
               name="chambers"
               onChange={e => {
@@ -87,7 +92,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               ))}
             </select>
             {this.props.validationErrors.section && (
-              <div className="usa-input-error-message beneath">
+              <div className="usa-error-message beneath">
                 Chambers is required.
               </div>
             )}
@@ -96,12 +101,16 @@ class CreateMessageModalDialogComponent extends ModalDialog {
         <div
           className={
             'usa-form-group ' +
-            (this.props.validationErrors.assigneeId ? 'usa-input-error' : '')
+            (this.props.validationErrors.assigneeId
+              ? 'usa-form-group--error'
+              : '')
           }
         >
-          <label htmlFor="assigneeId">Select Recipient</label>
+          <label htmlFor="assigneeId" className="usa-label">
+            Select Recipient
+          </label>
           <select
-            className="usa-input-inline"
+            className="usa-select"
             id="assigneeId"
             name="assigneeId"
             disabled={!this.props.form.section}
@@ -121,21 +130,26 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               </option>
             ))}
           </select>
-          <div className="usa-input-error-message beneath">
-            {this.props.validationErrors.assigneeId}
-          </div>
+          {this.props.validationErrors.assigneeId && (
+            <div className="usa-error-message beneath">
+              {this.props.validationErrors.assigneeId}
+            </div>
+          )}
         </div>
 
         <div
           className={
             'usa-form-group ' +
-            (this.props.validationErrors.message ? 'usa-input-error' : '')
+            (this.props.validationErrors.message ? 'usa-form-group--error' : '')
           }
         >
-          <label htmlFor="message">Add Message</label>
+          <label htmlFor="message" className="usa-label">
+            Add Message
+          </label>
           <textarea
             name="message"
             id="message"
+            className="usa-textarea"
             onChange={e => {
               this.props.updateMessageValueSequence({
                 key: e.target.name,
@@ -144,9 +158,11 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               this.props.validateInitialWorkItemMessageSequence();
             }}
           />
-          <div className="usa-input-error-message beneath">
-            {this.props.validationErrors.message}
-          </div>
+          {this.props.validationErrors.message && (
+            <div className="usa-error-message beneath">
+              {this.props.validationErrors.message}
+            </div>
+          )}
         </div>
       </div>
     );

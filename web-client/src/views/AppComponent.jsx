@@ -94,11 +94,13 @@ class App extends React.Component {
 
 App.propTypes = {
   currentPage: PropTypes.string,
+  currentPageHeader: PropTypes.string,
 };
 
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
+    currentPageHeader: state.currentPageHeader,
   },
   App,
 );
