@@ -30,6 +30,30 @@ async function deleteCase(context, events, done) {
     });
   }
 
+  const caseCatalogRecords = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': 'catalog',
+      ':sk': `case-${caseId}`,
+    },
+    KeyConditionExpression: '#pk = :pk AND #sk = :sk',
+    applicationContext,
+  });
+
+  for (let caseRecord of caseCatalogRecords) {
+    console.log('deleting case:', caseRecord.pk, caseRecord.sk);
+    await client.delete({
+      applicationContext,
+      key: {
+        pk: caseRecord.pk,
+        sk: caseRecord.sk,
+      },
+    });
+  }
+
   let workItems = [];
   caseRecords[0].documents.forEach(
     document => (workItems = [...workItems, ...(document.workItems || [])]),

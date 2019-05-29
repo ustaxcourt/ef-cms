@@ -34,7 +34,7 @@ export const StartCaseInternal = connect(
     validatePetitionFromPaperSequence,
   }) => {
     return (
-      <section className="usa-section usa-grid">
+      <section className="usa-section grid-container">
         <form
           role="form"
           aria-labelledby="start-case-header"
@@ -56,22 +56,27 @@ export const StartCaseInternal = connect(
           <div className="blue-container">
             <div
               className={
-                'ustc-form-group ' +
-                (validationErrors.receivedAt ? 'usa-input-error' : '')
+                validationErrors.receivedAt ? 'usa-form-group--error' : ''
               }
             >
-              <fieldset>
-                <legend id="date-received-legend with-hint">
-                  Date Received{' '}
-                  <span className="usa-form-hint">(required)</span>
+              <fieldset className="usa-fieldset">
+                <legend
+                  id="date-received-legend with-hint"
+                  className="usa-legend"
+                >
+                  Date Received <span className="usa-hint">(required)</span>
                 </legend>
-                <div className="usa-date-of-birth">
-                  <div className="usa-form-group usa-form-group-month">
-                    <label htmlFor="date-received-month" aria-hidden="true">
+                <div className="usa-memorable-date">
+                  <div className="usa-form-group usa-form-group--month">
+                    <label
+                      htmlFor="date-received-month"
+                      className="usa-label"
+                      aria-hidden="true"
+                    >
                       MM
                     </label>
                     <input
-                      className="usa-input-inline"
+                      className="usa-input usa-input-inline"
                       aria-describedby="date-received-legend"
                       id="date-received-month"
                       name="month"
@@ -90,12 +95,16 @@ export const StartCaseInternal = connect(
                       }}
                     />
                   </div>
-                  <div className="usa-form-group usa-form-group-day">
-                    <label htmlFor="date-received-day" aria-hidden="true">
+                  <div className="usa-form-group usa-form-group--day">
+                    <label
+                      htmlFor="date-received-day"
+                      className="usa-label"
+                      aria-hidden="true"
+                    >
                       DD
                     </label>
                     <input
-                      className="usa-input-inline"
+                      className="usa-input usa-input-inline"
                       aria-describedby="date-received-legend"
                       aria-label="day, two digits"
                       id="date-received-day"
@@ -114,12 +123,16 @@ export const StartCaseInternal = connect(
                       }}
                     />
                   </div>
-                  <div className="usa-form-group usa-form-group-year">
-                    <label htmlFor="date-received-year" aria-hidden="true">
+                  <div className="usa-form-group usa-form-group--year">
+                    <label
+                      htmlFor="date-received-year"
+                      className="usa-label"
+                      aria-hidden="true"
+                    >
                       YYYY
                     </label>
                     <input
-                      className="usa-input-inline"
+                      className="usa-input usa-input-inline"
                       aria-describedby="date-received-legend"
                       aria-label="year, four digits"
                       id="date-received-year"
@@ -139,7 +152,7 @@ export const StartCaseInternal = connect(
                     />
                   </div>
                   <Text
-                    className="usa-input-error-message"
+                    className="usa-error-message"
                     bind="validationErrors.receivedAt"
                   />
                 </div>
@@ -148,16 +161,17 @@ export const StartCaseInternal = connect(
 
             <div
               className={
-                'ustc-form-group ' +
-                (validationErrors.caseCaption ? 'usa-input-error' : '')
+                'usa-form-group ' +
+                (validationErrors.caseCaption ? 'usa-form-group--error' : '')
               }
             >
-              <label htmlFor="case-caption">
-                Case Caption <span className="usa-form-hint">(required)</span>
+              <label htmlFor="case-caption" className="usa-label">
+                Case Caption <span className="usa-hint">(required)</span>
               </label>
               <textarea
                 id="case-caption"
                 name="caseCaption"
+                className="usa-textarea"
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -170,25 +184,24 @@ export const StartCaseInternal = connect(
               />
               {constants.CASE_CAPTION_POSTFIX}
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.caseCaption"
               />
             </div>
 
             <div
-              className={`ustc-form-group ${
-                validationErrors.petitionFile ? 'usa-input-error' : ''
+              className={`usa-form-group ${
+                validationErrors.petitionFile ? 'usa-form-group--error' : ''
               }`}
             >
               <label
                 htmlFor="petition-file"
                 className={
-                  'ustc-upload-petition ' +
+                  'usa-label ustc-upload-petition ' +
                   (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                 }
               >
-                Upload the Petition{' '}
-                <span className="usa-form-hint">(required)</span>
+                Upload the Petition <span className="usa-hint">(required)</span>
                 <span className="success-message">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
@@ -199,6 +212,7 @@ export const StartCaseInternal = connect(
                 accept=".pdf"
                 aria-describedby="petition-hint"
                 name="petitionFile"
+                className="usa-input"
                 onChange={e => {
                   limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                     updatePetitionValueSequence({
@@ -214,27 +228,27 @@ export const StartCaseInternal = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.petitionFile"
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.petitionFileSize"
               />
             </div>
           </div>
 
-          <h2>Statement of Taxpayer Identification</h2>
+          <h2 className="margin-top-4">Statement of Taxpayer Identification</h2>
           <div className="blue-container">
             <div
-              className={`ustc-form-group ${
-                validationErrors.stinFile ? 'usa-input-error' : ''
+              className={`usa-form-group ${
+                validationErrors.stinFile ? 'usa-form-group--error' : ''
               }`}
             >
               <label
                 htmlFor="stin-file"
                 className={
-                  'ustc-upload-stin ' +
+                  'usa-label ustc-upload-stin ' +
                   (startCaseHelper.showStinFileValid ? 'validated' : '')
                 }
               >
@@ -248,6 +262,7 @@ export const StartCaseInternal = connect(
                 type="file"
                 accept=".pdf"
                 name="stinFile"
+                className="usa-input"
                 onChange={e => {
                   limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                     updatePetitionValueSequence({
@@ -263,22 +278,22 @@ export const StartCaseInternal = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.stinFile"
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.stinFileSize"
               />
             </div>
           </div>
 
-          <h2>Ownership Disclosure Statement</h2>
+          <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
           <div className="blue-container">
             <label
               htmlFor="ownership-disclosure-file"
               className={
-                'ustc-upload-ods ' +
+                'usa-label ustc-upload-ods ' +
                 (startCaseHelper.showOwnershipDisclosureValid
                   ? 'validated'
                   : '')
@@ -294,6 +309,7 @@ export const StartCaseInternal = connect(
               type="file"
               accept=".pdf"
               name="ownershipDisclosureFile"
+              className="usa-input"
               onChange={e => {
                 limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                   updatePetitionValueSequence({
@@ -308,23 +324,29 @@ export const StartCaseInternal = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.ownershipDisclosureFileSize"
             />
           </div>
-          <button id="submit-case" type="submit" className="usa-button">
-            Create Case
-          </button>
-          <button
-            type="button"
-            className="usa-button-secondary"
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </button>
+          <div className="margin-top-4">
+            <button
+              id="submit-case"
+              type="submit"
+              className="usa-button margin-bottom-2"
+            >
+              Create Case
+            </button>
+            <button
+              type="button"
+              className="usa-button usa-button--outline"
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         </form>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

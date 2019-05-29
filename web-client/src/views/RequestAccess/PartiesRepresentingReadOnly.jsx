@@ -12,9 +12,11 @@ export const PartiesRepresentingReadOnly = connect(
   ({ caseDetail, chooseWizardStepSequence, form }) => {
     return (
       <React.Fragment>
-        <h3 className="header-with-link-button">Parties You’re Representing</h3>
+        <h2 className="header-with-link-button margin-top-4">
+          Parties You’re Representing
+        </h2>
         <button
-          className="link push-right"
+          className="link push-right usa-button usa-button--unstyled"
           type="button"
           onClick={() => chooseWizardStepSequence({ value: 'RequestAccess' })}
         >
@@ -22,8 +24,10 @@ export const PartiesRepresentingReadOnly = connect(
           Edit
         </button>
         <div className="blue-container">
-          <div className="ustc-form-group">
-            <label htmlFor="filing-parties">Parties</label>
+          <div className="usa-form-group">
+            <label htmlFor="filing-parties" className="usa-label">
+              Parties
+            </label>
             <ul className="ustc-unstyled-list without-margins">
               {form.representingPrimary && (
                 <li>{caseDetail.contactPrimary.name}</li>

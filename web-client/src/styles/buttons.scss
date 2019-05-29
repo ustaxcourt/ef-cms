@@ -1,109 +1,72 @@
-.usa-button,
-.usa-button-secondary {
-  margin: 0 20px 20px 0;
-}
+.usa-button {
+  min-width: 132px;
 
-button,
-a {
-  svg {
+  &.margin-right-0 {
+    margin-right: 0;
+  }
+
+  .svg-inline--fa {
     margin-right: 5px;
   }
-}
 
-button.pdf-link,
-button.link {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: $color-blue;
-  cursor: pointer;
-  font-weight: normal;
-  text-align: left;
-  text-decoration: underline;
-  svg {
-    margin-right: 5px;
+  &.float-right {
+    text-align: right;
   }
-  &:active,
-  &:hover {
-    border: none;
-    background: none;
-    color: $color-primary-darker;
-    text-decoration: underline;
-  }
-}
 
-button.pdf-link:hover {
-  color: $color-blue;
-}
+  &.mobile-sort-docket-button.usa-button--unstyled {
+    margin-bottom: 12px;
+    color: color($theme-color-base-darkest);
+    text-decoration: none;
 
-button.tab-link {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: $color-base;
-  cursor: pointer;
-  font-weight: normal;
-  text-decoration: none;
-}
-
-button.text-style {
-  padding: 0;
-  margin: 0;
-  background: none;
-  color: $color-blue;
-  cursor: pointer;
-  font-weight: normal;
-  text-decoration: none;
-
-  &:hover,
-  &:active {
-    background: inherit;
-    background-color: transparent;
-    color: inherit;
-  }
-  &.heading-1 {
     svg {
-      margin-right: 12px;
+      margin-left: 5px;
+      color: color($theme-color-primary);
     }
-    color: $color-black;
-    font-weight: $font-bold;
-    text-align: left;
   }
+}
 
+.button-switch-box {
+  font-size: 14px;
+  font-weight: $font-semibold;
+
+  svg {
+    margin-right: 5px;
+  }
 }
 
 .recall-button-box {
-  padding: 2px;
-  border: 1px solid $color-gold;
-  margin-right: 2px;
-  margin-bottom: 4px;
-  float: right;
+  padding: 8px 10px;
+  border: 1px solid color($theme-color-warning);
+  margin-top: -17px;
+  margin-bottom: 20px;
+  float: left;
   font-family: $font-serif;
   svg {
-    margin: 0 2rem;
-    color: $color-gold;
+    color: color($theme-color-warning);
   }
-  button {
-    margin-left: 2rem;
+
+  .batched-message {
+    margin: 17px 31px 19px 14px;
+    font-size: 20px;
+    line-height: 34px;
+  }
+
+  .recall-petition {
+    min-width: 100px;
+    margin: 0;
   }
 }
 
 .serve-to-irs {
-  margin: 0 0 26px 0;
-  float: right;
+  margin-bottom: 20px;
 }
 
-.button-container {
-  margin-top: 20px;
+.button-box-container {
+  margin-top: 40px;
 }
 
-.new-case {
-  margin: 0;
-  float: right;
-}
-
-.sign-out {
-  width: 17px;
-  padding: 4px 20px 4px 4px;
-  margin: 4px;
+#init-file-petition {
+  //float: left;
+  //text-align: left;
+  margin-right: 0;
 }

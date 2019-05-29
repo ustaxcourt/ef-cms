@@ -26,6 +26,7 @@ import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMess
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
+import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
@@ -58,6 +59,7 @@ import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocu
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
+import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
@@ -158,6 +160,7 @@ export const presenter = {
     dismissModalSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
+    fetchUserNotificationsSequence,
     formCancelToggleCancelSequence,
     getUsersInSectionSequence,
     gotoAddDocketEntrySequence,
@@ -188,6 +191,7 @@ export const presenter = {
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
+    setDocumentDetailTabSequence,
     setFocusedWorkItemSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,

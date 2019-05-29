@@ -1,10 +1,8 @@
 const client = require('../../dynamodbClientService');
-const {
-  createMappingRecord,
-} = require('../../dynamo/helpers/createMappingRecord');
-const {
-  deleteMappingRecord,
-} = require('../../dynamo/helpers/deleteMappingRecord');
+const { createSectionInboxRecord } = require('./createSectionInboxRecord');
+const { createUserInboxRecord } = require('./createUserInboxRecord');
+const { deleteSectionInboxRecord } = require('./deleteSectionInboxRecord');
+const { deleteUserInboxRecord } = require('./deleteUserInboxRecord');
 
 exports.reassignWorkItem = async ({
   applicationContext,
@@ -12,43 +10,35 @@ exports.reassignWorkItem = async ({
   workItemToSave,
 }) => {
   if (existingWorkItem.assigneeId) {
-    await deleteMappingRecord({
+    await deleteUserInboxRecord({
       applicationContext,
-      pkId: existingWorkItem.assigneeId,
-      skId: workItemToSave.workItemId,
-      type: 'workItem',
+      workItem: existingWorkItem,
     });
   }
 
   if (existingWorkItem.section !== workItemToSave.section) {
-    await deleteMappingRecord({
+    await deleteSectionInboxRecord({
       applicationContext,
-      pkId: existingWorkItem.section,
-      skId: existingWorkItem.workItemId,
-      type: 'workItem',
+      workItem: existingWorkItem,
     });
 
-    await createMappingRecord({
+    await createSectionInboxRecord({
       applicationContext,
-      pkId: workItemToSave.section,
-      skId: workItemToSave.workItemId,
-      type: 'workItem',
+      workItem: workItemToSave,
     });
   }
 
-  await createMappingRecord({
+  await createUserInboxRecord({
     applicationContext,
-    pkId: workItemToSave.assigneeId,
-    skId: workItemToSave.workItemId,
-    type: 'workItem',
+    workItem: workItemToSave,
   });
 };
 
 exports.updateWorkItem = async ({ applicationContext, workItemToSave }) => {
   await client.put({
     Item: {
-      pk: workItemToSave.workItemId,
-      sk: workItemToSave.workItemId,
+      pk: `workitem-${workItemToSave.workItemId}`,
+      sk: `workitem-${workItemToSave.workItemId}`,
       ...workItemToSave,
     },
     applicationContext,

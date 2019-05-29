@@ -28,18 +28,18 @@ export const TrialCity = connect(
     return (
       <div
         className={
-          'ustc-form-group ' +
-          (validationErrors.preferredTrialCity ? 'usa-input-error' : '')
+          'usa-form-group ' +
+          (validationErrors.preferredTrialCity ? 'usa-form-group--error' : '')
         }
       >
         <label
           htmlFor="preferred-trial-city"
-          className={showHint && 'with-hint'}
+          className={`usa-label ${showHint ? 'with-hint' : ''}`}
         >
           {label}
         </label>
         {showHint && (
-          <span className="usa-form-hint">
+          <span className="usa-hint">
             {showSmallTrialCitiesHint && (
               <React.Fragment>
                 Trial locations are unavailable in the following states: DE, NH,
@@ -58,6 +58,7 @@ export const TrialCity = connect(
         <select
           name="preferredTrialCity"
           id="preferred-trial-city"
+          className="usa-select"
           onChange={onChange}
           value={value}
         >

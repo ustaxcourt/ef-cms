@@ -309,8 +309,22 @@ exports.createContactFactory = ({
   additionalValidation,
 }) => {
   return ({ countryType }) => {
-    function GenericContactConstructor(raw) {
-      Object.assign(this, raw);
+    function GenericContactConstructor(rawContact) {
+      Object.assign(this, {
+        address1: rawContact.address1,
+        address2: rawContact.address2,
+        address3: rawContact.address3,
+        city: rawContact.city,
+        country: rawContact.country,
+        countryType: rawContact.countryType,
+        email: rawContact.email,
+        inCareOf: rawContact.inCareOf,
+        name: rawContact.name,
+        phone: rawContact.phone,
+        postalCode: rawContact.postalCode,
+        state: rawContact.state,
+        title: rawContact.title,
+      });
     }
 
     GenericContactConstructor.errorToMessageMap = {

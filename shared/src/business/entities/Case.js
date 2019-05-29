@@ -1,6 +1,3 @@
-const documentMapExternal = require('../../tools/externalFilingEvents.json');
-const documentMapInternal = require('../../tools/internalFilingEvents.json');
-
 const joi = require('joi-browser');
 const moment = require('moment');
 const uuid = require('uuid');
@@ -8,9 +5,10 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
-const { flatten, uniqBy } = require('lodash');
+const { Document } = require('./Document');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
+const { uniqBy, includes } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -19,12 +17,16 @@ const uuidVersions = {
 
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
-  generalDocket: 'General Docket',
+  generalDocket: 'General Docket - Not at Issue',
+  generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
   recalled: 'Recalled',
 };
 
 exports.STATUS_TYPES = statusMap;
+
+exports.ANSWER_CUTOFF_AMOUNT = 5; //Should be 45
+exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'day'
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -66,20 +68,47 @@ exports.CASE_CAPTION_POSTFIX =
  * @constructor
  */
 function Case(rawCase) {
-  const { Document } = require('./Document'); // circular reference back to Case, hence located here
-
-  Object.assign(
-    this,
-    rawCase,
-    {
-      caseId: rawCase.caseId || uuid.v4(),
-      createdAt: rawCase.createdAt || new Date().toISOString(),
-      status: rawCase.status || statusMap.new,
-    },
-    {
-      docketNumberSuffix: getDocketNumberSuffix(rawCase),
-    },
-  );
+  Object.assign(this, {
+    caseCaption: rawCase.caseCaption,
+    caseId: rawCase.caseId || uuid.v4(),
+    caseType: rawCase.caseType,
+    contactPrimary: rawCase.contactPrimary,
+    contactSecondary: rawCase.contactSecondary,
+    createdAt: rawCase.createdAt || new Date().toISOString(),
+    currentVersion: rawCase.currentVersion,
+    docketNumber: rawCase.docketNumber,
+    docketNumberSuffix: getDocketNumberSuffix(rawCase),
+    docketRecord: rawCase.docketRecord,
+    documents: rawCase.documents,
+    filingType: rawCase.filingType,
+    hasIrsNotice: rawCase.hasIrsNotice,
+    hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
+    initialDocketNumberSuffix: rawCase.initialDocketNumberSuffix,
+    initialTitle: rawCase.initialTitle,
+    irsNoticeDate: rawCase.irsNoticeDate,
+    irsSendDate: rawCase.irsSendDate,
+    isPaper: rawCase.isPaper,
+    noticeOfAttachments: rawCase.noticeOfAttachments,
+    orderForAmendedPetition: rawCase.orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee:
+      rawCase.orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee: rawCase.orderForFilingFee,
+    orderForOds: rawCase.orderForOds,
+    orderForRatification: rawCase.orderForRatification,
+    orderToShowCause: rawCase.orderToShowCause,
+    partyType: rawCase.partyType,
+    payGovDate: rawCase.payGovDate,
+    payGovId: rawCase.payGovId,
+    practitioners: rawCase.practitioners,
+    preferredTrialCity: rawCase.preferredTrialCity,
+    procedureType: rawCase.procedureType,
+    receivedAt: rawCase.receivedAt,
+    respondent: rawCase.respondent,
+    status: rawCase.status || statusMap.new,
+    userId: rawCase.userId,
+    workItems: rawCase.workItems,
+    yearAmounts: rawCase.yearAmounts,
+  });
 
   this.initialDocketNumberSuffix =
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
@@ -233,7 +262,6 @@ joiValidationDecorator(
       .optional(),
   }),
   function() {
-    const { Document } = require('./Document');
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
@@ -688,51 +716,12 @@ Case.stripLeadingZeros = docketNumber => {
 };
 
 /**
- * documentTypes
- * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string, answer: string, stipulatedDecision: string}}
- */
-Case.documentTypes = {
-  answer: 'Answer',
-  ownershipDisclosure: 'Ownership Disclosure Statement',
-  petitionFile: 'Petition',
-  stin: 'Statement of Taxpayer Identification',
-  stipulatedDecision: 'Stipulated Decision',
-};
-
-/**
- * 531 doc type used when associating a user
- */
-const practitionerAssociationDocumentType = [
-  'Entry of Appearance',
-  'Substitution of Counsel',
-];
-
-/**
  *
  * @param yearAmounts
  * @returns {boolean}
  */
 Case.areYearsUnique = yearAmounts => {
   return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
-};
-
-/**
- *
- * @returns {*|Array}
- */
-Case.getDocumentTypes = () => {
-  const allFilingEvents = flatten([
-    ...Object.values(documentMapExternal),
-    ...Object.values(documentMapInternal),
-  ]);
-  const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const documentTypes = [
-    ...Object.values(Case.documentTypes),
-    ...practitionerAssociationDocumentType,
-    ...filingEventTypes,
-  ];
-
-  return documentTypes;
 };
 
 /**
@@ -765,3 +754,51 @@ Case.prototype.getWorkItems = function() {
 };
 
 exports.Case = Case;
+
+/**
+ * check a case to see whether it should change to ready for trial.
+ *
+ * @returns {Case}
+ */
+Case.prototype.checkForReadyForTrial = function() {
+  const ANSWER_DOCUMENT_CODES = [
+    'A',
+    'AAPN',
+    'ATAP',
+    'AAAP',
+    'AATP',
+    'APA',
+    'ATSP',
+    'AATS',
+    'ASUP',
+    'ASAP',
+    'AATT',
+  ];
+
+  let docFiledCutoffDate = moment().subtract(
+    exports.ANSWER_CUTOFF_AMOUNT,
+    exports.ANSWER_CUTOFF_UNIT,
+  );
+
+  const isCaseGeneralDocketNotAtIssue = this.status === statusMap.generalDocket;
+
+  if (isCaseGeneralDocketNotAtIssue) {
+    this.documents.forEach(document => {
+      const isAnswerDocument = includes(
+        ANSWER_DOCUMENT_CODES,
+        document.eventCode,
+      );
+
+      const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
+        docFiledCutoffDate,
+        exports.ANSWER_CUTOFF_UNIT,
+      );
+
+      if (isAnswerDocument && docFiledBeforeCutoff) {
+        this.status = statusMap.generalDocketReadyForTrial;
+      }
+    });
+  }
+
+  return this;
+};

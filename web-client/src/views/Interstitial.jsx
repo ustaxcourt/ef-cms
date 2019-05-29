@@ -11,7 +11,7 @@ export const Interstitial = connect(
     return (
       <>
         {alertHelper.showErrorAlert && (
-          <section className="usa-section usa-grid">
+          <section className="usa-section grid-container">
             <h1 tabIndex="-1">We’re experiencing technical problems</h1>
             <h2>Where do you go from here?</h2>
             <p>

@@ -4,6 +4,7 @@ const {
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -41,8 +42,7 @@ exports.runBatchProcess = async ({ applicationContext }) => {
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromSection({
       applicationContext,
-      section: IRS_BATCH_SYSTEM_SECTION,
-      workItemId: workItem.workItemId,
+      workItem,
     });
 
     const s3Ids = caseToBatch.documents.map(document => document.documentId);
@@ -66,7 +66,7 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     });
 
     const stinDocument = caseToBatch.documents.find(
-      document => document.documentType === Case.documentTypes.stin,
+      document => document.documentType === Document.initialDocumentTypes.stin,
     );
 
     if (stinDocument) {
@@ -81,7 +81,8 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     );
 
     const petitionDocument = caseEntity.documents.find(
-      document => document.documentType === Case.documentTypes.petitionFile,
+      document =>
+        document.documentType === Document.initialDocumentTypes.petitionFile,
     );
     const initializeCaseWorkItem = petitionDocument.workItems.find(
       workItem => workItem.isInitializeCase,
