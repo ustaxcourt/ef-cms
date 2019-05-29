@@ -7,8 +7,17 @@ const tmp = require('tmp');
  * @param pdfData {{Uint8Array}} unknown.. buffer?
  * @returns {Uint8Array}
  */
-exports.sanitizePdf = async ({ pdfData }) => {
-  let inputPdf, intermediatePostscript, outputPdf, result;
+exports.sanitizePdf = async ({ applicationContext, documentId }) => {
+  let inputPdf, intermediatePostscript, outputPdf, newPdfData;
+
+  applicationContext.logger.time('Fetching S3 File');
+  let { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
   try {
     // write original PDF to disk
     inputPdf = tmp.fileSync();
@@ -23,15 +32,17 @@ exports.sanitizePdf = async ({ pdfData }) => {
     fs.closeSync(outputPdf.fd);
 
     const pdf2ps_cmd = [
+      '-q',
+      '-dQUIET',
       '-dBATCH',
       '-dSAFER',
       '-dNOPAUSE',
-      '-q',
       '-sDEVICE=ps2write',
       `-sOutputFile=${intermediatePostscript.name}`,
       `-f ${inputPdf.name}`,
     ].join(' ');
     const ps2pdf_cmd = [
+      '-q',
       '-dQUIET',
       '-dBATCH',
       '-dSAFER',
@@ -54,7 +65,7 @@ exports.sanitizePdf = async ({ pdfData }) => {
     gs.executeSync(ps2pdf_cmd);
 
     // read GS results and return them
-    result = fs.readFileSync(outputPdf.name);
+    newPdfData = fs.readFileSync(outputPdf.name);
 
     // remove temp-files we no longer need
     inputPdf.removeCallback();
@@ -63,5 +74,12 @@ exports.sanitizePdf = async ({ pdfData }) => {
   } catch (err) {
     throw err;
   }
-  return result;
+
+  applicationContext.logger.time('Saving S3 Document');
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  applicationContext.logger.timeEnd('Saving S3 Document');
+
+  return newPdfData;
 };
