@@ -258,6 +258,21 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  sanitizePdf:
+    handler: src/handlers.sanitizePdfLambda
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: v1/documents/{documentId}/sanitize
+          method: post
+          cors: true
+          async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   updateCase:
     handler: src/handlers.updateCaseLambda
     events:
