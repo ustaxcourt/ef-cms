@@ -12,3 +12,5 @@ web-client/cypress/screenshots
 web-client/node_modules
 web-client/reports
 web-client/tests_output/
+efcms-service/runtimes/clamav/bin
+efcms-service/runtimes/clamav/lib
