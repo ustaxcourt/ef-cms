@@ -78,6 +78,7 @@ import { getFilingTypes } from '../../shared/src/business/useCases/getFilingType
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
+import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
@@ -262,6 +263,7 @@ const applicationContext = {
       uploadPdf,
     };
   },
+  getScanner: getScannerInterface,
   getScannerResourceUri: () => {
     return (
       process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
