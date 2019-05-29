@@ -96,9 +96,6 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
-        getUseCases: () => ({
-          sanitizePdf: ({ pdfData }) => pdfData,
-        }),
         logger: {
           time: () => null,
           timeEnd: () => null,
@@ -138,9 +135,6 @@ describe('addCoverToPDFDocument', () => {
         }),
         getStorageClient: () => ({
           getObject: getObjectStub,
-        }),
-        getUseCases: () => ({
-          sanitizePdf: ({ pdfData }) => pdfData,
         }),
         logger: {
           time: () => null,

@@ -110,8 +110,6 @@ exports.addCoverToPDFDocument = async ({
     })
     .promise();
 
-  pdfData = await applicationContext.getUseCases().sanitizePdf({ pdfData }); // TODO
-
   applicationContext.logger.timeEnd('Fetching S3 File');
 
   // Dimensions of cover page - 8.5"x11" @ 300dpi
