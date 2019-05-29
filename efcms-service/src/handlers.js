@@ -39,6 +39,7 @@ module.exports = {
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
+  sanitizePdfLambda: require('./documents/sanitizePdfLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')

@@ -175,6 +175,9 @@ const {
   runBatchProcess,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
+  sanitizePdf,
+} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
+const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -354,6 +357,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
+        sanitizePdf,
         sendPetitionToIRSHoldingQueue,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
