@@ -13,3 +13,7 @@ variable "ami" {
 variable "availability_zones" {
   type = "list"
 }
+
+variable "git_access_token" {
+  type = "string"
+}
