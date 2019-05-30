@@ -77,7 +77,8 @@
     "docker:smoketests": "./docker-smoketests.sh",
     "docker:route53": "./docker-route53.sh",
     "docker:globaltables": "./docker-globaltables.sh",
-    "docker:clamav": "./docker-clamav.sh"
+    "docker:clamav": "./docker-clamav.sh",
+    "docker:ghostscript": "./docker-ghostscript.sh"
   },
   "jest": {
     "collectCoverage": true,
