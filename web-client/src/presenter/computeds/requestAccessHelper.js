@@ -91,6 +91,17 @@ export const requestAccessHelper = (get, applicationContext) => {
     validationErrors.representingPrimary ||
     validationErrors.representingSecondary;
 
+  const showFilingIncludes =
+    form.certificateOfService ||
+    (documentWithExhibits && form.exhibits) ||
+    (documentWithAttachments && form.attachments);
+
+  const showFilingNotIncludes =
+    !form.certificateOfService ||
+    (documentWithExhibits && !form.exhibits) ||
+    (documentWithAttachments && !form.attachments) ||
+    (documentWithSupportingDocuments && !form.hasSupportingDocuments);
+
   let exported = {
     certificateOfServiceDateFormatted,
     documentWithAttachments,
@@ -99,6 +110,8 @@ export const requestAccessHelper = (get, applicationContext) => {
     documentWithSupportingDocuments,
     documents,
     partyValidationError,
+    showFilingIncludes,
+    showFilingNotIncludes,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryParty,
   };
