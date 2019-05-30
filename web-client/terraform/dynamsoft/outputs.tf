@@ -10,7 +10,6 @@ output "cert_arn" {
   value = "${aws_acm_certificate.this.arn}"
 }
 
-
 output "resource_record_name" {
   value = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_name}"
 }

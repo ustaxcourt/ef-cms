@@ -3,7 +3,6 @@ resource "aws_instance" "dynamsoft" {
   ami           = "${var.ami}"
   instance_type = "t2.nano"
 
-  key_name = "dynamsoft"
   availability_zone = "${var.availability_zones[0]}"
   security_groups = ["${aws_security_group.dynamsoft.name}"]
 
@@ -58,8 +57,6 @@ resource "aws_security_group" "dynamsoft" {
   name        = "dynamsoft-${var.environment}"
   description = "Allow access to dynamsoft"
 
-  # vpc_id = "${aws_vpc.main.vpc_id}"
-
   tags {
     Name        = "dynamsoft-${var.environment}"
     environment = "${var.environment}"
@@ -80,25 +77,13 @@ resource "aws_security_group_rule" "dynamsoft_http_ingress" {
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
-  # cidr_blocks = ["0.0.0.0/0"]
   source_security_group_id = "${aws_security_group.dynamsoft_load_balancer_security_group.id}"
-  security_group_id        = "${aws_security_group.dynamsoft.id}"
-}
-
-resource "aws_security_group_rule" "dynamsoft_ssh_ingress" {
-  type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
-  protocol                 = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-  # source_security_group_id = "${aws_security_group.bastion_host_security_group.id}"
   security_group_id        = "${aws_security_group.dynamsoft.id}"
 }
 
 
 resource "aws_elb" "dynamsoft_elb" {
   name            = "dynamsoft-elb-${var.environment}"
-  # subnets         = ["${element(aws_vpc.main.public_subnets, 0)}"]
   availability_zones = "${var.availability_zones}"
   security_groups = ["${aws_security_group.dynamsoft_load_balancer_security_group.id}"]
 
@@ -147,29 +132,3 @@ resource "aws_acm_certificate" "this" {
     ManagedBy     = "terraform"
   }
 }
-
-# resource "aws_route53_record" "this" {
-#   name    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_name}"
-#   type    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_type}"
-#   zone_id = "${data.aws_route53_zone.zone.zone_id}"
-#   records = ["${aws_acm_certificate.this.domain_validation_options.0.resource_record_value}"]
-#   ttl     = 60
-# }
-
-# resource "aws_acm_certificate_validation" "dns_validation" {
-#   certificate_arn         = "${aws_acm_certificate.this.arn}"
-#   validation_record_fqdns = ["${aws_route53_record.this.fqdn}"]
-# }
-
-
-# module "dynamsoft-certificate" {
-#   source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
-#   domain_name            = "dynamsoft-${var.environment}.${var.dns_domain}"
-#   hosted_zone_name       = "${var.dns_domain}."
-#   is_hosted_zone_private = "false"
-#   validation_method      = "DNS"
-#   certificate_name       = "dynamsoft-${var.environment}.${var.dns_domain}"
-#   environment            = "${var.environment}"
-#   description            = "Certificate for dynamsoft-${var.environment}.${var.dns_domain}"
-#   product_domain         = "EFCMS"
-# }
