@@ -77,6 +77,7 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 - Node v10.15.3
 - npm 6.4.1
 - Ghostscript v9.26 (see Setup below)
+- ClamAV 0.101.2 (see Setup below)
 
 ### Setup
 
@@ -84,6 +85,13 @@ Follow the installation prerequisites for Ghostscript4JS at https://www.npmjs.co
 MacOS users can do the following:
 - `brew install ghostscript`
 - `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
+- `source ~/.bash_profile`
+
+For ClamAV, MacOS users can do the following:
+- `brew install clamav`
+- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
+- `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
+- `echo 'export CLAMAV_CLAMSCAN_PATH="/usr/local/bin/clamscan"' >> ~/.bash_profile`
 - `source ~/.bash_profile`
 
 Both the web-client and efcms-service share code that exists in the `shared` directory; therefore, before you can run either, you need to run `npm install` inside the `shared` directory.
