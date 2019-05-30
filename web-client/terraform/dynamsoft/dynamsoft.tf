@@ -91,16 +91,6 @@ resource "aws_security_group_rule" "dynamsoft_http_ingress" {
   security_group_id        = "${aws_security_group.dynamsoft.id}"
 }
 
-resource "aws_security_group_rule" "dynamsoft_https_ingress" {
-  type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
-  # cidr_blocks = ["0.0.0.0/0"]
-  source_security_group_id = "${aws_security_group.dynamsoft_load_balancer_security_group.id}"
-  security_group_id        = "${aws_security_group.dynamsoft.id}"
-}
-
 resource "aws_security_group_rule" "dynamsoft_ssh_ingress" {
   type                     = "ingress"
   from_port                = 22
