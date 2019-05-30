@@ -71,7 +71,7 @@ export const RequestAccess = connect(
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentType',
-                  value: documentType || '',
+                  value: e.target.value,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentTitleTemplate',
