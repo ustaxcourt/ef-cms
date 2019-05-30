@@ -55,9 +55,11 @@ async function deleteCase(context, events, done) {
   }
 
   let workItems = [];
-  caseRecords[0].documents.forEach(
-    document => (workItems = [...workItems, ...(document.workItems || [])]),
-  );
+  if (caseRecords[0]) {
+    caseRecords[0].documents.forEach(
+      document => (workItems = [...workItems, ...(document.workItems || [])]),
+    );
+  }
 
   for (let workItem of workItems) {
     await client.delete({
@@ -91,7 +93,10 @@ async function deleteCase(context, events, done) {
   });
 
   for (let petitionerDashboardRecord of petitionerDashboardRecords) {
-    console.log('deleting petitions dashboard mapping record:', petitionerDashboardRecord.pk);
+    console.log(
+      'deleting petitions dashboard mapping record:',
+      petitionerDashboardRecord.pk,
+    );
     await client.delete({
       applicationContext,
       key: {
@@ -101,7 +106,10 @@ async function deleteCase(context, events, done) {
     });
   }
 
-  console.log('deleting docket number mapping record:', caseRecords[0].docketNumber)
+  console.log(
+    'deleting docket number mapping record:',
+    caseRecords[0].docketNumber,
+  );
   await client.delete({
     applicationContext,
     key: {
