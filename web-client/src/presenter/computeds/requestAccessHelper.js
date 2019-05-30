@@ -18,6 +18,48 @@ export const requestAccessHelper = (get, applicationContext) => {
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
+  const documents = [
+    {
+      documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
+      documentType: 'Entry of Appearance',
+      eventCode: 'EA',
+      scenario: 'Standard',
+    },
+    {
+      documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',
+      documentType: 'Substitution of Counsel',
+      eventCode: 'SOC',
+      scenario: 'Standard',
+    },
+    {
+      documentTitleTemplate:
+        'Motion to Substitute Parties and Change Caption for [Petitioner Names]',
+      documentType: 'Motion to Substitute Parties and Change Caption',
+      eventCode: 'M107',
+      scenario: 'Standard',
+    },
+    {
+      documentTitleTemplate: 'Notice of Intervention for [Petitioner Names]',
+      documentType: 'Notice of Intervention',
+      eventCode: 'NOI',
+      scenario: 'Standard',
+    },
+    {
+      documentTitleTemplate:
+        'Notice of Election to Participate for [Petitioner Names]',
+      documentType: 'Notice of Election to Participate',
+      eventCode: 'NOEP',
+      scenario: 'Standard',
+    },
+    {
+      documentTitleTemplate:
+        'Notice of Election to Intervene for [Petitioner Names]',
+      documentType: 'Notice of Election to Intervene',
+      eventCode: 'NOEI',
+      scenario: 'Standard',
+    },
+  ];
+
   const documentWithExhibits =
     [
       'Motion to Substitute Parties and Change Caption',
@@ -55,6 +97,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     documentWithExhibits,
     documentWithObjections,
     documentWithSupportingDocuments,
+    documents,
     partyValidationError,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryParty,
