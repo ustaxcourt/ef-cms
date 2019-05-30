@@ -20,9 +20,9 @@ resource "aws_instance" "dynamsoft" {
       "cd /var/www/html",
       "sudo curl -H 'Authorization: token ${var.git_access_token}' -L https://api.github.com/repos/codyseibert/dynamsoft/tarball -o dynamsoft.tar.gz",
       "sudo tar xvzf dynamsoft.tar.gz",
-      "sudo cp -R codyseibert-dynamsoft-1fe64a10bbc1e0e4a522516d8be0ee30d3a068cb/* .",
-      "sudo sed 's/DYNAMSOFT_KEY/${var.product_keys}/' dynamsoft.webtwain.config.js.tpl > /tmp/dynamsoft.webtwain.config.js",
-      "sudo cp /tmp/dynamsoft.webtwain.config.js .",
+      "sudo cp -R codyseibert-dynamsoft-5bbf51a51de3717dfee641678d33f36e3cc857e7/* .",
+      "sudo sed 's/DYNAMSOFT_KEY/${var.product_keys}/' Resources/dynamsoft.webtwain.config.js.tpl > /tmp/dynamsoft.webtwain.config.js",
+      "sudo cp /tmp/dynamsoft.webtwain.config.js ./Resources",
     ]
 
     connection {
