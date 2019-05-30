@@ -24,3 +24,7 @@ variable "cloudfront_max_ttl" {
 variable "git_access_token" {
   type = "string"
 }
+
+variable "product_keys" {
+  type = "string"
+}
