@@ -7,7 +7,7 @@ exports.getScannerInterface = () => {
     const completeScanSession = async () => {
       const count = DWObject.HowManyImagesInBuffer;
       const promises = [];
-      const response = { error: null, scannerBuffer: null };
+      const response = { error: null, scannedBuffer: null };
 
       for (let index = 0; index < count; index++) {
         promises.push(
@@ -32,7 +32,7 @@ exports.getScannerInterface = () => {
                 new Uint8Array(await new Response(blob).arrayBuffer()),
               );
             }
-            response.scannerBuffer = blobBuffers;
+            response.scannedBuffer = blobBuffers;
             return response;
           })
           .catch(err => {
