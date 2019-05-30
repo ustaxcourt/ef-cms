@@ -22,6 +22,6 @@ mkdir -p bin
 mkdir -p lib
 
 cp /tmp/build/usr/bin/ghostscript /tmp/build/usr/bin/gs bin/.
-cp /tmp/build/usr/lib64/* /tmp/build/usr/lib64/ghostscript/*/* lib/.
+cp -r /tmp/build/usr/lib64/* lib/.
 
 tar -czf /opt/app/ghostscript_lambda_layer.tar.gz bin lib 
