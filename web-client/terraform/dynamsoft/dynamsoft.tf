@@ -21,6 +21,8 @@ data "template_file" "setup_dynamsoft" {
   vars {
     git_access_token = "${var.git_access_token}"
     product_keys = "${var.product_keys}"
+    dynamsoft_zip_name = "${var.dynamsoft_zip_name}"
+    dynamsoft_repo = "${var.dynamsoft_repo}"
   }
 }
 

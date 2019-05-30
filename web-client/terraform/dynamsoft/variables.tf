@@ -22,3 +22,11 @@ variable "git_access_token" {
 variable "product_keys" {
   type = "string"
 }
+
+variable "dynamsoft_zip_name" {
+  type = "string"
+}
+
+variable "dynamsoft_repo" {
+  type = "string"
+}
