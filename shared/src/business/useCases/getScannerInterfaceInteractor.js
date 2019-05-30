@@ -54,37 +54,43 @@ exports.getScannerInterface = () => {
       for (var i = 0; i < count; i++) {
         sources.push(DWObject.GetSourceNameItems(i));
       }
+      return sources;
+    };
+
+    const getScanError = () => {
+      return {
+        code: DWObject.ErrorCode,
+        message: DWObject.ErrorString,
+      };
+    };
+
+    const getSourceStatus = () => {
+      // 0	The Data Source is closed
+      // 1	The Data Source is opened
+      // 2	The Data Source is enabled
+      // 3	The Data Source is acquiring images
+      return DWObject.DataSourceStatus;
     };
 
     const setSourceByIndex = index => {
-      DWObject.SelectSourceByIndex(index);
+      return DWObject.SelectSourceByIndex(index) > -1;
     };
 
     const setSourceByName = sourceName => {
       const sources = getSources();
       const index = sources.indexOf(sourceName);
       if (index > -1) {
-        setSourceByIndex(index);
+        return setSourceByIndex(index);
       } else {
         // Handle case where a named sources isn't found
+        return false;
       }
     };
 
     const startScanSession = () => {
-      return new Promise((resolve, reject) => {
-        DWObject.SelectSource(
-          function() {
-            DWObject.OpenSource();
-            DWObject.IfDisableSourceAfterAcquire = true;
-            DWObject.AcquireImage();
-            resolve();
-          },
-          function() {
-            console.log('SelectSource failed!');
-            reject();
-          },
-        );
-      });
+      DWObject.IfDisableSourceAfterAcquire = true;
+      DWObject.OpenSource();
+      DWObject.AcquireImage();
     };
 
     return {
@@ -92,6 +98,8 @@ exports.getScannerInterface = () => {
       changeSource: null,
       completeScanSession,
       getScanCount,
+      getScanError,
+      getSourceStatus,
       getSources,
       setSourceByIndex,
       setSourceByName,

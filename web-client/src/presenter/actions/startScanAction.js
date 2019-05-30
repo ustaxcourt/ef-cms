@@ -10,5 +10,9 @@ import { state } from 'cerebral';
 export const startScanAction = async ({ applicationContext, store }) => {
   store.set(state.isScanning, true);
   const scanner = applicationContext.getScanner();
-  await scanner.startScanSession();
+
+  // Probably should be a separate action
+  scanner.setSourceByName('ICA-HP DeskJet 3700 series [E9DB2F]');
+
+  scanner.startScanSession();
 };
