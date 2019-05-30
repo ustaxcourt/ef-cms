@@ -1,11 +1,12 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
  * Set document title.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
- * @param {Object} providers.props the cerebral props object
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
  */
 export const generateCaseAssociationTitleAction = ({
   store,
@@ -25,4 +26,16 @@ export const generateCaseAssociationTitleAction = ({
       contactSecondaryName,
     });
   store.set(state.form.documentTitle, documentTitle);
+
+  if (!isEmpty(caseAssociationRequest.supportingDocumentMetadata)) {
+    caseAssociationRequest.supportingDocumentMetadata.previousDocument = documentTitle;
+    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
+      applicationContext,
+      documentMetadata: caseAssociationRequest.supportingDocumentMetadata,
+    });
+    store.set(
+      state.form.supportingDocumentMetadata.documentTitle,
+      documentTitle,
+    );
+  }
 };

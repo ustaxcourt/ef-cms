@@ -453,10 +453,6 @@ export const RequestAccessDocumentForm = connect(
                         value: e.target.value,
                       });
                       updateCaseAssociationFormValueSequence({
-                        key: 'supportingDocumentMetadata.previousDocument',
-                        value: form.documentTitle,
-                      });
-                      updateCaseAssociationFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
