@@ -190,6 +190,12 @@ resources:
             ResourcePath: '/*'
             MetricsEnabled: true
 
+layers:
+  ghostscript:
+    path: runtimes/ghostscript
+    exclude:
+      - build.sh
+
 functions:
   createDocument:
     handler: src/handlers.createDocumentLambda
