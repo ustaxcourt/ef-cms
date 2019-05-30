@@ -64,6 +64,35 @@ export const RequestAccess = connect(
                   eventCode: 'SOC',
                   scenario: 'Standard',
                 },
+                {
+                  documentTitleTemplate:
+                    'Motion to Substitute Parties and Change Caption for [Petitioner Names]',
+                  documentType:
+                    'Motion to Substitute Parties and Change Caption',
+                  eventCode: 'M107',
+                  scenario: 'Standard',
+                },
+                {
+                  documentTitleTemplate:
+                    'Notice of Intervention for [Petitioner Names]',
+                  documentType: 'Notice of Intervention',
+                  eventCode: 'NOI',
+                  scenario: 'Standard',
+                },
+                {
+                  documentTitleTemplate:
+                    'Notice of Election to Participate for [Petitioner Names]',
+                  documentType: 'Notice of Election to Participate',
+                  eventCode: 'NOEP',
+                  scenario: 'Standard',
+                },
+                {
+                  documentTitleTemplate:
+                    'Notice of Election to Intervene for [Petitioner Names]',
+                  documentType: 'Notice of Election to Intervene',
+                  eventCode: 'NOEI',
+                  scenario: 'Standard',
+                },
               ].map((option, index) => (
                 <div className="usa-radio" key={index}>
                   <input
