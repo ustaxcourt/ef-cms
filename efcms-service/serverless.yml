@@ -191,6 +191,11 @@ resources:
             MetricsEnabled: true
 
 layers:
+  clamav:
+    path: runtimes/clamav
+    exclude:
+      - freshclam.conf
+      - build.sh
   ghostscript:
     path: runtimes/ghostscript
     exclude:
