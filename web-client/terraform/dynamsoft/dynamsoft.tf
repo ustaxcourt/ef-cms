@@ -12,27 +12,17 @@ resource "aws_instance" "dynamsoft" {
     environment = "${var.environment}"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt update",
-      "sudo apt install -y nginx",
-      "sudo ufw allow 'Nginx HTTP'",
-      "cd /var/www/html",
-      "sudo curl -H 'Authorization: token ${var.git_access_token}' -L https://api.github.com/repos/codyseibert/dynamsoft/tarball -o dynamsoft.tar.gz",
-      "sudo tar xvzf dynamsoft.tar.gz",
-      "sudo cp -R codyseibert-dynamsoft-5bbf51a51de3717dfee641678d33f36e3cc857e7/* .",
-      "sudo sed 's/DYNAMSOFT_KEY/${var.product_keys}/' Resources/dynamsoft.webtwain.config.js.tpl > /tmp/dynamsoft.webtwain.config.js",
-      "sudo cp /tmp/dynamsoft.webtwain.config.js ./Resources",
-    ]
-
-    connection {
-      private_key  = "${file("ssh/id_rsa")}"
-      host = "${aws_instance.dynamsoft.public_ip}"
-      user = "ubuntu"
-    }
-  }
+  user_data = "${data.template_file.setup_dynamsoft.rendered}"
 }
 
+data "template_file" "setup_dynamsoft" {
+  template = "${file("setup_dynamsoft.sh")}"
+
+  vars {
+    git_access_token = "${var.git_access_token}"
+    product_keys = "${var.product_keys}"
+  }
+}
 
 resource "aws_security_group" "dynamsoft_load_balancer_security_group" {
   name        = "dynamsoft-load-balancer-${var.environment}"
