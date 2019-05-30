@@ -4,8 +4,7 @@ resource "aws_instance" "dynamsoft" {
   instance_type = "t2.nano"
 
   key_name = "dynamsoft"
-
-
+  availability_zone = "${var.availability_zones[0]}"
   security_groups = ["${aws_security_group.dynamsoft.name}"]
 
   tags {
@@ -18,6 +17,10 @@ resource "aws_instance" "dynamsoft" {
       "sudo apt update",
       "sudo apt install -y nginx",
       "sudo ufw allow 'Nginx HTTP'",
+      "cd /var/www/html",
+      "sudo curl -H 'Authorization: token ${var.git_access_token}' -L https://api.github.com/repos/codyseibert/dynamsoft/tarball -o dynamsoft.tar.gz",
+      "sudo tar xvzf dynamsoft.tar.gz",
+      "sudo cp -R codyseibert-dynamsoft-7b8778de535b7571a9d7ab7a0e7b25223ad8df4c/* .",
     ]
 
     connection {
@@ -26,17 +29,6 @@ resource "aws_instance" "dynamsoft" {
       user = "ubuntu"
     }
   }
-
-  # provisioner "file" {
-  #   source      = "Resources"
-  #   destination = "/var/www/html"
-
-  #   connection {
-  #     private_key  = "${file("ssh/id_rsa")}"
-  #     host = "${aws_instance.dynamsoft.public_ip}"
-  #     user = "ubuntu"
-  #   }
-  # }
 }
 
 
@@ -172,18 +164,18 @@ resource "aws_acm_certificate" "this" {
   }
 }
 
-resource "aws_route53_record" "this" {
-  name    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_name}"
-  type    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_type}"
-  zone_id = "${data.aws_route53_zone.zone.zone_id}"
-  records = ["${aws_acm_certificate.this.domain_validation_options.0.resource_record_value}"]
-  ttl     = 60
-}
+# resource "aws_route53_record" "this" {
+#   name    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_name}"
+#   type    = "${aws_acm_certificate.this.domain_validation_options.0.resource_record_type}"
+#   zone_id = "${data.aws_route53_zone.zone.zone_id}"
+#   records = ["${aws_acm_certificate.this.domain_validation_options.0.resource_record_value}"]
+#   ttl     = 60
+# }
 
-resource "aws_acm_certificate_validation" "dns_validation" {
-  certificate_arn         = "${aws_acm_certificate.this.arn}"
-  validation_record_fqdns = ["${aws_route53_record.this.fqdn}"]
-}
+# resource "aws_acm_certificate_validation" "dns_validation" {
+#   certificate_arn         = "${aws_acm_certificate.this.arn}"
+#   validation_record_fqdns = ["${aws_route53_record.this.fqdn}"]
+# }
 
 
 # module "dynamsoft-certificate" {

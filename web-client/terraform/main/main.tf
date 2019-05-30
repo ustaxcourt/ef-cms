@@ -41,7 +41,7 @@ module "dynamsoft_us_east" {
   }
   ami = "ami-0a313d6098716f372"
   availability_zones = ["us-east-1a"]
-
+  git_access_token = "${var.git_access_token}"
 }
 
 module "dynamsoft_us_west" {
@@ -54,30 +54,57 @@ module "dynamsoft_us_west" {
   }
   ami = "ami-06397100adf427136"
   availability_zones = ["us-west-1a"]
+  git_access_token = "${var.git_access_token}"
 }
 
 
-# resource "aws_route53_record" "dynamsoft_record_east" {
-#   zone_id = "${data.aws_route53_zone.zone.zone_id}"
-#   name    = "dynamsoft-${var.environment}.${var.dns_domain}"
-#   type    = "A"
-
-#   alias {
-#     name                   = "${module.dynamsoft_us_east.dns_name}"
-#     zone_id                = "${module.dynamsoft_us_east.zone_id}"
-#     evaluate_target_health = true
-#   }
-# }
+resource "aws_route53_record" "record_certs" {
+  name    = "${module.dynamsoft_us_east.resource_record_name}"
+  type    = "${module.dynamsoft_us_east.resource_record_type}"
+  zone_id = "${data.aws_route53_zone.zone.zone_id}"
+  records = [
+    "${module.dynamsoft_us_east.resource_record_value}",
+  ]
+  ttl     = 60
+}
 
 
-# resource "aws_route53_record" "dynamsoft_record_west" {
-#   zone_id = "${data.aws_route53_zone.zone.zone_id}"
-#   name    = "dynamsoft-${var.environment}.${var.dns_domain}"
-#   type    = "A"
+resource "aws_route53_record" "record_east_www" {
+  name    = "dynamsoft-${var.environment}.${var.dns_domain}"
+  type    = "CNAME"
+  zone_id = "${data.aws_route53_zone.zone.zone_id}"
+  set_identifier = "us-east-1"
+  records = [
+    "${module.dynamsoft_us_east.dns_name}",
+  ]
+  latency_routing_policy = {
+    region = "us-east-1"
+  }
+  ttl     = 60
+}
 
-#   alias {
-#     name                   = "${module.dynamsoft_us_west.dns_name}"
-#     zone_id                = "${module.dynamsoft_us_west.zone_id}"
-#     evaluate_target_health = true
-#   }
-# }
+resource "aws_route53_record" "record_west_www" {
+  name    = "dynamsoft-${var.environment}.${var.dns_domain}"
+  type    = "CNAME"
+  zone_id = "${data.aws_route53_zone.zone.zone_id}"
+  set_identifier = "us-west-1"
+  records = [
+    "${module.dynamsoft_us_west.dns_name}"
+  ]
+  latency_routing_policy = {
+    region = "us-west-1"
+  }
+  ttl     = 60
+}
+
+resource "aws_acm_certificate_validation" "dns_validation_east" {
+  certificate_arn         = "${module.dynamsoft_us_east.cert_arn}"
+  validation_record_fqdns = ["${aws_route53_record.record_certs.fqdn}"]
+  provider = "aws.us-east-1"
+}
+
+resource "aws_acm_certificate_validation" "dns_validation_west" {
+  certificate_arn         = "${module.dynamsoft_us_west.cert_arn}"
+  validation_record_fqdns = ["${aws_route53_record.record_certs.fqdn}"]
+  provider = "aws.us-west-1"
+}

@@ -20,3 +20,7 @@ variable "cloudfront_max_ttl" {
   type = "string"
   default = "0"
 }
+
+variable "git_access_token" {
+  type = "string"
+}
