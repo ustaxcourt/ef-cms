@@ -67,6 +67,7 @@ import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequen
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
+import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
@@ -203,6 +204,7 @@ export const presenter = {
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
+    setScannerSourceSequence,
     setWorkItemActionSequence,
     showDocketRecordDetailModalSequence,
     signOutSequence,
