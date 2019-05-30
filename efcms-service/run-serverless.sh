@@ -16,6 +16,7 @@ cd ..
 npm run build
 cp dist/* src
 tar -xvzf runtimes/clamav/clamav_lambda_layer.tar.gz -C runtimes/clamav
+tar -xvzf runtimes/ghostscript/ghostscript_lambda_layer.tar.gz -C runtimes/ghostscript
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls create_domain --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}" --userPoolId "${USER_POOL_ID}" --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}" --verbose
 
