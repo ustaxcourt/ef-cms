@@ -60,7 +60,7 @@ export const setupPercentDone = (files, store) => {
 /**
  * invokes the filePetition useCase.
  *
- * @param {Object} providers the providers object
+ * @param {object} providers the providers object
  * @param {Object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
  * @param {Object} providers.props the cerebral props object
@@ -114,6 +114,10 @@ export const createCaseFromPaperAction = async ({
   }
 
   for (let document of caseDetail.documents) {
+    await applicationContext.getUseCases().sanitizePdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
     await applicationContext.getUseCases().createCoverSheet({
       applicationContext,
       caseId: caseDetail.caseId,
