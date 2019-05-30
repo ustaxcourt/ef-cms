@@ -222,4 +222,8 @@ Follow these steps for creating the end of sprint PRs for the court.
      - `UI_SONAR_TOKEN` (the token for the sonar UI project)
      - `COGNITO_SUFFIX` (a suffix of your choice for the cognito url)
      - `USTC_ADMIN_PASS` (a unique password of your choice used by the cognito admin user)
+     - `DYNAMSOFT_REPO` (the private github repo path for fetching the tarball, e.g., `https://api.github.com/repos/codyseibert/dynamsoft/tarball`)
+     - `DYNAMSOFT_ZIP_NAME` (the name of the zip file which is zipped into the tarball, e.g., `codyseibert-dynamsoft-5bbf51a51de3717dfee641678d33f36e3cc857e7`)
+     - `PRODUCT_KEYS` (the list of product keys provided by dynamsoft, e.g., `abc;123`)
+     - `GIT_ACCESS_TOKEN` (a private access token which has access to the dynamsoft repo for fetching the tarball [Access Tokens](https://github.com/settings/tokens))
 8. Run a build.

@@ -43,6 +43,8 @@ module "dynamsoft_us_east" {
   availability_zones = ["us-east-1a"]
   git_access_token = "${var.git_access_token}"
   product_keys = "${var.product_keys}"
+  dynamsoft_zip_name = "${var.dynamsoft_zip_name}"
+  dynamsoft_repo = "${var.dynamsoft_repo}"
 }
 
 module "dynamsoft_us_west" {
@@ -57,6 +59,8 @@ module "dynamsoft_us_west" {
   availability_zones = ["us-west-1a"]
   git_access_token = "${var.git_access_token}"
   product_keys = "${var.product_keys}"
+  dynamsoft_zip_name = "${var.dynamsoft_zip_name}"
+  dynamsoft_repo = "${var.dynamsoft_repo}"
 }
 
 
