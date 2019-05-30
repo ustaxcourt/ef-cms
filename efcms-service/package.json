@@ -76,7 +76,8 @@
     "docker:s3replication": "./docker-s3replication.sh",
     "docker:smoketests": "./docker-smoketests.sh",
     "docker:route53": "./docker-route53.sh",
-    "docker:globaltables": "./docker-globaltables.sh"
+    "docker:globaltables": "./docker-globaltables.sh",
+    "docker:clamav": "./docker-clamav.sh"
   },
   "jest": {
     "collectCoverage": true,
