@@ -3,6 +3,7 @@ import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import { find } from 'lodash';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -10,6 +11,7 @@ export const RequestAccess = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    requestAccessHelper: state.requestAccessHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence:
@@ -20,6 +22,7 @@ export const RequestAccess = connect(
   },
   ({
     form,
+    requestAccessHelper,
     formCancelToggleCancelSequence,
     reviewRequestAccessInformationSequence,
     validationErrors,
@@ -43,94 +46,58 @@ export const RequestAccess = connect(
         </div>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
+            className={`usa-form-group margin-bottom-0 ${
               validationErrors.documentType ? 'usa-form-group--error' : ''
             }`}
           >
-            <fieldset className="usa-fieldset">
-              <legend>Document Type</legend>
-              {[
-                {
-                  documentTitleTemplate:
-                    'Entry of Appearance for [Petitioner Names]',
-                  documentType: 'Entry of Appearance',
-                  eventCode: 'EA',
-                  scenario: 'Standard',
-                },
-                {
-                  documentTitleTemplate:
-                    'Substitution of Counsel for [Petitioner Names]',
-                  documentType: 'Substitution of Counsel',
-                  eventCode: 'SOC',
-                  scenario: 'Standard',
-                },
-                {
-                  documentTitleTemplate:
-                    'Motion to Substitute Parties and Change Caption for [Petitioner Names]',
-                  documentType:
-                    'Motion to Substitute Parties and Change Caption',
-                  eventCode: 'M107',
-                  scenario: 'Standard',
-                },
-                {
-                  documentTitleTemplate:
-                    'Notice of Intervention for [Petitioner Names]',
-                  documentType: 'Notice of Intervention',
-                  eventCode: 'NOI',
-                  scenario: 'Standard',
-                },
-                {
-                  documentTitleTemplate:
-                    'Notice of Election to Participate for [Petitioner Names]',
-                  documentType: 'Notice of Election to Participate',
-                  eventCode: 'NOEP',
-                  scenario: 'Standard',
-                },
-                {
-                  documentTitleTemplate:
-                    'Notice of Election to Intervene for [Petitioner Names]',
-                  documentType: 'Notice of Election to Intervene',
-                  eventCode: 'NOEI',
-                  scenario: 'Standard',
-                },
-              ].map((option, index) => (
-                <div className="usa-radio" key={index}>
-                  <input
-                    id={`document-type-${index}`}
-                    className="usa-radio__input"
-                    type="radio"
-                    name="documentType"
-                    value={option.documentType}
-                    checked={form.documentType === option.documentType}
-                    onChange={e => {
-                      updateCaseAssociationFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      updateCaseAssociationFormValueSequence({
-                        key: 'documentTitleTemplate',
-                        value: option.documentTitleTemplate,
-                      });
-                      updateCaseAssociationFormValueSequence({
-                        key: 'eventCode',
-                        value: option.eventCode,
-                      });
-                      updateCaseAssociationFormValueSequence({
-                        key: 'scenario',
-                        value: option.scenario,
-                      });
-                      validateCaseAssociationRequestSequence();
-                    }}
-                  />
-                  <label
-                    htmlFor={`document-type-${index}`}
-                    className="usa-radio__label"
-                  >
-                    {option.documentType}
-                  </label>
-                </div>
-              ))}
-            </fieldset>
+            <label
+              htmlFor="document-type"
+              id="document-type-label"
+              className="usa-label"
+            >
+              Document Type
+            </label>
+            <select
+              name="documentType"
+              id="document-type"
+              aria-describedby="document-type-label"
+              className={`usa-select ${
+                validationErrors.documentType ? 'usa-select--error' : ''
+              }`}
+              onChange={e => {
+                const documentType = e.target.value;
+                const entry = find(requestAccessHelper.documents, {
+                  documentType,
+                });
+                updateCaseAssociationFormValueSequence({
+                  key: 'documentType',
+                  value: documentType || '',
+                });
+                updateCaseAssociationFormValueSequence({
+                  key: 'documentTitleTemplate',
+                  value: entry.documentTitleTemplate,
+                });
+                updateCaseAssociationFormValueSequence({
+                  key: 'eventCode',
+                  value: entry.eventCode,
+                });
+                updateCaseAssociationFormValueSequence({
+                  key: 'scenario',
+                  value: entry.scenario,
+                });
+                validateCaseAssociationRequestSequence();
+              }}
+              value={form.documentType || ''}
+            >
+              <option value="">- Select -</option>
+              {requestAccessHelper.documents.map(entry => {
+                return (
+                  <option key={entry.documentType} value={entry.documentType}>
+                    {entry.documentType}
+                  </option>
+                );
+              })}
+            </select>
             <Text
               className="usa-error-message"
               bind="validationErrors.documentType"
