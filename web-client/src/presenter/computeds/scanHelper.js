@@ -9,5 +9,7 @@ export const scanHelper = get => {
   return {
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(user && user.role && internalRoles.includes(user.role)),
+    showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
+    sources: get(state.scanner.sources),
   };
 };

@@ -4,6 +4,8 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
+import { SelectScannerSourceModal } from './SelectScannerSourceModal';
+
 class ScanComponent extends React.Component {
   componentWillMount() {
     this.props.scannerStartup();
@@ -18,6 +20,7 @@ class ScanComponent extends React.Component {
       <>
         {scanHelper.hasLoadedScanDependencies && (
           <>
+            {scanHelper.showScannerSourceModal && <SelectScannerSourceModal />}
             <button
               className="usa-button"
               type="buttom"
