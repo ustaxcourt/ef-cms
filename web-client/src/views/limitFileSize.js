@@ -1,7 +1,7 @@
 /**
  * Limits the file size of the file chosen
  *
- * @param {Object} e the file selected event
+ * @param {object} e the file selected event
  * @param {number} megabyteLimit max size
  * @param {Function} callback call if the file is an acceptable size
  */
