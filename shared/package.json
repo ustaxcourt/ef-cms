@@ -48,7 +48,6 @@
     "csv-parse": "^4.4.1",
     "eslint-plugin-jest": "^22.6.4",
     "eslint-plugin-sort-requires": "^2.1.0",
-    "ghostscript4js": "^3.1.0",
     "joi-browser": "^13.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
