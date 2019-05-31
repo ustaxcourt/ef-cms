@@ -7,11 +7,11 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  * contactPrimary, and/or contactSecondary depending on the
  * key/value pair passed in via props
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store
- * @param {Object} providers.props the cerebral store used for
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store
+ * @param {object} providers.props the cerebral store used for
  * getting props.key and props.value
- * @param {Object} providers.get the cerebral get function used
+ * @param {object} providers.get the cerebral get function used
  * for getting state.form.filingType
  */
 export const updatePartyTypeAction = async ({ store, props, get }) => {
