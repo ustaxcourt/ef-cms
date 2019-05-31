@@ -43,18 +43,6 @@ export const RequestAccessDocumentReadOnly = connect(
             </div>
           )}
 
-          {form.certificateOfService === true && (
-            <div className="usa-form-group">
-              <label
-                htmlFor="certificate-of-service-date"
-                className="usa-label"
-              >
-                Certificate of Service Date
-              </label>
-              {requestAccessHelper.certificateOfServiceDateFormatted}
-            </div>
-          )}
-
           {requestAccessHelper.showFilingIncludes && (
             <div className="usa-form-group">
               <label htmlFor="filing-includes" className="usa-label">
