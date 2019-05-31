@@ -1,7 +1,8 @@
-const fs = require('fs');
-const gs = require('ghostscript4js');
-const tmp = require('tmp');
+const util = require('util');
 
+const exec = util.promisify(require('child_process').exec);
+const fs = require('fs');
+const tmp = require('tmp');
 /**
  * sanitizes PDF input, removing interactive elements
  * @param pdfData {{Uint8Array}} unknown.. buffer?
@@ -32,6 +33,7 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
     fs.closeSync(outputPdf.fd);
 
     const pdf2ps_cmd = [
+      'gs',
       '-q',
       '-dQUIET',
       '-dBATCH',
@@ -42,6 +44,7 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
       `-f ${inputPdf.name}`,
     ].join(' ');
     const ps2pdf_cmd = [
+      'gs',
       '-q',
       '-dQUIET',
       '-dBATCH',
@@ -61,8 +64,8 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
     ].join(' ');
 
     // run GS conversions
-    gs.executeSync(pdf2ps_cmd);
-    gs.executeSync(ps2pdf_cmd);
+    await exec(pdf2ps_cmd);
+    await exec(ps2pdf_cmd);
 
     // read GS results and return them
     newPdfData = fs.readFileSync(outputPdf.name);
