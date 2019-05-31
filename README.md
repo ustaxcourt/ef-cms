@@ -142,10 +142,6 @@ The password for all accounts is:
 
 `Testing1234$`
 
-## CI/CD Setup
-
-For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
-
 ## Editor configuration
 
 ### Atom.io
