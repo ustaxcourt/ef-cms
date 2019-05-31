@@ -7,9 +7,14 @@ global.window = jsdom.window;
 const mockSources = ['Test Source 1', 'Test Source 2'];
 const mockScanCount = 1;
 
+const mockAcquireImage = jest.fn();
+const mockCloseSource = jest.fn();
+const mockOpenSource = jest.fn();
+const mockRemoveAllImages = jest.fn();
+
 const DWObject = {
-  AcquireImage: () => null,
-  CloseSource: () => null,
+  AcquireImage: mockAcquireImage,
+  CloseSource: mockCloseSource,
   ConvertToBlob: (
     indices,
     enumImageType,
@@ -25,8 +30,9 @@ const DWObject = {
   ErrorString: 'Successful!',
   GetSourceNameItems: index => mockSources[index],
   HowManyImagesInBuffer: mockScanCount,
-  OpenSource: () => null,
-  RemoveAllImages: () => null,
+  IfDisableSourceAfterAcquire: false,
+  OpenSource: mockOpenSource,
+  RemoveAllImages: mockRemoveAllImages,
   SelectSourceByIndex: idx => {
     DWObject.DataSource = idx;
     return true;
@@ -50,10 +56,12 @@ describe('getScannerInterface', () => {
     expect(scannerAPI).toHaveProperty('DWObject');
   });
 
-  // TODO: Beef this up
-  it('has a method for completing the scan process', () => {
+  it('has a method for completing the scan process', async () => {
     const scannerAPI = getScannerInterface();
     expect(scannerAPI).toHaveProperty('completeScanSession');
+    await scannerAPI.completeScanSession();
+    expect(mockRemoveAllImages).toHaveBeenCalled();
+    expect(mockCloseSource).toHaveBeenCalled();
   });
 
   it('can get the page / scan count in the current buffer', () => {
@@ -91,9 +99,18 @@ describe('getScannerInterface', () => {
     expect(scannerAPI.DWObject.DataSource).toEqual(0);
   });
 
-  // TODO: Beef this up
-  it('has a method for starting the scan process', () => {
+  it('setSourceByName returns `false` when the source is not found', () => {
+    const scannerAPI = getScannerInterface();
+    const result = scannerAPI.setSourceByName('Unavailable Source');
+    expect(result).toBeFalsy();
+  });
+
+  it('has a method for starting the scan process', async () => {
     const scannerAPI = getScannerInterface();
     expect(scannerAPI).toHaveProperty('startScanSession');
+    await scannerAPI.startScanSession();
+    expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
+    expect(mockOpenSource).toHaveBeenCalled();
+    expect(mockAcquireImage).toHaveBeenCalled();
   });
 });
