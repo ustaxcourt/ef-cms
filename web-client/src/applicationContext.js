@@ -91,6 +91,7 @@ import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
+import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -105,6 +106,7 @@ import { validateInitialWorkItemMessage } from '../../shared/src/business/useCas
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
+import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -171,6 +173,7 @@ const allUseCases = {
   setItem: setItemUC,
   setWorkItemAsRead,
   submitCaseAssociationRequest,
+  submitPendingCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
   uploadExternalDocuments,
@@ -184,6 +187,7 @@ const allUseCases = {
   validatePetition,
   validatePetitionFromPaper,
   verifyCaseForUser,
+  verifyPendingCaseForUser,
 };
 tryCatchDecorator(allUseCases);
 
