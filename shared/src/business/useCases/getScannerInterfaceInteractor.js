@@ -95,7 +95,6 @@ exports.getScannerInterface = () => {
 
     return {
       DWObject,
-      changeSource: null,
       completeScanSession,
       getScanCount,
       getScanError,
