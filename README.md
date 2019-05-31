@@ -76,14 +76,14 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v10.15.3
 - npm 6.4.1
-- Ghostscript v9.26 (see Setup below)
+- Ghostscript v9.23 (see Setup below)
 - ClamAV 0.101.2 (see Setup below)
 
 ### Setup
 
 Follow the installation prerequisites for Ghostscript4JS at https://www.npmjs.com/package/ghostscript4js#prerequisites
 MacOS users can do the following:
-- `brew install ghostscript`
+- `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e61385fb91ced20245d063f728401e9727293ce0/Formula/ghostscript.rb`
 - `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
 - `source ~/.bash_profile`
 
@@ -141,10 +141,6 @@ seniorattorney1@example.com – seniorattorney5@example.com
 The password for all accounts is:
 
 `Testing1234$`
-
-## CI/CD Setup
-
-For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
 ## Editor configuration
 

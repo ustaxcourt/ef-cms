@@ -125,7 +125,7 @@ const router = {
       '..',
       () => {
         document.title = `Error ${pageTitleSuffix}`;
-        app.getSequence('unauthorizedErrorSequence')({
+        app.getSequence('notFoundErrorSequence')({
           error: {},
         });
       },
