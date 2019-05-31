@@ -1,25 +1,17 @@
 const fs = require('fs');
-const NodeClam = require('clamscan');
+const tmp = require('tmp');
+const util = require('util');
+const { exec } = require('child_process');
+
+const execPromise = util.promisify(exec);
 
 /**
  * virusScanDocument
  * @param applicationContext
  * @param documentId
- * @param user
  * @returns {Object} errors (null if no errors)
  */
 exports.virusScanPdf = async ({ applicationContext, documentId }) => {
-  // TODO: move to applicationContext
-  const clamscanConfig = {
-    clamscan: {
-      active: true, // Path to clamscan binary on your server
-      db: null, // Path to a custom virus definition database
-      path: '/usr/local/bin/clamscan', // If true, scan archives (ex. zip, rar, tar, dmg, iso, etc...)
-      scan_archives: true, // If true, this module will consider using the clamscan binary
-    },
-  };
-  const clamscan = await new NodeClam().init(clamscanConfig);
-
   applicationContext.logger.time('Fetching S3 File');
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -28,9 +20,24 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
       Key: documentId,
     })
     .promise();
-  const tempFileLocation = '/tmp/document.pdf';
-  await fs.writeFile(tempFileLocation, pdfData);
-  const results = await clamscan.is_infected(tempFileLocation);
 
-  return { viruses: results.viruses };
+  const inputPdf = tmp.fileSync();
+  fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
+  fs.closeSync(inputPdf.fd);
+
+  let results;
+  try {
+    const scanResults = await execPromise(`clamscan ${inputPdf.name}`);
+    applicationContext.logger.time(scanResults);
+    results = 'clean';
+  } catch (e) {
+    applicationContext.logger.time(e);
+    if (e.code === 1) {
+      results = 'infected';
+    } else {
+      results = 'error';
+    }
+  }
+
+  return results;
 };
