@@ -32,28 +32,25 @@ export const requestAccessHelper = (get, applicationContext) => {
       scenario: 'Standard',
     },
     {
-      documentTitleTemplate:
-        'Motion to Substitute Parties and Change Caption for [Petitioner Names]',
+      documentTitleTemplate: 'Motion to Substitute Parties and Change Caption',
       documentType: 'Motion to Substitute Parties and Change Caption',
       eventCode: 'M107',
       scenario: 'Standard',
     },
     {
-      documentTitleTemplate: 'Notice of Intervention for [Petitioner Names]',
+      documentTitleTemplate: 'Notice of Intervention',
       documentType: 'Notice of Intervention',
       eventCode: 'NOI',
       scenario: 'Standard',
     },
     {
-      documentTitleTemplate:
-        'Notice of Election to Participate for [Petitioner Names]',
+      documentTitleTemplate: 'Notice of Election to Participate',
       documentType: 'Notice of Election to Participate',
       eventCode: 'NOEP',
       scenario: 'Standard',
     },
     {
-      documentTitleTemplate:
-        'Notice of Election to Intervene for [Petitioner Names]',
+      documentTitleTemplate: 'Notice of Election to Intervene',
       documentType: 'Notice of Election to Intervene',
       eventCode: 'NOEI',
       scenario: 'Standard',
