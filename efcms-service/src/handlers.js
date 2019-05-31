@@ -36,6 +36,8 @@ module.exports = {
     .handler,
   practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
     .handler,
+  practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')
+    .handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,

@@ -369,6 +369,19 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  practitionerCaseAssociation:
+    handler: src/handlers.practitionerPendingCaseAssociationLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+
   getCasesForRespondent:
     handler: src/handlers.getCasesForRespondentLambda
     events:
