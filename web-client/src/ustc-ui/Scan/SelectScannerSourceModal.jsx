@@ -9,7 +9,7 @@ class SelectScannerSourceModalComponent extends ModalDialog {
     super(props);
     this.modal = {
       cancelLabel: 'Cancel',
-      classNames: '',
+      classNames: 'modal-select-scanner-source',
       confirmLabel: 'Use Scanner',
     };
   }
@@ -19,11 +19,11 @@ class SelectScannerSourceModalComponent extends ModalDialog {
 
     return (
       <div>
-        Select a scanner source:
+        <h3>Select a Scanner Source</h3>
         {sources.map((source, index) => {
           return (
             <button
-              className="margin-top-2"
+              className="usa-button usa-button--outline display-block margin-top-1"
               key={index}
               onClick={() => {
                 setScannerSource({ scannerSourceName: source });
@@ -33,6 +33,9 @@ class SelectScannerSourceModalComponent extends ModalDialog {
             </button>
           );
         })}
+        {sources.length === 0 && (
+          <p>There are currently no scanner sources available.</p>
+        )}
       </div>
     );
   }
@@ -40,6 +43,7 @@ class SelectScannerSourceModalComponent extends ModalDialog {
 
 export const SelectScannerSourceModal = connect(
   {
+    cancelSequence: sequences.dismissModalSequence,
     setScannerSource: sequences.setScannerSourceSequence,
     sources: state.scanHelper.sources,
   },
