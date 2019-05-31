@@ -67,4 +67,25 @@ describe('scanHelper', () => {
     });
     expect(result.hasScanFeature).toBeFalsy();
   });
+
+  it('shows the scanner source selection modal', async () => {
+    const result = await runCompute(scanHelper, {
+      state: {
+        showModal: 'SelectScannerSourceModal',
+      },
+    });
+    expect(result.showScannerSourceModal).toBeTruthy();
+  });
+
+  it('gets the scanner sources from state', async () => {
+    const mockSources = ['Test Source 1', 'Test Source 2'];
+    const result = await runCompute(scanHelper, {
+      state: {
+        scanner: {
+          sources: mockSources,
+        },
+      },
+    });
+    expect(result.sources.length).toEqual(2);
+  });
 });
