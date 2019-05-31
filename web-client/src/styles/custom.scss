@@ -147,6 +147,13 @@ select[disabled] {
       margin-bottom: 15px;
     }
   }
+
+  &.no-margin-last-child {
+    > .usa-form-group:last-child,
+    > .usa-fieldset:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 /* big screens */

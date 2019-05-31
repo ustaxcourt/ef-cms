@@ -23,7 +23,7 @@ export const PartiesRepresentingReadOnly = connect(
           <FontAwesomeIcon icon="edit" size="sm" />
           Edit
         </button>
-        <div className="blue-container">
+        <div className="blue-container no-margin-last-child">
           <div className="usa-form-group">
             <label htmlFor="filing-parties" className="usa-label">
               Parties
