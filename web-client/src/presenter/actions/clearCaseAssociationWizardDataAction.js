@@ -17,6 +17,12 @@ export const clearCaseAssociationWizardDataAction = ({ store, props }) => {
     case 'hasSupportingDocuments':
       store.unset(state.form.supportingDocument);
       store.unset(state.form.supportingDocumentMetadata);
+      store.unset(state.form.supportingDocumentFreeText);
+      store.unset(state.form.supportingDocumentFile);
+      break;
+    case 'supportingDocument':
+      store.unset(state.form.supportingDocumentFreeText);
+      store.unset(state.form.supportingDocumentMetadata.freeText);
       break;
     case 'documentType':
       store.unset(state.form.objections);
