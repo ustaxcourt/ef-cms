@@ -91,6 +91,7 @@ import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
+import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -171,6 +172,7 @@ const allUseCases = {
   setItem: setItemUC,
   setWorkItemAsRead,
   submitCaseAssociationRequest,
+  submitPendingCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
   uploadExternalDocuments,
