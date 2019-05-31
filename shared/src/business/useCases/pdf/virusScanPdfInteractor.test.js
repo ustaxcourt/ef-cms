@@ -31,7 +31,7 @@ describe('virusScanPdf', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
     const result = await virusScanPdf(cleanParams);
-    expect(result.viruses).toHaveLength(0);
+    expect(result).toBe('clean');
   });
 
   it('detects an infected PDF', async () => {
@@ -53,6 +53,6 @@ describe('virusScanPdf', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
     const result = await virusScanPdf(infectedParams);
-    expect(result.viruses).toHaveLength(1);
+    expect(result).toBe('infected');
   });
 });
