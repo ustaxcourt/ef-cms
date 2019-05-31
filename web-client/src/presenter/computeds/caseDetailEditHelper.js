@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  *
  * @param {Function} get the cerebral get function used
  * for getting state.caseDetail.partyType and state.constants
- * @returns {Object} partyTypes constant, showPrimary/SecondaryContact,
+ * @returns {object} partyTypes constant, showPrimary/SecondaryContact,
  * showOwnershipDisclosureStatement, and ownershipDisclosureStatementDocumentId
  */
 export const caseDetailEditHelper = get => {

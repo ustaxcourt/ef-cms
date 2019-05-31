@@ -5,9 +5,9 @@ import { state } from 'cerebral';
  * is different than the state.sessionMetadata.caseId (last case the user was viewing
  * when they changed the default sort option)
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store used for setting state.sessionMetadata.docketRecordSort
- * @param {Object} providers.get the cerebral store used for getting state.sessionMetadata.docketRecordSort
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store used for setting state.sessionMetadata.docketRecordSort
+ * @param {object} providers.get the cerebral store used for getting state.sessionMetadata.docketRecordSort
  */
 export const setDefaultDocketRecordSortAction = ({ store, get }) => {
   const caseId = get(state.caseDetail.caseId);
