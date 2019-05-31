@@ -37,53 +37,47 @@ function CaseAssociationRequestFactory(rawProps) {
     });
   };
 
-  const documentWithExhibits =
-    [
-      'Motion to Substitute Parties and Change Caption',
-      'Notice of Intervention',
-      'Notice of Election to Participate',
-      'Notice of Election to Intervene',
-    ].indexOf(rawProps.documentType) !== -1;
+  const documentWithExhibits = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(rawProps.documentType);
 
-  const documentWithAttachments =
-    [
-      'Motion to Substitute Parties and Change Caption',
-      'Notice of Intervention',
-      'Notice of Election to Participate',
-      'Notice of Election to Intervene',
-    ].indexOf(rawProps.documentType) !== -1;
+  const documentWithAttachments = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(rawProps.documentType);
 
-  const documentWithObjections =
-    [
-      'Substitution of Counsel',
-      'Motion to Substitute Parties and Change Caption',
-    ].indexOf(rawProps.documentType) !== -1;
+  const documentWithObjections = [
+    'Substitution of Counsel',
+    'Motion to Substitute Parties and Change Caption',
+  ].includes(rawProps.documentType);
 
-  const documentWithSupportingDocuments =
-    ['Motion to Substitute Parties and Change Caption'].indexOf(
-      rawProps.documentType,
-    ) !== -1;
+  const documentWithSupportingDocuments = [
+    'Motion to Substitute Parties and Change Caption',
+  ].includes(rawProps.documentType);
 
-  const documentWithConcatentatedPetitionerNames =
-    ['Entry of Appearance', 'Substitution of Counsel'].indexOf(
-      rawProps.documentType,
-    ) !== -1;
+  const documentWithConcatentatedPetitionerNames = [
+    'Entry of Appearance',
+    'Substitution of Counsel',
+  ].includes(rawProps.documentType);
 
-  const supportingDocumentWithFreeText =
-    [
-      'Affidavit in Support',
-      'Declaration in Support',
-      'Unsworn Declaration under Penalty of Perjury in Support',
-    ].indexOf(rawProps.supportingDocument) !== -1;
+  const supportingDocumentWithFreeText = [
+    'Affidavit in Support',
+    'Declaration in Support',
+    'Unsworn Declaration under Penalty of Perjury in Support',
+  ].includes(rawProps.supportingDocument);
 
-  const supportingDocumentWithFile =
-    [
-      'Memorandum in Support',
-      'Brief in Support',
-      'Affidavit in Support',
-      'Declaration in Support',
-      'Unsworn Declaration under Penalty of Perjury in Support',
-    ].indexOf(rawProps.supportingDocument) !== -1;
+  const supportingDocumentWithFile = [
+    'Memorandum in Support',
+    'Brief in Support',
+    'Affidavit in Support',
+    'Declaration in Support',
+    'Unsworn Declaration under Penalty of Perjury in Support',
+  ].includes(rawProps.supportingDocument);
 
   entityConstructor.prototype.getDocumentTitle = function(
     contactPrimaryName,

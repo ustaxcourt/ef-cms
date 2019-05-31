@@ -44,18 +44,17 @@ export const submitCaseAssociationRequestAction = async ({
       primaryDocumentFileId,
     });
 
-  const documentWithImmediateAssociation =
-    ['Entry of Appearance', 'Substitution of Counsel'].indexOf(
-      documentMetadata.documentType,
-    ) !== -1;
+  const documentWithImmediateAssociation = [
+    'Entry of Appearance',
+    'Substitution of Counsel',
+  ].includes(documentMetadata.documentType);
 
-  const documentWithPendingAssociation =
-    [
-      'Motion to Substitute Parties and Change Caption',
-      'Notice of Intervention',
-      'Notice of Election to Participate',
-      'Notice of Election to Intervene',
-    ].indexOf(documentMetadata.documentType) !== -1;
+  const documentWithPendingAssociation = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(documentMetadata.documentType);
 
   if (documentWithImmediateAssociation) {
     await applicationContext.getUseCases().submitCaseAssociationRequest({
