@@ -50,4 +50,6 @@ module.exports = {
   swaggerLambda: require('./swagger/swaggerLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
+  verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
+    .handler,
 };
