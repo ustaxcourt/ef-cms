@@ -369,7 +369,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  practitionerCaseAssociation:
+  practitionerPendingCaseAssociation:
     handler: src/handlers.practitionerPendingCaseAssociationLambda
     events:
       - http:
@@ -380,7 +380,6 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
 
   getCasesForRespondent:
     handler: src/handlers.getCasesForRespondentLambda
