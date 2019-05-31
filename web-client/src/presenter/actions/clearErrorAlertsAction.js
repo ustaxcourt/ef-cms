@@ -5,8 +5,8 @@ import { state } from 'cerebral';
  * state.alertError is used for displaying the red alert at the top of the page.
  * state.caseDetailErrors is used for field level validation on the update a petition page.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store object used for clearing alertError and caseDetailErrors
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store object used for clearing alertError and caseDetailErrors
  */
 export const clearErrorAlertsAction = ({ store }) => {
   store.set(state.alertError, null);

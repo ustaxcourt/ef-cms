@@ -4,10 +4,10 @@ import { state } from 'cerebral';
 /**
  * invokes the filePetition useCase.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
- * @returns {Object} the next path based on if creation was successful or error
+ * @returns {object} the next path based on if creation was successful or error
  */
 export const createCaseAction = async ({
   applicationContext,
