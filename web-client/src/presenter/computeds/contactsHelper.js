@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {Function} get the cerebral get function used
  * for getting state.form.partyType and state.constants
- * @returns {Object} the contactPrimary and/or contactSecondary
+ * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
 export const contactsHelper = get => {
