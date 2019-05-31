@@ -19,7 +19,6 @@ exports.handler = event =>
       const results = await applicationContext.getUseCases().virusScanDocument({
         applicationContext,
         documentId,
-        user: JSON.parse(event.body),
       });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

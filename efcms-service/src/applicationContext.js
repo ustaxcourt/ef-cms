@@ -305,7 +305,6 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCasesByUser,
         getCasesForRespondent,
-        getDocument,
         getDownloadPolicyUrl,
         getInternalUsers,
         getSentWorkItemsForSection,
