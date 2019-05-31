@@ -4,9 +4,10 @@ const exec = util.promisify(require('child_process').exec);
 const fs = require('fs');
 const tmp = require('tmp');
 /**
- * sanitizes PDF input, removing interactive elements
- * @param pdfData {{Uint8Array}} unknown.. buffer?
- * @returns {Uint8Array}
+ * sanitizes PDF input, removing interactive elements, saves altered PDF to persistence
+ * @param applicationContext
+ * @param documentId
+ * @returns {Uint8Array} modified PDF data
  */
 exports.sanitizePdf = async ({ applicationContext, documentId }) => {
   let inputPdf, intermediatePostscript, outputPdf, newPdfData;

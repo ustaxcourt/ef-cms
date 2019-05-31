@@ -24,7 +24,7 @@ export const RequestAccessDocumentReadOnly = connect(
           </button>
         </div>
 
-        <div className="blue-container">
+        <div className="blue-container no-margin-last-child">
           <div className="usa-form-group">
             <label htmlFor="primary-filing" className="usa-label">
               {form.documentTitle}
@@ -33,32 +33,56 @@ export const RequestAccessDocumentReadOnly = connect(
             {form.primaryDocumentFile.name}
           </div>
 
-          {form.certificateOfService === true && (
+          {form.hasSupportingDocuments && (
+            <div className="usa-form-group">
+              <label htmlFor="supporting-filing" className="usa-label">
+                {form.supportingDocumentMetadata.documentTitle}
+              </label>
+              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+              {form.supportingDocumentFile.name}
+            </div>
+          )}
+
+          {requestAccessHelper.showFilingIncludes && (
             <div className="usa-form-group">
               <label htmlFor="filing-includes" className="usa-label">
                 Filing Includes
               </label>
               <ul className="ustc-unstyled-list without-margins">
-                <li>
-                  Certificate of Service{' '}
-                  {requestAccessHelper.certificateOfServiceDateFormatted}
-                </li>
+                {form.certificateOfServiceDate && (
+                  <li>
+                    Certificate of Service{' '}
+                    {requestAccessHelper.certificateOfServiceDateFormatted}
+                  </li>
+                )}
+                {requestAccessHelper.documentWithExhibits && form.exhibits && (
+                  <li>Exhibit(s)</li>
+                )}
+                {requestAccessHelper.documentWithAttachments &&
+                  form.attachments && <li>Attachment(s)</li>}
               </ul>
             </div>
           )}
 
-          {form.certificateOfService === false && (
+          {requestAccessHelper.showFilingNotIncludes && (
             <div className="usa-form-group">
               <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>
               <ul className="ustc-unstyled-list without-margins">
-                <li>Certificate of Service</li>
+                {!form.certificateOfService && <li>Certificate of Service</li>}
+                {requestAccessHelper.documentWithExhibits && !form.exhibits && (
+                  <li>Exhibit(s)</li>
+                )}
+                {requestAccessHelper.documentWithAttachments &&
+                  !form.attachments && <li>Attachment(s)</li>}
+                {requestAccessHelper.documentWithSupportingDocuments &&
+                  !form.hasSupportingDocuments && <li>Supporting Documents</li>}
               </ul>
             </div>
           )}
 
-          {form.documentType === 'Substitution of Counsel' && (
+          {requestAccessHelper.documentWithObjections && (
             <div className="usa-form-group">
               <label htmlFor="objections" className="usa-label">
                 Are There Any Objections to This Document?

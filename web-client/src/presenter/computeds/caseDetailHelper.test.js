@@ -9,6 +9,9 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -24,6 +27,9 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          notAssociated: true,
+        },
         user: {
           role: 'practitioner',
         },
@@ -46,12 +52,32 @@ describe('case detail computed', () => {
     expect(result.showFileDocumentButton).toEqual(true);
   });
 
+  it('should set showPendingAccessToCaseButton to true if user role is practitioner and case is not owned by user but has pending request', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          pendingAssociation: true,
+        },
+        user: {
+          role: 'practitioner',
+        },
+      },
+    });
+    expect(result.showPendingAccessToCaseButton).toEqual(true);
+  });
+
   it('should set showRequestAccessToCaseButton to true if user role is practitioner and case is not owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          notAssociated: true,
+        },
         user: {
           role: 'practitioner',
         },
