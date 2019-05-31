@@ -15,17 +15,20 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   const userId = get(state.user.userId);
   const caseId = get(state.caseDetail.caseId);
 
-  if (some(caseDetailPractitioners, { userId })) {
+  const isAssociated = some(caseDetailPractitioners, { userId });
+  if (isAssociated) {
     return { isAssociated: true };
   }
 
-  if (
-    await applicationContext.getUseCases().verifyPendingCaseForUser({
+  const hasPendingAssociation = await applicationContext
+    .getUseCases()
+    .verifyPendingCaseForUser({
       applicationContext,
       caseId,
       userId,
-    })
-  ) {
+    });
+
+  if (hasPendingAssociation) {
     return { pendingAssociation: true };
   }
 
