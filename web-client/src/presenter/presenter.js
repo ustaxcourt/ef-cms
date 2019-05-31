@@ -148,6 +148,7 @@ export const presenter = {
     clearDocumentSequence,
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
+    notFoundErrorSequence,
     clickServeToIrsSequence,
     closeAccountMenuSequence,
     closeDocumentCategoryAccordionSequence,
