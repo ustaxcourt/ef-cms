@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
-    "aws-sdk": "^2.465.0",
+    "aws-sdk": "^2.466.0",
     "axios": "^0.18.0",
     "clamscan": "^1.0.3",
     "csv-parse": "^4.4.3",
