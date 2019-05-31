@@ -226,6 +226,9 @@ const {
   verifyPendingCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
 const {
+  verifyPendingCaseForUser: verifyPendingCaseForUserUC,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 
@@ -370,6 +373,7 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
         verifyCaseForUser: verifyCaseForUserUC,
+        verifyPendingCaseForUser: verifyPendingCaseForUserUC,
       };
     },
     irsGateway,
