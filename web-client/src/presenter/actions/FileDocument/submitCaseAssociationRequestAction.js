@@ -44,10 +44,29 @@ export const submitCaseAssociationRequestAction = async ({
       primaryDocumentFileId,
     });
 
-  await applicationContext.getUseCases().submitCaseAssociationRequest({
-    applicationContext,
-    caseId,
-  });
+  const documentWithImmediateAssociation = [
+    'Entry of Appearance',
+    'Substitution of Counsel',
+  ].includes(documentMetadata.documentType);
+
+  const documentWithPendingAssociation = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(documentMetadata.documentType);
+
+  if (documentWithImmediateAssociation) {
+    await applicationContext.getUseCases().submitCaseAssociationRequest({
+      applicationContext,
+      caseId,
+    });
+  } else if (documentWithPendingAssociation) {
+    await applicationContext.getUseCases().submitPendingCaseAssociationRequest({
+      applicationContext,
+      caseId,
+    });
+  }
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {

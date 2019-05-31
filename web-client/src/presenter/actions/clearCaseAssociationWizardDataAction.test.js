@@ -17,12 +17,7 @@ describe('clearCaseAssociationWizardDataAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual({
-      certificateOfServiceDate: null,
-      certificateOfServiceDay: null,
-      certificateOfServiceMonth: null,
-      certificateOfServiceYear: null,
-    });
+    expect(result.state.form).toEqual({});
   });
   it('clears objections', async () => {
     const result = await runAction(clearCaseAssociationWizardDataAction, {
@@ -31,11 +26,11 @@ describe('clearCaseAssociationWizardDataAction', () => {
       },
       state: {
         form: {
-          objections: ['objection 1', 'objection 2'],
+          objections: 'Yes',
         },
       },
     });
 
-    expect(result.state.form.objections).toEqual(null);
+    expect(result.state.form.objections).toEqual(undefined);
   });
 });

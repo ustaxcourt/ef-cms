@@ -24,6 +24,9 @@ const {
   associateUserWithCase,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
 const {
+  associateUserWithCasePending,
+} = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
+const {
   checkForReadyForTrialCases,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -175,6 +178,9 @@ const {
   runBatchProcess,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
+  sanitizePdf,
+} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
+const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -196,6 +202,9 @@ const {
   submitCaseAssociationRequest,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
 const {
+  submitPendingCaseAssociationRequest,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
+const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -214,9 +223,14 @@ const {
   verifyCaseForUser: verifyCaseForUserUC,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
 const {
+  verifyPendingCaseForUser,
+} = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
+const {
+  verifyPendingCaseForUser: verifyPendingCaseForUserUC,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-const { sanitizePdf } = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
 
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -274,6 +288,7 @@ module.exports = (appContextUser = {}) => {
       return {
         addWorkItemToSectionInbox,
         associateUserWithCase,
+        associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
         createDocument,
@@ -307,6 +322,7 @@ module.exports = (appContextUser = {}) => {
         updateDocumentProcessingStatus,
         updateWorkItem,
         verifyCaseForUser,
+        verifyPendingCaseForUser,
         zipDocuments,
       };
     },
@@ -354,8 +370,10 @@ module.exports = (appContextUser = {}) => {
         sendPetitionToIRSHoldingQueue,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
+        submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
         verifyCaseForUser: verifyCaseForUserUC,
+        verifyPendingCaseForUser: verifyPendingCaseForUserUC,
       };
     },
     irsGateway,

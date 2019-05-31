@@ -11,20 +11,30 @@ export const caseDetailHelper = get => {
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const userId = get(state.user.userId);
 
+  const isAssociated = get(state.screenMetadata.isAssociated);
+  const pendingAssociation = get(state.screenMetadata.pendingAssociation);
+  const notAssociated = get(state.screenMetadata.notAssociated);
+
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
     ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showRequestAccessToCaseButton = false;
+  let showPendingAccessToCaseButton = false;
   if (userRole === 'practitioner') {
-    showFileDocumentButton = false;
-    showRequestAccessToCaseButton = true;
-    if (
-      caseDetail &&
-      caseDetail.practitioners &&
-      some(caseDetail.practitioners, { userId: userId })
-    ) {
+    if (notAssociated) {
+      showFileDocumentButton = false;
+      showRequestAccessToCaseButton = true;
+      showPendingAccessToCaseButton = false;
+    }
+    if (isAssociated) {
       showFileDocumentButton = true;
       showRequestAccessToCaseButton = false;
+      showPendingAccessToCaseButton = false;
+    }
+    if (pendingAssociation) {
+      showFileDocumentButton = false;
+      showRequestAccessToCaseButton = false;
+      showPendingAccessToCaseButton = true;
     }
   }
 
@@ -59,6 +69,7 @@ export const caseDetailHelper = get => {
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
     showPaymentRecord: caseDetail.payGovId && !form.paymentType,
+    showPendingAccessToCaseButton,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',
     showRequestAccessToCaseButton,

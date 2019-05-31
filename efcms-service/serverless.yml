@@ -357,11 +357,35 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  verifyPendingCaseForUser:
+    handler: src/handlers.verifyPendingCaseForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   practitionerCaseAssociation:
     handler: src/handlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: v1/users/{userId}/case/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  practitionerPendingCaseAssociation:
+    handler: src/handlers.practitionerPendingCaseAssociationLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
           method: put
           cors: true
           authorizer:
