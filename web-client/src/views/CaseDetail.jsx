@@ -48,7 +48,7 @@ export const CaseDetail = connect(
                 )}
                 {caseHelper.showPendingAccessToCaseButton && (
                   <span
-                    className="usa-tag push-right margin-right-0"
+                    className="usa-tag push-right margin-right-0 padding-x-3"
                     aria-label="Request for Access Pending"
                   >
                     <span aria-hidden="true">Request for Access Pending</span>
