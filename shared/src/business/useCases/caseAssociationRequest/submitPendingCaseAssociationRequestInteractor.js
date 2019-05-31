@@ -1,4 +1,3 @@
-const { Case } = require('../../entities/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
