@@ -76,14 +76,14 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v10.15.3
 - npm 6.4.1
-- Ghostscript v9.26 (see Setup below)
+- Ghostscript v9.23 (see Setup below)
 - ClamAV 0.101.2 (see Setup below)
 
 ### Setup
 
 Follow the installation prerequisites for Ghostscript4JS at https://www.npmjs.com/package/ghostscript4js#prerequisites
 MacOS users can do the following:
-- `brew install ghostscript`
+- `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e61385fb91ced20245d063f728401e9727293ce0/Formula/ghostscript.rb`
 - `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
 - `source ~/.bash_profile`
 
@@ -141,10 +141,6 @@ seniorattorney1@example.com – seniorattorney5@example.com
 The password for all accounts is:
 
 `Testing1234$`
-
-## CI/CD Setup
-
-For instructions on how to build the DevOps pipeline and deploy the software to AWS, see [SETUP.md](SETUP.md).
 
 ## Editor configuration
 
@@ -237,4 +233,8 @@ Follow these steps for creating the end of sprint PRs for the court.
      - `UI_SONAR_TOKEN` (the token for the sonar UI project)
      - `COGNITO_SUFFIX` (a suffix of your choice for the cognito url)
      - `USTC_ADMIN_PASS` (a unique password of your choice used by the cognito admin user)
+     - `DYNAMSOFT_REPO` (the private github repo path for fetching the tarball, e.g., `https://api.github.com/repos/codyseibert/dynamsoft/tarball`)
+     - `DYNAMSOFT_ZIP_NAME` (the name of the zip file which is zipped into the tarball, e.g., `codyseibert-dynamsoft-5bbf51a51de3717dfee641678d33f36e3cc857e7`)
+     - `PRODUCT_KEYS` (the list of product keys provided by dynamsoft, e.g., `abc;123`)
+     - `GIT_ACCESS_TOKEN` (a private access token which has access to the dynamsoft repo for fetching the tarball [Access Tokens](https://github.com/settings/tokens))
 8. Run a build.
