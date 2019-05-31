@@ -57,32 +57,28 @@ export const requestAccessHelper = (get, applicationContext) => {
     },
   ];
 
-  const documentWithExhibits =
-    [
-      'Motion to Substitute Parties and Change Caption',
-      'Notice of Intervention',
-      'Notice of Election to Participate',
-      'Notice of Election to Intervene',
-    ].indexOf(documentType) !== -1;
+  const documentWithExhibits = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(documentType);
 
-  const documentWithAttachments =
-    [
-      'Motion to Substitute Parties and Change Caption',
-      'Notice of Intervention',
-      'Notice of Election to Participate',
-      'Notice of Election to Intervene',
-    ].indexOf(documentType) !== -1;
+  const documentWithAttachments = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(documentType);
 
-  const documentWithObjections =
-    [
-      'Substitution of Counsel',
-      'Motion to Substitute Parties and Change Caption',
-    ].indexOf(documentType) !== -1;
+  const documentWithObjections = [
+    'Substitution of Counsel',
+    'Motion to Substitute Parties and Change Caption',
+  ].includes(documentType);
 
-  const documentWithSupportingDocuments =
-    ['Motion to Substitute Parties and Change Caption'].indexOf(
-      documentType,
-    ) !== -1;
+  const documentWithSupportingDocuments = [
+    'Motion to Substitute Parties and Change Caption',
+  ].includes(documentType);
 
   const partyValidationError =
     validationErrors.representingPrimary ||
