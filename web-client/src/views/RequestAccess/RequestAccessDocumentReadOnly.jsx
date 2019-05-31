@@ -24,7 +24,7 @@ export const RequestAccessDocumentReadOnly = connect(
           </button>
         </div>
 
-        <div className="blue-container">
+        <div className="blue-container no-margin-last-child">
           <div className="usa-form-group">
             <label htmlFor="primary-filing" className="usa-label">
               {form.documentTitle}
