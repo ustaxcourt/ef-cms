@@ -7,7 +7,7 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.sanitizePdfProxy = ({ documentId, applicationContext }) => {
+exports.sanitizePdf = ({ documentId, applicationContext }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/sanitize`,
