@@ -14,7 +14,7 @@ export const submitCaseAssociationRequestAction = async ({
   applicationContext,
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
+  const { primaryDocumentFileId, supportingDocumentFileId } = props;
   const user = get(state.user);
 
   let documentMetadata = omit(
@@ -42,6 +42,7 @@ export const submitCaseAssociationRequestAction = async ({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
+      supportingDocumentFileId,
     });
 
   const documentWithImmediateAssociation = [
@@ -81,5 +82,7 @@ export const submitCaseAssociationRequestAction = async ({
   return {
     caseDetail,
     caseId: docketNumber,
+    documentWithImmediateAssociation,
+    documentWithPendingAssociation,
   };
 };
