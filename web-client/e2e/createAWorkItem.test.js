@@ -155,7 +155,7 @@ async function findWorkItemInWorkQueue({
 
 describe('Create a work item', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(65000);
 
     global.window = {
       localStorage: {
