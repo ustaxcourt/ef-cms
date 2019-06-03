@@ -90,9 +90,11 @@ export const formatWorkItem = (
 export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
   const box = get(state.workQueueToDisplay.box);
+  const internal = get(state.workQueueIsInternal);
   const selectedWorkItems = get(state.selectedWorkItems);
   let workQueue = workItems
-    .filter(items => (box === 'inbox' ? !items.completedAt : true))
+    .filter(item => (box === 'inbox' ? !item.completedAt : true))
+    .filter(item => item.isInternal === internal)
     .map(items => formatWorkItem(items, selectedWorkItems, applicationContext));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
