@@ -16,12 +16,12 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
     libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
     git bash openssh-client python python-dev python-pip python-setuptools ca-certificates groff less \
-    unzip wget jq shellcheck ghostscript libgs-dev
-
+    unzip wget jq shellcheck ghostscript libgs-dev clamav
 
 ENV AWS_CLI_VERSION 1.16.31
 
-RUN pip install --upgrade pip && \
+RUN freshclam && \
+  pip install --upgrade pip && \
   apt-get install -y awscli && \
   pip install --upgrade awscli==${AWS_CLI_VERSION} && \
   wget -q -O terraform_0.11.13_linux_amd64.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && \

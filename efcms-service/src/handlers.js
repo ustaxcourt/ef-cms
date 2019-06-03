@@ -52,4 +52,5 @@ module.exports = {
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,
+  virusScanPdfLambda: require('./documents/virusScanPdfLambda').handler,
 };
