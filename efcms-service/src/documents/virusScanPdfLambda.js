@@ -16,13 +16,16 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().virusScanDocument({
+      const results = await applicationContext.getUseCases().virusScanPdf({
         applicationContext,
         documentId,
       });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
-      return results;
+
+      if (results === 'infected') {
+        throw new Error(`Virus found for ${documentId}.`);
+      }
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
