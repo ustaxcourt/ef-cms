@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+const { post } = require('../requests');
 
 /**
  * virusScanPdf
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.virusScanPdf = ({ documentId, applicationContext }) => {
-  return get({
+  return post({
     applicationContext,
     endpoint: `/documents/${documentId}/virus-scan`,
   });
