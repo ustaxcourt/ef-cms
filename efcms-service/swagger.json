@@ -975,6 +975,63 @@
         }
       }
     },
+    "/v1/users/{userId}/case/{caseId}/pending": {
+      "get": {
+        "tags": ["cases"],
+        "summary": "verify if user has pending association with the case",
+        "description": "Verify if user has pending associationwith the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["cases"],
+        "summary": "add pending association for practitioner for case if not associated with the case",
+        "description": "Add pending association for practitioner for case if not associated with the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/users/{userId}/inbox": {
       "get": {
         "tags": ["workitems"],

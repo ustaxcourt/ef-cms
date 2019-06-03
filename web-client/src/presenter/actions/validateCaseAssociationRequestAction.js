@@ -33,7 +33,13 @@ export const validateCaseAssociationRequestAction = ({
       'primaryDocumentFile',
       'certificateOfService',
       'certificateOfServiceDate',
+      'exhibits',
+      'attachements',
       'objections',
+      'hasSupportingDocuments',
+      'supportingDocument',
+      'supportingDocumentFreeText',
+      'supportingDocumentFile',
       'representingPrimary',
       'representingSecondary',
     ];

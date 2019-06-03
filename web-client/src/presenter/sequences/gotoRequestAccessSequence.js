@@ -1,9 +1,11 @@
+import { canRequestAccessAction } from '../actions/CaseAssociationRequest/canRequestAccessAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/CaseAssociationRequest/getCaseAssociationAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -21,8 +23,14 @@ const gotoRequestAccess = [
   setCaseAction,
   getCaseAssociationAction,
   setCaseAssociationAction,
-  set(state.wizardStep, 'RequestAccess'),
-  setCurrentPageAction('RequestAccessWizard'),
+  canRequestAccessAction,
+  {
+    proceed: [
+      set(state.wizardStep, 'RequestAccess'),
+      setCurrentPageAction('RequestAccessWizard'),
+    ],
+    unauthorized: [navigateToCaseDetailAction],
+  },
 ];
 
 export const gotoRequestAccessSequence = [
