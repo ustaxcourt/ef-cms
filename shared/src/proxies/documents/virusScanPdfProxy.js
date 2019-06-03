@@ -1,14 +1,14 @@
-const { post } = require('../requests');
+const { get } = require('../requests');
 
 /**
- * createCoverSheet
+ * virusScanPdf
  *
  * @param documentId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.virusScanPdfProxy = ({ documentId, applicationContext }) => {
-  return post({
+exports.virusScanPdf = ({ documentId, applicationContext }) => {
+  return get({
     applicationContext,
     endpoint: `/documents/${documentId}/virus-scan`,
   });
