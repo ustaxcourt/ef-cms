@@ -10,7 +10,7 @@ export const extractedPendingMessagesFromCaseDetail = (
   let workQueue = documents
     .reduce((acc, document) => [...acc, ...(document.workItems || [])], [])
     .filter(items => !items.completedAt)
-    .map(workItem => formatWorkItem(workItem, [], applicationContext))
+    .map(workItem => formatWorkItem(applicationContext, workItem))
     .filter(
       workItem =>
         workItem.currentMessage.message.indexOf('batched for IRS') === -1,

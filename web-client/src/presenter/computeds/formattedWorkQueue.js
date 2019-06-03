@@ -20,9 +20,9 @@ const formatDateIfToday = (date, applicationContext) => {
 };
 
 export const formatWorkItem = (
+  applicationContext,
   workItem,
   selectedWorkItems = [],
-  applicationContext,
 ) => {
   const result = _.cloneDeep(workItem);
 
@@ -93,7 +93,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   let workQueue = workItems
     .filter(items => (box === 'inbox' ? !items.completedAt : true))
-    .map(items => formatWorkItem(items, selectedWorkItems, applicationContext));
+    .map(items => formatWorkItem(applicationContext, items, selectedWorkItems));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
 
