@@ -229,6 +229,9 @@ const {
   verifyPendingCaseForUser: verifyPendingCaseForUserUC,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
 const {
+  virusScanPdf,
+} = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 
@@ -374,6 +377,7 @@ module.exports = (appContextUser = {}) => {
         updateCase: updateCaseUC,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
+        virusScanPdf,
       };
     },
     irsGateway,
