@@ -190,6 +190,17 @@ resources:
             ResourcePath: '/*'
             MetricsEnabled: true
 
+layers:
+  clamav:
+    path: runtimes/clamav
+    exclude:
+      - freshclam.conf
+      - build.sh
+  ghostscript:
+    path: runtimes/ghostscript
+    exclude:
+      - build.sh
+
 functions:
   createDocument:
     handler: src/handlers.createDocumentLambda
@@ -250,6 +261,21 @@ functions:
     events:
       - http:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet
+          method: post
+          cors: true
+          async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  sanitizePdf:
+    handler: src/handlers.sanitizePdfLambda
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: v1/documents/{documentId}/sanitize
           method: post
           cors: true
           async: true
@@ -342,11 +368,35 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  verifyPendingCaseForUser:
+    handler: src/handlers.verifyPendingCaseForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   practitionerCaseAssociation:
     handler: src/handlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: v1/users/{userId}/case/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  practitionerPendingCaseAssociation:
+    handler: src/handlers.practitionerPendingCaseAssociationLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
           method: put
           cors: true
           authorizer:
@@ -584,5 +634,15 @@ functions:
     events:
       - http:
           path: v1/swagger.json
+          method: get
+          cors: true
+
+  virusScan:
+    handler: src/handlers.virusScan
+    layers:
+      - { Ref: ClamavLambdaLayer }
+    events:
+      - http:
+          path: v1/documents/{documentId}/virus-scan
           method: get
           cors: true

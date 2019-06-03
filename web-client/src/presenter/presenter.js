@@ -184,6 +184,7 @@ export const presenter = {
     gotoStyleGuideSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
+    notFoundErrorSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
     redirectToLoginSequence,

@@ -19,10 +19,12 @@ import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDo
 import practitionerLogin from './journey/practitionerLogIn';
 import practitionerNavigatesToCreateCase from './journey/practitionerNavigatesToCreateCase';
 import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
+import practitionerRequestsPendingAccessToCase from './journey/practitionerRequestsPendingAccessToCase';
 import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
 import practitionerSignsOut from './journey/practitionerSignsOut';
 import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsCaseDetailOfOwnedCase';
+import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
 import practitionerViewsDashboard from './journey/practitionerViewsDashboard';
 import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
@@ -118,5 +120,23 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsDashboard(test);
   practitionerViewsCaseDetailOfOwnedCase(test);
   practitionerFilesDocumentForOwnedCase(test, fakeFile);
+  practitionerSignsOut(test);
+
+  //tests for practitioner requesting access to existing case
+  //taxpayer must first create a case for practitioner to request access to
+  taxpayerLogin(test);
+  taxpayerCancelsCreateCase(test);
+  taxpayerNavigatesToCreateCase(test);
+  taxpayerChoosesProcedureType(test);
+  taxpayerChoosesCaseType(test);
+  taxpayerCreatesNewCase(test, fakeFile);
+  taxpayerViewsDashboard(test);
+  taxpayerSignsOut(test);
+
+  practitionerLogin(test);
+  practitionerSearchesForCase(test);
+  practitionerViewsCaseDetail(test);
+  practitionerRequestsPendingAccessToCase(test, fakeFile);
+  practitionerViewsCaseDetailOfPendingCase(test);
   practitionerSignsOut(test);
 });

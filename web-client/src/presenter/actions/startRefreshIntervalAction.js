@@ -3,8 +3,8 @@ import { state } from 'cerebral';
 /**
  * sets the state.showValidation to true
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store used for setting state.workItem
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store used for setting state.workItem
  */
 export const startRefreshIntervalAction = ({
   applicationContext,

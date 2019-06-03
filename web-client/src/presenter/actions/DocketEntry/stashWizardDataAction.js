@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * stash wizard data in props
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.get the cerebral get function
- * @param {Object} providers.props the cerebral props object
+ * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props object
  */
 export const stashWizardDataAction = async ({ get, props, store }) => {
   const supporting = get(state.screenMetadata.supporting);

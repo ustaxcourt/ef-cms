@@ -2,6 +2,7 @@ FROM cypress/base:10.15.3
 
 WORKDIR /home/app
 
+RUN echo "clearing cache - remove this at some point"
 RUN echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
 RUN sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
 
@@ -15,10 +16,11 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
     libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
     ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
     git bash openssh-client python python-dev python-pip python-setuptools ca-certificates groff less \
-    unzip wget jq shellcheck
+    unzip wget jq shellcheck ghostscript libgs-dev clamav
 
 ENV AWS_CLI_VERSION 1.16.31
 
+RUN freshclam
 RUN pip install --upgrade pip
 RUN apt-get install -y awscli && \
   pip install --upgrade awscli==${AWS_CLI_VERSION} && \
@@ -35,6 +37,7 @@ RUN apt-get install -y awscli && \
 
 ENV SONAR_RUNNER_HOME=/home/app/sonar_home
 ENV PATH ${SONAR_RUNNER_HOME}/bin:$PATH
+ENV GS4JS_HOME=/usr/lib
 
 COPY shared/package.json /home/app/shared/package.json
 COPY shared/package-lock.json /home/app/shared/package-lock.json

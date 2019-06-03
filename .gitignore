@@ -3,6 +3,10 @@
 .terraform/
 /cypress
 aws.json
+efcms-service/runtimes/clamav/bin
+efcms-service/runtimes/clamav/lib
+efcms-service/runtimes/ghostscript/bin
+efcms-service/runtimes/ghostscript/lib
 gen.conf
 policy.json
 shared/coverage
@@ -12,3 +16,7 @@ web-client/cypress/screenshots
 web-client/node_modules
 web-client/reports
 web-client/tests_output/
+efcms-service/runtimes/clamav/bin
+efcms-service/runtimes/clamav/lib
+efcms-service/runtimes/ghostscript/bin
+efcms-service/runtimes/ghostscript/lib
