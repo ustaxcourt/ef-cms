@@ -69,6 +69,7 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
+import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
@@ -98,6 +99,7 @@ import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetai
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
+import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -207,6 +209,7 @@ export const presenter = {
     setModalDialogNameSequence,
     setScannerSourceSequence,
     setWorkItemActionSequence,
+    setWorkQueueIsInternalSequence,
     showDocketRecordDetailModalSequence,
     signOutSequence,
     startScanSequence,
@@ -235,6 +238,7 @@ export const presenter = {
     unauthorizedErrorSequence,
     unidentifiedUserErrorSequence,
     unsetFormSaveSuccessSequence,
+    unsetWorkQueueIsInternalSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDetailSequence,
     updateCasePartyTypeSequence,

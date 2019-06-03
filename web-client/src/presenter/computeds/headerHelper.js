@@ -4,6 +4,7 @@ export const headerHelper = get => {
   const user = get(state.user);
   const currentPage = get(state.currentPage);
   const notifications = get(state.notifications);
+  const workQueueIsInternal = get(state.workQueueIsInternal);
 
   const isUserInternal = user => {
     const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
@@ -15,9 +16,8 @@ export const headerHelper = get => {
   };
 
   return {
-    pageIsDocumentQC: false, // doesn't exist yet
-    pageIsMessages:
-      currentPage && currentPage.includes('Dashboard') && isUserInternal(user),
+    pageIsDocumentQC: !workQueueIsInternal,
+    pageIsMessages: workQueueIsInternal,
     pageIsMyCases:
       currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
     showDocumentQC: isUserInternal(user),

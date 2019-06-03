@@ -8,7 +8,7 @@ import seal from '../images/ustc_seal.svg';
 
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
-const NavigationItems = helper => {
+const NavigationItems = (helper, sequences) => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
       {helper.showMessages && (
@@ -19,7 +19,13 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/">
+          <a
+            href="/"
+            onClick={e => {
+              e.preventDefault();
+              sequences.setWorkQueueIsInternalSequence();
+            }}
+          >
             Messages{' '}
             {helper.showMessagesIcon && (
               <FontAwesomeIcon
@@ -41,7 +47,15 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/">Document QC</a>
+          <a
+            href="/"
+            onClick={e => {
+              e.preventDefault();
+              sequences.unsetWorkQueueIsInternalSequence();
+            }}
+          >
+            Document QC
+          </a>
         </li>
       )}
       {helper.showMyCases && (
@@ -65,9 +79,12 @@ export const Header = connect(
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
+    setWorkQueueIsInternalSequence: sequences.setWorkQueueIsInternalSequence,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+    unsetWorkQueueIsInternalSequence:
+      sequences.unsetWorkQueueIsInternalSequence,
     user: state.user,
   },
   ({
@@ -78,6 +95,8 @@ export const Header = connect(
     signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
+    unsetWorkQueueIsInternalSequence,
+    setWorkQueueIsInternalSequence,
     user,
   }) => {
     return (
@@ -120,7 +139,11 @@ export const Header = connect(
           </div>
           <div className="grid-col-5">
             <nav role="navigation" className="main-navigation">
-              {user && NavigationItems(helper)}
+              {user &&
+                NavigationItems(helper, {
+                  setWorkQueueIsInternalSequence,
+                  unsetWorkQueueIsInternalSequence,
+                })}
             </nav>
           </div>
           <div className="grid-col-6">
@@ -156,7 +179,10 @@ export const Header = connect(
                         <SearchBox />
                         {user && user.userId && (
                           <div className="mobile-account-menu-container">
-                            {NavigationItems(helper)}
+                            {NavigationItems(helper, {
+                              setWorkQueueIsInternalSequence,
+                              unsetWorkQueueIsInternalSequence,
+                            })}
                           </div>
                         )}
                       </li>
