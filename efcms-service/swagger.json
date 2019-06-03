@@ -438,7 +438,7 @@
       }
     },
     "/v1/documents/{documentId}/virus-scan": {
-      "get": {
+      "post": {
         "tags": ["documents"],
         "summary": "triggers the virus scan function",
         "description": "Endpoint that triggers the virus scan function for the specified document.\n",
