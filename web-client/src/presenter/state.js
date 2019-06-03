@@ -84,7 +84,6 @@ export const state = {
   modal: {},
   notifications: {},
   path: '/',
-
   paymentInfo: {
     showDetails: false,
   },
@@ -118,6 +117,7 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
+  workQueueIsInternal: true,
   workQueueSectionHelper,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', internal: true, queue: 'my' },
 };
