@@ -33,7 +33,7 @@ describe('formattedCaseDetail', () => {
           },
         ],
       };
-      formatYearAmounts(caseDetail, undefined, applicationContext);
+      formatYearAmounts(applicationContext, caseDetail, undefined);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -69,7 +69,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: [{ index: 1, year: 'year can not be in future' }],
       };
-      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
+      formatYearAmounts(applicationContext, caseDetail, caseDetailErrors);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '',
@@ -106,7 +106,7 @@ describe('formattedCaseDetail', () => {
       const caseDetailErrors = {
         yearAmounts: 'Duplicate years are bad',
       };
-      formatYearAmounts(caseDetail, caseDetailErrors, applicationContext);
+      formatYearAmounts(applicationContext, caseDetail, caseDetailErrors);
       expect(caseDetail.yearAmountsFormatted).toEqual([
         {
           amount: '1000',
