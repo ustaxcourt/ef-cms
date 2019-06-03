@@ -14,12 +14,17 @@ export const uploadExternalDocumentsAction = async ({
   path,
   applicationContext,
 }) => {
-  const { primaryDocumentFile, secondaryDocumentFile } = get(state.form);
+  const {
+    primaryDocumentFile,
+    secondaryDocumentFile,
+    supportingDocumentFile,
+  } = get(state.form);
 
   const progressFunctions = setupPercentDone(
     {
       primary: primaryDocumentFile,
       secondary: secondaryDocumentFile,
+      supporting: supportingDocumentFile,
     },
     store,
   );
@@ -28,16 +33,26 @@ export const uploadExternalDocumentsAction = async ({
     const [
       primaryDocumentFileId,
       secondaryDocumentFileId,
+      supportingDocumentFileId,
     ] = await applicationContext.getUseCases().uploadExternalDocuments({
       applicationContext,
-      documentFiles: [primaryDocumentFile, secondaryDocumentFile],
+      documentFiles: [
+        primaryDocumentFile,
+        secondaryDocumentFile,
+        supportingDocumentFile,
+      ],
       onUploadProgresses: [
         progressFunctions.primary,
         progressFunctions.secondary,
+        progressFunctions.supporting,
       ],
     });
 
-    return path.success({ primaryDocumentFileId, secondaryDocumentFileId });
+    return path.success({
+      primaryDocumentFileId,
+      secondaryDocumentFileId,
+      supportingDocumentFileId,
+    });
   } catch (err) {
     return path.error();
   }
