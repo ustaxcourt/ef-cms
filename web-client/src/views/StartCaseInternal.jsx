@@ -244,7 +244,7 @@ export const StartCaseInternal = connect(
                 bind="validationErrors.petitionFileSize"
               />
             </div>
-            {scanHelper.hasScanFeature && (
+            {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
               <Scan
                 onScanClicked={() => startScanSequence()}
                 onDoneClicked={() =>
