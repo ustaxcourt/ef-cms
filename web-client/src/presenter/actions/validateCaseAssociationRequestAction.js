@@ -34,7 +34,7 @@ export const validateCaseAssociationRequestAction = ({
       'certificateOfService',
       'certificateOfServiceDate',
       'exhibits',
-      'attachements',
+      'attachments',
       'objections',
       'hasSupportingDocuments',
       'supportingDocument',
