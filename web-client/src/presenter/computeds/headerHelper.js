@@ -20,10 +20,15 @@ export const headerHelper = get => {
       currentPage && currentPage.includes('Dashboard') && isUserInternal(user),
     pageIsMyCases:
       currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
+    pageIsTrialSessions:
+      currentPage &&
+      currentPage.includes('TrialSessions') &&
+      isUserInternal(user),
     showDocumentQC: isUserInternal(user),
     showMessages: isUserInternal(user),
     showMessagesIcon: notifications.unreadCount > 0,
     showMyCases: isUserExternal(user),
     showSearchInHeader: user && user.role && user.role !== 'practitioner',
+    showTrialSessions: isUserInternal(user),
   };
 };
