@@ -75,6 +75,9 @@ const {
   forwardWorkItem,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
+  generatePDFFromPNGData,
+} = require('../../shared/src/business/useCases/generatePDFFromPNGDataInteractor');
+const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -355,6 +358,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItem: createWorkItemUC,
         fileExternalDocument,
         forwardWorkItem,
+        generatePDFFromPNGData,
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
