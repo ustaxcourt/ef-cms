@@ -2,14 +2,15 @@ import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const SectionWorkQueue = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
+    workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence }) => {
+  ({ chooseWorkQueueSequence, workQueueHelper }) => {
     return (
       <Tabs
         className="classic-horizontal-header3 tab-border"
@@ -21,6 +22,17 @@ export const SectionWorkQueue = connect(
             <SectionWorkQueueInbox />
           </div>
         </Tab>
+        {workQueueHelper.showBatchedForIRSTab && (
+          <Tab
+            tabName="batched"
+            title="Batched for IRS"
+            id="section-batched-for-irs-tab"
+          >
+            <div id="section-batched-for-irs-tab-content">
+              <SectionWorkQueueOutbox />
+            </div>
+          </Tab>
+        )}
         <Tab tabName="outbox" title="Sent" id="section-sent-tab">
           <div id="section-sent-tab-content">
             <SectionWorkQueueOutbox />
