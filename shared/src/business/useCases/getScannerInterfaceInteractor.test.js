@@ -4,6 +4,7 @@ const { JSDOM } = require('jsdom');
 const jsdom = new JSDOM('');
 global.window = jsdom.window;
 
+window['EnumDWT_ImageType'] = { IT_PNG: 1 };
 const mockSources = ['Test Source 1', 'Test Source 2'];
 const mockScanCount = 1;
 
@@ -21,7 +22,7 @@ const DWObject = {
     asyncSuccessFunc,
     asyncFailureFunc,
   ) => {
-    const args = [indices, enumImageType, asyncSuccessFunc, asyncFailureFunc];
+    const args = { asyncFailureFunc, asyncSuccessFunc, enumImageType, indices };
     return asyncSuccessFunc(args);
   },
   DataSource: null,
