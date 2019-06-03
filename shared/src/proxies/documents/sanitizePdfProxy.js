@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * createCoverSheet
+ * sanitizePdf
  *
  * @param documentId
  * @param applicationContext

@@ -1,8 +1,10 @@
-const util = require('util');
-
-const exec = util.promisify(require('child_process').exec);
 const fs = require('fs');
 const tmp = require('tmp');
+const util = require('util');
+const { exec } = require('child_process');
+
+const execPromise = util.promisify(exec);
+
 /**
  * sanitizes PDF input, removing interactive elements, saves altered PDF to persistence
  * @param applicationContext
@@ -65,8 +67,8 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
     ].join(' ');
 
     // run GS conversions
-    await exec(pdf2ps_cmd);
-    await exec(ps2pdf_cmd);
+    await execPromise(pdf2ps_cmd);
+    await execPromise(ps2pdf_cmd);
 
     // read GS results and return them
     newPdfData = fs.readFileSync(outputPdf.name);
