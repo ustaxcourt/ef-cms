@@ -39,4 +39,12 @@ User.prototype.isValid = function isValid() {
   return !!this.userId && !!this.role;
 };
 
+User.prototype.isExternalUser = function() {
+  return (
+    this.role === 'petitioner' ||
+    this.role === 'practitioner' ||
+    this.role === 'respondent'
+  );
+};
+
 module.exports = { User };
