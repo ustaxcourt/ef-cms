@@ -638,7 +638,7 @@ functions:
           cors: true
 
   virusScan:
-    handler: src/handlers.virusScan
+    handler: src/handlers.virusScanPdfLambda
     layers:
       - { Ref: ClamavLambdaLayer }
     events:
