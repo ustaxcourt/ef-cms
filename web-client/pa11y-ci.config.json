@@ -464,9 +464,9 @@
       "notes": "fill out request-access form and review inputs",
       "url": "http://localhost:1234/mock-login?token=practitioner&path=/case-detail/102-19/request-access&filled-form=true",
       "actions": [
-        "wait for element #document-type-1 to be visible",
-        "click element label[for=document-type-1]",
-        "check field #document-type-1",
+        "wait for element #document-type to be visible",
+        "set field #document-type to Substitution of Counsel",
+        "check field #document-type",
         "set field #certificate-Yes to Yes",
         "check field #certificate-Yes",
         "wait for element #objections-Unknown to be visible",

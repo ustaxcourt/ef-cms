@@ -4,9 +4,9 @@ import { state } from 'cerebral';
 /**
  * submit a new docket entry
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
- * @param {Object} providers.props the cerebral props object
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
  */
 export const submitDocketEntryAction = async ({
   get,
@@ -58,6 +58,10 @@ export const submitDocketEntryAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
+      await applicationContext.getUseCases().sanitizePdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
         caseId: caseDetail.caseId,

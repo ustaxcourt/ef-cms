@@ -5,11 +5,13 @@ import sinon from 'sinon';
 
 describe('submitCaseAssociationRequestAction', () => {
   let submitCaseAssociationRequestStub;
+  let submitPendingCaseAssociationRequestStub;
   let createCoverSheetStub;
   let fileExternalDocumentStub;
 
   beforeEach(() => {
     submitCaseAssociationRequestStub = sinon.stub();
+    submitPendingCaseAssociationRequestStub = sinon.stub();
     createCoverSheetStub = sinon.stub();
     fileExternalDocumentStub = sinon.stub();
 
@@ -18,6 +20,7 @@ describe('submitCaseAssociationRequestAction', () => {
         createCoverSheet: createCoverSheetStub,
         fileExternalDocument: fileExternalDocumentStub,
         submitCaseAssociationRequest: submitCaseAssociationRequestStub,
+        submitPendingCaseAssociationRequest: submitPendingCaseAssociationRequestStub,
       }),
     };
   });
@@ -31,11 +34,30 @@ describe('submitCaseAssociationRequestAction', () => {
       state: {
         caseDetail: {},
         form: {
+          documentType: 'Entry of Appearance',
           primaryDocumentFile: {},
         },
       },
     });
 
     expect(submitCaseAssociationRequestStub.calledOnce).toEqual(true);
+  });
+
+  it('should call submitPendingCaseAssociationRequest', async () => {
+    fileExternalDocumentStub.returns({ documents: [] });
+    await runAction(submitCaseAssociationRequestAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          documentType: 'Notice of Intervention',
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(submitPendingCaseAssociationRequestStub.calledOnce).toEqual(true);
   });
 });

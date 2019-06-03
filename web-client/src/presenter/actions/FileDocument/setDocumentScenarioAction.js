@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * Set document scenario.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store object
- * @param {Object} providers.get the cerebral get function
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store object
+ * @param {object} providers.get the cerebral get function
  * @returns {undefined}
  */
 export const setDocumentScenarioAction = ({ store, get }) => {
