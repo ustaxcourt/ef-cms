@@ -121,14 +121,14 @@ data "aws_route53_zone" "zone" {
 
 
 resource "aws_acm_certificate" "this" {
-  domain_name       = "dynamsoft-${var.environment}.${var.dns_domain}"
+  domain_name       = "dynamsoft-lib-${var.environment}.${var.dns_domain}"
   validation_method = "DNS"
 
   tags = {
-    Name          = "dynamsoft-${var.environment}.${var.dns_domain}"
+    Name          = "dynamsoft-lib-${var.environment}.${var.dns_domain}"
     ProductDomain = "EFCMS"
     Environment   = "${var.environment}"
-    Description   = "Certificate for dynamsoft-${var.environment}.${var.dns_domain}"
+    Description   = "Certificate for dynamsoft-lib-${var.environment}.${var.dns_domain}"
     ManagedBy     = "terraform"
   }
 }

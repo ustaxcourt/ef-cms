@@ -76,7 +76,7 @@ resource "aws_route53_record" "record_certs" {
 
 
 resource "aws_route53_record" "record_east_www" {
-  name    = "dynamsoft-${var.environment}.${var.dns_domain}"
+  name    = "dynamsoft-lib-${var.environment}.${var.dns_domain}"
   type    = "CNAME"
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   set_identifier = "us-east-1"
@@ -90,7 +90,7 @@ resource "aws_route53_record" "record_east_www" {
 }
 
 resource "aws_route53_record" "record_west_www" {
-  name    = "dynamsoft-${var.environment}.${var.dns_domain}"
+  name    = "dynamsoft-lib-${var.environment}.${var.dns_domain}"
   type    = "CNAME"
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   set_identifier = "us-west-1"
