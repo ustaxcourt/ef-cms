@@ -32,6 +32,8 @@ function WorkItem(rawWorkItem) {
     docketNumberSuffix: rawWorkItem.docketNumberSuffix,
     document: rawWorkItem.document,
     isInitializeCase: rawWorkItem.isInitializeCase,
+    isInternal:
+      rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal,
     isRead: rawWorkItem.isRead,
     messages: rawWorkItem.messages,
     section: rawWorkItem.section,

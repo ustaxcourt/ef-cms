@@ -24,6 +24,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
       createdAt: documentEntity.createdAt,
     },
     isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
+    isInternal: false,
     section: PETITIONS_SECTION,
     sentBy: user.userId,
   });
