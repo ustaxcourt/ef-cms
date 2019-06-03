@@ -437,6 +437,22 @@
         }
       }
     },
+    "/v1/documents/{documentId}/sanitize": {
+      "post": {
+        "tags": ["documents"],
+        "summary": "sanitizes PDF input, removing interactive elements",
+        "description": "Sanitize PDF input, removing interactive elements.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
+            }
+          }
+        }
+      }
+    },
     "/v1/respondents/{respondentId}/cases": {
       "get": {
         "tags": ["cases"],
