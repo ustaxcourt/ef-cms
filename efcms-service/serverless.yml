@@ -644,5 +644,5 @@ functions:
     events:
       - http:
           path: v1/documents/{documentId}/virus-scan
-          method: get
+          method: post
           cors: true
