@@ -30,7 +30,7 @@ module.exports.createISODateString = (dateString, inputFormat) => {
   if (!dateString) {
     result = moment();
   } else {
-    result = prepareDateFromString(dateString, inputFormat, USTC_TZ);
+    result = prepareDateFromString(dateString, inputFormat);
   }
 
   return result.toISOString();
