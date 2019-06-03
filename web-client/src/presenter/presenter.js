@@ -18,6 +18,7 @@ import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
@@ -53,6 +54,8 @@ import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
+import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
+import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
@@ -64,9 +67,11 @@ import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequen
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
+import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
+import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
@@ -152,6 +157,7 @@ export const presenter = {
     closeAccountMenuSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
+    completeScanSequence,
     confirmStayLoggedInSequence,
     createWorkItemSequence,
     dismissAlertSequence,
@@ -187,6 +193,8 @@ export const presenter = {
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
     runBatchProcessSequence,
+    scannerShutdownSequence,
+    scannerStartupSequence,
     selectAssigneeSequence,
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
@@ -197,9 +205,11 @@ export const presenter = {
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
+    setScannerSourceSequence,
     setWorkItemActionSequence,
     showDocketRecordDetailModalSequence,
     signOutSequence,
+    startScanSequence,
     submitCaseAssociationRequestSequence,
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
