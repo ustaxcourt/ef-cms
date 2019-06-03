@@ -64,7 +64,7 @@ test = CerebralTest(presenter);
 
 describe('Taxpayer files document', () => {
   beforeEach(() => {
-    jest.setTimeout(65000);
+    jest.setTimeout(120000);
     global.window = {
       localStorage: {
         removeItem: () => null,
