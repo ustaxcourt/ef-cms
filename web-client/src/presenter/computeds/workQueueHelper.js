@@ -8,6 +8,7 @@ export const workQueueHelper = get => {
   const userRole = get(state.user.role);
   const userRoleMap = mapValueHelper(userRole);
   const unreadCount = get(state.notifications.unreadCount);
+  const workQueueIsInternal = get(state.workQueueIsInternal);
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
@@ -23,6 +24,8 @@ export const workQueueHelper = get => {
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
-    workQueueTitle: `${showIndividualWorkQueue ? 'My' : 'Section'} Messages`,
+    workQueueTitle: `${showIndividualWorkQueue ? 'My' : 'Section'} ${
+      workQueueIsInternal ? 'Messages' : 'Document QC'
+    }`,
   };
 };
