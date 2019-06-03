@@ -81,5 +81,7 @@ export const submitCaseAssociationRequestAction = async ({
   return {
     caseDetail,
     caseId: docketNumber,
+    documentWithImmediateAssociation,
+    documentWithPendingAssociation,
   };
 };
