@@ -157,8 +157,6 @@ table.work-queue {
 
   tbody:not(.action-bar) {
     &:hover {
-      cursor: pointer;
-
       td.focus-toggle {
         button.focus-button {
           background-color: color($theme-color-primary);
