@@ -19,7 +19,13 @@ export const workQueueHelper = get => {
   return {
     currentBoxView: showInbox ? 'inbox' : 'outbox',
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
-    showBatchedForIRSTab: workQueueIsInternal === false,
+    sentTitle: workQueueIsInternal
+      ? 'Sent'
+      : userRole === 'docketclerk'
+      ? 'Processed'
+      : 'Served',
+    showBatchedForIRSTab:
+      userRole === 'docketclerk' ? false : workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
     showOutbox: workQueueToDisplay.box === 'outbox',
