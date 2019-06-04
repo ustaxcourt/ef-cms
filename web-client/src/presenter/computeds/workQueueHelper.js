@@ -16,9 +16,13 @@ export const workQueueHelper = get => {
     ? myInboxUnreadCount
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
+  const isDisplayingQC = !workQueueIsInternal;
 
   return {
+    assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
     currentBoxView: showInbox ? 'inbox' : 'outbox',
+    hideFromColumn: isDisplayingQC,
+    hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     sentTitle: workQueueIsInternal
       ? 'Sent'
@@ -26,11 +30,18 @@ export const workQueueHelper = get => {
       ? 'Processed'
       : 'Served',
     showBatchedForIRSTab:
-      userRole === 'docketclerk' ? false : workQueueIsInternal === false,
+      userRole === 'petitionsclerk' && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
+    showMessageContent: !isDisplayingQC,
+    showMyQueueToggle:
+      userRole === 'docketclerk' || userRole === 'petitionsclerk',
     showOutbox: workQueueToDisplay.box === 'outbox',
     showRunBatchIRSProcessButton: userSection === 'petitions',
+    showSectionSentTab:
+      workQueueIsInternal ||
+      userRole === 'docketclerk' ||
+      userRole === 'petitionsclerk',
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:

@@ -43,7 +43,8 @@ export const HeaderDashboardInternal = connect(
               Switch to Section {workQueueHelper.workQueueType}
             </button>
           )}
-          {workQueueHelper.showSectionWorkQueue && (
+          {workQueueHelper.showSectionWorkQueue &&
+           workQueueHelper.showMyQueueToggle && (
             <button
               className="button-switch-box usa-button usa-button--unstyled"
               onClick={() => {

@@ -47,4 +47,8 @@ User.prototype.isExternalUser = function() {
   );
 };
 
+User.prototype.inInternalUser = function() {
+  return !this.isExternalUser();
+};
+
 module.exports = { User };
