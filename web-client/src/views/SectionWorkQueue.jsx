@@ -33,7 +33,11 @@ export const SectionWorkQueue = connect(
             </div>
           </Tab>
         )}
-        <Tab tabName="outbox" title="Sent" id="section-sent-tab">
+        <Tab
+          tabName="outbox"
+          title={workQueueHelper.sentTitle}
+          id="section-sent-tab"
+        >
           <div id="section-sent-tab-content">
             <SectionWorkQueueOutbox />
           </div>

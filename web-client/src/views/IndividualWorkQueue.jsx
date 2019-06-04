@@ -33,7 +33,11 @@ export const IndividualWorkQueue = connect(
             </div>
           </Tab>
         )}
-        <Tab tabName="outbox" title="Sent" id="individual-sent-tab">
+        <Tab
+          tabName="outbox"
+          title={workQueueHelper.sentTitle}
+          id="individual-sent-tab"
+        >
           <div id="individual-sent-tab-content">
             <IndividualWorkQueueOutbox />
           </div>
