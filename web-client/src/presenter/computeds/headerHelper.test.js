@@ -39,6 +39,14 @@ describe('headerHelper', () => {
       expect(result.showMessages).toBeTruthy();
     });
   });
+  it('should show trial sessions for internal users', async () => {
+    interal.forEach(role => {
+      const result = runCompute(headerHelper, {
+        state: getState(role),
+      });
+      expect(result.showTrialSessions).toBeTruthy();
+    });
+  });
   it('should show cases for external users', async () => {
     external.forEach(role => {
       const result = runCompute(headerHelper, {
@@ -59,6 +67,14 @@ describe('headerHelper', () => {
         state: getState(role),
       });
       expect(result.showDocumentQC).toBeFalsy();
+    });
+  });
+  it('should NOT show trial sessions for external users', async () => {
+    external.forEach(role => {
+      const result = runCompute(headerHelper, {
+        state: getState(role),
+      });
+      expect(result.showTrialSessions).toBeFalsy();
     });
   });
   it('should NOT show messages for external users', async () => {
@@ -94,5 +110,14 @@ describe('headerHelper', () => {
       },
     });
     expect(result.pageIsMyCases).toBeTruthy();
+  });
+  it('should know when the page is TrialSessions', async () => {
+    const result = await runCompute(headerHelper, {
+      state: {
+        ...getState('petitionsclerk'),
+        currentPage: 'TrialSessions',
+      },
+    });
+    expect(result.pageIsTrialSessions).toBeTruthy();
   });
 });
