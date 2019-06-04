@@ -7,7 +7,6 @@ export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     documentHelper: state.documentHelper,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     sectionWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -26,7 +25,6 @@ export const SectionWorkQueueInbox = connect(
     setFocusedWorkItem,
     users,
     workQueueHelper,
-    navigateToPathSequence,
   }) => {
     return (
       <React.Fragment>
@@ -90,18 +88,7 @@ export const SectionWorkQueueInbox = connect(
                 })
               }
             >
-              <tr
-                onClick={e => {
-                  e.stopPropagation();
-
-                  navigateToPathSequence({
-                    path: documentHelper({
-                      docketNumber: item.docketNumber,
-                      documentId: item.document.documentId,
-                    }),
-                  });
-                }}
-              >
+              <tr>
                 <td className="focus-toggle">
                   <button
                     className="focus-button usa-button usa-button--unstyled"
