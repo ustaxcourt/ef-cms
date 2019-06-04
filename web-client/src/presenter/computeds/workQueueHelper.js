@@ -26,11 +26,17 @@ export const workQueueHelper = get => {
       ? 'Processed'
       : 'Served',
     showBatchedForIRSTab:
-      userRole === 'docketclerk' ? false : workQueueIsInternal === false,
+      userRole !== 'docketclerk' ? false : workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
+    showMyQueueToggle:
+      userRole === 'dockerclerk' || userRole === 'petitionsclerk',
     showOutbox: workQueueToDisplay.box === 'outbox',
     showRunBatchIRSProcessButton: userSection === 'petitions',
+    showSectionSentTab:
+      workQueueIsInternal ||
+      userRole === 'docketclerk' ||
+      userRole === 'petitionsclerk',
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
