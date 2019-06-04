@@ -33,6 +33,7 @@ export const workQueueHelper = get => {
       userRole === 'petitionsclerk' && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
+    showMessageContent: !isDisplayingQC,
     showMyQueueToggle:
       userRole === 'docketclerk' || userRole === 'petitionsclerk',
     showOutbox: workQueueToDisplay.box === 'outbox',

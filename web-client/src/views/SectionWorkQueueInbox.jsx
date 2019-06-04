@@ -148,12 +148,14 @@ export const SectionWorkQueueInbox = connect(
                       {item.document.documentType}
                     </a>
                   </div>
-                  <div
-                    id={`detail-${item.workItemId}`}
-                    className="message-document-detail"
-                  >
-                    {item.currentMessage.message}
-                  </div>
+                  {workQueueHelper.showMessageContent && (
+                    <div
+                      id={`detail-${item.workItemId}`}
+                      className="message-document-detail"
+                    >
+                      {item.currentMessage.message}
+                    </div>
+                  )}
                 </td>
                 <td className="message-queue-row">{item.caseStatus}</td>
                 <td className="to message-queue-row">{item.assigneeName}</td>
