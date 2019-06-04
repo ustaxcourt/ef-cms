@@ -70,6 +70,7 @@ describe('fileExternalDocument', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
+            isInternalUser: () => false,
             name: 'Olivia Jade',
             role: 'respondent',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
