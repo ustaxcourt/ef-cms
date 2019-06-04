@@ -81,6 +81,7 @@ import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedu
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
@@ -162,6 +163,7 @@ const allUseCases = {
   getProcedureTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
+  getTrialSessions,
   getUser,
   getUsersInSection,
   getWorkItem,
