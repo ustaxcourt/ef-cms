@@ -1,4 +1,3 @@
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { state } from 'cerebral';
 import _ from 'lodash';
 
@@ -59,12 +58,11 @@ export const formatWorkItem = (
     result.showUnassignedIcon = true;
   }
 
-  result.unreadIconType = !result.isInternal ? 'copy' : 'envelope';
-
   switch (result.caseStatus.trim()) {
     case 'Batched for IRS':
       result.showBatchedStatusIcon = true;
       result.showUnreadStatusIcon = false;
+      result.showUnassignedIcon = false;
       break;
     case 'Recalled':
       result.showRecalledStatusIcon = true;

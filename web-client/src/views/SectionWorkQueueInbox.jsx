@@ -137,8 +137,9 @@ export const SectionWorkQueueInbox = connect(
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
-                      className={item.statusIcon}
+                      className="iconStatusBatched"
                       aria-hidden="true"
+                      size="lg"
                     />
                   )}
                   {item.showUnassignedIcon && (
@@ -146,6 +147,7 @@ export const SectionWorkQueueInbox = connect(
                       icon={['fas', 'question-circle']}
                       className="iconStatusUnassigned"
                       aria-hidden="true"
+                      size="lg"
                     />
                   )}
                 </td>

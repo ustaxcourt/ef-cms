@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -23,6 +24,7 @@ export const IndividualWorkQueueOutbox = connect(
                 Docket
               </th>
               <th>Sent</th>
+              <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
               <th>Case Status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
@@ -45,6 +47,17 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.sentDateFormatted}</span>
+                </td>
+                <td className="message-queue-row has-icon">
+                  {item.showBatchedStatusIcon && (
+                    <FontAwesomeIcon
+                      icon={['far', 'clock']}
+                      className="iconStatusBatched"
+                      aria-label="batched for IRS"
+                      aria-hidden="false"
+                      size="lg"
+                    />
+                  )}
                 </td>
                 <td className="message-queue-row">
                   <div className="message-document-title">

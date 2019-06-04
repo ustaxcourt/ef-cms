@@ -70,7 +70,7 @@ export const IndividualWorkQueueInbox = connect(
                   )}
                   {item.showUnreadStatusIcon && (
                     <FontAwesomeIcon
-                      icon={['fas', item.unreadIconType]}
+                      icon={['fas', 'envelope']}
                       className="iconStatusUnread"
                       aria-label="unread message"
                       size="lg"
