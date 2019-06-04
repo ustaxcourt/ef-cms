@@ -110,6 +110,7 @@ import { validatePetition } from '../../shared/src/business/useCases/validatePet
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
+import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -193,6 +194,7 @@ const allUseCases = {
   validatePetitionFromPaper,
   verifyCaseForUser,
   verifyPendingCaseForUser,
+  virusScanPdf,
 };
 tryCatchDecorator(allUseCases);
 
