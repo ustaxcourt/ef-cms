@@ -6,9 +6,15 @@ import React from 'react';
 export const HeaderDashboardInternal = connect(
   {
     chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
+    refreshSectionInboxCountSequence:
+      sequences.refreshSectionInboxCountSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence, workQueueHelper }) => {
+  ({
+    chooseWorkQueueSequence,
+    refreshSectionInboxCountSequence,
+    workQueueHelper,
+  }) => {
     return (
       <div className="big-blue-header">
         <div className="grid-container">
@@ -27,6 +33,7 @@ export const HeaderDashboardInternal = connect(
                   box: workQueueHelper.currentBoxView,
                   queue: 'section',
                 });
+                refreshSectionInboxCountSequence();
               }}
             >
               <FontAwesomeIcon icon={['far', 'clone']} />

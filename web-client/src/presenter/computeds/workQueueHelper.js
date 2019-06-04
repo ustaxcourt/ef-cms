@@ -7,15 +7,18 @@ export const workQueueHelper = get => {
   const userSection = get(state.user.section);
   const userRole = get(state.user.role);
   const userRoleMap = mapValueHelper(userRole);
-  const unreadCount = get(state.notifications.unreadCount);
+  const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueIsInternal);
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
+  const myUnreadCount = workQueueIsInternal
+    ? myInboxUnreadCount
+    : qcUnreadCount;
 
   return {
     currentBoxView: showInbox ? 'inbox' : 'outbox',
-    inboxCount: showIndividualWorkQueue ? unreadCount : sectionInboxCount,
+    inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     showBatchedForIRSTab: workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,

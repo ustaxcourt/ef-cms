@@ -50,6 +50,7 @@ import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSe
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
+import { refreshSectionInboxCountSequence } from './sequences/refreshSectionInboxCountSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -191,6 +192,7 @@ export const presenter = {
     openCreateMessageModalSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
+    refreshSectionInboxCountSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
