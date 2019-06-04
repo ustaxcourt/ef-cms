@@ -6,9 +6,10 @@ export const IndividualWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
     workQueue: state.formattedWorkQueue,
+    workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, workQueue, workQueueSectionHelper }) => {
+  ({ documentHelper, workQueue, workQueueSectionHelper, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -23,8 +24,8 @@ export const IndividualWorkQueueOutbox = connect(
               </th>
               <th>Sent</th>
               <th>Document</th>
-              <th>Status</th>
-              <th>To</th>
+              <th>Case Status</th>
+              <th>Assigned To</th>
               <th>Section</th>
             </tr>
           </thead>
@@ -60,12 +61,14 @@ export const IndividualWorkQueueOutbox = connect(
                       {item.document.documentType}
                     </a>
                   </div>
-                  <div
-                    id={`detail-${item.workItemId}`}
-                    className="message-document-detail"
-                  >
-                    {item.currentMessage.message}
-                  </div>
+                  {workQueueHelper.showMessageContent && (
+                    <div
+                      id={`detail-${item.workItemId}`}
+                      className="message-document-detail"
+                    >
+                      {item.currentMessage.message}
+                    </div>
+                  )}
                 </td>
                 <td className="message-queue-row">{item.caseStatus}</td>
                 <td className="message-queue-row">{item.assigneeName}</td>

@@ -6,9 +6,15 @@ export const SectionWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
     sectionWorkQueue: state.formattedWorkQueue,
+    workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, sectionWorkQueue, workQueueSectionHelper }) => {
+  ({
+    documentHelper,
+    sectionWorkQueue,
+    workQueueSectionHelper,
+    workQueueHelper,
+  }) => {
     return (
       <table
         className="usa-table work-queue subsection"
@@ -60,12 +66,14 @@ export const SectionWorkQueueOutbox = connect(
                     {item.document.documentType}
                   </a>
                 </div>
-                <div
-                  id={`detail-${item.workItemId}`}
-                  className="message-document-detail"
-                >
-                  {item.currentMessage.message}
-                </div>
+                {workQueueHelper.showMessageContent && (
+                  <div
+                    id={`detail-${item.workItemId}`}
+                    className="message-document-detail"
+                  >
+                    {item.currentMessage.message}
+                  </div>
+                )}
               </td>
               <td className="message-queue-row">{item.caseStatus}</td>
               <td className="message-queue-row">{item.currentMessage.from}</td>
