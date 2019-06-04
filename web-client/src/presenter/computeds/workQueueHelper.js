@@ -46,6 +46,7 @@ export const workQueueHelper = get => {
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
+    workQueueIsInternal,
     workQueueTitle: `${
       showIndividualWorkQueue ? 'My' : 'Section'
     } ${workQueueType}`,

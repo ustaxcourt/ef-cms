@@ -45,6 +45,7 @@ import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
+import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
@@ -187,6 +188,7 @@ export const presenter = {
     gotoStyleGuideSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
+    navigateToPathSequence,
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
