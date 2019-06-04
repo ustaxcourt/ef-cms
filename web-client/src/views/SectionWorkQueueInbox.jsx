@@ -7,6 +7,7 @@ export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     documentHelper: state.documentHelper,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     sectionWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -25,6 +26,7 @@ export const SectionWorkQueueInbox = connect(
     setFocusedWorkItem,
     users,
     workQueueHelper,
+    navigateToPathSequence,
   }) => {
     return (
       <React.Fragment>
@@ -88,7 +90,18 @@ export const SectionWorkQueueInbox = connect(
                 })
               }
             >
-              <tr>
+              <tr
+                onClick={e => {
+                  e.stopPropagation();
+
+                  navigateToPathSequence({
+                    path: documentHelper({
+                      docketNumber: item.docketNumber,
+                      documentId: item.document.documentId,
+                    }),
+                  });
+                }}
+              >
                 <td className="focus-toggle">
                   <button
                     className="focus-button usa-button usa-button--unstyled"
@@ -97,7 +110,12 @@ export const SectionWorkQueueInbox = connect(
                     aria-controls={`detail-${item.workItemId}`}
                   />{' '}
                 </td>
-                <td className="message-select-control has-icon">
+                <td
+                  onClick={e => {
+                    e.stopPropagation();
+                  }}
+                  className="message-select-control has-icon"
+                >
                   <input
                     id={item.workItemId}
                     type="checkbox"
