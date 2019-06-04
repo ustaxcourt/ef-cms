@@ -16,9 +16,13 @@ export const workQueueHelper = get => {
     ? myInboxUnreadCount
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
+  const isDisplayingQC = !workQueueIsInternal;
 
   return {
+    assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
     currentBoxView: showInbox ? 'inbox' : 'outbox',
+    hideFromColumn: isDisplayingQC,
+    hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     sentTitle: workQueueIsInternal
       ? 'Sent'

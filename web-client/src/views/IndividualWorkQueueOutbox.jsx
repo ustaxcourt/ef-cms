@@ -23,8 +23,8 @@ export const IndividualWorkQueueOutbox = connect(
               </th>
               <th>Sent</th>
               <th>Document</th>
-              <th>Status</th>
-              <th>To</th>
+              <th>Case Status</th>
+              <th>Assigned To</th>
               <th>Section</th>
             </tr>
           </thead>

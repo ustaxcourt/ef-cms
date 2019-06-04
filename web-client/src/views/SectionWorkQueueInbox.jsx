@@ -71,10 +71,10 @@ export const SectionWorkQueueInbox = connect(
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               <th>Document</th>
-              <th>Status</th>
-              <th>To</th>
-              <th>From</th>
-              <th>Section</th>
+              <th>Case Status</th>
+              <th>{workQueueHelper.assigneeColumnTitle}</th>
+              {!workQueueHelper.hideFromColumn && <th>From</th>}
+              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
           {sectionWorkQueue.map((item, idx) => (
@@ -157,10 +157,14 @@ export const SectionWorkQueueInbox = connect(
                 </td>
                 <td className="message-queue-row">{item.caseStatus}</td>
                 <td className="to message-queue-row">{item.assigneeName}</td>
-                <td className="message-queue-row">
-                  {item.currentMessage.from}
-                </td>
-                <td className="message-queue-row">{item.sentBySection}</td>
+                {!workQueueHelper.hideFromColumn && (
+                  <td className="message-queue-row">
+                    {item.currentMessage.from}
+                  </td>
+                )}
+                {!workQueueHelper.hideSectionColumn && (
+                  <td className="message-queue-row">{item.sentBySection}</td>
+                )}
               </tr>
             </tbody>
           ))}
