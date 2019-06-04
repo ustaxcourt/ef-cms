@@ -23,10 +23,8 @@ const NavigationItems = (helper, sequences) => {
             href="/"
             onClick={e => {
               e.preventDefault();
-              sequences.setWorkQueueIsInternalSequence();
-              sequences.chooseWorkQueueSequence({
-                box: 'inbox',
-                queue: 'my',
+              sequences.navigateToPathSequence({
+                path: '/messages/my/inbox',
               });
             }}
           >
@@ -55,10 +53,8 @@ const NavigationItems = (helper, sequences) => {
             href="/"
             onClick={e => {
               e.preventDefault();
-              sequences.unsetWorkQueueIsInternalSequence();
-              sequences.chooseWorkQueueSequence({
-                box: 'inbox',
-                queue: 'section',
+              sequences.navigateToPathSequence({
+                path: '/document-qc/my/inbox',
               });
             }}
           >
@@ -84,16 +80,13 @@ const NavigationItems = (helper, sequences) => {
 export const Header = connect(
   {
     betaBar: state.betaBar,
-    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
-    setWorkQueueIsInternalSequence: sequences.setWorkQueueIsInternalSequence,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-    unsetWorkQueueIsInternalSequence:
-      sequences.unsetWorkQueueIsInternalSequence,
     user: state.user,
   },
   ({
@@ -101,12 +94,10 @@ export const Header = connect(
     helper,
     loginSequence,
     mobileMenu,
+    navigateToPathSequence,
     signOutSequence,
     toggleBetaBarSequence,
-    chooseWorkQueueSequence,
     toggleMobileMenuSequence,
-    unsetWorkQueueIsInternalSequence,
-    setWorkQueueIsInternalSequence,
     user,
   }) => {
     return (
@@ -151,9 +142,7 @@ export const Header = connect(
             <nav role="navigation" className="main-navigation">
               {user &&
                 NavigationItems(helper, {
-                  chooseWorkQueueSequence,
-                  setWorkQueueIsInternalSequence,
-                  unsetWorkQueueIsInternalSequence,
+                  navigateToPathSequence,
                 })}
             </nav>
           </div>
@@ -191,9 +180,7 @@ export const Header = connect(
                         {user && user.userId && (
                           <div className="mobile-account-menu-container">
                             {NavigationItems(helper, {
-                              chooseWorkQueueSequence,
-                              setWorkQueueIsInternalSequence,
-                              unsetWorkQueueIsInternalSequence,
+                              navigateToPathSequence,
                             })}
                           </div>
                         )}
