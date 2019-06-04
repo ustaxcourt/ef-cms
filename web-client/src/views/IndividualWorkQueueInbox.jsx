@@ -7,8 +7,9 @@ export const IndividualWorkQueueInbox = connect(
   {
     documentHelper: state.documentHelper,
     workQueue: state.formattedWorkQueue,
+    workQueueHelper: state.workQueueHelper,
   },
-  ({ workQueue, documentHelper }) => {
+  ({ workQueue, workQueueHelper, documentHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -24,9 +25,9 @@ export const IndividualWorkQueueInbox = connect(
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
-              <th>Status</th>
-              <th>From</th>
-              <th>Section</th>
+              <th>Case Status</th>
+              {!workQueueHelper.hideFromColumn && <th>From</th>}
+              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
@@ -103,10 +104,14 @@ export const IndividualWorkQueueInbox = connect(
                   </div>
                 </td>
                 <td className="message-queue-row">{item.caseStatus}</td>
-                <td className="message-queue-row from">
-                  {item.currentMessage.from}
-                </td>
-                <td className="message-queue-row">{item.sentBySection}</td>
+                {!workQueueHelper.hideFromColumn && (
+                  <td className="message-queue-row from">
+                    {item.currentMessage.from}
+                  </td>
+                )}
+                {!workQueueHelper.hideFromColumn && (
+                  <td className="message-queue-row">{item.sentBySection}</td>
+                )}
               </tr>
             </tbody>
           ))}
