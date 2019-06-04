@@ -67,9 +67,10 @@ export const SectionWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th colSpan="3">Select</th>
+              <th colSpan="2">Select</th>
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
+              <th />
               <th>Document</th>
               <th>Case Status</th>
               <th>{workQueueHelper.assigneeColumnTitle}</th>
@@ -116,6 +117,14 @@ export const SectionWorkQueueInbox = connect(
                     className="usa-checkbox__label padding-top-05"
                   />
                 </td>
+                <td className="message-queue-row">
+                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
+                </td>
+                <td className="message-queue-row">
+                  <span className="no-wrap">
+                    {item.currentMessage.createdAtFormatted}
+                  </span>
+                </td>
                 <td className="message-queue-row has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
@@ -124,14 +133,13 @@ export const SectionWorkQueueInbox = connect(
                       aria-hidden="true"
                     />
                   )}
-                </td>
-                <td className="message-queue-row">
-                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
-                </td>
-                <td className="message-queue-row">
-                  <span className="no-wrap">
-                    {item.currentMessage.createdAtFormatted}
-                  </span>
+                  {item.showUnassignedIcon && (
+                    <FontAwesomeIcon
+                      icon={['fas', 'question-circle']}
+                      className="iconStatusUnassigned"
+                      aria-hidden="true"
+                    />
+                  )}
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
