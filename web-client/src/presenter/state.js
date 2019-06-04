@@ -119,5 +119,5 @@ export const state = {
   workQueueHelper,
   workQueueIsInternal: true,
   workQueueSectionHelper,
-  workQueueToDisplay: { box: 'inbox', internal: true, queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
