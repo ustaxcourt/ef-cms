@@ -138,10 +138,12 @@ async function findWorkItemInWorkQueue({
   message,
   box,
   queue,
+  workQueueIsInternal = true,
 }) {
   await test.runSequence('chooseWorkQueueSequence', {
     box,
     queue,
+    workQueueIsInternal,
   });
 
   const myOutbox = test.getState('workQueue');
