@@ -437,11 +437,11 @@
         }
       }
     },
-    "/v1/documents/{documentId}/sanitize": {
+    "/v1/documents/{documentId}/virus-scan": {
       "post": {
         "tags": ["documents"],
-        "summary": "sanitizes PDF input, removing interactive elements",
-        "description": "Sanitize PDF input, removing interactive elements.\n",
+        "summary": "triggers the virus scan function",
+        "description": "Endpoint that triggers the virus scan function for the specified document.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -455,6 +455,8 @@
         ]
       },
       "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",

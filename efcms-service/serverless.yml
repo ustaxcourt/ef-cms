@@ -638,11 +638,11 @@ functions:
           cors: true
 
   virusScan:
-    handler: src/handlers.virusScan
+    handler: src/handlers.virusScanPdfLambda
     layers:
       - { Ref: ClamavLambdaLayer }
     events:
       - http:
           path: v1/documents/{documentId}/virus-scan
-          method: get
+          method: post
           cors: true
