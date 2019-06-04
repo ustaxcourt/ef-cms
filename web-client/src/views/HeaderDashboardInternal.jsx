@@ -40,20 +40,21 @@ export const HeaderDashboardInternal = connect(
               Switch to Section {workQueueHelper.workQueueType}
             </button>
           )}
-          {workQueueHelper.showSectionWorkQueue && (
-            <button
-              className="button-switch-box usa-button usa-button--unstyled"
-              onClick={() => {
-                chooseWorkQueueSequence({
-                  box: workQueueHelper.currentBoxView,
-                  queue: 'my',
-                });
-              }}
-            >
-              <FontAwesomeIcon icon={['far', 'clone']} />
-              Switch to My {workQueueHelper.workQueueType}
-            </button>
-          )}
+          {workQueueHelper.showSectionWorkQueue &&
+            workQueueHelper.showMyQueueToggle && (
+              <button
+                className="button-switch-box usa-button usa-button--unstyled"
+                onClick={() => {
+                  chooseWorkQueueSequence({
+                    box: workQueueHelper.currentBoxView,
+                    queue: 'my',
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'clone']} />
+                Switch to My {workQueueHelper.workQueueType}
+              </button>
+            )}
         </div>
       </div>
     );
