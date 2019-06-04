@@ -24,6 +24,10 @@ const NavigationItems = (helper, sequences) => {
             onClick={e => {
               e.preventDefault();
               sequences.setWorkQueueIsInternalSequence();
+              sequences.chooseWorkQueueSequence({
+                box: 'inbox',
+                queue: 'my',
+              });
             }}
           >
             Messages{' '}
@@ -52,6 +56,10 @@ const NavigationItems = (helper, sequences) => {
             onClick={e => {
               e.preventDefault();
               sequences.unsetWorkQueueIsInternalSequence();
+              sequences.chooseWorkQueueSequence({
+                box: 'inbox',
+                queue: 'section',
+              });
             }}
           >
             Document QC
@@ -76,6 +84,7 @@ const NavigationItems = (helper, sequences) => {
 export const Header = connect(
   {
     betaBar: state.betaBar,
+    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
@@ -94,6 +103,7 @@ export const Header = connect(
     mobileMenu,
     signOutSequence,
     toggleBetaBarSequence,
+    chooseWorkQueueSequence,
     toggleMobileMenuSequence,
     unsetWorkQueueIsInternalSequence,
     setWorkQueueIsInternalSequence,
@@ -141,6 +151,7 @@ export const Header = connect(
             <nav role="navigation" className="main-navigation">
               {user &&
                 NavigationItems(helper, {
+                  chooseWorkQueueSequence,
                   setWorkQueueIsInternalSequence,
                   unsetWorkQueueIsInternalSequence,
                 })}
@@ -180,6 +191,7 @@ export const Header = connect(
                         {user && user.userId && (
                           <div className="mobile-account-menu-container">
                             {NavigationItems(helper, {
+                              chooseWorkQueueSequence,
                               setWorkQueueIsInternalSequence,
                               unsetWorkQueueIsInternalSequence,
                             })}
