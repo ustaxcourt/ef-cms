@@ -1,7 +1,8 @@
-import { ErrorNotification } from './ErrorNotification';
-import { HeaderDashboardInternal } from './HeaderDashboardInternal';
-import { SuccessNotification } from './SuccessNotification';
+import { ErrorNotification } from '../ErrorNotification';
+import { HeaderDashboardInternal } from '../HeaderDashboardInternal';
+import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { UpcomingTrialSessions } from './UpcomingTrialSessions';
 import React from 'react';
 
 export const TrialSessions = () => (
