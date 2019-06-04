@@ -5,13 +5,13 @@ import React from 'react';
 
 export const HeaderDashboardInternal = connect(
   {
-    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     refreshSectionInboxCountSequence:
       sequences.refreshSectionInboxCountSequence,
     workQueueHelper: state.workQueueHelper,
   },
   ({
-    chooseWorkQueueSequence,
+    navigateToPathSequence,
     refreshSectionInboxCountSequence,
     workQueueHelper,
   }) => {
@@ -29,9 +29,12 @@ export const HeaderDashboardInternal = connect(
             <button
               className="button-switch-box usa-button usa-button--unstyled"
               onClick={() => {
-                chooseWorkQueueSequence({
-                  box: workQueueHelper.currentBoxView,
-                  queue: 'section',
+                navigateToPathSequence({
+                  path: `/${
+                    workQueueHelper.workQueueIsInternal
+                      ? 'messages'
+                      : 'document-qc'
+                  }/section/${workQueueHelper.currentBoxView}`,
                 });
                 refreshSectionInboxCountSequence();
               }}
@@ -41,20 +44,24 @@ export const HeaderDashboardInternal = connect(
             </button>
           )}
           {workQueueHelper.showSectionWorkQueue &&
-            workQueueHelper.showMyQueueToggle && (
-              <button
-                className="button-switch-box usa-button usa-button--unstyled"
-                onClick={() => {
-                  chooseWorkQueueSequence({
-                    box: workQueueHelper.currentBoxView,
-                    queue: 'my',
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'clone']} />
-                Switch to My {workQueueHelper.workQueueType}
-              </button>
-            )}
+           workQueueHelper.showMyQueueToggle && (
+            <button
+              className="button-switch-box usa-button usa-button--unstyled"
+              onClick={() => {
+                navigateToPathSequence({
+                  path: `/${
+                    workQueueHelper.workQueueIsInternal
+                      ? 'messages'
+                      : 'document-qc'
+                  }/my/${workQueueHelper.currentBoxView}`,
+                });
+                refreshSectionInboxCountSequence();
+              }}
+            >
+              <FontAwesomeIcon icon={['far', 'clone']} />
+              Switch to My {workQueueHelper.workQueueType}
+            </button>
+          )}
         </div>
       </div>
     );

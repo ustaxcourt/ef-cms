@@ -7,15 +7,22 @@ import React from 'react';
 
 export const SectionWorkQueue = connect(
   {
-    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
+    navigateToPathSequence: sequences.navigateToPathSequence,
+    queue: state.workQueueToDisplay.queue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence, workQueueHelper }) => {
+  ({ navigateToPathSequence, queue, workQueueHelper }) => {
     return (
       <Tabs
         className="classic-horizontal-header3 tab-border"
         bind="workQueueToDisplay.box"
-        onSelect={() => chooseWorkQueueSequence()}
+        onSelect={box => {
+          navigateToPathSequence({
+            path: `/${
+              workQueueHelper.workQueueIsInternal ? 'messages' : 'document-qc'
+            }/${queue}/${box}`,
+          });
+        }}
       >
         <Tab tabName="inbox" title="Inbox" id="section-inbox-tab">
           <div id="section-inbox-tab-content">
