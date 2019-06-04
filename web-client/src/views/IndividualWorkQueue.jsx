@@ -8,14 +8,21 @@ import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
 
 export const IndividualWorkQueue = connect(
   {
-    chooseWorkQueueSequence: sequences.chooseWorkQueueSequence,
+    navigateToPathSequence: sequences.navigateToPathSequence,
+    queue: state.workQueueToDisplay.queue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ chooseWorkQueueSequence, workQueueHelper }) => {
+  ({ navigateToPathSequence, queue, workQueueHelper }) => {
     return (
       <Tabs
         bind="workQueueToDisplay.box"
-        onSelect={() => chooseWorkQueueSequence()}
+        onSelect={box => {
+          navigateToPathSequence({
+            path: `/${
+              workQueueHelper.workQueueIsInternal ? 'messages' : 'document-qc'
+            }/${queue}/${box}`,
+          });
+        }}
       >
         <Tab tabName="inbox" title="Inbox" id="individual-inbox-tab">
           <div id="individual-inbox-tab-content">

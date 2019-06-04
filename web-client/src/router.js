@@ -140,13 +140,6 @@ const router = {
       app.getSequence('gotoStyleGuideSequence')();
     });
     route(
-      '/messages',
-      checkLoggedIn(() => {
-        document.title = `Dashboard ${pageTitleSuffix}`;
-        app.getSequence('gotoDashboardSequence')();
-      }),
-    );
-    route(
       '/messages..',
       checkLoggedIn(() => {
         const path = route._.getPathFromBase();
