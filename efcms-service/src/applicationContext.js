@@ -126,6 +126,12 @@ const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
+  getTrialSessions,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
+const {
+  getTrialSessions: getTrialSessionsUC,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
+const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
@@ -312,6 +318,7 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getTrialSessions,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
@@ -366,6 +373,7 @@ module.exports = (appContextUser = {}) => {
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,
         getWorkItem,

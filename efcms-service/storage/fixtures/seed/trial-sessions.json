@@ -1,0 +1,11 @@
+[
+  {
+    "pk": "trial-session",
+    "sk": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "maxCases": 100,
+    "sessionType": "Regular",
+    "startDate": "2019-12-01T00:00:00.000Z",
+    "term": "Fall",
+    "trialLocation": "Birmingham, AL"
+  }
+]
