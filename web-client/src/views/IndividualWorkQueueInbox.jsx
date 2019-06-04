@@ -1,16 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
     documentHelper: state.documentHelper,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     workQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ workQueue, workQueueHelper, documentHelper, navigateToPathSequence }) => {
+  ({ workQueue, workQueueHelper, documentHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -32,20 +31,7 @@ export const IndividualWorkQueueInbox = connect(
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
-            <tbody
-              onClick={e => {
-                e.stopPropagation();
-
-                navigateToPathSequence({
-                  path: documentHelper({
-                    docketNumber: item.docketNumber,
-                    documentId: item.document.documentId,
-                    messageId: item.currentMessage.messageId,
-                  }),
-                });
-              }}
-              key={idx}
-            >
+            <tbody key={idx}>
               <tr>
                 <td className="focus-toggle">
                   <button
