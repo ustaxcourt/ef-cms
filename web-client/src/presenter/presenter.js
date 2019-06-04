@@ -126,6 +126,7 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
+import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
 /**
@@ -257,6 +258,7 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
     validateDocketEntrySequence,
+    submitTrialSessionSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,
