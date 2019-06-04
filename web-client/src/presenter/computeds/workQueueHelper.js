@@ -15,6 +15,7 @@ export const workQueueHelper = get => {
   const myUnreadCount = workQueueIsInternal
     ? myInboxUnreadCount
     : qcUnreadCount;
+  const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
 
   return {
     currentBoxView: showInbox ? 'inbox' : 'outbox',
@@ -34,8 +35,9 @@ export const workQueueHelper = get => {
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
-    workQueueTitle: `${showIndividualWorkQueue ? 'My' : 'Section'} ${
-      workQueueIsInternal ? 'Messages' : 'Document QC'
-    }`,
+    workQueueTitle: `${
+      showIndividualWorkQueue ? 'My' : 'Section'
+    } ${workQueueType}`,
+    workQueueType,
   };
 };
