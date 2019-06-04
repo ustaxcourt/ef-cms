@@ -112,6 +112,9 @@ export const SectionWorkQueueInbox = connect(
                 </td>
                 <td
                   onClick={e => {
+                    selectWorkItemSequence({
+                      workItem: item,
+                    });
                     e.stopPropagation();
                   }}
                   className="message-select-control has-icon"
