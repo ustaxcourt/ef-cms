@@ -25,8 +25,8 @@ export const IndividualWorkQueueOutbox = connect(
               <th>Sent</th>
               <th>Document</th>
               <th>Case Status</th>
-              <th>Assigned To</th>
-              <th>Section</th>
+              {!workQueueHelper.hideFromColumn && <th>From</th>}
+              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
@@ -71,10 +71,14 @@ export const IndividualWorkQueueOutbox = connect(
                   )}
                 </td>
                 <td className="message-queue-row">{item.caseStatus}</td>
-                <td className="message-queue-row">{item.assigneeName}</td>
-                <td className="message-queue-row">
-                  {workQueueSectionHelper.sectionDisplay(item.section)}
-                </td>
+                {!workQueueHelper.hideFromColumn && (
+                  <td className="message-queue-row">{item.assigneeName}</td>
+                )}
+                {!workQueueHelper.hideSectionColumn && (
+                  <td className="message-queue-row">
+                    {workQueueSectionHelper.sectionDisplay(item.section)}
+                  </td>
+                )}
               </tr>
             </tbody>
           ))}
