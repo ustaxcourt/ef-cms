@@ -1,0 +1,12 @@
+{
+  "name": "graph-generators",
+  "version": "1.0.0",
+  "description": "Dependency graph generator",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "madge": "^3.4.4"
+  }
+}
