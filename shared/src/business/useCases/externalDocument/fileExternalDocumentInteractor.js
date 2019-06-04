@@ -105,7 +105,7 @@ exports.fileExternalDocument = async ({
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,
           },
-          isInternal: user.isExternalUser(),
+          isInternal: user.inInternalUser(),
           section: DOCKET_SECTION,
           sentBy: user.userId,
         });
