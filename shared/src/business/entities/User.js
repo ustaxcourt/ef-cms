@@ -47,7 +47,7 @@ User.prototype.isExternalUser = function() {
   );
 };
 
-User.prototype.inInternalUser = function() {
+User.prototype.isInternalUser = function() {
   return !this.isExternalUser();
 };
 

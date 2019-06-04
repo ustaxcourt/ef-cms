@@ -21,7 +21,10 @@ describe('getWorkItemsForUser', () => {
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ unreadCount: 1 });
+    expect(result).toEqual({
+      myInboxUnreadCount: 0,
+      qcUnreadCount: 0,
+    });
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
@@ -42,6 +45,9 @@ describe('getWorkItemsForUser', () => {
       applicationContext,
       userId: 'docketclerk',
     });
-    expect(result).toEqual({ unreadCount: 0 });
+    expect(result).toEqual({
+      myInboxUnreadCount: 0,
+      qcUnreadCount: 0,
+    });
   });
 });

@@ -94,6 +94,8 @@ exports.fileExternalDocument = async ({
       documentEntity.generateFiledBy(caseToUpdate);
 
       if (!metadata.isPaper) {
+        console.log('user.prototype', user.prototype);
+
         const workItem = new WorkItem({
           assigneeId: null,
           assigneeName: null,
@@ -105,7 +107,7 @@ exports.fileExternalDocument = async ({
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,
           },
-          isInternal: user.inInternalUser(),
+          isInternal: user.isInternalUser(),
           section: DOCKET_SECTION,
           sentBy: user.userId,
         });
