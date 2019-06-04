@@ -1,4 +1,5 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
+import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
@@ -30,6 +31,7 @@ import React from 'react';
 
 const pages = {
   AddDocketEntry,
+  AddTrialSession,
   BeforeStartingCase,
   CaseDetail,
   CaseDetailInternal,
