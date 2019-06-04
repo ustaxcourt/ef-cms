@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -19,6 +20,7 @@ export const UpcomingTrialSessions = connect(
               <th aria-label="Number">No.</th>
               <th>Date</th>
               <th>Type</th>
+              <th className="icon-column" aria-hidden="true" />
               <th>Location</th>
               <th>Judge</th>
               <th aria-label="Number of cases">No. of Cases</th>
@@ -28,7 +30,7 @@ export const UpcomingTrialSessions = connect(
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan="6">
+                  <td colSpan="7">
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>
@@ -41,6 +43,15 @@ export const UpcomingTrialSessions = connect(
                     <td>{idx + 1}</td>
                     <td>{item.startDate}</td>
                     <td>{item.sessionType}</td>
+                    <td>
+                      {item.swingSession && (
+                        <FontAwesomeIcon
+                          icon="link"
+                          size="sm"
+                          className="fa-icon-blue"
+                        />
+                      )}
+                    </td>
                     <td>
                       <button className="usa-button--unstyled link">
                         {item.trialLocation}

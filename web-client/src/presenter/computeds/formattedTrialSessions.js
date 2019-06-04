@@ -14,7 +14,11 @@ const formatSession = (session, applicationContext) => {
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
-  const sessions = _.orderBy(get(state.trialSessions), 'startDate');
+  const sessions = _.orderBy(
+    get(state.trialSessions),
+    ['startDate', 'swingSession'],
+    ['asc', 'desc'],
+  );
 
   const formattedSessions = [];
   sessions.forEach(session => {
