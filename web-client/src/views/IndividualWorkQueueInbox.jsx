@@ -109,7 +109,7 @@ export const IndividualWorkQueueInbox = connect(
                     {item.currentMessage.from}
                   </td>
                 )}
-                {!workQueueHelper.hideFromColumn && (
+                {!workQueueHelper.hideSectionColumn && (
                   <td className="message-queue-row">{item.sentBySection}</td>
                 )}
               </tr>

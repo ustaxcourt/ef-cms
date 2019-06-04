@@ -6,9 +6,15 @@ export const SectionWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
     sectionWorkQueue: state.formattedWorkQueue,
+    workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, sectionWorkQueue, workQueueSectionHelper }) => {
+  ({
+    documentHelper,
+    sectionWorkQueue,
+    workQueueHelper,
+    workQueueSectionHelper,
+  }) => {
     return (
       <table
         className="usa-table work-queue subsection"
@@ -22,10 +28,10 @@ export const SectionWorkQueueOutbox = connect(
             </th>
             <th>Sent</th>
             <th>Document</th>
-            <th>Status</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Section</th>
+            <th>Case Status</th>
+            <th>{workQueueHelper.assigneeColumnTitle}</th>
+            {!workQueueHelper.hideFromColumn && <th>From</th>}
+            {!workQueueHelper.hideSectionColumn && <th>Section</th>}
           </tr>
         </thead>
         {sectionWorkQueue.map((item, idx) => (
@@ -69,10 +75,14 @@ export const SectionWorkQueueOutbox = connect(
               </td>
               <td className="message-queue-row">{item.caseStatus}</td>
               <td className="message-queue-row">{item.currentMessage.from}</td>
-              <td className="message-queue-row">{item.assigneeName}</td>
-              <td className="message-queue-row">
-                {workQueueSectionHelper.sectionDisplay(item.section)}
-              </td>
+              {!workQueueHelper.hideFromColumn && (
+                <td className="message-queue-row">{item.assigneeName}</td>
+              )}
+              {!workQueueHelper.hideSectionColumn && (
+                <td className="message-queue-row">
+                  {workQueueSectionHelper.sectionDisplay(item.section)}
+                </td>
+              )}
             </tr>
           </tbody>
         ))}
