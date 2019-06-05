@@ -40,7 +40,7 @@ export const workQueueHelper = get => {
       : 'Served',
     showAssignedToColumn:
       (isDisplayingQC && !showIndividualWorkQueue && showInbox) ||
-      !isDisplayingQC,
+      (!isDisplayingQC && !showIndividualWorkQueue),
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
@@ -53,7 +53,8 @@ export const workQueueHelper = get => {
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSelectColumn:
-      isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk),
+      (isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk)) ||
+      (workQueueIsInternal && !isDisplayingQC),
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
