@@ -32,16 +32,16 @@
   "bugs": {
     "url": "https://github.com/ustaxcourt/ef-cms/issues"
   },
+  "browserslist": [
+    ">2%",
+    "last 4 versions",
+    "Firefox ESR",
+    "not ie < 11"
+  ],
   "postcss": {
     "modules": false,
     "plugins": {
       "autoprefixer": {
-        "browsers": [
-          ">2%",
-          "last 4 versions",
-          "Firefox ESR",
-          "not ie < 11"
-        ],
         "flexbox": "no-2009"
       }
     }
