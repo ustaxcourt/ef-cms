@@ -390,7 +390,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
-        sanitizePdf,
+        sanitizePdf: args => process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
@@ -398,7 +398,7 @@ module.exports = (appContextUser = {}) => {
         updateCase: updateCaseUC,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
-        virusScanPdf,
+        virusScanPdf: args => process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
       };
     },
     irsGateway,
