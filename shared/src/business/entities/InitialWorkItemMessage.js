@@ -13,7 +13,11 @@ const uuidVersions = {
  * @constructor
  */
 function InitialWorkItemMessage(rawMessage) {
-  Object.assign(this, rawMessage);
+  Object.assign(this, {
+    assigneeId: rawMessage.assigneeId,
+    message: rawMessage.message,
+    section: rawMessage.section,
+  });
 }
 
 joiValidationDecorator(

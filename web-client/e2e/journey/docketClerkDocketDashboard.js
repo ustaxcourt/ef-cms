@@ -1,5 +1,8 @@
-import { formattedWorkQueue } from '../../src/presenter/computeds/formattedWorkQueue';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export default test => {
   return it('Docket clerk docket work queue dashboard', async () => {

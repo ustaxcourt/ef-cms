@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -32,18 +33,20 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Add Docket Entry</h2>
+        <h1>Add Docket Entry</h1>
         <div className="blue-container docket-entry-form">
           <div
-            className={`ustc-form-group ${
-              validationErrors.primaryDocumentFile ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              validationErrors.primaryDocumentFile
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <label
               htmlFor="primary-document"
               id="primary-document-label"
               className={
-                'ustc-upload ' +
+                'usa-label ustc-upload ' +
                 (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
@@ -62,57 +65,63 @@ export const PrimaryDocumentForm = connect(
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.primaryDocumentFile"
             />
           </div>
 
           <div
-            className={`ustc-form-group ${
-              validationErrors.lodged ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              validationErrors.lodged ? 'usa-form-group--error' : ''
             }`}
           >
-            <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend>Filing Status</legend>
-              <ul className="usa-unstyled-list">
-                {['File', 'Lodge'].map(option => (
-                  <li key={option}>
-                    <input
-                      id={`filing-status-${option}`}
-                      type="radio"
-                      name="lodged"
-                      value={option}
-                      checked={form.lodged === (option === 'Lodge')}
-                      onChange={e => {
-                        updateDocketEntryFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value === 'Lodge',
-                        });
-                        validateDocketEntrySequence();
-                      }}
-                    />
-                    <label htmlFor={`filing-status-${option}`}>{option}</label>
-                  </li>
-                ))}
-              </ul>
+            <fieldset className="usa-fieldset">
+              <legend className="usa-legend">Filing Status</legend>
+              {['File', 'Lodge'].map(option => (
+                <div className="usa-radio usa-radio__inline" key={option}>
+                  <input
+                    id={`filing-status-${option}`}
+                    type="radio"
+                    name="lodged"
+                    value={option}
+                    className="usa-radio__input"
+                    checked={form.lodged === (option === 'Lodge')}
+                    onChange={e => {
+                      updateDocketEntryFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value === 'Lodge',
+                      });
+                      validateDocketEntrySequence();
+                    }}
+                  />
+                  <label
+                    htmlFor={`filing-status-${option}`}
+                    className="usa-radio__label"
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
             </fieldset>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.lodged"
             />
           </div>
 
           <div
-            className={`ustc-form-group ${
-              validationErrors.dateReceived ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              validationErrors.dateReceived ? 'usa-form-group--error' : ''
             }`}
           >
-            <fieldset className="date-received">
-              <legend id="date-received-legend">Date Received</legend>
-              <div className="usa-date-of-birth">
-                <div className="usa-form-group usa-form-group-month">
+            <fieldset className="usa-fieldset date-received">
+              <legend id="usa-legend date-received-legend">
+                Date Received
+              </legend>
+              <div className="usa-memorable-date">
+                <div className="usa-form-group usa-form-group--month">
                   <input
-                    className="usa-input-inline"
+                    className="usa-input usa-input--inline"
                     id="date-received-month"
                     aria-label="month, two digits"
                     aria-describedby="date-received-legend"
@@ -133,9 +142,9 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-day">
+                <div className="usa-form-group usa-form-group--day">
                   <input
-                    className="usa-input-inline"
+                    className="usa-input usa-input--inline"
                     id="date-received-day"
                     name="dateReceivedDay"
                     value={form.dateReceivedDay || ''}
@@ -156,9 +165,9 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                 </div>
-                <div className="usa-form-group usa-form-group-year">
+                <div className="usa-form-group usa-form-group--year">
                   <input
-                    className="usa-input-inline"
+                    className="usa-input usa-input--inline"
                     id="date-received-year"
                     aria-label="year, four digits"
                     aria-describedby="date-received-legend"
@@ -182,17 +191,21 @@ export const PrimaryDocumentForm = connect(
               </div>
             </fieldset>
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.dateReceived"
             />
           </div>
 
           <div
-            className={`ustc-form-group ${
-              validationErrors.eventCode ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              validationErrors.eventCode ? 'usa-form-group--error' : ''
             }`}
           >
-            <label htmlFor="react-select-2-input" id="document-type-label">
+            <label
+              htmlFor="react-select-2-input"
+              id="document-type-label"
+              className="usa-label"
+            >
               Document Type
             </label>
             <Select
@@ -233,22 +246,23 @@ export const PrimaryDocumentForm = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.eventCode"
             />
           </div>
 
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
-              className={`ustc-form-group ${
+              className={`usa-form-group ${
                 validationErrors.secondaryDocument && !form.secondaryDocument
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : ''
               }`}
             >
               <label
                 htmlFor="react-select-3-input"
                 id="secondary-document-type-label"
+                className="usa-label"
               >
                 Which Document Is This Motion for Leave For?
               </label>
@@ -293,7 +307,7 @@ export const PrimaryDocumentForm = connect(
               />
               {!form.secondaryDocument && (
                 <Text
-                  className="usa-input-error-message"
+                  className="usa-error-message"
                   bind="validationErrors.secondaryDocument"
                 />
               )}
@@ -310,8 +324,12 @@ export const PrimaryDocumentForm = connect(
             />
           )}
 
-          <div className="ustc-form-group">
-            <label htmlFor="additional-info" id="additional-info-label">
+          <div className="usa-form-group">
+            <label
+              htmlFor="additional-info"
+              id="additional-info-label"
+              className="usa-label"
+            >
               Additional Info 1
             </label>
             <input
@@ -320,6 +338,7 @@ export const PrimaryDocumentForm = connect(
               aria-describedby="additional-info-label"
               name="additionalInfo"
               autoCapitalize="none"
+              className="usa-input"
               value={form.additionalInfo || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
@@ -332,25 +351,37 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
-            <input
-              id="add-to-coversheet"
-              type="checkbox"
-              name="addToCoversheet"
-              checked={form.addToCoversheet || false}
-              onChange={e => {
-                updateDocketEntryFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                validateDocketEntrySequence();
-              }}
-            />
-            <label htmlFor="add-to-coversheet">Add to Cover Sheet</label>
+          <div className="usa-form-group">
+            <div className="usa-checkbox">
+              <input
+                id="add-to-coversheet"
+                type="checkbox"
+                name="addToCoversheet"
+                className="usa-checkbox__input"
+                checked={form.addToCoversheet || false}
+                onChange={e => {
+                  updateDocketEntryFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  validateDocketEntrySequence();
+                }}
+              />
+              <label
+                htmlFor="add-to-coversheet"
+                className="usa-checkbox__label"
+              >
+                Add to Cover Sheet
+              </label>
+            </div>
           </div>
 
-          <div className="ustc-form-group">
-            <label htmlFor="additional-info2" id="additional-info2-label">
+          <div className="usa-form-group">
+            <label
+              htmlFor="additional-info2"
+              id="additional-info2-label"
+              className="usa-label"
+            >
               Additional Info 2
             </label>
             <input
@@ -359,6 +390,7 @@ export const PrimaryDocumentForm = connect(
               aria-describedby="additional-info2-label"
               name="additionalInfo2"
               autoCapitalize="none"
+              className="usa-input"
               value={form.additionalInfo2 || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
@@ -372,199 +404,86 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <div className="ustc-form-group">
-            <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend>Inclusions</legend>
-              <ul className="ustc-vertical-option-list">
-                <li>
-                  <input
-                    id="exhibits"
-                    type="checkbox"
-                    name="exhibits"
-                    checked={form.exhibits || false}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateDocketEntrySequence();
-                    }}
-                  />
-                  <label htmlFor="exhibits">Exhibit(s)</label>
-                </li>
-                <li>
-                  <input
-                    id="attachments"
-                    type="checkbox"
-                    name="attachments"
-                    checked={form.attachments || false}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateDocketEntrySequence();
-                    }}
-                  />
-                  <label htmlFor="attachments">Attachment(s)</label>
-                </li>
-                <li>
-                  <input
-                    id="certificate-of-service"
-                    type="checkbox"
-                    name="certificateOfService"
-                    checked={form.certificateOfService || false}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateDocketEntrySequence();
-                    }}
-                  />
-                  <label htmlFor="certificate-of-service">
-                    Certificate of Service
-                  </label>
-                  {form.certificateOfService && (
-                    <fieldset
-                      className={`service-date
-                        ${
-                          validationErrors.certificateOfServiceDate
-                            ? 'usa-input-error'
-                            : ''
-                        }`}
-                    >
-                      <legend id="service-date-legend" className="usa-sr-only">
-                        Certificate of Service
-                      </legend>
-                      <div className="usa-date-of-birth">
-                        <div className="usa-form-group usa-form-group-month">
-                          <input
-                            className="usa-input-inline"
-                            id="service-date-month"
-                            aria-label="month, two digits"
-                            aria-describedby="service-date-legend"
-                            name="certificateOfServiceMonth"
-                            value={form.certificateOfServiceMonth || ''}
-                            type="number"
-                            min="1"
-                            max="12"
-                            placeholder="MM"
-                            onChange={e => {
-                              updateDocketEntryFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                            onBlur={() => {
-                              validateDocketEntrySequence();
-                            }}
-                          />
-                        </div>
-                        <div className="usa-form-group usa-form-group-day">
-                          <input
-                            className="usa-input-inline"
-                            id="service-date-day"
-                            name="certificateOfServiceDay"
-                            value={form.certificateOfServiceDay || ''}
-                            aria-label="day, two digits"
-                            aria-describedby="service-date-legend"
-                            type="number"
-                            min="1"
-                            max="31"
-                            placeholder="DD"
-                            onChange={e => {
-                              updateDocketEntryFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                            onBlur={() => {
-                              validateDocketEntrySequence();
-                            }}
-                          />
-                        </div>
-                        <div className="usa-form-group usa-form-group-year">
-                          <input
-                            className="usa-input-inline"
-                            id="service-date-year"
-                            aria-label="year, four digits"
-                            aria-describedby="service-date-legend"
-                            name="certificateOfServiceYear"
-                            value={form.certificateOfServiceYear || ''}
-                            type="number"
-                            min="1900"
-                            max="2100"
-                            placeholder="YYYY"
-                            onChange={e => {
-                              updateDocketEntryFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                            onBlur={() => {
-                              validateDocketEntrySequence();
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <Text
-                        className="usa-input-error-message"
-                        bind="validationErrors.certificateOfServiceDate"
-                      />
-                    </fieldset>
-                  )}
-                </li>
-              </ul>
-            </fieldset>
-          </div>
+          <Inclusions />
 
           <div
-            className={`ustc-form-group ${
-              addDocketEntryHelper.partyValidationError ? 'usa-input-error' : ''
-            }`}
+            className={`usa-form-group ${
+              addDocketEntryHelper.partyValidationError
+                ? 'usa-form-group--error'
+                : ''
+            } ${!addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''}`}
           >
-            <fieldset className="usa-fieldset-inputs usa-sans">
-              <legend>Who Is Filing This Document?</legend>
-              <ul className="ustc-vertical-option-list">
-                {addDocketEntryHelper.showPractitionerParty &&
-                  addDocketEntryHelper.practitionerNames.map(
-                    (practitionerName, idx) => {
-                      return (
-                        <li key={idx}>
-                          <input
-                            id={`party-practitioner-${idx}`}
-                            type="checkbox"
-                            name={`practitioner.${idx}`}
-                            checked={
-                              (form.practitioner[idx] &&
-                                form.practitioner[idx].partyPractitioner) ||
-                              false
-                            }
-                            onChange={e => {
-                              updateDocketEntryFormValueSequence({
-                                key: e.target.name,
-                                value: {
-                                  name: practitionerName,
-                                  partyPractitioner: e.target.checked,
-                                },
-                              });
-                              validateDocketEntrySequence();
-                            }}
-                          />
-                          <label htmlFor={`party-practitioner-${idx}`}>
-                            Counsel {practitionerName}
-                          </label>
-                        </li>
-                      );
-                    },
-                  )}
-                <li>
+            <fieldset
+              className={`usa-fieldset ${
+                !addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''
+              }`}
+            >
+              <legend className="usa-legend">
+                Who Is Filing This Document?
+              </legend>
+              {addDocketEntryHelper.showPractitionerParty &&
+                addDocketEntryHelper.practitionerNames.map(
+                  (practitionerName, idx) => {
+                    return (
+                      <div className="usa-checkbox" key={idx}>
+                        <input
+                          id={`party-practitioner-${idx}`}
+                          type="checkbox"
+                          name={`practitioner.${idx}`}
+                          className="usa-checkbox__input"
+                          checked={
+                            (form.practitioner[idx] &&
+                              form.practitioner[idx].partyPractitioner) ||
+                            false
+                          }
+                          onChange={e => {
+                            updateDocketEntryFormValueSequence({
+                              key: e.target.name,
+                              value: {
+                                name: practitionerName,
+                                partyPractitioner: e.target.checked,
+                              },
+                            });
+                            validateDocketEntrySequence();
+                          }}
+                        />
+                        <label
+                          htmlFor={`party-practitioner-${idx}`}
+                          className="usa-checkbox__label"
+                        >
+                          Counsel {practitionerName}
+                        </label>
+                      </div>
+                    );
+                  },
+                )}
+              <div className="usa-checkbox">
+                <input
+                  id="party-primary"
+                  type="checkbox"
+                  name="partyPrimary"
+                  className="usa-checkbox__input"
+                  checked={form.partyPrimary || false}
+                  onChange={e => {
+                    updateDocketEntryFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateDocketEntrySequence();
+                  }}
+                />
+                <label htmlFor="party-primary" className="usa-checkbox__label">
+                  {caseDetail.contactPrimary.name}
+                </label>
+              </div>
+              {addDocketEntryHelper.showSecondaryParty && (
+                <div className="usa-checkbox">
                   <input
-                    id="party-primary"
+                    id="party-secondary"
                     type="checkbox"
-                    name="partyPrimary"
-                    checked={form.partyPrimary || false}
+                    name="partySecondary"
+                    className="usa-checkbox__input"
+                    checked={form.partySecondary || false}
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -573,90 +492,83 @@ export const PrimaryDocumentForm = connect(
                       validateDocketEntrySequence();
                     }}
                   />
-                  <label htmlFor="party-primary">
-                    {caseDetail.contactPrimary.name}
+                  <label
+                    htmlFor="party-secondary"
+                    className="usa-checkbox__label"
+                  >
+                    {caseDetail.contactSecondary.name}
                   </label>
-                </li>
-                {addDocketEntryHelper.showSecondaryParty && (
-                  <li>
-                    <input
-                      id="party-secondary"
-                      type="checkbox"
-                      name="partySecondary"
-                      checked={form.partySecondary || false}
-                      onChange={e => {
-                        updateDocketEntryFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateDocketEntrySequence();
-                      }}
-                    />
-                    <label htmlFor="party-secondary">
-                      {caseDetail.contactSecondary.name}
-                    </label>
-                  </li>
-                )}
-                {addDocketEntryHelper.showRespondentParty && (
-                  <li>
-                    <input
-                      id="party-respondent"
-                      type="checkbox"
-                      name="partyRespondent"
-                      checked={form.partyRespondent || false}
-                      onChange={e => {
-                        updateDocketEntryFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateDocketEntrySequence();
-                      }}
-                    />
-                    <label htmlFor="party-respondent">Respondent</label>
-                  </li>
-                )}
-              </ul>
+                </div>
+              )}
+              {addDocketEntryHelper.showRespondentParty && (
+                <div className="usa-checkbox">
+                  <input
+                    id="party-respondent"
+                    type="checkbox"
+                    name="partyRespondent"
+                    className="usa-checkbox__input"
+                    checked={form.partyRespondent || false}
+                    onChange={e => {
+                      updateDocketEntryFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateDocketEntrySequence();
+                    }}
+                  />
+                  <label
+                    htmlFor="party-respondent"
+                    className="usa-checkbox__label"
+                  >
+                    Respondent
+                  </label>
+                </div>
+              )}
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="addDocketEntryHelper.partyValidationError"
               />
             </fieldset>
           </div>
           {addDocketEntryHelper.showObjection && (
             <div
-              className={`ustc-form-group ${
-                validationErrors.objections ? 'usa-input-error' : ''
+              className={`usa-form-group margin-bottom-0 ${
+                validationErrors.objections ? 'usa-form-group--error' : ''
               }`}
             >
-              <fieldset className="usa-fieldset-inputs usa-sans">
-                <legend id="objections-legend">
+              <fieldset className="usa-fieldset margin-bottom-0">
+                <legend id="objections-legend" className="usa-legend">
                   Are There Any Objections to This Document?
                 </legend>
-                <ul className="usa-unstyled-list">
-                  {['Yes', 'No', 'Unknown'].map(option => (
-                    <li key={option}>
-                      <input
-                        id={`objections-${option}`}
-                        type="radio"
-                        aria-describedby="objections-legend"
-                        name="objections"
-                        value={option}
-                        checked={form.objections === option}
-                        onChange={e => {
-                          updateDocketEntryFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                          validateDocketEntrySequence();
-                        }}
-                      />
-                      <label htmlFor={`objections-${option}`}>{option}</label>
-                    </li>
-                  ))}
-                </ul>
+                {['Yes', 'No', 'Unknown'].map(option => (
+                  <div className="usa-radio" key={option}>
+                    <input
+                      id={`objections-${option}`}
+                      type="radio"
+                      aria-describedby="objections-legend"
+                      name="objections"
+                      className="usa-radio__input"
+                      value={option}
+                      checked={form.objections === option}
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validateDocketEntrySequence();
+                      }}
+                    />
+                    <label
+                      htmlFor={`objections-${option}`}
+                      className="usa-radio__label"
+                    >
+                      {option}
+                    </label>
+                  </div>
+                ))}
               </fieldset>
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.objections"
               />
             </div>

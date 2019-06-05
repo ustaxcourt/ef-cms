@@ -1,6 +1,10 @@
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
+const { createSectionInboxRecord } = require('./createSectionInboxRecord');
+const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
+const { createUserInboxRecord } = require('./createUserInboxRecord');
+const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 const { put } = require('../../dynamodbClientService');
 
 /**
@@ -15,51 +19,42 @@ const { put } = require('../../dynamodbClientService');
 exports.createWorkItem = async ({ workItem, applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
-  // create the work item
   await put({
     Item: {
-      pk: workItem.workItemId,
-      sk: workItem.workItemId,
+      pk: `workitem-${workItem.workItemId}`,
+      sk: `workitem-${workItem.workItemId}`,
+      gsi1pk: `workitem-${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,
   });
 
-  // individual inbox
   await createMappingRecord({
     applicationContext,
-    pkId: workItem.assigneeId,
+    pkId: workItem.caseId,
     skId: workItem.workItemId,
     type: 'workItem',
   });
 
-  // sending user 'my' outbox
-  await createMappingRecord({
+  await createUserInboxRecord({
     applicationContext,
-    item: {
-      workItemId: workItem.workItemId,
-    },
-    pkId: workItem.sentByUserId,
-    skId: workItem.createdAt,
-    type: 'outbox',
+    workItem,
   });
 
-  // section inbox
-  await createMappingRecord({
+  await createUserOutboxRecord({
     applicationContext,
-    pkId: workItem.section,
-    skId: workItem.workItemId,
-    type: 'workItem',
+    userId: user.userId,
+    workItem,
   });
 
-  // sending user section outbox
-  await createMappingRecord({
+  await createSectionInboxRecord({
     applicationContext,
-    item: {
-      workItemId: workItem.workItemId,
-    },
-    pkId: user.section,
-    skId: workItem.createdAt,
-    type: 'outbox',
+    workItem,
+  });
+
+  await createSectionOutboxRecord({
+    applicationContext,
+    section: user.section,
+    workItem,
   });
 };

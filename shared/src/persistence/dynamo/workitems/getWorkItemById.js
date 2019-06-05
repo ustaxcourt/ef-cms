@@ -5,8 +5,8 @@ exports.getWorkItemById = ({ workItemId, applicationContext }) => {
   return client
     .get({
       Key: {
-        pk: workItemId,
-        sk: workItemId,
+        pk: `workitem-${workItemId}`,
+        sk: `workitem-${workItemId}`,
       },
       applicationContext,
     })

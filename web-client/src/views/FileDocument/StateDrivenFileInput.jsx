@@ -52,13 +52,14 @@ export const StateDrivenFileInput = connect(
               validationSequence();
             });
           }}
+          className="usa-input"
         />
 
         {form[name] && (
           <div>
             <span className="mr-1">{form[name].name}</span>
             <button
-              className="link"
+              className="usa-button usa-button--unstyled margin-left-1"
               onClick={() => {
                 updateFormValueSequence({
                   key: name,

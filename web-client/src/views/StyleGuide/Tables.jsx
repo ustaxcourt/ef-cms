@@ -1,11 +1,11 @@
 import React from 'react';
 
 export const Tables = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <h1>Tables</h1>
     <hr />
     <h2>Responsive Table</h2>
-    <table className="responsive-table subsection">
+    <table className="usa-table responsive-table subsection">
       <thead>
         <tr>
           <th>Docket number</th>
@@ -58,8 +58,9 @@ export const Tables = () => (
         </tr>
       </tbody>
     </table>
+
     <h2>Work Queue Table</h2>
-    <table className="work-queue subsection">
+    <table className="usa-table work-queue subsection">
       <thead>
         <tr>
           <th>Docket number</th>
@@ -103,8 +104,9 @@ export const Tables = () => (
         </tr>
       </tbody>
     </table>
+
     <h2>Dashboard Table</h2>
-    <table className="dashboard subsection">
+    <table className="usa-table dashboard subsection">
       <thead>
         <tr>
           <th>Docket number</th>

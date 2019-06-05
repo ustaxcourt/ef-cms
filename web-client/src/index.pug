@@ -2,16 +2,19 @@ doctype html
 html(lang="en")
   head
     meta(charset="utf-8")
-    meta(built="" + Date())
-    meta(revision="" + (process.env.GIT_COMMIT))
+    meta(built="" + (new Date()).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York'}) + " EST")
+    meta(revision="" + process.env.GIT_COMMIT.substr(0,7))
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title U.S. Tax Court Electronic Filing and Case Management System
-    link(rel="preload" as="font" type="font/woff2" href="fonts/noto-serif-jp-v4-latin-400.woff2")
-    link(rel="preload" as="font" type="font/woff2" href="fonts/noto-serif-jp-v4-latin-500.woff2")
-    link(rel="preload" as="font" type="font/woff2" href="fonts/noto-serif-jp-v4-latin-600.woff2")
-    link(rel="preload" as="font" type="font/woff2" href="fonts/noto-serif-jp-v4-latin-700.woff2")
-    link(rel="preload" as="font" type="font/woff2" href="fonts/sourcesanspro-600.woff2")
     link(rel="stylesheet" href="index.scss")
+    link(rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png")
+    link(rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png")
+    link(rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png")
+    link(rel="manifest" href="./site.webmanifest")
+    link(rel="mask-icon" href="./safari-pinned-tab.svg" color="#5bbad5")
+    meta(name="msapplication-TileColor" content="#da532c")
+    meta(name="theme-color" content="#ffffff")
+
   body
     #app
     #modal-root

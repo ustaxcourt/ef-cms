@@ -68,7 +68,7 @@ describe('getSentWorkItemsForSection', () => {
       ExpressionAttributeNames: { '#pk': 'pk', '#sk': 'sk' },
       ExpressionAttributeValues: {
         ':afterDate': '2019-01-16T00:00:00Z',
-        ':pk': 'petitions|outbox',
+        ':pk': 'section-outbox-petitions',
       },
       KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
       applicationContext: { environment: { stage: 'dev' } },
