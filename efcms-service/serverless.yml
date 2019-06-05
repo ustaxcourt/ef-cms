@@ -264,7 +264,7 @@ functions:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet
           method: post
           cors: true
-          async: true
+          # async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -281,7 +281,7 @@ functions:
           path: v1/documents/{documentId}/sanitize
           method: post
           cors: true
-          async: true
+          # async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
