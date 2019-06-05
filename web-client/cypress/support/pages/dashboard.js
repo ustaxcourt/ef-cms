@@ -7,6 +7,8 @@ exports.viewMyOutbox = () => {
 };
 
 exports.viewMyInbox = () => {
+  cy.visit('/messages/my/inbox');
+  cy.wait(1000);
   cy.get('button#individual-inbox-tab').click();
 };
 
@@ -18,6 +20,13 @@ exports.viewSectionInbox = () => {
 exports.viewSectionOutbox = () => {
   cy.get('button.button-switch-box').click();
   cy.get('button#section-sent-tab').click();
+};
+
+exports.viewDocumentQCSectionInbox = () => {
+  cy.visit('/document-qc/my/inbox');
+  cy.wait(1000);
+  cy.get('button.button-switch-box').click();
+  cy.get('button#section-inbox-tab').click();
 };
 
 exports.getWorkItemContaining = text => {
@@ -44,6 +53,10 @@ exports.getSendButton = () => {
   return cy.contains('button', 'Send');
 };
 
+exports.getWorkItemMessages = () => {
+  return cy.get('#tab-pending-messages').click();
+};
+
 exports.getWorkItemMessage = workItemId => {
-  return cy.get(`div#detail-${workItemId}`);
+  return cy.get(`div.workitem-${workItemId}`);
 };
