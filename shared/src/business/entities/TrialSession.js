@@ -1,7 +1,12 @@
 const joi = require('joi-browser');
+const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+
+const uuidVersions = {
+  version: ['uuidv4'],
+};
 
 const SESSION_TYPES = [
   'Regular',
@@ -10,20 +15,6 @@ const SESSION_TYPES = [
   'Special',
   'Motion/Hearing',
 ];
-
-const errorToMessageMap = {
-  maxCases: 'Enter number of cases allowed.',
-  postalCode: [
-    {
-      contains: 'match',
-      message: 'Please enter a valid zip code.',
-    },
-  ],
-  sessionType: 'Enter Session Type.',
-  startDate: 'Enter Start Date.',
-  term: 'Enter selection for Term.',
-  trialLocation: 'Select a Trial Location.',
-};
 
 /**
  * constructor
@@ -51,8 +42,23 @@ function TrialSession(rawSession) {
     term: rawSession.term,
     trialClerk: rawSession.trialClerk,
     trialLocation: rawSession.trialLocation,
+    trialSessionId: rawSession.trialSessionId || uuid.v4(),
   });
 }
+
+TrialSession.errorToMessageMap = {
+  maxCases: 'Enter number of cases allowed.',
+  postalCode: [
+    {
+      contains: 'match',
+      message: 'Please enter a valid zip code.',
+    },
+  ],
+  sessionType: 'Enter Session Type.',
+  startDate: 'Enter Start Date.',
+  term: 'Enter selection for Term.',
+  trialLocation: 'Select a Trial Location.',
+};
 
 joiValidationDecorator(
   TrialSession,
@@ -92,11 +98,15 @@ joiValidationDecorator(
     term: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
+    trialSessionId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
   }),
   function() {
     return !this.getFormattedValidationErrors();
   },
-  errorToMessageMap,
+  TrialSession.errorToMessageMap,
 );
 
 module.exports = { TrialSession };
