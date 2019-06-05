@@ -25,6 +25,7 @@ export const IndividualWorkQueueInbox = connect(
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
+              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
@@ -105,6 +106,9 @@ export const IndividualWorkQueueInbox = connect(
                     </div>
                   )}
                 </td>
+                {!workQueueHelper.hideFiledByColumn && (
+                  <td className="message-queue-row">{item.document.filedBy}</td>
+                )}
                 <td className="message-queue-row">{item.caseStatus}</td>
                 {!workQueueHelper.hideFromColumn && (
                   <td className="message-queue-row from">
