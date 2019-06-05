@@ -19,6 +19,7 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
@@ -73,6 +74,7 @@ export const state = {
   form: {},
   formattedCaseDetail,
   formattedCases,
+  formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
   headerHelper,
@@ -83,8 +85,8 @@ export const state = {
   },
   modal: {},
   notifications: {},
-  path: '/',
 
+  path: '/',
   paymentInfo: {
     showDetails: false,
   },
