@@ -22,25 +22,6 @@ exports.handler = event =>
       });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
-
-      if (results === 'infected') {
-        throw new Error(`Virus found for ${documentId}.`);
-      }
-
-      const params = {
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: documentId,
-        Tagging: {
-          TagSet: [
-            {
-              Key: 'AV_RESULT',
-              Value: results,
-            },
-          ],
-        },
-      };
-
-      await applicationContext.getStorageClient().putObjectTagging(params);
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
