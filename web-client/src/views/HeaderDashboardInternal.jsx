@@ -44,24 +44,24 @@ export const HeaderDashboardInternal = connect(
             </button>
           )}
           {workQueueHelper.showSectionWorkQueue &&
-           workQueueHelper.showMyQueueToggle && (
-            <button
-              className="button-switch-box usa-button usa-button--unstyled"
-              onClick={() => {
-                navigateToPathSequence({
-                  path: `/${
-                    workQueueHelper.workQueueIsInternal
-                      ? 'messages'
-                      : 'document-qc'
-                  }/my/${workQueueHelper.currentBoxView}`,
-                });
-                refreshSectionInboxCountSequence();
-              }}
-            >
-              <FontAwesomeIcon icon={['far', 'clone']} />
-              Switch to My {workQueueHelper.workQueueType}
-            </button>
-          )}
+            workQueueHelper.showMyQueueToggle && (
+              <button
+                className="button-switch-box usa-button usa-button--unstyled"
+                onClick={() => {
+                  navigateToPathSequence({
+                    path: `/${
+                      workQueueHelper.workQueueIsInternal
+                        ? 'messages'
+                        : 'document-qc'
+                    }/my/${workQueueHelper.currentBoxView}`,
+                  });
+                  refreshSectionInboxCountSequence();
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'clone']} />
+                Switch to My {workQueueHelper.workQueueType}
+              </button>
+            )}
         </div>
       </div>
     );
