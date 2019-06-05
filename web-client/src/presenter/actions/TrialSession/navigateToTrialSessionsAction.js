@@ -6,5 +6,5 @@
  * @returns {Promise<*>} the promise when the item is complete
  */
 export const navigateToTrialSessionsAction = async ({ router }) => {
-  await router.route('/trial-session/');
+  await router.route('/trial-sessions');
 };
