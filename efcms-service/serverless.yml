@@ -642,6 +642,8 @@ functions:
 
   virusScan:
     handler: src/handlers.virusScanPdfLambda
+    memorySize: 3008
+    timeout: 900
     layers:
       - { Ref: ClamavLambdaLayer }
     events:
