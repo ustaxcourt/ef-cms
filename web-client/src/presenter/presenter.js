@@ -31,6 +31,7 @@ import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificatio
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
+import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -173,6 +174,7 @@ export const presenter = {
     formCancelToggleCancelSequence,
     getUsersInSectionSequence,
     gotoAddDocketEntrySequence,
+    gotoAddTrialSessionSequence,
     gotoBeforeStartCaseSequence,
     gotoCaseDetailSequence,
     gotoDashboardSequence,
