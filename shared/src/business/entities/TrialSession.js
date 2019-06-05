@@ -47,17 +47,23 @@ function TrialSession(rawSession) {
 }
 
 TrialSession.errorToMessageMap = {
-  maxCases: 'Enter number of cases allowed.',
+  maxCases: 'Enter the maximum number of cases allowed for this session.',
   postalCode: [
     {
       contains: 'match',
-      message: 'Please enter a valid zip code.',
+      message: 'Enter a valid zip code.',
     },
   ],
-  sessionType: 'Enter Session Type.',
-  startDate: 'Enter Start Date.',
-  term: 'Enter selection for Term.',
-  trialLocation: 'Select a Trial Location.',
+  sessionType: 'Session type is required.',
+  startDate: [
+    {
+      contains: 'must be larger than or equal to',
+      message: 'Date must be in the future.',
+    },
+    'Date must be in correct format.',
+  ],
+  term: 'Term is required.',
+  trialLocation: 'Trial Location is required.',
 };
 
 joiValidationDecorator(
