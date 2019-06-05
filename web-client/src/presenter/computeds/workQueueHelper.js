@@ -7,15 +7,22 @@ export const workQueueHelper = get => {
   const userSection = get(state.user.section);
   const userRole = get(state.user.role);
   const userRoleMap = mapValueHelper(userRole);
+  const unreadCount = get(state.notifications.unreadCount);
+  const showInbox = workQueueToDisplay.box === 'inbox';
+  const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
+  const sectionInboxCount = get(state.sectionInboxCount);
 
   return {
-    showInbox: workQueueToDisplay.box === 'inbox',
-    showIndividualWorkQueue: workQueueToDisplay.queue === 'my',
+    currentBoxView: showInbox ? 'inbox' : 'outbox',
+    inboxCount: showIndividualWorkQueue ? unreadCount : sectionInboxCount,
+    showInbox,
+    showIndividualWorkQueue,
     showOutbox: workQueueToDisplay.box === 'outbox',
     showRunBatchIRSProcessButton: userSection === 'petitions',
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
+    workQueueTitle: `${showIndividualWorkQueue ? 'My' : 'Section'} Messages`,
   };
 };

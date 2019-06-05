@@ -80,7 +80,11 @@ describe('selectDocumentTypeHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel: 'Which Document Are You Objecting To?',
-        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        previouslyFiledDocuments: [
+          'Petition',
+          'Answer',
+          'Proposed Stipulated Decision',
+        ],
         showNonstandardForm: true,
       },
     });
@@ -115,7 +119,11 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel:
           'Which Document Is This Affidavit in Support Of?',
-        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        previouslyFiledDocuments: [
+          'Petition',
+          'Answer',
+          'Proposed Stipulated Decision',
+        ],
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: 'Who Signed This?',
@@ -135,7 +143,11 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         previousDocumentSelectLabel:
           'Which Document Is This Certificate of Service For?',
-        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        previouslyFiledDocuments: [
+          'Petition',
+          'Answer',
+          'Proposed Stipulated Decision',
+        ],
         showDateFields: true,
         showNonstandardForm: true,
         textInputLabel: 'Date of Service',
@@ -173,7 +185,11 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         ordinalField: 'What Iteration Is This Filing?',
         previousDocumentSelectLabel: 'Which Document Is This a Supplement To?',
-        previouslyFiledDocuments: ['Petition', 'Answer', 'Stipulated Decision'],
+        previouslyFiledDocuments: [
+          'Petition',
+          'Answer',
+          'Proposed Stipulated Decision',
+        ],
         showNonstandardForm: true,
       },
     });

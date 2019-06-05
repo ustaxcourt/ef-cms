@@ -1,243 +1,119 @@
-.queue-tab-container {
-  border: 1px solid $color-gray-lighter;
-  background-color: $color-gray-lightest;
-
-  .queue-tab {
-    display: inline-block;
-    box-sizing: border-box;
-    padding: 1rem 2rem;
-    margin: 0;
-    border-radius: 0;
-    font-family: $font-serif;
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1.3em;
-
-    &.selected,
-    &[aria-selected='true'] {
-      background-color: $color-white;
-      box-shadow: 0 2px 0 $color-white;
-      font-weight: $font-bold;
-    }
-  }
-}
-
-nav.horizontal-tabs,
-.horizontal-tabs > nav {
-  margin-bottom: 20px;
-
-  ul {
-    padding: 0;
-    margin: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0;
-
-    button {
-      padding-bottom: 10px;
-      border-bottom: 3px $color-white solid;
-      margin: 0 45px 0 0;
-      border-radius: 0;
-      cursor: pointer;
-      font-family: $font-serif;
-      font-size: 24px;
-      font-weight: $font-medium;
-      line-height: 1.3em;
-    }
-  }
-
-  li.active button {
-    border-bottom: 3px $color-blue solid;
-    cursor: default;
-    font-weight: $font-bold;
-  }
-
-  li button:hover {
-    border-bottom: 3px $color-primary-darkest solid;
-    color: $color-primary-darkest;
-  }
-}
-
-.horizontal-tabs-header3 {
-  li {
-    button {
-      margin: 0 30px 0 0;
-      font-size: 20px;
-    }
-  }
-}
-
-.tab-content {
-  padding: 2rem;
-  border: 2px solid $color-gray-lightest;
-
-  h3 {
-    margin-bottom: 3rem;
-  }
-}
-
 .ustc-ui-tabs {
-  position: relative;
+  ul {
+    padding-left: 0px;
+    border-bottom: 1px solid color($theme-color-base-lighter);
+    margin-top: 0;
+    margin-bottom: 40px;
+    list-style-type: none;
 
-  > nav {
-    margin-bottom: 20px;
-
-    ul {
-      padding: 0;
-      margin: 0;
-
-      li {
-        display: inline-block;
-        margin: 0;
-
-        @media only screen and (min-width: $medium-screen) {
-          button {
-            padding-bottom: 10px;
-            margin: 0 45px 0 0;
-            border-radius: 0;
-            cursor: pointer;
-
-            &:hover {
-              background-color: transparent;
-              color: $color-primary-darkest;
-            }
-          }
-
-          &.active {
-            button {
-              cursor: default;
-              font-weight: $font-bold;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  &.classic-horizontal,
-  &.classic-horizontal-header3 {
-    > nav > ul > li {
+    li {
       display: inline-block;
-      width: 100%;
-      @media only screen and (min-width: $medium-screen) {
-        width: unset;
-      }
-    }
 
-    &.ustc-num-tabs-2 > nav > ul > li {
-      width: 50%;
-      @media only screen and (min-width: $medium-screen) {
-        width: unset;
-      }
-    }
+      button {
+        position: relative;
+        top: 2px;
+        padding: 0px;
+        border: none;
+        margin-right: 45px;
+        background: none;
+        color: color($theme-color-primary);
+        cursor: pointer;
+        font-family: $font-serif;
+        font-size: 32px;
+        font-weight: bold;
+        text-align: left;
 
-    /* small screens */
-    @media only screen and (max-width: $medium-screen - 1px) {
-      > nav {
-        ul {
-          li {
-            button {
-              width: 100%;
-              min-height: 40px;
-              border: 1px solid $color-gray-lighter;
-              background-color: transparent;
-              border-radius: 5px;
-              color: $color-blue;
-              font-family: Noto Serif JP, $georgia, serif;
-              font-style: normal;
-              &:hover {
-                border: 1px solid $color-gray-lighter;
-              }
-            }
-            &.active {
-              button {
-                background-color: $color-blue-darker;
-                color: $color-white;
-              }
-            }
+        &:hover {
+          border-bottom: 3px solid color($theme-color-primary-darker);
+          background-color: none;
+          color: color($theme-color-primary-darker);
+        }
+
+        &:focus {
+          outline: 0;
+        }
+      }
+
+      &.active {
+        button {
+          border-bottom: 3px solid color($theme-color-primary);
+          color: color($theme-color-base-darkest);
+
+          &:hover {
+            border-bottom: 3px solid color($theme-color-primary-darker);
+            color: color($theme-color-primary-darker);
           }
         }
       }
     }
   }
 
-  @media only screen and (min-width: $medium-screen) {
-    &.classic-horizontal,
-    &.classic-horizontal-header3 {
-      > nav {
-        ul {
-          li {
-            &.active {
-              button {
-                border-bottom: 3px $color-blue solid;
-              }
-            }
-
-            button {
-              padding-bottom: 10px;
-              border-bottom: 3px $color-white solid;
-              margin: 0 45px 0 0;
-              border-radius: 0;
-              font-family: $font-serif;
-              font-size: 24px;
-              font-weight: $font-medium;
-              line-height: 1.3em;
-
-              &:hover {
-                border-bottom: 3px $color-primary-darkest solid;
-                color: $color-primary-darkest;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    &.classic-horizontal-header3 {
-      > nav {
-        ul {
-          li {
-            &.active {
-              button {
-                font-weight: $font-bold;
-              }
-            }
-          }
-        }
-      }
+  &.no-full-border-bottom {
+    ul {
+      border-bottom: none;
     }
   }
 
   &.container-tabs {
-    border: 1px solid $color-gray-lighter;
-    > nav {
-      border-bottom: 2px solid $color-gray-lighter;
-      background-color: $color-gray-lightest;
-
+    nav {
       ul {
+        margin: 0px;
+
         li {
+          border-right: 1px solid color($theme-color-base-lighter);
+          border-bottom: 1px solid color($theme-color-base-lighter);
+          margin-right: 0px;
+          text-align: center;
+
+          &:last-child {
+            border-right-width: 0;
+          }
+
           button {
             display: inline-block;
-            box-sizing: border-box;
-            padding: 1rem 2rem;
-            margin: 0;
-            border-radius: 0;
-            font-family: $font-serif;
-            font-size: 20px;
-            font-weight: 500;
-            line-height: 1.3em;
+            padding-top: 10px;
+            padding-right: 30px;
+            padding-bottom: 15px;
+            padding-left: 30px;
+            margin-right: 0px;
+            font-size: 17px;
+            text-align: center;
 
             &:hover {
-              color: $color-primary-darkest;
+              border-bottom: none;
+              background-color: none;
+              color: color($theme-color-primary-darker);
+
+              span {
+                padding-bottom: 0;
+                border-bottom: 1px solid color($theme-color-primary-darker);
+              }
+            }
+
+            span {
+              padding-bottom: 5px;
             }
           }
 
           &.active {
+            border-bottom: 2px solid $color-primary-alt-lightest;
+            background-color: $color-primary-alt-lightest;
+
             button {
-              background-color: $color-white;
-              box-shadow: 0 2px 0 $color-white;
+              border-bottom: none;
+              color: inherit;
+              cursor: default;
+
+              &:hover {
+                span {
+                  padding-bottom: 5px;
+                  border-bottom: 3px solid color($theme-color-primary);
+                }
+              }
+
+              span {
+                border-bottom: 3px solid color($theme-color-primary);
+              }
             }
           }
         }
@@ -245,51 +121,18 @@ nav.horizontal-tabs,
     }
   }
 
-  &.subsection-container-tabs {
-    * {
-      animation: none;
-    }
-
-    > nav {
-      border: 1px solid $color-gray-lighter;
-      margin-bottom: 0;
-      background-color: $color-gray-lightest;
-
-      ul {
-        li {
-          button {
-            display: inline-block;
-            box-sizing: border-box;
-            padding: 1rem 2rem;
-            margin: 0;
-            border-radius: 0;
-            font-family: $font-serif;
-            font-size: 20px;
-            font-weight: 500;
-            line-height: 1.3em;
-
-            &:hover {
-              color: $color-primary-darkest;
-            }
-          }
-
-          &.active {
-            button {
-              background-color: $color-white;
-              box-shadow: 0 2px 0 $color-white;
-            }
-          }
-        }
+  &.tab-button-h2 {
+    > nav ul {
+      margin-bottom: 20px;
+      li button {
+        font-size: 24px;
       }
     }
   }
 
-  > .fix-top-right {
-    @media only screen and (min-width: $medium-screen) {
-      position: absolute;
-      top: 4px;
-      right: 0px;
-      margin: 0px;
+  &.tab-button-h3 {
+    nav ul li button {
+      font-size: 17px;
     }
   }
 }

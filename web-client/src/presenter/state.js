@@ -52,6 +52,7 @@ export const state = {
   completeForm: {},
   contactsHelper,
   currentPage: 'Interstitial',
+  currentPageHeader: '',
   currentTab: '',
   dashboardPetitionerHelper,
   dashboardRespondentHelper,
@@ -80,6 +81,7 @@ export const state = {
     isVisible: false,
   },
   modal: {},
+  notifications: {},
   path: '/',
 
   paymentInfo: {
@@ -91,6 +93,7 @@ export const state = {
   requestAccessHelper,
   screenMetadata: {},
   searchTerm: '',
+  sectionInboxCount: 0,
   selectDocumentTypeHelper,
   selectedWorkItems: [],
   sessionMetadata: {},

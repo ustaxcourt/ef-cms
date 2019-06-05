@@ -34,7 +34,6 @@ export const clearWizardDataAction = ({ store, get, props }) => {
       break;
     case 'supportingDocument':
       store.set(state.form.supportingDocumentFreeText, null);
-      store.set(state.form.supportingDocumentFile, null);
 
       break;
     case 'secondaryDocumentFile':
@@ -53,7 +52,6 @@ export const clearWizardDataAction = ({ store, get, props }) => {
       break;
     case 'secondarySupportingDocument':
       store.set(state.form.secondarySupportingDocumentFreeText, null);
-      store.set(state.form.secondarySupportingDocumentFile, null);
 
       break;
     case 'secondaryDocument.category':

@@ -85,7 +85,6 @@ exports.createWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().createWorkItem({
     applicationContext,
-    messageId: newMessage.messageId,
     workItem: newWorkItem.validate().toRawObject(),
   });
 

@@ -3,7 +3,7 @@ const moment = require('moment');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { replaceBracketed } = require('../../utilities/getDocumentTitle');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
  *
@@ -11,7 +11,13 @@ const { replaceBracketed } = require('../../utilities/getDocumentTitle');
  * @constructor
  */
 function ExternalDocumentNonStandardD(rawProps) {
-  Object.assign(this, rawProps);
+  Object.assign(this, {
+    category: rawProps.category,
+    documentTitle: rawProps.documentTitle,
+    documentType: rawProps.documentType,
+    previousDocument: rawProps.previousDocument,
+    serviceDate: rawProps.serviceDate,
+  });
 }
 
 ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {

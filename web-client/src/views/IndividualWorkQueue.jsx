@@ -13,7 +13,6 @@ export const IndividualWorkQueue = connect(
   ({ chooseWorkQueueSequence }) => {
     return (
       <Tabs
-        className="subsection-container-tabs"
         bind="workQueueToDisplay.box"
         onSelect={() => chooseWorkQueueSequence()}
       >

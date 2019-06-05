@@ -1,14 +1,17 @@
-import { formattedWorkQueue } from './formattedWorkQueue';
+import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: null,
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: 'General Docket',
-  createdAtFormatted: '12/27/2018',
+  caseStatus: 'General Docket - Not at Issue',
+  createdAtFormatted: '12/27/18',
   currentMessage: {
-    createdAtFormatted: '12/27/2018',
+    createdAtFormatted: '12/27/18',
     from: 'Test Respondent',
     fromUserId: 'respondent',
     message: 'Answer filed by respondent is ready for review',
@@ -22,7 +25,7 @@ const FORMATTED_WORK_ITEM = {
   },
   historyMessages: [
     {
-      createdAtFormatted: '12/27/2018',
+      createdAtFormatted: '12/27/18',
       from: 'Test Docketclerk',
       fromUserId: 'docketclerk',
       message: 'a message',
@@ -32,7 +35,7 @@ const FORMATTED_WORK_ITEM = {
   ],
   messages: [
     {
-      createdAtFormatted: '12/27/2018',
+      createdAtFormatted: '12/27/18',
       from: 'Test Respondent',
       fromUserId: 'respondent',
       message: 'Answer filed by respondent is ready for review',
@@ -40,7 +43,7 @@ const FORMATTED_WORK_ITEM = {
       to: 'Unassigned',
     },
     {
-      createdAtFormatted: '12/27/2018',
+      createdAtFormatted: '12/27/18',
       from: 'Test Docketclerk',
       fromUserId: 'docketclerk',
       message: 'a message',
@@ -60,7 +63,7 @@ describe('formatted work queue computed', () => {
     assigneeId: null,
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'General Docket',
+    caseStatus: 'General Docket - Not at Issue',
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     document: {

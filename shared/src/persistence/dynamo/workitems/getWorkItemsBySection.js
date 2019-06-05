@@ -1,13 +1,16 @@
-const {
-  getRecordsViaMapping,
-} = require('../../dynamo/helpers/getRecordsViaMapping');
+const { query } = require('../../dynamodbClientService');
 
 exports.getWorkItemsBySection = async ({ section, applicationContext }) => {
-  const workItems = await getRecordsViaMapping({
+  return query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `section-${section}`,
+      ':prefix': 'workitem',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-    key: section,
-    type: 'workItem',
   });
-
-  return workItems;
 };
