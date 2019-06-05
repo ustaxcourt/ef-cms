@@ -22,6 +22,11 @@ exports.viewSectionOutbox = () => {
   cy.get('button#section-sent-tab').click();
 };
 
+exports.viewDocumentQCMyInbox = () => {
+  cy.visit('/document-qc/my/inbox');
+  cy.wait(1000);
+};
+
 exports.viewDocumentQCSectionInbox = () => {
   cy.visit('/document-qc/my/inbox');
   cy.wait(1000);
