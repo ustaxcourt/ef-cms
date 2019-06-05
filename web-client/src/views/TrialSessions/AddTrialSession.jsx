@@ -13,6 +13,7 @@ export const AddTrialSession = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
+    submitTrialSessionSequence: sequences.submitTrialSessionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
@@ -20,6 +21,7 @@ export const AddTrialSession = connect(
     formCancelToggleCancelSequence,
     showModal,
     updateFormValueSequence,
+    submitTrialSessionSequence,
   }) => {
     return (
       <>
@@ -32,6 +34,7 @@ export const AddTrialSession = connect(
             noValidate
             onSubmit={e => {
               e.preventDefault();
+              submitTrialSessionSequence();
             }}
             className="usa-form maxw-none"
           >
@@ -70,7 +73,7 @@ export const AddTrialSession = connect(
             </div>
 
             <div className="button-box-container">
-              <button type="submit" className="usa-button" onClick={() => {}}>
+              <button type="submit" className="usa-button">
                 Add Session
               </button>
               <button
