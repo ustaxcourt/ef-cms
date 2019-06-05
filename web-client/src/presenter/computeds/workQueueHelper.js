@@ -17,31 +17,30 @@ export const workQueueHelper = get => {
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
   const isDisplayingQC = !workQueueIsInternal;
+  const userIsPetitionsClerk = userRole === 'petitionsclerk';
+  const userIsDocketClerk = userRole === 'docketclerk';
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
     currentBoxView: showInbox ? 'inbox' : 'outbox',
+    hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
     hideFromColumn: isDisplayingQC,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     sentTitle: workQueueIsInternal
       ? 'Sent'
-      : userRole === 'docketclerk'
+      : userIsDocketClerk
       ? 'Processed'
       : 'Served',
-    showBatchedForIRSTab:
-      userRole === 'petitionsclerk' && workQueueIsInternal === false,
+    showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,
-    showMyQueueToggle:
-      userRole === 'docketclerk' || userRole === 'petitionsclerk',
+    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
     showOutbox: workQueueToDisplay.box === 'outbox',
     showRunBatchIRSProcessButton: userSection === 'petitions',
     showSectionSentTab:
-      workQueueIsInternal ||
-      userRole === 'docketclerk' ||
-      userRole === 'petitionsclerk',
+      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
