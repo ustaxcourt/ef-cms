@@ -7,9 +7,15 @@ export const SessionInformationForm = connect(
   {
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
-  ({ validationErrors, form, updateFormValueSequence }) => {
+  ({
+    form,
+    updateFormValueSequence,
+    validateTrialSessionSequence,
+    validationErrors,
+  }) => {
     return (
       <>
         <h2 className="margin-top-4">Session Information</h2>
@@ -36,6 +42,7 @@ export const SessionInformationForm = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                      validateTrialSessionSequence();
                     }}
                   />
                   <label
@@ -73,8 +80,8 @@ export const SessionInformationForm = connect(
                     id="start-date-month"
                     aria-label="month, two digits"
                     aria-describedby="start-date-legend"
-                    name="startDateMonth"
-                    value={form.startDateMonth}
+                    name="month"
+                    value={form.month || ''}
                     type="number"
                     min="1"
                     max="12"
@@ -83,6 +90,9 @@ export const SessionInformationForm = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                    }}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
                     }}
                   />
                 </div>
@@ -97,8 +107,8 @@ export const SessionInformationForm = connect(
                   <input
                     className="usa-input usa-input-inline"
                     id="start-date-day"
-                    name="startDateDay"
-                    value={form.startDateDay}
+                    name="day"
+                    value={form.day || ''}
                     aria-label="day, two digits"
                     aria-describedby="start-date-legend"
                     type="number"
@@ -109,6 +119,9 @@ export const SessionInformationForm = connect(
                         key: e.target.name,
                         value: e.target.value,
                       });
+                    }}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
                     }}
                   />
                 </div>
@@ -125,16 +138,19 @@ export const SessionInformationForm = connect(
                     id="start-date-year"
                     aria-label="year, four digits"
                     aria-describedby="start-date-legend"
-                    name="startDateYear"
-                    value={form.startDateYear}
+                    name="year"
+                    value={form.year || ''}
                     type="number"
-                    min="1900"
-                    max="2100"
+                    min="2019"
+                    max="2200"
                     onChange={e => {
                       updateFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
+                    }}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
                     }}
                   />
                 </div>
@@ -291,6 +307,7 @@ export const SessionInformationForm = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
+                        validateTrialSessionSequence();
                       }}
                     />
                     <label
@@ -329,6 +346,9 @@ export const SessionInformationForm = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+              }}
+              onBlur={() => {
+                validateTrialSessionSequence();
               }}
             />
             <Text

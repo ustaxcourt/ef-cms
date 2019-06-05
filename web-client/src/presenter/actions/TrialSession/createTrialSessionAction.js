@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -13,8 +14,16 @@ export const createTrialSessionAction = async ({
   applicationContext,
   get,
   path,
+  props,
 }) => {
-  const trialSession = get(state.form);
+  const startDate = props.computedDate;
+
+  const trialSession = omit(
+    {
+      ...get(state.form),
+    },
+    ['year', 'month', 'day'],
+  );
 
   let createTrialSessionResult;
 
@@ -23,7 +32,7 @@ export const createTrialSessionAction = async ({
       .getUseCases()
       .createTrialSession({
         applicationContext,
-        trialSession,
+        trialSession: { ...trialSession, startDate },
       });
   } catch (err) {
     return path.error();

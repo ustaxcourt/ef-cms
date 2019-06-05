@@ -1,11 +1,20 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateTrialSessionAction } from '../actions/TrialSession/validateTrialSessionAction';
 
 export const validateTrialSessionSequence = [
-  validateTrialSessionAction,
+  shouldValidateAction,
   {
-    error: [setValidationErrorsAction],
-    success: [clearAlertsAction],
+    ignore: [],
+    validate: [
+      computeFormDateAction,
+      validateTrialSessionAction,
+      {
+        error: [setValidationErrorsAction],
+        success: [clearAlertsAction],
+      },
+    ],
   },
 ];
