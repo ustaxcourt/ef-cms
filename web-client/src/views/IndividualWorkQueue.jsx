@@ -18,9 +18,10 @@ export const IndividualWorkQueue = connect(
         bind="workQueueToDisplay.box"
         onSelect={box => {
           navigateToPathSequence({
-            path: `/${
-              workQueueHelper.workQueueIsInternal ? 'messages' : 'document-qc'
-            }/${queue}/${box}`,
+            path: workQueueHelper.getQueuePath({
+              box,
+              queue,
+            }),
           });
         }}
       >
