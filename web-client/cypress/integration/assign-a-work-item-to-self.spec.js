@@ -1,6 +1,6 @@
 const {
+  viewDocumentQCMyInbox,
   viewDocumentQCSectionInbox,
-  viewMyInbox,
   getWorkItemCheckboxLabel,
   getSectionUsersSelect,
   getWorkItemMessages,
@@ -32,7 +32,9 @@ describe('Assign a work item ', () => {
       .contains('td.to', 'Test Petitionsclerk')
       .should('exist');
 
-    getWorkItemRow('101-19W').click();
+    getWorkItemRow('101-19W')
+      .contains('a', 'Petition')
+      .click();
     getWorkItemMessages();
 
     getWorkItemMessage('2611344f-f7bf-4f47-8ba0-60c70cb25446').contains(
@@ -42,9 +44,7 @@ describe('Assign a work item ', () => {
 
   it('places the work item in the petitionsclerk my inbox', () => {
     navigateToDashboard('petitionsclerk');
-    viewMyInbox();
-    getWorkItemRow('101-19W')
-      .contains('td.from', 'Test Petitionsclerk')
-      .should('exist');
+    viewDocumentQCMyInbox();
+    getWorkItemRow('101-19W').should('exist');
   });
 });
