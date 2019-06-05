@@ -63,7 +63,7 @@ export const CompletedMessages = connect(
                 <div className="content-wrapper gray">
                   {workItem.messages.map((message, messageIdx) => (
                     <React.Fragment key={messageIdx}>
-                      <div>
+                      <div className={`workitem-${workItem.workItemId}`}>
                         <div className="margin-bottom-1">
                           <span className="label-inline">To</span>
                           {message.to}

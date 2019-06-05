@@ -73,6 +73,17 @@ const NavigationItems = (helper, sequences) => {
           <a href="/">My Cases</a>
         </li>
       )}
+      {helper.showTrialSessions && (
+        <li
+          className={
+            helper.pageIsTrialSessions
+              ? 'usa-nav__primary-item active'
+              : 'usa-nav__primary-item'
+          }
+        >
+          <a href="/trial-sessions">Trial Sessions</a>
+        </li>
+      )}
     </ul>
   );
 };
@@ -138,7 +149,7 @@ export const Header = connect(
               </a>
             </div>
           </div>
-          <div className="grid-col-5">
+          <div className="grid-col-6">
             <nav role="navigation" className="main-navigation">
               {user &&
                 NavigationItems(helper, {
@@ -146,7 +157,7 @@ export const Header = connect(
                 })}
             </nav>
           </div>
-          <div className="grid-col-6">
+          <div className="grid-col-5">
             <button
               className="usa-menu-btn"
               onClick={() => toggleMobileMenuSequence()}
