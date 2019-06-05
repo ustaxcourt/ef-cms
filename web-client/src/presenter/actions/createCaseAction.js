@@ -55,6 +55,10 @@ export const createCaseAction = async ({
   }
 
   for (let document of caseDetail.documents) {
+    await applicationContext.getUseCases().virusScanPdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
     await applicationContext.getUseCases().sanitizePdf({
       applicationContext,
       documentId: document.documentId,

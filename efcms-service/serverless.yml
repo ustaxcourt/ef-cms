@@ -41,6 +41,7 @@ custom:
               - ./storage/fixtures/seed/103-19.json
               - ./storage/fixtures/seed/104-19.json
               - ./storage/fixtures/seed/105-19.json
+              - ./storage/fixtures/seed/trial-sessions.json
 
   alerts:
     stages:
@@ -638,11 +639,35 @@ functions:
           cors: true
 
   virusScan:
-    handler: src/handlers.virusScan
+    handler: src/handlers.virusScanPdfLambda
     layers:
       - { Ref: ClamavLambdaLayer }
     events:
       - http:
           path: v1/documents/{documentId}/virus-scan
+          method: post
+          cors: true
+
+  getTrialSessions:
+    handler: src/handlers.getTrialSessionsLambda
+    events:
+      - http:
+          path: v1/trialSessions
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createTrialSession:
+    handler: src/handlers.createTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

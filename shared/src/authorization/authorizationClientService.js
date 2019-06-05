@@ -8,6 +8,7 @@ exports.CREATE_USER = 'createUser';
 exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 exports.START_PAPER_CASE = 'startPaperCase';
 exports.GET_READ_MESSAGES = 'getReadMessages';
+exports.TRIAL_SESSIONS = 'trialSessions';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -21,6 +22,7 @@ const AUTHORIZATION_MAP = {
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
     exports.FILE_EXTERNAL_DOCUMENT,
+    exports.TRIAL_SESSIONS,
   ],
   petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
@@ -33,6 +35,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_USERS_IN_SECTION,
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
+    exports.TRIAL_SESSIONS,
   ],
 
   practitioner: [
@@ -53,6 +56,7 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.GET_READ_MESSAGES,
     exports.GET_USERS_IN_SECTION,
+    exports.TRIAL_SESSIONS,
   ],
   taxpayer: [exports.PETITION],
 };
