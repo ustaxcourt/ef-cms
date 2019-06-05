@@ -4,8 +4,71 @@
     "sk": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "maxCases": 100,
     "sessionType": "Regular",
-    "startDate": "2019-12-01T00:00:00.000Z",
-    "term": "Fall",
+    "judge": "Judge Judy",
+    "startDate": "2019-11-27T15:00:00.000Z",
+    "term": "Winter",
+    "swingSession": true,
+    "trialLocation": "Houston, TX"
+  },
+  {
+    "pk": "trial-session",
+    "sk": "208a959f-9526-4db5-b262-e58c476a4604",
+    "maxCases": 6,
+    "sessionType": "Special",
+    "judge": "Judge Judy",
+    "startDate": "2019-11-25T15:00:00.000Z",
+    "term": "Winter",
+    "swingSession": true,
+    "trialLocation": "Austin, TX"
+  },
+  {
+    "pk": "trial-session",
+    "sk": "f3b04943-8ea8-422b-8990-dec3ca644c83",
+    "maxCases": 125,
+    "sessionType": "Hybrid",
+    "judge": "Judge Smith",
+    "startDate": "2019-11-25T15:00:00.000Z",
+    "term": "Winter",
+    "trialLocation": "Seattle, WA"
+  },
+  {
+    "pk": "trial-session",
+    "sk": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
+    "maxCases": 100,
+    "sessionType": "Regular",
+    "judge": "Judge Dredd",
+    "startDate": "2019-11-25T15:00:00.000Z",
+    "term": "Winter",
+    "trialLocation": "Las Vegas, NV"
+  },
+  {
+    "pk": "trial-session",
+    "sk": "6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
+    "maxCases": 125,
+    "sessionType": "Small",
+    "judge": "Judge Dredd",
+    "startDate": "2019-12-02T15:00:00.000Z",
+    "term": "Winter",
+    "trialLocation": "Kansas City, KS"
+  },
+  {
+    "pk": "trial-session",
+    "sk": "9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "maxCases": 30,
+    "sessionType": "Special",
+    "judge": "Judge Arnold",
+    "startDate": "2019-12-02T15:00:00.000Z",
+    "term": "Winter",
+    "trialLocation": "Denver, CO"
+  },
+  {
+    "pk": "trial-session",
+    "sk": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
+    "maxCases": 8,
+    "sessionType": "Regular",
+    "judge": "Judge Judy",
+    "startDate": "2019-12-02T15:00:00.000Z",
+    "term": "Winter",
     "trialLocation": "Birmingham, AL"
   }
 ]
