@@ -10,8 +10,19 @@ import { state } from 'cerebral';
  */
 export const trialCitiesHelper = get => procedureType => {
   const { TRIAL_CITIES } = get(state.constants);
-  let trialCities =
-    procedureType === 'Small' ? TRIAL_CITIES.SMALL : TRIAL_CITIES.REGULAR;
+  let trialCities;
+  switch (procedureType) {
+    case 'Small':
+      trialCities = TRIAL_CITIES.SMALL;
+      break;
+    case 'All':
+      trialCities = TRIAL_CITIES.ALL;
+      break;
+    case 'Regular': //fall-through
+    default:
+      trialCities = TRIAL_CITIES.REGULAR;
+      break;
+  }
   trialCities = sortBy(trialCities, ['state', 'city']);
   const getTrialCityName = get(state.getTrialCityName);
   const states = {};

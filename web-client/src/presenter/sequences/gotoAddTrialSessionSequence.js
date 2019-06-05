@@ -13,6 +13,8 @@ const gotoAddTrialSession = [
   clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
+  set(state.form.term, 'Winter'),
+  set(state.form.sessionType, 'Regular'),
   setCurrentPageAction('AddTrialSession'),
 ];
 
