@@ -86,6 +86,7 @@ import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromP
 import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitSearchSequence } from './sequences/submitSearchSequence';
+import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleAccountMenuSequence } from './sequences/toggleAccountMenuSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -126,8 +127,6 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
-import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
-import { validateTrailSessionSequence } from './sequences/validateTrailSessionSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
@@ -226,6 +225,7 @@ export const presenter = {
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitSearchSequence,
+    submitTrialSessionSequence,
     submitUpdateCaseSequence,
     toggleAccountMenuSequence,
     toggleBetaBarSequence,
@@ -260,15 +260,13 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
     validateDocketEntrySequence,
-    submitTrialSessionSequence,
-    validateTrailSessionSequence,
-    validateTrialSessionSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,
     validatePetitionFromPaperSequence,
     validateSelectDocumentTypeSequence,
     validateStartCaseSequence,
+    validateTrialSessionSequence,
     viewDocumentSequence,
   },
   state,
