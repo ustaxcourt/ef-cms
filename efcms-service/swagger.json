@@ -119,7 +119,6 @@
         "tags": ["cases"],
         "summary": "get a case by caseId",
         "description": "Get a case by caseId.\n",
-        "produces": ["application/json"],
         "parameters": [
           {
             "name": "caseId",
@@ -128,6 +127,7 @@
             "type": "string"
           }
         ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -146,6 +146,14 @@
         "tags": ["cases"],
         "summary": "update a case",
         "description": "Update a case.\n",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -168,6 +176,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -196,6 +212,14 @@
         "tags": ["documents"],
         "summary": "create a new document inside of a case",
         "description": "Create a new document and attaches it to a case.  It will also create a generic work item.\n",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -212,6 +236,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -240,6 +272,14 @@
         "tags": ["cases"],
         "summary": "sends the case to the holding queue",
         "description": "Send a packaged case to the respondent.\n",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -265,6 +305,14 @@
         "tags": ["cases"],
         "summary": "deletes the petition on the case from the holding queue",
         "description": "Deletes the petition on the case from the holding queue.\n",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -287,6 +335,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -359,6 +415,14 @@
         "tags": ["documents"],
         "summary": "redirects to the s3 url for downloading a document",
         "description": "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "302": {
@@ -370,6 +434,14 @@
         }
       },
       "options": {
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -398,6 +470,14 @@
         "tags": ["documents"],
         "summary": "create a pre-signed url for downloads",
         "description": "Create a pre-signed url for  document downloads from S3.\n",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -414,6 +494,71 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/documents/{documentId}/sanitize": {
+      "post": {
+        "tags": ["documents"],
+        "summary": "triggers the PDF sanitizer function",
+        "description": "Endpoint that triggers the sanitize function for the specified document.\n",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -442,6 +587,14 @@
         "tags": ["documents"],
         "summary": "triggers the virus scan function",
         "description": "Endpoint that triggers the virus scan function for the specified document.\n",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -455,6 +608,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -483,6 +644,14 @@
         "tags": ["cases"],
         "summary": "get all cases for a user",
         "description": "Get all cases for a user.\n",
+        "parameters": [
+          {
+            "name": "respondentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -499,6 +668,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "respondentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -546,6 +723,14 @@
         "tags": ["workitems"],
         "summary": "get all workitems in the sections inbox",
         "description": "Get all workitems in the sections inbox.\n",
+        "parameters": [
+          {
+            "name": "section",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -562,6 +747,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "section",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -591,6 +784,20 @@
         "tags": ["workitems"],
         "summary": "creates a new work item and attaches it to the case document",
         "description": "creates a new work item and attaches it to the case document\n",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -607,6 +814,20 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -635,6 +856,14 @@
         "tags": ["workitems"],
         "summary": "get all workitems in the sections outbox",
         "description": "Get all workitems in the sections outbox.\n",
+        "parameters": [
+          {
+            "name": "section",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -651,6 +880,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "section",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -679,6 +916,14 @@
         "tags": ["workitems"],
         "summary": "get all users in a section",
         "description": "get all users in a section\n",
+        "parameters": [
+          {
+            "name": "section",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -695,6 +940,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "section",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -720,7 +973,12 @@
     },
     "/v1/swagger": {
       "get": {
-        "responses": {}
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -748,7 +1006,12 @@
     },
     "/v1/swagger.json": {
       "get": {
-        "responses": {}
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -917,6 +1180,14 @@
         "tags": ["cases"],
         "summary": "get all cases for a user",
         "description": "Get all cases for a user.\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -933,6 +1204,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -961,6 +1240,20 @@
         "tags": ["cases"],
         "summary": "verify if user is associated with the case",
         "description": "Verify if user is associated with the case.\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -980,6 +1273,20 @@
         "tags": ["cases"],
         "summary": "add practitioner to case if not associated with the case",
         "description": "Add practitioner to case if not associated with the case.\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -993,6 +1300,20 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1021,6 +1342,20 @@
         "tags": ["cases"],
         "summary": "verify if user has pending association with the case",
         "description": "Verify if user has pending associationwith the case.\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1037,6 +1372,20 @@
         "tags": ["cases"],
         "summary": "add pending association for practitioner for case if not associated with the case",
         "description": "Add pending association for practitioner for case if not associated with the case.\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1050,6 +1399,20 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1078,6 +1441,14 @@
         "tags": ["workitems"],
         "summary": "get a users work item inbox",
         "description": "get a users work item inbox\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1094,6 +1465,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1122,6 +1501,14 @@
         "tags": ["workitems"],
         "summary": "get a users work item outbox",
         "description": "get a users work item outbox\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1138,6 +1525,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1210,6 +1605,14 @@
         "tags": ["workitems"],
         "summary": "get a workitem by workItemId",
         "description": "Get a workitem.\n",
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1229,6 +1632,14 @@
         "tags": ["workitems"],
         "summary": "update a workitem by workItemId",
         "description": "Update a workitem.\n",
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1245,6 +1656,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1273,6 +1692,14 @@
         "tags": ["workitems"],
         "summary": "sets the assigneeId of the workitem to a new user",
         "description": "sets the assigneeId of the workitem to a new user.\n",
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1289,6 +1716,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1317,6 +1752,20 @@
         "tags": ["workitems"],
         "summary": "creates a coversheet and prepends it to the existing s3 document",
         "description": "creates a coversheet and prepends it to the existing s3 document.\n",
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1330,6 +1779,20 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
@@ -1358,6 +1821,14 @@
         "tags": ["workitems"],
         "summary": "marks the workitem complete",
         "description": "marks the workitem complete.\n",
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -1374,6 +1845,14 @@
         ]
       },
       "options": {
+        "parameters": [
+          {
+            "name": "workItemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "responses": {
