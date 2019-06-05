@@ -17,6 +17,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 
 const {
   PARTY_TYPES,
@@ -79,4 +80,5 @@ describe('Docket Clerk Creates A Trial', () => {
   });
   docketClerkLogIn(test);
   docketClerkCreatesATrialSession(test);
+  docketClerkViewsTrialSessionList(test);
 });

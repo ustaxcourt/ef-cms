@@ -1,4 +1,4 @@
-import { TrialCity } from '../StartCase/TrialCity';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -8,25 +8,61 @@ export const LocationInformationForm = connect(
     form: state.form,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+    validationErrors: state.validationErrors,
   },
-  ({ form, trialCitiesHelper, updateFormValueSequence }) => {
+  ({
+    form,
+    trialCitiesHelper,
+    updateFormValueSequence,
+    validateTrialSessionSequence,
+    validationErrors,
+  }) => {
     return (
       <>
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
-          <TrialCity
-            showHint={false}
-            label="Trial Location"
-            showDefaultOption={true}
-            value={form.trialLocation}
-            trialCitiesByState={trialCitiesHelper('All').trialCitiesByState}
-            onChange={e => {
-              updateFormValueSequence({
-                key: 'trialLocation',
-                value: e.target.value || null,
-              });
-            }}
-          />
+          <div
+            className={`usa-form-group ${
+              validationErrors.trialLocation ? 'usa-form-group--error' : ''
+            }`}
+          >
+            <label htmlFor="trial-location" className="usa-label">
+              Trial Location
+            </label>
+            <select
+              name="trialLocation"
+              id="trial-location"
+              className="usa-select"
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value || null,
+                });
+                validateTrialSessionSequence();
+              }}
+              value={form.trialLocation}
+            >
+              <option value="">-- Select --</option>
+              {Object.keys(trialCitiesHelper('All').trialCitiesByState).map(
+                (state, idx) => (
+                  <optgroup key={idx} label={state}>
+                    {trialCitiesHelper('All').trialCitiesByState[state].map(
+                      (trialCity, cityIdx) => (
+                        <option key={cityIdx} value={trialCity}>
+                          {trialCity}
+                        </option>
+                      ),
+                    )}
+                  </optgroup>
+                ),
+              )}
+            </select>
+            <Text
+              className="usa-error-message"
+              bind="validationErrors.trialLocation"
+            />
+          </div>
 
           <div className="usa-form-group">
             <label htmlFor="courthouse-name" className="usa-label">

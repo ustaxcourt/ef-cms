@@ -1,17 +1,15 @@
 export default test => {
   return it('Docket clerk starts a trial session', async () => {
-    //await test.runSequence('goToSubmitTrialSessionSequence');
+    await test.runSequence('gotoAddTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      maxCases: 'Enter number of cases allowed.',
-      sessionType: 'Enter Session Type.',
-      startDate: 'Enter Start Date.',
-      term: 'Enter selection for Term.',
-      trialLocation: 'Select a Trial Location.',
+      maxCases: 'Enter the maximum number of cases allowed for this session.',
+      startDate: 'Date must be in correct format.',
+      trialLocation: 'Trial Location is required.',
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -25,8 +23,18 @@ export default test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'startDate',
-      value: '2019-12-01T00:00:00.000Z',
+      key: 'month',
+      value: '12',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'day',
+      value: '12',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'year',
+      value: '2025',
     });
 
     await test.runSequence('updateFormValueSequence', {
