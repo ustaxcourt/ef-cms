@@ -8,13 +8,10 @@ exports.viewMyOutbox = () => {
 
 exports.viewMyInbox = () => {
   cy.visit('/messages/my/inbox');
-  cy.wait(1000);
-  cy.get('button#individual-inbox-tab').click();
 };
 
 exports.viewSectionInbox = () => {
-  cy.get('button.button-switch-box').click();
-  cy.get('button#section-inbox-tab').click();
+  cy.visit('/messages/section/inbox');
 };
 
 exports.viewSectionOutbox = () => {
@@ -28,10 +25,7 @@ exports.viewDocumentQCMyInbox = () => {
 };
 
 exports.viewDocumentQCSectionInbox = () => {
-  cy.visit('/document-qc/my/inbox');
-  cy.wait(1000);
-  cy.get('button.button-switch-box').click();
-  cy.get('button#section-inbox-tab').click();
+  cy.visit('/document-qc/section/inbox');
 };
 
 exports.getWorkItemContaining = text => {
