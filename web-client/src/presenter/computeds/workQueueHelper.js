@@ -40,7 +40,7 @@ export const workQueueHelper = get => {
       : 'Served',
     showAssignedToColumn:
       (isDisplayingQC && !showIndividualWorkQueue && showInbox) ||
-      !isDisplayingQC,
+      (!isDisplayingQC && !showIndividualWorkQueue),
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
