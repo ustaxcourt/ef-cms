@@ -75,6 +75,14 @@ const router = {
       }),
     );
 
+    route(
+      '/trial-sessions',
+      checkLoggedIn(() => {
+        document.title = `Trial sessions ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionsSequence')();
+      }),
+    );
+
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
