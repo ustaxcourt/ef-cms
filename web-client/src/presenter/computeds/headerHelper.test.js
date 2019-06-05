@@ -82,6 +82,7 @@ describe('headerHelper', () => {
       state: {
         ...getState('petitionsclerk'),
         currentPage: 'DashboardPetitionsClerk',
+        workQueueIsInternal: true,
       },
     });
     expect(result.pageIsMessages).toBeTruthy();
