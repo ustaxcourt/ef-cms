@@ -131,6 +131,11 @@ WorkItem.prototype.addMessage = function(message) {
   return this;
 };
 
+WorkItem.prototype.setAsInternal = function() {
+  this.isInternal = true;
+  return this;
+};
+
 /**
  * get the latest message (by createdAt)
  * @returns {Message}
