@@ -67,13 +67,16 @@ export const SectionWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th colSpan="2">Select</th>
+              {workQueueHelper.showSelectColumn && <th colSpan="2">Select</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               <th />
               <th>Document</th>
+              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
-              <th>{workQueueHelper.assigneeColumnTitle}</th>
+              {workQueueHelper.showAssignedToColumn && (
+                <th>{workQueueHelper.assigneeColumnTitle}</th>
+              )}
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
@@ -89,42 +92,46 @@ export const SectionWorkQueueInbox = connect(
               }
             >
               <tr>
-                <td className="focus-toggle">
-                  <button
-                    className="focus-button usa-button usa-button--unstyled"
-                    aria-label="Expand message detail"
-                    aria-expanded={item.isFocused}
-                    aria-controls={`detail-${item.workItemId}`}
-                  />{' '}
-                </td>
-                <td
-                  onClick={e => {
-                    selectWorkItemSequence({
-                      workItem: item,
-                    });
-                    e.stopPropagation();
-                  }}
-                  className="message-select-control has-icon"
-                >
-                  <input
-                    id={item.workItemId}
-                    type="checkbox"
-                    className="usa-checkbox__input"
-                    onChange={e => {
-                      selectWorkItemSequence({
-                        workItem: item,
-                      });
-                      e.stopPropagation();
-                    }}
-                    checked={item.selected}
-                    aria-label="Select work item"
-                  />
-                  <label
-                    htmlFor={item.workItemId}
-                    id={`label-${item.workItemId}`}
-                    className="usa-checkbox__label padding-top-05"
-                  />
-                </td>
+                {workQueueHelper.showSelectColumn && (
+                  <>
+                    <td className="focus-toggle">
+                      <button
+                        className="focus-button usa-button usa-button--unstyled"
+                        aria-label="Expand message detail"
+                        aria-expanded={item.isFocused}
+                        aria-controls={`detail-${item.workItemId}`}
+                      />{' '}
+                    </td>
+                    <td
+                      onClick={e => {
+                        selectWorkItemSequence({
+                          workItem: item,
+                        });
+                        e.stopPropagation();
+                      }}
+                      className="message-select-control has-icon"
+                    >
+                      <input
+                        id={item.workItemId}
+                        type="checkbox"
+                        className="usa-checkbox__input"
+                        onChange={e => {
+                          selectWorkItemSequence({
+                            workItem: item,
+                          });
+                          e.stopPropagation();
+                        }}
+                        checked={item.selected}
+                        aria-label="Select work item"
+                      />
+                      <label
+                        htmlFor={item.workItemId}
+                        id={`label-${item.workItemId}`}
+                        className="usa-checkbox__label padding-top-05"
+                      />
+                    </td>
+                  </>
+                )}
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
@@ -175,8 +182,13 @@ export const SectionWorkQueueInbox = connect(
                     </div>
                   )}
                 </td>
+                {!workQueueHelper.hideFiledByColumn && (
+                  <td className="message-queue-row">{item.document.filedBy}</td>
+                )}
                 <td className="message-queue-row">{item.caseStatus}</td>
-                <td className="to message-queue-row">{item.assigneeName}</td>
+                {workQueueHelper.showAssignedToColumn && (
+                  <td className="to message-queue-row">{item.assigneeName}</td>
+                )}
                 {!workQueueHelper.hideFromColumn && (
                   <td className="message-queue-row">
                     {item.currentMessage.from}

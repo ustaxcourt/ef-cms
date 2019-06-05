@@ -28,8 +28,12 @@ export const SectionWorkQueueOutbox = connect(
             </th>
             <th>Sent</th>
             <th>Document</th>
+            {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
             <th>Case Status</th>
-            <th>{workQueueHelper.assigneeColumnTitle}</th>
+            {workQueueHelper.showAssignedToColumn && (
+              <th>{workQueueHelper.assigneeColumnTitle}</th>
+            )}
+            {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             {!workQueueHelper.hideFromColumn && <th>From</th>}
             {!workQueueHelper.hideSectionColumn && <th>Section</th>}
           </tr>
@@ -75,8 +79,18 @@ export const SectionWorkQueueOutbox = connect(
                   </div>
                 )}
               </td>
+              {!workQueueHelper.hideFiledByColumn && (
+                <td className="message-queue-row">{item.document.filedBy}</td>
+              )}
               <td className="message-queue-row">{item.caseStatus}</td>
-              <td className="message-queue-row">{item.currentMessage.from}</td>
+              {workQueueHelper.showAssignedToColumn && (
+                <td className="message-queue-row">
+                  {item.currentMessage.from}
+                </td>
+              )}
+              {workQueueHelper.showProcessedByColumn && (
+                <td className="message-queue-row">{item.completedBy}</td>
+              )}
               {!workQueueHelper.hideFromColumn && (
                 <td className="message-queue-row">{item.assigneeName}</td>
               )}

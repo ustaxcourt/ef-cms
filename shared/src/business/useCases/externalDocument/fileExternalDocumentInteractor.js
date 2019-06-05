@@ -94,6 +94,8 @@ exports.fileExternalDocument = async ({
       documentEntity.generateFiledBy(caseToUpdate);
 
       if (!metadata.isPaper) {
+        console.log('user.prototype', user.prototype);
+
         const workItem = new WorkItem({
           assigneeId: null,
           assigneeName: null,
