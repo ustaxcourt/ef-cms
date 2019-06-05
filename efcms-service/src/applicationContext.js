@@ -38,6 +38,7 @@ const {
 const {
   createCase: createCaseUC,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
+
 const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
@@ -47,6 +48,12 @@ const {
 const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
+const {
+  createTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
+const {
+  createTrialSession: createTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -125,6 +132,12 @@ const {
 const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+const {
+  getTrialSessions,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
+const {
+  getTrialSessions: getTrialSessionsUC,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
 const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
@@ -298,6 +311,7 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createCaseCatalogRecord,
         createDocument,
+        createTrialSession,
         createUser,
         createWorkItem,
         deleteDocument,
@@ -312,6 +326,7 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getTrialSessions,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
@@ -354,6 +369,7 @@ module.exports = (appContextUser = {}) => {
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
+        createTrialSession: createTrialSessionUC,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
         fileExternalDocument,
@@ -366,6 +382,7 @@ module.exports = (appContextUser = {}) => {
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,
         getWorkItem,

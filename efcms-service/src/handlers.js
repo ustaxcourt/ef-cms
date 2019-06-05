@@ -8,6 +8,8 @@ module.exports = {
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
   createDocumentLambda: require('./users/createDocumentLambda').handler,
+  createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
+    .handler,
   createUserLambda: require('./users/createUserLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
@@ -26,6 +28,8 @@ module.exports = {
   getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda')
     .handler,
   getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda')
+    .handler,
+  getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
     .handler,
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,
   getUsersInSectionLambda: require('./users/getUsersInSectionLambda').handler,

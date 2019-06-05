@@ -130,6 +130,10 @@ div.usa-radio.usa-radio__inline {
   .usa-radio__label {
     padding-right: 2rem;
     padding-left: 0;
+
+    &.smaller-padding-right {
+      padding-right: 1rem;
+    }
   }
 }
 

@@ -110,6 +110,13 @@ const router = {
         document.title = `Dashboard ${pageTitleSuffix}`;
       }),
     );
+    route(
+      '/trial-sessions',
+      checkLoggedIn(() => {
+        document.title = `Trial sessions ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionsSequence')();
+      }),
+    );
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
@@ -135,6 +142,15 @@ const router = {
         app.getSequence('gotoStartCaseSequence')();
       }),
     );
+
+    route(
+      '/add-a-trial-session',
+      checkLoggedIn(() => {
+        document.title = `Add a trial session ${pageTitleSuffix}`;
+        app.getSequence('gotoAddTrialSessionSequence')();
+      }),
+    );
+
     route('/style-guide', () => {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
