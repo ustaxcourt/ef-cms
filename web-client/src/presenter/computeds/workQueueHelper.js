@@ -10,6 +10,7 @@ export const workQueueHelper = get => {
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueIsInternal);
   const showInbox = workQueueToDisplay.box === 'inbox';
+  const showOutbox = workQueueToDisplay.box === 'outbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
   const myUnreadCount = workQueueIsInternal
@@ -37,16 +38,22 @@ export const workQueueHelper = get => {
       : userIsDocketClerk
       ? 'Processed'
       : 'Served',
+    showAssignedToColumn:
+      (isDisplayingQC && !showIndividualWorkQueue && showInbox) ||
+      !isDisplayingQC,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,
     showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
-    showOutbox: workQueueToDisplay.box === 'outbox',
+    showOutbox,
+    showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showRunBatchIRSProcessButton: userSection === 'petitions',
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showSelectColumn:
+      isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk),
     showSendToBar: selectedWorkItems.length > 0,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
