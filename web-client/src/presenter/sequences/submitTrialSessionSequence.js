@@ -4,7 +4,6 @@ import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession
 import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { setTrialSessionAction } from '../actions/TrialSession/setTrialSessionAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -23,7 +22,6 @@ export const submitTrialSessionSequence = [
       {
         error: [],
         success: [
-          setTrialSessionAction,
           getCreateTrialSessionAlertSuccessAction,
           setAlertSuccessAction,
           navigateToTrialSessionsAction,
