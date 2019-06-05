@@ -1,4 +1,5 @@
 import { ErrorNotification } from '../ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HeaderDashboardInternal } from '../HeaderDashboardInternal';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -11,7 +12,12 @@ export const TrialSessions = () => (
     <section className="usa-section grid-container">
       <SuccessNotification />
       <ErrorNotification />
+
       <Tabs defaultActiveTab="Upcoming" bind="trialsessions.group">
+        <a href="/add-a-trial-session" className="usa-button tab-right-button">
+          <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Trial Session
+        </a>
+
         <Tab
           tabName="Upcoming"
           title="Upcoming"
