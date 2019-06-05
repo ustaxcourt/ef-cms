@@ -17,6 +17,12 @@ export const chooseWorkQueueSequence = [
   clearWorkQueueAction,
   chooseWorkQueueAction,
   {
+    mybatched: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getSentWorkItemsForUserAction, setWorkItemsAction],
+      ]),
+    ],
     myinbox: [
       parallel([
         [getNotificationsAction, setNotificationsAction],
@@ -24,6 +30,12 @@ export const chooseWorkQueueSequence = [
       ]),
     ],
     myoutbox: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getSentWorkItemsForUserAction, setWorkItemsAction],
+      ]),
+    ],
+    sectionbatched: [
       parallel([
         [getNotificationsAction, setNotificationsAction],
         [getSentWorkItemsForUserAction, setWorkItemsAction],
