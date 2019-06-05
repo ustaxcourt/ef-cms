@@ -10,7 +10,7 @@ function testAsset(name) {
 }
 
 describe('virusScanPdf', () => {
-  jest.setTimeout(60000);
+  jest.setTimeout(1200000);
 
   it('detects a clean PDF', async () => {
     const cleanParams = {
@@ -22,6 +22,7 @@ describe('virusScanPdf', () => {
               Body: testAsset('sample.pdf'),
             }),
           }),
+          putObjectTagging: () => {},
         }),
         logger: {
           time: () => null,
@@ -44,6 +45,7 @@ describe('virusScanPdf', () => {
               Body: testAsset('fake-virus.pdf'),
             }),
           }),
+          putObjectTagging: () => {},
         }),
         logger: {
           time: () => null,
@@ -52,7 +54,7 @@ describe('virusScanPdf', () => {
       },
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
-    const result = await virusScanPdf(infectedParams);
-    expect(result).toBe('infected');
+
+    await expect(virusScanPdf(infectedParams)).rejects.toThrow();
   });
 });
