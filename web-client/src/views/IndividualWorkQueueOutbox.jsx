@@ -28,6 +28,9 @@ export const IndividualWorkQueueOutbox = connect(
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
+              {workQueueHelper.showAssignedToColumn && (
+                <th>{workQueueHelper.assigneeColumnTitle}</th>
+              )}
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
@@ -88,6 +91,11 @@ export const IndividualWorkQueueOutbox = connect(
                   <td className="message-queue-row">{item.document.filedBy}</td>
                 )}
                 <td className="message-queue-row">{item.caseStatus}</td>
+                {workQueueHelper.showAssignedToColumn && (
+                  <td className="to message-queue-row">
+                    {item.currentMessage.to}
+                  </td>
+                )}
                 {!workQueueHelper.hideFromColumn && (
                   <td className="message-queue-row">{item.assigneeName}</td>
                 )}
