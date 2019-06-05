@@ -1,7 +1,12 @@
 const joi = require('joi-browser');
+const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+
+const uuidVersions = {
+  version: ['uuidv4'],
+};
 
 const SESSION_TYPES = [
   'Regular',
@@ -37,6 +42,7 @@ function TrialSession(rawSession) {
     term: rawSession.term,
     trialClerk: rawSession.trialClerk,
     trialLocation: rawSession.trialLocation,
+    trialSessionId: rawSession.trialSessionId || uuid.v4(),
   });
 }
 
@@ -92,6 +98,10 @@ joiValidationDecorator(
     term: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
+    trialSessionId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
   }),
   function() {
     return !this.getFormattedValidationErrors();

@@ -8,6 +8,8 @@ module.exports = {
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
   createDocumentLambda: require('./users/createDocumentLambda').handler,
+  createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
+    .handler,
   createUserLambda: require('./users/createUserLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')

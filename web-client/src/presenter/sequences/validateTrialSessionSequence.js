@@ -1,6 +1,6 @@
 import { validateTrialSessionAction } from '../actions/TrialSession/validateTrialSessionAction';
 
-export const validateTrailSessionSequence = [
+export const validateTrialSessionSequence = [
   validateTrialSessionAction,
   { error: [], success: [] },
 ];
