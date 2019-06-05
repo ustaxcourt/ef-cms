@@ -108,6 +108,7 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
+import { validateTrialSession } from '../../shared/src/business/useCases/validateTrialSessionInteractor';
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
@@ -192,6 +193,7 @@ const allUseCases = {
   validateInitialWorkItemMessage,
   validatePetition,
   validatePetitionFromPaper,
+  validateTrialSession,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   virusScanPdf,
