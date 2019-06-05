@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
-import { navigateToTrialSessionAction } from '../actions/TrialSession/navigateToTrialSessionAction';
+import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setTrialSessionAction } from '../actions/TrialSession/setTrialSessionAction';
@@ -26,7 +26,7 @@ export const submitTrialSessionSequence = [
           setTrialSessionAction,
           getCreateTrialSessionAlertSuccessAction,
           setAlertSuccessAction,
-          navigateToTrialSessionAction,
+          navigateToTrialSessionsAction,
         ],
       },
     ],

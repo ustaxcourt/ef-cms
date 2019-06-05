@@ -11,20 +11,6 @@ const SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
-const errorToMessageMap = {
-  maxCases: 'Enter number of cases allowed.',
-  postalCode: [
-    {
-      contains: 'match',
-      message: 'Please enter a valid zip code.',
-    },
-  ],
-  sessionType: 'Enter Session Type.',
-  startDate: 'Enter Start Date.',
-  term: 'Enter selection for Term.',
-  trialLocation: 'Select a Trial Location.',
-};
-
 /**
  * constructor
  * @param rawSession
@@ -53,6 +39,20 @@ function TrialSession(rawSession) {
     trialLocation: rawSession.trialLocation,
   });
 }
+
+TrialSession.errorToMessageMap = {
+  maxCases: 'Enter number of cases allowed.',
+  postalCode: [
+    {
+      contains: 'match',
+      message: 'Please enter a valid zip code.',
+    },
+  ],
+  sessionType: 'Enter Session Type.',
+  startDate: 'Enter Start Date.',
+  term: 'Enter selection for Term.',
+  trialLocation: 'Select a Trial Location.',
+};
 
 joiValidationDecorator(
   TrialSession,
@@ -96,7 +96,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  errorToMessageMap,
+  TrialSession.errorToMessageMap,
 );
 
 module.exports = { TrialSession };
