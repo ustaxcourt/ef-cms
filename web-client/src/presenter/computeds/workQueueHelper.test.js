@@ -6,6 +6,10 @@ describe('workQueueHelper', () => {
   it('returns the expected state when set', async () => {
     const result = await runCompute(workQueueHelper, {
       state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
         selectedWorkItems: [true],
         workQueueToDisplay: { box: 'inbox', queue: 'section' },
       },
@@ -23,6 +27,10 @@ describe('workQueueHelper', () => {
   it('returns the expected state when not set', async () => {
     const result = await runCompute(workQueueHelper, {
       state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
         selectedWorkItems: [],
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
@@ -40,6 +48,10 @@ describe('workQueueHelper', () => {
   it('shows the start a case button when role is petitions clerk', async () => {
     const result = await runCompute(workQueueHelper, {
       state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
         selectedWorkItems: [],
         user: {
           role: 'petitionsclerk',
@@ -55,6 +67,10 @@ describe('workQueueHelper', () => {
   it('shows the start a case button when role is docket clerk', async () => {
     const result = await runCompute(workQueueHelper, {
       state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
         selectedWorkItems: [],
         user: {
           role: 'docketclerk',
