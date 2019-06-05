@@ -272,6 +272,8 @@ functions:
 
   sanitizePdf:
     handler: src/handlers.sanitizePdfLambda
+    layers:
+      - { Ref: GhostscriptLambdaLayer }
     memorySize: 3008
     timeout: 900
     events:
