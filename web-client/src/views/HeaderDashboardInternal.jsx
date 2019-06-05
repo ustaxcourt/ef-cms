@@ -6,15 +6,9 @@ import React from 'react';
 export const HeaderDashboardInternal = connect(
   {
     navigateToPathSequence: sequences.navigateToPathSequence,
-    refreshSectionInboxCountSequence:
-      sequences.refreshSectionInboxCountSequence,
     workQueueHelper: state.workQueueHelper,
   },
-  ({
-    navigateToPathSequence,
-    refreshSectionInboxCountSequence,
-    workQueueHelper,
-  }) => {
+  ({ navigateToPathSequence, workQueueHelper }) => {
     return (
       <div className="big-blue-header">
         <div className="grid-container">
@@ -30,13 +24,11 @@ export const HeaderDashboardInternal = connect(
               className="button-switch-box usa-button usa-button--unstyled"
               onClick={() => {
                 navigateToPathSequence({
-                  path: `/${
-                    workQueueHelper.workQueueIsInternal
-                      ? 'messages'
-                      : 'document-qc'
-                  }/section/${workQueueHelper.currentBoxView}`,
+                  path: workQueueHelper.getQueuePath({
+                    box: workQueueHelper.currentBoxView,
+                    queue: 'section',
+                  }),
                 });
-                refreshSectionInboxCountSequence();
               }}
             >
               <FontAwesomeIcon icon={['far', 'clone']} />
@@ -44,24 +36,22 @@ export const HeaderDashboardInternal = connect(
             </button>
           )}
           {workQueueHelper.showSectionWorkQueue &&
-           workQueueHelper.showMyQueueToggle && (
-            <button
-              className="button-switch-box usa-button usa-button--unstyled"
-              onClick={() => {
-                navigateToPathSequence({
-                  path: `/${
-                    workQueueHelper.workQueueIsInternal
-                      ? 'messages'
-                      : 'document-qc'
-                  }/my/${workQueueHelper.currentBoxView}`,
-                });
-                refreshSectionInboxCountSequence();
-              }}
-            >
-              <FontAwesomeIcon icon={['far', 'clone']} />
-              Switch to My {workQueueHelper.workQueueType}
-            </button>
-          )}
+            workQueueHelper.showMyQueueToggle && (
+              <button
+                className="button-switch-box usa-button usa-button--unstyled"
+                onClick={() => {
+                  navigateToPathSequence({
+                    path: workQueueHelper.getQueuePath({
+                      box: workQueueHelper.currentBoxView,
+                      queue: 'my',
+                    }),
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'clone']} />
+                Switch to My {workQueueHelper.workQueueType}
+              </button>
+            )}
         </div>
       </div>
     );
