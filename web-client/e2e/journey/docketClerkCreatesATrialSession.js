@@ -1,5 +1,7 @@
 export default test => {
   return it('Docket clerk starts a trial session', async () => {
+    //await test.runSequence('goToSubmitTrialSessionSequence');
+
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitTrialSessionSequence');
