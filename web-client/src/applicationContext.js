@@ -45,6 +45,7 @@ import { InitialWorkItemMessage } from '../../shared/src/business/entities/Initi
 import { Petition } from '../../shared/src/business/entities/Petition';
 import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
@@ -62,6 +63,7 @@ import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
+import { createTrialSession } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
@@ -81,6 +83,7 @@ import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedu
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
@@ -107,8 +110,10 @@ import { validateForwardMessage } from '../../shared/src/business/useCases/worki
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
+import { validateTrialSession } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
+import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -136,12 +141,11 @@ const allUseCases = {
   assignWorkItems,
   authorizeCode,
   completeWorkItem,
-
   createCase,
   createCaseFromPaper,
   createCoverSheet,
-
   createDocument,
+  createTrialSession,
   createWorkItem,
   downloadDocumentFile,
   fileExternalDocument,
@@ -162,6 +166,7 @@ const allUseCases = {
   getProcedureTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
+  getTrialSessions,
   getUser,
   getUsersInSection,
   getWorkItem,
@@ -189,8 +194,10 @@ const allUseCases = {
   validateInitialWorkItemMessage,
   validatePetition,
   validatePetitionFromPaper,
+  validateTrialSession,
   verifyCaseForUser,
   verifyPendingCaseForUser,
+  virusScanPdf,
 };
 tryCatchDecorator(allUseCases);
 
@@ -256,6 +263,7 @@ const applicationContext = {
     InitialWorkItemMessage,
     Petition,
     PetitionFromPaper,
+    TrialSession,
   }),
   getError: e => {
     return ErrorFactory.getError(e);
