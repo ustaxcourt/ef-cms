@@ -23,6 +23,11 @@ export const workQueueHelper = get => {
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
     currentBoxView: showInbox ? 'inbox' : 'outbox',
+    getQueuePath: ({ box, queue }) => {
+      return `/${
+        workQueueIsInternal ? 'messages' : 'document-qc'
+      }/${queue}/${box}`;
+    },
     hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
     hideFromColumn: isDisplayingQC,
     hideSectionColumn: isDisplayingQC,
