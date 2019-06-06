@@ -193,11 +193,18 @@ resources:
 
 layers:
   clamav:
+    compatibleRuntimes:
+      - nodejs10.x
     path: runtimes/clamav
     exclude:
       - freshclam.conf
       - build.sh
+      - Dockerfile
+      - Dockerfile.clamscan
+      - clamav_lambda_layer.tar.gz
   ghostscript:
+    compatibleRuntimes:
+      - nodejs10.x
     path: runtimes/ghostscript
     exclude:
       - build.sh

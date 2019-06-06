@@ -26,7 +26,9 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
   fs.closeSync(inputPdf.fd);
 
   try {
-    const scanResults = await execPromise(`clamscan ${inputPdf.name}`);
+    const scanResults = await execPromise(
+      `clamscan -d /opt/var/lib/clamav ${inputPdf.name}`,
+    );
     applicationContext.logger.time(scanResults);
     applicationContext.getStorageClient().putObjectTagging({
       Bucket: applicationContext.environment.documentsBucketName,
@@ -42,7 +44,7 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
     });
     return 'clean';
   } catch (e) {
-    applicationContext.logger.time(e);
+    applicationContext.logger.error(e);
     if (e.code === 1) {
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,

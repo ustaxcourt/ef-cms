@@ -7,3 +7,4 @@ node_modules/
 storage/s3/*
 dist/
 .cache/
+runtimes/clamav/var/

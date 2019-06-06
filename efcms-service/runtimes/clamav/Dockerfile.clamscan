@@ -1,0 +1,19 @@
+FROM amazonlinux:2
+
+WORKDIR /home/app
+
+RUN yum install shadow-utils.x86_64 -y
+
+RUN groupadd clamav
+RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamav
+RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamupdate
+
+RUN mkdir /var/lib/clamav
+RUN chmod -R 777 /var/lib/clamav
+
+COPY . /home/app
+
+RUN cp freshclam.conf /etc/freshclam.conf
+
+RUN LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/app/lib ./bin/freshclam
+RUN LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/app/lib ./bin/clamscan test2.pdf
