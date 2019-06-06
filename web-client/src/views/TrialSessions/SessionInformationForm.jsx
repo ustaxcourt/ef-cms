@@ -6,12 +6,14 @@ import React from 'react';
 export const SessionInformationForm = connect(
   {
     form: state.form,
+    sessionsByTerm: state.formattedTrialSessions.sessionsByTerm,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   ({
     form,
+    sessionsByTerm,
     updateFormValueSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -20,43 +22,6 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-4">Session Information</h2>
         <div className="blue-container">
-          <div
-            className={`usa-form-group ${
-              validationErrors.term ? 'usa-form-group--error' : ''
-            }`}
-          >
-            <fieldset className="usa-fieldset">
-              <legend id="term-legend">Term</legend>
-              {['Winter', 'Spring', 'Fall'].map(option => (
-                <div className="usa-radio usa-radio__inline" key={option}>
-                  <input
-                    id={`term-${option}`}
-                    type="radio"
-                    name="term"
-                    className="usa-radio__input"
-                    value={option}
-                    aria-describedby="term-legend"
-                    checked={form.term === option}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateTrialSessionSequence();
-                    }}
-                  />
-                  <label
-                    htmlFor={`term-${option}`}
-                    className="usa-radio__label"
-                  >
-                    {option}
-                  </label>
-                </div>
-              ))}
-            </fieldset>
-            <Text className="usa-error-message" bind="validationErrors.term" />
-          </div>
-
           <div
             className={`usa-form-group ${
               validationErrors.startDate ? 'usa-form-group--error' : ''
@@ -241,43 +206,45 @@ export const SessionInformationForm = connect(
             </div>
           </div>
 
-          {form.swingSession && (
+          {form.swingSession && form.term && (
             <div
               className={`usa-form-group ${
-                validationErrors.swingSessionAssociated
-                  ? 'usa-form-group--error '
-                  : ''
+                validationErrors.swingSessionId ? 'usa-form-group--error ' : ''
               }`}
             >
               <label
-                htmlFor="swing-session-associated"
-                id="swing-session-associated-label"
+                htmlFor="swing-session-id"
+                id="swing-session-id-label"
                 className="usa-label"
               >
                 Which Trial Session is This Associated With?
               </label>
               <select
-                name="swingSessionAssociated"
-                id="swing-session-associated"
-                aria-describedby="swing-session-associated-label"
+                name="swingSessionId"
+                id="swing-session-id"
+                aria-describedby="swing-session-id-label"
                 className={`usa-select ${
-                  validationErrors.swingSessionAssociated
-                    ? 'usa-select--error'
-                    : ''
+                  validationErrors.swingSessionId ? 'usa-select--error' : ''
                 }`}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  validateTrialSessionSequence();
                 }}
-                value={form.swingSessionAssociated || ''}
+                value={form.swingSessionId || ''}
               >
                 <option value="">- Select -</option>
+                {sessionsByTerm.map((session, idx) => (
+                  <option value={session.trialSessionId} key={idx}>
+                    {session.trialLocation}
+                  </option>
+                ))}
               </select>
               <Text
                 className="usa-error-message"
-                bind="validationErrors.swingSessionAssociated"
+                bind="validationErrors.swingSessionId"
               />
             </div>
           )}
