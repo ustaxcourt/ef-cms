@@ -15,7 +15,11 @@ describe('validateTrialSession', () => {
 
     expect(Object.keys(errors)).toEqual(
       Object.keys(
-        omit(TrialSession.errorToMessageMap, ['postalCode', 'swingSessionId']),
+        omit(TrialSession.errorToMessageMap, [
+          'postalCode',
+          'swingSessionId',
+          'startTime',
+        ]),
       ),
     );
   });
@@ -26,6 +30,7 @@ describe('validateTrialSession', () => {
       sessionType: 'Regular',
       startDate: '2019-12-01T00:00:00.000Z',
       term: 'Fall',
+      termYear: '2019',
       trialLocation: 'Birmingham, AL',
     };
 
