@@ -18,7 +18,7 @@ describe('validateTrialSession', () => {
     );
   });
 
-  it('returns the null for valid trial session', () => {
+  it('returns null for a valid trial session', () => {
     const MOCK_TRIAL = {
       maxCases: 100,
       sessionType: 'Regular',
