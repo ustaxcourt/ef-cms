@@ -34,6 +34,7 @@ describe('sanitizePdf', () => {
           }),
           getStorageClient: () => ({
             getObject,
+            putObjectTagging: () => {},
           }),
 
           logger: {
