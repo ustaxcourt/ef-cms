@@ -1,6 +1,6 @@
+import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { HeaderDashboardInternal } from '../HeaderDashboardInternal';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { UpcomingTrialSessions } from './UpcomingTrialSessions';
@@ -8,7 +8,7 @@ import React from 'react';
 
 export const TrialSessions = () => (
   <>
-    <HeaderDashboardInternal />
+    <BigHeader text="Trial Sessions" />
     <section className="usa-section grid-container">
       <SuccessNotification />
       <ErrorNotification />
