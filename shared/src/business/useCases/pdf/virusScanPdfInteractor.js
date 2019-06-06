@@ -42,7 +42,7 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
     });
     return 'clean';
   } catch (e) {
-    applicationContext.logger.time(e);
+    applicationContext.logger.time('Virus scanner failed: ', e);
     if (e.code === 1) {
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,
@@ -56,10 +56,8 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
           ],
         },
       });
-      applicationContext.logger.error(e);
       throw new Error('infected');
     } else {
-      applicationContext.logger.error(e);
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,
         Key: documentId,
