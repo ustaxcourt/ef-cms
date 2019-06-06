@@ -20,7 +20,6 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
   const caseDetail = await applicationContext.getUseCases().updateCase({
     applicationContext,
     caseToUpdate,
-    userId: get(state.user.token),
   });
 
   return {
