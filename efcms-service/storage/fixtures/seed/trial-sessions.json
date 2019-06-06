@@ -7,7 +7,9 @@
     "sessionType": "Regular",
     "judge": "Judge Judy",
     "startDate": "2019-11-27T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "10:00",
+    "term": "Fall",
+    "termYear": "2019",
     "swingSession": true,
     "swingSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
     "trialLocation": "Houston, TX"
@@ -20,7 +22,9 @@
     "sessionType": "Special",
     "judge": "Judge Judy",
     "startDate": "2019-11-25T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "15:00",
+    "term": "Fall",
+    "termYear": "2019",
     "swingSession": true,
     "swingSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "trialLocation": "Austin, TX"
@@ -33,7 +37,9 @@
     "sessionType": "Hybrid",
     "judge": "Judge Smith",
     "startDate": "2019-11-25T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "15:00",
+    "term": "Fall",
+    "termYear": "2019",
     "trialLocation": "Seattle, WA"
   },
   {
@@ -44,7 +50,9 @@
     "sessionType": "Regular",
     "judge": "Judge Dredd",
     "startDate": "2019-11-25T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "21:00",
+    "term": "Fall",
+    "termYear": "2019",
     "trialLocation": "Las Vegas, NV"
   },
   {
@@ -55,7 +63,9 @@
     "sessionType": "Small",
     "judge": "Judge Dredd",
     "startDate": "2019-12-02T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "21:00",
+    "term": "Fall",
+    "termYear": "2019",
     "trialLocation": "Kansas City, KS"
   },
   {
@@ -66,7 +76,9 @@
     "sessionType": "Special",
     "judge": "Judge Arnold",
     "startDate": "2019-12-02T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "21:00",
+    "term": "Fall",
+    "termYear": "2019",
     "trialLocation": "Denver, CO"
   },
   {
@@ -77,7 +89,9 @@
     "sessionType": "Regular",
     "judge": "Judge Judy",
     "startDate": "2019-12-02T15:00:00.000Z",
-    "term": "Winter",
+    "startTime": "09:00",
+    "term": "Fall",
+    "termYear": "2019",
     "trialLocation": "Birmingham, AL"
   }
 ]
