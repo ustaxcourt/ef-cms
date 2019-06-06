@@ -17,4 +17,25 @@ describe('validateTrialSession', () => {
       Object.keys(omit(TrialSession.errorToMessageMap, ['postalCode'])),
     );
   });
+
+  it('returns null for a valid trial session', () => {
+    const MOCK_TRIAL = {
+      maxCases: 100,
+      sessionType: 'Regular',
+      startDate: '2019-12-01T00:00:00.000Z',
+      term: 'Fall',
+      trialLocation: 'Birmingham, AL',
+    };
+
+    const errors = validateTrialSession({
+      applicationContext: {
+        getEntityConstructors: () => ({
+          TrialSession,
+        }),
+      },
+      trialSession: { ...MOCK_TRIAL },
+    });
+
+    expect(errors).toEqual(null);
+  });
 });
