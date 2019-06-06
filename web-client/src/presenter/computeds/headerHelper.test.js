@@ -112,6 +112,16 @@ describe('headerHelper', () => {
     });
     expect(result.pageIsMyCases).toBeTruthy();
   });
+  it('should not set pageIsMessages or pageIsDocumentQC to true if currentPage is TrialSessions', async () => {
+    const result = await runCompute(headerHelper, {
+      state: {
+        ...getState('petitionsclerk'),
+        currentPage: 'TrialSessions',
+      },
+    });
+    expect(result.pageIsMyCases).toBeFalsy();
+    expect(result.pageIsDocumentQC).toBeFalsy();
+  });
   it('should know when the page is TrialSessions', async () => {
     const result = await runCompute(headerHelper, {
       state: {
