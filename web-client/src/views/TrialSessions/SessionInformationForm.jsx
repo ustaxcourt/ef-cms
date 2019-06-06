@@ -7,14 +7,15 @@ export const SessionInformationForm = connect(
   {
     form: state.form,
     sessionsByTerm: state.formattedTrialSessions.sessionsByTerm,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateTrialSessionFormDataSequence:
+      sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   ({
     form,
     sessionsByTerm,
-    updateFormValueSequence,
+    updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
   }) => {
@@ -51,7 +52,7 @@ export const SessionInformationForm = connect(
                     min="1"
                     max="12"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -80,7 +81,7 @@ export const SessionInformationForm = connect(
                     min="1"
                     max="31"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -109,7 +110,7 @@ export const SessionInformationForm = connect(
                     min="2019"
                     max="2200"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -127,7 +128,11 @@ export const SessionInformationForm = connect(
             />
           </div>
 
-          <div className="usa-form-group">
+          <div
+            className={`usa-form-group ${
+              validationErrors.startTime ? 'usa-form-group--error' : ''
+            }`}
+          >
             <fieldset className="start-time usa-fieldset margin-bottom-0">
               <legend id="start-time-legend" className="usa-legend">
                 Time <span className="usa-hint">(optional)</span>
@@ -139,13 +144,11 @@ export const SessionInformationForm = connect(
                     id="start-time"
                     aria-label="time"
                     aria-describedby="start-time-legend"
-                    name="startTime"
-                    value={form.startTime}
-                    type="number"
-                    min="1"
-                    max="12"
+                    name="startTimeInput"
+                    value={form.startTimeInput || ''}
+                    type="text"
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -165,7 +168,7 @@ export const SessionInformationForm = connect(
                           value={option}
                           checked={form.startTimeExtension === option}
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateTrialSessionFormDataSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
@@ -183,6 +186,10 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
+            <Text
+              className="usa-error-message"
+              bind="validationErrors.startTime"
+            />
           </div>
 
           <div className="usa-form-group">
@@ -194,7 +201,7 @@ export const SessionInformationForm = connect(
                 className="usa-checkbox__input"
                 checked={form.swingSession || false}
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateTrialSessionFormDataSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
@@ -227,7 +234,7 @@ export const SessionInformationForm = connect(
                   validationErrors.swingSessionId ? 'usa-select--error' : ''
                 }`}
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateTrialSessionFormDataSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -270,7 +277,7 @@ export const SessionInformationForm = connect(
                       value={option}
                       checked={form.sessionType === option}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateTrialSessionFormDataSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -309,7 +316,7 @@ export const SessionInformationForm = connect(
               autoCapitalize="none"
               value={form.maxCases || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });

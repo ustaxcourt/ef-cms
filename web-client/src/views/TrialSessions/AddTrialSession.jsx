@@ -14,13 +14,14 @@ export const AddTrialSession = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
     submitTrialSessionSequence: sequences.submitTrialSessionSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateTrialSessionFormDataSequence:
+      sequences.updateTrialSessionFormDataSequence,
   },
   ({
     form,
     formCancelToggleCancelSequence,
     showModal,
-    updateFormValueSequence,
+    updateTrialSessionFormDataSequence,
     submitTrialSessionSequence,
   }) => {
     return (
@@ -63,7 +64,7 @@ export const AddTrialSession = connect(
                   name="notes"
                   value={form.notes}
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateTrialSessionFormDataSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });

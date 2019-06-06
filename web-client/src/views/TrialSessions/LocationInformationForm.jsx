@@ -7,14 +7,15 @@ export const LocationInformationForm = connect(
   {
     form: state.form,
     trialCitiesHelper: state.trialCitiesHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateTrialSessionFormDataSequence:
+      sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   ({
     form,
     trialCitiesHelper,
-    updateFormValueSequence,
+    updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
   }) => {
@@ -35,7 +36,7 @@ export const LocationInformationForm = connect(
               id="trial-location"
               className="usa-select"
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value || null,
                 });
@@ -76,7 +77,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.courthouseName || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -96,7 +97,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.address1 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -116,7 +117,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.address2 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -138,7 +139,7 @@ export const LocationInformationForm = connect(
                   autoCapitalize="none"
                   value={form.city || ''}
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateTrialSessionFormDataSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -155,7 +156,7 @@ export const LocationInformationForm = connect(
                   name="state"
                   value={form.state || ''}
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateTrialSessionFormDataSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -249,7 +250,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.postalCode || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });

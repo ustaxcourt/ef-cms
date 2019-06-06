@@ -124,6 +124,7 @@ import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSe
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
+import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
@@ -269,6 +270,7 @@ export const presenter = {
     updateSearchTermSequence,
     updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
+    updateTrialSessionFormDataSequence,
     validateCaseAssociationRequestSequence,
     validateCaseDetailSequence,
     validateDocketEntrySequence,
