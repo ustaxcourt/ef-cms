@@ -58,6 +58,10 @@ export const submitDocketEntryAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
+      await applicationContext.getUseCases().virusScanPdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
       await applicationContext.getUseCases().sanitizePdf({
         applicationContext,
         documentId: document.documentId,
