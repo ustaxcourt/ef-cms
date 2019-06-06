@@ -1,7 +1,7 @@
 const { PDFDocumentFactory } = require('pdf-lib');
 
 /**
- * virusScanDocument
+ * validatePdf
  * @param applicationContext
  * @param documentId
  * @returns {Object} errors (null if no errors)

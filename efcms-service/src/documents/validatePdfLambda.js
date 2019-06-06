@@ -14,11 +14,14 @@ exports.handler = event =>
     const applicationContext = createApplicationContext(user);
     applicationContext.logger.info('Event', event);
     try {
-      await applicationContext.getUseCases().validatePdf({
+      const result = await applicationContext.getUseCases().validatePdf({
         applicationContext,
         documentId: (event.pathParameters || event.path).documentId,
       });
       applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Validate PDF Result', result);
+
+      return result;
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
