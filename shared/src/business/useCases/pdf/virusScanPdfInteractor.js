@@ -56,8 +56,10 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
           ],
         },
       });
+      applicationContext.logger.error(e);
       throw new Error('infected');
     } else {
+      applicationContext.logger.error(e);
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,
         Key: documentId,
