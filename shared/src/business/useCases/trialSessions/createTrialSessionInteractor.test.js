@@ -4,8 +4,9 @@ const { User } = require('../../entities/User');
 const MOCK_TRIAL = {
   maxCases: 100,
   sessionType: 'Regular',
-  startDate: '2019-12-01T00:00:00.000Z',
+  startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
+  termYear: '2025',
   trialLocation: 'Birmingham, AL',
 };
 
