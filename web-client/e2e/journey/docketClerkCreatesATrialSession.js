@@ -8,7 +8,9 @@ export default test => {
 
     expect(test.getState('validationErrors')).toEqual({
       maxCases: 'Enter the maximum number of cases allowed for this session.',
+      sessionType: 'Session type is required.',
       startDate: 'Date must be in correct format.',
+      term: 'Term is required.',
       trialLocation: 'Trial Location is required.',
     });
 
@@ -37,10 +39,9 @@ export default test => {
       value: '2025',
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'term',
-      value: 'Fall',
-    });
+    await test.runSequence('validateTrialSessionSequence');
+
+    expect(test.getState('form.term')).toBeDefined();
 
     await test.runSequence('updateFormValueSequence', {
       key: 'trialLocation',

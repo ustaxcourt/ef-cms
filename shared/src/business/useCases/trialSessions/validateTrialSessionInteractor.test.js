@@ -14,7 +14,9 @@ describe('validateTrialSession', () => {
     });
 
     expect(Object.keys(errors)).toEqual(
-      Object.keys(omit(TrialSession.errorToMessageMap, ['postalCode'])),
+      Object.keys(
+        omit(TrialSession.errorToMessageMap, ['postalCode', 'swingSessionId']),
+      ),
     );
   });
 });
