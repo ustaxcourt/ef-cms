@@ -1,10 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { state } from 'cerebral';
 
 const gotoAddTrialSession = [
@@ -13,8 +15,8 @@ const gotoAddTrialSession = [
   clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
-  set(state.form.term, 'Winter'),
-  set(state.form.sessionType, 'Regular'),
+  getTrialSessionsAction,
+  setTrialSessionsAction,
   setCurrentPageAction('AddTrialSession'),
 ];
 

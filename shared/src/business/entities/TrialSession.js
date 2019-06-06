@@ -39,6 +39,7 @@ function TrialSession(rawSession) {
     startTime: rawSession.startTime,
     state: rawSession.state,
     swingSession: rawSession.swingSession,
+    swingSessionId: rawSession.swingSessionId,
     term: rawSession.term,
     trialClerk: rawSession.trialClerk,
     trialLocation: rawSession.trialLocation,
@@ -62,6 +63,7 @@ TrialSession.errorToMessageMap = {
     },
     'Date must be in correct format.',
   ],
+  swingSessionId: 'You must select a swing session.',
   term: 'Term is required.',
   trialLocation: 'Trial Location is required.',
 };
@@ -101,6 +103,14 @@ joiValidationDecorator(
       .required(),
     state: joi.string().optional(),
     swingSession: joi.boolean().optional(),
+    swingSessionId: joi.when('swingSession', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .string()
+        .uuid(uuidVersions)
+        .required(),
+    }),
     term: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
