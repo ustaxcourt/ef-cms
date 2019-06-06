@@ -25,19 +25,52 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
   fs.closeSync(inputPdf.fd);
 
-  let results;
   try {
     const scanResults = await execPromise(`clamscan ${inputPdf.name}`);
     applicationContext.logger.time(scanResults);
-    results = 'clean';
+    applicationContext.getStorageClient().putObjectTagging({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+      Tagging: {
+        TagSet: [
+          {
+            Key: 'virus-scan',
+            Value: 'clean',
+          },
+        ],
+      },
+    });
+    return 'clean';
   } catch (e) {
     applicationContext.logger.time(e);
     if (e.code === 1) {
-      results = 'infected';
+      applicationContext.getStorageClient().putObjectTagging({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: documentId,
+        Tagging: {
+          TagSet: [
+            {
+              Key: 'virus-scan',
+              Value: 'infected',
+            },
+          ],
+        },
+      });
+      throw new Error('infected');
     } else {
-      results = 'error';
+      applicationContext.getStorageClient().putObjectTagging({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: documentId,
+        Tagging: {
+          TagSet: [
+            {
+              Key: 'virus-scan',
+              Value: 'error',
+            },
+          ],
+        },
+      });
+      throw new Error('error scanning PDF');
     }
   }
-
-  return results;
 };
