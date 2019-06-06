@@ -118,6 +118,10 @@ export const createCaseFromPaperAction = async ({
       applicationContext,
       documentId: document.documentId,
     });
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
     await applicationContext.getUseCases().sanitizePdf({
       applicationContext,
       documentId: document.documentId,
