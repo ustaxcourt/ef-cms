@@ -10,8 +10,6 @@ function testAsset(name) {
 }
 
 describe('validatePdf', () => {
-  jest.setTimeout(1200000);
-
   it('validates a clean PDF', async () => {
     const cleanParams = {
       applicationContext: {

@@ -7,7 +7,7 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.virusPdf = ({ documentId, applicationContext }) => {
+exports.validatePdf = ({ documentId, applicationContext }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/validate`,
