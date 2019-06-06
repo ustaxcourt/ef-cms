@@ -658,6 +658,7 @@ functions:
           path: v1/documents/{documentId}/virus-scan
           method: post
           cors: true
+          async: true
 
   getTrialSessions:
     handler: src/handlers.getTrialSessionsLambda
