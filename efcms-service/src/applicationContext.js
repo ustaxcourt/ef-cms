@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection */
+/* eslint-disable security/detect-object-injection, security/detect-child-process */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -10,6 +10,10 @@ const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
+
+const util = require('util');
+const { exec } = require('child_process');
+const execPromise = util.promisify(exec);
 
 const {
   addCoverToPDFDocument,
@@ -427,6 +431,13 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    runVirusScan: async ({filePath}) => {
+      return execPromise(
+        `clamscan ${
+          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
+        } ${filePath}`,
+      );
     },
   };
 };

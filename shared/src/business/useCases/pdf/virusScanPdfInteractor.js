@@ -1,9 +1,5 @@
 const fs = require('fs');
 const tmp = require('tmp');
-const util = require('util');
-const { exec } = require('child_process');
-
-const execPromise = util.promisify(exec);
 
 /**
  * virusScanDocument
@@ -20,14 +16,16 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
       Key: documentId,
     })
     .promise();
+  applicationContext.logger.timeEnd('Fetching S3 File');
 
   const inputPdf = tmp.fileSync();
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
   fs.closeSync(inputPdf.fd);
 
   try {
-    const scanResults = await execPromise(`clamscan ${inputPdf.name}`);
-    applicationContext.logger.time(scanResults);
+    applicationContext.logger.time('Running Clamscan');
+    await applicationContext.runVirusScan({ filePath: inputPdf.name });
+    applicationContext.logger.timeEnd('Running Clamscan');
     applicationContext.getStorageClient().putObjectTagging({
       Bucket: applicationContext.environment.documentsBucketName,
       Key: documentId,
@@ -42,7 +40,7 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
     });
     return 'clean';
   } catch (e) {
-    applicationContext.logger.time('Virus scanner failed: ', e);
+    applicationContext.logger.error(e);
     if (e.code === 1) {
       applicationContext.getStorageClient().putObjectTagging({
         Bucket: applicationContext.environment.documentsBucketName,
