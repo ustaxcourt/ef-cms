@@ -215,9 +215,7 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = `Respondent served ${
-    result.irsDateFormatted
-  }`;
+  result.datePetitionSentToIrsMessage = `Respondent served ${result.irsDateFormatted}`;
 
   result.shouldShowIrsNoticeDate =
     result.hasVerifiedIrsNotice ||
