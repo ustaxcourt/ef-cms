@@ -11,7 +11,7 @@ function testAsset(name) {
 
 describe('validatePdf', () => {
   it('validates a clean PDF', async () => {
-    const cleanParams = {
+    const validParams = {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
@@ -29,12 +29,12 @@ describe('validatePdf', () => {
       },
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
-    const result = await validatePdf(cleanParams);
+    const result = await validatePdf(validParams);
     expect(result).toBe(true);
   });
 
   it('validates an invalid PDF', async () => {
-    const infectedParams = {
+    const invalidParams = {
       applicationContext: {
         environment: { documentsBucketName: 'documents' },
         getStorageClient: () => ({
@@ -53,6 +53,6 @@ describe('validatePdf', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    await expect(validatePdf(infectedParams)).rejects.toThrow();
+    await expect(validatePdf(invalidParams)).rejects.toThrow();
   });
 });
