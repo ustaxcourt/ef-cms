@@ -103,6 +103,7 @@ For ClamAV, MacOS users can do the following:
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
 - `echo 'export CLAMAV_CLAMSCAN_PATH="/usr/local/bin/clamscan"' >> ~/.bash_profile`
 - `source ~/.bash_profile`
+- `freshclam` (installs virus definitions)
 
 Both the web-client and efcms-service share code that exists in the `shared` directory; therefore, before you can run either, you need to run `npm install` inside the `shared` directory.
 
