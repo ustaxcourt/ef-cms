@@ -1,7 +1,7 @@
 import { find, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
-const formatSession = (session, applicationContext) => {
+export const formatSession = (session, applicationContext) => {
   session.startOfWeek = applicationContext
     .getUtilities()
     .prepareDateFromString(session.startDate)
@@ -13,11 +13,11 @@ const formatSession = (session, applicationContext) => {
   return session;
 };
 
-export const formattedTrialSessions = (get, applicationContext) => {
-  const sessionSorter = sessionList => {
-    return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
-  };
+export const sessionSorter = sessionList => {
+  return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
+};
 
+export const formattedTrialSessions = (get, applicationContext) => {
   const sessions = orderBy(get(state.trialSessions), 'startDate');
 
   const formattedSessions = [];
