@@ -34,13 +34,6 @@ export const SessionInformationForm = connect(
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <label
-                    htmlFor="start-date-month"
-                    className="usa-label"
-                    aria-hidden="true"
-                  >
-                    MM
-                  </label>
                   <input
                     className="usa-input usa-input-inline"
                     id="start-date-month"
@@ -51,6 +44,7 @@ export const SessionInformationForm = connect(
                     type="number"
                     min="1"
                     max="12"
+                    placeholder="MM"
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
@@ -63,13 +57,6 @@ export const SessionInformationForm = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <label
-                    htmlFor="start-date-day"
-                    className="usa-label"
-                    aria-hidden="true"
-                  >
-                    DD
-                  </label>
                   <input
                     className="usa-input usa-input-inline"
                     id="start-date-day"
@@ -80,6 +67,7 @@ export const SessionInformationForm = connect(
                     type="number"
                     min="1"
                     max="31"
+                    placeholder="DD"
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
@@ -92,13 +80,6 @@ export const SessionInformationForm = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <label
-                    htmlFor="start-date-year"
-                    className="usa-label"
-                    aria-hidden="true"
-                  >
-                    YYYY
-                  </label>
                   <input
                     className="usa-input usa-input-inline"
                     id="start-date-year"
@@ -109,6 +90,7 @@ export const SessionInformationForm = connect(
                     type="number"
                     min="2019"
                     max="2200"
+                    placeholder="YYYY"
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
@@ -173,6 +155,9 @@ export const SessionInformationForm = connect(
                               value: e.target.value,
                             });
                           }}
+                          onBlur={() => {
+                            validateTrialSessionSequence();
+                          }}
                         />
                         <label
                           htmlFor={`startTimeExtension-${option}`}
@@ -192,68 +177,75 @@ export const SessionInformationForm = connect(
             />
           </div>
 
-          <div className="usa-form-group">
-            <div className="usa-checkbox">
-              <input
-                id="swing-session"
-                type="checkbox"
-                name="swingSession"
-                className="usa-checkbox__input"
-                checked={form.swingSession || false}
-                onChange={e => {
-                  updateTrialSessionFormDataSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                }}
-              />
-              <label htmlFor="swing-session" className="usa-checkbox__label">
-                This is part of a Swing Session
-              </label>
-            </div>
-          </div>
+          {sessionsByTerm.length > 0 && (
+            <>
+              <div className="usa-form-group">
+                <div className="usa-checkbox">
+                  <input
+                    id="swing-session"
+                    type="checkbox"
+                    name="swingSession"
+                    className="usa-checkbox__input"
+                    checked={form.swingSession || false}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
+                  <label
+                    htmlFor="swing-session"
+                    className="usa-checkbox__label"
+                  >
+                    This is part of a Swing Session
+                  </label>
+                </div>
+              </div>
 
-          {form.swingSession && form.term && (
-            <div
-              className={`usa-form-group ${
-                validationErrors.swingSessionId ? 'usa-form-group--error ' : ''
-              }`}
-            >
-              <label
-                htmlFor="swing-session-id"
-                id="swing-session-id-label"
-                className="usa-label"
-              >
-                Which Trial Session is This Associated With?
-              </label>
-              <select
-                name="swingSessionId"
-                id="swing-session-id"
-                aria-describedby="swing-session-id-label"
-                className={`usa-select ${
-                  validationErrors.swingSessionId ? 'usa-select--error' : ''
+              <div
+                className={`usa-form-group ${
+                  validationErrors.swingSessionId
+                    ? 'usa-form-group--error '
+                    : ''
                 }`}
-                onChange={e => {
-                  updateTrialSessionFormDataSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                  validateTrialSessionSequence();
-                }}
-                value={form.swingSessionId || ''}
               >
-                <option value="">- Select -</option>
-                {sessionsByTerm.map((session, idx) => (
-                  <option value={session.trialSessionId} key={idx}>
-                    {session.trialLocation}
-                  </option>
-                ))}
-              </select>
-              <Text
-                className="usa-error-message"
-                bind="validationErrors.swingSessionId"
-              />
-            </div>
+                <label
+                  htmlFor="swing-session-id"
+                  id="swing-session-id-label"
+                  className="usa-label"
+                >
+                  Which Trial Session is This Associated With?
+                </label>
+                <select
+                  name="swingSessionId"
+                  id="swing-session-id"
+                  aria-describedby="swing-session-id-label"
+                  className={`usa-select ${
+                    validationErrors.swingSessionId ? 'usa-select--error' : ''
+                  }`}
+                  onChange={e => {
+                    updateTrialSessionFormDataSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                    validateTrialSessionSequence();
+                  }}
+                  value={form.swingSessionId || ''}
+                >
+                  <option value="">- Select -</option>
+                  {sessionsByTerm.map((session, idx) => (
+                    <option value={session.trialSessionId} key={idx}>
+                      {session.trialLocation}
+                    </option>
+                  ))}
+                </select>
+                <Text
+                  className="usa-error-message"
+                  bind="validationErrors.swingSessionId"
+                />
+              </div>
+            </>
           )}
 
           <div
