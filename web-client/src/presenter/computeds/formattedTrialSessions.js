@@ -15,11 +15,7 @@ const formatSession = (session, applicationContext) => {
 
 export const formattedTrialSessions = (get, applicationContext) => {
   const sessionSorter = sessionList => {
-    return orderBy(
-      sessionList,
-      ['swingSession', 'startDate', 'trialLocation'],
-      ['desc', 'asc', 'asc'],
-    );
+    return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
   };
 
   const sessions = orderBy(get(state.trialSessions), 'startDate');

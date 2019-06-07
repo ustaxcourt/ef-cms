@@ -34,13 +34,13 @@ export const validateTrialSessionAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
-      'term',
       'startDate',
       'startTime',
       'swingSessionId',
       'sessionType',
       'maxCases',
       'trialLocation',
+      'postalCode',
     ];
     return path.error({
       alertError: {
