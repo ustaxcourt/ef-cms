@@ -21,6 +21,6 @@ exports.validatePdf = async ({ applicationContext, documentId }) => {
     return true;
   } catch (e) {
     applicationContext.logger.time('Invalid PDF: ', documentId);
-    return false;
+    throw new Error('Invalid PDF');
   }
 };
