@@ -11,39 +11,41 @@ export default test => {
       sessionType: 'Session type is required.',
       startDate: 'Date must be in correct format.',
       term: 'Term is required.',
+      termYear: 'Term year is required.',
       trialLocation: 'Trial Location is required.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'maxCases',
       value: 100,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'sessionType',
       value: 'Regular',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
       value: '12',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'day',
       value: '12',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'year',
       value: '2025',
     });
 
     await test.runSequence('validateTrialSessionSequence');
 
-    expect(test.getState('form.term')).toBeDefined();
+    expect(test.getState('form.term')).toEqual('Fall');
+    expect(test.getState('form.termYear')).toEqual('2025');
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: 'Birmingham, AL',
     });
