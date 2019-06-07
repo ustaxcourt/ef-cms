@@ -13,7 +13,6 @@ RUN yum update -y
 RUN amazon-linux-extras install epel -y
 RUN yum install -y cpio yum-utils tar.x86_64 gzip
 
-# extract binaries for clamav, json-c, pcre
 RUN yumdownloader -x \*i686 --archlist=x86_64 clamav
 RUN rpm2cpio clamav-0*.rpm | cpio -vimd
 
@@ -49,7 +48,6 @@ RUN chmod -R 777 var/lib/clamav
 COPY ./freshclam.conf .
 
 RUN cp usr/bin/clamscan usr/bin/freshclam bin/.
-RUN readlink -f usr/lib64/liblzma.so
 RUN cp usr/lib64/* lib/.
 RUN cp freshclam.conf bin/freshclam.conf
 

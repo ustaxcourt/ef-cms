@@ -8,3 +8,6 @@ storage/s3/*
 dist/
 .cache/
 runtimes/clamav/var/
+runtimes/ghostscript/share/
+runtimes/ghostscript/fonts/
+
