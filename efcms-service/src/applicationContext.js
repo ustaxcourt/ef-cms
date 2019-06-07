@@ -212,6 +212,9 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setTrialSessionAsSwingSession,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
+const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -401,6 +404,7 @@ module.exports = (appContextUser = {}) => {
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setTrialSessionAsSwingSession,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,

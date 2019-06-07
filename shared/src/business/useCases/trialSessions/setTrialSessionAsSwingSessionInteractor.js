@@ -17,7 +17,6 @@ exports.setTrialSessionAsSwingSession = async ({
   trialSessionId,
   swingSessionId,
 }) => {
-  console.log('in here doing a thing!');
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, TRIAL_SESSIONS)) {

@@ -48,6 +48,8 @@ module.exports = {
   sanitizePdfLambda: require('./documents/sanitizePdfLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
+  setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
+    .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
     .handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
