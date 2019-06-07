@@ -98,6 +98,7 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
+    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
 
   iamRoleStatements:
     - Effect: 'Allow'

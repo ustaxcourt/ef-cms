@@ -1,19 +1,10 @@
-FROM amazonlinux:2
+FROM lambci/lambda:nodejs10.x
 
-WORKDIR /home/app
+WORKDIR /var/tasks
 
-RUN yum install shadow-utils.x86_64 -y
+COPY ./bin /opt/bin
+COPY ./lib /opt/lib
+COPY ./var /opt/var
+COPY ./test.pdf /var/tasks
 
-RUN groupadd clamav
-RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamav
-RUN useradd -g clamav -s /bin/false -c "Clam Antivirus" clamupdate
-
-RUN mkdir /var/lib/clamav
-RUN chmod -R 777 /var/lib/clamav
-
-COPY . /home/app
-
-RUN cp freshclam.conf /etc/freshclam.conf
-
-RUN LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/app/lib ./bin/freshclam
-RUN LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/app/lib ./bin/clamscan test2.pdf
+RUN clamscan -d /opt/var/lib/clamav test.pdf
