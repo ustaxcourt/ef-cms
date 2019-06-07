@@ -76,7 +76,7 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: docker build -t efcms -f Dockerfile .
+          command: cd efcms-service/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
