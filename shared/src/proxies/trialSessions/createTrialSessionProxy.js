@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * createTrialSessionProxy
+ * createTrialSession
  *
  * @param trialSession
  * @param applicationContext
