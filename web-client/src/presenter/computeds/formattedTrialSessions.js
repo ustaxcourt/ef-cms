@@ -14,11 +14,15 @@ const formatSession = (session, applicationContext) => {
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
-  const sessions = orderBy(
-    get(state.trialSessions),
-    ['swingSession', 'startDate'],
-    ['desc', 'asc'],
-  );
+  const sessionSorter = sessionList => {
+    return orderBy(
+      sessionList,
+      ['swingSession', 'startDate', 'trialLocation'],
+      ['desc', 'asc', 'asc'],
+    );
+  };
+
+  const sessions = orderBy(get(state.trialSessions), 'startDate');
 
   const formattedSessions = [];
   sessions.forEach(session => {
@@ -33,6 +37,9 @@ export const formattedTrialSessions = (get, applicationContext) => {
     }
     match.sessions.push(session);
   });
+  formattedSessions.forEach(
+    week => (week.sessions = sessionSorter(week.sessions)),
+  );
 
   const selectedTerm = get(state.form.term);
   let sessionsByTerm = [];
