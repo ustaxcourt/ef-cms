@@ -36,10 +36,12 @@ function TrialSession(rawSession) {
     postalCode: rawSession.postalCode,
     sessionType: rawSession.sessionType,
     startDate: rawSession.startDate,
-    startTime: rawSession.startTime,
+    startTime: rawSession.startTime || '10:00',
     state: rawSession.state,
     swingSession: rawSession.swingSession,
+    swingSessionId: rawSession.swingSessionId,
     term: rawSession.term,
+    termYear: rawSession.termYear,
     trialClerk: rawSession.trialClerk,
     trialLocation: rawSession.trialLocation,
     trialSessionId: rawSession.trialSessionId || uuid.v4(),
@@ -62,7 +64,10 @@ TrialSession.errorToMessageMap = {
     },
     'Date must be in correct format.',
   ],
+  startTime: 'Start time value provided is invalid.',
+  swingSessionId: 'You must select a swing session.',
   term: 'Term is required.',
+  termYear: 'Term year is required.',
   trialLocation: 'Trial Location is required.',
 };
 
@@ -99,9 +104,19 @@ joiValidationDecorator(
       .iso()
       .min('now')
       .required(),
+    startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
     state: joi.string().optional(),
     swingSession: joi.boolean().optional(),
+    swingSessionId: joi.when('swingSession', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .string()
+        .uuid(uuidVersions)
+        .required(),
+    }),
     term: joi.string().required(),
+    termYear: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
     trialSessionId: joi

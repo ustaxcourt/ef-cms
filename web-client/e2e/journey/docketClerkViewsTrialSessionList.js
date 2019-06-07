@@ -14,6 +14,6 @@ export default test => {
     const formatted = runCompute(formattedTrialSessions, {
       state: test.getState(),
     });
-    expect(formatted.length).toBeGreaterThan(0);
+    expect(formatted.formattedSessions.length).toBeGreaterThan(0);
   });
 };

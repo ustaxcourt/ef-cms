@@ -4,8 +4,9 @@ const { TrialSession } = require('./TrialSession');
 const VALID_TRIAL_SESSION = {
   maxCases: 100,
   sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
+  startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',
+  termYear: '2025',
   trialLocation: 'Birmingham, AL',
 };
 
