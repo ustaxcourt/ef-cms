@@ -2,8 +2,8 @@ import { sequences, state } from 'cerebral';
 
 import { Contacts } from '../StartCase/Contacts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import { connect } from '@cerebral/react';
+import React from 'react';
 
 export const PartyInformation = connect(
   {
@@ -29,9 +29,12 @@ export const PartyInformation = connect(
     return (
       <div className="blue-container document-detail-one-third">
         <div className="subsection">
-          <div className="ustc-form-group">
-            <label htmlFor="case-caption">Case Caption</label>
+          <div className="usa-form-group">
+            <label htmlFor="case-caption" className="usa-label">
+              Case Caption
+            </label>
             <textarea
+              className="usa-textarea"
               id="case-caption"
               name="caseCaption"
               value={caseDetail.caseCaption}
@@ -45,13 +48,18 @@ export const PartyInformation = connect(
                 autoSaveCaseSequence();
               }}
             />
-            {constants.CASE_CAPTION_POSTFIX}
+            <span className="display-inline-block margin-top-1">
+              {constants.CASE_CAPTION_POSTFIX}
+            </span>
           </div>
         </div>
-        <div className="subsection">
-          <div className="ustc-form-group">
-            <label htmlFor="party-type">Party Type</label>
+        <div className="subsection party-type">
+          <div className="usa-form-group">
+            <label htmlFor="party-type" className="usa-label">
+              Party Type
+            </label>
             <select
+              className="usa-select"
               id="party-type"
               name="partyType"
               value={caseDetail.partyType}
@@ -77,8 +85,10 @@ export const PartyInformation = connect(
         </div>
         {caseDetailEditHelper.showOwnershipDisclosureStatement && (
           <div className="subsection">
-            <div className="ustc-form-group">
-              <label htmlFor="ods-link">Ownership Disclosure Statement</label>
+            <div className="usa-form-group">
+              <label htmlFor="ods-link" className="usa-label">
+                Ownership Disclosure Statement
+              </label>
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
                   href={`${baseUrl}/documents/${
@@ -93,10 +103,11 @@ export const PartyInformation = connect(
                 </a>
               )}
               {!caseDetailEditHelper.ownershipDisclosureStatementDocumentId &&
-                'No file uploaded.'}
+                'No file uploaded'}
               <div className="order-checkbox">
                 <input
                   id="order-for-ods"
+                  className="usa-checkbox__input"
                   type="checkbox"
                   name="orderForOds"
                   checked={caseDetail.orderForOds}
@@ -108,25 +119,28 @@ export const PartyInformation = connect(
                     autoSaveCaseSequence();
                   }}
                 />
-                <label htmlFor="order-for-ods">
+                <label htmlFor="order-for-ods" className="usa-checkbox__label">
                   Order for Ownership Disclosure Statement
                 </label>
               </div>
             </div>
           </div>
         )}
-        <div className="subsection">
-          <Contacts
-            parentView="CaseDetail"
-            bind="caseDetail"
-            emailBind="caseDetail.contactPrimary"
-            onChange="updateCaseValueSequence"
-            onBlur="autoSaveCaseSequence"
-            contactsHelper="caseDetailEditContactsHelper"
-            showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
-            showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
-          />
-        </div>
+        {(caseDetailEditHelper.showPrimaryContact ||
+          caseDetailEditHelper.showSecondaryContact) && (
+          <div className="subsection contacts">
+            <Contacts
+              parentView="CaseDetail"
+              bind="caseDetail"
+              emailBind="caseDetail.contactPrimary"
+              onChange="updateCaseValueSequence"
+              onBlur="autoSaveCaseSequence"
+              contactsHelper="caseDetailEditContactsHelper"
+              showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
+              showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
+            />
+          </div>
+        )}
       </div>
     );
   },

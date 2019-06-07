@@ -2,7 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { replaceBracketed } = require('../../utilities/getDocumentTitle');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
  *
@@ -11,7 +11,13 @@ const { replaceBracketed } = require('../../utilities/getDocumentTitle');
  * @constructor
  */
 function ExternalDocumentNonStandardI(rawProps) {
-  Object.assign(this, rawProps);
+  Object.assign(this, {
+    category: rawProps.category,
+    documentTitle: rawProps.documentTitle,
+    documentType: rawProps.documentType,
+    freeText: rawProps.freeText,
+    ordinalValue: rawProps.ordinalValue,
+  });
 }
 
 ExternalDocumentNonStandardI.prototype.getDocumentTitle = function() {

@@ -28,7 +28,8 @@
     "include-warnings": true,
     "standard": "WCAG2AA",
     "timeout": 30000,
-    "wait": 2000
+    "wait": 2000,
+    "concurrency": 5
   },
   "urls": [
     "http://localhost:1234/",
@@ -419,12 +420,12 @@
       "notes": "checks a11y of section queue tab panel, may become brittle if element IDs change",
       "url": "http://localhost:1234/mock-login?token=docketclerk&path=/&info=section-queue-tab",
       "actions": [
-        "wait for #tab-work-queue to be visible",
-        "click element #tab-work-queue",
+        "wait for .button-switch-box to be visible",
+        "click element .button-switch-box",
         "wait for #section-work-queue to be visible",
         "wait for #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2 to be visible",
         "click element #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
-        "wait for td.action-bar to be visible"
+        "wait for .action-section to be visible"
       ]
     },
     "http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19",

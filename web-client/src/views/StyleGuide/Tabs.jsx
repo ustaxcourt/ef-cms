@@ -2,7 +2,7 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import React from 'react';
 
 export const TabsSection = () => (
-  <section className="usa-section usa-grid">
+  <section className="usa-section grid-container">
     <h1>Tabs</h1>
     <hr />
 

@@ -26,18 +26,22 @@ export const SecondaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2>Add Entry for {form.secondaryDocument.documentType}</h2>
+        <h2 className="margin-top-4">
+          Add Entry for {form.secondaryDocument.documentType}
+        </h2>
         <div className="blue-container">
           <div
-            className={`ustc-form-group ${
-              validationErrors.secondaryDocumentFile ? 'usa-input-error' : ''
+            className={`usa-form-group ${
+              validationErrors.secondaryDocumentFile
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <label
               htmlFor="secondary-document"
               id="secondary-document-label"
               className={
-                'ustc-upload with-hint' +
+                'usa-label ustc-upload with-hint ' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
@@ -48,7 +52,7 @@ export const SecondaryDocumentForm = connect(
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
-            <span className="usa-form-hint">
+            <span className="usa-hint">
               File must be in PDF format (.pdf). Max file size{' '}
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
@@ -60,7 +64,7 @@ export const SecondaryDocumentForm = connect(
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.secondaryDocumentFile"
             />
           </div>
@@ -76,14 +80,16 @@ export const SecondaryDocumentForm = connect(
             />
           )}
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="secondary-additional-info"
               id="secondary-additional-info-label"
             >
               Additional Info 1
             </label>
             <input
+              className="usa-input"
               id="secondary-additional-info"
               type="text"
               aria-describedby="secondary-additional-info-label"
@@ -101,33 +107,41 @@ export const SecondaryDocumentForm = connect(
               }}
             />
           </div>
-          <div className="ustc-form-group add-to-coversheet-checkbox">
-            <input
-              id="secondary-add-to-coversheet"
-              type="checkbox"
-              name="secondaryDocument.addToCoversheet"
-              checked={form.secondaryDocument.addToCoversheet}
-              onChange={e => {
-                updateDocketEntryFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                validateDocketEntrySequence();
-              }}
-            />
-            <label htmlFor="secondary-add-to-coversheet">
-              Add to Cover Sheet
-            </label>
+          <div className="usa-form-group">
+            <div className="usa-checkbox">
+              <input
+                id="secondary-add-to-coversheet"
+                className="usa-checkbox__input"
+                type="checkbox"
+                name="secondaryDocument.addToCoversheet"
+                checked={form.secondaryDocument.addToCoversheet}
+                onChange={e => {
+                  updateDocketEntryFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  validateDocketEntrySequence();
+                }}
+              />
+              <label
+                htmlFor="secondary-add-to-coversheet"
+                className="usa-checkbox__label"
+              >
+                Add to Cover Sheet
+              </label>
+            </div>
           </div>
 
-          <div className="ustc-form-group">
+          <div className="usa-form-group margin-bottom-0">
             <label
               htmlFor="secondary-additional-info2"
               id="secondary-additional-info2-label"
+              className="usa-label"
             >
               Additional Info 2
             </label>
             <input
+              className="usa-input"
               id="secondary-additional-info2"
               type="text"
               aria-describedby="secondary-additional-info2-label"

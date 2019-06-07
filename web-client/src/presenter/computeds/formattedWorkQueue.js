@@ -1,42 +1,49 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
-import moment from 'moment';
 
-const DATE_FORMAT_LONG = 'MM/DD/YYYY hh:mm a';
-const DATE_TODAY_TIME = 'LT';
-const DATE_MMDDYYYY = 'L';
-
-const formatDateIfToday = date => {
-  const now = moment();
-  const then = moment(date).local();
+const formatDateIfToday = (date, applicationContext) => {
+  const now = applicationContext
+    .getUtilities()
+    .formatDateString(undefined, 'MMDDYY');
+  const then = applicationContext
+    .getUtilities()
+    .formatDateString(date, 'MMDDYY');
   let formattedDate;
-  if (now.format(DATE_MMDDYYYY) == then.format(DATE_MMDDYYYY)) {
-    formattedDate = then.format(DATE_TODAY_TIME);
+  if (now == then) {
+    formattedDate = applicationContext
+      .getUtilities()
+      .formatDateString(date, 'TIME');
   } else {
-    formattedDate = then.format(DATE_MMDDYYYY);
+    formattedDate = then;
   }
   return formattedDate;
 };
 
-export const formatWorkItem = (workItem, selectedWorkItems = []) => {
+export const formatWorkItem = (
+  applicationContext,
+  workItem,
+  selectedWorkItems = [],
+) => {
   const result = _.cloneDeep(workItem);
-  result.createdAtFormatted = moment
-    .utc(result.createdAt)
-    .format(DATE_MMDDYYYY);
+
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.createdAt, 'MMDDYY');
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
-    message.createdAtFormatted = formatDateIfToday(message.createdAt);
+    message.createdAtFormatted = formatDateIfToday(
+      message.createdAt,
+      applicationContext,
+    );
     message.to = message.to || 'Unassigned';
-    message.createdAtTimeFormatted = moment
-      .utc(message.createdAt)
-      .local()
-      .format(DATE_FORMAT_LONG);
+    message.createdAtTimeFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(message.createdAt, 'DATE_TIME');
   });
   result.sentBySection = _.capitalize(result.sentBySection);
-  result.completedAtFormatted = moment
-    .utc(result.completedAt)
-    .local()
-    .format(DATE_FORMAT_LONG);
+  result.completedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.completedAt, 'DATE_TIME');
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showUnreadIndicators = !result.isRead;
@@ -55,7 +62,7 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
       result.showRecalledStatusIcon = true;
       result.showUnreadStatusIcon = false;
       break;
-    case 'General Docket':
+    case 'General Docket - Not at Issue':
     case 'New':
     default:
       result.showBatchedStatusIcon = false;
@@ -71,19 +78,22 @@ export const formatWorkItem = (workItem, selectedWorkItems = []) => {
   );
 
   result.currentMessage = result.messages[0];
-  result.sentDateFormatted = formatDateIfToday(result.currentMessage.createdAt);
+  result.sentDateFormatted = formatDateIfToday(
+    result.currentMessage.createdAt,
+    applicationContext,
+  );
   result.historyMessages = result.messages.slice(1);
 
   return result;
 };
 
-export const formattedWorkQueue = get => {
+export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
   const box = get(state.workQueueToDisplay.box);
   const selectedWorkItems = get(state.selectedWorkItems);
   let workQueue = workItems
     .filter(items => (box === 'inbox' ? !items.completedAt : true))
-    .map(items => formatWorkItem(items, selectedWorkItems));
+    .map(items => formatWorkItem(applicationContext, items, selectedWorkItems));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
 

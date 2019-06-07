@@ -1,26 +1,26 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
     documentHelper: state.documentHelper,
-    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
     workQueue: state.formattedWorkQueue,
   },
-  ({ setFocusedWorkItem, workQueue, documentHelper }) => {
+  ({ workQueue, documentHelper }) => {
     return (
       <React.Fragment>
         <table
-          className="work-queue subsection"
+          className="usa-table work-queue subsection"
           id="my-work-queue"
           aria-describedby="tab-my-queue"
         >
           <thead>
             <tr>
-              <th aria-hidden="true">&nbsp;</th>
-              <th aria-label="Docket Number">Docket</th>
+              <th aria-label="Docket Number" colSpan="2">
+                Docket
+              </th>
               <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
@@ -30,27 +30,25 @@ export const IndividualWorkQueueInbox = connect(
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
-            <tbody
-              key={idx}
-              onClick={() =>
-                setFocusedWorkItem({
-                  queueType: 'workQueue',
-                  uiKey: item.uiKey,
-                })
-              }
-            >
+            <tbody key={idx}>
               <tr>
                 <td className="focus-toggle">
                   <button
-                    className="focus-button"
+                    className="focus-button usa-button usa-button--unstyled"
                     aria-label="Expand message detail"
                     aria-expanded={item.isFocused}
                     aria-controls={`detail-${item.workItemId}`}
-                  />
+                  />{' '}
                 </td>
-                <td>{item.docketNumberWithSuffix}</td>
-                <td>{item.currentMessage.createdAtFormatted}</td>
-                <td className="has-icon">
+                <td className="message-queue-row">
+                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
+                </td>
+                <td className="message-queue-row">
+                  <span className="no-wrap">
+                    {item.currentMessage.createdAtFormatted}
+                  </span>
+                </td>
+                <td className="message-queue-row has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
@@ -79,48 +77,37 @@ export const IndividualWorkQueueInbox = connect(
                     />
                   )}
                 </td>
-                <td>
-                  <a
-                    onClick={e => {
-                      e.stopPropagation();
-                    }}
-                    href={documentHelper({
-                      docketNumber: item.docketNumber,
-                      documentId: item.document.documentId,
-                      messageId: item.currentMessage.messageId,
-                    })}
-                    className={
-                      item.isRead ? 'case-link' : 'link case-link-bold'
-                    }
-                  >
-                    {item.document.documentType}
-                  </a>
-                </td>
-                <td>{item.caseStatus}</td>
-                <td className="from">{item.currentMessage.from}</td>
-                <td>{item.sentBySection}</td>
-              </tr>
-              {item.isFocused && (
-                <tr className="queue-message">
-                  <td className="focus-toggle">
-                    <button
-                      className="focus-button"
-                      tabIndex="-1"
-                      aria-disabled="true"
-                    />
-                  </td>
-                  <td colSpan="3" aria-hidden="true" />
-                  <td
-                    colSpan="5"
-                    className="message-detail"
-                    aria-label="Message detail"
-                    aria-live="polite"
+                <td className="message-queue-row message-queue-document">
+                  <div className="message-document-title">
+                    <a
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                      href={documentHelper({
+                        docketNumber: item.docketNumber,
+                        documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
+                      })}
+                      className={
+                        item.isRead ? 'case-link' : 'link case-link-bold'
+                      }
+                    >
+                      {item.document.documentType}
+                    </a>
+                  </div>
+                  <div
                     id={`detail-${item.workItemId}`}
+                    className="message-document-detail"
                   >
                     {item.currentMessage.message}
-                  </td>
-                </tr>
-              )}
+                  </div>
+                </td>
+                <td className="message-queue-row">{item.caseStatus}</td>
+                <td className="message-queue-row from">
+                  {item.currentMessage.from}
+                </td>
+                <td className="message-queue-row">{item.sentBySection}</td>
+              </tr>
             </tbody>
           ))}
         </table>
