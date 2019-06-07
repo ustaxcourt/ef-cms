@@ -93,7 +93,7 @@
     "node-sass": "^4.12.0",
     "pa11y-ci": "^2.3.0",
     "parcel-bundler": "^1.12.3",
-    "prettier": "^1.18.1",
+    "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
     "qs": "^6.7.0",
@@ -108,10 +108,13 @@
     "riot": "^3.13.2",
     "riot-route": "^3.1.4",
     "sinon": "^7.3.2",
-    "stylelint": "^10.0.1",
+    "stylelint": "^10.1.0",
     "stylelint-config-idiomatic-order": "^7.0.0",
     "stylelint-config-standard": "^18.3.0",
     "uswds": "^2.0.2",
     "wicg-inert": "^2.1.0"
+  },
+  "devDependencies": {
+    "sass": "^1.21.0"
   }
 }
