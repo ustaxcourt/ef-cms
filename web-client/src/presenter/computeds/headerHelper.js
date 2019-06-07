@@ -17,9 +17,13 @@ export const headerHelper = get => {
 
   return {
     pageIsDocumentQC:
+      currentPage &&
+      currentPage.includes('Dashboard') &&
       !workQueueIsInternal &&
       (!currentPage || !currentPage.includes('TrialSessions')),
     pageIsMessages:
+      currentPage &&
+      currentPage.includes('Dashboard') &&
       workQueueIsInternal &&
       (!currentPage || !currentPage.includes('TrialSessions')),
     pageIsMyCases:
