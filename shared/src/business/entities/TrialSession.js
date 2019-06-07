@@ -130,4 +130,16 @@ joiValidationDecorator(
   TrialSession.errorToMessageMap,
 );
 
-module.exports = { TrialSession };
+/**
+ *
+ * @param {string} swingSessionId
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
+  this.swingSessionId = swingSessionId;
+  this.swingSession = true;
+
+  return this;
+};
+
+exports.TrialSession = TrialSession;
