@@ -20,7 +20,7 @@ const formatDateIfToday = (date, applicationContext) => {
 };
 
 export const formatWorkItem = (
-  workItem,
+  workItem = {},
   selectedWorkItems = [],
   applicationContext,
 ) => {
@@ -108,7 +108,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
     )
     .filter(item => item.isInternal === internal)
-    .map(items => formatWorkItem(items, selectedWorkItems, applicationContext));
+    .map(item => formatWorkItem(item, selectedWorkItems, applicationContext));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
 

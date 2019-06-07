@@ -1,7 +1,7 @@
 const { get } = require('../requests');
 
 /**
- * getTrialSessionsProxy
+ * getTrialSessions
  *
  * @param applicationContext
  * @returns {Promise<*>}

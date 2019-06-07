@@ -7,7 +7,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getTrialSessions
- * @param userId
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
