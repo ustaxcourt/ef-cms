@@ -4,7 +4,7 @@ exports.updateTrialSession = async ({
   trialSessionToUpdate,
   applicationContext,
 }) => {
-  await client.put({
+  return await client.put({
     Item: {
       pk: `trial-session-${trialSessionToUpdate.trialSessionId}`,
       sk: `trial-session-${trialSessionToUpdate.trialSessionId}`,
