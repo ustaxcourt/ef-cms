@@ -652,6 +652,14 @@ functions:
           method: post
           cors: true
 
+  validate:
+    handler: src/handlers.validatePdfLambda
+    events:
+      - http:
+          path: v1/documents/{documentId}/validate
+          method: post
+          cors: true
+
   getTrialSessions:
     handler: src/handlers.getTrialSessionsLambda
     events:
