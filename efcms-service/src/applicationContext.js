@@ -137,6 +137,9 @@ const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
+  getTrialSessionById,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
+const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
 const {
@@ -213,6 +216,9 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setTrialSessionAsSwingSession,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
+const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -233,6 +239,9 @@ const {
 const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
+const {
+  updateTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
@@ -333,6 +342,7 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getTrialSessionById,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
@@ -348,6 +358,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateDocumentProcessingStatus,
+        updateTrialSession,
         updateWorkItem,
         verifyCaseForUser,
         verifyPendingCaseForUser,
@@ -400,6 +411,7 @@ module.exports = (appContextUser = {}) => {
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setTrialSessionAsSwingSession,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,

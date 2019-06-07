@@ -1,4 +1,5 @@
 const { query } = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getTrialSessions = async ({ applicationContext }) => {
   return await query({
@@ -11,5 +12,5 @@ exports.getTrialSessions = async ({ applicationContext }) => {
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
-  });
+  }).then(stripInternalKeys);
 };
