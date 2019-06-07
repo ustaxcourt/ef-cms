@@ -233,6 +233,9 @@ const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
+  validatePdf,
+} = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
+const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
@@ -390,15 +393,18 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
-        sanitizePdf: args => process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
+        sanitizePdf: args =>
+          process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
+        validatePdf,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
-        virusScanPdf: args => process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
+        virusScanPdf: args =>
+          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
       };
     },
     irsGateway,
