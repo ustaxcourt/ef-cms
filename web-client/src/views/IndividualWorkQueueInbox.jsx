@@ -88,7 +88,9 @@ export const IndividualWorkQueueInbox = connect(
                       href={documentHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
+                        messageId: workQueueHelper.linkToDocumentMessages
+                          ? item.currentMessage.messageId
+                          : null,
                       })}
                       className={
                         item.isRead ? 'case-link' : 'link case-link-bold'
