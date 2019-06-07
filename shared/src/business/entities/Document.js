@@ -185,9 +185,7 @@ Document.prototype.generateFiledBy = function(caseDetail) {
       caseDetail.contactSecondary
     ) {
       filedByArray.push(
-        `Petrs. ${caseDetail.contactPrimary.name} & ${
-          caseDetail.contactSecondary.name
-        }`,
+        `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
       );
     }
 
