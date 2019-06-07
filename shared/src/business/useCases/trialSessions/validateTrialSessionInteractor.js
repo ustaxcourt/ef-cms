@@ -2,7 +2,7 @@
  * validateTrialSession
  * @param applicationContext
  * @param trialSession
- * @returns {object}
+ * @returns {Object}
  */
 exports.validateTrialSession = ({ trialSession, applicationContext }) => {
   const errors = new (applicationContext.getEntityConstructors()).TrialSession(

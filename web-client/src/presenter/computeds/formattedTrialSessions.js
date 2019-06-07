@@ -7,7 +7,7 @@ const formatSession = (session, applicationContext) => {
     .prepareDateFromString(session.startDate)
     .startOf('isoWeek')
     .format('MMMM D, YYYY');
-  session.startDate = applicationContext
+  session.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(session.startDate, 'MMDDYY');
   return session;
@@ -16,8 +16,8 @@ const formatSession = (session, applicationContext) => {
 export const formattedTrialSessions = (get, applicationContext) => {
   const sessions = orderBy(
     get(state.trialSessions),
-    ['startDate', 'swingSession'],
-    ['asc', 'desc'],
+    ['swingSession', 'startDate'],
+    ['desc', 'asc'],
   );
 
   const formattedSessions = [];
@@ -33,5 +33,15 @@ export const formattedTrialSessions = (get, applicationContext) => {
     }
     match.sessions.push(session);
   });
-  return formattedSessions;
+
+  const selectedTerm = get(state.form.term);
+  let sessionsByTerm = [];
+  if (selectedTerm) {
+    sessionsByTerm = orderBy(
+      sessions.filter(session => session.term === selectedTerm),
+      'trialLocation',
+    );
+  }
+
+  return { formattedSessions, sessionsByTerm };
 };

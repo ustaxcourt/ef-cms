@@ -5,7 +5,7 @@ import React from 'react';
 
 export const UpcomingTrialSessions = connect(
   {
-    formattedTrialSessions: state.formattedTrialSessions,
+    formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
   },
   ({ formattedTrialSessions }) => {
     return (
@@ -39,7 +39,7 @@ export const UpcomingTrialSessions = connect(
               {trialDate.sessions.map((item, idx) => (
                 <tbody key={idx}>
                   <tr className="trial-sessions-row">
-                    <td>{item.startDate}</td>
+                    <td>{item.formattedStartDate}</td>
                     <td>{item.sessionType}</td>
                     <td>
                       {item.swingSession && (

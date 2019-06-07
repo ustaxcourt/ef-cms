@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
 import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
@@ -19,6 +20,7 @@ export const submitTrialSessionSequence = [
   clearAlertsAction,
   startShowValidationAction,
   computeFormDateAction,
+  computeTrialSessionFormDataAction,
   validateTrialSessionAction,
   {
     error: [
