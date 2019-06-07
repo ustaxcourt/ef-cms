@@ -38,9 +38,7 @@ export const CaseDetail = connect(
                 {caseHelper.showRequestAccessToCaseButton && (
                   <a
                     className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${
-                      caseDetail.docketNumber
-                    }/request-access`}
+                    href={`/case-detail/${caseDetail.docketNumber}/request-access`}
                     id="button-request-access"
                   >
                     Request Access to Case
