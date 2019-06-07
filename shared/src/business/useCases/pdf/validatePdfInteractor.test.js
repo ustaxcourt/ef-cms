@@ -53,7 +53,6 @@ describe('validatePdf', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    const result = await validatePdf(infectedParams);
-    expect(result).toBe(false);
+    await expect(validatePdf(infectedParams)).rejects.toThrow();
   });
 });
