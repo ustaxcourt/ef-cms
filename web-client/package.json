@@ -6,7 +6,7 @@
   "scripts": {
     "cypress": "cypress run",
     "cypress:open": "CYPRESS=true cypress open --config watchForFileChanges=true",
-    "dev": "GIT_COMMIT=$(git log --pretty=format:'%h' -n 1) USTC_ENV=dev parcel --no-source-maps src/index.pug",
+    "dev": "GIT_COMMIT=$(git log --pretty=format:'%h' -n 1) USTC_ENV=dev parcel --no-hmr --no-source-maps src/index.pug",
     "dev:cypress": "CYPRESS=true npm run dev -- --no-cache --no-hmr --no-source-maps",
     "dev:cognito": "COGNITO=true npm run dev -- --no-cache  --no-hmr --no-source-maps",
     "dev:debug": "USTC_DEBUG=true npm run dev -- --no-source-maps",

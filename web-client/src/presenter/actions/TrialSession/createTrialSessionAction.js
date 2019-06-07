@@ -27,6 +27,8 @@ export const createTrialSessionAction = async ({
 
   let createTrialSessionResult;
 
+  console.log('in here doing a thing!123');
+
   try {
     createTrialSessionResult = await applicationContext
       .getUseCases()
@@ -34,6 +36,16 @@ export const createTrialSessionAction = async ({
         applicationContext,
         trialSession: { ...trialSession, startDate },
       });
+
+    console.log('got results', createTrialSessionResult);
+
+    if (trialSession.swingSession && trialSession.swingSessionId) {
+      await applicationContext.getUseCases().setTrialSessionAsSwingSession({
+        applicationContext,
+        swingSessionId: createTrialSessionResult.trialSessionId,
+        trialSessionId: trialSession.swingSessionId,
+      });
+    }
   } catch (err) {
     return path.error();
   }

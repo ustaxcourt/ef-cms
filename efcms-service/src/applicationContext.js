@@ -133,6 +133,9 @@ const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
 const {
+  getTrialSessionById,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
+const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
 const {
@@ -230,6 +233,9 @@ const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
+  updateTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -326,6 +332,7 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getTrialSessionById,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
@@ -341,6 +348,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateDocumentProcessingStatus,
+        updateTrialSession,
         updateWorkItem,
         verifyCaseForUser,
         verifyPendingCaseForUser,
@@ -390,7 +398,8 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
-        sanitizePdf: args => process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
+        sanitizePdf: args =>
+          process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
@@ -398,7 +407,8 @@ module.exports = (appContextUser = {}) => {
         updateCase: updateCaseUC,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
-        virusScanPdf: args => process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
+        virusScanPdf: args =>
+          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
       };
     },
     irsGateway,
