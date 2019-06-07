@@ -1,4 +1,4 @@
-const { PDFDocumentFactory } = require('pdf-lib');
+const { PDFParser, PDFObjectIndex } = require('pdf-lib');
 
 /**
  * validatePdf
@@ -17,10 +17,11 @@ exports.validatePdf = async ({ applicationContext, documentId }) => {
     .promise();
 
   try {
-    PDFDocumentFactory.load(pdfData);
-    return true;
+    const index = PDFObjectIndex.create();
+    const pdfParser = new PDFParser();
+    return pdfParser.parse(pdfData, index);
   } catch (e) {
-    applicationContext.logger.time('Invalid PDF: ', documentId);
+    applicationContext.logger.error('Invalid PDF: ', documentId);
     throw new Error('Invalid PDF');
   }
 };
