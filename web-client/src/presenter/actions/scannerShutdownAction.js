@@ -14,7 +14,7 @@ export const scannerShutdownAction = ({ store, get }) => {
     const injectedScripts = Array.from(
       document.getElementsByClassName(dynanScriptClass),
     );
-    injectedScripts.map(scriptEl => scriptEl.remove());
+    injectedScripts.forEach(scriptEl => scriptEl.remove());
   }
   store.set(state.scanner.initiateScriptLoaded, false);
   store.set(state.scanner.configScriptLoaded, false);
