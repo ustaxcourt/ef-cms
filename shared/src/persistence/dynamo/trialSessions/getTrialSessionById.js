@@ -1,8 +1,11 @@
 const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
-exports.getTrialSessionById = ({ trialSessionId, applicationContext }) => {
-  return client
+exports.getTrialSessionById = async ({
+  trialSessionId,
+  applicationContext,
+}) => {
+  return await client
     .get({
       Key: {
         pk: `trial-session-${trialSessionId}`,
