@@ -108,6 +108,7 @@ import { validateExternalDocument } from '../../shared/src/business/useCases/ext
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
+import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validateTrialSession } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -192,6 +193,7 @@ const allUseCases = {
   validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
+  validatePdf,
   validatePetition,
   validatePetitionFromPaper,
   validateTrialSession,
