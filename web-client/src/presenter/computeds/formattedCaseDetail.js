@@ -1,20 +1,22 @@
-import { applicationContext } from '../../applicationContext';
 import { state } from 'cerebral';
 import _ from 'lodash';
-import moment from 'moment';
 
-export const formatDocument = document => {
+export const formatDocument = (document, applicationContext) => {
   const result = _.cloneDeep(document);
-  result.createdAtFormatted = moment.utc(result.createdAt).format('L');
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.createdAt, 'MMDDYY');
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
   return result;
 };
 
-export const formatDocketRecord = docketRecord => {
+const formatDocketRecord = (docketRecord, applicationContext) => {
   const result = _.cloneDeep(docketRecord);
-  result.createdAtFormatted = moment.utc(result.filingDate).format('L');
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.filingDate, 'MMDDYY');
 
   return result;
 };
@@ -43,11 +45,16 @@ const processDuplicateError = (caseDetail, caseDetailErrors) => {
   });
 };
 
-const formatYearAmount = (caseDetailErrors, caseDetail) => (
+const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
   yearAmount,
   idx,
 ) => {
-  const formattedYear = moment.utc(yearAmount.year, 'YYYY').format('YYYY');
+  const isoYear = applicationContext
+    .getUtilities()
+    .createISODateString(yearAmount.year, 'YYYY');
+  const formattedYear = yearAmount.year
+    ? applicationContext.getUtilities().formatDateString(isoYear, 'YYYY')
+    : 'Invalid date';
   yearAmount.formattedYear = formattedYear;
   yearAmount.showError = false;
   yearAmount.amountFormatted = yearAmount.amount
@@ -68,7 +75,11 @@ const formatYearAmount = (caseDetailErrors, caseDetail) => (
   };
 };
 
-export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
+export const formatYearAmounts = (
+  applicationContext,
+  caseDetail,
+  caseDetailErrors = {},
+) => {
   caseDetail.canAddYearAmount =
     (caseDetail.yearAmounts || []).filter(yearAmount => {
       return !yearAmount.year;
@@ -78,12 +89,13 @@ export const formatYearAmounts = (caseDetail, caseDetailErrors = {}) => {
     caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
   } else {
     caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
-      formatYearAmount(caseDetailErrors, caseDetail),
+      formatYearAmount(caseDetailErrors, caseDetail, applicationContext),
     );
   }
 };
 
 const formatDocketRecordWithDocument = (
+  applicationContext,
   caseDetail,
   docketRecords = [],
   documents = [],
@@ -102,9 +114,9 @@ const formatDocketRecordWithDocument = (
       document = documentMap[record.documentId];
 
       if (document.certificateOfServiceDate) {
-        document.certificateOfServiceDateFormatted = moment
-          .utc(document.certificateOfServiceDate)
-          .format('L');
+        document.certificateOfServiceDateFormatted = applicationContext
+          .getUtilities()
+          .formatDateString(document.certificateOfServiceDate, 'MMDDYY');
       }
 
       //filings and proceedings string
@@ -129,23 +141,33 @@ const formatDocketRecordWithDocument = (
       record.filingsAndProceedings = filingsAndProceedingsArray
         .filter(item => item !== '')
         .join(' ');
+
+      if (document.additionalInfo) {
+        record.description += ` ${document.additionalInfo}`;
+      }
     }
 
     return { document, index, record };
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors) => {
+const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
   if (_.isEmpty(caseDetail)) {
     return {};
   }
   const result = _.cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
-  if (result.documents) result.documents = result.documents.map(formatDocument);
+  if (result.documents)
+    result.documents = result.documents.map(d =>
+      formatDocument(d, applicationContext),
+    );
   if (result.docketRecord) {
-    result.docketRecord = result.docketRecord.map(formatDocketRecord);
+    result.docketRecord = result.docketRecord.map(d =>
+      formatDocketRecord(d, applicationContext),
+    );
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
+      applicationContext,
       caseDetail,
       result.docketRecord,
       result.documents,
@@ -170,20 +192,27 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     result.practitioner.formattedName = formattedName;
   }
 
-  result.createdAtFormatted = moment.utc(result.createdAt).format('L');
-  result.receivedAtFormatted = moment.utc(result.receivedAt).format('L');
-  result.irsDateFormatted = moment
-    .utc(result.irsSendDate)
-    .local()
-    .format('L LT');
-  result.payGovDateFormatted = moment.utc(result.payGovDate).format('L');
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.createdAt, 'MMDDYY');
+  result.receivedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.receivedAt, 'MMDDYY');
+  result.irsDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.irsSendDate, 'DATE_TIME');
+  result.payGovDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.payGovDate, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
   }${result.docketNumberSuffix || ''}`;
 
   result.irsNoticeDateFormatted = result.irsNoticeDate
-    ? moment.utc(result.irsNoticeDate).format('L')
+    ? applicationContext
+        .getUtilities()
+        .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
   result.datePetitionSentToIrsMessage = `Respondent served ${
@@ -203,7 +232,7 @@ const formatCase = (caseDetail, caseDetailErrors) => {
     caseDetail.caseCaption || '',
   );
 
-  formatYearAmounts(result, caseDetailErrors);
+  formatYearAmounts(applicationContext, result, caseDetailErrors);
 
   return result;
 };
@@ -260,12 +289,12 @@ const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   return result;
 };
 
-export const formattedCases = get => {
+export const formattedCases = (get, applicationContext) => {
   const cases = get(state.cases);
-  return cases.map(formatCase);
+  return cases.map(myCase => formatCase(myCase, undefined, applicationContext));
 };
 
-export const formattedCaseDetail = get => {
+export const formattedCaseDetail = (get, applicationContext) => {
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
   const caseId = get(state.caseDetail.caseId);
@@ -273,7 +302,7 @@ export const formattedCaseDetail = get => {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
   const caseDetailErrors = get(state.caseDetailErrors);
-  const result = formatCase(caseDetail, caseDetailErrors);
+  const result = formatCase(caseDetail, caseDetailErrors, applicationContext);
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,

@@ -13,23 +13,25 @@ export const SecondaryDocumentReadOnly = connect(
     return (
       <React.Fragment>
         <div>
-          <h3 className="header-with-link-button">
-            {form.secondaryDocument.documentTitle}
-          </h3>
-          <button
-            className="link push-right"
-            type="button"
-            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
-          >
-            <FontAwesomeIcon icon="edit" size="sm" />
-            Edit
-          </button>
+          <h2 className="header-with-link-button margin-top-4">
+            {form.secondaryDocument.documentTitle}{' '}
+            <button
+              className="usa-button usa-button--unstyled margin-left-205"
+              type="button"
+              onClick={() =>
+                chooseWizardStepSequence({ value: 'FileDocument' })
+              }
+            >
+              <FontAwesomeIcon icon="edit" size="sm" />
+              Edit
+            </button>
+          </h2>
         </div>
 
         <div className="blue-container">
           {form.secondaryDocumentFile && (
-            <div className="ustc-form-group">
-              <label htmlFor="secondary-filing">
+            <div className="usa-form-group">
+              <label htmlFor="secondary-filing" className="usa-label">
                 {form.secondaryDocument.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -38,8 +40,11 @@ export const SecondaryDocumentReadOnly = connect(
           )}
 
           {form.secondarySupportingDocumentFile && (
-            <div className="ustc-form-group">
-              <label htmlFor="secondary-supporting-documents">
+            <div className="usa-form-group">
+              <label
+                htmlFor="secondary-supporting-documents"
+                className="usa-label"
+              >
                 {form.secondarySupportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -52,8 +57,8 @@ export const SecondaryDocumentReadOnly = connect(
             'No file attached'}
 
           {fileDocumentHelper.showSecondaryFilingNotIncludes && (
-            <div className="ustc-form-group">
-              <label htmlFor="filing-not-includes">
+            <div className="usa-form-group margin-bottom-0">
+              <label htmlFor="filing-not-includes" className="usa-label">
                 Filing Does Not Include
               </label>
               <ul className="ustc-unstyled-list without-margins">

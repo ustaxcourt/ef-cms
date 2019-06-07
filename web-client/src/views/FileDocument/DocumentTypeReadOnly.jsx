@@ -11,20 +11,24 @@ export const DocumentTypeReadOnly = connect(
       sequences.closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence: sequences.editSelectedDocumentSequence,
     form: state.form,
-    selectDocumentSequence: sequences.selectDocumentSequence,
     selectDocumentTypeHelper: state.selectDocumentTypeHelper,
   },
   ({
     closeDocumentCategoryAccordionSequence,
     editSelectedDocumentSequence,
-    selectDocumentSequence,
     form,
     selectDocumentTypeHelper,
   }) => {
     return (
-      <React.Fragment>
-        <div className="blue-container" role="alert" aria-live="polite">
-          <div className="ustc-form-group">
+      <div className="document-type-read-only">
+        <div role="alert" aria-live="polite">
+          <div
+            className={`usa-form-group ${
+              !selectDocumentTypeHelper.primary.showNonstandardForm
+                ? 'margin-bottom-0'
+                : ''
+            }`}
+          >
             <div>
               <Focus className="header-with-link-button">
                 <label htmlFor="category" tabIndex="-1" className="focusable">
@@ -32,7 +36,7 @@ export const DocumentTypeReadOnly = connect(
                 </label>
               </Focus>
               <button
-                className="link"
+                className="usa-button usa-button--unstyled"
                 id="edit-selected-document-type"
                 onClick={() => {
                   closeDocumentCategoryAccordionSequence();
@@ -44,7 +48,9 @@ export const DocumentTypeReadOnly = connect(
               </button>
             </div>
             <div>
-              <p>{form.documentType}</p>
+              <p className="margin-top-105 margin-bottom-0">
+                {form.documentType}
+              </p>
             </div>
           </div>
           {selectDocumentTypeHelper.primary.showNonstandardForm && (
@@ -57,20 +63,7 @@ export const DocumentTypeReadOnly = connect(
             />
           )}
         </div>
-
-        <div className="ustc-form-group">
-          <button
-            type="button"
-            className="usa-button"
-            id="continue-button"
-            onClick={() => {
-              selectDocumentSequence();
-            }}
-          >
-            Continue
-          </button>
-        </div>
-      </React.Fragment>
+      </div>
     );
   },
 );

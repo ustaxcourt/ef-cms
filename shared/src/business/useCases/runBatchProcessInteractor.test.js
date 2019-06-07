@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const { Case } = require('../entities/Case');
+const { Document } = require('../entities/Document');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { runBatchProcess } = require('./runBatchProcessInteractor');
@@ -17,7 +17,7 @@ const MOCK_WORK_ITEMS = [
     document: {
       createdAt: '2018-12-27T18:06:02.968Z',
       documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-      documentType: Case.documentTypes.petitionFile,
+      documentType: Document.initialDocumentTypes.petitionFile,
     },
     isInitializeCase: true,
     messages: [
@@ -96,15 +96,17 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
-      section: 'irsBatchSection',
-      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
     });
     expect(zipDocumentsStub.getCall(0).args[0]).toMatchObject({
       fileNames: [
         'Petition.pdf',
         'Statement of Taxpayer Identification.pdf',
         'Answer.pdf',
-        'Stipulated Decision.pdf',
+        'Proposed Stipulated Decision.pdf',
       ],
       s3Ids: [
         'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -119,7 +121,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
       },
     });
   });
@@ -152,15 +154,17 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
-      section: 'irsBatchSection',
-      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
     });
     expect(zipDocumentsStub.getCall(1).args[0]).toMatchObject({
       fileNames: [
         'Petition.pdf',
         'Statement of Taxpayer Identification.pdf',
         'Answer.pdf',
-        'Stipulated Decision.pdf',
+        'Proposed Stipulated Decision.pdf',
       ],
       s3Ids: [
         'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -175,7 +179,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
       },
     });
   });
@@ -209,11 +213,17 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(2).args[0]).toMatchObject({
-      section: 'irsBatchSection',
-      workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
     });
     expect(zipDocumentsStub.getCall(2).args[0]).toMatchObject({
-      fileNames: ['Petition.pdf', 'Answer.pdf', 'Stipulated Decision.pdf'],
+      fileNames: [
+        'Petition.pdf',
+        'Answer.pdf',
+        'Proposed Stipulated Decision.pdf',
+      ],
       s3Ids: [
         'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -224,7 +234,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     expect(deleteDocumentStub.getCall(2)).toEqual(null);
     expect(updateCaseStub.getCall(2).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket',
+        status: 'General Docket - Not at Issue',
       },
     });
   });

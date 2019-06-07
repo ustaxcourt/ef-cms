@@ -119,6 +119,8 @@
     "pk": "101-19|case"
   },
   {
+    "sk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "section-petitions",
     "docketNumberSuffix": "W",
     "caseStatus": "New",
     "document": {
@@ -138,7 +140,8 @@
     "createdAt": "2019-03-01T21:40:46.415Z",
     "assigneeName": null,
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+
     "messages": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
@@ -148,12 +151,42 @@
         "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
     "docketNumber": "101-19",
     "updatedAt": "2019-03-01T21:40:46.415Z"
   },
   {
-    "sk": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
-    "pk": "petitions|workItem"
+    "sk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "docketNumberSuffix": "W",
+    "caseStatus": "New",
+    "document": {
+      "processingStatus": "complete",
+      "createdAt": "2019-03-01T21:40:46.415Z",
+      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+      "documentType": "Petition",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "assigneeName": null,
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+        "message": "Petition filed by Brett Osborne is ready for review.",
+        "from": "Test Petitioner",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "docketNumber": "101-19",
+    "updatedAt": "2019-03-01T21:40:46.415Z"
   }
 ]

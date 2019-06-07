@@ -3,7 +3,9 @@ import { state } from 'cerebral';
 import moment from 'moment';
 
 /**
- *
+ * properly casts a variety of inputs to a UTC ISOString
+ * directly using the moment library rather than date functions from the applicationContext
+ * because this function is extremely well-tested.
  *
  * @param {string} dateString the date string to cast to an ISO string
  * @returns {string} the ISO string.

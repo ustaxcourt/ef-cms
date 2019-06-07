@@ -1,4 +1,5 @@
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 import {
   CATEGORY_MAP,
@@ -6,6 +7,7 @@ import {
 } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
+import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 
 const state = {
   caseDetail: MOCK_CASE,
@@ -18,7 +20,9 @@ const state = {
   validationErrors: {},
 };
 
-import { addDocketEntryHelper } from './addDocketEntryHelper';
+const addDocketEntryHelper = withAppContextDecorator(
+  addDocketEntryHelperComputed,
+);
 
 describe('addDocketEntryHelper', () => {
   beforeEach(() => {
@@ -89,7 +93,7 @@ describe('addDocketEntryHelper', () => {
   it('generates correctly formatted service date', async () => {
     state.form.certificateOfServiceDate = '2012-05-31';
     const result = await runCompute(addDocketEntryHelper, { state });
-    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/2012');
+    expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
   it('does not generate a formatted service date if a service date is not entered on the form', async () => {

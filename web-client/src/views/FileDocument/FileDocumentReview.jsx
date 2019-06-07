@@ -24,19 +24,19 @@ export const FileDocumentReview = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h2 tabIndex="-1" id="file-a-document-header">
+          <h1 className="heading-1" tabIndex="-1" id="file-a-document-header">
             Review Your Filing
-          </h2>
+          </h1>
         </Focus>
         <p>
           You can’t edit your filing once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
 
-        <div id="file-document-hint" className="usa-alert usa-alert-warning">
-          <div className="usa-alert-body">
-            <h3 className="usa-alert-heading">Before You Submit...</h3>
-            <p className="usa-alert-text">
+        <div id="file-document-hint" className="usa-alert usa-alert--warning">
+          <div className="usa-alert__body">
+            <h3 className="usa-alert__heading">Before You Submit...</h3>
+            <p className="usa-alert__text">
               Verify the documents you uploaded are correct and ensure all
               personal information has been removed or redacted from your
               documents.
@@ -63,7 +63,7 @@ export const FileDocumentReview = connect(
           </button>
           <button
             type="button"
-            className="usa-button-secondary"
+            className="usa-button usa-button--outline"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import moment from 'moment';
 
 export const supportingDocumentFreeTextTypes = [
   'Affidavit in Support',
@@ -7,7 +6,7 @@ export const supportingDocumentFreeTextTypes = [
   'Unsworn Declaration under Penalty of Perjury in Support',
 ];
 
-export const fileDocumentHelper = get => {
+export const fileDocumentHelper = (get, applicationContext) => {
   const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
@@ -47,9 +46,9 @@ export const fileDocumentHelper = get => {
   const certificateOfServiceDate = form.certificateOfServiceDate;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
-    certificateOfServiceDateFormatted = moment
-      .utc(certificateOfServiceDate)
-      .format('L');
+    certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
   const showFilingIncludes =

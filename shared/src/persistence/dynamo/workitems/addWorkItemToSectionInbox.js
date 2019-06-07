@@ -1,13 +1,13 @@
-const { createMappingRecord } = require('../helpers/createMappingRecord');
+const {
+  createSectionInboxRecord,
+} = require('../workitems/createSectionInboxRecord');
 
 exports.addWorkItemToSectionInbox = async ({
   workItem,
   applicationContext,
 }) => {
-  await createMappingRecord({
+  await createSectionInboxRecord({
     applicationContext,
-    pkId: workItem.section,
-    skId: workItem.workItemId,
-    type: 'workItem',
+    workItem,
   });
 };

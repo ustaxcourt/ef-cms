@@ -1,44 +1,22 @@
 #!/bin/bash -e 
-# TODO: Enable sonarqube / cloud related tasks ....
 
-#if [ -z ${SHARED_SONAR_KEY+x} ]; then echo "SHARED_SONAR_KEY must be set to run build-all.sh"; exit 1; fi
-#if [ -z ${SONAR_ORG+x} ]; then echo "SONAR_ORG must be set to run build-all.sh"; exit 1; fi
-#if [ -z ${SHARED_SONAR_TOKEN+x} ]; then echo "SHARED_SONAR_TOKEN must be set to run build-all.sh"; exit 1; fi
-#if [ -z ${API_SONAR_TOKEN+x} ]; then echo "API_SONAR_TOKEN must be set to run build-all.sh"; exit 1; fi
-#if [ -z ${UI_SONAR_TOKEN+x} ]; then echo "UI_SONAR_TOKEN must be set to run build-all.sh"; exit 1; fi
-
-./docker-init.sh
-
-# shared
-pushd shared
-./docker-init.sh
-./docker-shellcheck.sh
-./docker-audit.sh
-./docker-lint.sh
-CONTAINER_NAME=shared-test ./docker-test.sh
-#SONAR_KEY=${SHARED_SONAR_KEY} branch_name=local SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SHARED_SONAR_TOKEN} ./docker-sonarqube.sh
-popd
-
-# web-client
-pushd web-client
-./docker-init.sh
-./docker-shellcheck.sh
-./docker-audit.sh
-./docker-lint.sh
-#sh "SONAR_KEY=${UI_SONAR_KEY} branch_name=${branch_name} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${UI_SONAR_TOKEN} ./docker-sonarqube.sh"
-popd
-
-# efcms-service
-pushd efcms-service
-./docker-init.sh
-./docker-shellcheck.sh
-./docker-audit.sh
-./docker-lint.sh
-CONTAINER_NAME=efcmstest ./docker-test.sh
-#SONAR_KEY=${API_SONAR_KEY} branch_name=${branch_name} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${API_SONAR_TOKEN} ./docker-sonarqube.sh
-popd
-
-# integration tests
-./docker-pa11y.sh
-./docker-cerebral.sh
-CONTAINER_NAME=cypress ./docker-cypress.sh
+# This runs the same build steps that run in Circle, except sonar
+docker build -t efcms -f Dockerfile .
+docker run --rm efcms /bin/sh -c 'cd shared && ./run-shellcheck.sh'
+docker run --rm efcms /bin/sh -c 'cd shared && npm run lint'
+docker run --rm efcms /bin/sh -c 'cd shared && npm audit'
+docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'cd shared && npm run test'
+# docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage -e "SONAR_KEY=${SHARED_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${SHARED_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd shared && ./verify-sonarqube-passed.sh'
+docker run --rm efcms /bin/sh -c 'cd efcms-service && ./run-shellcheck.sh'
+docker run --rm efcms /bin/sh -c 'cd efcms-service && npm run lint'
+docker run --rm efcms /bin/sh -c 'cd efcms-service && ./run-audit.sh'
+docker run -v $(pwd)/efcms-service/coverage:/home/app/efcms-service/coverage --rm efcms /bin/sh -c 'cd efcms-service && npm run test'
+# docker run -v $(pwd)/efcms-service/coverage:/home/app/efcms-service/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd efcms-service && ./verify-sonarqube-passed.sh'
+docker run --rm efcms /bin/sh -c 'cd web-client && ./run-shellcheck.sh'
+docker run --rm efcms /bin/sh -c 'cd web-client && npm run lint'
+docker run --rm efcms /bin/sh -c 'cd web-client && ./run-audit.sh'
+docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage-unit --rm efcms /bin/sh -c 'cd web-client && npm run test:unit'
+# docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
+docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev &) && ../wait-until.sh http://localhost:1234 && npm run test:pa11y'
+docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && npm run test"
+docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd efcms-service && npm run install:dynamodb && (npm start &) && ../wait-until.sh http://localhost:3000/v1/swagger && cd ../web-client && (npm run dev:cypress &) && ../wait-until.sh http://localhost:1234 && npm run cypress'

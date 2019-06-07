@@ -37,7 +37,9 @@ export const ContactPrimary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h2>{contactsHelper.contactPrimary.header}</h2>
+          <h2 className="margin-top-4">
+            {contactsHelper.contactPrimary.header}
+          </h2>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
@@ -50,20 +52,21 @@ export const ContactPrimary = connect(
           />
           <div
             className={
-              'ustc-form-group ' +
+              'usa-form-group ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.name
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
-            <label htmlFor="name">
+            <label htmlFor="name" className="usa-label">
               {contactsHelper.contactPrimary.nameLabel}
             </label>
             <input
               id="name"
               type="text"
               name="contactPrimary.name"
+              className="usa-input"
               autoCapitalize="none"
               value={data.contactPrimary.name || ''}
               onChange={e => {
@@ -77,20 +80,21 @@ export const ContactPrimary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactPrimary.name"
             />
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
-            <div className="ustc-form-group">
-              <label htmlFor="title">
+            <div className="usa-form-group">
+              <label htmlFor="title" className="usa-label with-hint">
                 Title
-                <p className="usa-form-hint">For example, Executor, PR, etc.</p>
               </label>
+              <span className="usa-hint">For example, Executor, PR, etc.</span>
               <input
                 id="title"
                 type="text"
                 name="contactPrimary.title"
+                className="usa-input"
                 autoCapitalize="none"
                 value={data.contactPrimary.title || ''}
                 onChange={e => {
@@ -105,26 +109,26 @@ export const ContactPrimary = connect(
           {contactsHelper.contactPrimary.displayInCareOf && (
             <div
               className={
-                'ustc-form-group ' +
+                'usa-form-group ' +
                 (validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.inCareOf
-                  ? 'usa-input-error'
+                  ? 'usa-form-group--error'
                   : '')
               }
             >
-              <label htmlFor="inCareOf">
+              <label htmlFor="inCareOf" className="usa-label">
                 {contactsHelper.contactPrimary.inCareOfLabel ? (
                   <span>
                     {contactsHelper.contactPrimary.inCareOfLabel}{' '}
                     {contactsHelper.contactPrimary.inCareOfLabelHint && (
-                      <span className="usa-form-hint">
+                      <span className="usa-hint">
                         ({contactsHelper.contactPrimary.inCareOfLabelHint})
                       </span>
                     )}
                   </span>
                 ) : (
                   <span>
-                    In Care Of <span className="usa-form-hint">(optional)</span>
+                    In Care Of <span className="usa-hint">(optional)</span>
                   </span>
                 )}
               </label>
@@ -132,6 +136,7 @@ export const ContactPrimary = connect(
                 id="inCareOf"
                 type="text"
                 name="contactPrimary.inCareOf"
+                className="usa-input"
                 autoCapitalize="none"
                 value={data.contactPrimary.inCareOf || ''}
                 onChange={e => {
@@ -145,7 +150,7 @@ export const ContactPrimary = connect(
                 }}
               />
               <Text
-                className="usa-input-error-message"
+                className="usa-error-message"
                 bind="validationErrors.contactPrimary.inCareOf"
               />
             </div>
@@ -171,19 +176,21 @@ export const ContactPrimary = connect(
           {contactsHelper.showEmail && <Email bind={emailBind} />}
           <div
             className={
-              'ustc-form-group phone-input ' +
+              'usa-form-group phone-input ' +
               (validationErrors.contactPrimary &&
               validationErrors.contactPrimary.phone
-                ? 'usa-input-error'
+                ? 'usa-form-group--error'
                 : '')
             }
           >
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone" className="usa-label">
+              Phone Number
+            </label>
             <input
               id="phone"
               type="tel"
               name="contactPrimary.phone"
-              className="ustc-input-phone"
+              className="usa-input"
               autoCapitalize="none"
               value={data.contactPrimary.phone || ''}
               onChange={e => {
@@ -197,7 +204,7 @@ export const ContactPrimary = connect(
               }}
             />
             <Text
-              className="usa-input-error-message"
+              className="usa-error-message"
               bind="validationErrors.contactPrimary.phone"
             />
           </div>

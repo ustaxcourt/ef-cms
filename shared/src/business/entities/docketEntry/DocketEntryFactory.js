@@ -13,7 +13,29 @@ const { includes, omit } = require('lodash');
  */
 function DocketEntryFactory(rawProps) {
   let entityConstructor = function(rawProps) {
-    Object.assign(this, rawProps);
+    Object.assign(this, {
+      addToCoversheet: rawProps.addToCoversheet,
+      additionalInfo: rawProps.additionalInfo,
+      additionalInfo2: rawProps.additionalInfo2,
+      attachments: rawProps.attachments,
+      certificateOfService: rawProps.certificateOfService,
+      certificateOfServiceDate: rawProps.certificateOfServiceDate,
+      dateReceived: rawProps.dateReceived,
+      documentType: rawProps.documentType,
+      eventCode: rawProps.eventCode,
+      exhibits: rawProps.exhibits,
+      freeText: rawProps.freeText,
+      hasSupportingDocuments: rawProps.hasSupportingDocuments,
+      lodged: rawProps.lodged,
+      objections: rawProps.objections,
+      ordinalValue: rawProps.ordinalValue,
+      partyPrimary: rawProps.partyPrimary,
+      partyRespondent: rawProps.partyRespondent,
+      partySecondary: rawProps.partySecondary,
+      previousDocument: rawProps.previousDocument,
+      primaryDocumentFile: rawProps.primaryDocumentFile,
+      secondaryDocumentFile: rawProps.secondaryDocumentFile,
+    });
     const { secondaryDocument } = rawProps;
     if (secondaryDocument) {
       this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument);

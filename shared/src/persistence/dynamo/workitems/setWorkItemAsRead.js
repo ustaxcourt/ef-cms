@@ -13,8 +13,8 @@ exports.setWorkItemAsRead = async ({
       ':isRead': true,
     },
     Key: {
-      pk: `${userId}|workItem`,
-      sk: workItemId,
+      pk: `user-${userId}`,
+      sk: `workitem-${workItemId}`,
     },
     UpdateExpression: `SET #isRead = :isRead`,
     applicationContext,

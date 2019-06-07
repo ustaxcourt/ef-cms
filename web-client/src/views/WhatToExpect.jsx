@@ -3,13 +3,13 @@ import React from 'react';
 
 export const WhatToExpect = () => (
   <>
-    <h2>What to Expect When Filing a Case Online</h2>
+    <h2>What to Expect When Filing a Petition Online</h2>
     <div className="icon-list">
       <div className="icon-item">
         <div className="bullet-icon-wrapper">
           <div className="bullet-icon-circle">
             <FontAwesomeIcon
-              icon={'file-pdf'}
+              icon={['far', 'file-pdf']}
               size="lg"
               className="bullet-icon"
             />
@@ -55,7 +55,7 @@ export const WhatToExpect = () => (
       href="/before-starting-a-case"
       id="init-file-petition"
     >
-      Start a Case
+      <FontAwesomeIcon icon="file" size="1x" /> File a Petition
     </a>
   </>
 );
