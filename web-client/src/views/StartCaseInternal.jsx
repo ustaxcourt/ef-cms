@@ -56,7 +56,7 @@ export const StartCaseInternal = connect(
             Upload Documents to Create a Case
           </h1>
           {showModal === 'FormCancelModalDialogComponent' && (
-            <FormCancelModalDialog />
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
           )}
           <ErrorNotification />
           <h2>Petition Documents</h2>
