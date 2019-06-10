@@ -1,4 +1,3 @@
-const assert = require('assert');
 const { TrialSession } = require('./TrialSession');
 
 const VALID_TRIAL_SESSION = {
@@ -14,7 +13,7 @@ describe('TrialSession entity', () => {
   describe('isValid', () => {
     it('creates a valid trial session', () => {
       const trialSession = new TrialSession(VALID_TRIAL_SESSION);
-      assert.ok(trialSession.isValid());
+      expect(trialSession.isValid()).toBeTruthy();
     });
 
     it('creates an invalid trial session with startDate in the past', () => {
@@ -22,7 +21,7 @@ describe('TrialSession entity', () => {
         ...VALID_TRIAL_SESSION,
         startDate: '2000-03-01T00:00:00.000Z',
       });
-      assert.ok(!trialSession.isValid());
+      expect(trialSession.isValid()).toBeFalsy();
     });
 
     it('creates an invalid trial session with invalid sessionType', () => {
@@ -30,31 +29,39 @@ describe('TrialSession entity', () => {
         ...VALID_TRIAL_SESSION,
         sessionType: 'Something Else',
       });
-      assert.ok(!trialSession.isValid());
+      expect(trialSession.isValid()).toBeFalsy();
     });
   });
 
   describe('validate', () => {
+    it('should produce an error if invalid startDate', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        startDate: '2030-03-01',
+      });
+      console.log(trialSession.getValidationErrors());
+      expect(trialSession.isValid()).toBeFalsy();
+    });
     it('should do nothing if valid', () => {
-      let error = null;
+      let error;
       try {
         const trialSession = new TrialSession(VALID_TRIAL_SESSION);
         trialSession.validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error === null);
+      expect(error).not.toBeDefined();
     });
 
     it('should throw an error on invalid documents', () => {
-      let error = null;
+      let error;
       try {
         const trialSession = new TrialSession({});
         trialSession.validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error !== null);
+      expect(error).toBeDefined();
     });
   });
 });
