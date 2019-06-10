@@ -24,8 +24,6 @@ export const validateTrialSessionAction = ({
         .toISOString()) ||
     null;
 
-  console.log('startDate is ', startDate);
-
   const trialSession = omit(
     {
       ...get(state.form),
