@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 
 export const scanHelper = get => {
   // Master switch for the time being
-  const scanFeatureEnabled = true;
+  const scanFeatureEnabled = false;
 
   const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
   const user = get(state.user);
