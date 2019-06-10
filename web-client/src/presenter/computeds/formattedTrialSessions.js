@@ -38,13 +38,21 @@ export const formattedTrialSessions = (get, applicationContext) => {
   );
 
   const selectedTerm = get(state.form.term);
+  const selectedTermYear = get(state.form.termYear);
   let sessionsByTerm = [];
   if (selectedTerm) {
     sessionsByTerm = orderBy(
-      sessions.filter(session => session.term === selectedTerm),
+      sessions.filter(
+        session =>
+          session.term === selectedTerm && session.termYear == selectedTermYear,
+      ),
       'trialLocation',
     );
   }
 
-  return { formattedSessions, sessionsByTerm };
+  return {
+    formattedSessions,
+    sessionsByTerm,
+    showSwingSessionOption: sessionsByTerm.length > 0,
+  };
 };
