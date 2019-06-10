@@ -16,7 +16,13 @@ export const validateTrialSessionAction = ({
   path,
   props,
 }) => {
-  const startDate = props.computedDate;
+  const startDate = // AAAA-BB-CC
+    (props.computedDate &&
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString(props.computedDate)
+        .toISOString()) ||
+    null;
 
   const trialSession = omit(
     {
@@ -34,13 +40,13 @@ export const validateTrialSessionAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
-      'term',
       'startDate',
       'startTime',
       'swingSessionId',
       'sessionType',
       'maxCases',
       'trialLocation',
+      'postalCode',
     ];
     return path.error({
       alertError: {

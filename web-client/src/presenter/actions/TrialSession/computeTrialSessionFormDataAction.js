@@ -31,6 +31,7 @@ const computeStartTime = ({ form }) => {
   if (form.startTimeExtension == 'pm') {
     hours = `${+hours + 12}`;
   } else {
+    if (+hours > 12) hours = '25'; // force time validation error
     hours = hours.padStart(2, '0');
   }
   minutes = (minutes && minutes.padStart(2, '0')) || '00';
