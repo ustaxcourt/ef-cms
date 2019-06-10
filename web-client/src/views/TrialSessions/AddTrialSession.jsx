@@ -40,7 +40,7 @@ export const AddTrialSession = connect(
             className="usa-form maxw-none"
           >
             {showModal === 'FormCancelModalDialogComponent' && (
-              <FormCancelModalDialog />
+              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
             )}
             <ErrorNotification />
 

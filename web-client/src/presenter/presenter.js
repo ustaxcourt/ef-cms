@@ -18,6 +18,7 @@ import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
+import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
@@ -166,6 +167,7 @@ export const presenter = {
     closeAccountMenuSequence,
     closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToDashboardSequence,
+    closeModalAndReturnToTrialSessionsSequence,
     completeScanSequence,
     confirmStayLoggedInSequence,
     createWorkItemSequence,
