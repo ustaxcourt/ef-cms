@@ -8,6 +8,8 @@ module.exports = {
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
   createDocumentLambda: require('./users/createDocumentLambda').handler,
+  createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
+    .handler,
   createUserLambda: require('./users/createUserLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
@@ -27,6 +29,8 @@ module.exports = {
     .handler,
   getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda')
     .handler,
+  getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
+    .handler,
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,
   getUsersInSectionLambda: require('./users/getUsersInSectionLambda').handler,
   getWorkItemLambda: require('./workitems/getWorkItemLambda').handler,
@@ -36,15 +40,24 @@ module.exports = {
     .handler,
   practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
     .handler,
+  practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')
+    .handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
+  sanitizePdfLambda: require('./documents/sanitizePdfLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
+    .handler,
+  setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
     .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
     .handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
+  validatePdfLambda: require('./documents/validatePdfLambda').handler,
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
+  verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
+    .handler,
+  virusScanPdfLambda: require('./documents/virusScanPdfLambda').handler,
 };

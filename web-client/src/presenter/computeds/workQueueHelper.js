@@ -7,22 +7,68 @@ export const workQueueHelper = get => {
   const userSection = get(state.user.section);
   const userRole = get(state.user.role);
   const userRoleMap = mapValueHelper(userRole);
-  const unreadCount = get(state.notifications.unreadCount);
+  const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
+  const workQueueIsInternal = get(state.workQueueIsInternal);
   const showInbox = workQueueToDisplay.box === 'inbox';
+  const showOutbox = workQueueToDisplay.box === 'outbox';
+  const showBatched = workQueueToDisplay.box === 'batched';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
+  const myUnreadCount = workQueueIsInternal
+    ? myInboxUnreadCount
+    : qcUnreadCount;
+  const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
+  const isDisplayingQC = !workQueueIsInternal;
+  const userIsPetitionsClerk = userRole === 'petitionsclerk';
+  const userIsDocketClerk = userRole === 'docketclerk';
 
   return {
-    currentBoxView: showInbox ? 'inbox' : 'outbox',
-    inboxCount: showIndividualWorkQueue ? unreadCount : sectionInboxCount,
+    assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
+    currentBoxView: showInbox ? 'inbox' : showBatched ? 'batched' : 'outbox',
+    getQueuePath: ({ box, queue }) => {
+      return `/${
+        workQueueIsInternal ? 'messages' : 'document-qc'
+      }/${queue}/${box}`;
+    },
+    hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
+    hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
+    hideFromColumn: isDisplayingQC,
+    hideSectionColumn: isDisplayingQC,
+    inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    linkToDocumentMessages: !isDisplayingQC,
+    sentTitle: workQueueIsInternal
+      ? 'Sent'
+      : userIsDocketClerk
+      ? 'Processed'
+      : 'Served',
+    showAssignedToColumn:
+      (isDisplayingQC && !showIndividualWorkQueue && showInbox) ||
+      !isDisplayingQC,
+    showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
-    showOutbox: workQueueToDisplay.box === 'outbox',
+    showMessageContent: !isDisplayingQC,
+    showMessagesSentFromColumn: !isDisplayingQC,
+    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
+    showOutbox,
+    showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
+    showReceivedColumn: isDisplayingQC,
     showRunBatchIRSProcessButton: userSection === 'petitions',
+    showSectionSentTab:
+      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
+    showSelectColumn:
+      (isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk)) ||
+      (workQueueIsInternal && !isDisplayingQC),
     showSendToBar: selectedWorkItems.length > 0,
+    showSentColumn: !isDisplayingQC,
+    showServedColumn: userIsPetitionsClerk && isDisplayingQC,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
-    workQueueTitle: `${showIndividualWorkQueue ? 'My' : 'Section'} Messages`,
+    workQueueIsInternal,
+    workQueueTitle: `${
+      showIndividualWorkQueue ? 'My' : 'Section'
+    } ${workQueueType}`,
+    workQueueType,
   };
 };

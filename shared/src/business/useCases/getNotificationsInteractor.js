@@ -13,5 +13,12 @@ exports.getNotifications = async ({ applicationContext }) => {
       userId: applicationContext.getCurrentUser().userId,
     });
 
-  return { unreadCount: inbox.filter(item => !item.isRead).length };
+  return {
+    myInboxUnreadCount: inbox
+      .filter(item => item.isInternal === true)
+      .filter(item => !item.isRead).length,
+    qcUnreadCount: inbox
+      .filter(item => item.isInternal === false)
+      .filter(item => !item.isRead).length,
+  };
 };

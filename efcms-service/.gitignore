@@ -7,3 +7,8 @@ node_modules/
 storage/s3/*
 dist/
 .cache/
+runtimes/clamav/var/
+runtimes/ghostscript/share/
+runtimes/ghostscript/fonts/
+runtimes/clamav/clamav_lambda_layer.tar.gz
+runtimes/ghostscript/ghostscript_lambda_layer.tar.gz

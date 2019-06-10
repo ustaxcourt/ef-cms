@@ -65,10 +65,10 @@ export const checkDate = (updatedDateString, originalDate) => {
 /**
  * combines the dates in the form with the caseDetails
  *
- * @param {Object} providers the cerebral providers
+ * @param {object} providers the cerebral providers
  * @param {Function} providers.get the cerebral get function for getting the state.caseDetail
- * @param {Object} providers.props the cerebral props object
- * @returns {Object} the combinedCaseDetailWithForm
+ * @param {object} providers.props the cerebral props object
+ * @returns {object} the combinedCaseDetailWithForm
  */
 export const getFormCombinedWithCaseDetailAction = ({ get, props }) => {
   const caseDetail = { ...get(state.caseDetail) };

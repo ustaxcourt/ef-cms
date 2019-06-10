@@ -1,6 +1,6 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { props, sequences } from 'cerebral';
 
 class FormCancelModalDialogComponent extends ModalDialog {
   constructor(props) {
@@ -18,7 +18,7 @@ class FormCancelModalDialogComponent extends ModalDialog {
 export const FormCancelModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.closeModalAndReturnToDashboardSequence,
+    confirmSequence: sequences[props.onCancelSequence],
   },
   FormCancelModalDialogComponent,
 );

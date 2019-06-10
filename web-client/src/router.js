@@ -74,7 +74,49 @@ const router = {
         app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
+    route(
+      '/document-qc..',
+      checkLoggedIn(() => {
+        const path = route._.getPathFromBase();
+        const validPaths = [
+          'document-qc',
+          'document-qc/my',
+          'document-qc/my/inbox',
+          'document-qc/my/outbox',
+          'document-qc/my/batched',
+          'document-qc/section',
+          'document-qc/section/inbox',
+          'document-qc/section/outbox',
+          'document-qc/section/batched',
+        ];
 
+        if (path && validPaths.indexOf(path) === -1) {
+          app.getSequence('notFoundErrorSequence')({
+            error: {},
+          });
+        } else {
+          const routeArgs = { workQueueIsInternal: false };
+          const pathParts = path.split('/');
+
+          if (pathParts[1]) {
+            routeArgs.queue = pathParts[1];
+          }
+          if (pathParts[2]) {
+            routeArgs.box = pathParts[2];
+          }
+
+          app.getSequence('gotoDashboardSequence')(routeArgs);
+        }
+        document.title = `Dashboard ${pageTitleSuffix}`;
+      }),
+    );
+    route(
+      '/trial-sessions',
+      checkLoggedIn(() => {
+        document.title = `Trial sessions ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionsSequence')();
+      }),
+    );
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
@@ -100,10 +142,56 @@ const router = {
         app.getSequence('gotoStartCaseSequence')();
       }),
     );
+
+    route(
+      '/add-a-trial-session',
+      checkLoggedIn(() => {
+        document.title = `Add a trial session ${pageTitleSuffix}`;
+        app.getSequence('gotoAddTrialSessionSequence')();
+      }),
+    );
+
     route('/style-guide', () => {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
     });
+    route(
+      '/messages..',
+      checkLoggedIn(() => {
+        const path = route._.getPathFromBase();
+        const validPaths = [
+          'messages',
+          'messages/my',
+          'messages/my/inbox',
+          'messages/my/outbox',
+          'messages/my/batched',
+          'messages/section',
+          'messages/section/inbox',
+          'messages/section/outbox',
+          'messages/section/batched',
+        ];
+
+        if (path && validPaths.indexOf(path) === -1) {
+          app.getSequence('notFoundErrorSequence')({
+            error: {},
+          });
+        } else {
+          const routeArgs = { workQueueIsInternal: true };
+          const pathParts = path.split('/');
+
+          if (pathParts[1]) {
+            routeArgs.queue = pathParts[1];
+          }
+          if (pathParts[2]) {
+            routeArgs.box = pathParts[2];
+          }
+
+          app.getSequence('gotoDashboardSequence')(routeArgs);
+        }
+        document.title = `Dashboard ${pageTitleSuffix}`;
+      }),
+    );
+
     route('/mock-login...', () => {
       const { token, path } = queryStringDecoder();
       if (token) {
@@ -125,7 +213,7 @@ const router = {
       '..',
       () => {
         document.title = `Error ${pageTitleSuffix}`;
-        app.getSequence('unauthorizedErrorSequence')({
+        app.getSequence('notFoundErrorSequence')({
           error: {},
         });
       },
