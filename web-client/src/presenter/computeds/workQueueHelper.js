@@ -30,6 +30,7 @@ export const workQueueHelper = get => {
         workQueueIsInternal ? 'messages' : 'document-qc'
       }/${queue}/${box}`;
     },
+    hideCaseStatusColumn: userIsPetitionsClerk,
     hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
     hideFromColumn: isDisplayingQC,
     hideSectionColumn: isDisplayingQC,
@@ -50,6 +51,7 @@ export const workQueueHelper = get => {
     showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
+    showReceivedColumn: isDisplayingQC,
     showRunBatchIRSProcessButton: userSection === 'petitions',
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
@@ -58,6 +60,8 @@ export const workQueueHelper = get => {
       (isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk)) ||
       (workQueueIsInternal && !isDisplayingQC),
     showSendToBar: selectedWorkItems.length > 0,
+    showSentColumn: !isDisplayingQC,
+    showServedColumn: userIsPetitionsClerk,
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
     workQueueIsInternal,
