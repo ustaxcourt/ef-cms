@@ -21,7 +21,7 @@ exports.validatePdf = async ({ applicationContext, documentId }) => {
     const pdfParser = new PDFParser();
     return !!pdfParser.parse(pdfData, index);
   } catch (e) {
-    applicationContext.logger.error('Invalid PDF: ', documentId, e);
-    throw new Error('Invalid PDF');
+    applicationContext.logger.error(`Invalid PDF: ${documentId}, ${e}`);
+    throw new Error('Invalid PDF', e);
   }
 };
