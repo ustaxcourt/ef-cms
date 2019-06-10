@@ -116,9 +116,12 @@ export const SessionInformationForm = connect(
             }`}
           >
             <fieldset className="start-time usa-fieldset margin-bottom-0">
-              <legend id="start-time-legend" className="usa-legend">
+              <legend id="start-time-legend" className="usa-legend with-hint">
                 Time <span className="usa-hint">(optional)</span>
               </legend>
+              <span className="usa-hint">
+                enter time as hour : minutes (e.g. 10:30)
+              </span>
               <div className="grid-row grid-gap-3">
                 <div className="grid-col-3">
                   <input
