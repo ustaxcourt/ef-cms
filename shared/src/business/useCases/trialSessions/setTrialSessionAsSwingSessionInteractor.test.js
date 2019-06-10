@@ -30,6 +30,37 @@ describe('Set trial session as swing session', () => {
     .returns(OTHER_MOCK_TRIAL_SESSION);
   const updateTrialSessionStub = sinon.stub().returns();
 
+  it('throws error if user is unauthorized', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'petitioner',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          getTrialSessionById: getTrialSessionByIdStub,
+          updateTrialSession: updateTrialSessionStub,
+        };
+      },
+    };
+
+    let error;
+    try {
+      await setTrialSessionAsSwingSession({
+        applicationContext,
+        swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+        trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
+    expect(error.message).toEqual('Unauthorized');
+  });
+
   it('calls getTrialSessionById and updateTrialSession persistence methods with correct parameters', async () => {
     applicationContext = {
       environment: { stage: 'local' },
