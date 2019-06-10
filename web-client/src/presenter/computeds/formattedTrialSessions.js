@@ -1,7 +1,7 @@
 import { find, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
-const formatSession = (session, applicationContext) => {
+export const formatSession = (session, applicationContext) => {
   session.startOfWeek = applicationContext
     .getUtilities()
     .prepareDateFromString(session.startDate)
@@ -13,15 +13,11 @@ const formatSession = (session, applicationContext) => {
   return session;
 };
 
-export const formattedTrialSessions = (get, applicationContext) => {
-  const sessionSorter = sessionList => {
-    return orderBy(
-      sessionList,
-      ['swingSession', 'startDate', 'trialLocation'],
-      ['desc', 'asc', 'asc'],
-    );
-  };
+export const sessionSorter = sessionList => {
+  return orderBy(sessionList, ['startDate', 'trialLocation'], ['asc', 'asc']);
+};
 
+export const formattedTrialSessions = (get, applicationContext) => {
   const sessions = orderBy(get(state.trialSessions), 'startDate');
 
   const formattedSessions = [];
@@ -42,13 +38,21 @@ export const formattedTrialSessions = (get, applicationContext) => {
   );
 
   const selectedTerm = get(state.form.term);
+  const selectedTermYear = get(state.form.termYear);
   let sessionsByTerm = [];
   if (selectedTerm) {
     sessionsByTerm = orderBy(
-      sessions.filter(session => session.term === selectedTerm),
+      sessions.filter(
+        session =>
+          session.term === selectedTerm && session.termYear == selectedTermYear,
+      ),
       'trialLocation',
     );
   }
 
-  return { formattedSessions, sessionsByTerm };
+  return {
+    formattedSessions,
+    sessionsByTerm,
+    showSwingSessionOption: sessionsByTerm.length > 0,
+  };
 };

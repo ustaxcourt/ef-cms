@@ -234,7 +234,11 @@ export const LocationInformationForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group margin-bottom-0">
+          <div
+            className={`usa-form-group margin-bottom-0 ${
+              validationErrors.postalCode ? 'usa-form-group--error' : ''
+            }`}
+          >
             <label
               htmlFor="postal-code"
               className="usa-label"
@@ -255,6 +259,13 @@ export const LocationInformationForm = connect(
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateTrialSessionSequence();
+              }}
+            />
+            <Text
+              className="usa-error-message"
+              bind="validationErrors.postalCode"
             />
           </div>
         </div>
