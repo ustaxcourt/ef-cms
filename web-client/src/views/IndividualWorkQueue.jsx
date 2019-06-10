@@ -3,6 +3,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { IndividualWorkQueueBatched } from './IndividualWorkQueueBatched';
 import { IndividualWorkQueueInbox } from './IndividualWorkQueueInbox';
 import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
 
@@ -37,7 +38,7 @@ export const IndividualWorkQueue = connect(
             id="section-batched-for-irs-tab"
           >
             <div id="section-batched-for-irs-tab-content">
-              <IndividualWorkQueueOutbox />
+              <IndividualWorkQueueBatched />
             </div>
           </Tab>
         )}
