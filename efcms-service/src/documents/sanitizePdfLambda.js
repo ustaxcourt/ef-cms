@@ -12,14 +12,14 @@ exports.handler = event =>
   handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
+    const { documentId } = event.pathParameters;
+
     applicationContext.logger.info('Event', event);
     try {
-      await applicationContext
-        .getUseCases()
-        .sanitizePdf({
-          applicationContext,
-          documentId: (event.pathParameters || event.path).documentId,
-        });
+      await applicationContext.getUseCases().sanitizePdf({
+        applicationContext,
+        documentId,
+      });
       applicationContext.logger.info('User', user);
     } catch (e) {
       applicationContext.logger.error(e);
