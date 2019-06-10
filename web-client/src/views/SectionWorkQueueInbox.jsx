@@ -109,7 +109,7 @@ export const SectionWorkQueueInbox = connect(
                         });
                         e.stopPropagation();
                       }}
-                      className="message-select-control has-icon"
+                      className="message-select-control"
                     >
                       <input
                         id={item.workItemId}
