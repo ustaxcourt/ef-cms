@@ -12,11 +12,13 @@ exports.handler = event =>
   handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
+    const { documentId } = event.pathParameters;
+
     applicationContext.logger.info('Event', event);
     try {
       const result = await applicationContext.getUseCases().validatePdf({
         applicationContext,
-        documentId: (event.pathParameters || event.path).documentId,
+        documentId,
       });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Validate PDF Result', result);
