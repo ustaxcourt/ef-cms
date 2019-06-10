@@ -20,7 +20,7 @@ const formatDateIfToday = (date, applicationContext) => {
 };
 
 export const formatWorkItem = (
-  workItem,
+  workItem = {},
   selectedWorkItems = [],
   applicationContext,
 ) => {
@@ -53,10 +53,16 @@ export const formatWorkItem = (
   if (!result.isRead) {
     result.showUnreadStatusIcon = true;
   }
+
+  if (result.assigneeName === 'Unassigned') {
+    result.showUnassignedIcon = true;
+  }
+
   switch (result.caseStatus.trim()) {
     case 'Batched for IRS':
       result.showBatchedStatusIcon = true;
       result.showUnreadStatusIcon = false;
+      result.showUnassignedIcon = false;
       break;
     case 'Recalled':
       result.showRecalledStatusIcon = true;
@@ -90,10 +96,19 @@ export const formatWorkItem = (
 export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
   const box = get(state.workQueueToDisplay.box);
+  const internal = get(state.workQueueIsInternal);
   const selectedWorkItems = get(state.selectedWorkItems);
+
   let workQueue = workItems
-    .filter(items => (box === 'inbox' ? !items.completedAt : true))
-    .map(items => formatWorkItem(items, selectedWorkItems, applicationContext));
+    .filter(item => (box === 'inbox' ? !item.completedAt : true))
+    .filter(item =>
+      box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
+    )
+    .filter(item =>
+      box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
+    )
+    .filter(item => item.isInternal === internal)
+    .map(item => formatWorkItem(item, selectedWorkItems, applicationContext));
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
 

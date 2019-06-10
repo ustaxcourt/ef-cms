@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { fileExternalDocument } = require('./fileExternalDocumentInteractor');
+const { User } = require('../../entities/User');
 
 describe('fileExternalDocument', () => {
   let applicationContext;
@@ -69,11 +70,11 @@ describe('fileExternalDocument', () => {
       applicationContext = {
         environment: { stage: 'local' },
         getCurrentUser: () => {
-          return {
+          return new User({
             name: 'Olivia Jade',
             role: 'respondent',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
+          });
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,

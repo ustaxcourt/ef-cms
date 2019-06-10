@@ -76,7 +76,7 @@ const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
 };
 
 export const formatYearAmounts = (
-  caseDetail,
+  caseDetail = {},
   caseDetailErrors = {},
   applicationContext,
 ) => {
@@ -95,7 +95,6 @@ export const formatYearAmounts = (
 };
 
 const formatDocketRecordWithDocument = (
-  caseDetail,
   docketRecords = [],
   documents = [],
   applicationContext,
@@ -167,7 +166,6 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
       formatDocketRecord(d, applicationContext),
     );
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
-      caseDetail,
       result.docketRecord,
       result.documents,
       applicationContext,
@@ -215,9 +213,7 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = `Respondent served ${
-    result.irsDateFormatted
-  }`;
+  result.datePetitionSentToIrsMessage = `Respondent served ${result.irsDateFormatted}`;
 
   result.shouldShowIrsNoticeDate =
     result.hasVerifiedIrsNotice ||

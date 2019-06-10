@@ -1,8 +1,9 @@
 const {
-  viewSectionInbox,
-  viewMyInbox,
+  viewDocumentQCMyInbox,
+  viewDocumentQCSectionInbox,
   getWorkItemCheckboxLabel,
   getSectionUsersSelect,
+  getWorkItemMessages,
   getWorkItemRow,
   getWorkItemMessage,
   navigateTo: navigateToDashboard,
@@ -15,12 +16,9 @@ describe('Assign a work item ', () => {
 
   it('views the section inbox', () => {
     navigateToDashboard('petitionsclerk');
-    viewSectionInbox();
+    viewDocumentQCSectionInbox();
     cy.wait(3000); // TODO: find a way to avoid this... we need to wait for the XHR and the list to resort
-    getWorkItemRow('101-19W').click();
-    getWorkItemMessage('2611344f-f7bf-4f47-8ba0-60c70cb25446').contains(
-      'Petition filed by Brett Osborne is ready for review.',
-    );
+    getWorkItemRow('101-19W').should('exist');
   });
 
   it('assigns the work item to self', () => {
@@ -35,8 +33,9 @@ describe('Assign a work item ', () => {
       .should('exist');
 
     getWorkItemRow('101-19W')
-      .contains('td.to', 'Test Petitionsclerk')
+      .contains('a', 'Petition')
       .click();
+    getWorkItemMessages();
 
     getWorkItemMessage('2611344f-f7bf-4f47-8ba0-60c70cb25446').contains(
       'Petition filed by Brett Osborne is ready for review.',
@@ -45,9 +44,7 @@ describe('Assign a work item ', () => {
 
   it('places the work item in the petitionsclerk my inbox', () => {
     navigateToDashboard('petitionsclerk');
-    viewMyInbox();
-    getWorkItemRow('101-19W')
-      .contains('td.from', 'Test Petitionsclerk')
-      .should('exist');
+    viewDocumentQCMyInbox();
+    getWorkItemRow('101-19W').should('exist');
   });
 });

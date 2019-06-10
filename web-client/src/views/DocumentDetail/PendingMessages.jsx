@@ -68,7 +68,7 @@ export const PendingMessages = connect(
           documentDetailHelper.formattedDocument.workItems.map(
             (workItem, idx) => (
               <div
-                className={`card ${
+                className={`card workitem-${workItem.workItemId} ${
                   workItem.currentMessage.messageId === messageId
                     ? 'highlight'
                     : ''
