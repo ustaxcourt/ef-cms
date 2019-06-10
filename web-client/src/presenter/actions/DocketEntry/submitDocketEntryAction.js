@@ -63,22 +63,22 @@ export const submitDocketEntryAction = async ({
         documentId: document.documentId,
       });
 
-      const isValid = await applicationContext.getUseCases().validatePdf({
+      // disable for demo
+      // await applicationContext.getUseCases().validatePdf({
+      //   applicationContext,
+      //   documentId: document.documentId,
+      // });
+
+      await applicationContext.getUseCases().sanitizePdf({
         applicationContext,
         documentId: document.documentId,
       });
 
-      if (isValid) {
-        await applicationContext.getUseCases().sanitizePdf({
-          applicationContext,
-          documentId: document.documentId,
-        });
-        await applicationContext.getUseCases().createCoverSheet({
-          applicationContext,
-          caseId: caseDetail.caseId,
-          documentId: document.documentId,
-        });
-      }
+      await applicationContext.getUseCases().createCoverSheet({
+        applicationContext,
+        caseId: caseDetail.caseId,
+        documentId: document.documentId,
+      });
     }
   }
 
