@@ -34,13 +34,6 @@ describe('TrialSession entity', () => {
   });
 
   describe('validate', () => {
-    it('should produce an error if invalid startDate', () => {
-      const trialSession = new TrialSession({
-        ...VALID_TRIAL_SESSION,
-        startDate: '2030-03-01',
-      });
-      expect(trialSession.isValid()).toBeFalsy();
-    });
     it('should do nothing if valid', () => {
       let error;
       try {

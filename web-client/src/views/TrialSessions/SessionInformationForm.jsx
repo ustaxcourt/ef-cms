@@ -6,7 +6,7 @@ import React from 'react';
 export const SessionInformationForm = connect(
   {
     form: state.form,
-    sessionsByTerm: state.formattedTrialSessions.sessionsByTerm,
+    trialSessionHelper: state.formattedTrialSessions,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -14,7 +14,7 @@ export const SessionInformationForm = connect(
   },
   ({
     form,
-    sessionsByTerm,
+    trialSessionHelper,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -180,7 +180,7 @@ export const SessionInformationForm = connect(
             />
           </div>
 
-          {sessionsByTerm.length > 0 && (
+          {trialSessionHelper.showSwingSessionOption && (
             <>
               <div className="usa-form-group">
                 <div className="usa-checkbox">
@@ -237,7 +237,7 @@ export const SessionInformationForm = connect(
                   value={form.swingSessionId || ''}
                 >
                   <option value="">- Select -</option>
-                  {sessionsByTerm.map((session, idx) => (
+                  {trialSessionHelper.sessionsByTerm.map((session, idx) => (
                     <option value={session.trialSessionId} key={idx}>
                       {session.trialLocation}
                     </option>

@@ -2,7 +2,6 @@ import { applicationContext } from '../../applicationContext';
 import {
   formatSession,
   formattedTrialSessions as formattedTrialSessionsComputed,
-  sessionSorter,
 } from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -74,6 +73,58 @@ describe('formattedTrialSessions', () => {
     expect(result.formattedSessions[1].dateFormatted).toEqual(
       'February 17, 2020',
     );
+  });
+
+  it('shows swing session option only if matching term and term year is found', async () => {
+    const trialSessions = [
+      {
+        judge: '1',
+        startDate: '2019-11-25T15:00:00.000Z',
+        term: 'Fall',
+        termYear: '2019',
+        trialLocation: 'Denver, CO',
+      },
+      {
+        judge: '2',
+        startDate: '2019-04-25T15:00:00.000Z',
+        term: 'Spring',
+        termYear: '2019',
+        trialLocation: 'Jacksonville, FL',
+      },
+    ];
+
+    let form = {
+      term: 'Winter',
+      termYear: '2019',
+    };
+    let result = await runCompute(formattedTrialSessions, {
+      state: {
+        form,
+        trialSessions,
+      },
+    });
+    expect(result.sessionsByTerm.length).toEqual(0);
+    expect(result.showSwingSessionOption).toBeFalsy();
+
+    form.term = 'Spring';
+    result = await runCompute(formattedTrialSessions, {
+      state: {
+        form,
+        trialSessions,
+      },
+    });
+    expect(result.sessionsByTerm.length).toEqual(1);
+    expect(result.showSwingSessionOption).toBeTruthy();
+
+    form.termYear = '2011'; // similar term but not a matching year
+    result = await runCompute(formattedTrialSessions, {
+      state: {
+        form,
+        trialSessions,
+      },
+    });
+    expect(result.sessionsByTerm.length).toEqual(0);
+    expect(result.showSwingSessionOption).toBeFalsy();
   });
 
   it('returns sessionsByTerm with only sessions in that term if form.term is set', async () => {
