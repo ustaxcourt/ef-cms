@@ -87,7 +87,7 @@ export const StartCase = connect(
             className="usa-form maxw-none"
           >
             {showModal === 'FormCancelModalDialogComponent' && (
-              <FormCancelModalDialog />
+              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
             <ErrorNotification />
             <h1
