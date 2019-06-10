@@ -99,7 +99,7 @@ export const SectionWorkQueueOutbox = connect(
                     id={`detail-${item.workItemId}`}
                     className="message-document-detail"
                   >
-                    {item.currentMessage.message}
+                    {item.completedMessage || item.currentMessage.message}
                   </div>
                 )}
               </td>
