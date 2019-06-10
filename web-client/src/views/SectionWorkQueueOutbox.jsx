@@ -29,7 +29,7 @@ export const SectionWorkQueueOutbox = connect(
             </th>
             {workQueueHelper.showReceivedColumn && <th>Received</th>}
             {workQueueHelper.showSentColumn && <th>Sent</th>}
-            <th />
+            <th aria-label="Status Icon" className="padding-right-0" />
             <th>Document</th>
             {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
             {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
@@ -68,7 +68,7 @@ export const SectionWorkQueueOutbox = connect(
                   <span className="no-wrap">{item.sentDateFormatted}</span>
                 </td>
               )}
-              <td className="message-queue-row">
+              <td className="message-queue-row has-icon padding-right-0">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
                     icon={['far', 'clock']}
