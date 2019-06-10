@@ -3,14 +3,14 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const IndividualWorkQueueOutbox = connect(
+export const IndividualWorkQueueBatched = connect(
   {
     documentHelper: state.documentHelper,
     workQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, workQueue, workQueueSectionHelper, workQueueHelper }) => {
+  ({ documentHelper, workQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -23,17 +23,11 @@ export const IndividualWorkQueueOutbox = connect(
               <th aria-label="Docket Number" colSpan="2">
                 Docket
               </th>
-              {workQueueHelper.showReceivedColumn && <th>Received</th>}
-              {workQueueHelper.showSentColumn && <th>Sent</th>}
+              <th>Received</th>
               <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
-              {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
-              {workQueueHelper.showAssignedToColumn && (
-                <th>{workQueueHelper.assigneeColumnTitle}</th>
-              )}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
-              {workQueueHelper.showServedColumn && <th>Served</th>}
+              <th>Filed By</th>
+              <th>Batched</th>
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
@@ -50,18 +44,11 @@ export const IndividualWorkQueueOutbox = connect(
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
-                {workQueueHelper.showReceivedColumn && (
-                  <td className="message-queue-row">
-                    <span className="no-wrap">
-                      {item.currentMessage.createdAtFormatted}
-                    </span>
-                  </td>
-                )}
-                {workQueueHelper.showSentColumn && (
-                  <td className="message-queue-row">
-                    <span className="no-wrap">{item.sentDateFormatted}</span>
-                  </td>
-                )}
+                <td className="message-queue-row">
+                  <span className="no-wrap">
+                    {item.currentMessage.createdAtFormatted}
+                  </span>
+                </td>
                 <td className="message-queue-row has-icon">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
@@ -97,27 +84,10 @@ export const IndividualWorkQueueOutbox = connect(
                     </div>
                   )}
                 </td>
-                {!workQueueHelper.hideFiledByColumn && (
-                  <td className="message-queue-row">{item.document.filedBy}</td>
-                )}
-                {!workQueueHelper.hideCaseStatusColumn && (
-                  <td className="message-queue-row">{item.caseStatus}</td>
-                )}
-                {workQueueHelper.showAssignedToColumn && (
-                  <td className="to message-queue-row">
-                    {item.currentMessage.to}
-                  </td>
-                )}
-                {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row">
-                    {workQueueSectionHelper.sectionDisplay(item.section)}
-                  </td>
-                )}
-                {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">
-                    {item.currentMessage.createdAtFormatted}
-                  </td>
-                )}
+                <td className="message-queue-row">{item.document.filedBy}</td>
+                <td className="message-queue-row">
+                  {item.completedAtFormatted}
+                </td>
               </tr>
             </tbody>
           ))}

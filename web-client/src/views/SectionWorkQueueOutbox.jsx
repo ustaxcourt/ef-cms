@@ -27,17 +27,19 @@ export const SectionWorkQueueOutbox = connect(
             <th colSpan="2" aria-label="Docket Number">
               Docket
             </th>
-            <th>Sent</th>
+            {workQueueHelper.showReceivedColumn && <th>Received</th>}
+            {workQueueHelper.showSentColumn && <th>Sent</th>}
             <th />
             <th>Document</th>
             {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
-            <th>Case Status</th>
+            {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
+            {workQueueHelper.showMessagesSentFromColumn && <th>From</th>}
             {workQueueHelper.showAssignedToColumn && (
               <th>{workQueueHelper.assigneeColumnTitle}</th>
             )}
             {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
-            {!workQueueHelper.hideFromColumn && <th>From</th>}
             {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+            {workQueueHelper.showServedColumn && <th>Served</th>}
           </tr>
         </thead>
         {sectionWorkQueue.map((item, idx) => (
@@ -54,9 +56,18 @@ export const SectionWorkQueueOutbox = connect(
               <td className="message-queue-row">
                 <span className="no-wrap">{item.docketNumberWithSuffix}</span>
               </td>
-              <td className="message-queue-row">
-                <span className="no-wrap">{item.sentDateFormatted}</span>
-              </td>
+              {workQueueHelper.showReceivedColumn && (
+                <td className="message-queue-row">
+                  <span className="no-wrap">
+                    {item.currentMessage.createdAtFormatted}
+                  </span>
+                </td>
+              )}
+              {workQueueHelper.showSentColumn && (
+                <td className="message-queue-row">
+                  <span className="no-wrap">{item.sentDateFormatted}</span>
+                </td>
+              )}
               <td className="message-queue-row">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
@@ -95,7 +106,12 @@ export const SectionWorkQueueOutbox = connect(
               {!workQueueHelper.hideFiledByColumn && (
                 <td className="message-queue-row">{item.document.filedBy}</td>
               )}
-              <td className="message-queue-row">{item.caseStatus}</td>
+              {!workQueueHelper.hideCaseStatusColumn && (
+                <td className="message-queue-row">{item.caseStatus}</td>
+              )}
+              {workQueueHelper.showMessagesSentFromColumn && (
+                <td className="message-queue-row">{item.assigneeName}</td>
+              )}
               {workQueueHelper.showAssignedToColumn && (
                 <td className="message-queue-row">
                   {item.currentMessage.from}
@@ -104,12 +120,14 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showProcessedByColumn && (
                 <td className="message-queue-row">{item.completedBy}</td>
               )}
-              {!workQueueHelper.hideFromColumn && (
-                <td className="message-queue-row">{item.assigneeName}</td>
-              )}
               {!workQueueHelper.hideSectionColumn && (
                 <td className="message-queue-row">
                   {workQueueSectionHelper.sectionDisplay(item.section)}
+                </td>
+              )}
+              {workQueueHelper.showServedColumn && (
+                <td className="message-queue-row">
+                  {item.currentMessage.createdAtFormatted}
                 </td>
               )}
             </tr>

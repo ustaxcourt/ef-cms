@@ -1,3 +1,4 @@
+import { SectionWorkQueueBatched } from './SectionWorkQueueBatched';
 import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -37,7 +38,7 @@ export const SectionWorkQueue = connect(
             id="section-batched-for-irs-tab"
           >
             <div id="section-batched-for-irs-tab-content">
-              <SectionWorkQueueOutbox />
+              <SectionWorkQueueBatched />
             </div>
           </Tab>
         )}
