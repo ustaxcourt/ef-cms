@@ -13,7 +13,7 @@ export const computeFormDateAction = ({ get }) => {
   const formDay = get(state.form.day);
   const formYear = get(state.form.year);
 
-  if (formMonth || formDay || formYear) {
+  if (formMonth && formDay && formYear) {
     formDate = `${formYear}-${formMonth}-${formDay}`;
 
     formDate = formDate

@@ -54,7 +54,7 @@ const NavigationItems = (helper, sequences) => {
             onClick={e => {
               e.preventDefault();
               sequences.navigateToPathSequence({
-                path: '/document-qc/my/inbox',
+                path: helper.defaultQCBoxPath,
               });
             }}
           >

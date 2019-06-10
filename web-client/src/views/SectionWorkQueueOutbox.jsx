@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -23,11 +24,12 @@ export const SectionWorkQueueOutbox = connect(
       >
         <thead>
           <tr>
-            <th aria-label="Docket Number" colSpan="2">
+            <th colSpan="2" aria-label="Docket Number">
               Docket
             </th>
             {workQueueHelper.showReceivedColumn && <th>Received</th>}
             {workQueueHelper.showSentColumn && <th>Sent</th>}
+            <th />
             <th>Document</th>
             {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
             {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
@@ -66,6 +68,17 @@ export const SectionWorkQueueOutbox = connect(
                   <span className="no-wrap">{item.sentDateFormatted}</span>
                 </td>
               )}
+              <td className="message-queue-row">
+                {item.showBatchedStatusIcon && (
+                  <FontAwesomeIcon
+                    icon={['far', 'clock']}
+                    className="iconStatusBatched"
+                    aria-hidden="true"
+                    size="lg"
+                  />
+                )}
+              </td>
+
               <td className="message-queue-row">
                 <div className="message-document-title">
                   <a
