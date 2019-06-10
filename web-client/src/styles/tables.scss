@@ -235,6 +235,10 @@ table.work-queue {
       margin: -4px;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      a {
+        font-weight: $font-semibold;
+      }
     }
 
     .message-document-detail {
