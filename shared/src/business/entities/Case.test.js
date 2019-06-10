@@ -947,4 +947,47 @@ describe('Case entity', () => {
       );
     });
   });
+
+  describe('generateTrialSortTags', () => {
+    it('should generate sort tags for a regular case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        receivedAt: new Date('12-12-2018').toISOString(),
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-R-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+
+    it('should generate sort tags for a small case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        receivedAt: new Date('12-12-2018').toISOString(),
+        procedureType: 'Small',
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-S-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+
+    it('should generate sort tags for a prioritized case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        receivedAt: new Date('12-12-2018').toISOString(),
+        caseType: 'passport',
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-A-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-R-A-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+  });
 });
