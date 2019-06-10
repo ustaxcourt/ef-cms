@@ -75,16 +75,6 @@ describe('formattedTrialSessions', () => {
       'February 17, 2020',
     );
   });
-  it('correctly sorts sessions', async () => {
-    const [week1, week2] = (await runCompute(formattedTrialSessions, {
-      state: {
-        trialSessions: TRIAL_SESSIONS_LIST,
-      },
-    })).formattedSessions;
-    console.log(week1);
-    console.log(week2);
-    expect(true).toBe(true);
-  });
 
   it('returns sessionsByTerm with only sessions in that term if form.term is set', async () => {
     const trialSessions = [
