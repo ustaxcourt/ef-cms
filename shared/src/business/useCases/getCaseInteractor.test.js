@@ -1,4 +1,3 @@
-const assert = require('assert');
 const sinon = require('sinon');
 const { getCase } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -29,7 +28,7 @@ describe('Get case', () => {
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
-    assert.equal(caseRecord.caseId, 'c54ba5a9-b37b-479d-9201-067ec6e335bb');
+    expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
   });
 
   it('failure case by case id', async () => {
@@ -79,9 +78,8 @@ describe('Get case', () => {
       applicationContext,
       caseId: '00101-00',
     });
-    assert.equal(caseRecord.caseId, 'c54ba5a9-b37b-479d-9201-067ec6e335bb');
-    assert.equal(
-      getCaseByDocketNumberStub.getCall(0).args[0].docketNumber,
+    expect(caseRecord.caseId).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
+    expect(getCaseByDocketNumberStub.getCall(0).args[0].docketNumber).toEqual(
       '101-00',
     );
   });
@@ -109,14 +107,17 @@ describe('Get case', () => {
           }),
       }),
     };
+    let error;
     try {
       await getCase({
         applicationContext,
         caseId: '00-11111',
       });
-    } catch (error) {
-      assert.equal(error.message, 'Case 00-11111 was not found.');
+    } catch (err) {
+      error = err;
     }
+    expect(error).toBeDefined();
+    expect(error.message).toEqual('Case 00-11111 was not found.');
   });
 
   it('failure case by invalid user', async () => {
@@ -143,14 +144,17 @@ describe('Get case', () => {
           ]),
       }),
     };
+    let error;
     try {
       await getCase({
         applicationContext,
         caseId: '00101-00',
       });
-    } catch (error) {
-      assert.equal(error.message, 'Unauthorized');
+    } catch (err) {
+      error = err;
     }
+    expect(error).toBeDefined();
+    expect(error.message).toEqual('Unauthorized');
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
