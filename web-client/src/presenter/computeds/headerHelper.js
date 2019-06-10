@@ -14,8 +14,15 @@ export const headerHelper = get => {
     const externalRoles = ['petitioner', 'practitioner', 'respondent'];
     return user && user.role && externalRoles.includes(user.role);
   };
+  const isOtherUser = user => {
+    const externalRoles = ['petitionsclerk', 'docketclerk'];
+    return user && user.role && !externalRoles.includes(user.role);
+  };
 
   return {
+    defaultQCBoxPath: isOtherUser(user)
+      ? '/document-qc/section/inbox'
+      : '/document-qc/my/inbox',
     pageIsDocumentQC:
       currentPage &&
       currentPage.includes('Dashboard') &&
