@@ -592,9 +592,9 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
 Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
   this.preferredTrialCity = preferredTrialCity;
 
-  const found = find(this.docketRecord, item => {
-    return item.description.indexOf('Request for Place of Trial') !== -1;
-  });
+  const found = find(this.docketRecord, item =>
+    item.description.includes('Request for Place of Trial'),
+  );
 
   if (preferredTrialCity && !found) {
     this.addDocketRecord(
