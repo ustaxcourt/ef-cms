@@ -17,8 +17,16 @@ export const getCachedScannerSourceAction = async ({
       key: 'scannerSourceName',
     });
 
+  const scannerSourceIndex = await applicationContext
+    .getPersistenceGateway()
+    .getItem({
+      applicationContext,
+      key: 'scannerSourceIndex',
+    });
+
   if (scannerSourceName) {
     return path.success({
+      scannerSourceIndex,
       scannerSourceName,
     });
   } else {
