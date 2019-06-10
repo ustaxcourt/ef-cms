@@ -39,7 +39,6 @@ describe('TrialSession entity', () => {
         ...VALID_TRIAL_SESSION,
         startDate: '2030-03-01',
       });
-      console.log(trialSession.getValidationErrors());
       expect(trialSession.isValid()).toBeFalsy();
     });
     it('should do nothing if valid', () => {
