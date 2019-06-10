@@ -6,9 +6,9 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
 const { Document } = require('./Document');
+const { find, includes, uniqBy } = require('lodash');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { uniqBy, includes } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -567,12 +567,13 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   let datesMatch;
 
   this.docketRecord.forEach((docketRecord, index) => {
-    found = found || docketRecord.description === newDocketItem.description;
-    docketRecordIndex = found ? index : docketRecordIndex;
-    datesMatch =
-      datesMatch ||
-      (docketRecord.description === newDocketItem.description &&
-        docketRecord.filingDate === newDocketItem.filingDate);
+    if (docketRecord.description === newDocketItem.description) {
+      found = true;
+      docketRecordIndex = index;
+      if (docketRecord.filingDate === newDocketItem.filingDate) {
+        datesMatch = true;
+      }
+    }
   });
 
   if (payGovDate && !found) {
@@ -591,14 +592,8 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
 Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
   this.preferredTrialCity = preferredTrialCity;
 
-  let found;
-  let docketRecordIndex;
-
-  this.docketRecord.forEach((docketRecord, index) => {
-    found =
-      found ||
-      docketRecord.description.indexOf('Request for Place of Trial') !== -1;
-    docketRecordIndex = found ? index : docketRecordIndex;
+  const found = find(this.docketRecord, item => {
+    return item.description.indexOf('Request for Place of Trial') !== -1;
   });
 
   if (preferredTrialCity && !found) {
