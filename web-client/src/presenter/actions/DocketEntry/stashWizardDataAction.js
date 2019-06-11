@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
  */
-export const stashWizardDataAction = async ({ get, props, store }) => {
+export const stashWizardDataAction = ({ get, props, store }) => {
   const supporting = get(state.screenMetadata.supporting);
   if (!supporting) {
     const { primaryDocumentFileId, secondaryDocumentFileId } = props;

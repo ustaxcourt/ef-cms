@@ -10,7 +10,7 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  */
-export const resetContactsAction = async ({ get, store }) => {
+export const resetContactsAction = ({ get, store }) => {
   const partyType = get(state.caseDetail.partyType);
   const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
