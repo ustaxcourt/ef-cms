@@ -75,6 +75,11 @@ export const formatWorkItem = (
       result.showRecalledStatusIcon = false;
   }
 
+  if (applicationContext.getCurrentUser().role !== 'petitionsclerk') {
+    result.showRecalledStatusIcon = false;
+    result.showBatchedStatusIcon = false;
+  }
+
   result.docketNumberWithSuffix = `${
     result.docketNumber
   }${result.docketNumberSuffix || ''}`;
