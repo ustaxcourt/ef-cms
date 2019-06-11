@@ -109,7 +109,7 @@ joiValidationDecorator(
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
-      otherwise: joi.optional().allow(null),
+      otherwise: joi.string().optional(),
       then: joi
         .string()
         .uuid(uuidVersions)
