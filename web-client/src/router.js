@@ -4,10 +4,11 @@ import route from 'riot-route';
 route.base('/');
 const pageTitleSuffix = ' | U.S. Tax Court';
 
+const externalRoute = path => {
+  window.location.replace(path);
+};
+
 const router = {
-  externalRoute: path => {
-    window.location.replace(path);
-  },
   initialize: app => {
     document.title = 'U.S. Tax Court';
     const checkLoggedIn = cb => {
@@ -224,10 +225,6 @@ const router = {
     );
     route.start(true);
   },
-};
-
-const externalRoute = path => {
-  window.location.replace(path);
 };
 
 export { route, router, externalRoute };
