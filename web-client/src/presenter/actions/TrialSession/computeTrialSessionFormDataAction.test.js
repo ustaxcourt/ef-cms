@@ -91,4 +91,134 @@ describe('computeTrialSessionFormDataAction', () => {
     expect(result.state.form.term).toBeUndefined();
     expect(result.state.form.termYear).toBeUndefined();
   });
+  /*
+  it('unsets term and term year if month and year are cleared', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { month: '', term: 'Winter', termYear: '2019', year: '' },
+      },
+    });
+    expect(result.state.form.term).toBeUndefined();
+    expect(result.state.form.termYear).toEqual('');
+  });
+
+  it('sets startTime and defaults to 00 minutes if only startTimeHours and startTimeExtension are set', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { startTimeExtension: 'am', startTimeHours: '10' },
+      },
+    });
+    expect(result.state.form.startTime).toEqual('10:00');
+  });
+
+  it('sets startTime if startTimeHours, startTimeMinutes, and startTimeExtension are all set', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          startTimeExtension: 'am',
+          startTimeHours: '10',
+          startTimeMinutes: '30',
+        },
+      },
+    });
+    expect(result.state.form.startTime).toEqual('10:30');
+  });
+
+  it('sets correct startTime in military time if startTimeExtension is pm', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          startTimeExtension: 'pm',
+          startTimeHours: '1',
+          startTimeMinutes: '30',
+        },
+      },
+    });
+    expect(result.state.form.startTime).toEqual('13:30');
+  });
+
+  it('pads startTimeHours with a 0 if it is less than 10', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          startTimeExtension: 'am',
+          startTimeHours: '9',
+        },
+      },
+    });
+    expect(result.state.form.startTime).toEqual('09:00');
+  });
+
+  it('pads startTimeMinutes with a 0 if it is less than 10', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          startTimeExtension: 'am',
+          startTimeHours: '9',
+          startTimeMinutes: '5',
+        },
+      },
+    });
+    expect(result.state.form.startTime).toEqual('09:05');
+  });
+
+  it('does not set startTime if startTimeExtension is not set', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          startTimeHours: '1',
+          startTimeMinutes: '30',
+        },
+      },
+    });
+    expect(result.state.form.startTime).toBeUndefined();
+  });
+
+  it('does not set startTime if startTimeHours is not set', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          startTimeExtension: 'pm',
+          startTimeMinutes: '30',
+        },
+      },
+    });
+    expect(result.state.form.startTime).toBeUndefined();
+  });
+
+  it('does not set startTime if no time fields are set', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {},
+      },
+    });
+    expect(result.state.form.startTime).toBeUndefined();
+  });*/
 });
