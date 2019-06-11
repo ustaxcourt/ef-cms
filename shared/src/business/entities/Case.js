@@ -807,6 +807,7 @@ Case.prototype.generateTrialSortTags = function() {
 
   const hybridSortKey = [
     formattedTrialCity,
+    'H',
     casePrioritySymbol,
     unixFiledTimeSortLengthPrefix,
     unixFiledTime,

@@ -956,7 +956,7 @@ describe('Case entity', () => {
       });
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
           'WashingtonDC-R-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -970,7 +970,7 @@ describe('Case entity', () => {
       });
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
           'WashingtonDC-S-B-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -984,7 +984,7 @@ describe('Case entity', () => {
       });
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-A-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-A-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
           'WashingtonDC-R-A-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });

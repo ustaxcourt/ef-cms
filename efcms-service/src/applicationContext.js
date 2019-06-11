@@ -119,6 +119,12 @@ const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
+  getEligibleCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
+const {
+  getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
+const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -269,7 +275,6 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-
 const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
@@ -343,6 +348,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
+        getEligibleCasesForTrialSession,
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
@@ -400,6 +406,7 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
+        getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,

@@ -17,7 +17,7 @@ exports.createCaseTrialSortMappingRecords = async ({
   await put({
     Item: {
       caseId,
-      pk: `eligible-for-trial-non-hybrid-catalog`,
+      pk: 'eligible-for-trial-case-catalog',
       sk: nonHybrid,
     },
     applicationContext,
@@ -26,7 +26,7 @@ exports.createCaseTrialSortMappingRecords = async ({
   await put({
     Item: {
       caseId,
-      pk: `eligible-for-trial-hybrid-catalog`,
+      pk: 'eligible-for-trial-case-catalog',
       sk: hybrid,
     },
     applicationContext,
