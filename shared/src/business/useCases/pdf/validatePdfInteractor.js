@@ -20,6 +20,9 @@ exports.validatePdf = async ({ applicationContext, documentId }) => {
   const pdfHeaderBytes = pdfData.slice(0, 5);
   const pdfHeaderString = stringDecoder.write(pdfHeaderBytes);
 
+  applicationContext.logger.info('pdfHeaderBytes', pdfHeaderBytes);
+  applicationContext.logger.info('pdfHeaderString', pdfHeaderString);
+
   if (pdfHeaderString !== '%PDF-') {
     throw new Error('invalid pdf');
   }
