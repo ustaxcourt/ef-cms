@@ -7,9 +7,8 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
  * @param {object} providers.props the cerebral props object used for knowing which year amount index to remove
  * @param {object} providers.store the cerebral store object needed for setting the state.caseDetails.yearAmounts
- * @returns {undefined} doesn't return anything
  */
-export const removeYearAmountAction = async ({ store, get, props }) => {
+export const removeYearAmountAction = ({ store, get, props }) => {
   const caseDetail = get(state.caseDetail);
   const { index } = props;
   store.set(
