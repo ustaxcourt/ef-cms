@@ -2,8 +2,26 @@ import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCas
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractPendingMessagesFromCaseDetailComputed,
+  {
+    getCurrentUser: () => ({
+      role: 'petitionsclerk',
+    }),
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
+      };
+    },
+  },
 );
 
 describe('extractPendingMessagesFromCaseDetail', () => {
