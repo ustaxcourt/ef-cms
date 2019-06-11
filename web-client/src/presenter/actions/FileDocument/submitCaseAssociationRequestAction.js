@@ -76,21 +76,22 @@ export const submitCaseAssociationRequestAction = async ({
         documentId: document.documentId,
       });
 
-      // disable for demo
-      // await applicationContext.getUseCases().validatePdf({
-      //   applicationContext,
-      //   documentId: document.documentId,
-      // });
+      const isValidPdf = await applicationContext.getUseCases().validatePdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
 
-      await applicationContext.getUseCases().sanitizePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-      await applicationContext.getUseCases().createCoverSheet({
-        applicationContext,
-        caseId: caseDetail.caseId,
-        documentId: document.documentId,
-      });
+      if (isValidPdf) {
+        await applicationContext.getUseCases().sanitizePdf({
+          applicationContext,
+          documentId: document.documentId,
+        });
+        await applicationContext.getUseCases().createCoverSheet({
+          applicationContext,
+          caseId: caseDetail.caseId,
+          documentId: document.documentId,
+        });
+      }
     }
   }
 
