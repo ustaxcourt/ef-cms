@@ -165,6 +165,7 @@ export const SessionInformationForm = connect(
                         <label
                           htmlFor={`startTimeExtension-${option}`}
                           className="usa-radio__label smaller-padding-right"
+                          aria-label={option.toUpperCase()}
                         >
                           {option}
                         </label>
