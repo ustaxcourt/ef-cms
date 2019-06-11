@@ -13,6 +13,7 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  * getting props.key and props.value
  * @param {object} providers.get the cerebral get function used
  * for getting state.form.filingType
+ * @returns {object} props
  */
 export const updatePartyTypeAction = async ({ store, props, get }) => {
   let partyType = '';

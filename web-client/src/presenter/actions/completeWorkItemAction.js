@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the cerebral store object used for setting workQueue
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.props.workItemId the workItemId to set as completed
- * @returns {undefined} doesn't return anything
+ * @returns {Promise} async action
  */
 export const completeWorkItemAction = async ({
   get,

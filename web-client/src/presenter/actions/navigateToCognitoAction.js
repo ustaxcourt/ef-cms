@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const navigateToCognitoAction = async ({ get, router }) => {
+export const navigateToCognitoAction = ({ get, router }) => {
   const path = get(state.cognitoLoginUrl);
-  await router.route(path);
+  router.externalRoute(path);
 };
