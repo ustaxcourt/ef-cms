@@ -49,10 +49,12 @@ export const formattedTrialSessions = (get, applicationContext) => {
       'trialLocation',
     );
   }
+  const showSwingSessionList = get(state.form.swingSession);
 
   return {
     formattedSessions,
     sessionsByTerm,
+    showSwingSessionList,
     showSwingSessionOption: sessionsByTerm.length > 0,
   };
 };
