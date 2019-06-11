@@ -1,224 +1,229 @@
 import { computeTrialSessionFormDataAction } from './computeTrialSessionFormDataAction';
-import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('computeTrialSessionFormDataAction', () => {
-  it('sets term and term year when month is in Winter term and year is set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          month: '1',
-          year: '2019',
-        },
-      },
-    });
-    expect(result.state.form.term).toEqual('Winter');
-    expect(result.state.form.termYear).toEqual('2019');
+  let form;
+  const TIME_INVALID = '99:99';
+
+  beforeEach(() => {
+    form = {
+      month: '12',
+      startTimeExtension: 'am',
+      startTimeHours: '11',
+      startTimeMinutes: '00',
+      year: '2019',
+    };
   });
 
-  it('sets term and term year when month is in Spring term and year is set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          month: '5',
-          year: '2019',
-        },
-      },
+  it('should store term and time when provided valid inputs', async () => {
+    let result;
+
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
     });
-    expect(result.state.form.term).toEqual('Spring');
-    expect(result.state.form.termYear).toEqual('2019');
+    expect(result.state.form).toMatchObject({
+      startTime: '11:00',
+      term: 'Fall',
+      termYear: '2019',
+    });
+
+    form.month = '5';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: 'Spring',
+    });
+
+    form.month = '2';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: 'Winter',
+    });
   });
 
-  it('sets term and term year when month is in Fall term and year is set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          month: '11',
-          year: '2019',
-        },
-      },
+  it('should store empty term and termYear if month is invalid or year is empty', async () => {
+    let result;
+
+    form.month = 'June';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
     });
-    expect(result.state.form.term).toEqual('Fall');
-    expect(result.state.form.termYear).toEqual('2019');
+    expect(result.state.form).toMatchObject({
+      term: undefined,
+      termYear: undefined,
+    });
+
+    form.month = '7';
+    form.year = '2019';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: undefined,
+      termYear: '2019',
+    });
+
+    form.month = '5';
+    form.year = '';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: undefined,
+      termYear: undefined,
+    });
   });
 
-  it('sets term but not term year when month is set but year is not set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          month: '11',
-        },
-      },
+  it('should store an afternoon (pm) startTime in 24hr format', async () => {
+    let result;
+    form.startTimeHours = '6';
+    form.startTimeMinutes = '15';
+    form.startTimeExtension = 'pm';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
     });
-    expect(result.state.form.term).toEqual('Fall');
-    expect(result.state.form.termYear).toBeUndefined();
+    expect(result.state.form).toMatchObject({
+      startTime: '18:15',
+    });
   });
 
-  it('does not set term or term year when month and year are not set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {},
-      },
+  it('should store a morning (am) startTime in 24hr format', async () => {
+    let result;
+    form.startTimeHours = '6';
+    form.startTimeMinutes = '15';
+    form.startTimeExtension = 'am';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
     });
-    expect(result.state.form.term).toBeUndefined();
-    expect(result.state.form.termYear).toBeUndefined();
+    expect(result.state.form).toMatchObject({
+      startTime: '06:15',
+    });
   });
 
-  it('does not set term if month is not part of any term', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { month: '8' },
-      },
+  it('should store a midnight startTime in 24hr format', async () => {
+    let result;
+    form.startTimeHours = '12';
+    form.startTimeMinutes = '00';
+    form.startTimeExtension = 'am';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
     });
-    expect(result.state.form.term).toBeUndefined();
-    expect(result.state.form.termYear).toBeUndefined();
-  });
-  /*
-  it('unsets term and term year if month and year are cleared', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { month: '', term: 'Winter', termYear: '2019', year: '' },
-      },
+    expect(result.state.form).toMatchObject({
+      startTime: '00:00',
     });
-    expect(result.state.form.term).toBeUndefined();
-    expect(result.state.form.termYear).toEqual('');
   });
 
-  it('sets startTime and defaults to 00 minutes if only startTimeHours and startTimeExtension are set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { startTimeExtension: 'am', startTimeHours: '10' },
-      },
+  it('should not store a time if hours and minutes are not set', async () => {
+    let result;
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form: {} },
     });
-    expect(result.state.form.startTime).toEqual('10:00');
+    expect(result.state.startTime).toBeUndefined();
   });
 
-  it('sets startTime if startTimeHours, startTimeMinutes, and startTimeExtension are all set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          startTimeExtension: 'am',
-          startTimeHours: '10',
-          startTimeMinutes: '30',
-        },
-      },
-    });
-    expect(result.state.form.startTime).toEqual('10:30');
-  });
+  describe('should store a startTime deliberately created as invalid', () => {
+    it('if hours are invalid', async () => {
+      let result;
 
-  it('sets correct startTime in military time if startTimeExtension is pm', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          startTimeExtension: 'pm',
-          startTimeHours: '1',
-          startTimeMinutes: '30',
-        },
-      },
-    });
-    expect(result.state.form.startTime).toEqual('13:30');
-  });
+      form.startTimeHours = '13';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
 
-  it('pads startTimeHours with a 0 if it is less than 10', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          startTimeExtension: 'am',
-          startTimeHours: '9',
-        },
-      },
-    });
-    expect(result.state.form.startTime).toEqual('09:00');
-  });
+      form.startTimeHours = '13';
+      form.startTimeExtension = 'pm';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
 
-  it('pads startTimeMinutes with a 0 if it is less than 10', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          startTimeExtension: 'am',
-          startTimeHours: '9',
-          startTimeMinutes: '5',
-        },
-      },
-    });
-    expect(result.state.form.startTime).toEqual('09:05');
-  });
+      form.startTimeHours = '0';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
 
-  it('does not set startTime if startTimeExtension is not set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          startTimeHours: '1',
-          startTimeMinutes: '30',
-        },
-      },
-    });
-    expect(result.state.form.startTime).toBeUndefined();
-  });
+      form.startTimeHours = '24';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
 
-  it('does not set startTime if startTimeHours is not set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          startTimeExtension: 'pm',
-          startTimeMinutes: '30',
-        },
-      },
-    });
-    expect(result.state.form.startTime).toBeUndefined();
-  });
+      form.startTimeHours = undefined;
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
 
-  it('does not set startTime if no time fields are set', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {},
-      },
+      form.startTimeHours = 'abc';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
     });
-    expect(result.state.form.startTime).toBeUndefined();
-  });*/
+
+    it('if minutes are invalid', async () => {
+      let result;
+
+      form.startTimeMinutes = undefined;
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeMinutes = '61';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeMinutes = 'abc';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+    });
+
+    it('if extension is invalid', async () => {
+      let result;
+
+      form.startTimeExtension = undefined;
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeExtension = 'abc';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+    });
+  });
 });
