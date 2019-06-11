@@ -26,13 +26,17 @@ const computeTerm = ({ form }) => {
 
 const computeStartTime = ({ form }) => {
   if (!form.startTimeInput) return undefined;
+  const HOUR_INVALID = '99'; // force time validation error
 
   let [hours, minutes] = form.startTimeInput.split(':');
   if (form.startTimeExtension == 'pm') {
     hours = `${+hours + 12}`;
-  } else {
-    if (+hours > 12) hours = '25'; // force time validation error
+  } else if (form.startTimeExtension == 'am') {
+    if (+hours > 12) hours = HOUR_INVALID;
     hours = hours.padStart(2, '0');
+  } else {
+    // neither 'am' nor 'pm' selected
+    hours = HOUR_INVALID;
   }
   minutes = (minutes && minutes.padStart(2, '0')) || '00';
 
@@ -51,9 +55,9 @@ export const computeTrialSessionFormDataAction = ({ get, store }) => {
   const form = get(state.form);
 
   const { term, termYear } = computeTerm({ form });
-  if (term) store.set(state.form.term, term);
-  if (termYear) store.set(state.form.termYear, termYear);
+  store.set(state.form.term, term);
+  store.set(state.form.termYear, termYear);
 
   const startTime = computeStartTime({ form });
-  if (startTime) store.set(state.form.startTime, startTime);
+  store.set(state.form.startTime, startTime);
 };
