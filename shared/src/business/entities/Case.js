@@ -787,21 +787,14 @@ Case.prototype.generateTrialSortTags = function() {
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
   const casePrioritySymbol = isCasePrioritized ? 'A' : 'B';
-  const unixFiledTime = formatDateString(receivedAt, 'X');
-  const unixFiledTimeSortLengthPrefix = `L${padStart(
-    unixFiledTime.length,
-    2,
-    '0',
-  )}`;
-
+  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [
     formattedTrialCity,
     caseProcedureSymbol,
     casePrioritySymbol,
-    unixFiledTimeSortLengthPrefix,
-    unixFiledTime,
+    formattedFiledTime,
     caseId,
   ].join('-');
 
@@ -809,8 +802,7 @@ Case.prototype.generateTrialSortTags = function() {
     formattedTrialCity,
     'H', // Hybrid Tag
     casePrioritySymbol,
-    unixFiledTimeSortLengthPrefix,
-    unixFiledTime,
+    formattedFiledTime,
     caseId,
   ].join('-');
 
