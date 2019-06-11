@@ -151,7 +151,7 @@ export const SessionInformationForm = connect(
                       type="number"
                       min="0"
                       max="59"
-                      placeholder="30"
+                      placeholder="00"
                       onChange={e => {
                         updateTrialSessionFormDataSequence({
                           key: e.target.name,

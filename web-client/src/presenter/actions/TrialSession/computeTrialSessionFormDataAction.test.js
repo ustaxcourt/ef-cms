@@ -56,6 +56,16 @@ describe('computeTrialSessionFormDataAction', () => {
       termYear: undefined,
     });
 
+    form.month = '7';
+    form.year = '2019';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: undefined,
+      termYear: '2019',
+    });
+
     form.month = '5';
     form.year = '';
     result = await runAction(computeTrialSessionFormDataAction, {
@@ -93,11 +103,41 @@ describe('computeTrialSessionFormDataAction', () => {
     });
   });
 
+  it('should store a midnight startTime in 24hr format', async () => {
+    let result;
+    form.startTimeHours = '12';
+    form.startTimeMinutes = '00';
+    form.startTimeExtension = 'am';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      startTime: '00:00',
+    });
+  });
+
+  it('should not store a time if hours and minutes are not set', async () => {
+    let result;
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form: {} },
+    });
+    expect(result.state.startTime).toBeUndefined();
+  });
+
   describe('should store a startTime deliberately created as invalid', () => {
     it('if hours are invalid', async () => {
       let result;
 
       form.startTimeHours = '13';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeHours = '13';
+      form.startTimeExtension = 'pm';
       result = await runAction(computeTrialSessionFormDataAction, {
         state: { form },
       });
@@ -128,10 +168,56 @@ describe('computeTrialSessionFormDataAction', () => {
       expect(result.state.form).toMatchObject({
         startTime: TIME_INVALID,
       });
+
+      form.startTimeHours = 'abc';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
     });
-    
-    it('if minutes are invalid', () => {
+
+    it('if minutes are invalid', async () => {
+      let result;
+
       form.startTimeMinutes = undefined;
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeMinutes = '61';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeMinutes = 'abc';
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+    });
+
+    it('if extension is invalid', async () => {
+      let result;
+
+      form.startTimeExtension = undefined;
+      result = await runAction(computeTrialSessionFormDataAction, {
+        state: { form },
+      });
+      expect(result.state.form).toMatchObject({
+        startTime: TIME_INVALID,
+      });
+
+      form.startTimeExtension = 'abc';
       result = await runAction(computeTrialSessionFormDataAction, {
         state: { form },
       });
