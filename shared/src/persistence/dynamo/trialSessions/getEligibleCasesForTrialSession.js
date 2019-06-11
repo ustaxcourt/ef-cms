@@ -1,4 +1,4 @@
-const { query, batchGet } = require('../../dynamodbClientService');
+const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getEligibleCasesForTrialSession = async ({
@@ -6,7 +6,7 @@ exports.getEligibleCasesForTrialSession = async ({
   skPrefix,
   limit,
 }) => {
-  const mappings = await query({
+  const mappings = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -22,7 +22,7 @@ exports.getEligibleCasesForTrialSession = async ({
 
   const ids = mappings.map(metadata => metadata.caseId);
 
-  const results = await batchGet({
+  const results = await client.batchGet({
     applicationContext,
     keys: ids.map(id => ({
       pk: id,

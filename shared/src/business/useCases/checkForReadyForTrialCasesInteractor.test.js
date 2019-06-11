@@ -13,6 +13,7 @@ describe('checkForReadyForTrialCases', () => {
     const getAllCatalogCasesSpy = sinon.stub().returns([]);
     applicationContext = {
       getPersistenceGateway: () => ({
+        createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: getAllCatalogCasesSpy,
         getCaseByCaseId: () => MOCK_CASE,
         updateCase: () => {},
@@ -40,6 +41,7 @@ describe('checkForReadyForTrialCases', () => {
     const getAllCatalogCasesSpy = sinon.stub().returns([]);
     applicationContext = {
       getPersistenceGateway: () => ({
+        createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: getAllCatalogCasesSpy,
         getCaseByCaseId: () => undefined,
         updateCase: () => {},
@@ -67,6 +69,7 @@ describe('checkForReadyForTrialCases', () => {
     updateCaseSpy = sinon.spy();
     applicationContext = {
       getPersistenceGateway: () => ({
+        createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: () => [
           { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
         ],
@@ -96,6 +99,7 @@ describe('checkForReadyForTrialCases', () => {
     updateCaseSpy = sinon.spy();
     applicationContext = {
       getPersistenceGateway: () => ({
+        createCaseTrialSortMappingRecords: () => {},
         getAllCatalogCases: () => [
           { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
         ],
