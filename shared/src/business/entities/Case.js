@@ -25,8 +25,8 @@ const statusMap = {
 
 exports.STATUS_TYPES = statusMap;
 
-exports.ANSWER_CUTOFF_AMOUNT = 5; //Should be 45
-exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'day'
+exports.ANSWER_CUTOFF_AMOUNT = 45;
+exports.ANSWER_CUTOFF_UNIT = 'day';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
