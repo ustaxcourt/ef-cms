@@ -13,7 +13,7 @@ export const startScanAction = async ({ applicationContext, store, props }) => {
   const scanner = applicationContext.getScanner();
 
   if (
-    props.scannerSourceIndex &&
+    props.scannerSourceIndex !== null &&
     scanner.getSourceNameByIndex(props.scannerSourceIndex) ===
       props.scannerSourceName
   ) {
