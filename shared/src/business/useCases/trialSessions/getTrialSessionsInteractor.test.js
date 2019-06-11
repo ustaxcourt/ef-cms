@@ -27,16 +27,11 @@ describe('Get trial sessions', () => {
         };
       },
     };
-    let error;
-    try {
-      await getTrialSessions({
+    await expect(
+      getTrialSessions({
         applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).rejects.toThrow();
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {

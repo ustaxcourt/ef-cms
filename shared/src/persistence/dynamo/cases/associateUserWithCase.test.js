@@ -1,4 +1,4 @@
-const client = require('../../../../../shared/src/persistence/dynamodbClientService');
+const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const { associateUserWithCase } = require('./associateUserWithCase');
 

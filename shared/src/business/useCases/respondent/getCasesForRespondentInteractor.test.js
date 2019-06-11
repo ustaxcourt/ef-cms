@@ -15,16 +15,12 @@ describe('Get cases for respondent', () => {
         };
       },
     };
-    let error;
-    try {
-      await getCasesForRespondent({
+    await expect(
+      getCasesForRespondent({
         applicationContext,
         respondentId: 'respondent',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow();
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {

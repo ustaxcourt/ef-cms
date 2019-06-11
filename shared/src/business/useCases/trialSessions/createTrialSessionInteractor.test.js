@@ -26,17 +26,12 @@ describe('createTrialSessionInteractor', () => {
         createTrialSession: () => {},
       }),
     };
-    let error;
-    try {
-      await createTrialSession({
+    await expect(
+      createTrialSession({
         applicationContext,
         trialSession: MOCK_TRIAL,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).rejects.toThrow();
   });
 
   it('throws an exception when it fails to create a trial session', async () => {

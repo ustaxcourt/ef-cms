@@ -46,19 +46,13 @@ describe('Set trial session as swing session', () => {
         };
       },
     };
-
-    let error;
-    try {
-      await setTrialSessionAsSwingSession({
+    await expect(
+      setTrialSessionAsSwingSession({
         applicationContext,
         swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
         trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).rejects.toThrow();
   });
 
   it('calls getTrialSessionById and updateTrialSession persistence methods with correct parameters', async () => {
