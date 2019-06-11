@@ -50,6 +50,9 @@ const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
+  createCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
+const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
 const {
@@ -326,6 +329,7 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
+        createCaseTrialSortMappingRecords,
         createDocument,
         createTrialSession,
         createUser,
@@ -444,7 +448,7 @@ module.exports = (appContextUser = {}) => {
         console.timeEnd(key);
       },
     },
-    runVirusScan: async ({filePath}) => {
+    runVirusScan: async ({ filePath }) => {
       return execPromise(
         `clamscan ${
           process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
