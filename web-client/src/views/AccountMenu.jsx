@@ -9,7 +9,8 @@ export const AccountMenuItems = ({ signOut }) => {
     <ul className="usa-unstyled-list">
       <li>
         <button
-          className="account-menu-item log-out"
+          id="log-out"
+          className="account-menu-item usa-button--unstyled"
           onClick={() => {
             signOut();
           }}
