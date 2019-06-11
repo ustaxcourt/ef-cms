@@ -5,6 +5,9 @@ route.base('/');
 const pageTitleSuffix = ' | U.S. Tax Court';
 
 const router = {
+  externalRoute: path => {
+    window.location.replace(path);
+  },
   initialize: app => {
     document.title = 'U.S. Tax Court';
     const checkLoggedIn = cb => {
@@ -223,4 +226,8 @@ const router = {
   },
 };
 
-export { route, router };
+const externalRoute = path => {
+  window.location.replace(path);
+};
+
+export { route, router, externalRoute };
