@@ -6,7 +6,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
 const { Document } = require('./Document');
-const { find, padStart, includes, uniqBy } = require('lodash');
+const { find, includes, uniqBy } = require('lodash');
 const { formatDateString } = require('../utilities/DateHandler');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
@@ -777,7 +777,7 @@ Case.prototype.generateTrialSortTags = function() {
     preferredTrialCity,
     caseId,
     caseType,
-    receivedAt,
+    createdAt,
     procedureType,
   } = this;
 
@@ -787,7 +787,7 @@ Case.prototype.generateTrialSortTags = function() {
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
   const casePrioritySymbol = isCasePrioritized ? 'A' : 'B';
-  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
+  const formattedFiledTime = formatDateString(createdAt, 'YYYYMMDDHHmmss');
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [
