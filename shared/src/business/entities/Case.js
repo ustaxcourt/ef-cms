@@ -6,9 +6,10 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
 const { Document } = require('./Document');
+const { find, includes, uniqBy } = require('lodash');
+const { formatDateString } = require('../utilities/DateHandler');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { uniqBy, includes } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -25,8 +26,8 @@ const statusMap = {
 
 exports.STATUS_TYPES = statusMap;
 
-exports.ANSWER_CUTOFF_AMOUNT = 5; //Should be 45
-exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'day'
+exports.ANSWER_CUTOFF_AMOUNT = 45;
+exports.ANSWER_CUTOFF_UNIT = 'day';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -567,12 +568,13 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   let datesMatch;
 
   this.docketRecord.forEach((docketRecord, index) => {
-    found = found || docketRecord.description === newDocketItem.description;
-    docketRecordIndex = found ? index : docketRecordIndex;
-    datesMatch =
-      datesMatch ||
-      (docketRecord.description === newDocketItem.description &&
-        docketRecord.filingDate === newDocketItem.filingDate);
+    if (docketRecord.description === newDocketItem.description) {
+      found = true;
+      docketRecordIndex = index;
+      if (docketRecord.filingDate === newDocketItem.filingDate) {
+        datesMatch = true;
+      }
+    }
   });
 
   if (payGovDate && !found) {
@@ -591,15 +593,9 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
 Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
   this.preferredTrialCity = preferredTrialCity;
 
-  let found;
-  let docketRecordIndex;
-
-  this.docketRecord.forEach((docketRecord, index) => {
-    found =
-      found ||
-      docketRecord.description.indexOf('Request for Place of Trial') !== -1;
-    docketRecordIndex = found ? index : docketRecordIndex;
-  });
+  const found = find(this.docketRecord, item =>
+    item.description.includes('Request for Place of Trial'),
+  );
 
   if (preferredTrialCity && !found) {
     this.addDocketRecord(
@@ -769,4 +765,49 @@ Case.prototype.checkForReadyForTrial = function() {
   }
 
   return this;
+};
+
+/**
+ * generates sort tags used for sorting trials for calendaring
+ *
+ * @returns {Object} the sort tags
+ */
+Case.prototype.generateTrialSortTags = function() {
+  const {
+    preferredTrialCity,
+    caseId,
+    caseType,
+    createdAt,
+    procedureType,
+  } = this;
+
+  const isCasePrioritized = ['cdp (lien/levy)', 'passport'].includes(
+    caseType.toLowerCase(),
+  );
+  const caseProcedureSymbol =
+    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
+  const casePrioritySymbol = isCasePrioritized ? 'A' : 'B';
+  const formattedFiledTime = formatDateString(createdAt, 'YYYYMMDDHHmmss');
+  const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
+
+  const nonHybridSortKey = [
+    formattedTrialCity,
+    caseProcedureSymbol,
+    casePrioritySymbol,
+    formattedFiledTime,
+    caseId,
+  ].join('-');
+
+  const hybridSortKey = [
+    formattedTrialCity,
+    'H', // Hybrid Tag
+    casePrioritySymbol,
+    formattedFiledTime,
+    caseId,
+  ].join('-');
+
+  return {
+    hybrid: hybridSortKey,
+    nonHybrid: nonHybridSortKey,
+  };
 };

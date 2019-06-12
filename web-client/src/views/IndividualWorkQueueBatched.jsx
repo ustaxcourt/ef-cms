@@ -24,7 +24,7 @@ export const IndividualWorkQueueBatched = connect(
                 Docket
               </th>
               <th>Received</th>
-              <th aria-label="Status Icon">&nbsp;</th>
+              <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
               <th>Filed By</th>
               <th>Batched</th>
@@ -45,11 +45,9 @@ export const IndividualWorkQueueBatched = connect(
                   <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
                 <td className="message-queue-row">
-                  <span className="no-wrap">
-                    {item.currentMessage.createdAtFormatted}
-                  </span>
+                  <span className="no-wrap">{item.received}</span>
                 </td>
-                <td className="message-queue-row has-icon">
+                <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}

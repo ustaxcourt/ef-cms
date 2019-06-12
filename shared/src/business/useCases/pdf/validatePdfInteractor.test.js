@@ -23,6 +23,7 @@ describe('validatePdf', () => {
           putObjectTagging: () => {},
         }),
         logger: {
+          info: () => null,
           time: () => null,
           timeEnd: () => null,
         },

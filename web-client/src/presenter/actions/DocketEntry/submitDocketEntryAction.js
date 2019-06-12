@@ -7,6 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
+ * @returns {Promise} async action
  */
 export const submitDocketEntryAction = async ({
   get,
@@ -63,11 +64,10 @@ export const submitDocketEntryAction = async ({
         documentId: document.documentId,
       });
 
-      // disable for demo
-      // await applicationContext.getUseCases().validatePdf({
-      //   applicationContext,
-      //   documentId: document.documentId,
-      // });
+      await applicationContext.getUseCases().validatePdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
 
       await applicationContext.getUseCases().sanitizePdf({
         applicationContext,

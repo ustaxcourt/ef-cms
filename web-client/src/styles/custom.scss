@@ -76,7 +76,7 @@ iframe {
 }
 
 .link.case-link-bold {
-  font-weight: $font-bold;
+  font-weight: $font-semibold;
 }
 
 .address-line {
@@ -792,10 +792,8 @@ nav.usa-nav {
     }
   }
 
-  a.log-out {
-    font-family: $font-source-sans;
-    font-size: 20px;
-    font-weight: $font-bold;
+  #log-out {
+    color: $color-white;
   }
 }
 
@@ -973,9 +971,4 @@ nav.usa-nav {
   position: absolute;
   top: -10px;
   right: -7px;
-}
-
-.radio-container {
-  position: absolute;
-  bottom: 0;
 }
