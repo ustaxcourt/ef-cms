@@ -1,33 +1,32 @@
-const assert = require('assert');
 const { Message } = require('./Message');
 
 describe('Message', () => {
   describe('isValid', () => {
-    it('Creates a valid document', () => {
+    it('Creates a valid Message without messageId (defaults to new uuid)', () => {
       const message = new Message({
         from: 'gg',
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'hello world',
       });
-      assert.ok(message.isValid());
+      expect(message.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid document', () => {
+    it('Creates a valid Message with messageId', () => {
       const message = new Message({
         from: 'gg',
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'hello world',
         messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       });
-      assert.ok(message.isValid());
+      expect(message.isValid()).toBeTruthy();
     });
 
-    it('Creates an invalid document with no document type', () => {
+    it('Creates an invalid Message with no message', () => {
       const message = new Message({
         from: 'gg',
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
-      assert.ok(!message.isValid());
+      expect(message.isValid()).toBeFalsy();
     });
   });
 });

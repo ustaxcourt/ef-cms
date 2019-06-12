@@ -190,11 +190,25 @@ table.messages {
 table.work-queue {
   th {
     border: 0;
+    &.padding-left-0 {
+      padding-left: 0;
+    }
+    &.padding-right-0 {
+      padding-right: 0;
+    }
   }
 
   td {
+    padding: 15px 16px;
     border: none;
     font-size: 17px;
+
+    &.padding-left-0 {
+      padding-left: 0;
+    }
+    &.padding-right-0 {
+      padding-right: 0;
+    }
 
     &.message-select-control {
       label {

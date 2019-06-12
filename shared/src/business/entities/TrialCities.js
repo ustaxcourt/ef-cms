@@ -83,7 +83,7 @@ const SMALL = [
 
 const REGULAR = [...COMMON];
 
-const ALL = uniq(REGULAR, SMALL);
+const ALL = uniq([...REGULAR, ...SMALL]);
 
 exports.TRIAL_CITIES = {
   ALL,

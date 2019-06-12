@@ -29,7 +29,7 @@ export const SectionWorkQueueOutbox = connect(
             </th>
             {workQueueHelper.showReceivedColumn && <th>Received</th>}
             {workQueueHelper.showSentColumn && <th>Sent</th>}
-            <th />
+            <th aria-label="Status Icon" className="padding-right-0" />
             <th>Document</th>
             {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
             {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
@@ -58,9 +58,7 @@ export const SectionWorkQueueOutbox = connect(
               </td>
               {workQueueHelper.showReceivedColumn && (
                 <td className="message-queue-row">
-                  <span className="no-wrap">
-                    {item.currentMessage.createdAtFormatted}
-                  </span>
+                  <span className="no-wrap">{item.received}</span>
                 </td>
               )}
               {workQueueHelper.showSentColumn && (
@@ -68,7 +66,7 @@ export const SectionWorkQueueOutbox = connect(
                   <span className="no-wrap">{item.sentDateFormatted}</span>
                 </td>
               )}
-              <td className="message-queue-row">
+              <td className="message-queue-row has-icon padding-right-0">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
                     icon={['far', 'clock']}
@@ -99,7 +97,7 @@ export const SectionWorkQueueOutbox = connect(
                     id={`detail-${item.workItemId}`}
                     className="message-document-detail"
                   >
-                    {item.currentMessage.message}
+                    {item.completedMessage || item.currentMessage.message}
                   </div>
                 )}
               </td>
@@ -126,9 +124,7 @@ export const SectionWorkQueueOutbox = connect(
                 </td>
               )}
               {workQueueHelper.showServedColumn && (
-                <td className="message-queue-row">
-                  {item.currentMessage.createdAtFormatted}
-                </td>
+                <td className="message-queue-row">{item.received}</td>
               )}
             </tr>
           </tbody>

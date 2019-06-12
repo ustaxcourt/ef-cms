@@ -4,6 +4,10 @@ import route from 'riot-route';
 route.base('/');
 const pageTitleSuffix = ' | U.S. Tax Court';
 
+const externalRoute = path => {
+  window.location.replace(path);
+};
+
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
@@ -223,4 +227,4 @@ const router = {
   },
 };
 
-export { route, router };
+export { route, router, externalRoute };

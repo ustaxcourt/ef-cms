@@ -15,8 +15,6 @@ describe('caseTypeDescriptionHelper', () => {
           'Partnership (BBA Section 1101)',
           'Whistleblower',
           'Worker Classification',
-          'Declaratory Judgment (Retirement Plan)',
-          'Declaratory Judgment (Exempt Organization)',
           'Passport',
           'Interest Abatement',
           'Other',
@@ -56,14 +54,6 @@ describe('caseTypeDescriptionHelper', () => {
         {
           description: 'Notice of Determination of Worker Classification',
           type: 'Worker Classification',
-        },
-        {
-          description: 'Declaratory Judgment (Retirement Plan)',
-          type: 'Declaratory Judgment (Retirement Plan)',
-        },
-        {
-          description: 'Declaratory Judgment (Exempt Organization)',
-          type: 'Declaratory Judgment (Exempt Organization)',
         },
         {
           description:

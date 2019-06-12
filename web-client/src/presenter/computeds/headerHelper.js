@@ -41,7 +41,7 @@ export const headerHelper = get => {
       isUserInternal(user),
     showDocumentQC: isUserInternal(user),
     showMessages: isUserInternal(user),
-    showMessagesIcon: notifications.unreadCount > 0,
+    showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases: isUserExternal(user),
     showSearchInHeader: user && user.role && user.role !== 'practitioner',
     showTrialSessions: isUserInternal(user),
