@@ -54,9 +54,7 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 {workQueueHelper.showReceivedColumn && (
                   <td className="message-queue-row">
-                    <span className="no-wrap">
-                      {item.currentMessage.createdAtFormatted}
-                    </span>
+                    <span className="no-wrap">{item.received}</span>
                   </td>
                 )}
                 {workQueueHelper.showSentColumn && (
@@ -116,9 +114,7 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">
-                    {item.currentMessage.createdAtFormatted}
-                  </td>
+                  <td className="message-queue-row">{item.received}</td>
                 )}
               </tr>
             </tbody>

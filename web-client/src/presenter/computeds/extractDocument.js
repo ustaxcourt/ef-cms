@@ -10,11 +10,11 @@ export const extractedDocument = (get, applicationContext) => {
   );
   if (!selectedDocument) return {};
   const formattedDocument = formatDocument(
-    selectedDocument,
     applicationContext,
+    selectedDocument,
   );
   formattedDocument.workItems = (formattedDocument.workItems || [])
     .filter(items => !items.completedAt)
-    .map(items => formatWorkItem(items, undefined, applicationContext));
+    .map(items => formatWorkItem(applicationContext, items));
   return formattedDocument;
 };

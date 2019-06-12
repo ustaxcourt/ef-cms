@@ -47,6 +47,28 @@ describe('trialCitiesHelper', () => {
     });
   });
 
+  it('returns regular trialCitiesByState if param is "Regular"', async () => {
+    const result = await runCompute(trialCitiesHelper, {
+      state: {
+        constants: {
+          TRIAL_CITIES: {
+            REGULAR: [
+              {
+                city: 'Chicago',
+                state: 'Illinois',
+              },
+            ],
+          },
+        },
+        getTrialCityName,
+      },
+    });
+    const trialCitiesResult = result('Regular');
+    expect(trialCitiesResult).toMatchObject({
+      trialCitiesByState: { Illinois: ['Chicago, Illinois'] },
+    });
+  });
+
   it('returns regular trialCitiesByState by default if param is not "small" or "all"', async () => {
     const result = await runCompute(trialCitiesHelper, {
       state: {

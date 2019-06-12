@@ -628,11 +628,7 @@ functions:
   checkForReadyForTrialCases:
     handler: src/handlers.checkForReadyForTrialCases
     events:
-      - schedule: cron(0 * * * ? *)
-      - http:
-          path: v1/checkForReadyForTrialCases
-          method: get
-          cors: true
+      - schedule: cron(0 7 * * ? *)
 
   swagger:
     handler: src/handlers.swaggerLambda
@@ -701,6 +697,18 @@ functions:
       - http:
           path: v1/trialSessions/{trialSessionId}/setSwingSession
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getEligibleCasesForTrialSession:
+    handler: src/handlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/eligible-cases
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

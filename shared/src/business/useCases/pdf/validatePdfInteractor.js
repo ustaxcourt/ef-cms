@@ -1,4 +1,4 @@
-const { PDFParser, PDFObjectIndex } = require('pdf-lib');
+const { StringDecoder } = require('string_decoder');
 
 /**
  * validatePdf
@@ -16,12 +16,16 @@ exports.validatePdf = async ({ applicationContext, documentId }) => {
     })
     .promise();
 
-  try {
-    const index = PDFObjectIndex.create();
-    const pdfParser = new PDFParser();
-    return !!pdfParser.parse(pdfData, index);
-  } catch (e) {
-    applicationContext.logger.error(`Invalid PDF: ${documentId}, ${e}`);
-    throw new Error('Invalid PDF', e);
+  const stringDecoder = new StringDecoder('utf8');
+  const pdfHeaderBytes = pdfData.slice(0, 5);
+  const pdfHeaderString = stringDecoder.write(pdfHeaderBytes);
+
+  applicationContext.logger.info('pdfHeaderBytes', pdfHeaderBytes);
+  applicationContext.logger.info('pdfHeaderString', pdfHeaderString);
+
+  if (pdfHeaderString !== '%PDF-') {
+    throw new Error('invalid pdf');
   }
+
+  return true;
 };
