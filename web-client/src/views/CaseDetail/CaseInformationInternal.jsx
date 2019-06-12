@@ -43,17 +43,17 @@ const TrialInformation = ({ caseDetail }) => (
     <div className="grid-row">
       <div className="grid-col-6">
         <p className="label">Place of Trial</p>
-        <p>{caseDetail.preferredTrialCity}</p>
+        <p>{caseDetail.formattedTrialCity}</p>
       </div>
       <div className="grid-col-6">
         <p className="label">Trial Date</p>
-        <p>Not scheduled</p>
+        <p>{caseDetail.formattedTrialDate}</p>
       </div>
     </div>
     <div className="grid-row">
       <div className="grid-col-6">
         <p className="label">Assigned Judge</p>
-        <p>Not assigned</p>
+        <p>{caseDetail.formattedTrialJudge}</p>
       </div>
     </div>
   </React.Fragment>

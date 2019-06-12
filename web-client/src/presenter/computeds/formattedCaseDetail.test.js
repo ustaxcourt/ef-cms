@@ -694,4 +694,59 @@ describe('formattedCaseDetail', () => {
       expect(result.practitioner.formattedName).toEqual('Jackie Chan');
     });
   });
+
+  describe('trial detail mapping mapping', () => {
+    it('should provide defaults for trial information if no trial session id exist', async () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.formattedTrialCity).toEqual('Not assigned');
+      expect(result.formattedTrialDate).toEqual('Not scheduled');
+      expect(result.formattedTrialJudge).toEqual('Not assigned');
+    });
+
+    it('should provide defaults for trial information if no trial session id exist', async () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+        preferredTrialCity: 'England is my City',
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.formattedTrialCity).toEqual('England is my City');
+      expect(result.formattedTrialDate).toEqual('Not scheduled');
+      expect(result.formattedTrialJudge).toEqual('Not assigned');
+    });
+
+    it('should provide defaults for trial information if no trial session id exist', async () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+        trialDate: '2018-12-12T05:00:00Z',
+        trialJudge: 'Judge Judy',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.formattedTrialCity).toEqual('England is my City');
+      expect(result.formattedTrialDate).toEqual('12/12/18 12:00 am');
+      expect(result.formattedTrialJudge).toEqual('Judge Judy');
+    });
+  });
 });
