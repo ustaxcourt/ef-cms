@@ -13,6 +13,27 @@ const MOCK_TRIAL = {
 describe('createTrialSessionInteractor', () => {
   let applicationContext;
 
+  it('throws error if user is unauthorized', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'petitioner',
+        };
+      },
+      getPersistenceGateway: () => ({
+        createTrialSession: () => {},
+      }),
+    };
+    await expect(
+      createTrialSession({
+        applicationContext,
+        trialSession: MOCK_TRIAL,
+      }),
+    ).rejects.toThrow();
+  });
+
   it('throws an exception when it fails to create a trial session', async () => {
     applicationContext = {
       getCurrentUser: () => {

@@ -70,7 +70,7 @@ export const SectionWorkQueueInbox = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">Select</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
-              <th />
+              <th aria-label="Status Icon" className="padding-right-0" />
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
@@ -109,7 +109,7 @@ export const SectionWorkQueueInbox = connect(
                         });
                         e.stopPropagation();
                       }}
-                      className="message-select-control has-icon"
+                      className="message-select-control"
                     >
                       <input
                         id={item.workItemId}
@@ -140,7 +140,7 @@ export const SectionWorkQueueInbox = connect(
                     {item.currentMessage.createdAtFormatted}
                   </span>
                 </td>
-                <td className="message-queue-row has-icon">
+                <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}

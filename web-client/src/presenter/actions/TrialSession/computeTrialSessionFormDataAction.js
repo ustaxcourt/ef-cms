@@ -1,10 +1,11 @@
 import { state } from 'cerebral';
 
-const computeTerm = ({ form }) => {
-  const selectedMonth = +form.month;
-  let term;
+const computeTerm = ({ month, year }) => {
+  const selectedMonth = +month;
+  let term, termYear;
 
-  if (selectedMonth) {
+  if (selectedMonth && year) {
+    termYear = year;
     const termsByMonth = {
       fall: [9, 10, 11, 12],
       spring: [4, 5, 6],
@@ -20,24 +21,37 @@ const computeTerm = ({ form }) => {
     }
   }
 
-  const termYear = form.year;
   return { term, termYear };
 };
 
-const computeStartTime = ({ form }) => {
-  if (!form.startTimeInput) return undefined;
+const compute24HrTime = ({ hours, minutes, extension }) => {
+  if (!hours && !minutes) return undefined;
+  const TIME_INVALID = '99:99'; // force time validation error
 
-  let [hours, minutes] = form.startTimeInput.split(':');
-  if (form.startTimeExtension == 'pm') {
-    hours = `${+hours + 12}`;
-  } else {
-    if (+hours > 12) hours = '25'; // force time validation error
-    hours = hours.padStart(2, '0');
+  const VALID_HOUR_RE = /^((0?[1-9])|([1][0-2]))$/; // 1-9, 01-09, 10-12
+  const VALID_MINUTE_RE = /^([0-5][0-9])$/; // 00-59
+
+  if (
+    !VALID_HOUR_RE.test(hours) ||
+    !VALID_MINUTE_RE.test(minutes) ||
+    !['am', 'pm'].includes(extension)
+  ) {
+    return TIME_INVALID;
   }
-  minutes = (minutes && minutes.padStart(2, '0')) || '00';
 
-  let computedTime = `${hours}:${minutes}`;
-  return computedTime;
+  if (extension == 'pm') {
+    if (+hours <= 11) {
+      hours = `${+hours + 12}`;
+    }
+  } else if (extension == 'am') {
+    if (+hours == 12) {
+      hours = '00';
+    } else {
+      hours = hours.padStart(2, '0');
+    }
+  }
+
+  return `${hours}:${minutes}`;
 };
 
 /**
@@ -50,10 +64,17 @@ const computeStartTime = ({ form }) => {
 export const computeTrialSessionFormDataAction = ({ get, store }) => {
   const form = get(state.form);
 
-  const { term, termYear } = computeTerm({ form });
-  if (term) store.set(state.form.term, term);
-  if (termYear) store.set(state.form.termYear, termYear);
+  const { term, termYear } = computeTerm({
+    month: form.month,
+    year: form.year,
+  });
+  store.set(state.form.term, term);
+  store.set(state.form.termYear, termYear);
 
-  const startTime = computeStartTime({ form });
-  if (startTime) store.set(state.form.startTime, startTime);
+  const startTime = compute24HrTime({
+    extension: form.startTimeExtension,
+    hours: form.startTimeHours,
+    minutes: form.startTimeMinutes,
+  });
+  store.set(state.form.startTime, startTime);
 };
