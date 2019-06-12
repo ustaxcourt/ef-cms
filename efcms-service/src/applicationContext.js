@@ -228,6 +228,9 @@ const {
   setTrialSessionAsSwingSession,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
 const {
+  setTrialSessionCalendar,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
+const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -423,6 +426,7 @@ module.exports = (appContextUser = {}) => {
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
         setTrialSessionAsSwingSession,
+        setTrialSessionCalendar,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,
