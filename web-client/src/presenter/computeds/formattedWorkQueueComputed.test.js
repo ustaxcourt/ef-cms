@@ -2,7 +2,24 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWor
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
+  getCurrentUser: () => ({
+    role: 'petitionsclerk',
+  }),
+  getUtilities: () => {
+    return {
+      createISODateString,
+      formatDateString,
+      prepareDateFromString,
+    };
+  },
+});
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: null,

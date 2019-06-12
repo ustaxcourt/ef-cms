@@ -45,9 +45,7 @@ export const IndividualWorkQueueBatched = connect(
                   <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
                 <td className="message-queue-row">
-                  <span className="no-wrap">
-                    {item.currentMessage.createdAtFormatted}
-                  </span>
+                  <span className="no-wrap">{item.received}</span>
                 </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (

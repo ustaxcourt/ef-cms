@@ -109,7 +109,7 @@ joiValidationDecorator(
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
-      otherwise: joi.optional().allow(null),
+      otherwise: joi.string().optional(),
       then: joi
         .string()
         .uuid(uuidVersions)
@@ -140,6 +140,26 @@ TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
   this.swingSession = true;
 
   return this;
+};
+
+/**
+ * generate sort key prefix
+ *
+ * @returns {string} the sort key prefix
+ */
+TrialSession.prototype.generateSortKeyPrefix = function() {
+  const { trialLocation, sessionType } = this;
+
+  const caseProcedureSymbol =
+    {
+      Regular: 'R',
+      Small: 'S',
+    }[sessionType] || 'H';
+
+  const formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+  const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
+
+  return skPrefix;
 };
 
 exports.TrialSession = TrialSession;

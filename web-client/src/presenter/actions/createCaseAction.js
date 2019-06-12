@@ -60,11 +60,10 @@ export const createCaseAction = async ({
       documentId: document.documentId,
     });
 
-    // disable for demo
-    // await applicationContext.getUseCases().validatePdf({
-    //   applicationContext,
-    //   documentId: document.documentId,
-    // });
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
 
     await applicationContext.getUseCases().sanitizePdf({
       applicationContext,

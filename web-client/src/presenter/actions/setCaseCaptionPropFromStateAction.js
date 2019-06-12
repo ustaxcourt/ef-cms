@@ -6,8 +6,9 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting state.caseCaption
+ * @returns {object} case caption
  */
-export const setCaseCaptionPropFromStateAction = async ({ get }) => {
+export const setCaseCaptionPropFromStateAction = ({ get }) => {
   const caseCaption = get(state.caseCaption);
   return { caseCaption };
 };

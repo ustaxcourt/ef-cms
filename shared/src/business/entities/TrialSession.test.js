@@ -56,4 +56,30 @@ describe('TrialSession entity', () => {
       expect(error).toBeDefined();
     });
   });
+
+  describe('generateSortKeyPrefix', () => {
+    it('should generate correct sort key prefix for a regular trial session', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Regular',
+      });
+      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-R');
+    });
+
+    it('should generate correct sort key prefix for a small trial session', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Small',
+      });
+      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-S');
+    });
+
+    it('should generate correct sort key prefix for a hybrid trial session', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-H');
+    });
+  });
 });
