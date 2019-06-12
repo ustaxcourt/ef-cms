@@ -12,7 +12,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   );
   let formattedDocument = {};
   if (selectedDocument) {
-    formattedDocument = formatDocument(selectedDocument, applicationContext);
+    formattedDocument = formatDocument(applicationContext, selectedDocument);
     const allWorkItems = _.orderBy(
       formattedDocument.workItems,
       'createdAt',
@@ -20,11 +20,11 @@ export const documentDetailHelper = (get, applicationContext) => {
     );
     formattedDocument.workItems = (allWorkItems || [])
       .filter(items => !items.completedAt)
-      .map(items => formatWorkItem(items, undefined, applicationContext));
+      .map(items => formatWorkItem(applicationContext, items));
     formattedDocument.completedWorkItems = (allWorkItems || [])
       .filter(items => items.completedAt)
       .map(items => {
-        const formatted = formatWorkItem(items, undefined, applicationContext);
+        const formatted = formatWorkItem(applicationContext, items);
         formatted.messages = formatted.messages.filter(
           message => message.message.indexOf('Served on IRS') === -1,
         );
