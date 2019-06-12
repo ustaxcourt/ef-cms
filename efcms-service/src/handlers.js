@@ -23,6 +23,8 @@ module.exports = {
     .handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')
     .handler,
+  getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
+    .handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
   getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda')

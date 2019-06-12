@@ -142,4 +142,24 @@ TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
   return this;
 };
 
+/**
+ * generate sort key prefix
+ *
+ * @returns {string} the sort key prefix
+ */
+TrialSession.prototype.generateSortKeyPrefix = function() {
+  const { trialLocation, sessionType } = this;
+
+  const caseProcedureSymbol =
+    {
+      Regular: 'R',
+      Small: 'S',
+    }[sessionType] || 'H';
+
+  const formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+  const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
+
+  return skPrefix;
+};
+
 exports.TrialSession = TrialSession;
