@@ -42,8 +42,6 @@ exports.setTrialSessionCalendar = async ({
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  trialSessionEntity.setAsCalendared();
-
   for (let caseRecord of eligibleCases) {
     const caseId = caseRecord.caseId;
     const caseEntity = new Case(caseRecord);
@@ -63,6 +61,8 @@ exports.setTrialSessionCalendar = async ({
         caseId,
       });
   }
+
+  trialSessionEntity.setAsCalendared();
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

@@ -49,7 +49,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     expect(error).toBeDefined();
   });
 
-  it('should find the cases for a trial session successfully', async () => {
+  it('should set a trial session to "calendared"', async () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
