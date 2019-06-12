@@ -696,7 +696,7 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('trial detail mapping mapping', () => {
-    it('should provide defaults for trial information if no trial session id exist', async () => {
+    it('should provide defaults for trial information if no trial session id exists', async () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
       };
@@ -712,7 +712,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialJudge).toEqual('Not assigned');
     });
 
-    it('should provide defaults for trial information if no trial session id exist', async () => {
+    it('should provide defaults for trial information if no trial session id exists', async () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
         preferredTrialCity: 'England is my City',
@@ -729,7 +729,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialJudge).toEqual('Not assigned');
     });
 
-    it('should provide defaults for trial information if no trial session id exist', async () => {
+    it('should format trial information if a trial session id exists', async () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
         trialDate: '2018-12-12T05:00:00Z',
