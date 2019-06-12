@@ -5,7 +5,6 @@
  * @param procedureType the procedureType (small or regular)
  */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
-  console.log(caseType.toLowerCase());
   switch (caseType) {
     case 'Whistleblower':
       return 'W';
