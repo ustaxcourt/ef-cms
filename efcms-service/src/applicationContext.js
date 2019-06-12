@@ -427,7 +427,8 @@ module.exports = (appContextUser = {}) => {
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
-        validatePdf,
+        validatePdf: args =>
+          process.env.SKIP_VALIDATE_PDF ? null : validatePdf(args),
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
         virusScanPdf: args =>
