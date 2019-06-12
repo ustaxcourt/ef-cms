@@ -101,7 +101,7 @@ describe('TrialSession entity', () => {
         sessionType: 'Hybrid',
       });
       trialSession.addCaseToCalendar({ caseId: '123' });
-      expect(trialSession.caseOrder[0]).toEqual('123');
+      expect(trialSession.caseOrder[0]).toEqual({ caseId: '123' });
     });
   });
 });
