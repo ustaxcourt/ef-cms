@@ -67,6 +67,30 @@ exports.uploadExternalDocument = async ({
     documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
   }
 
+  const documentIds = [
+    primaryDocumentFileId,
+    secondaryDocumentFileId,
+    supportingDocumentFileId,
+    secondarySupportingDocumentFileId,
+  ];
+
+  for (let documentId of documentIds) {
+    await applicationContext.getUseCases().virusScanPdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().sanitizePdf({
+      applicationContext,
+      documentId,
+    });
+  }
+
   return await applicationContext.getUseCases().fileExternalDocument({
     applicationContext,
     documentMetadata,
