@@ -16,10 +16,13 @@ const SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
-export const STATUS_TYPES = {
+const STATUS_TYPES = {
   calendared: 'calendared',
   new: 'new',
 };
+
+exports.STATUS_TYPES = STATUS_TYPES;
+
 /**
  * constructor
  * @param rawSession

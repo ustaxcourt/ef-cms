@@ -56,7 +56,7 @@ exports.setTrialSessionCalendar = async ({
 
     await applicationContext
       .getPersistenceGateway()
-      .deleteCaseTrialSessionSortMappingRecords({
+      .deleteCaseTrialSortMappingRecords({
         applicationContext,
         caseId,
       });
