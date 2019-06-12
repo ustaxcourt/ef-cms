@@ -719,7 +719,7 @@ functions:
     handler: src/handlers.setTrialSessionCalendarLambda
     events:
       - http:
-        path: v1/trialSessions/${trialSessionId}/setCalendar
+        path: v1/trialSessions/{trialSessionId}/setCalendar
         method: post
         cors: true
         authorizer:
