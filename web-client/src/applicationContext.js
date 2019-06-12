@@ -95,6 +95,7 @@ import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInt
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
@@ -182,6 +183,7 @@ const allUseCases = {
   runBatchProcess,
   sanitizePdf,
   sendPetitionToIRSHoldingQueue,
+  setCaseToReadyForTrial,
   setItem: setItemUC,
   setTrialSessionAsSwingSession,
   setWorkItemAsRead,
