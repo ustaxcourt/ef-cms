@@ -74,6 +74,9 @@ const {
   createWorkItem: createWorkItemUC,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
+  deleteCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
+const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
@@ -342,6 +345,7 @@ module.exports = (appContextUser = {}) => {
         createTrialSession,
         createUser,
         createWorkItem,
+        deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,

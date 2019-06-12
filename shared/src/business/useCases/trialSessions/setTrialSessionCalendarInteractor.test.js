@@ -27,7 +27,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        deleteCaseTrialSessionSortMappingRecords: () => {},
+        deleteCaseTrialSortMappingRecords: () => {},
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
         updateCase: () => {},
@@ -59,7 +59,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        deleteCaseTrialSessionSortMappingRecords: () => {},
+        deleteCaseTrialSortMappingRecords: () => {},
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
         updateCase: () => {},
