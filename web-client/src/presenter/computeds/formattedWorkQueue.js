@@ -20,9 +20,9 @@ const formatDateIfToday = (date, applicationContext) => {
 };
 
 export const formatWorkItem = (
+  applicationContext,
   workItem = {},
   selectedWorkItems = [],
-  applicationContext,
   isInternal,
 ) => {
   const result = _.cloneDeep(workItem);
@@ -122,7 +122,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
     )
     .filter(item => item.isInternal === isInternal)
     .map(item =>
-      formatWorkItem(item, selectedWorkItems, applicationContext, isInternal),
+      formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
