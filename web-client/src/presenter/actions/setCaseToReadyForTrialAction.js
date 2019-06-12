@@ -14,10 +14,10 @@ export const setCaseToReadyForTrialAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseToUpdate = get(state.caseDetail);
+  const caseId = get(state.caseDetail.caseId);
 
   await applicationContext.getUseCases().setCaseToReadyForTrial({
     applicationContext,
-    caseToUpdate,
+    caseId,
   });
 };

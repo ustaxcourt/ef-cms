@@ -16,7 +16,7 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
-    runSetToReadyForTrialSequence: sequences.runSetToReadyForTrialSequence,
+    setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     token: state.token,
   },
@@ -24,7 +24,7 @@ export const CaseDetailInternal = connect(
     baseUrl,
     caseDetail,
     caseHelper,
-    runSetToReadyForTrialSequence,
+    setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
     token,
   }) => {
@@ -102,7 +102,7 @@ export const CaseDetailInternal = connect(
           )}
           <button
             className="usa-button usa-button--outline margin-left-1"
-            onClick={() => runSetToReadyForTrialSequence()}
+            onClick={() => setCaseToReadyForTrialSequence()}
           >
             Set Case Status to Ready for Trial
           </button>

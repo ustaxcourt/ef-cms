@@ -5,7 +5,7 @@ const {
 } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for updating a case
+ * set case status to ready for trial
  *
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -19,7 +19,7 @@ exports.handler = event =>
         .getUseCases()
         .setCaseToReadyForTrial({
           applicationContext,
-          caseToUpdate: JSON.parse(event.body),
+          caseId: event.pathParameters.caseId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
