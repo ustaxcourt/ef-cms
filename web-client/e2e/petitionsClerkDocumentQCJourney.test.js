@@ -43,6 +43,7 @@ global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  externalRoute: () => null,
   route: async url => {
     if (url === '/document-qc/section/inbox') {
       await test.runSequence('gotoDashboardSequence', {
@@ -87,7 +88,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Document QC Journey', () => {
+describe('Petitions Clerk Document QC Journey', () => {
   beforeEach(() => {
     jest.setTimeout(300000);
     global.window = {
