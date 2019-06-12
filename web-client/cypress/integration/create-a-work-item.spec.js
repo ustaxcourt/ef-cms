@@ -66,9 +66,8 @@ describe('Create a work item ', () => {
   });
 
   it('creates a section inbox message in this work item', () => {
+    navigateToDashboard('docketclerk');
     viewSectionInbox();
-    getTableRows().should('have.length', 2);
-    getWorkItemContaining('104-19').click();
     getWorkItemContaining('yolo').should('exist');
   });
 });

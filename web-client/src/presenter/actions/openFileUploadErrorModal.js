@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * show the file upload status modal
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the store where we register our modal request
+ * @param {object} providers the providers object
+ * @param {object} providers.store the store where we register our modal request
  */
-export const openFileUploadErrorModal = async ({ store }) => {
+export const openFileUploadErrorModal = ({ store }) => {
   store.set(state.showModal, 'FileUploadErrorModal');
 };

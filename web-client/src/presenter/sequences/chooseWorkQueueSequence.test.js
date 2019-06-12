@@ -4,9 +4,10 @@ import sinon from 'sinon';
 
 let test;
 const setCurrentUserStub = sinon.stub().returns({ section: 'petitions' });
-const getWorkItemsBySectionStub = sinon.stub().returns({});
+const getWorkItemsBySectionStub = sinon.stub().returns([{ isInternal: true }]);
 presenter.providers.applicationContext = {
   getCurrentUser: setCurrentUserStub,
+  getUniqueId: () => new Date().getTime(),
   getUseCases: () => ({
     getNotifications: () => {
       return {};

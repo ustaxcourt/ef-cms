@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  * on whether there is an IRS notice or not
  *
  * @param {*} get cerebral get function
- * @returns {Object} array of case types with descriptions
+ * @returns {object} array of case types with descriptions
  */
 export const caseTypeDescriptionHelper = get => {
   const form = get(state.form);
@@ -43,12 +43,6 @@ export const caseTypeDescriptionHelper = get => {
           break;
         case 'Worker Classification':
           caseDescription = 'Notice of Determination of Worker Classification';
-          break;
-        case 'Declaratory Judgment (Retirement Plan)':
-          caseDescription = 'Declaratory Judgment (Retirement Plan)';
-          break;
-        case 'Declaratory Judgment (Exempt Organization)':
-          caseDescription = 'Declaratory Judgment (Exempt Organization)';
           break;
         case 'Passport':
           caseDescription =

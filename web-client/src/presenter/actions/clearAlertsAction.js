@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * Clears any and all alerts that might be enabled.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.get the cerebral get function to retrieve state values
- * @param {Object} providers.store the cerebral store object used for clearing alertError, alertSuccess, caseDetailErrors
+ * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function to retrieve state values
+ * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess, caseDetailErrors
  */
 export const clearAlertsAction = ({ get, store }) => {
   const saveAlerts = get(state.saveAlertsForNavigation);

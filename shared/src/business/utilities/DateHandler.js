@@ -3,7 +3,7 @@ const moment = require('moment-timezone');
 const dateFormats = {
   DATE_TIME: 'MM/DD/YY hh:mm a',
   MMDDYY: 'MM/DD/YY',
-  TIME: 'LT',
+  TIME: 'hh:mm a',
 };
 
 const USTC_TZ = 'America/New_York';

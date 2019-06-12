@@ -21,6 +21,96 @@ table,
   }
 }
 
+.ustc-table /* TODO - eliminate work-queue rule? */ {
+  th {
+    border: 0;
+  }
+
+  td {
+    border: none;
+    font-size: 17px;
+    label {
+      margin: 0;
+    }
+  }
+
+  tr {
+    border-top: 1px solid color($theme-color-base-lighter);
+  }
+
+  tbody:not(.action-bar) {
+    &:hover {
+      td.focus-toggle {
+        button.focus-button {
+          background-color: color($theme-color-primary);
+        }
+      }
+    }
+
+    tr {
+      &:not(:first-child) {
+        border-top-width: 0;
+      }
+
+      &.queue-message {
+        td {
+          background-color: $color-primary-alt-lightest;
+        }
+      }
+    }
+  }
+
+  thead {
+    th {
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+
+      .collapse-header {
+        padding: 0;
+      }
+    }
+  }
+
+  .action-bar {
+    background-color: $color-primary-alt-lightest;
+    font-size: 1em;
+
+    label {
+      display: inline-block;
+      margin: 0;
+    }
+
+    select {
+      display: inline-block;
+      width: auto;
+      margin: 0 1em;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    .selected-count {
+      margin-right: 3em;
+      font-weight: $font-bold;
+    }
+  }
+
+  width: 100%;
+  border-top: none;
+  border-right: 1px solid color($theme-color-base-lighter);
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  border-left: 1px solid color($theme-color-base-lighter);
+}
+
+table.trial-sessions {
+  tr.trial-date {
+    td {
+      background-color: $color-primary-alt-lightest;
+    }
+  }
+}
+
 table.small-case-qualifications-table {
   margin-bottom: 2em;
 
@@ -100,11 +190,25 @@ table.messages {
 table.work-queue {
   th {
     border: 0;
+    &.padding-left-0 {
+      padding-left: 0;
+    }
+    &.padding-right-0 {
+      padding-right: 0;
+    }
   }
 
   td {
+    padding: 15px 16px;
     border: none;
     font-size: 17px;
+
+    &.padding-left-0 {
+      padding-left: 0;
+    }
+    &.padding-right-0 {
+      padding-right: 0;
+    }
 
     &.message-select-control {
       label {

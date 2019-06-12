@@ -41,6 +41,7 @@ custom:
               - ./storage/fixtures/seed/103-19.json
               - ./storage/fixtures/seed/104-19.json
               - ./storage/fixtures/seed/105-19.json
+              - ./storage/fixtures/seed/trial-sessions.json
 
   alerts:
     stages:
@@ -84,6 +85,7 @@ provider:
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
+  clamavDefDir: /opt/var/lib/clamav
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
@@ -97,6 +99,8 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
+    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -190,6 +194,24 @@ resources:
             ResourcePath: '/*'
             MetricsEnabled: true
 
+layers:
+  clamav:
+    compatibleRuntimes:
+      - nodejs10.x
+    path: runtimes/clamav
+    exclude:
+      - freshclam.conf
+      - build.sh
+      - Dockerfile
+      - Dockerfile.clamscan
+      - clamav_lambda_layer.tar.gz
+  ghostscript:
+    compatibleRuntimes:
+      - nodejs10.x
+    path: runtimes/ghostscript
+    exclude:
+      - build.sh
+
 functions:
   createDocument:
     handler: src/handlers.createDocumentLambda
@@ -252,7 +274,24 @@ functions:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet
           method: post
           cors: true
-          async: true
+          # async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  sanitizePdf:
+    handler: src/handlers.sanitizePdfLambda
+    layers:
+      - { Ref: GhostscriptLambdaLayer }
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: v1/documents/{documentId}/sanitize
+          method: post
+          cors: true
+          # async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -342,11 +381,35 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  verifyPendingCaseForUser:
+    handler: src/handlers.verifyPendingCaseForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   practitionerCaseAssociation:
     handler: src/handlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: v1/users/{userId}/case/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  practitionerPendingCaseAssociation:
+    handler: src/handlers.practitionerPendingCaseAssociationLambda
+    events:
+      - http:
+          path: v1/users/{userId}/case/{caseId}/pending
           method: put
           cors: true
           authorizer:
@@ -565,11 +628,7 @@ functions:
   checkForReadyForTrialCases:
     handler: src/handlers.checkForReadyForTrialCases
     events:
-      - schedule: cron(0 * * * ? *)
-      - http:
-          path: v1/checkForReadyForTrialCases
-          method: get
-          cors: true
+      - schedule: cron(0 7 * * ? *)
 
   swagger:
     handler: src/handlers.swaggerLambda
@@ -586,3 +645,72 @@ functions:
           path: v1/swagger.json
           method: get
           cors: true
+
+  virusScan:
+    handler: src/handlers.virusScanPdfLambda
+    memorySize: 3008
+    timeout: 900
+    layers:
+      - { Ref: ClamavLambdaLayer }
+    events:
+      - http:
+          path: v1/documents/{documentId}/virus-scan
+          method: post
+          cors: true
+          async: true
+
+  validate:
+    handler: src/handlers.validatePdfLambda
+    events:
+      - http:
+          path: v1/documents/{documentId}/validate
+          method: post
+          cors: true
+
+  getTrialSessions:
+    handler: src/handlers.getTrialSessionsLambda
+    events:
+      - http:
+          path: v1/trialSessions
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createTrialSession:
+    handler: src/handlers.createTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionAsSwingSession:
+    handler: src/handlers.setTrialSessionAsSwingSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/setSwingSession
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getEligibleCasesForTrialSession:
+    handler: src/handlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/eligible-cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

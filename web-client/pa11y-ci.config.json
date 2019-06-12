@@ -402,6 +402,20 @@
         "wait for .modal-dialog to be visible"
       ]
     },
+    {
+      "notes": "checks a11y of trial sessions table list",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions",
+      "actions": [
+        "wait for table#upcoming-sessions to be visible"
+      ]
+    },
+    {
+      "notes": "checks a11y of trial sessions add form",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session",
+      "actions": [
+        "wait for #start-date-month to be visible"
+      ]
+    },
 
     "http://localhost:1234/mock-login?token=respondent&path=/",
     "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-19",
@@ -418,10 +432,8 @@
     "http://localhost:1234/mock-login?token=docketclerk&path=/",
     {
       "notes": "checks a11y of section queue tab panel, may become brittle if element IDs change",
-      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/&info=section-queue-tab",
+      "url": "http://localhost:1234/mock-login?token=docketclerk&path=/document-qc/section/inbox&info=section-queue-tab",
       "actions": [
-        "wait for .button-switch-box to be visible",
-        "click element .button-switch-box",
         "wait for #section-work-queue to be visible",
         "wait for #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2 to be visible",
         "click element #label-337f4e0d-cf5e-4c4f-b373-5256edbbbdf2",
@@ -464,9 +476,9 @@
       "notes": "fill out request-access form and review inputs",
       "url": "http://localhost:1234/mock-login?token=practitioner&path=/case-detail/102-19/request-access&filled-form=true",
       "actions": [
-        "wait for element #document-type-1 to be visible",
-        "click element label[for=document-type-1]",
-        "check field #document-type-1",
+        "wait for element #document-type to be visible",
+        "set field #document-type to Substitution of Counsel",
+        "check field #document-type",
         "set field #certificate-Yes to Yes",
         "check field #certificate-Yes",
         "wait for element #objections-Unknown to be visible",

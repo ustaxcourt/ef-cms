@@ -12,6 +12,7 @@ const caseDetail = {
       documentId: '2',
       documentTitle: 'B Document',
       documentType: 'B Document',
+      relationship: 'secondaryDocument',
     },
     {
       documentId: '3',
@@ -167,6 +168,113 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
   });
 
+  it('unsets previous document form fields if screenMetadata.supporting is true and sets primary doc information if relationship if primary', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'previousDocument',
+        value: 'C Document',
+      },
+      state: {
+        caseDetail,
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          attachments: 'something else',
+          exhibits: 'something',
+        },
+        screenMetadata: {
+          filedDocumentIds: ['3', '2'],
+          primary: { primarySomething: true },
+          supporting: true,
+        },
+      },
+    });
+
+    expect(result.state.form.attachments).toEqual(undefined);
+    expect(result.state.form.exhibits).toEqual(undefined);
+    expect(result.state.form.primarySomething).toEqual(true);
+  });
+
+  it('unsets previous document form fields if screenMetadata.supporting is true and sets secondary doc information if relationship if secondary', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'previousDocument',
+        value: 'B Document',
+      },
+      state: {
+        caseDetail,
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          certificateOfService: false,
+        },
+        screenMetadata: {
+          filedDocumentIds: ['3', '2'],
+          secondary: { secondarySomething: 'abc' },
+          supporting: true,
+        },
+      },
+    });
+
+    expect(result.state.form.certificateOfService).toEqual(undefined);
+    expect(result.state.form.secondarySomething).toEqual('abc');
+  });
+
+  it('unsets previous document form fields if screenMetadata.supporting is true and does not set doc information if previous document has no relationship', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'previousDocument',
+        value: 'A Document',
+      },
+      state: {
+        caseDetail,
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          certificateOfService: false,
+        },
+        screenMetadata: {
+          filedDocumentIds: ['1', '2'],
+          secondary: { secondarySomething: 'abc' },
+          supporting: true,
+        },
+      },
+    });
+
+    expect(result.state.form).toEqual({});
+  });
+
+  it('does nothing if props.key is previousDocument and screenMetadata.supporting is false', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'previousDocument',
+        value: 'C Document',
+      },
+      state: {
+        caseDetail,
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          attachments: 'something else',
+          exhibits: 'something',
+        },
+        screenMetadata: {
+          filedDocumentIds: ['3', '2'],
+          primary: { primarySomething: true },
+          supporting: false,
+        },
+      },
+    });
+
+    expect(result.state.form.attachments).toEqual('something else');
+    expect(result.state.form.exhibits).toEqual('something');
+    expect(result.state.form.primarySomething).toBeUndefined();
+  });
+
   it('unsets additionalInfo if empty', async () => {
     const result = await runAction(updateDocketEntryWizardDataAction, {
       props: {
@@ -186,6 +294,26 @@ describe('updateDocketEntryWizardDataAction', () => {
     expect(result.state.form.additionalInfo).toEqual(undefined);
   });
 
+  it('does not unset additionalInfo if not empty', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'additionalInfo',
+        value: 'abc',
+      },
+      state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          additionalInfo: 'abc',
+          documentTitle: 'document title',
+        },
+      },
+    });
+
+    expect(result.state.form.additionalInfo).toEqual('abc');
+  });
+
   it('unsets additionalInfo2 if empty', async () => {
     const result = await runAction(updateDocketEntryWizardDataAction, {
       props: {
@@ -203,5 +331,25 @@ describe('updateDocketEntryWizardDataAction', () => {
     });
 
     expect(result.state.form.additionalInfo2).toEqual(undefined);
+  });
+
+  it('does not unset additionalInfo2 if not empty', async () => {
+    const result = await runAction(updateDocketEntryWizardDataAction, {
+      props: {
+        key: 'additionalInfo2',
+        value: 'abc',
+      },
+      state: {
+        constants: {
+          INTERNAL_CATEGORY_MAP: ['documentTitle'],
+        },
+        form: {
+          additionalInfo2: 'abc',
+          documentTitle: 'document title',
+        },
+      },
+    });
+
+    expect(result.state.form.additionalInfo2).toEqual('abc');
   });
 });
