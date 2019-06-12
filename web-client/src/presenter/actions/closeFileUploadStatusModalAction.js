@@ -10,7 +10,7 @@ export const closeFileUploadStatusModalAction = async ({ store }) => {
     store.set(state.percentComplete, 100);
     store.set(state.timeRemaining, 0);
     store.set(state.isUploading, false);
-    setTimeout(resolve, 3000);
+    setTimeout(resolve, process.env.FILE_UPLOAD_MODAL_TIMEOUT || 3000);
   }).then(() => {
     store.set(state.showModal, '');
   });
