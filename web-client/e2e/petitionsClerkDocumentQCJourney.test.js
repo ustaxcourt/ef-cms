@@ -19,6 +19,7 @@ import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsC
 import petitionsClerkGetsMyInboxCount from './journey/petitionsClerkGetsMyInboxCount';
 import petitionsClerkGetsSectionInboxCount from './journey/petitionsClerkGetsSectionInboxCount';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkVerifiesAssignedWorkItem from './journey/petitionsClerkVerifiesAssignedWorkItem';
 import petitionsClerkVerifiesUnreadMessage from './journey/petitionsClerkVerifiesUnreadMessage';
 import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
@@ -111,6 +112,11 @@ describe('Petitions Clerk Document QC Journey', () => {
   });
   const caseCreationCount = 3;
 
+  petitionsClerkLogIn(test);
+  petitionsClerkViewsSectionDocumentQC(test, true);
+  petitionsClerkViewsMyDocumentQC(test, true);
+  petitionsClerkSignsOut(test);
+
   taxpayerLogin(test);
 
   // Create multiple cases for testing
@@ -133,4 +139,5 @@ describe('Petitions Clerk Document QC Journey', () => {
   petitionsClerkGetsMyInboxCount(test);
   petitionsClerkVerifiesAssignedWorkItem(test);
   petitionsClerkVerifiesUnreadMessage(test);
+  petitionsClerkSignsOut(test);
 });
