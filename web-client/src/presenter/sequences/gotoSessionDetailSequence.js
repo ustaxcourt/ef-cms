@@ -4,7 +4,7 @@ import { getSessionDetailsAction } from '../actions/TrialSession/getSessionDetai
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setSessionDetailsAction } from '../actions/TrialSession/setSessiondetailsAction';
+import { setSessionDetailsAction } from '../actions/TrialSession/setSessionDetailsAction';
 import { setSessionIdAction } from '../actions/TrialSession/setSessionIdAction';
 
 const gotoSessionDetails = [
