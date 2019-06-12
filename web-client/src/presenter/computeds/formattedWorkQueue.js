@@ -23,12 +23,10 @@ export const formatWorkItem = (
   workItem = {},
   selectedWorkItems = [],
   applicationContext,
+  isInternal,
 ) => {
   const result = _.cloneDeep(workItem);
 
-  result.createdAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.createdAt, 'MMDDYY');
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
@@ -89,6 +87,12 @@ export const formatWorkItem = (
   );
 
   result.currentMessage = result.messages[0];
+
+  result.received = formatDateIfToday(
+    isInternal ? result.currentMessage.createdAt : result.document.createdAt,
+    applicationContext,
+  );
+
   result.sentDateFormatted = formatDateIfToday(
     result.currentMessage.createdAt,
     applicationContext,
@@ -101,7 +105,7 @@ export const formatWorkItem = (
 export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
   const box = get(state.workQueueToDisplay.box);
-  const internal = get(state.workQueueIsInternal);
+  const isInternal = get(state.workQueueIsInternal);
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
@@ -112,8 +116,10 @@ export const formattedWorkQueue = (get, applicationContext) => {
     .filter(item =>
       box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
     )
-    .filter(item => item.isInternal === internal)
-    .map(item => formatWorkItem(item, selectedWorkItems, applicationContext));
+    .filter(item => item.isInternal === isInternal)
+    .map(item =>
+      formatWorkItem(item, selectedWorkItems, applicationContext, isInternal),
+    );
 
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
 
