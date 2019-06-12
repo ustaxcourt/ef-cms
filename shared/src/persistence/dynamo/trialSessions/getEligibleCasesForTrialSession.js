@@ -30,5 +30,9 @@ exports.getEligibleCasesForTrialSession = async ({
     })),
   });
 
-  return stripInternalKeys(results);
+  const afterMapping = ids.map(m => ({
+    ...results.find(r => m === r.pk),
+  }));
+
+  return stripInternalKeys(afterMapping);
 };
