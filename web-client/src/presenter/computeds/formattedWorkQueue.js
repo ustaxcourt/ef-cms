@@ -27,6 +27,10 @@ export const formatWorkItem = (
 ) => {
   const result = _.cloneDeep(workItem);
 
+  result.createdAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.createdAt, 'MMDDYY');
+
   result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
