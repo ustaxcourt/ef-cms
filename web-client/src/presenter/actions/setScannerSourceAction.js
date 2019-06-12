@@ -24,6 +24,13 @@ export const setScannerSourceAction = async ({
       value: props.scannerSourceName,
     });
 
+    // also need to keep track of the index due to some scanners showing up twice as a source with duplicate name
+    await applicationContext.getUseCases().setItem({
+      applicationContext,
+      key: 'scannerSourceIndex',
+      value: props.scannerSourceIndex,
+    });
+
     // This may not be necessary
     store.set(state.scanner.scannerSourceName, props.scannerSourceName);
   } else {

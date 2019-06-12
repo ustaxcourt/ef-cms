@@ -26,7 +26,10 @@ class SelectScannerSourceModalComponent extends ModalDialog {
               className="usa-button usa-button--outline display-block margin-top-1"
               key={index}
               onClick={() => {
-                setScannerSource({ scannerSourceName: source });
+                setScannerSource({
+                  scannerSourceIndex: index,
+                  scannerSourceName: source,
+                });
               }}
             >
               {source}

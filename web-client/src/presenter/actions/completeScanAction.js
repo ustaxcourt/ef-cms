@@ -16,6 +16,7 @@ export const completeScanAction = async ({
 }) => {
   const scanner = applicationContext.getScanner();
   const { error, scannedBuffer } = await scanner.completeScanSession();
+
   if (error) {
     // let's handle the error
   } else {
