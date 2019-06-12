@@ -10,8 +10,8 @@ export const extractedDocument = (get, applicationContext) => {
   );
   if (!selectedDocument) return {};
   const formattedDocument = formatDocument(
-    selectedDocument,
     applicationContext,
+    selectedDocument,
   );
   formattedDocument.workItems = (formattedDocument.workItems || [])
     .filter(items => !items.completedAt)
