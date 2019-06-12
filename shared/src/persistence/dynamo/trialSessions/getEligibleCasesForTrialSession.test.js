@@ -12,11 +12,13 @@ describe('getEligibleCasesForTrialSession', () => {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         pk: 'eligible-for-trial-case-catalog',
         sk:
-          'WashingtonDC-R-A-L10-1544594400-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-R-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     ]);
 
-    sinon.stub(client, 'batchGet').resolves([MOCK_CASE]);
+    sinon
+      .stub(client, 'batchGet')
+      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
   });
 
   afterEach(() => {
