@@ -837,7 +837,7 @@ Case.prototype.generateTrialSortTags = function() {
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialSessionId = trialSessionEntity.trialSessionId;
   this.trialDate = trialSessionEntity.startDate;
-  this.trialJudge = trialSessionEntity.trialJudge;
+  this.trialJudge = trialSessionEntity.judge;
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = statusMap.calendared;
   return this;

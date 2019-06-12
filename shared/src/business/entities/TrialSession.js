@@ -85,7 +85,11 @@ joiValidationDecorator(
   joi.object().keys({
     address1: joi.string().optional(),
     address2: joi.string().optional(),
-    caseOrder: joi.array().items(joi.string().uuid(uuidVersions)),
+    caseOrder: joi.array().items(
+      joi.object().keys({
+        caseId: joi.string().uuid(uuidVersions),
+      }),
+    ),
     city: joi.string().optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().optional(),
@@ -192,7 +196,8 @@ TrialSession.prototype.setAsCalendared = function() {
  * @returns {TrialSession}
  */
 TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
-  this.caseOrder.push(caseEntity.caseId);
+  const { caseId } = caseEntity;
+  this.caseOrder.push({ caseId });
   return this;
 };
 
