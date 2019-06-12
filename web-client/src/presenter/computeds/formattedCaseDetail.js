@@ -78,7 +78,6 @@ const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
 export const formatYearAmounts = (
   caseDetail = {},
   caseDetailErrors = {},
-  applicationContext,
 ) => {
   caseDetail.canAddYearAmount =
     (caseDetail.yearAmounts || []).filter(yearAmount => {
@@ -97,7 +96,6 @@ export const formatYearAmounts = (
 const formatDocketRecordWithDocument = (
   docketRecords = [],
   documents = [],
-  applicationContext,
 ) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
@@ -168,7 +166,6 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
       result.docketRecord,
       result.documents,
-      applicationContext,
     );
   }
 
@@ -228,7 +225,7 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
     caseDetail.caseCaption || '',
   );
 
-  formatYearAmounts(result, caseDetailErrors, applicationContext);
+  formatYearAmounts(applicationContext, result, caseDetailErrors);
 
   return result;
 };
