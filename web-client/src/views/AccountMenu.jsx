@@ -8,15 +8,15 @@ export const AccountMenuItems = ({ signOut }) => {
   return (
     <ul className="usa-unstyled-list">
       <li>
-        <a
-          className="account-menu-item log-out"
-          href="/"
+        <button
+          id="log-out"
+          className="account-menu-item usa-button--unstyled"
           onClick={() => {
             signOut();
           }}
         >
           Log Out
-        </a>
+        </button>
       </li>
     </ul>
   );

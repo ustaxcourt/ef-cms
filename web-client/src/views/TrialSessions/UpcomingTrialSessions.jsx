@@ -41,7 +41,7 @@ export const UpcomingTrialSessions = connect(
                   <tr className="trial-sessions-row">
                     <td>{item.formattedStartDate}</td>
                     <td>{item.sessionType}</td>
-                    <td>
+                    <td aria-hidden="true">
                       {item.swingSession && (
                         <FontAwesomeIcon
                           icon="link"

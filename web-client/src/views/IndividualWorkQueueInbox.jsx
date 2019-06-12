@@ -23,7 +23,9 @@ export const IndividualWorkQueueInbox = connect(
                 Docket
               </th>
               <th>Received</th>
-              <th aria-label="Status Icon">&nbsp;</th>
+              <th aria-label="Status Icon" className="padding-right-0">
+                &nbsp;
+              </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
@@ -50,7 +52,7 @@ export const IndividualWorkQueueInbox = connect(
                     {item.currentMessage.createdAtFormatted}
                   </span>
                 </td>
-                <td className="message-queue-row has-icon">
+                <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
@@ -88,9 +90,7 @@ export const IndividualWorkQueueInbox = connect(
                       href={documentHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
-                        messageId: workQueueHelper.linkToDocumentMessages
-                          ? item.currentMessage.messageId
-                          : null,
+                        messageId: item.currentMessage.messageId,
                       })}
                       className={
                         item.isRead ? 'case-link' : 'link case-link-bold'

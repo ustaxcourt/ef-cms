@@ -45,6 +45,7 @@ global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  externalRoute: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {

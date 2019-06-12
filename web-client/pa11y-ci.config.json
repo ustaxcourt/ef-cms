@@ -402,6 +402,20 @@
         "wait for .modal-dialog to be visible"
       ]
     },
+    {
+      "notes": "checks a11y of trial sessions table list",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-sessions&info=list-trial-sessions",
+      "actions": [
+        "wait for table#upcoming-sessions to be visible"
+      ]
+    },
+    {
+      "notes": "checks a11y of trial sessions add form",
+      "url": "http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session",
+      "actions": [
+        "wait for #start-date-month to be visible"
+      ]
+    },
 
     "http://localhost:1234/mock-login?token=respondent&path=/",
     "http://localhost:1234/mock-login?token=respondent&path=/case-detail/101-19",
