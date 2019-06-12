@@ -25,6 +25,7 @@ import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocu
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
 
 import taxPayerSignsOut from './journey/taxpayerSignsOut';
+import taxpayerAddNewCaseToTestObj from './journey/taxpayerAddNewCaseToTestObj';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
@@ -107,12 +108,19 @@ describe('Document QC Journey', () => {
       TRIAL_CITIES,
     });
   });
+  const caseCreationCount = 3;
 
   taxpayerLogin(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
+
+  // Create multiple cases for testing
+  for (let i = 0; i < caseCreationCount; i++) {
+    taxpayerNavigatesToCreateCase(test);
+    taxpayerChoosesProcedureType(test);
+    taxpayerChoosesCaseType(test);
+    taxpayerCreatesNewCase(test, fakeFile);
+    taxpayerAddNewCaseToTestObj(test);
+  }
+
   taxPayerSignsOut(test);
 
   petitionsClerkLogIn(test);

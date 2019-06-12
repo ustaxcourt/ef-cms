@@ -786,7 +786,5 @@ export default (test, fakeFile) => {
       message: 'You can access your case at any time from the case list below.',
       title: 'Your petition has been successfully submitted.',
     });
-
-    test.taxpayerNewCase = test.getState('cases.0');
   });
 };
