@@ -44,12 +44,6 @@ export const caseTypeDescriptionHelper = get => {
         case 'Worker Classification':
           caseDescription = 'Notice of Determination of Worker Classification';
           break;
-        case 'Declaratory Judgment (Retirement Plan)':
-          caseDescription = 'Declaratory Judgment (Retirement Plan)';
-          break;
-        case 'Declaratory Judgment (Exempt Organization)':
-          caseDescription = 'Declaratory Judgment (Exempt Organization)';
-          break;
         case 'Passport':
           caseDescription =
             'Notice of Certification of Your Seriously Delinquent Federal Tax Debt to the Department of State';
