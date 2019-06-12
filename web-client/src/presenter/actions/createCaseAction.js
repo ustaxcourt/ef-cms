@@ -4,10 +4,10 @@ import { state } from 'cerebral';
 /**
  * invokes the filePetition useCase.
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
- * @returns {Object} the next path based on if creation was successful or error
+ * @returns {object} the next path based on if creation was successful or error
  */
 export const createCaseAction = async ({
   applicationContext,
@@ -55,6 +55,21 @@ export const createCaseAction = async ({
   }
 
   for (let document of caseDetail.documents) {
+    await applicationContext.getUseCases().virusScanPdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
+
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
+
+    await applicationContext.getUseCases().sanitizePdf({
+      applicationContext,
+      documentId: document.documentId,
+    });
+
     await applicationContext.getUseCases().createCoverSheet({
       applicationContext,
       caseId: caseDetail.caseId,

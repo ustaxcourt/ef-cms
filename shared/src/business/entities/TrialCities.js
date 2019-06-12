@@ -1,3 +1,5 @@
+const { uniq } = require('lodash');
+
 const COMMON = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
@@ -81,7 +83,10 @@ const SMALL = [
 
 const REGULAR = [...COMMON];
 
+const ALL = uniq([...REGULAR, ...SMALL]);
+
 exports.TRIAL_CITIES = {
+  ALL,
   REGULAR,
   SMALL,
 };

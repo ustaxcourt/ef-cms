@@ -7,8 +7,9 @@ export const IndividualWorkQueueInbox = connect(
   {
     documentHelper: state.documentHelper,
     workQueue: state.formattedWorkQueue,
+    workQueueHelper: state.workQueueHelper,
   },
-  ({ workQueue, documentHelper }) => {
+  ({ workQueue, workQueueHelper, documentHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -22,11 +23,14 @@ export const IndividualWorkQueueInbox = connect(
                 Docket
               </th>
               <th>Received</th>
-              <th aria-label="Status Icon">&nbsp;</th>
+              <th aria-label="Status Icon" className="padding-right-0">
+                &nbsp;
+              </th>
               <th>Document</th>
-              <th>Status</th>
-              <th>From</th>
-              <th>Section</th>
+              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              <th>Case Status</th>
+              {!workQueueHelper.hideFromColumn && <th>From</th>}
+              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
           {workQueue.map((item, idx) => (
@@ -44,11 +48,9 @@ export const IndividualWorkQueueInbox = connect(
                   <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
                 <td className="message-queue-row">
-                  <span className="no-wrap">
-                    {item.currentMessage.createdAtFormatted}
-                  </span>
+                  <span className="no-wrap">{item.received}</span>
                 </td>
-                <td className="message-queue-row has-icon">
+                <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
                       icon={['far', 'clock']}
@@ -95,18 +97,27 @@ export const IndividualWorkQueueInbox = connect(
                       {item.document.documentType}
                     </a>
                   </div>
-                  <div
-                    id={`detail-${item.workItemId}`}
-                    className="message-document-detail"
-                  >
-                    {item.currentMessage.message}
-                  </div>
+                  {workQueueHelper.showMessageContent && (
+                    <div
+                      id={`detail-${item.workItemId}`}
+                      className="message-document-detail"
+                    >
+                      {item.currentMessage.message}
+                    </div>
+                  )}
                 </td>
+                {!workQueueHelper.hideFiledByColumn && (
+                  <td className="message-queue-row">{item.document.filedBy}</td>
+                )}
                 <td className="message-queue-row">{item.caseStatus}</td>
-                <td className="message-queue-row from">
-                  {item.currentMessage.from}
-                </td>
-                <td className="message-queue-row">{item.sentBySection}</td>
+                {!workQueueHelper.hideFromColumn && (
+                  <td className="message-queue-row from">
+                    {item.currentMessage.from}
+                  </td>
+                )}
+                {!workQueueHelper.hideSectionColumn && (
+                  <td className="message-queue-row">{item.sentBySection}</td>
+                )}
               </tr>
             </tbody>
           ))}

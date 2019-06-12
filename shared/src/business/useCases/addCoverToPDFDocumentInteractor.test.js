@@ -136,7 +136,6 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
-
         logger: {
           time: () => null,
           timeEnd: () => null,

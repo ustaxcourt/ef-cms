@@ -24,6 +24,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
       createdAt: documentEntity.createdAt,
     },
     isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
+    isInternal: false,
     section: PETITIONS_SECTION,
     sentBy: user.userId,
   });
@@ -32,9 +33,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
   if (documentEntity.documentType === 'Petition') {
     const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
-    message = `${
-      documentEntity.documentType
-    } filed by ${caseCaptionNames} is ready for review.`;
+    message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
   } else {
     message = `${documentEntity.documentType} filed by ${capitalize(
       user.role,
@@ -122,9 +121,7 @@ exports.createCase = async ({
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
-      description: `Request for Place of Trial at ${
-        caseToAdd.preferredTrialCity
-      }`,
+      description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
       filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
     }),
   );

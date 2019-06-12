@@ -1,4 +1,3 @@
-const assert = require('assert');
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('./sendPetitionToIRSHoldingQueueInteractor');
@@ -155,7 +154,7 @@ describe('Send petition to IRS Holding Queue', () => {
     } catch (err) {
       error = err;
     }
-    assert.ok(error);
+    expect(error).toBeDefined();
     expect(error.message).toContain(
       'Case c54ba5a9-b37b-479d-9201-067ec6e335ba was not found',
     );

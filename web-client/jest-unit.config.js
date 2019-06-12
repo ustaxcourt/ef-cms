@@ -1,6 +1,6 @@
 module.exports = {
-  testEnvironment: 'node',
   collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.js', '!e2e/**/*.js', '!src/**/*.test.js'],
   coverageDirectory: './coverage-unit',
   coverageThreshold: {
     global: {
@@ -13,5 +13,5 @@ module.exports = {
   globals: {
     window: true,
   },
-  collectCoverageFrom: ['src/**/*.js', '!e2e/**/*.js', '!src/**/*.test.js'],
+  testEnvironment: 'node',
 };

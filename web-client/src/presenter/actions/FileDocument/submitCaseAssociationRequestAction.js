@@ -4,9 +4,10 @@ import { state } from 'cerebral';
 /**
  * set practitioner to a case
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context
- * @param {Object} providers.props the cerebral props object
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
+ * @returns {Promise} async action
  */
 export const submitCaseAssociationRequestAction = async ({
   get,
@@ -14,7 +15,7 @@ export const submitCaseAssociationRequestAction = async ({
   applicationContext,
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
+  const { primaryDocumentFileId, supportingDocumentFileId } = props;
   const user = get(state.user);
 
   let documentMetadata = omit(
@@ -42,15 +43,49 @@ export const submitCaseAssociationRequestAction = async ({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
+      supportingDocumentFileId,
     });
 
-  await applicationContext.getUseCases().submitCaseAssociationRequest({
-    applicationContext,
-    caseId,
-  });
+  const documentWithImmediateAssociation = [
+    'Entry of Appearance',
+    'Substitution of Counsel',
+  ].includes(documentMetadata.documentType);
+
+  const documentWithPendingAssociation = [
+    'Motion to Substitute Parties and Change Caption',
+    'Notice of Intervention',
+    'Notice of Election to Participate',
+    'Notice of Election to Intervene',
+  ].includes(documentMetadata.documentType);
+
+  if (documentWithImmediateAssociation) {
+    await applicationContext.getUseCases().submitCaseAssociationRequest({
+      applicationContext,
+      caseId,
+    });
+  } else if (documentWithPendingAssociation) {
+    await applicationContext.getUseCases().submitPendingCaseAssociationRequest({
+      applicationContext,
+      caseId,
+    });
+  }
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
+      await applicationContext.getUseCases().virusScanPdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
+
+      await applicationContext.getUseCases().validatePdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
+
+      await applicationContext.getUseCases().sanitizePdf({
+        applicationContext,
+        documentId: document.documentId,
+      });
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
         caseId: caseDetail.caseId,
@@ -62,5 +97,7 @@ export const submitCaseAssociationRequestAction = async ({
   return {
     caseDetail,
     caseId: docketNumber,
+    documentWithImmediateAssociation,
+    documentWithPendingAssociation,
   };
 };
