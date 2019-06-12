@@ -831,7 +831,7 @@ Case.prototype.generateTrialSortTags = function() {
 /**
  * set as calendared
  *
- * @param trialSessionEntity - the trial session that is associated with the case
+ * @param {Object} trialSessionEntity - the trial session that is associated with the case
  * @returns {Case}
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
