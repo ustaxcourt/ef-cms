@@ -72,7 +72,7 @@ exports.uploadExternalDocument = async ({
     secondaryDocumentFileId,
     supportingDocumentFileId,
     secondarySupportingDocumentFileId,
-  ];
+  ].filter(documentId => documentId);
 
   for (let documentId of documentIds) {
     await applicationContext.getUseCases().virusScanPdf({
