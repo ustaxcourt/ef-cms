@@ -142,6 +142,13 @@ describe('checkForReadyForTrialCases', () => {
   });
 
   it("should update cases to 'ready for trial' that meet requirements", async () => {
+    /**
+     * Requirements:
+     * 1. Case has status 'General Docket - Not at Issue'
+     * 2. Case has had an 'Answer' type document filed
+     * 3. The cutoff(45 days) has passed since the first Answer document was submitted.
+     */
+
     updateCaseSpy = sinon.spy();
     applicationContext = {
       getPersistenceGateway: () => ({
