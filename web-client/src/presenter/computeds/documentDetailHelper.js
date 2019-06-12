@@ -12,7 +12,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   );
   let formattedDocument = {};
   if (selectedDocument) {
-    formattedDocument = formatDocument(selectedDocument, applicationContext);
+    formattedDocument = formatDocument(applicationContext, selectedDocument);
     const allWorkItems = _.orderBy(
       formattedDocument.workItems,
       'createdAt',
