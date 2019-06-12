@@ -152,7 +152,7 @@ describe('clearSecondaryDocumentScenarioAction', () => {
       secondarySupportingDocumentFreeText: null,
     });
   });
-  it('clears document scenario with "secondaryDocument.category" key', async () => {
+  it("clears document scenario, but preserves secondaryDocument's category key", async () => {
     const result = await runAction(clearWizardDataAction, {
       props: {
         key: 'secondaryDocument.category',
@@ -161,6 +161,7 @@ describe('clearSecondaryDocumentScenarioAction', () => {
         form: {
           secondaryDocument: {
             category: 'what',
+            documentType: 'another document type',
           },
         },
       },
@@ -170,7 +171,7 @@ describe('clearSecondaryDocumentScenarioAction', () => {
       category: 'what',
     });
   });
-  it('clears document scenario with "secondaryDocument.documentType" key', async () => {
+  it("clears document scenario, but preserves the secondaryDocument's documentType and category keys", async () => {
     const result = await runAction(clearWizardDataAction, {
       props: {
         key: 'secondaryDocument.documentType',
@@ -180,6 +181,7 @@ describe('clearSecondaryDocumentScenarioAction', () => {
           secondaryDocument: {
             category: 'what',
             documentType: 'other',
+            foo: 'bar',
           },
         },
       },
