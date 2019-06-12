@@ -115,6 +115,13 @@ const router = {
       }),
     );
     route(
+      '/session-detail/*',
+      checkLoggedIn(sessionId => {
+        document.title = `Session Information ${pageTitleSuffix}`;
+        app.getSequence('gotoSessionDetailSequence')({ sessionId });
+      }),
+    );
+    route(
       '/trial-sessions',
       checkLoggedIn(() => {
         document.title = `Trial sessions ${pageTitleSuffix}`;
