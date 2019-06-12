@@ -952,41 +952,41 @@ describe('Case entity', () => {
     it('should generate sort tags for a regular case', () => {
       const myCase = new Case({
         ...MOCK_CASE,
-        createdAt: new Date('12-12-2018').toISOString(),
+        createdAt: '2018-12-12T05:00:00Z',
       });
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-B-20181212010000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-B-20181212010000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
     it('should generate sort tags for a small case', () => {
       const myCase = new Case({
         ...MOCK_CASE,
-        createdAt: new Date('12-12-2018').toISOString(),
+        createdAt: '2018-12-12T05:00:00Z',
         procedureType: 'Small',
       });
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-B-20181212010000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-B-20181212010000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-S-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
     it('should generate sort tags for a prioritized case', () => {
       const myCase = new Case({
         ...MOCK_CASE,
-        createdAt: new Date('12-12-2018').toISOString(),
+        createdAt: '2018-12-12T05:00:00Z',
         caseType: 'passport',
       });
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-A-20181212010000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-A-20181212010000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-R-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
   });

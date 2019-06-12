@@ -21,6 +21,11 @@ describe('DateHandler', () => {
       const myDate = createISODateString('2001-01-01'); // Jan 1, 2001 at the stroke of midnight, EST
       expect(myDate).toBe('2001-01-01T05:00:00.000Z');
     });
+
+    it('should not alter a zulu time string', () => {
+      const myDate = createISODateString('2001-01-01T00:00:00.000Z'); // Jan 1, 2001 at the stroke of midnight, GMT
+      expect(myDate).toBe('2001-01-01T00:00:00.000Z');
+    });
   });
 
   describe('formatDateString', () => {
