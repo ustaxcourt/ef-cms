@@ -703,10 +703,10 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-    getEligibleCasesForTrialSession:
-      handler: src/handlers.getEligibleCasesForTrialSessionLambda
-      events:
-        - http:
+  getEligibleCasesForTrialSession:
+    handler: src/handlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
           path: v1/trialSessions/{trialSessionId}/eligible-cases
           method: get
           cors: true
