@@ -43,6 +43,7 @@ import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
+import { gotoSessionDetailSequence } from './sequences/gotoSessionDetailSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
@@ -192,6 +193,7 @@ export const presenter = {
     gotoLoginSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
+    gotoSessionDetailSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     gotoTrialSessionsSequence,
