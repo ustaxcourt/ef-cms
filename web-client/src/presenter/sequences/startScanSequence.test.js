@@ -12,20 +12,26 @@ presenter.providers.applicationContext = {
     getItem: ({ key }) => mockItems[key],
   }),
   getScanner: () => ({
+    getSourceNameByIndex: () => 'Mock Scanner',
     getSources: () => mockSources,
+    setSourceByIndex: () => null,
     setSourceByName: mockSetSourceByName,
     startScanSession: mockStartScanSession,
   }),
   getUseCases: () => ({
+    removeItem: async () => null,
     setItem: mockSetItem,
   }),
 };
+
+global.alert = () => null;
 
 const test = CerebralTest(presenter);
 
 describe('startScanSequence', () => {
   it('gets the cached scan source name and starts the scan action', async () => {
     mockItems = {
+      scannerSourceIndex: '1',
       scannerSourceName: 'Mock Scanner',
     };
     await test.runSequence('startScanSequence', {});
@@ -36,6 +42,7 @@ describe('startScanSequence', () => {
 
   it('provides a flow for setting a scan source if one isn not cached', async () => {
     mockItems = {
+      scannerSourceIndex: null,
       scannerSourceName: '',
     };
     await test.runSequence('startScanSequence', {});
