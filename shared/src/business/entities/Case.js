@@ -7,6 +7,7 @@ const {
 const { DocketRecord } = require('./DocketRecord');
 const { Document } = require('./Document');
 const { find, includes, uniqBy } = require('lodash');
+const { formatDateString } = require('../utilities/DateHandler');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 const { YearAmount } = require('./YearAmount');
@@ -764,4 +765,49 @@ Case.prototype.checkForReadyForTrial = function() {
   }
 
   return this;
+};
+
+/**
+ * generates sort tags used for sorting trials for calendaring
+ *
+ * @returns {Object} the sort tags
+ */
+Case.prototype.generateTrialSortTags = function() {
+  const {
+    preferredTrialCity,
+    caseId,
+    caseType,
+    createdAt,
+    procedureType,
+  } = this;
+
+  const isCasePrioritized = ['cdp (lien/levy)', 'passport'].includes(
+    caseType.toLowerCase(),
+  );
+  const caseProcedureSymbol =
+    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
+  const casePrioritySymbol = isCasePrioritized ? 'A' : 'B';
+  const formattedFiledTime = formatDateString(createdAt, 'YYYYMMDDHHmmss');
+  const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
+
+  const nonHybridSortKey = [
+    formattedTrialCity,
+    caseProcedureSymbol,
+    casePrioritySymbol,
+    formattedFiledTime,
+    caseId,
+  ].join('-');
+
+  const hybridSortKey = [
+    formattedTrialCity,
+    'H', // Hybrid Tag
+    casePrioritySymbol,
+    formattedFiledTime,
+    caseId,
+  ].join('-');
+
+  return {
+    hybrid: hybridSortKey,
+    nonHybrid: nonHybridSortKey,
+  };
 };

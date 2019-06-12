@@ -50,6 +50,9 @@ const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
+  createCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
+const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
 const {
@@ -115,6 +118,12 @@ const {
 const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
+const {
+  getEligibleCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
+const {
+  getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -266,7 +275,6 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-
 const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
@@ -326,6 +334,7 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
+        createCaseTrialSortMappingRecords,
         createDocument,
         createTrialSession,
         createUser,
@@ -339,6 +348,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
+        getEligibleCasesForTrialSession,
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
@@ -396,6 +406,7 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
+        getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
@@ -444,7 +455,7 @@ module.exports = (appContextUser = {}) => {
         console.timeEnd(key);
       },
     },
-    runVirusScan: async ({filePath}) => {
+    runVirusScan: async ({ filePath }) => {
       return execPromise(
         `clamscan ${
           process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
