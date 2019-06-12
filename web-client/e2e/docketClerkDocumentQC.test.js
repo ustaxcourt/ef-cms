@@ -137,7 +137,7 @@ describe('Create a work item', () => {
   let qcSectionInboxCountBefore;
   let notificationsBefore;
 
-  it('get initial docket clerk inbox counts', async () => {
+  async function loginAsDocketClerkAndKeepTrackOfInitialInboxCounts() {
     await loginAs('docketclerk');
     await waitForRouter();
 
@@ -160,16 +160,16 @@ describe('Create a work item', () => {
     }).inboxCount;
 
     notificationsBefore = test.getState('notifications');
-  });
+  }
 
-  it('create the case for this test', async () => {
+  async function taxpayerCreatesTheInitialCaseToTestWith() {
     await loginAs('taxpayer');
     await waitForRouter();
     await createCase(test);
     caseDetail = test.getState('caseDetail');
-  });
+  }
 
-  it('upload an external document to the case', async () => {
+  async function taxpayerUploads3ExternalDocuments() {
     test.setState('form', {
       attachments: false,
       category: 'Decision',
@@ -195,9 +195,9 @@ describe('Create a work item', () => {
     await test.runSequence('submitExternalDocumentSequence');
     await test.runSequence('submitExternalDocumentSequence');
     await test.runSequence('submitExternalDocumentSequence');
-  });
+  }
 
-  it('docket clerk views section document qc inbox and checks inbox counts increase by 3', async () => {
+  async function docketClerkVerifiesThose3ExternalDocumentsExistInDocumentQCSectionInbox() {
     await loginAs('docketclerk');
     await waitForRouter();
 
@@ -225,9 +225,9 @@ describe('Create a work item', () => {
       state: test.getState(),
     }).inboxCount;
     expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 3);
-  });
+  }
 
-  it('docket clerk assigns the 3 decision work items to self', async () => {
+  async function docketClerkAssignsThose3ItemsToSelf() {
     const documentQCSectionInbox = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
@@ -245,9 +245,9 @@ describe('Create a work item', () => {
       });
     }
     await test.runSequence('assignSelectedWorkItemsSequence');
-  });
+  }
 
-  it('docket clerk views their individual document qc inbox and checks inbox counts increase by 3', async () => {
+  async function docketClerkVerifies3MessagesAddedToQCInbox() {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
@@ -269,12 +269,22 @@ describe('Create a work item', () => {
       state: test.getState(),
     }).inboxCount;
     expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 3);
-  });
+  }
 
-  it('check that unread notifications increase by 3', async () => {
+  async function docketClerkVerifyUnreadCountIncreasedBy3() {
     expect(test.getState('notifications')).toMatchObject({
       myInboxUnreadCount: notificationsBefore.myInboxUnreadCount,
       qcUnreadCount: notificationsBefore.qcUnreadCount + 3,
     });
+  }
+
+  it('a docket clerk viewing and assigning document qc section items to themself', async () => {
+    loginAsDocketClerkAndKeepTrackOfInitialInboxCounts();
+    taxpayerCreatesTheInitialCaseToTestWith();
+    taxpayerUploads3ExternalDocuments();
+    docketClerkVerifiesThose3ExternalDocumentsExistInDocumentQCSectionInbox();
+    docketClerkAssignsThose3ItemsToSelf();
+    docketClerkVerifies3MessagesAddedToQCInbox();
+    docketClerkVerifyUnreadCountIncreasedBy3();
   });
 });
