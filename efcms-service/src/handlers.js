@@ -50,6 +50,8 @@ module.exports = {
   sanitizePdfLambda: require('./documents/sanitizePdfLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
+  setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
+    .handler,
   setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
     .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')

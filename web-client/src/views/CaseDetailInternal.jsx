@@ -16,6 +16,7 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    runSetToReadyForTrialSequence: sequences.runSetToReadyForTrialSequence,
     setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     token: state.token,
   },
@@ -23,6 +24,7 @@ export const CaseDetailInternal = connect(
     baseUrl,
     caseDetail,
     caseHelper,
+    runSetToReadyForTrialSequence,
     setDocumentDetailTabSequence,
     token,
   }) => {
@@ -98,6 +100,12 @@ export const CaseDetailInternal = connect(
               Batch Zip Download
             </a>
           )}
+          <button
+            className="usa-button usa-button--outline margin-left-1"
+            onClick={() => runSetToReadyForTrialSequence()}
+          >
+            Set Case Status to Ready for Trial
+          </button>
         </section>
       </>
     );
