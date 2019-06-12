@@ -7,10 +7,9 @@ const { put } = require('./requests');
  * @param caseToUpdate
  * @returns {Promise<*>}
  */
-exports.setCaseToReadyForTrial = ({ applicationContext, caseToUpdate }) => {
+exports.setCaseToReadyForTrial = ({ applicationContext, caseId }) => {
   return put({
     applicationContext,
-    body: caseToUpdate,
-    endpoint: `/cases/${caseToUpdate.caseId}/setToReadyForTrial`,
+    endpoint: `/cases/${caseId}/setToReadyForTrial`,
   });
 };
