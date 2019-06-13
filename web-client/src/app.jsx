@@ -16,6 +16,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
+  faCalendarCheck,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -92,6 +93,7 @@ const app = {
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
+      faCalendarCheck,
       faCaretDown,
       faCaretLeft,
       faCaretUp,
