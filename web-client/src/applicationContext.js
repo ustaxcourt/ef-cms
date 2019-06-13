@@ -8,6 +8,7 @@ import {
 import {
   CASE_CAPTION_POSTFIX,
   Case,
+  STATUS_TYPES,
 } from '../../shared/src/business/entities/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
@@ -103,6 +104,7 @@ import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents
 import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -192,6 +194,7 @@ const allUseCases = {
   submitCaseAssociationRequest,
   submitPendingCaseAssociationRequest,
   updateCase,
+  updateCaseTrialSortTags,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,
@@ -260,11 +263,13 @@ const applicationContext = {
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
+    STATUS_TYPES,
     TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    Case,
     CaseAssociationRequestFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
