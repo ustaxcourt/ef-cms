@@ -2,7 +2,10 @@ import { CerebralTest } from 'cerebral/test';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import {
+  CASE_CAPTION_POSTFIX,
+  STATUS_TYPES,
+} from '../../shared/src/business/entities/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
@@ -121,6 +124,7 @@ describe('Case journey', () => {
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
+      STATUS_TYPES,
       TRIAL_CITIES,
     });
   });
