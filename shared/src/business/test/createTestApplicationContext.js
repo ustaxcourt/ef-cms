@@ -52,6 +52,9 @@ const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
+  updateWorkItemInCase,
+} = require('../../persistence/dynamo/cases/updateWorkItemInCase');
+const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -99,6 +102,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateWorkItem,
+        updateWorkItemInCase,
         verifyCaseForUser,
       };
     },

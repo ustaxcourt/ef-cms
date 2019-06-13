@@ -7,14 +7,13 @@ exports.updateWorkItemInCase = async ({
 }) => {
   let documentIndex = null;
   let workItemIndex = null;
-  caseToUpdate.documents.forEach(
-    (document, dIndex) =>
-      (document.workItems = document.workItems.forEach((item, wIndex) => {
-        if (item.workItemId === workItem.workItemId) {
-          documentIndex = dIndex;
-          workItemIndex = wIndex;
-        }
-      })),
+  caseToUpdate.documents.forEach((document, dIndex) =>
+    document.workItems.forEach((item, wIndex) => {
+      if (item.workItemId === workItem.workItemId) {
+        documentIndex = dIndex;
+        workItemIndex = wIndex;
+      }
+    }),
   );
 
   await client.update({
