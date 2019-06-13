@@ -54,6 +54,20 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
+      - internalAlarm:
+          description: 'Internal Lambda Alarm'
+          namespace: 'AWS/Lambda'
+          metric: Errors
+          threshold: 1
+          statistic: Minimum
+          period: 60
+          evaluationPeriods: 1
+          comparisonOperator: GreaterThanThreshold
+    topics:
+      alarm: ${self:service}-${opt:stage}-alerts-alarm
+      notifications:
+        - protocol: email
+          endpoint: jsutton@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -666,6 +680,8 @@ functions:
           path: v1/documents/{documentId}/validate
           method: post
           cors: true
+    alarms:
+      - internalAlarm
 
   getTrialSessions:
     handler: src/handlers.getTrialSessionsLambda
