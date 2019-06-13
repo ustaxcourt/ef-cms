@@ -1,11 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import { getTrialSessionDetailsAction } from '../actions/TrialSession/getSessionDetailsAction';
+import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setTrialSessionDetailsAction } from '../actions/TrialSession/setSessionDetailsAction';
-import { setTrialSessionIdAction } from '../actions/TrialSession/setSessionIdAction';
+import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
+import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
