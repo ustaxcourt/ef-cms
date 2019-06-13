@@ -5,22 +5,22 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getTrialSessions
+ * getTrialSessionsDetails
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getSessionDetails = async ({ applicationContext }) => {
+exports.getTrialSessionDetails = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessions = {};
+  const trialSessionDetails = {};
   // await applicationContext
   //   .getPersistenceGateway()
   //   .getSessionInfo({
   //     applicationContext,
   //   });
 
-  return trialSessions;
+  return trialSessionDetails;
 };
