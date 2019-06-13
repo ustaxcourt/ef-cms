@@ -20,10 +20,10 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
-import { SessionDetail } from './SessionDetail/SessionDetail';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -52,10 +52,10 @@ const pages = {
   LogIn,
   RequestAccessWizard,
   SelectDocumentType,
-  SessionDetail,
   StartCase,
   StartCaseInternal,
   StyleGuide,
+  TrialSessionDetail,
   TrialSessions,
 };
 

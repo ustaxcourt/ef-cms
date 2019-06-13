@@ -115,10 +115,10 @@ const router = {
       }),
     );
     route(
-      '/session-detail/*',
-      checkLoggedIn(sessionId => {
-        document.title = `Session Information ${pageTitleSuffix}`;
-        app.getSequence('gotoSessionDetailSequence')({ sessionId });
+      '/trial-session-detail/*',
+      checkLoggedIn(trialSessionId => {
+        document.title = `Trial Session Information ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
       }),
     );
     route(
