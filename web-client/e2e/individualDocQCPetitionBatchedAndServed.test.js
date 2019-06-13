@@ -23,7 +23,9 @@ import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
+import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkRunsIrsBatch from './journey/petitionsClerkRunsIrsBatch';
 import petitionsClerkSelectsFirstPetitionOnMyDocumentQC from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -61,6 +63,14 @@ presenter.providers.router = {
     if (url === '/document-qc/my/inbox') {
       await test.runSequence('gotoDashboardSequence', {
         box: 'inbox',
+        queue: 'my',
+        workQueueIsInternal: false,
+      });
+    }
+
+    if (url === '/document-qc/my/batched') {
+      await test.runSequence('gotoDashboardSequence', {
+        box: 'batched',
         queue: 'my',
         workQueueIsInternal: false,
       });
@@ -123,7 +133,8 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   petitionsClerkViewsMyDocumentQC(test);
   petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
   petitionsClerkSubmitsCaseToIrs(test);
-  // Petition no longer displays in “Inbox”
+  petitionsClerkIrsHoldingQueue(test);
+  petitionsClerkRunsIrsBatch(test);
   // Petitions Clerk navigates to “Batched for IRS” tab and sees the petition they just batched
   // Petitions Clerk clicks “Run IRS Batch Process”
   // Petition no longer displays in “Batched for IRS” tab
