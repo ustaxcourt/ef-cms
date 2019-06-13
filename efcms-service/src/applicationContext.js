@@ -228,6 +228,9 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setCaseToReadyForTrial,
+} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
+const {
   setTrialSessionAsSwingSession,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
 const {
@@ -251,6 +254,9 @@ const {
 const {
   updateCase: updateCaseUC,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
+const {
+  updateCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
@@ -374,6 +380,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForPaper,
         setWorkItemAsRead,
         updateCase,
+        updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateTrialSession,
         updateWorkItem,
@@ -429,6 +436,7 @@ module.exports = (appContextUser = {}) => {
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setCaseToReadyForTrial,
         setTrialSessionAsSwingSession,
         setTrialSessionCalendar,
         setWorkItemAsRead: setWorkItemAsReadUC,
