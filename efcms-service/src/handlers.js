@@ -31,6 +31,8 @@ module.exports = {
     .handler,
   getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda')
     .handler,
+  getTrialSessionDetailsLambda: require('./trialSessions/getTrialSessionDetailsLambda')
+    .handler,
   getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
     .handler,
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,
