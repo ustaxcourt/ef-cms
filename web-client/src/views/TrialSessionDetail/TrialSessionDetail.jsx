@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { TrialSessionInformation } from './TrialSessionInformation';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -20,6 +21,8 @@ export const TrialSessionDetail = connect(
       <section className="usa-section grid-container">
         <SuccessNotification />
         <ErrorNotification />
+
+        <TrialSessionInformation />
 
         <Tabs
           defaultActiveTab="EligibleCases"
