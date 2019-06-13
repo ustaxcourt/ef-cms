@@ -2,7 +2,10 @@ import { CerebralTest } from 'cerebral/test';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import {
+  CASE_CAPTION_POSTFIX,
+  STATUS_TYPES,
+} from '../../shared/src/business/entities/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
@@ -19,14 +22,20 @@ import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 
+import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSelectsFirstPetitionOnMyDocumentQC from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
+import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
+import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
+import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
 import taxPayerSignsOut from './journey/taxPayerSignsOut';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogin';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
+import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 let test;
 global.FormData = FormData;
@@ -38,6 +47,22 @@ presenter.providers.router = {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.docketNumber,
+      });
+    }
+
+    if (url === '/document-qc/section/inbox') {
+      await test.runSequence('gotoDashboardSequence', {
+        box: 'inbox',
+        queue: 'section',
+        workQueueIsInternal: false,
+      });
+    }
+
+    if (url === '/document-qc/my/inbox') {
+      await test.runSequence('gotoDashboardSequence', {
+        box: 'inbox',
+        queue: 'my',
+        workQueueIsInternal: false,
       });
     }
 
@@ -80,6 +105,7 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
+      STATUS_TYPES,
       TRIAL_CITIES,
     });
   });
@@ -89,12 +115,14 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   taxpayerChoosesProcedureType(test);
   taxpayerChoosesCaseType(test);
   taxpayerCreatesNewCase(test, fakeFile);
+  taxpayerViewsDashboard(test);
   taxPayerSignsOut(test);
   petitionsClerkLogIn(test);
-  // Petitions Clerk navigates to Document QC>My Document QC
-  // Petitions Clerk selects a Petition
-  // Petitions Clerk clicks “Serve to IRS”
-  // Petitions Clerk confirms “Yes, serve”
+  petitionsClerkViewsSectionDocumentQC(test);
+  petitionsClerkAssignsWorkItemToSelf(test);
+  petitionsClerkViewsMyDocumentQC(test);
+  petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
+  petitionsClerkSubmitsCaseToIrs(test);
   // Petition no longer displays in “Inbox”
   // Petitions Clerk navigates to “Batched for IRS” tab and sees the petition they just batched
   // Petitions Clerk clicks “Run IRS Batch Process”
