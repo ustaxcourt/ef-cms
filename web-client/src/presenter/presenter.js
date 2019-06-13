@@ -66,6 +66,7 @@ import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
+import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTrialSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
@@ -73,6 +74,7 @@ import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
+import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
@@ -215,12 +217,14 @@ export const presenter = {
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
+    setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
     setFocusedWorkItemSequence,
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setScannerSourceSequence,
+    setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,
     showDocketRecordDetailModalSequence,
