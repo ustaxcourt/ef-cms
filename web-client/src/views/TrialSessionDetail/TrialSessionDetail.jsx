@@ -15,41 +15,39 @@ export const TrialSessionDetail = connect(
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
   },
-  ({ showModal, openSetCalendarModalSequence }) => {
-    return (
-      <>
-        <BigHeader text="Session Information" />
-        <section className="usa-section grid-container">
-          <SuccessNotification />
-          <ErrorNotification />
+  ({ showModal, openSetCalendarModalSequence }) => (
+    <>
+      <BigHeader text="Session Information" />
+      <section className="usa-section grid-container">
+        <SuccessNotification />
+        <ErrorNotification />
 
-          <TrialSessionInformation />
+        <TrialSessionInformation />
 
-          <Tabs
-            defaultActiveTab="EligibleCases"
-            bind="trialsessiondetails.caseList"
+        <Tabs
+          defaultActiveTab="EligibleCases"
+          bind="trialsessiondetails.caseList"
+        >
+          <Tab
+            tabName="EligibleCases"
+            title="Eligible Cases"
+            id="eligible-cases-tab"
           >
-            <Tab
-              tabName="EligibleCases"
-              title="Eligible Cases"
-              id="eligible-cases-tab"
+            <button
+              className="usa-button tab-right-button"
+              onClick={() => openSetCalendarModalSequence()}
             >
-              <button
-                className="usa-button tab-right-button"
-                onClick={() => openSetCalendarModalSequence()}
-              >
-                <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
-                {showModal == 'SetCalendarModalDialog' && (
-                  <SetCalendarModalDialog />
-                )}
-              </button>
-              <div id="eligible-cases-tab-content">
-                <EligibleCases />
-              </div>
-            </Tab>
-          </Tabs>
-        </section>
-      </>
-    );
-  },
+              <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
+              {showModal == 'SetCalendarModalDialog' && (
+                <SetCalendarModalDialog />
+              )}
+            </button>
+            <div id="eligible-cases-tab-content">
+              <EligibleCases />
+            </div>
+          </Tab>
+        </Tabs>
+      </section>
+    </>
+  ),
 );
