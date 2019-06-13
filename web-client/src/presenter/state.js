@@ -19,6 +19,7 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
@@ -74,6 +75,7 @@ export const state = {
   form: {},
   formattedCaseDetail,
   formattedCases,
+  formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
