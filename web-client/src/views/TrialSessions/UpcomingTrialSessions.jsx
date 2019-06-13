@@ -51,9 +51,9 @@ export const UpcomingTrialSessions = connect(
                       )}
                     </td>
                     <td>
-                      <button className="usa-button--unstyled link">
+                      <a href={`/trial-session-detail/${item.trialSessionId}`}>
                         {item.trialLocation}
-                      </button>
+                      </a>
                     </td>
                     <td>{item.judge}</td>
                     <td>{item.maxCases}</td>
