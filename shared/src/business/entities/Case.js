@@ -111,6 +111,7 @@ function Case(rawCase) {
     trialJudge: rawCase.trialJudge,
     trialLocation: rawCase.trialLocation,
     trialSessionId: rawCase.trialSessionId,
+    trialTime: rawCase.trialTime,
     userId: rawCase.userId,
     workItems: rawCase.workItems,
     yearAmounts: rawCase.yearAmounts,
@@ -268,6 +269,7 @@ joiValidationDecorator(
       .string()
       .uuid(uuidVersions)
       .optional(),
+    trialTime: joi.string().optional(),
     userId: joi
       .string()
       // .uuid(uuidVersions)
@@ -837,6 +839,7 @@ Case.prototype.generateTrialSortTags = function() {
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialSessionId = trialSessionEntity.trialSessionId;
   this.trialDate = trialSessionEntity.startDate;
+  this.trialTime = trialSessionEntity.startTime;
   this.trialJudge = trialSessionEntity.judge;
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = statusMap.calendared;
