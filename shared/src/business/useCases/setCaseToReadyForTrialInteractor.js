@@ -41,5 +41,13 @@ exports.setCaseToReadyForTrial = async ({ applicationContext, caseId }) => {
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
+  await applicationContext
+    .getPersistenceGateway()
+    .createCaseTrialSortMappingRecords({
+      applicationContext,
+      caseId,
+      caseSortTags: caseEntity.validate().generateTrialSortTags(),
+    });
+
   return updatedCase;
 };
