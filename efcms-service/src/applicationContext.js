@@ -152,6 +152,9 @@ const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
+  getTrialSessionDetails,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
+const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
 const {
@@ -425,6 +428,7 @@ module.exports = (appContextUser = {}) => {
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getTrialSessionDetails,
         getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,

@@ -3,6 +3,7 @@ import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { TrialSessionInformation } from './TrialSessionInformation';
 import React from 'react';
 
 export const TrialSessionDetail = () => (
@@ -11,6 +12,8 @@ export const TrialSessionDetail = () => (
     <section className="usa-section grid-container">
       <SuccessNotification />
       <ErrorNotification />
+
+      <TrialSessionInformation />
 
       <Tabs
         defaultActiveTab="EligibleCases"
