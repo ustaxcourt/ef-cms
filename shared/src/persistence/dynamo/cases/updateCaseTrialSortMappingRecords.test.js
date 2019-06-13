@@ -19,10 +19,12 @@ const caseSortTags = {
 describe('updateCaseTrialSortMappingRecords', () => {
   beforeEach(() => {
     sinon.stub(client, 'put').resolves(null);
+    sinon.stub(client, 'delete').resolves(null);
   });
 
   afterEach(() => {
     client.put.restore();
+    client.delete.restore();
     client.query.restore();
   });
 

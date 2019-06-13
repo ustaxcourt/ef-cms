@@ -14,9 +14,11 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 
-  caseToUpdate.yearAmounts = caseToUpdate.yearAmounts.filter(yearAmount => {
-    return yearAmount.amount || yearAmount.year;
-  });
+  if (caseToUpdate.yearAmounts) {
+    caseToUpdate.yearAmounts = caseToUpdate.yearAmounts.filter(yearAmount => {
+      return yearAmount.amount || yearAmount.year;
+    });
+  }
 
   const caseDetail = await applicationContext.getUseCases().updateCase({
     applicationContext,
@@ -24,9 +26,15 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
   });
 
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
+    const Case = applicationContext.getEntityConstructors().Case;
+    const caseEntity = new Case(caseDetail).validate();
+
+    const caseSortTags = caseEntity.generateTrialSortTags();
+
     await applicationContext.getUseCases().updateCaseTrialSortTags({
       applicationContext,
       caseId: caseDetail.caseId,
+      caseSortTags,
     });
   }
 

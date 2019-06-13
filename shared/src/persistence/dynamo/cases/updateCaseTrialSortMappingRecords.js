@@ -26,15 +26,16 @@ exports.updateCaseTrialSortMappingRecords = async ({
       ':gsi1pk': `eligible-for-trial-case-catalog-{caseId}`,
       ':pk': 'eligible-for-trial-case-catalog',
     },
+    IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pkpk AND #pk = :pk',
     applicationContext,
   });
 
   if (
-    oldSortRecords[0] &&
+    oldSortRecords.length &&
     (oldSortRecords[0].sk !== hybrid && oldSortRecords[0].sk !== nonHybrid)
   ) {
-    deleteCaseTrialSortMappingRecords({
+    await deleteCaseTrialSortMappingRecords({
       applicationContext,
       caseId,
     });
