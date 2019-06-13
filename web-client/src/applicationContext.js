@@ -102,6 +102,7 @@ import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents
 import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -190,6 +191,7 @@ const allUseCases = {
   submitCaseAssociationRequest,
   submitPendingCaseAssociationRequest,
   updateCase,
+  updateCaseTrialSortTags,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,

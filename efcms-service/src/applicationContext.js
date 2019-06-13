@@ -252,6 +252,9 @@ const {
   updateCase: updateCaseUC,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
+  updateCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
+const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
@@ -374,6 +377,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForPaper,
         setWorkItemAsRead,
         updateCase,
+        updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateTrialSession,
         updateWorkItem,
