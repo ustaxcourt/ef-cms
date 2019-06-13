@@ -151,6 +151,8 @@ exports.uploadPetition = async test => {
 
   await test.runSequence('submitFilePetitionSequence');
 
+  await exports.waitForRouter();
+
   return test.getState('caseDetail');
 };
 
