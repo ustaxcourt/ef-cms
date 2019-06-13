@@ -115,6 +115,13 @@ const router = {
       }),
     );
     route(
+      '/trial-session-detail/*',
+      checkLoggedIn(trialSessionId => {
+        document.title = `Trial Session Information ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
+      }),
+    );
+    route(
       '/trial-sessions',
       checkLoggedIn(() => {
         document.title = `Trial sessions ${pageTitleSuffix}`;
