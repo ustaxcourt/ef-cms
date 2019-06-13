@@ -228,6 +228,9 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setCaseToReadyForTrial,
+} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
+const {
   setTrialSessionAsSwingSession,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
 const {
@@ -429,6 +432,7 @@ module.exports = (appContextUser = {}) => {
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setCaseToReadyForTrial,
         setTrialSessionAsSwingSession,
         setTrialSessionCalendar,
         setWorkItemAsRead: setWorkItemAsReadUC,
