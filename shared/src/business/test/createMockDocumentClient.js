@@ -95,24 +95,26 @@ const createMockDocumentClient = () => {
           ExpressionAttributeNames[name],
         );
       }
-      for (let name in ExpressionAttributeValues) {
-        UpdateExpression = UpdateExpression.replace(
-          name,
-          ExpressionAttributeValues[name],
-        );
-      }
+
       const hasSet = UpdateExpression.indexOf('SET') !== -1;
       UpdateExpression = UpdateExpression.replace('SET', '').trim();
       const expressions = UpdateExpression.split(',').map(t => t.trim());
       const gg = expressions.map(v => v.split('=').map(x => x.trim()));
       let obj = {};
       for (let [k, v] of gg) {
+        v = ExpressionAttributeValues[v];
         if (v === 'true' || v === 'false') {
           obj[k] = v === 'true';
         } else {
-          obj[k] = v;
+          if (k.indexOf('documents[') !== -1) {
+            obj = data[`${Key.pk} ${Key.sk}`];
+            eval(`obj.${k} = ${JSON.stringify(v)};`);
+          } else {
+            obj[k] = v;
+          }
         }
       }
+
       if (hasSet) {
         data[`${Key.pk} ${Key.sk}`] = {
           ...data[`${Key.pk} ${Key.sk}`],
