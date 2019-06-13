@@ -252,9 +252,6 @@ const {
   submitPendingCaseAssociationRequest,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
-  TrialSession,
-} = require('../../shared/src/business/entities/TrialSession');
-const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -296,7 +293,6 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-const { Case } = require('../../shared/src/business/entities/Case');
 const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
@@ -346,10 +342,8 @@ module.exports = (appContextUser = {}) => {
       return environment.documentsBucketName;
     },
     getEntityConstructors: () => ({
-      Case,
       Petition: PetitionWithoutFiles,
       PetitionFromPaper: PetitionFromPaperWithoutFiles,
-      TrialSession,
     }),
     getPersistenceGateway: () => {
       return {
