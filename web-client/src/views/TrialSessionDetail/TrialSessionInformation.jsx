@@ -3,8 +3,8 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const TrialSessionInformation = connect(
-  { trialSession: state.trialSession },
-  ({ trialSession }) => {
+  { formattedTrialSession: state.formattedTrialSessionDetails },
+  ({ formattedTrialSession }) => {
     return (
       <>
         <h1>Session Information</h1>
@@ -19,13 +19,11 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Term</p>
-                          <p>
-                            {trialSession.term} {trialSession.termYear}
-                          </p>
+                          <p>{formattedTrialSession.formattedTerm}</p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Type</p>
-                          <p>{trialSession.sessionType}</p>
+                          <p>{formattedTrialSession.sessionType}</p>
                         </div>
                       </div>
 
@@ -33,12 +31,13 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">Date</p>
                           <p>
-                            {trialSession.startDate} {trialSession.startTime}
+                            {formattedTrialSession.formattedStartDate}{' '}
+                            {formattedTrialSession.formattedStartTime}
                           </p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Max # of Cases</p>
-                          <p>{trialSession.maxCases}</p>
+                          <p>{formattedTrialSession.maxCases}</p>
                         </div>
                       </div>
                     </div>
@@ -53,22 +52,26 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Judge</p>
-                          <p>{trialSession.judge}</p>
+                          <p>{formattedTrialSession.formattedJudge}</p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Trial Clerk</p>
-                          <p>{trialSession.trialClerk}</p>
+                          <p>{formattedTrialSession.formattedTrialClerk}</p>
                         </div>
                       </div>
 
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Court Report</p>
-                          <p>{trialSession.courtReporter}</p>
+                          <p>{formattedTrialSession.formattedCourtReporter}</p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">IRS Calendar Administrator</p>
-                          <p>{trialSession.irsCalendarAdministrator}</p>
+                          <p>
+                            {
+                              formattedTrialSession.formattedIrsCalendarAdministrator
+                            }
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -82,17 +85,16 @@ export const TrialSessionInformation = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">Location</h3>
                     <p className="label">Location</p>
-                    <p>{trialSession.courthouseName}</p>
+                    <p>{formattedTrialSession.courthouseName}</p>
                     <p>
                       <span className="address-line">
-                        {trialSession.address1}
+                        {formattedTrialSession.address1}
                       </span>
                       <span className="address-line">
-                        {trialSession.address2}
+                        {formattedTrialSession.address2}
                       </span>
                       <span className="address-line">
-                        {trialSession.city}, {trialSession.state}{' '}
-                        {trialSession.postalCode}
+                        {formattedTrialSession.formattedCityStateZip}
                       </span>
                     </p>
                   </div>
@@ -102,7 +104,7 @@ export const TrialSessionInformation = connect(
                 <div className="card height-full">
                   <div className="content-wrapper">
                     <h3 className="underlined">Notes</h3>
-                    {trialSession.notes}
+                    {formattedTrialSession.notes}
                   </div>
                 </div>
               </div>
