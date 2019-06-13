@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
@@ -20,9 +21,10 @@ export const TrialSessionDetail = connect(
         <SuccessNotification />
         <ErrorNotification />
 
-        <div>Trial Session Info Goes Here</div>
-
-        <Tabs defaultActiveTab="Eligible Cases">
+        <Tabs
+          defaultActiveTab="EligibleCases"
+          bind="trialsessiondetails.caseList"
+        >
           <button
             className="usa-button tab-right-button"
             onClick={() => openSetCalendarModalSequence()}
@@ -33,12 +35,12 @@ export const TrialSessionDetail = connect(
             )}
           </button>
           <Tab
-            tabName="Eligible Cases"
+            tabName="EligibleCases"
             title="Eligible Cases"
             id="eligible-cases-tab"
           >
             <div id="eligible-cases-tab-content">
-              <div>Eligible Cases</div>
+              <EligibleCases />
             </div>
           </Tab>
         </Tabs>

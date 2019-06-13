@@ -131,4 +131,13 @@ describe('headerHelper', () => {
     });
     expect(result.pageIsTrialSessions).toBeTruthy();
   });
+  it('should know when the page is TrialSessionDetails', async () => {
+    const result = await runCompute(headerHelper, {
+      state: {
+        ...getState('petitionsclerk'),
+        currentPage: 'TrialSessionDetails',
+      },
+    });
+    expect(result.pageIsTrialSessions).toBeTruthy();
+  });
 });
