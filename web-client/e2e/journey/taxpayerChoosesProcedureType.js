@@ -22,7 +22,7 @@ export default test => {
     expect(helper.showRegularTrialCitiesHint).toBe(false);
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: 'Chattanooga, TN',
+      value: 'Seattle, Washington',
     });
   });
 };
