@@ -85,7 +85,7 @@ export const CaseDetailInternal = connect(
           </div>
         </section>
         {/* This section below will be removed in a future story */}
-        <section>
+        <section className="usa-section grid-container">
           {caseDetail.status === 'General Docket - Not at Issue' && (
             <a
               href={`${baseUrl}/documents/${
