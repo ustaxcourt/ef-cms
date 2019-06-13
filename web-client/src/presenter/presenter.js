@@ -74,6 +74,7 @@ import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
+import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
@@ -223,6 +224,7 @@ export const presenter = {
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setScannerSourceSequence,
+    setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,
     showDocketRecordDetailModalSequence,
