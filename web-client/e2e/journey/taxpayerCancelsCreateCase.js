@@ -6,9 +6,11 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: 'Chattanooga, TN',
+      value: 'Seattle, Washington',
     });
-    expect(test.getState('form.preferredTrialCity')).toEqual('Chattanooga, TN');
+    expect(test.getState('form.preferredTrialCity')).toEqual(
+      'Seattle, Washington',
+    );
 
     await test.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
     expect(test.getState('showModal')).toBeTruthy();
