@@ -11,24 +11,29 @@ import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
+    formattedTrialSession: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
-    trialSession: state.trialSession,
   },
-  ({ showModal, openSetCalendarModalSequence, trialSession }) => (
+  ({ showModal, openSetCalendarModalSequence, formattedTrialSession }) => (
     <>
       <div className="big-blue-header">
         <div className="grid-container">
           <div className="margin-bottom-1">
-            <h1 tabIndex="-1">{trialSession.trialLocation}</h1>
-            <span className="usa-tag ustc-tag--yellow">
+            <h1 tabIndex="-1">{formattedTrialSession.trialLocation}</h1>
+            <span
+              className={`usa-tag ${
+                !formattedTrialSession.isCalendared ? 'ustc-tag--yellow' : ''
+              }`}
+            >
               <span aria-hidden="true">
-                {trialSession.term} {trialSession.termYear}: Upcoming
+                {formattedTrialSession.formattedTerm}:{' '}
+                {formattedTrialSession.status}
               </span>
             </span>
           </div>
           <p id="case-title" className="margin-y-0">
-            <span>{trialSession.startDate}</span>
+            <span>{formattedTrialSession.formattedStartDate}</span>
           </p>
         </div>
       </div>
