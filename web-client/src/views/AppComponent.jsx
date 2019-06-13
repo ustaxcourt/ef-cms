@@ -23,6 +23,7 @@ import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -54,6 +55,7 @@ const pages = {
   StartCase,
   StartCaseInternal,
   StyleGuide,
+  TrialSessionDetail,
   TrialSessions,
 };
 
