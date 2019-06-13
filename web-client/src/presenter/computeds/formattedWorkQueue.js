@@ -49,12 +49,10 @@ export const formatWorkItem = (
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showUnreadIndicators = !result.isRead;
+  result.showUnreadStatusIcon = !result.isRead;
 
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
-  if (!result.isRead) {
-    result.showUnreadStatusIcon = true;
-  }
 
   if (result.assigneeName === 'Unassigned') {
     result.showUnassignedIcon = true;
