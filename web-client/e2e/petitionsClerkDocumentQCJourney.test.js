@@ -16,14 +16,19 @@ import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
-import petitionsClerkGetsMyInboxCount from './journey/petitionsClerkGetsMyInboxCount';
-import petitionsClerkGetsSectionInboxCount from './journey/petitionsClerkGetsSectionInboxCount';
+import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
+import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
+import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
+import petitionsClerkGetsSectionDocumentQCInboxCount from './journey/petitionsClerkGetsSectionDocumentQCInboxCount';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkVerifiesAssignedWorkItem from './journey/petitionsClerkVerifiesAssignedWorkItem';
 import petitionsClerkVerifiesUnreadMessage from './journey/petitionsClerkVerifiesUnreadMessage';
+import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
+import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
+import petitionsClerkViewsUnreadMessage from './journey/petitionsClerkViewsUnreadMessage';
 
 import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerAddNewCaseToTestObj from './journey/taxpayerAddNewCaseToTestObj';
@@ -59,6 +64,14 @@ presenter.providers.router = {
         box: 'inbox',
         queue: 'my',
         workQueueIsInternal: false,
+      });
+    }
+
+    if (url === '/messages/my/inbox') {
+      await test.runSequence('gotoDashboardSequence', {
+        box: 'inbox',
+        queue: 'my',
+        workQueueIsInternal: true,
       });
     }
 
@@ -132,12 +145,19 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   petitionsClerkLogIn(test);
   petitionsClerkViewsSectionDocumentQC(test);
-  petitionsClerkGetsSectionInboxCount(test);
+  petitionsClerkGetsSectionDocumentQCInboxCount(test, caseCreationCount);
   petitionsClerkBulkAssignsCases(test);
   petitionsClerkViewsMyDocumentQC(test);
-  petitionsClerkGetsMyInboxCount(test);
-  petitionsClerkGetsMyInboxCount(test);
+  petitionsClerkGetsMyDocumentQCInboxCount(test, caseCreationCount);
   petitionsClerkVerifiesAssignedWorkItem(test);
   petitionsClerkVerifiesUnreadMessage(test);
+  petitionsClerkCreatesMessage(test, 'Here comes the hotstepper!');
+  petitionsClerkSignsOut(test);
+
+  petitionsClerkLogIn(test, 'petitionsclerk1');
+  petitionsClerkViewsMyMessagesInbox(test, true);
+  petitionsClerkGetsMyMessagesInboxCount(test);
+  petitionsClerkViewsUnreadMessage(test, 'Here comes the hotstepper!');
+  petitionsClerkGetsMyMessagesInboxCount(test, -1);
   petitionsClerkSignsOut(test);
 });
