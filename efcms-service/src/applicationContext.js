@@ -74,6 +74,9 @@ const {
   createWorkItem: createWorkItemUC,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
+  deleteCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
+const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
@@ -225,8 +228,14 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setCaseToReadyForTrial,
+} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
+const {
   setTrialSessionAsSwingSession,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
+const {
+  setTrialSessionCalendar,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
@@ -339,6 +348,7 @@ module.exports = (appContextUser = {}) => {
         createTrialSession,
         createUser,
         createWorkItem,
+        deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -422,7 +432,9 @@ module.exports = (appContextUser = {}) => {
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setCaseToReadyForTrial,
         setTrialSessionAsSwingSession,
+        setTrialSessionCalendar,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,

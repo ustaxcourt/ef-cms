@@ -309,6 +309,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  setCaseToReadyForTrial:
+    handler: src/handlers.setCaseToReadyForTrialLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/setToReadyForTrial
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   runBatchProcess:
     handler: src/handlers.runBatchProcessLambda
     events:
@@ -709,6 +721,18 @@ functions:
       - http:
           path: v1/trialSessions/{trialSessionId}/eligible-cases
           method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionCalendar:
+    handler: src/handlers.setTrialSessionCalendarLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/setCalendar
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

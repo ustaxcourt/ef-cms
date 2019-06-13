@@ -990,4 +990,17 @@ describe('Case entity', () => {
       });
     });
   });
+
+  describe('setAsCalendared', () => {
+    it('should set case as calendared', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.setAsCalendared({
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.status).toEqual(STATUS_TYPES.calendared);
+    });
+  });
 });

@@ -18,6 +18,7 @@ const uuidVersions = {
 
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
+  calendared: 'Calendared',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
@@ -106,6 +107,10 @@ function Case(rawCase) {
     receivedAt: rawCase.receivedAt,
     respondent: rawCase.respondent,
     status: rawCase.status || statusMap.new,
+    trialDate: rawCase.trialDate,
+    trialJudge: rawCase.trialJudge,
+    trialLocation: rawCase.trialLocation,
+    trialSessionId: rawCase.trialSessionId,
     userId: rawCase.userId,
     workItems: rawCase.workItems,
     yearAmounts: rawCase.yearAmounts,
@@ -251,6 +256,17 @@ joiValidationDecorator(
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
+      .optional(),
+    trialDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
+    trialJudge: joi.string().optional(),
+    trialLocation: joi.string().optional(),
+    trialSessionId: joi
+      .string()
+      .uuid(uuidVersions)
       .optional(),
     userId: joi
       .string()
@@ -810,4 +826,19 @@ Case.prototype.generateTrialSortTags = function() {
     hybrid: hybridSortKey,
     nonHybrid: nonHybridSortKey,
   };
+};
+
+/**
+ * set as calendared
+ *
+ * @param {Object} trialSessionEntity - the trial session that is associated with the case
+ * @returns {Case}
+ */
+Case.prototype.setAsCalendared = function(trialSessionEntity) {
+  this.trialSessionId = trialSessionEntity.trialSessionId;
+  this.trialDate = trialSessionEntity.startDate;
+  this.trialJudge = trialSessionEntity.judge;
+  this.trialLocation = trialSessionEntity.trialLocation;
+  this.status = statusMap.calendared;
+  return this;
 };
