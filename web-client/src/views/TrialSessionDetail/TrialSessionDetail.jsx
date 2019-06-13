@@ -28,20 +28,20 @@ export const TrialSessionDetail = connect(
           defaultActiveTab="EligibleCases"
           bind="trialsessiondetails.caseList"
         >
+          <button
+            className="usa-button tab-right-button"
+            onClick={() => openSetCalendarModalSequence()}
+          >
+            <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
+            {showModal == 'SetCalendarModalDialog' && (
+              <SetCalendarModalDialog />
+            )}
+          </button>
           <Tab
             tabName="EligibleCases"
             title="Eligible Cases"
             id="eligible-cases-tab"
           >
-            <button
-              className="usa-button tab-right-button"
-              onClick={() => openSetCalendarModalSequence()}
-            >
-              <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
-              {showModal == 'SetCalendarModalDialog' && (
-                <SetCalendarModalDialog />
-              )}
-            </button>
             <div id="eligible-cases-tab-content">
               <EligibleCases />
             </div>
