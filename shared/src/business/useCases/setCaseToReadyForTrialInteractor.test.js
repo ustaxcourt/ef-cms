@@ -23,6 +23,7 @@ describe('set case status to ready for trial', () => {
       },
       getPersistenceGateway: () => {
         return {
+          createCaseTrialSortMappingRecords: () => {},
           getCaseByCaseId: () => Promise.resolve(mockCase),
           updateCase: ({ caseToUpdate }) =>
             Promise.resolve(new Case(caseToUpdate)),
