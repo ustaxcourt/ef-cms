@@ -1,18 +1,19 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
-    showSetCalendarModalDialogSequence:
-      sequences.showSetCalendarModalDialogSequence,
+    openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
+    showModal: state.showModal,
   },
-  ({ showSetCalendarModalDialogSequence }) => (
+  ({ showModal, openSetCalendarModalSequence }) => (
     <>
       <BigHeader text="Session Information" />
       <section className="usa-section grid-container">
@@ -24,11 +25,13 @@ export const TrialSessionDetail = connect(
         <Tabs defaultActiveTab="Eligible Cases">
           <button
             className="usa-button tab-right-button"
-            onClick={() => showSetCalendarModalDialogSequence()}
+            onClick={() => openSetCalendarModalSequence()}
           >
             <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
+            {showModal == 'SetCalendarModalDialog' && (
+              <SetCalendarModalDialog />
+            )}
           </button>
-
           <Tab
             tabName="Eligible Cases"
             title="Eligible Cases"

@@ -53,6 +53,7 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
+import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { refreshSectionInboxCountSequence } from './sequences/refreshSectionInboxCountSequence';
@@ -205,6 +206,7 @@ export const presenter = {
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
+    openSetCalendarModalSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
     refreshSectionInboxCountSequence,
