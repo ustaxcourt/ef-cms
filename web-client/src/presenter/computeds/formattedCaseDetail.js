@@ -230,6 +230,18 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
 
   formatYearAmounts(applicationContext, result, caseDetailErrors);
 
+  result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
+  result.formattedTrialDate = 'Not scheduled';
+  result.formattedTrialJudge = 'Not assigned';
+
+  if (result.trialSessionId) {
+    result.formattedTrialCity = result.trialLocation || 'Not assigned';
+    result.formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(result.trialDate, 'DATE_TIME');
+    result.formattedTrialJudge = result.trialJudge || 'Not assigned';
+  }
+
   return result;
 };
 

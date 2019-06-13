@@ -52,6 +52,8 @@ module.exports = {
     .handler,
   setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
     .handler,
+  setTrialSessionCalendarLambda: require('./trialSessions/setTrialSessionCalendarLambda')
+    .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
     .handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
