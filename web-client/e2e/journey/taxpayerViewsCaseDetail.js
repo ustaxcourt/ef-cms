@@ -24,7 +24,7 @@ export default test => {
       `${test.docketNumber}W`,
     );
     expect(caseDetail.documents.length).toEqual(2);
-    expect(caseDetail.preferredTrialCity).toEqual('Chattanooga, TN');
+    expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
 
     const helper = runCompute(caseDetailHelper, {
       state: test.getState(),

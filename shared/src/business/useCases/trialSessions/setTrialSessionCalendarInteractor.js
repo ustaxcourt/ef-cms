@@ -64,7 +64,7 @@ exports.setTrialSessionCalendar = async ({
 
   trialSessionEntity.setAsCalendared();
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
+  return await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
