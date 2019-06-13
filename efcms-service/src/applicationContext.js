@@ -267,6 +267,9 @@ const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
+  updateWorkItemInCase
+} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase')
+const {
   validatePdf,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
@@ -384,6 +387,7 @@ module.exports = (appContextUser = {}) => {
         updateDocumentProcessingStatus,
         updateTrialSession,
         updateWorkItem,
+        updateWorkItemInCase,
         verifyCaseForUser,
         verifyPendingCaseForUser,
         zipDocuments,
