@@ -213,3 +213,16 @@ exports.setupTest = () => {
 
   return test;
 };
+
+exports.viewDocumentDetailMessage = async ({
+  test,
+  docketNumber,
+  documentId,
+  messageId,
+}) => {
+  await test.runSequence('gotoDocumentDetailMessageSequence', {
+    docketNumber,
+    documentId,
+    messageId,
+  });
+};

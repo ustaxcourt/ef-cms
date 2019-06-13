@@ -9,6 +9,7 @@ import {
   setupTest,
   uploadExternalDecisionDocument,
   uploadPetition,
+  viewDocumentDetailMessage,
 } from './helpers';
 
 const test = setupTest();
@@ -18,6 +19,7 @@ describe('Create a work item', () => {
   let qcMyInboxCountBefore;
   let qcSectionInboxCountBefore;
   let notificationsBefore;
+  let decisionWorkItem;
 
   it('login as the docketclerk and cache the initial inbox counts', async () => {
     await loginAs(test, 'docketclerk');
@@ -75,7 +77,7 @@ describe('Create a work item', () => {
 
   it('verify the docketclerk has 3 messages in document qc my inbox', async () => {
     const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
-    const decisionWorkItem = findWorkItemByCaseId(
+    decisionWorkItem = findWorkItemByCaseId(
       documentQCMyInbox,
       caseDetail.caseId,
     );
@@ -94,6 +96,30 @@ describe('Create a work item', () => {
     expect(notifications).toMatchObject({
       myInboxUnreadCount: notificationsBefore.myInboxUnreadCount,
       qcUnreadCount: notificationsBefore.qcUnreadCount + 3,
+    });
+  });
+
+  it('the unread counts should decrease by one after a docketclerk reads one of those messages', async () => {
+    await viewDocumentDetailMessage({
+      docketNumber: caseDetail.docketNumber,
+      documentId: decisionWorkItem.document.documentId,
+      messageId: decisionWorkItem.currentMessage.messageId,
+      test,
+    });
+    const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
+    decisionWorkItem = documentQCMyInbox.find(
+      workItem => workItem.workItemId === decisionWorkItem.workItemId,
+    );
+    expect(decisionWorkItem).toMatchObject({
+      showUnreadIndicators: false,
+      showUnreadStatusIcon: false,
+    });
+    const qcMyInboxCountAfter = getInboxCount(test);
+    expect(qcMyInboxCountAfter).toEqual(qcMyInboxCountBefore + 2);
+    const notifications = getNotifications(test);
+    expect(notifications).toMatchObject({
+      myInboxUnreadCount: notificationsBefore.myInboxUnreadCount,
+      qcUnreadCount: notificationsBefore.qcUnreadCount + 2,
     });
   });
 });
