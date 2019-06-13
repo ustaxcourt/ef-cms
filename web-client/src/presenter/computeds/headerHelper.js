@@ -37,7 +37,8 @@ export const headerHelper = get => {
       currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
     pageIsTrialSessions:
       currentPage &&
-      currentPage.includes('TrialSessions') &&
+      (currentPage.includes('TrialSessions') ||
+        currentPage.includes('TrialSessionDetail')) &&
       isUserInternal(user),
     showDocumentQC: isUserInternal(user),
     showMessages: isUserInternal(user),
