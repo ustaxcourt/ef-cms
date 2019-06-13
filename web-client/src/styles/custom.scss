@@ -878,6 +878,10 @@ nav.usa-nav {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
+
+    &.ustc-tag--yellow {
+      background: color($theme-color-warning);
+    }
   }
   .unread {
     position: relative;
