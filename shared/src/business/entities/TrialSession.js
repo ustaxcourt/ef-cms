@@ -16,6 +16,13 @@ const SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
+const STATUS_TYPES = {
+  calendared: 'calendared',
+  new: 'new',
+};
+
+exports.STATUS_TYPES = STATUS_TYPES;
+
 /**
  * constructor
  * @param rawSession
@@ -25,6 +32,7 @@ function TrialSession(rawSession) {
   Object.assign(this, {
     address1: rawSession.address1,
     address2: rawSession.address2,
+    caseOrder: rawSession.caseOrder || [],
     city: rawSession.city,
     courtReporter: rawSession.courtReporter,
     courthouseName: rawSession.courthouseName,
@@ -38,6 +46,7 @@ function TrialSession(rawSession) {
     startDate: rawSession.startDate,
     startTime: rawSession.startTime || '10:00',
     state: rawSession.state,
+    status: rawSession.status || STATUS_TYPES.new,
     swingSession: rawSession.swingSession,
     swingSessionId: rawSession.swingSessionId,
     term: rawSession.term,
@@ -76,6 +85,11 @@ joiValidationDecorator(
   joi.object().keys({
     address1: joi.string().optional(),
     address2: joi.string().optional(),
+    caseOrder: joi.array().items(
+      joi.object().keys({
+        caseId: joi.string().uuid(uuidVersions),
+      }),
+    ),
     city: joi.string().optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().optional(),
@@ -106,6 +120,9 @@ joiValidationDecorator(
       .required(),
     startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
     state: joi.string().optional(),
+    status: joi
+      .string()
+      .valid(Object.keys(STATUS_TYPES).map(key => STATUS_TYPES[key])),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -160,6 +177,28 @@ TrialSession.prototype.generateSortKeyPrefix = function() {
   const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
   return skPrefix;
+};
+
+/**
+ * set as calendared
+ *
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.setAsCalendared = function() {
+  this.status = STATUS_TYPES.calendared;
+  return this;
+};
+
+/**
+ * add case to calendar
+ *
+ * @param {Object} caseEntity
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
+  const { caseId } = caseEntity;
+  this.caseOrder.push({ caseId });
+  return this;
 };
 
 exports.TrialSession = TrialSession;
