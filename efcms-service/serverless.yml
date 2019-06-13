@@ -65,7 +65,7 @@ custom:
           comparisonOperator: GreaterThanThreshold
           pattern: 'ERROR'
     topics:
-      alarm: ${self:custom.stage}-cloudwatch-alerts
+      alarm: ${self:provider.stage}-cloudwatch-alerts
       notifications:
         - protocol: email
           endpoint: jsutton@flexion.us
