@@ -8,6 +8,7 @@ import {
 import {
   CASE_CAPTION_POSTFIX,
   Case,
+  STATUS_TYPES,
 } from '../../shared/src/business/entities/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
@@ -260,6 +261,7 @@ const applicationContext = {
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
+    STATUS_TYPES,
     TRIAL_CITIES,
   }),
   getCurrentUser,
