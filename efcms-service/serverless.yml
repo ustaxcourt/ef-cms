@@ -54,6 +54,21 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
+      - errorExceptions:
+          description: 'Internal Lambda Alarm'
+          namespace: 'AWS/Lambda'
+          metric: Errors
+          threshold: 1
+          statistic: Minimum
+          period: 60
+          evaluationPeriods: 1
+          comparisonOperator: GreaterThanThreshold
+          pattern: 'ERROR'
+    topics:
+      alarm: ${self:custom.stage}-cloudwatch-alerts
+      notifications:
+        - protocol: email
+          endpoint: jsutton@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -302,6 +317,30 @@ functions:
     events:
       - http:
           path: v1/cases/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseTrialSortTags:
+    handler: src/handlers.updateCaseTrialSortTagsLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/updateCaseTrialSortTags
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setCaseToReadyForTrial:
+    handler: src/handlers.setCaseToReadyForTrialLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/setToReadyForTrial
           method: put
           cors: true
           authorizer:
@@ -666,6 +705,8 @@ functions:
           path: v1/documents/{documentId}/validate
           method: post
           cors: true
+    alarms:
+      - errorExceptions
 
   getTrialSessions:
     handler: src/handlers.getTrialSessionsLambda
