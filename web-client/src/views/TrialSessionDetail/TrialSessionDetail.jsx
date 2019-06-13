@@ -3,7 +3,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import React from 'react';
 
-export const TSrialSessionDetail = () => (
+export const TrialSessionDetail = () => (
   <>
     <BigHeader text="Session Information" />
     <section className="usa-section grid-container">
