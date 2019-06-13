@@ -50,6 +50,29 @@ exports.filePetitionFromPaper = async ({
       });
   }
 
+  const documentIds = [
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  ].filter(documentId => documentId);
+
+  for (let documentId of documentIds) {
+    await applicationContext.getUseCases().virusScanPdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().sanitizePdf({
+      applicationContext,
+      documentId,
+    });
+  }
+
   return await applicationContext.getUseCases().createCaseFromPaper({
     applicationContext,
     ownershipDisclosureFileId,

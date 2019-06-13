@@ -17,7 +17,7 @@ const MOCK_TRIAL = {
 describe('setTrialSessionCalendarInteractor', () => {
   let applicationContext;
 
-  it('throws an exception when it fails to find the cases for a trial session', async () => {
+  it('throws an exception when there is a permissions issue', async () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
