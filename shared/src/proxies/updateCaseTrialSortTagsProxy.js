@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+const { put } = require('./requests');
 
 /**
  * createTrialSession
