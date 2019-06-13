@@ -10,6 +10,7 @@ import { state } from 'cerebral';
  * @returns {object} the alertSuccess and the caseDetail
  */
 export const updateCaseAction = async ({ applicationContext, get, props }) => {
+  const { STATUS_TYPES } = get(state.constants);
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 
@@ -21,6 +22,13 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
     applicationContext,
     caseToUpdate,
   });
+
+  if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
+    await applicationContext.getUseCases().updateCaseTrialSortTags({
+      applicationContext,
+      caseId: caseDetail.caseId,
+    });
+  }
 
   return {
     alertSuccess: {
