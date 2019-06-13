@@ -267,6 +267,7 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    Case,
     CaseAssociationRequestFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
