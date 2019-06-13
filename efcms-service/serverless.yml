@@ -54,7 +54,7 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
-      - internalAlarm:
+      - errorExceptions:
           description: 'Internal Lambda Alarm'
           namespace: 'AWS/Lambda'
           metric: Errors
@@ -63,8 +63,9 @@ custom:
           period: 60
           evaluationPeriods: 1
           comparisonOperator: GreaterThanThreshold
+          pattern: 'ERROR'
     topics:
-      alarm: ${self:service}-${opt:stage}-alerts-alarm
+      alarm: ${self:custom.stage}-cloudwatch-alerts
       notifications:
         - protocol: email
           endpoint: jsutton@flexion.us
@@ -705,7 +706,7 @@ functions:
           method: post
           cors: true
     alarms:
-      - internalAlarm
+      - errorExceptions
 
   getTrialSessions:
     handler: src/handlers.getTrialSessionsLambda
