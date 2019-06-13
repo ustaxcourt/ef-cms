@@ -45,6 +45,7 @@ import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
+import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
@@ -66,6 +67,7 @@ import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
+import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTrialSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
@@ -195,6 +197,7 @@ export const presenter = {
     gotoSelectDocumentTypeSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
+    gotoTrialSessionDetailSequence,
     gotoTrialSessionsSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
@@ -216,6 +219,7 @@ export const presenter = {
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     setCaseCaptionSequence,
+    setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
     setFocusedWorkItemSequence,
     setIdleStatusIdleSequence,

@@ -8,6 +8,7 @@ import {
 import {
   CASE_CAPTION_POSTFIX,
   Case,
+  STATUS_TYPES,
 } from '../../shared/src/business/entities/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
@@ -84,6 +85,7 @@ import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedu
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getTrialSessionDetails } from '../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor';
 import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
@@ -95,6 +97,7 @@ import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInt
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -102,6 +105,7 @@ import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents
 import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -171,6 +175,7 @@ const allUseCases = {
   getProcedureTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
+  getTrialSessionDetails,
   getTrialSessions,
   getUser,
   getUsersInSection,
@@ -183,6 +188,7 @@ const allUseCases = {
   runBatchProcess,
   sanitizePdf,
   sendPetitionToIRSHoldingQueue,
+  setCaseToReadyForTrial,
   setItem: setItemUC,
   setTrialSessionAsSwingSession,
   setTrialSessionCalendar,
@@ -190,6 +196,7 @@ const allUseCases = {
   submitCaseAssociationRequest,
   submitPendingCaseAssociationRequest,
   updateCase,
+  updateCaseTrialSortTags,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,
@@ -258,11 +265,13 @@ const applicationContext = {
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
+    STATUS_TYPES,
     TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    Case,
     CaseAssociationRequestFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,

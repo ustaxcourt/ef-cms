@@ -131,7 +131,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: 'Chattanooga, TN',
+      value: 'Seattle, Washington',
     });
 
     await test.runSequence('updateFormValueSequence', {

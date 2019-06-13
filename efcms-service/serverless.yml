@@ -323,6 +323,30 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateCaseTrialSortTags:
+    handler: src/handlers.updateCaseTrialSortTagsLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/updateCaseTrialSortTags
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setCaseToReadyForTrial:
+    handler: src/handlers.setCaseToReadyForTrialLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/setToReadyForTrial
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   runBatchProcess:
     handler: src/handlers.runBatchProcessLambda
     events:
