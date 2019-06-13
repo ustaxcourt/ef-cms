@@ -21,6 +21,13 @@ export const workQueueHelper = get => {
   const isDisplayingQC = !workQueueIsInternal;
   const userIsPetitionsClerk = userRole === 'petitionsclerk';
   const userIsDocketClerk = userRole === 'docketclerk';
+  const workQueueTitle = `${
+    showIndividualWorkQueue
+      ? 'My'
+      : ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1
+      ? 'Docket'
+      : 'Section'
+  } ${workQueueType}`;
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
@@ -66,9 +73,7 @@ export const workQueueHelper = get => {
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
     workQueueIsInternal,
-    workQueueTitle: `${
-      showIndividualWorkQueue ? 'My' : 'Section'
-    } ${workQueueType}`,
+    workQueueTitle,
     workQueueType,
   };
 };
