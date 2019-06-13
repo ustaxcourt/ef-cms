@@ -2,7 +2,8 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TrialSession } = require('../../entities/TrialSession');
 
 /**
  * getTrialSessionsDetails
@@ -25,5 +26,10 @@ exports.getTrialSessionDetails = async ({
       trialSessionId,
     });
 
-  return trialSessionDetails;
+  if (!trialSessionDetails) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
+
+  const trialSessionEntity = new TrialSession(trialSessionDetails).validate();
+  return trialSessionEntity.toRawObject();
 };
