@@ -1,4 +1,4 @@
-export default test => {
+export default (test, overriddes = {}) => {
   return it('Docket clerk starts a trial session', async () => {
     await test.runSequence('gotoAddTrialSessionSequence');
 
@@ -17,12 +17,12 @@ export default test => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'maxCases',
-      value: 100,
+      value: overriddes.maxCases || 100,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'sessionType',
-      value: 'Hybrid',
+      value: overriddes.sessionType || 'Hybrid',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -52,7 +52,7 @@ export default test => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
-      value: 'Seattle, Washington',
+      value: overriddes.trialLocation || 'Seattle, Washington',
     });
 
     await test.runSequence('validateTrialSessionSequence');

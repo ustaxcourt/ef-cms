@@ -23,6 +23,8 @@ import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
+import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
 import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
@@ -114,6 +116,8 @@ describe('Schedule A Trial Session', () => {
     taxpayerViewsCaseDetail(test);
     userSignsOut(test);
     petitionsClerkLogIn(test);
+    petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
     petitionsClerkSetsCaseReadyForTrial(test);
     userSignsOut(test);
   }
