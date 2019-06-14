@@ -107,6 +107,7 @@ describe('Trial Session Eligible Cases - Scenario 7 - Case status is automatical
     trialLocation,
   };
   const createdCases = [];
+  const createdDocketNumbers = [];
 
   describe(`Create trial session with Regular session type for '${trialLocation}' with max case count = 1`, () => {
     docketClerkLogIn(test);
@@ -131,7 +132,7 @@ describe('Trial Session Eligible Cases - Scenario 7 - Case status is automatical
       taxpayerChoosesCaseType(test);
       taxpayerCreatesNewCase(test, fakeFile);
       taxpayerViewsDashboard(test);
-      captureCreatedCase(test, createdCases);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -155,7 +156,7 @@ describe('Trial Session Eligible Cases - Scenario 7 - Case status is automatical
       taxpayerChoosesCaseType(test);
       taxpayerCreatesNewCase(test, fakeFile);
       taxpayerViewsDashboard(test);
-      captureCreatedCase(test, createdCases);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -198,22 +199,26 @@ describe('Trial Session Eligible Cases - Scenario 7 - Case status is automatical
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('trialSession.caseOrder').length).toEqual(2);
+      expect(test.getState('trialSession.caseOrder').length).toEqual(1);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
       expect(test.getState('trialSession.caseOrder.0.caseId')).toEqual(
         createdCases[0],
       );
-    });
 
-    petitionsClerkViewsCaseDetail(test);
-
-    it(`Case #2 is not assigned to '${trialLocation}' session and case status is not updated to “Calendared for Trial”`, async () => {
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
       });
 
-      expect(test.getState('trialSession.caseOrder.0.caseId')).toEqual(
-        createdCases[1],
+      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+    });
+
+    it(`Case #2 is not assigned to '${trialLocation}' session and case status is “General Docket - At Issue”`, async () => {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[1],
+      });
+
+      expect(test.getState('caseDetail.status')).toEqual(
+        'General Docket - At Issue (Ready for Trial)',
       );
     });
 
