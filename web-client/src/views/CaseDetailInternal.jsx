@@ -85,27 +85,29 @@ export const CaseDetailInternal = connect(
           </div>
         </section>
         {/* This section below will be removed in a future story */}
-        <section>
+        <section className="usa-section grid-container">
           {caseDetail.status === 'General Docket - Not at Issue' && (
-            <a
-              href={`${baseUrl}/documents/${
-                caseDetail.docketNumber
-              }_${caseDetail.contactPrimary.name.replace(
-                /\s/g,
-                '_',
-              )}.zip/documentDownloadUrl?token=${token}`}
-              aria-label="View PDF"
-            >
-              <FontAwesomeIcon icon={['far', 'file-pdf']} />
-              Batch Zip Download
-            </a>
+            <>
+              <a
+                href={`${baseUrl}/documents/${
+                  caseDetail.docketNumber
+                }_${caseDetail.contactPrimary.name.replace(
+                  /\s/g,
+                  '_',
+                )}.zip/documentDownloadUrl?token=${token}`}
+                aria-label="View PDF"
+              >
+                <FontAwesomeIcon icon={['far', 'file-pdf']} />
+                Batch Zip Download
+              </a>
+              <button
+                className="usa-button usa-button--outline margin-left-1"
+                onClick={() => setCaseToReadyForTrialSequence()}
+              >
+                Set Case Status to Ready for Trial
+              </button>
+            </>
           )}
-          <button
-            className="usa-button usa-button--outline margin-left-1"
-            onClick={() => setCaseToReadyForTrialSequence()}
-          >
-            Set Case Status to Ready for Trial
-          </button>
         </section>
       </>
     );
