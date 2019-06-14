@@ -5,6 +5,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
+import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -15,6 +16,8 @@ import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
+import { setWorkItemAction } from '../actions/setWorkItemAction';
+import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { state } from 'cerebral';
 
 export const gotoDocumentDetailSequence = [
@@ -36,4 +39,9 @@ export const gotoDocumentDetailSequence = [
   getCaseTypesAction,
   setCaseTypesAction,
   setCurrentPageAction('DocumentDetail'),
+  getShouldMarkReadAction,
+  {
+    markRead: [setWorkItemAction, setWorkItemAsReadAction],
+    noAction: [],
+  },
 ];
