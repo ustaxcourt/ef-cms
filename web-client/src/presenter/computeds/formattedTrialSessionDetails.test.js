@@ -37,6 +37,8 @@ describe('formattedTrialSessionDetails', () => {
       formattedStartTime: '10:00 am',
       formattedTerm: 'Fall 19',
       formattedTrialClerk: 'Test Trial Clerk',
+      noLocationEntered: false,
+      showSwingSession: false,
     });
   });
 
@@ -48,6 +50,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       formattedCityStateZip: '',
+      noLocationEntered: true,
     });
 
     result = await runCompute(formattedTrialSessionDetails, {
@@ -57,6 +60,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       formattedCityStateZip: 'CT 12345',
+      noLocationEntered: false,
     });
 
     result = await runCompute(formattedTrialSessionDetails, {
@@ -66,6 +70,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       formattedCityStateZip: 'Hartford, 12345',
+      noLocationEntered: false,
     });
 
     result = await runCompute(formattedTrialSessionDetails, {
@@ -75,6 +80,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       formattedCityStateZip: 'Hartford, 12345',
+      noLocationEntered: false,
     });
 
     result = await runCompute(formattedTrialSessionDetails, {
@@ -84,6 +90,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       formattedCityStateZip: 'Hartford, CT',
+      noLocationEntered: false,
     });
   });
 
@@ -114,6 +121,104 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       formattedStartTime: '2:00 pm',
+    });
+  });
+
+  it('displays swing session area if session is a swing session', async () => {
+    let result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          swingSession: true,
+          swingSessionId: '1234',
+          swingSessionLocation: 'Honolulu, Hawaii',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showSwingSession: true,
+    });
+  });
+
+  it('displays eliglble cases table and set calendar button for Regular, Small, and Hybrid sessions that are not yet calendared', async () => {
+    let result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          sessionType: 'Regular',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showEligibleCases: true,
+    });
+
+    result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          sessionType: 'Small',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showEligibleCases: true,
+    });
+
+    result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          sessionType: 'Hybrid',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showEligibleCases: true,
+    });
+  });
+
+  it('does not display eliglble cases table if session type is Motion/Hearing or Special, or session is calendared', async () => {
+    let result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          sessionType: 'Motion/Hearing',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showEligibleCases: false,
+    });
+
+    result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          sessionType: 'Special',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showEligibleCases: false,
+    });
+
+    result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: true,
+          sessionType: 'Hybrid',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      showEligibleCases: false,
     });
   });
 });
