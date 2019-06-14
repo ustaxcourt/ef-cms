@@ -13,7 +13,9 @@
     "swingSession": true,
     "swingSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
     "trialLocation": "Houston, Texas",
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "isCalendared": false,
+    "status": "Upcoming"
   },
   {
     "pk": "trial-session-208a959f-9526-4db5-b262-e58c476a4604",
@@ -29,7 +31,9 @@
     "swingSession": true,
     "swingSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "trialLocation": "Austin, Texas",
-    "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604"
+    "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
+    "isCalendared": false,
+    "status": "Upcoming"
   },
   {
     "pk": "trial-session-f3b04943-8ea8-422b-8990-dec3ca644c83",
@@ -43,7 +47,9 @@
     "term": "Fall",
     "termYear": "2019",
     "trialLocation": "Seattle, Washington",
-    "trialSessionId": "f3b04943-8ea8-422b-8990-dec3ca644c83"
+    "trialSessionId": "f3b04943-8ea8-422b-8990-dec3ca644c83",
+    "isCalendared": false,
+    "status": "Upcoming"
   },
   {
     "pk": "trial-session-5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
@@ -57,7 +63,9 @@
     "term": "Fall",
     "termYear": "2019",
     "trialLocation": "Las Vegas, Nevada",
-    "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5"
+    "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
+    "isCalendared": false,
+    "status": "Upcoming"
   },
   {
     "pk": "trial-session-6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
@@ -71,7 +79,9 @@
     "term": "Fall",
     "termYear": "2019",
     "trialLocation": "Kansas City, Kansas",
-    "trialSessionId": "6b6975cf-2b10-4e84-bcae-91e162d2f9d1"
+    "trialSessionId": "6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
+    "isCalendared": false,
+    "status": "Upcoming"
   },
   {
     "pk": "trial-session-9c943468-bc2e-4631-84e3-b084cf5b1faa",
@@ -85,7 +95,9 @@
     "term": "Fall",
     "termYear": "2019",
     "trialLocation": "Denver, Colorado",
-    "trialSessionId": "9c943468-bc2e-4631-84e3-b084cf5b1faa"
+    "trialSessionId": "9c943468-bc2e-4631-84e3-b084cf5b1faa",
+    "isCalendared": false,
+    "status": "Upcoming"
   },
   {
     "pk": "trial-session-149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
@@ -99,6 +111,8 @@
     "term": "Fall",
     "termYear": "2019",
     "trialLocation": "Birmingham, Alabama",
-    "trialSessionId": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc"
+    "trialSessionId": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
+    "isCalendared": false,
+    "status": "Upcoming"
   }
 ]

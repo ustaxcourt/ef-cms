@@ -1,4 +1,3 @@
-import { BigHeader } from '../BigHeader';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,12 +11,33 @@ import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
+    formattedTrialSession: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
   },
-  ({ showModal, openSetCalendarModalSequence }) => (
+  ({ showModal, openSetCalendarModalSequence, formattedTrialSession }) => (
     <>
-      <BigHeader text="Session Information" />
+      <div className="big-blue-header">
+        <div className="grid-container">
+          <div className="margin-bottom-1">
+            <h1 tabIndex="-1">{formattedTrialSession.trialLocation}</h1>
+            <span
+              className={`usa-tag ${
+                !formattedTrialSession.isCalendared ? 'ustc-tag--yellow' : ''
+              }`}
+            >
+              <span aria-hidden="true">
+                {formattedTrialSession.formattedTerm}:{' '}
+                {formattedTrialSession.status}
+              </span>
+            </span>
+          </div>
+          <p id="case-title" className="margin-y-0">
+            <span>{formattedTrialSession.formattedStartDate}</span>
+          </p>
+        </div>
+      </div>
+
       <section className="usa-section grid-container">
         <SuccessNotification />
         <ErrorNotification />
