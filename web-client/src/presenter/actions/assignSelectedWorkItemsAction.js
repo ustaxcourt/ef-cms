@@ -20,14 +20,16 @@ export const assignSelectedWorkItemsAction = async ({
   const assigneeId = get(state.assigneeId);
   const assigneeName = get(state.assigneeName);
 
-  for (let workItem of selectedWorkItems) {
-    await applicationContext.getUseCases().assignWorkItems({
-      applicationContext,
-      assigneeId,
-      assigneeName,
-      workItemId: workItem.workItemId,
-    });
-  }
+  await Promise.all(
+    selectedWorkItems.map(workItem =>
+      applicationContext.getUseCases().assignWorkItems({
+        applicationContext,
+        assigneeId,
+        assigneeName,
+        workItemId: workItem.workItemId,
+      }),
+    ),
+  );
 
   store.set(
     state.workQueue,
