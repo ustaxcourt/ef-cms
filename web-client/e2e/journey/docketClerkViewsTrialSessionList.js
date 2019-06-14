@@ -21,6 +21,7 @@ export default test => {
       judge: 'Judge Cohen',
       sessionType: 'Hybrid',
       startDate: '2025-12-12T05:00:00.000Z',
+      status: 'Upcoming',
       term: 'Fall',
       termYear: '2025',
       trialLocation: 'Seattle, Washington',
