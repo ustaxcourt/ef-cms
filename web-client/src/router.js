@@ -46,6 +46,17 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/qc/*',
+      checkLoggedIn((docketNumber, documentId, markWorkItemRead) => {
+        document.title = `Document details ${pageTitleSuffix}`;
+        app.getSequence('gotoDocumentDetailSequence')({
+          docketNumber,
+          documentId,
+          markWorkItemRead,
+        });
+      }),
+    );
+    route(
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
         document.title = `Document details ${pageTitleSuffix}`;
