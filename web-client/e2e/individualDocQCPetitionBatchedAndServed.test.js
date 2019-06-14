@@ -34,7 +34,7 @@ import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsS
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogin from './journey/taxpayerLogin';
+import taxpayerLogIn from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
@@ -120,7 +120,7 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
     });
   });
 
-  taxpayerLogin(test);
+  taxpayerLogIn(test);
   taxpayerNavigatesToCreateCase(test);
   taxpayerChoosesProcedureType(test);
   taxpayerChoosesCaseType(test);
