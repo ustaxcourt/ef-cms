@@ -16,7 +16,7 @@
     "test": "FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$",
     "test:all": "npm run lint && npm run test && npm run test:pa11y && npm run cypress",
     "test:e2e": "jest --runInBand --config jest-e2e.config.js ./e2e/.*test\\.js$",
-    "test:pa11y": "pa11y-ci --config pa11y-ci.config.json",
+    "test:pa11y": "pa11y-ci --config pa11y-ci.config.js",
     "test:unit": "jest --runInBand --config jest-unit.config.js ./src/.*test\\.js$",
     "test:watch": "jest --runInBand --watch .*test\\.js$",
     "print:success": "../wait-until.sh http://localhost:1234 && echo 'Build successful. You can access the site at http://localhost:1234'",
