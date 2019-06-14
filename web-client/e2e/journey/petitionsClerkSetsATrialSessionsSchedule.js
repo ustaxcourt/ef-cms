@@ -4,8 +4,6 @@ export default test => {
       trialSessionId: test.trialSessionId,
     });
 
-    await test.runSequence('setTrialSessionCalendarSequence', {
-      trialSessionId: test.trialSessionId,
-    });
+    await test.runSequence('setTrialSessionCalendarSequence');
   });
 };
