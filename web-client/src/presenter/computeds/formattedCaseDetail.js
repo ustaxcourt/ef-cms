@@ -236,10 +236,20 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
 
   if (result.trialSessionId) {
     result.formattedTrialCity = result.trialLocation || 'Not assigned';
+    result.formattedTrialJudge = result.trialJudge || 'Not assigned';
     result.formattedTrialDate = applicationContext
       .getUtilities()
-      .formatDateString(result.trialDate, 'DATE_TIME');
-    result.formattedTrialJudge = result.trialJudge || 'Not assigned';
+      .formatDateString(result.trialDate, 'YYYY-MM-DD');
+    if (result.trialTime) {
+      result.formattedTrialDate += `T${result.trialTime}:00`;
+      result.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(result.formattedTrialDate, 'DATE_TIME');
+    } else {
+      result.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(result.formattedTrialDate, 'MMDDYY');
+    }
   }
 
   return result;
