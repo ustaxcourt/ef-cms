@@ -1,6 +1,6 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { props, sequences } from 'cerebral';
+import { sequences } from 'cerebral';
 
 class SetCalendarModalDialogComponent extends ModalDialog {
   constructor(props) {
@@ -20,7 +20,7 @@ class SetCalendarModalDialogComponent extends ModalDialog {
 export const SetCalendarModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.dismissModalSequence, // TODO
+    confirmSequence: sequences.setTrialSessionCalendarSequence,
   },
   SetCalendarModalDialogComponent,
 );
