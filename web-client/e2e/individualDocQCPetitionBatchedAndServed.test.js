@@ -31,12 +31,12 @@ import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
-import taxPayerSignsOut from './journey/taxPayerSignsOut';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogin';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
+import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 let test;
@@ -126,7 +126,7 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   taxpayerChoosesCaseType(test);
   taxpayerCreatesNewCase(test, fakeFile);
   taxpayerViewsDashboard(test);
-  taxPayerSignsOut(test);
+  taxpayerSignsOut(test);
   petitionsClerkLogIn(test);
   petitionsClerkViewsSectionDocumentQC(test);
   petitionsClerkAssignsWorkItemToSelf(test);
