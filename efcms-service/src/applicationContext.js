@@ -270,8 +270,8 @@ const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
-  updateWorkItemInCase
-} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase')
+  updateWorkItemInCase,
+} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
 const {
   validatePdf,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
