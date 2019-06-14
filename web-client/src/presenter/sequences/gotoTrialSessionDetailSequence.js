@@ -8,6 +8,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setEligibleCasesForTrialSessionAction } from '../actions/TrialSession/setEligibleCasesForTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
+import { shouldTrialSessionRetrieveEligibleCaseAction } from '../actions/TrialSession/shouldTrialSessionRetrieveEligibleCaseAction';
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
@@ -16,8 +17,14 @@ const gotoTrialSessionDetails = [
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
-  getEligibleCasesForTrialSessionAction,
-  setEligibleCasesForTrialSessionAction,
+  shouldTrialSessionRetrieveEligibleCaseAction,
+  {
+    no: [],
+    yes: [
+      getEligibleCasesForTrialSessionAction,
+      setEligibleCasesForTrialSessionAction,
+    ],
+  },
   setCurrentPageAction('TrialSessionDetail'),
 ];
 
