@@ -1,4 +1,3 @@
-import { checkDate } from './getFormCombinedWithCaseDetailAction';
 import { omit } from 'lodash';
 import { state } from 'cerebral';
 
@@ -77,12 +76,10 @@ export const createCaseFromPaperAction = async ({
     state.petition,
   );
 
-  const receivedAt = checkDate(props.computedDate);
-
   const form = omit(
     {
       ...get(state.form),
-      receivedAt,
+      receivedAt: props.computedDate,
     },
     ['year', 'month', 'day'],
   );
