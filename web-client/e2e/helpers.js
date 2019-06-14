@@ -47,6 +47,50 @@ exports.getFormattedDocumentQCSectionInbox = async test => {
   });
 };
 
+exports.getFormattedMyInbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'inbox',
+    queue: 'my',
+    workQueueIsInternal: true,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+exports.getFormattedSectionInbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'inbox',
+    queue: 'section',
+    workQueueIsInternal: true,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+exports.getFormattedMyOutbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'outbox',
+    queue: 'my',
+    workQueueIsInternal: true,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+exports.getFormattedSectionOutbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'outbox',
+    queue: 'section',
+    workQueueIsInternal: true,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
 exports.getInboxCount = test => {
   return runCompute(workQueueHelper, {
     state: test.getState(),
@@ -104,6 +148,34 @@ exports.uploadExternalDecisionDocument = async test => {
     supportingDocumentMetadata: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
+};
+
+exports.createMessage = async ({ test, assigneeId, message }) => {
+  test.setState('form', {
+    assigneeId,
+    message,
+    section: 'docket',
+  });
+
+  await test.runSequence('createWorkItemSequence');
+};
+
+exports.forwardWorkItem = async (test, to, workItemId, message) => {
+  let assigneeId;
+  if (to === 'docketclerk1') {
+    assigneeId = '2805d1ab-18d0-43ec-bafb-654e83405416';
+  }
+  test.setState('form', {
+    [workItemId]: {
+      assigneeId: assigneeId,
+      forwardMessage: message,
+      section: 'petitions',
+    },
+  });
+
+  await test.runSequence('submitForwardSequence', {
+    workItemId,
+  });
 };
 
 exports.uploadPetition = async test => {
