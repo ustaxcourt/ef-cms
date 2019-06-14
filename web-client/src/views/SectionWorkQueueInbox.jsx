@@ -70,7 +70,9 @@ export const SectionWorkQueueInbox = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">Select</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
-              <th aria-label="Status Icon" className="padding-right-0" />
+              {!workQueueHelper.hideIconColumn && (
+                <th aria-label="Status Icon" className="padding-right-0" />
+              )}
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
@@ -138,24 +140,26 @@ export const SectionWorkQueueInbox = connect(
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
                 </td>
-                <td className="message-queue-row has-icon padding-right-0">
-                  {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      icon={['far', 'clock']}
-                      className="iconStatusBatched"
-                      aria-hidden="true"
-                      size="lg"
-                    />
-                  )}
-                  {item.showUnassignedIcon && (
-                    <FontAwesomeIcon
-                      icon={['fas', 'question-circle']}
-                      className="iconStatusUnassigned"
-                      aria-hidden="true"
-                      size="lg"
-                    />
-                  )}
-                </td>
+                {!workQueueHelper.hideIconColumn && (
+                  <td className="message-queue-row has-icon padding-right-0">
+                    {item.showBatchedStatusIcon && (
+                      <FontAwesomeIcon
+                        icon={['far', 'clock']}
+                        className="iconStatusBatched"
+                        aria-hidden="true"
+                        size="lg"
+                      />
+                    )}
+                    {item.showUnassignedIcon && (
+                      <FontAwesomeIcon
+                        icon={['fas', 'question-circle']}
+                        className="iconStatusUnassigned"
+                        aria-hidden="true"
+                        size="lg"
+                      />
+                    )}
+                  </td>
+                )}
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
                     <a
