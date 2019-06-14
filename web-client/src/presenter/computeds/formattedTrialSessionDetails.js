@@ -33,5 +33,21 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     result.postalCode,
   ]).join(' ');
 
+  result.noLocationEntered =
+    !result.courthouseName &&
+    !result.address1 &&
+    !result.address2 &&
+    !result.formattedCityStateZip;
+
+  result.showSwingSession =
+    !!result.swingSession &&
+    !!result.swingSessionId &&
+    !!result.swingSessionLocation;
+
+  result.showEligibleCases =
+    result.sessionType !== 'Motion/Hearing' &&
+    result.sessionType !== 'Special' &&
+    !result.isCalendared;
+
   return result;
 };
