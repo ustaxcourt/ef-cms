@@ -152,6 +152,9 @@ const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
+  getTrialSessionDetails,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
+const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
 const {
@@ -266,6 +269,9 @@ const {
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  updateWorkItemInCase,
+} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
 const {
   validatePdf,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
@@ -384,6 +390,7 @@ module.exports = (appContextUser = {}) => {
         updateDocumentProcessingStatus,
         updateTrialSession,
         updateWorkItem,
+        updateWorkItemInCase,
         verifyCaseForUser,
         verifyPendingCaseForUser,
         zipDocuments,
@@ -425,6 +432,7 @@ module.exports = (appContextUser = {}) => {
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getTrialSessionDetails,
         getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,

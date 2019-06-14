@@ -732,6 +732,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getTrialSessionDetails:
+    handler: src/handlers.getTrialSessionDetailsLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   setTrialSessionAsSwingSession:
     handler: src/handlers.setTrialSessionAsSwingSessionLambda
     events:

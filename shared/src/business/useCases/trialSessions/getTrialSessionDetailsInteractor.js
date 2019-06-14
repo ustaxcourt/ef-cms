@@ -2,25 +2,34 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TrialSession } = require('../../entities/TrialSession');
 
 /**
  * getTrialSessionsDetails
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getTrialSessionDetails = async ({ applicationContext }) => {
+exports.getTrialSessionDetails = async ({
+  applicationContext,
+  trialSessionId,
+}) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessionDetails = {};
-  // await applicationContext
-  //   .getPersistenceGateway()
-  //   .getSessionInfo({
-  //     applicationContext,
-  //   });
+  const trialSessionDetails = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId,
+    });
 
-  return trialSessionDetails;
+  if (!trialSessionDetails) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
+
+  const trialSessionEntity = new TrialSession(trialSessionDetails).validate();
+  return trialSessionEntity.toRawObject();
 };

@@ -1,4 +1,4 @@
-const { TrialSession, STATUS_TYPES } = require('./TrialSession');
+const { TrialSession } = require('./TrialSession');
 
 const VALID_TRIAL_SESSION = {
   maxCases: 100,
@@ -90,7 +90,7 @@ describe('TrialSession entity', () => {
         sessionType: 'Hybrid',
       });
       trialSession.setAsCalendared();
-      expect(trialSession.status).toEqual(STATUS_TYPES.calendared);
+      expect(trialSession.isCalendared).toEqual(true);
     });
   });
 
