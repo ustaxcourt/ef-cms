@@ -135,10 +135,5 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   petitionsClerkSubmitsCaseToIrs(test);
   petitionsClerkIrsHoldingQueue(test);
   petitionsClerkRunsIrsBatch(test);
-  // Petitions Clerk navigates to “Batched for IRS” tab and sees the petition they just batched
-  // Petitions Clerk clicks “Run IRS Batch Process”
-  // Petition no longer displays in “Batched for IRS” tab
-  // Petitions Clerk navigates to “Served” tab and sees the petition they served
-
   petitionsClerkSignsOut(test);
 });
