@@ -24,7 +24,8 @@ export const workQueueHelper = get => {
   const workQueueTitle = `${
     showIndividualWorkQueue
       ? 'My'
-      : ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1
+      : ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1 &&
+        !workQueueIsInternal
       ? 'Docket'
       : 'Section'
   } ${workQueueType}`;
@@ -56,7 +57,8 @@ export const workQueueHelper = get => {
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,
     showMessagesSentFromColumn: !isDisplayingQC,
-    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
+    showMyQueueToggle:
+      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showReceivedColumn: isDisplayingQC,
