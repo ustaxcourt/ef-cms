@@ -34,7 +34,6 @@ import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 
@@ -100,20 +99,25 @@ describe('Schedule A Trial Session', () => {
     });
   });
 
+  const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
   docketClerkLogIn(test);
-  docketClerkCreatesATrialSession(test);
-  docketClerkViewsTrialSessionList(test);
+  docketClerkCreatesATrialSession(test, overrides);
+  docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsAnUpcomingTrialSession(test);
   userSignsOut(test);
 
   for (let i = 0; i < 5; i++) {
     taxpayerLogin(test);
     taxpayerNavigatesToCreateCase(test);
-    taxpayerChoosesProcedureType(test);
+    taxpayerChoosesProcedureType(test, overrides);
     taxpayerChoosesCaseType(test);
     taxpayerCreatesNewCase(test, fakeFile);
     taxpayerViewsDashboard(test);
-    taxpayerViewsCaseDetail(test);
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
