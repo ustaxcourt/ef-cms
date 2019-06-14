@@ -47,12 +47,12 @@ const router = {
     );
     route(
       '/case-detail/*/documents/*/qc/*',
-      checkLoggedIn((docketNumber, documentId, markWorkItemRead) => {
+      checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
         document.title = `Document details ${pageTitleSuffix}`;
         app.getSequence('gotoDocumentDetailSequence')({
           docketNumber,
           documentId,
-          markWorkItemRead,
+          workItemIdToMarkAsRead,
         });
       }),
     );
