@@ -54,16 +54,17 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
-      - errorExceptions:
-          description: 'Internal Lambda Alarm'
-          namespace: 'AWS/Lambda'
-          metric: Errors
-          threshold: 1
-          statistic: Minimum
-          period: 60
-          evaluationPeriods: 1
-          comparisonOperator: GreaterThanThreshold
-          pattern: 'ERROR'
+    definitions:
+      errorExceptions:
+        description: 'Internal Lambda Alarm'
+        namespace: 'AWS/Lambda'
+        metric: Errors
+        threshold: 1
+        statistic: Minimum
+        period: 60
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanThreshold
+        pattern: 'ERROR'
     topics:
       alarm: ${self:provider.stage}-cloudwatch-alerts
       notifications:
