@@ -17,8 +17,8 @@ const SESSION_TYPES = [
 ];
 
 const STATUS_TYPES = {
-  calendared: 'calendared',
-  new: 'new',
+  closed: 'Closed',
+  upcoming: 'Upcoming',
 };
 
 exports.STATUS_TYPES = STATUS_TYPES;
@@ -38,6 +38,7 @@ function TrialSession(rawSession) {
     courthouseName: rawSession.courthouseName,
     createdAt: rawSession.createdAt || new Date().toISOString(),
     irsCalendarAdministrator: rawSession.irsCalendarAdministrator,
+    isCalendared: rawSession.isCalendared || false,
     judge: rawSession.judge,
     maxCases: rawSession.maxCases,
     notes: rawSession.notes,
@@ -46,7 +47,7 @@ function TrialSession(rawSession) {
     startDate: rawSession.startDate,
     startTime: rawSession.startTime || '10:00',
     state: rawSession.state,
-    status: rawSession.status || STATUS_TYPES.new,
+    status: rawSession.status || STATUS_TYPES.upcoming,
     swingSession: rawSession.swingSession,
     swingSessionId: rawSession.swingSessionId,
     term: rawSession.term,
@@ -98,6 +99,7 @@ joiValidationDecorator(
       .iso()
       .optional(),
     irsCalendarAdministrator: joi.string().optional(),
+    isCalendared: joi.boolean().required(),
     judge: joi.string().optional(),
     maxCases: joi
       .number()
@@ -185,7 +187,7 @@ TrialSession.prototype.generateSortKeyPrefix = function() {
  * @returns {TrialSession}
  */
 TrialSession.prototype.setAsCalendared = function() {
-  this.status = STATUS_TYPES.calendared;
+  this.isCalendared = true;
   return this;
 };
 

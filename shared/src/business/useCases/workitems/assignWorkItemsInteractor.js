@@ -65,24 +65,16 @@ exports.assignWorkItems = async ({
     })
     .addMessage(newMessage);
 
-  caseToUpdate.documents.forEach(
-    document =>
-      (document.workItems = document.workItems.map(item => {
-        return item.workItemId === workItemEntity.workItemId
-          ? workItemEntity
-          : item;
-      })),
-  );
-
   await Promise.all([
     applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       deleteFromSection: false,
       workItem: originalWorkItem,
     }),
-    applicationContext.getPersistenceGateway().updateCase({
+    applicationContext.getPersistenceGateway().updateWorkItemInCase({
       applicationContext,
-      caseToUpdate: caseToUpdate.validate().toRawObject(),
+      caseToUpdate,
+      workItem: workItemEntity.validate().toRawObject(),
     }),
     applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,
