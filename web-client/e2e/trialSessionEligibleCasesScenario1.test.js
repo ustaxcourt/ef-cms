@@ -25,16 +25,12 @@ import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSes
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
-import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
-import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 
@@ -77,7 +73,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Schedule A Trial Session', () => {
+describe('Trial Session Eligible Cases - Scenario 1', () => {
   beforeEach(() => {
     jest.setTimeout(300000);
     global.window = {
@@ -100,31 +96,81 @@ describe('Schedule A Trial Session', () => {
     });
   });
 
-  docketClerkLogIn(test);
-  docketClerkCreatesATrialSession(test);
-  docketClerkViewsTrialSessionList(test);
-  docketClerkViewsAnUpcomingTrialSession(test);
-  userSignsOut(test);
+  const trialLocation = `Baton Rouge, Louisiana, ${Date.now()}`;
+  const overrides = {
+    maxCases: 1,
+    preferredTrialCity: trialLocation,
+    procedureType: 'Small',
+    sessionType: 'Hybrid',
+    trialLocation,
+  };
 
-  for (let i = 0; i < 5; i++) {
+  describe(`Create trial session for '${trialLocation}'`, () => {
+    docketClerkLogIn(test);
+    docketClerkCreatesATrialSession(test, overrides);
+    docketClerkViewsTrialSessionList(test, overrides);
+    docketClerkViewsAnUpcomingTrialSession(test);
+    userSignsOut(test);
+  });
+
+  describe(`#1 Case with status “General Docket - Not at Issue” for '${trialLocation}'`, () => {
     taxpayerLogin(test);
     taxpayerNavigatesToCreateCase(test);
-    taxpayerChoosesProcedureType(test);
+    taxpayerChoosesProcedureType(test, overrides);
     taxpayerChoosesCaseType(test);
     taxpayerCreatesNewCase(test, fakeFile);
     taxpayerViewsDashboard(test);
-    taxpayerViewsCaseDetail(test);
+    userSignsOut(test);
+    petitionsClerkLogIn(test);
+    petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
+    // Case is not set ready for trial
+    // petitionsClerkSetsCaseReadyForTrial(test);
+    userSignsOut(test);
+  });
+
+  describe(`#2 Case with Status “General Docket - At Issue” for '${trialLocation}'`, () => {
+    taxpayerLogin(test);
+    taxpayerNavigatesToCreateCase(test);
+    taxpayerChoosesProcedureType(test, overrides);
+    taxpayerChoosesCaseType(test);
+    taxpayerCreatesNewCase(test, fakeFile);
+    taxpayerViewsDashboard(test);
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
     petitionsClerkRunsBatchProcess(test);
     petitionsClerkSetsCaseReadyForTrial(test);
     userSignsOut(test);
-  }
+  });
 
-  petitionsClerkLogIn(test);
-  petitionsClerkViewsATrialSessionsEligibleCases(test);
-  petitionsClerkSetsATrialSessionsSchedule(test);
-  petitionsClerkViewsACalendaredTrialSession(test);
-  userSignsOut(test);
+  describe('#3 Case with status “General Docket - At Issue” for [another trial location]', () => {
+    taxpayerLogin(test);
+    taxpayerNavigatesToCreateCase(test);
+    taxpayerChoosesProcedureType(test);
+    taxpayerChoosesCaseType(test);
+    taxpayerCreatesNewCase(test, fakeFile);
+    taxpayerViewsDashboard(test);
+    userSignsOut(test);
+    petitionsClerkLogIn(test);
+    petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    petitionsClerkRunsBatchProcess(test);
+    petitionsClerkSetsCaseReadyForTrial(test);
+    userSignsOut(test);
+  });
+
+  describe(`Check eligible cases for '${trialLocation}' session`, () => {
+    petitionsClerkLogIn(test);
+
+    it(`Only one case (#2) should show up as eligible for '${trialLocation}' session`, async () => {
+      await test.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: test.trialSessionId,
+      });
+
+      expect(test.getState('eligibleCases').length).toEqual(1);
+      expect(test.getState('trialSession.status')).toEqual('Upcoming');
+    });
+
+    userSignsOut(test);
+  });
 });
