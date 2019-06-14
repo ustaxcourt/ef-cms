@@ -32,7 +32,7 @@ export const TrialSessionInformation = connect(
                           <p className="label">Date</p>
                           <p
                             className={
-                              !formattedTrialSession.showSwingSession &&
+                              formattedTrialSession.showSwingSession ||
                               'margin-bottom-0'
                             }
                           >
@@ -44,7 +44,7 @@ export const TrialSessionInformation = connect(
                           <p className="label">Max # of Cases</p>
                           <p
                             className={
-                              !formattedTrialSession.showSwingSession &&
+                              formattedTrialSession.showSwingSession ||
                               'margin-bottom-0'
                             }
                           >
@@ -115,8 +115,7 @@ export const TrialSessionInformation = connect(
               <div className="grid-col-6">
                 <div className="card trial-session-card">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Location</h3>
-                    <p className="label">Location</p>
+                    <h3 className="underlined">Courthouse Location</h3>
                     {formattedTrialSession.noLocationEntered && (
                       <p>No location entered</p>
                     )}
