@@ -228,3 +228,16 @@ exports.viewDocumentDetailMessage = async ({
     messageId,
   });
 };
+
+/**
+ * This is needed because some sequences run router.route which runs another test.runSequence which
+ * adds an new entry on the node event loop and causes the tests to continue running even though the sequence is
+ * not yet done.
+ *
+ * @returns {Promise} resolves when the setImmediate is done
+ */
+exports.waitForRouter = () => {
+  return new Promise(resolve => {
+    setImmediate(() => resolve(true));
+  });
+};
