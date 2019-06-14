@@ -68,6 +68,20 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/messages/*/mark/*',
+      checkLoggedIn(
+        (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
+          document.title = `Document details ${pageTitleSuffix}`;
+          app.getSequence('gotoDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+            messageId,
+            workItemIdToMarkAsRead,
+          });
+        },
+      ),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
