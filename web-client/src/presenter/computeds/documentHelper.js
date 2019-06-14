@@ -1,14 +1,14 @@
 export const documentHelper = () => ({
   docketNumber,
   documentId,
-  markWorkItemRead,
   messageId,
+  workItemIdToMarkAsRead,
 }) => {
   const baseUri = `/case-detail/${docketNumber}/documents/${documentId}`;
   if (messageId) {
     return `${baseUri}/messages/${messageId}`;
-  } else if (markWorkItemRead) {
-    return `${baseUri}/qc/${markWorkItemRead}`;
+  } else if (workItemIdToMarkAsRead) {
+    return `${baseUri}/qc/${workItemIdToMarkAsRead}`;
   } else {
     return baseUri;
   }

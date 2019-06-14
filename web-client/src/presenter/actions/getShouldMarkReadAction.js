@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  * @returns {object} continue path for the sequence
  */
 export const getShouldMarkReadAction = ({ store, props, path }) => {
-  const shouldMarkWorkItemRead = props.markWorkItemRead;
+  const workItemIdToMarkAsRead = props.workItemIdToMarkAsRead;
 
-  if (shouldMarkWorkItemRead) {
-    store.set(state.workItemId, props.markWorkItemRead);
+  if (workItemIdToMarkAsRead) {
+    store.set(state.workItemId, props.workItemIdToMarkAsRead);
 
     return path['markRead']();
   } else {

@@ -18,7 +18,7 @@ describe('getShouldMarkReadAction', () => {
         presenter,
       },
       props: {
-        markWorkItemRead: '123r',
+        workItemIdToMarkAsRead: '123',
       },
     });
     expect(markReadStub.calledOnce).toEqual(true);
@@ -30,19 +30,19 @@ describe('getShouldMarkReadAction', () => {
         presenter,
       },
       props: {
-        markWorkItemRead: null,
+        workItemIdToMarkAsRead: null,
       },
     });
     expect(noActionStub.calledOnce).toEqual(true);
   });
 
-  it('should set state.workItemId if props.markWorkItemRead is set', async () => {
+  it('should set state.workItemId if props.workItemIdToMarkAsRead is set', async () => {
     const { state } = await runAction(getShouldMarkReadAction, {
       modules: {
         presenter,
       },
       props: {
-        markWorkItemRead: '123',
+        workItemIdToMarkAsRead: '123',
       },
     });
     expect(state.workItemId).toEqual('123');
