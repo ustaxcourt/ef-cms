@@ -67,7 +67,7 @@ export const SectionWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              {workQueueHelper.showSelectColumn && <th colSpan="2">Select</th>}
+              {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
               {!workQueueHelper.hideIconColumn && (
