@@ -44,7 +44,7 @@ export const TrialSessionDetail = connect(
 
         <TrialSessionInformation />
 
-        {!formattedTrialSession.isCalendared && (
+        {formattedTrialSession.showEligibleCases && (
           <Tabs
             defaultActiveTab="EligibleCases"
             bind="trialsessiondetails.caseList"
