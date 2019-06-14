@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * set trial session calendar
  *
@@ -8,9 +10,9 @@
  */
 export const setTrialSessionCalendarAction = async ({
   applicationContext,
-  props,
+  get,
 }) => {
-  const trialSessionId = props.trialSessionId;
+  const trialSessionId = get(state.trialSession.trialSessionId);
 
   const trialSession = await applicationContext
     .getUseCases()
@@ -19,5 +21,5 @@ export const setTrialSessionCalendarAction = async ({
       trialSessionId,
     });
 
-  return { trialSession };
+  return { trialSessionId: trialSession.trialSessionId };
 };
