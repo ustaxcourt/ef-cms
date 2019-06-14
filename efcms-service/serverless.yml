@@ -66,10 +66,11 @@ custom:
         comparisonOperator: GreaterThanThreshold
         pattern: 'ERROR'
     topics:
-      alarm: ${self:provider.stage}-cloudwatch-alerts
-      notifications:
-        - protocol: email
-          endpoint: jsutton@flexion.us
+      alarm:
+        topic: ${self:provider.stage}-cloudwatch-alerts
+        notifications:
+          - protocol: email
+            endpoint: jsutton@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
