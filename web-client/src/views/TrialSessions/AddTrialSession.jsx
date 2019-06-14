@@ -63,6 +63,7 @@ export const AddTrialSession = connect(
                   id="notes"
                   name="notes"
                   value={form.notes}
+                  maxLength="400"
                   onChange={e => {
                     updateTrialSessionFormDataSequence({
                       key: e.target.name,

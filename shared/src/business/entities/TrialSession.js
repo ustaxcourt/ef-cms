@@ -106,7 +106,10 @@ joiValidationDecorator(
       .greater(0)
       .integer()
       .required(),
-    notes: joi.string().optional(),
+    notes: joi
+      .string()
+      .max(400)
+      .optional(),
     postalCode: joi
       .string()
       .regex(/^\d{5}(-\d{4})?$/)
