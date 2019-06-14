@@ -44,29 +44,31 @@ export const TrialSessionDetail = connect(
 
         <TrialSessionInformation />
 
-        <Tabs
-          defaultActiveTab="EligibleCases"
-          bind="trialsessiondetails.caseList"
-        >
-          <button
-            className="usa-button tab-right-button"
-            onClick={() => openSetCalendarModalSequence()}
+        {!formattedTrialSession.isCalendared && (
+          <Tabs
+            defaultActiveTab="EligibleCases"
+            bind="trialsessiondetails.caseList"
           >
-            <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
-            {showModal == 'SetCalendarModalDialog' && (
-              <SetCalendarModalDialog />
-            )}
-          </button>
-          <Tab
-            tabName="EligibleCases"
-            title="Eligible Cases"
-            id="eligible-cases-tab"
-          >
-            <div id="eligible-cases-tab-content">
-              <EligibleCases />
-            </div>
-          </Tab>
-        </Tabs>
+            <button
+              className="usa-button tab-right-button"
+              onClick={() => openSetCalendarModalSequence()}
+            >
+              <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
+              {showModal == 'SetCalendarModalDialog' && (
+                <SetCalendarModalDialog />
+              )}
+            </button>
+            <Tab
+              tabName="EligibleCases"
+              title="Eligible Cases"
+              id="eligible-cases-tab"
+            >
+              <div id="eligible-cases-tab-content">
+                <EligibleCases />
+              </div>
+            </Tab>
+          </Tabs>
+        )}
       </section>
     </>
   ),
