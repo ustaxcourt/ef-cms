@@ -16,6 +16,14 @@ export default test => {
       key: 'irsYear',
       value: '2017',
     });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
     await test.runSequence('autoSaveCaseSequence');
 
     await test.runSequence('clickServeToIrsSequence');
