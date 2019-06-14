@@ -2,7 +2,10 @@ import { CerebralTest } from 'cerebral/test';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import {
+  CASE_CAPTION_POSTFIX,
+  STATUS_TYPES,
+} from '../../shared/src/business/entities/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
@@ -15,27 +18,23 @@ import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
-import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
-import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
-import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
-import petitionsClerkGetsSectionDocumentQCInboxCount from './journey/petitionsClerkGetsSectionDocumentQCInboxCount';
+import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
+import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
+import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
-import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
-import petitionsClerkVerifiesAssignedWorkItem from './journey/petitionsClerkVerifiesAssignedWorkItem';
-import petitionsClerkVerifiesUnreadMessage from './journey/petitionsClerkVerifiesUnreadMessage';
-import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
-import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
-import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
-import petitionsClerkViewsUnreadMessage from './journey/petitionsClerkViewsUnreadMessage';
-
-import taxPayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerAddNewCaseToTestObj from './journey/taxpayerAddNewCaseToTestObj';
+import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
+import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
+import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
+import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
+import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+import userSignsOut from './journey/taxpayerSignsOut';
 
 const {
   PARTY_TYPES,
@@ -43,37 +42,12 @@ const {
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;
-
 global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
-  externalRoute: () => null,
+  externalRoute: () => {},
   route: async url => {
-    if (url === '/document-qc/section/inbox') {
-      await test.runSequence('gotoDashboardSequence', {
-        box: 'inbox',
-        queue: 'section',
-        workQueueIsInternal: false,
-      });
-    }
-
-    if (url === '/document-qc/my/inbox') {
-      await test.runSequence('gotoDashboardSequence', {
-        box: 'inbox',
-        queue: 'my',
-        workQueueIsInternal: false,
-      });
-    }
-
-    if (url === '/messages/my/inbox') {
-      await test.runSequence('gotoDashboardSequence', {
-        box: 'inbox',
-        queue: 'my',
-        workQueueIsInternal: true,
-      });
-    }
-
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.docketNumber,
@@ -101,7 +75,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Petitions Clerk Document QC Journey', () => {
+describe('Schedule A Trial Session', () => {
   beforeEach(() => {
     jest.setTimeout(300000);
     global.window = {
@@ -119,44 +93,34 @@ describe('Petitions Clerk Document QC Journey', () => {
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
+      STATUS_TYPES,
       TRIAL_CITIES,
     });
   });
-  const caseCreationCount = 3;
 
-  petitionsClerkLogIn(test);
-  petitionsClerkViewsSectionDocumentQC(test, true);
-  petitionsClerkViewsMyDocumentQC(test, true);
-  petitionsClerkSignsOut(test);
+  docketClerkLogIn(test);
+  docketClerkCreatesATrialSession(test);
+  docketClerkViewsTrialSessionList(test);
+  docketClerkViewsAnUpcomingTrialSession(test);
+  userSignsOut(test);
 
-  taxpayerLogin(test);
-
-  // Create multiple cases for testing
-  for (let i = 0; i < caseCreationCount; i++) {
+  for (let i = 0; i < 5; i++) {
+    taxpayerLogin(test);
     taxpayerNavigatesToCreateCase(test);
     taxpayerChoosesProcedureType(test);
     taxpayerChoosesCaseType(test);
     taxpayerCreatesNewCase(test, fakeFile);
-    taxpayerAddNewCaseToTestObj(test);
+    taxpayerViewsDashboard(test);
+    taxpayerViewsCaseDetail(test);
+    userSignsOut(test);
+    petitionsClerkLogIn(test);
+    petitionsClerkSetsCaseReadyForTrial(test);
+    userSignsOut(test);
   }
 
-  taxPayerSignsOut(test);
-
   petitionsClerkLogIn(test);
-  petitionsClerkViewsSectionDocumentQC(test);
-  petitionsClerkGetsSectionDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkBulkAssignsCases(test);
-  petitionsClerkViewsMyDocumentQC(test);
-  petitionsClerkGetsMyDocumentQCInboxCount(test, caseCreationCount);
-  petitionsClerkVerifiesAssignedWorkItem(test);
-  petitionsClerkVerifiesUnreadMessage(test);
-  petitionsClerkCreatesMessage(test, 'Here comes the hotstepper!');
-  petitionsClerkSignsOut(test);
-
-  petitionsClerkLogIn(test, 'petitionsclerk1');
-  petitionsClerkViewsMyMessagesInbox(test, true);
-  petitionsClerkGetsMyMessagesInboxCount(test);
-  petitionsClerkViewsUnreadMessage(test, 'Here comes the hotstepper!');
-  petitionsClerkGetsMyMessagesInboxCount(test, -1);
-  petitionsClerkSignsOut(test);
+  petitionsClerkViewsATrialSessionsEligibleCases(test);
+  petitionsClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkViewsACalendaredTrialSession(test);
+  userSignsOut(test);
 });

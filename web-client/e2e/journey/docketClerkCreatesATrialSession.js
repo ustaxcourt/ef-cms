@@ -22,7 +22,7 @@ export default test => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'sessionType',
-      value: 'Regular',
+      value: 'Hybrid',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -40,6 +40,11 @@ export default test => {
       value: '2025',
     });
 
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'judge',
+      value: 'Judge Cohen',
+    });
+
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('form.term')).toEqual('Fall');
@@ -47,7 +52,7 @@ export default test => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
-      value: 'Birmingham, AL',
+      value: 'Seattle, Washington',
     });
 
     await test.runSequence('validateTrialSessionSequence');
