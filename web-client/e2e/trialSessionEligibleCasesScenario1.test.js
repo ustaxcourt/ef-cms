@@ -31,7 +31,6 @@ import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 
