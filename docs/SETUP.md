@@ -15,8 +15,9 @@
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the UI. (This will be referred to as `UI_SONAR_TOKEN` when setting up Jenkins.)
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the API. (This will be referred to as `API_SONAR_TOKEN` when setting up Jenkins.)
   - [Create a project and project key](https://sonarcloud.io/projects/create?manual=true) for the SHARED code. (This will be referred to as `SHARED_SONAR_TOKEN` when setting up Jenkins.)
+  - [Create a Github Access Token](https://github.com/settings/tokens) click "Generate new token" and keep track of the generated token.  This will be used later in the CircleCI setup.
 
-## CircleCI Setup
+## Circle CI Setup
 1. Set up a [CircleCI](https://circleci.com/) account
 2. Click "Add Projects"
 3. Click "Set Up Project" next to the court's repo
@@ -36,4 +37,8 @@
      - `UI_SONAR_TOKEN` (the token for the sonar UI project)
      - `COGNITO_SUFFIX` (a suffix of your choice for the cognito url)
      - `USTC_ADMIN_PASS` (a unique password of your choice used by the cognito admin user)
+     - `DYNAMSOFT_REPO` (the private github repo path for fetching the tarball, e.g., `https://api.github.com/repos/codyseibert/dynamsoft/tarball`)
+     - `DYNAMSOFT_ZIP_NAME` (the name of the zip file which is zipped into the tarball, e.g., `codyseibert-dynamsoft-5bbf51a51de3717dfee641678d33f36e3cc857e7`)
+     - `PRODUCT_KEYS` (the list of product keys provided by dynamsoft, e.g., `abc;123`)
+     - `GIT_ACCESS_TOKEN` (a private access token which has access to the dynamsoft repo for fetching the tarball [Access Tokens](https://github.com/settings/tokens))
 8. Run a build.
