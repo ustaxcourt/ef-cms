@@ -54,7 +54,7 @@ describe('validateTrialSessionAction', () => {
   });
 
   it('should call the path error when any errors are found', async () => {
-    validateTrialSessionStub.returns('error');
+    validateTrialSessionStub.returns({ some: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
@@ -68,7 +68,7 @@ describe('validateTrialSessionAction', () => {
   });
 
   it('should call the path error when term is summer', async () => {
-    validateTrialSessionStub.returns('error');
+    validateTrialSessionStub.returns({ term: 'error' });
     await runAction(validateTrialSessionAction, {
       modules: {
         presenter,
