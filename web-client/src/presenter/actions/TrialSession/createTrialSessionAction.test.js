@@ -26,7 +26,7 @@ presenter.providers.path = {
 
 describe('createTrialSessionAction', () => {
   beforeEach(() => {
-    createTrialSessionStub = sinon.stub().resolves(MOCK_TRIAL.trialSessionId);
+    createTrialSessionStub = sinon.stub().resolves(MOCK_TRIAL);
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
