@@ -33,99 +33,105 @@ export const IndividualWorkQueueInbox = connect(
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
-          {workQueue.map((item, idx) => (
-            <tbody key={idx}>
-              <tr>
-                <td className="focus-toggle">
-                  <button
-                    className="focus-button usa-button usa-button--unstyled"
-                    aria-label="Expand message detail"
-                    aria-expanded={item.isFocused}
-                    aria-controls={`detail-${item.workItemId}`}
-                  />{' '}
-                </td>
-                <td className="message-queue-row">
-                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
-                </td>
-                <td className="message-queue-row">
-                  <span className="no-wrap">{item.received}</span>
-                </td>
-                <td className="message-queue-row has-icon padding-right-0">
-                  {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      icon={['far', 'clock']}
-                      className="iconStatusBatched"
-                      aria-label="batched for IRS"
-                      aria-hidden="false"
-                      size="lg"
-                    />
-                  )}
-                  {item.showRecalledStatusIcon && (
-                    <FontAwesomeIcon
-                      icon={['far', 'clock']}
-                      className="iconStatusRecalled"
-                      aria-label="recalled from IRS"
-                      aria-hidden="false"
-                      size="lg"
-                    />
-                  )}
-                  {item.showUnreadStatusIcon && (
-                    <FontAwesomeIcon
-                      icon={['fas', 'envelope']}
-                      className="iconStatusUnread"
-                      aria-label="unread message"
-                      size="lg"
-                      aria-hidden="false"
-                    />
-                  )}
-                </td>
-                <td className="message-queue-row message-queue-document">
-                  <div className="message-document-title">
-                    <a
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
-                      href={documentHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: workQueueHelper.workQueueIsInternal
-                          ? item.currentMessage.messageId
-                          : null,
-                        workItemIdToMarkAsRead: workQueueHelper.workQueueIsInternal
-                          ? null
-                          : item.workItemId,
-                      })}
-                      className={
-                        item.isRead ? 'case-link' : 'link case-link-bold'
-                      }
-                    >
-                      {item.document.documentType}
-                    </a>
-                  </div>
-                  {workQueueHelper.showMessageContent && (
-                    <div
-                      id={`detail-${item.workItemId}`}
-                      className="message-document-detail"
-                    >
-                      {item.currentMessage.message}
-                    </div>
-                  )}
-                </td>
-                {!workQueueHelper.hideFiledByColumn && (
-                  <td className="message-queue-row">{item.document.filedBy}</td>
-                )}
-                <td className="message-queue-row">{item.caseStatus}</td>
-                {!workQueueHelper.hideFromColumn && (
-                  <td className="message-queue-row from">
-                    {item.currentMessage.from}
+          {workQueue.map((item, idx) => {
+            const workItemUnread =
+              item.showUnreadStatusIcon && item.showUnreadIndicators;
+            return (
+              <tbody key={idx}>
+                <tr>
+                  <td className="focus-toggle">
+                    <button
+                      className="focus-button usa-button usa-button--unstyled"
+                      aria-label="Expand message detail"
+                      aria-expanded={item.isFocused}
+                      aria-controls={`detail-${item.workItemId}`}
+                    />{' '}
                   </td>
-                )}
-                {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row">{item.sentBySection}</td>
-                )}
-              </tr>
-            </tbody>
-          ))}
+                  <td className="message-queue-row">
+                    <span className="no-wrap">
+                      {item.docketNumberWithSuffix}
+                    </span>
+                  </td>
+                  <td className="message-queue-row">
+                    <span className="no-wrap">{item.received}</span>
+                  </td>
+                  <td className="message-queue-row has-icon padding-right-0">
+                    {item.showBatchedStatusIcon && (
+                      <FontAwesomeIcon
+                        icon={['far', 'clock']}
+                        className="iconStatusBatched"
+                        aria-label="batched for IRS"
+                        aria-hidden="false"
+                        size="lg"
+                      />
+                    )}
+                    {item.showRecalledStatusIcon && (
+                      <FontAwesomeIcon
+                        icon={['far', 'clock']}
+                        className="iconStatusRecalled"
+                        aria-label="recalled from IRS"
+                        aria-hidden="false"
+                        size="lg"
+                      />
+                    )}
+                    {item.showUnreadStatusIcon && (
+                      <FontAwesomeIcon
+                        icon={['fas', 'envelope']}
+                        className="iconStatusUnread"
+                        aria-label="unread message"
+                        size="lg"
+                        aria-hidden="false"
+                      />
+                    )}
+                  </td>
+                  <td className="message-queue-row message-queue-document">
+                    <div className="message-document-title">
+                      <a
+                        onClick={e => {
+                          e.stopPropagation();
+                        }}
+                        href={documentHelper({
+                          docketNumber: item.docketNumber,
+                          documentId: item.document.documentId,
+                          messageId: item.currentMessage.messageId,
+                          workItemIdToMarkAsRead: workItemUnread
+                            ? item.workItemId
+                            : null,
+                        })}
+                        className={
+                          item.isRead ? 'case-link' : 'link case-link-bold'
+                        }
+                      >
+                        {item.document.documentType}
+                      </a>
+                    </div>
+                    {workQueueHelper.showMessageContent && (
+                      <div
+                        id={`detail-${item.workItemId}`}
+                        className="message-document-detail"
+                      >
+                        {item.currentMessage.message}
+                      </div>
+                    )}
+                  </td>
+                  {!workQueueHelper.hideFiledByColumn && (
+                    <td className="message-queue-row">
+                      {item.document.filedBy}
+                    </td>
+                  )}
+                  <td className="message-queue-row">{item.caseStatus}</td>
+                  {!workQueueHelper.hideFromColumn && (
+                    <td className="message-queue-row from">
+                      {item.currentMessage.from}
+                    </td>
+                  )}
+                  {!workQueueHelper.hideSectionColumn && (
+                    <td className="message-queue-row">{item.sentBySection}</td>
+                  )}
+                </tr>
+              </tbody>
+            );
+          })}
         </table>
       </React.Fragment>
     );
