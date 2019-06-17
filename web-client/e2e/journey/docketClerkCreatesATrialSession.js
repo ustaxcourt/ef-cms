@@ -42,7 +42,7 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
-      value: 'Judge Cohen',
+      value: overrides.judge || 'Judge Cohen',
     });
 
     await test.runSequence('validateTrialSessionSequence');
