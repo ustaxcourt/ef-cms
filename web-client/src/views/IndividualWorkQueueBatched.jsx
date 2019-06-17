@@ -83,9 +83,7 @@ export const IndividualWorkQueueBatched = connect(
                   )}
                 </td>
                 <td className="message-queue-row">{item.document.filedBy}</td>
-                <td className="message-queue-row">
-                  {item.completedAtFormatted}
-                </td>
+                <td className="message-queue-row">{item.batchedAt}</td>
               </tr>
             </tbody>
           ))}
