@@ -69,6 +69,34 @@ export const TrialSessionDetail = connect(
             </Tab>
           </Tabs>
         )}
+        {/* 
+        {formattedTrialSession.isCalendared && (
+          <Tabs
+            defaultActiveTab="OpenCases"
+            bind="trialsessiondetails.calendaredCaseList"
+          >
+            <Tab tabName="OpenCases" title="Open Cases" id="open-cases-tab">
+              <div id="eligible-cases-tab-content">
+                <p>Open Cases</p>
+              </div>
+            </Tab>
+            <Tab
+              tabName="ClosedCases"
+              title="Closed Cases"
+              id="closed-cases-tab"
+            >
+              <div id="eligible-cases-tab-content">
+                <p>Closed Cases</p>
+              </div>
+            </Tab>
+            <Tab tabName="AllCases" title="All Cases" id="all-cases-tab">
+              <div id="all-cases-tab-content">
+                <p>All Cases</p>
+              </div>
+            </Tab>
+          </Tabs>
+        )}
+        */}
       </section>
     </>
   ),
