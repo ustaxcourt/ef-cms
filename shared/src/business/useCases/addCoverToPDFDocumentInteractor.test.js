@@ -7,6 +7,11 @@ const {
 const { PDFDocumentFactory } = require('pdf-lib');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../utilities/DateHandler');
 
 function testPdfDocBytes() {
   // sample.pdf is a 1 page document
@@ -96,6 +101,13 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+        getUtilities: () => {
+          return {
+            createISODateString,
+            formatDateString,
+            prepareDateFromString,
+          };
+        },
         logger: {
           time: () => null,
           timeEnd: () => null,
@@ -136,6 +148,13 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+        getUtilities: () => {
+          return {
+            createISODateString,
+            formatDateString,
+            prepareDateFromString,
+          };
+        },
         logger: {
           time: () => null,
           timeEnd: () => null,
