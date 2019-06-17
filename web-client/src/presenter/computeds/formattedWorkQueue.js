@@ -101,6 +101,16 @@ export const formatWorkItem = (
   );
   result.historyMessages = result.messages.slice(1);
 
+  if (
+    result.messages.find(
+      message => message.message == 'Petition batched for IRS',
+    )
+  ) {
+    result.batchedAt = result.messages.find(
+      message => message.message == 'Petition batched for IRS',
+    ).createdAtTimeFormatted;
+  }
+
   return result;
 };
 
