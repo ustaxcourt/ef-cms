@@ -150,6 +150,15 @@ export const SectionWorkQueueInbox = connect(
                         size="lg"
                       />
                     )}
+                    {item.showRecalledStatusIcon && (
+                      <FontAwesomeIcon
+                        icon={['far', 'clock']}
+                        className="iconStatusRecalled"
+                        aria-label="recalled from IRS"
+                        aria-hidden="false"
+                        size="lg"
+                      />
+                    )}
                     {item.showUnassignedIcon && (
                       <FontAwesomeIcon
                         icon={['fas', 'question-circle']}
