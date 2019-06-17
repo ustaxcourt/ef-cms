@@ -5,7 +5,7 @@ const {
 } = require('../middleware/apiGatewayHelper');
 
 /**
- * creates a new trial session.
+ * updates case trial sort tags
  *
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers

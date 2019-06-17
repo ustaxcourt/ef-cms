@@ -4,7 +4,7 @@ const {
 } = require('./deleteCaseTrialSortMappingRecords');
 
 /**
- * updateCaseTrailSortMappingRecords
+ * updateCaseTrialSortMappingRecords
  *
  * @param case
  * @param applicationContext
