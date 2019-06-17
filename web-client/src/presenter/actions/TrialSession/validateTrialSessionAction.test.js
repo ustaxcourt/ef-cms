@@ -66,4 +66,18 @@ describe('validateTrialSessionAction', () => {
 
     expect(errorStub.calledOnce).toEqual(true);
   });
+
+  it('should call the path error when term is summer', async () => {
+    validateTrialSessionStub.returns('error');
+    await runAction(validateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { ...MOCK_TRIAL, term: 'Summer' },
+      },
+    });
+
+    expect(errorStub.calledOnce).toEqual(true);
+  });
 });

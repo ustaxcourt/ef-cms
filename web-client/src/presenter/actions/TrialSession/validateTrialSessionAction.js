@@ -39,6 +39,7 @@ export const validateTrialSessionAction = ({
   if (!errors) {
     return path.success();
   } else {
+    errors.startDate = errors.startDate || errors.term;
     const errorDisplayOrder = [
       'startDate',
       'startTime',
