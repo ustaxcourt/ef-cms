@@ -227,8 +227,8 @@ describe('Trial Session Eligible Cases - Scenario 6 - L and P case types get pri
       });
 
       expect(test.getState('eligibleCases').length).toEqual(4);
-      expect(test.getState('eligibleCases.0.caseId')).toEqual(createdCases[1]);
-      expect(test.getState('eligibleCases.1.caseId')).toEqual(createdCases[0]);
+      expect(test.getState('eligibleCases.0.caseId')).toEqual(createdCases[0]);
+      expect(test.getState('eligibleCases.1.caseId')).toEqual(createdCases[1]);
       expect(test.getState('eligibleCases.2.caseId')).toEqual(createdCases[2]);
       expect(test.getState('eligibleCases.3.caseId')).toEqual(createdCases[3]);
       expect(test.getState('trialSession.status')).toEqual('Upcoming');
@@ -255,10 +255,10 @@ describe('Trial Session Eligible Cases - Scenario 6 - L and P case types get pri
       expect(test.getState('trialSession.caseOrder').length).toEqual(3);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
       expect(test.getState('trialSession.caseOrder.0.caseId')).toEqual(
-        createdCases[1],
+        createdCases[0],
       );
       expect(test.getState('trialSession.caseOrder.1.caseId')).toEqual(
-        createdCases[0],
+        createdCases[1],
       );
       expect(test.getState('trialSession.caseOrder.2.caseId')).toEqual(
         createdCases[2],

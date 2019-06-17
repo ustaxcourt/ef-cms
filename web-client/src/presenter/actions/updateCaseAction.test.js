@@ -86,9 +86,9 @@ describe('updateCaseAction', () => {
     expect(updateCaseTrialSortTagsStub.getCall(0).args[0].caseSortTags).toEqual(
       {
         hybrid:
-          'WashingtonDC-H-B-20190301164046-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-H-C-20190301164046-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-B-20190301164046-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDC-R-C-20190301164046-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     );
   });
