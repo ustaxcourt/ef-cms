@@ -14,10 +14,11 @@ export default (test, message) => {
       item => item.currentMessage.message == message,
     );
 
-    await test.runSequence('gotoDocumentDetailMessageSequence', {
+    await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: workItem.docketNumber,
       documentId: workItem.document.documentId,
       messageId: workItem.currentMessage.messageId,
+      workItemIdToMarkAsRead: workItem.workItemId,
     });
 
     await test.runSequence('chooseWorkQueueSequence', {

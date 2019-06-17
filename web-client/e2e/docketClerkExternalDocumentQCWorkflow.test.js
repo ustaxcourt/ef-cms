@@ -105,6 +105,7 @@ describe('Create a work item', () => {
       documentId: decisionWorkItem.document.documentId,
       messageId: decisionWorkItem.currentMessage.messageId,
       test,
+      workItemIdToMarkAsRead: decisionWorkItem.workItemId,
     });
     const documentQCMyInbox = await getFormattedDocumentQCMyInbox(test);
     decisionWorkItem = documentQCMyInbox.find(

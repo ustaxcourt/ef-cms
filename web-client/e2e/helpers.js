@@ -293,11 +293,13 @@ exports.viewDocumentDetailMessage = async ({
   docketNumber,
   documentId,
   messageId,
+  workItemIdToMarkAsRead,
 }) => {
-  await test.runSequence('gotoDocumentDetailMessageSequence', {
+  await test.runSequence('gotoDocumentDetailSequence', {
     docketNumber,
     documentId,
     messageId,
+    workItemIdToMarkAsRead,
   });
 };
 

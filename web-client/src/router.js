@@ -46,7 +46,7 @@ const router = {
       }),
     );
     route(
-      '/case-detail/*/documents/*/qc/*',
+      '/case-detail/*/documents/*/mark/*',
       checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
         document.title = `Document details ${pageTitleSuffix}`;
         app.getSequence('gotoDocumentDetailSequence')({
@@ -60,12 +60,26 @@ const router = {
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
         document.title = `Document details ${pageTitleSuffix}`;
-        app.getSequence('gotoDocumentDetailMessageSequence')({
+        app.getSequence('gotoDocumentDetailSequence')({
           docketNumber,
           documentId,
           messageId,
         });
       }),
+    );
+    route(
+      '/case-detail/*/documents/*/messages/*/mark/*',
+      checkLoggedIn(
+        (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
+          document.title = `Document details ${pageTitleSuffix}`;
+          app.getSequence('gotoDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+            messageId,
+            workItemIdToMarkAsRead,
+          });
+        },
+      ),
     );
     route(
       '/case-detail/*/file-a-document',
