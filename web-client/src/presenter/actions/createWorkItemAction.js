@@ -19,7 +19,7 @@ export const createWorkItemAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view it in the Sent tab on your Work Queue.',
+      message: 'You can view it in the Sent tab on your Message Queue.',
       title: 'Your message was created successfully.',
     },
   });
