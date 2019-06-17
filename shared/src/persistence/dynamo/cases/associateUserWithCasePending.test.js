@@ -18,7 +18,7 @@ describe('associateUserWithCasePending', () => {
     client.put.restore();
   });
 
-  it('should put item', async () => {
+  it('should create mapping request that creates pending association request', async () => {
     const result = await associateUserWithCasePending({
       applicationContext,
       caseId: '123',
