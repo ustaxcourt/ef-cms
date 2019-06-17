@@ -6,8 +6,9 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/TrialSession');
 
 /**
- * getTrialSessionsDetails
+ * getTrialSessionDetails
  * @param applicationContext
+ * @param trialSessionId
  * @returns {*|Promise<*>}
  */
 exports.getTrialSessionDetails = async ({

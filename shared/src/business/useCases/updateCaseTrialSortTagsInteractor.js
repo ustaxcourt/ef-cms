@@ -6,7 +6,10 @@ const { Case, STATUS_TYPES } = require('../entities/Case');
 const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
 
 /**
+ * updates the case trial sort tags
+ *
  * @param applicationContext
+ * @param caseId
  * @returns {Promise<*>}
  */
 exports.updateCaseTrialSortTags = async ({ applicationContext, caseId }) => {
