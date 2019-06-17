@@ -90,10 +90,10 @@ export const formatWorkItem = (
 
   result.currentMessage = result.messages[0];
 
-  result.received = formatDateIfToday(
-    isInternal ? result.currentMessage.createdAt : result.document.createdAt,
-    applicationContext,
-  );
+  result.receivedAt = isInternal
+    ? result.currentMessage.createdAt
+    : result.document.createdAt;
+  result.received = formatDateIfToday(result.receivedAt, applicationContext);
 
   result.sentDateFormatted = formatDateIfToday(
     result.currentMessage.createdAt,
@@ -133,7 +133,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
 
-  workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+  workQueue = _.orderBy(workQueue, 'receivedAt', 'desc');
 
   return workQueue;
 };
