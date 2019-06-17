@@ -781,3 +781,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getAssociatedCasesForTrialSession:
+    handler: src/handlers.getAssociatedCasesForTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/getAssociatedCases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

@@ -56,6 +56,9 @@ const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
+  createCaseTrialSessionMappingRecord,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSessionMappingRecord');
+const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
@@ -103,6 +106,12 @@ const {
 const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
+const {
+  getAssociatedCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getAssociatedCasesForTrialSession');
+const {
+  getAssociatedCasesForTrialSession: getAssociatedCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getAssociatedCasesForTrialSessionInteractor');
 const {
   getCase,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
@@ -358,6 +367,7 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
+        createCaseTrialSessionMappingRecord,
         createCaseTrialSortMappingRecords,
         createDocument,
         createTrialSession,
@@ -368,6 +378,7 @@ module.exports = (appContextUser = {}) => {
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getAllCatalogCases,
+        getAssociatedCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
@@ -430,6 +441,7 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocument,
         forwardWorkItem,
         generatePDFFromPNGData,
+        getAssociatedCasesForTrialSession: getAssociatedCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
