@@ -1,10 +1,10 @@
 const { put } = require('./requests');
 
 /**
- * createTrialSession
+ * updateCaseTrialSortTags
  *
- * @param trialSession
  * @param applicationContext
+ * @param caseId
  * @returns {Promise<*>}
  */
 exports.updateCaseTrialSortTags = ({ applicationContext, caseId }) => {

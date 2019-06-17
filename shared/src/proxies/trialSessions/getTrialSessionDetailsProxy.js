@@ -4,7 +4,6 @@ const { get } = require('../requests');
  * getTrialSessionDetails
  *
  * @param applicationContext
- * @param swingSessionId
  * @param trialSessionId
  * @returns {Promise<*>}
  */

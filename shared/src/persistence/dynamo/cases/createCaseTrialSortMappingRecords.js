@@ -1,7 +1,7 @@
 const { put } = require('../../dynamodbClientService');
 
 /**
- * createCaseTrailSortMappingRecords
+ * createCaseTrialSortMappingRecords
  *
  * @param caseId
  * @param caseSortTags
