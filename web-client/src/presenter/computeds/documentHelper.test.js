@@ -42,6 +42,43 @@ describe('documentHelper', () => {
     expect(result).toEqual('/case-detail/abc/documents/123/messages/123');
   });
 
+  it('should return a correctly-assembled URI to document details based on docket number, document id, and workItemIdToMarkAsRead', async () => {
+    const result = await runCompute(documentHelper, {
+      state: {
+        user: {
+          role: 'petitionsclerk',
+        },
+        workQueueIsInternal: true,
+        workQueueToDisplay: MY_INBOX,
+      },
+    })({
+      docketNumber: 'abc',
+      documentId: '123',
+      workItemIdToMarkAsRead: '789',
+    });
+    expect(result).toEqual('/case-detail/abc/documents/123/mark/789');
+  });
+
+  it('should return a correctly-assembled URI to document details based on docket number, document id, messageId, and workItemIdToMarkAsRead', async () => {
+    const result = await runCompute(documentHelper, {
+      state: {
+        user: {
+          role: 'petitionsclerk',
+        },
+        workQueueIsInternal: true,
+        workQueueToDisplay: MY_INBOX,
+      },
+    })({
+      docketNumber: 'abc',
+      documentId: '123',
+      messageId: '456',
+      workItemIdToMarkAsRead: '789',
+    });
+    expect(result).toEqual(
+      '/case-detail/abc/documents/123/messages/456/mark/789',
+    );
+  });
+
   // Petition Clerk > Messages | My | Inbox > Message tab
   it('Petitions Clerk: Links from My Messages Inbox to individual Message tab', async () => {
     const result = await runCompute(documentHelper, {
