@@ -184,7 +184,7 @@ export const Header = connect(
                   />
                 </button>
                 <div className="header-search-container">
-                  <ul className="usa-unstyled-list">
+                  <ul className="usa-unstyled-list padding-left-0">
                     {helper.showSearchInHeader && (
                       <li role="search" className="usa-search">
                         <SearchBox />
