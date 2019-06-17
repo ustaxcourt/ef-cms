@@ -5,7 +5,7 @@ const {
 
 import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
-export default (test, fakeFile) => {
+export default (test, fakeFile, overrides = {}) => {
   return it('Taxpayer creates a new case', async () => {
     await test.runSequence('updatePetitionValueSequence', {
       key: 'petitionFile',
@@ -750,7 +750,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Whistleblower',
+      value: overrides.caseType || 'Whistleblower',
     });
 
     await test.runSequence('updateFormValueSequence', {
