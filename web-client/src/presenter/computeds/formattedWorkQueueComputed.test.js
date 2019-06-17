@@ -182,4 +182,32 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showRecalledStatusIcon).toBeTruthy();
     expect(result2[0].showUnreadIndicators).toEqual(true);
   });
+
+  it('should not show a workItem in user messages outbox if it is completed', () => {
+    workItem.completedAt = '2019-06-17T15:27:55.801Z';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        selectedWorkItems: [],
+        workQueue: [workItem],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+
+    expect(result).toEqual([]);
+  });
+
+  it('should not show a workItem in section messages outbox if it is completed', () => {
+    workItem.completedAt = '2019-06-17T15:27:55.801Z';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        selectedWorkItems: [],
+        workQueue: [workItem],
+        workQueueToDisplay: { box: 'outbox', queue: 'section' },
+      },
+    });
+
+    expect(result).toEqual([]);
+  });
 });
