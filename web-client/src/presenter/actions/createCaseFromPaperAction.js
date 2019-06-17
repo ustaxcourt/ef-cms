@@ -76,10 +76,18 @@ export const createCaseFromPaperAction = async ({
     state.petition,
   );
 
+  const receivedAt = // AAAA-BB-CC
+    (props.computedDate &&
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString(props.computedDate)
+        .toISOString()) ||
+    null;
+
   const form = omit(
     {
       ...get(state.form),
-      receivedAt: props.computedDate,
+      receivedAt,
     },
     ['year', 'month', 'day'],
   );
