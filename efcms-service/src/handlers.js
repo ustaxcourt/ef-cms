@@ -17,6 +17,8 @@ module.exports = {
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
+  getAssociatedCasesForTrialSessionLambda: require('./trialSessions/getAssociatedCasesForTrialSessionLambda')
+    .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getCasesForRespondentLambda: require('./cases/getCasesForRespondentLambda')
