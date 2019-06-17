@@ -54,13 +54,14 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
+      - errorExceptions
     definitions:
       errorExceptions:
-        description: 'Internal Lambda Alarm'
+        description: 'Internal Error Exception Alarm'
         namespace: 'AWS/Lambda'
         metric: Errors
         threshold: 1
-        statistic: Minimum
+        statistic: Sum
         period: 60
         evaluationPeriods: 1
         comparisonOperator: GreaterThanThreshold
