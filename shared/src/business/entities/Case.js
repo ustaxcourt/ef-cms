@@ -800,12 +800,17 @@ Case.prototype.generateTrialSortTags = function() {
     procedureType,
   } = this;
 
-  const isCasePrioritized = ['cdp (lien/levy)', 'passport'].includes(
-    caseType.toLowerCase(),
-  );
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
-  const casePrioritySymbol = isCasePrioritized ? 'A' : 'B';
+
+  let casePrioritySymbol = 'C';
+
+  if (caseType.toLowerCase() === 'cdp (lien/levy)') {
+    casePrioritySymbol = 'A';
+  } else if (caseType.toLowerCase() === 'passport') {
+    casePrioritySymbol = 'B';
+  }
+
   const formattedFiledTime = formatDateString(
     receivedAt || createdAt,
     'YYYYMMDDHHmmss',
