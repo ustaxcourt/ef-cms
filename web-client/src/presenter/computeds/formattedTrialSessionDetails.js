@@ -44,10 +44,5 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     !!result.swingSessionId &&
     !!result.swingSessionLocation;
 
-  result.showEligibleCases =
-    result.sessionType !== 'Motion/Hearing' &&
-    result.sessionType !== 'Special' &&
-    !result.isCalendared;
-
   return result;
 };
