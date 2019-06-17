@@ -114,7 +114,6 @@ describe('createTrialSessionInteractor', () => {
       },
     });
 
-    console.log(result);
     expect(result.trialSession.isCalendared).toEqual(true);
   });
 
