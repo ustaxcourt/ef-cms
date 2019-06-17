@@ -16,6 +16,12 @@ const { exec } = require('child_process');
 const execPromise = util.promisify(exec);
 
 const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
+
+const {
   addCoverToPDFDocument,
 } = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
@@ -456,6 +462,13 @@ module.exports = (appContextUser = {}) => {
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
         virusScanPdf: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
+      };
+    },
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
       };
     },
     irsGateway,
