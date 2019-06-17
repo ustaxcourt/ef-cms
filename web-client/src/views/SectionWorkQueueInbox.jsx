@@ -169,6 +169,7 @@ export const SectionWorkQueueInbox = connect(
                       href={documentHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
                       })}
                       className="case-link"
                     >
