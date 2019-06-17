@@ -22,6 +22,9 @@ const {
 const {
   deleteUserOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
+const {
+  deleteWorkItemFromInbox,
+} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 /**
  *
  * @param caseId
@@ -70,6 +73,11 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   }
 
   if (initializeCaseWorkItem) {
+    await deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: initializeCaseWorkItem,
+    });
+
     initializeCaseWorkItem.recallFromIRSBatchSystem({
       user,
     });
