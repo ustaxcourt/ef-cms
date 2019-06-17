@@ -42,6 +42,7 @@ module.exports.createISODateString = (dateString, inputFormat) => {
  * @returns {string} a formatted date string
  */
 module.exports.formatDateString = (dateString, formatStr) => {
+  if (!dateString) return;
   formatStr = dateFormats[formatStr] || formatStr;
   return prepareDateFromString(dateString).format(formatStr);
 };
