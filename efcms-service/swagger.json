@@ -1688,6 +1688,277 @@
           }
         }
       }
+    },
+    "/v1/trialSessions": {
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets all trial sessions",
+        "description": "gets all trial sessions.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "creates a new trial session",
+        "description": "creates a new trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets a trial session",
+        "description": "gets a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/setSwingSession": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "sets a trial session as a swing session",
+        "description": "sets a trial session as a swing session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/eligible-cases": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets eligible cases for a trial session",
+        "description": "gets eligible cases for a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/setCalendar": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "sets the calendar for a trial session",
+        "description": "sets the calendar for a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -1963,6 +2234,40 @@
         }
       },
       "description": "a case response"
+    },
+    "trialSession": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "description": "date trial session created"
+        },
+        "sessionType": {
+          "type": "string",
+          "description": "type of the session"
+        },
+        "maxCases": {
+          "type": "string",
+          "description": "max number of cases on the session"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "start date of the session"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "start time of the session"
+        },
+        "trialLocation": {
+          "type": "string",
+          "description": "location of the session"
+        },
+        "trialSessionId": {
+          "type": "string",
+          "description": "id of trial session"
+        }
+      },
+      "description": "a trial session"
     }
   }
 }
