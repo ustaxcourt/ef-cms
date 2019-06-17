@@ -121,7 +121,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
-    .filter(item => (box === 'inbox' ? !item.completedAt : true))
+    .filter(item => !item.completedAt)
     .filter(item =>
       box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
     )
@@ -129,7 +129,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
       box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
     )
     .filter(item => item.isInternal === isInternal)
-    .filter(item => (box === 'outbox' ? !item.completedAt : true))
     .map(item =>
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
