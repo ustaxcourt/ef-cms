@@ -16,6 +16,8 @@ const SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
+const SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+
 /**
  * constructor
  * @param rawSession
@@ -66,7 +68,7 @@ TrialSession.errorToMessageMap = {
   ],
   startTime: 'Start time value provided is invalid.',
   swingSessionId: 'You must select a swing session.',
-  term: 'Term is required.',
+  term: 'Term session is not valid.',
   termYear: 'Term year is required.',
   trialLocation: 'Trial Location is required.',
 };
@@ -115,7 +117,10 @@ joiValidationDecorator(
         .uuid(uuidVersions)
         .required(),
     }),
-    term: joi.string().required(),
+    term: joi
+      .string()
+      .valid(SESSION_TERMS)
+      .required(),
     termYear: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
