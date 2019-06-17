@@ -68,6 +68,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
       documentId: decisionWorkItem.document.documentId,
       messageId: decisionWorkItem.currentMessage.messageId,
       test,
+      workItemIdToMarkAsRead: decisionWorkItem.workItemId,
     });
     await createMessage({
       assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -168,6 +169,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
       documentId: myInboxWorkItem.document.documentId,
       messageId: myInboxWorkItem.currentMessage.messageId,
       test,
+      workItemIdToMarkAsRead: myInboxWorkItem.workItemId,
     });
     const myInbox = await getFormattedMyInbox(test);
     const workItem = myInbox.find(

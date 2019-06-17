@@ -10,7 +10,7 @@ export default test => {
     test.documentId = documentId;
     test.messageId = messageId;
 
-    await test.runSequence('gotoDocumentDetailMessageSequence', {
+    await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId,
       messageId,
