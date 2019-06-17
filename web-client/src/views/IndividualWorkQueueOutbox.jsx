@@ -82,6 +82,8 @@ export const IndividualWorkQueueOutbox = connect(
                       href={documentHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
+                        workItemIdToMarkAsRead: null,
                       })}
                       className="case-link"
                     >
