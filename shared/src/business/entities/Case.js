@@ -796,6 +796,7 @@ Case.prototype.generateTrialSortTags = function() {
     caseId,
     caseType,
     createdAt,
+    receivedAt,
     procedureType,
   } = this;
 
@@ -805,7 +806,10 @@ Case.prototype.generateTrialSortTags = function() {
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
   const casePrioritySymbol = isCasePrioritized ? 'A' : 'B';
-  const formattedFiledTime = formatDateString(createdAt, 'YYYYMMDDHHmmss');
+  const formattedFiledTime = formatDateString(
+    receivedAt || createdAt,
+    'YYYYMMDDHHmmss',
+  );
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [

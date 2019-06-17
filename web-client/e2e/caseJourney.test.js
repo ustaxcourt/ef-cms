@@ -11,9 +11,13 @@ import {
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+const {
+  PARTY_TYPES,
+  COUNTRY_TYPES,
+} = require('../../shared/src/business/entities/contacts/PetitionContact');
 
+import { Document } from '../../shared/src/business/entities/Document';
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -67,11 +71,6 @@ import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
-
-const {
-  PARTY_TYPES,
-  COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;
 global.FormData = FormData;

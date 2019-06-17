@@ -8,11 +8,11 @@ export const TrialSessionInformation = connect(
     return (
       <>
         <h1>Session Information</h1>
-        <div className="trial-session-details margin-bottom-6">
+        <div className="trial-session-details margin-bottom-4">
           <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap margin-bottom-4">
+            <div className="grid-row grid-gap margin-bottom-2">
               <div className="grid-col-6">
-                <div className="card height-full">
+                <div className="card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Details</h3>
                     <div className="grid-container padding-x-0">
@@ -30,22 +30,49 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Date</p>
-                          <p>
+                          <p
+                            className={
+                              formattedTrialSession.showSwingSession ||
+                              'margin-bottom-0'
+                            }
+                          >
                             {formattedTrialSession.formattedStartDate}{' '}
                             {formattedTrialSession.formattedStartTime}
                           </p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Max # of Cases</p>
-                          <p>{formattedTrialSession.maxCases}</p>
+                          <p
+                            className={
+                              formattedTrialSession.showSwingSession ||
+                              'margin-bottom-0'
+                            }
+                          >
+                            {formattedTrialSession.maxCases}
+                          </p>
                         </div>
                       </div>
+
+                      {formattedTrialSession.showSwingSession && (
+                        <div className="grid-row grid-gap">
+                          <div className="grid-col-6">
+                            <p className="label">Swing Session</p>
+                            <p className="margin-bottom-0">
+                              <a
+                                href={`/trial-session-detail/${formattedTrialSession.swingSessionId}`}
+                              >
+                                {formattedTrialSession.swingSessionLocation}
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="grid-col-6">
-                <div className="card height-full">
+                <div className="card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Assignments</h3>
                     <div className="grid-container padding-x-0">
@@ -60,14 +87,19 @@ export const TrialSessionInformation = connect(
                         </div>
                       </div>
 
-                      <div className="grid-row grid-gap">
+                      <div
+                        className={`grid-row grid-gap ${formattedTrialSession.showSwingSession &&
+                          'margin-bottom-8'}`}
+                      >
                         <div className="grid-col-6">
-                          <p className="label">Court Report</p>
-                          <p>{formattedTrialSession.formattedCourtReporter}</p>
+                          <p className="label">Court Reporter</p>
+                          <p className="margin-bottom-0">
+                            {formattedTrialSession.formattedCourtReporter}
+                          </p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">IRS Calendar Administrator</p>
-                          <p>
+                          <p className="margin-bottom-0">
                             {
                               formattedTrialSession.formattedIrsCalendarAdministrator
                             }
@@ -81,10 +113,12 @@ export const TrialSessionInformation = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <div className="card height-full">
+                <div className="card trial-session-card">
                   <div className="content-wrapper">
-                    <h3 className="underlined">Location</h3>
-                    <p className="label">Location</p>
+                    <h3 className="underlined">Courthouse Location</h3>
+                    {formattedTrialSession.noLocationEntered && (
+                      <p>No location entered</p>
+                    )}
                     <p>{formattedTrialSession.courthouseName}</p>
                     <p>
                       <span className="address-line">
@@ -101,7 +135,7 @@ export const TrialSessionInformation = connect(
                 </div>
               </div>
               <div className="grid-col-6">
-                <div className="card height-full">
+                <div className="card trial-session-card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Notes</h3>
                     {formattedTrialSession.notes}

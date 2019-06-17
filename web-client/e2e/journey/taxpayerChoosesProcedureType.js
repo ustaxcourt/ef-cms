@@ -2,7 +2,7 @@ import { runCompute } from 'cerebral/test';
 
 import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
-export default test => {
+export default (test, overrides = {}) => {
   it('taxpayer chooses the procedure types to get the trial cities', async () => {
     await test.runSequence('gotoStartCaseSequence');
     let helper = runCompute(startCaseHelper, {
@@ -13,16 +13,21 @@ export default test => {
     expect(test.getState('form.preferredTrialCity')).toEqual(undefined);
     await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: 'Small',
+      value: overrides.procedureType || 'Small',
     });
     helper = runCompute(startCaseHelper, {
       state: test.getState(),
     });
-    expect(helper.showSmallTrialCitiesHint).toBe(true);
-    expect(helper.showRegularTrialCitiesHint).toBe(false);
+    if (overrides.procedureType === 'Regular') {
+      expect(helper.showSmallTrialCitiesHint).toBe(false);
+      expect(helper.showRegularTrialCitiesHint).toBe(true);
+    } else {
+      expect(helper.showSmallTrialCitiesHint).toBe(true);
+      expect(helper.showRegularTrialCitiesHint).toBe(false);
+    }
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: 'Seattle, Washington',
+      value: overrides.preferredTrialCity || 'Seattle, Washington',
     });
   });
 };
