@@ -53,7 +53,7 @@ TrialSession.errorToMessageMap = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter a valid zip code.',
+      message: 'Enter a valid ZIP code.',
     },
   ],
   sessionType: 'Session type is required.',
