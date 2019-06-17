@@ -18,5 +18,16 @@ export const getTrialSessionDetailsAction = async ({
       trialSessionId,
     });
 
+  if (trialSession.swingSession && trialSession.swingSessionId) {
+    const swingSession = await applicationContext
+      .getUseCases()
+      .getTrialSessionDetails({
+        applicationContext,
+        trialSessionId: trialSession.swingSessionId,
+      });
+
+    trialSession.swingSessionLocation = swingSession.trialLocation;
+  }
+
   return { trialSession };
 };

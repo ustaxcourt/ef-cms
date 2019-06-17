@@ -21,10 +21,13 @@ export const workQueueHelper = get => {
   const isDisplayingQC = !workQueueIsInternal;
   const userIsPetitionsClerk = userRole === 'petitionsclerk';
   const userIsDocketClerk = userRole === 'docketclerk';
+  const userIsOther =
+    ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1;
   const workQueueTitle = `${
     showIndividualWorkQueue
       ? 'My'
-      : ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1
+      : ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1 &&
+        !workQueueIsInternal
       ? 'Docket'
       : 'Section'
   } ${workQueueType}`;
@@ -40,6 +43,9 @@ export const workQueueHelper = get => {
     hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
     hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
     hideFromColumn: isDisplayingQC,
+    hideIconColumn:
+      !workQueueIsInternal &&
+      ['docketclerk', 'petitionsclerk'].indexOf(userRole) === -1,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     linkToDocumentMessages: !isDisplayingQC,
@@ -49,14 +55,18 @@ export const workQueueHelper = get => {
       ? 'Processed'
       : 'Served',
     showAssignedToColumn:
-      (isDisplayingQC && !showIndividualWorkQueue && showInbox) ||
+      (isDisplayingQC &&
+        !showIndividualWorkQueue &&
+        showInbox &&
+        !userIsOther) ||
       !isDisplayingQC,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,
     showMessagesSentFromColumn: !isDisplayingQC,
-    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
+    showMyQueueToggle:
+      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showReceivedColumn: isDisplayingQC,

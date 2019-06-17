@@ -92,7 +92,7 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
     );
 
     const fromUserId = batchedMessage.fromUserId;
-    const createdAt = batchedMessage.createdAt;
+    const createdAt = initializeCaseWorkItem.createdAt;
 
     await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,
