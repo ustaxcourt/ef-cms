@@ -4,9 +4,10 @@ import React from 'react';
 
 export const EligibleCases = connect(
   {
-    eligibleCases: state.eligibleCases,
+    formattedEligibleCases:
+      state.formattedTrialSessionDetails.formattedEligibleCases,
   },
-  ({ eligibleCases }) => {
+  ({ formattedEligibleCases }) => {
     return (
       <React.Fragment>
         <table
@@ -23,12 +24,12 @@ export const EligibleCases = connect(
               <th>Case Type</th>
             </tr>
           </thead>
-          {eligibleCases.map((item, idx) => (
+          {formattedEligibleCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
                 <td>
                   <a href={`/case-detail/${item.docketNumber}`}>
-                    {item.docketNumber}
+                    {item.docketNumberWithSuffix}
                   </a>
                 </td>
                 <td>{item.caseCaption}</td>
