@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const result = get(state.trialSession);
+  const eligibleCases = get(state.eligibleCases);
 
   result.formattedTerm = `${result.term} ${result.termYear.substr(-2)}`;
 
@@ -43,6 +44,15 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     !!result.swingSession &&
     !!result.swingSessionId &&
     !!result.swingSessionLocation;
+
+  if (eligibleCases) {
+    result.formattedEligibleCases = eligibleCases.map(item => {
+      item.docketNumberWithSuffix = `${
+        item.docketNumber
+      }${item.docketNumberSuffix || ''}`;
+      return item;
+    });
+  }
 
   return result;
 };

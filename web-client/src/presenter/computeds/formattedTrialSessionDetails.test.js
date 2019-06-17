@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
 import { runCompute } from 'cerebral/test';
@@ -138,5 +139,21 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({
       showSwingSession: true,
     });
+  });
+
+  it('formats docket numbers with suffixes on eligible cases', async () => {
+    let result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        eligibleCases: [MOCK_CASE, { ...MOCK_CASE, docketNumberSuffix: 'W' }],
+        trialSession: TRIAL_SESSION,
+      },
+    });
+    expect(result.formattedEligibleCases.length).toEqual(2);
+    expect(result.formattedEligibleCases[0].docketNumberWithSuffix).toEqual(
+      '101-18',
+    );
+    expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
+      '101-18W',
+    );
   });
 });
