@@ -17,6 +17,7 @@ import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocument
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
+import { setMessageIdAndCurrentTabFromUrlAction } from '../actions/setMessageIdAndCurrentTabFromUrlAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { setWorkItemAction } from '../actions/setWorkItemAction';
@@ -33,10 +34,11 @@ export const gotoDocumentDetailSequence = [
   getCaseAction,
   setCaseAction,
   setFormForCaseAction,
+  setDefaultDocumentDetailTabAction,
   setBaseUrlAction,
+  setMessageIdAndCurrentTabFromUrlAction,
   getInternalUsersAction,
   setInternalUsersAction,
-  setDefaultDocumentDetailTabAction,
   getProcedureTypesAction,
   setProcedureTypesAction,
   getCaseTypesAction,
