@@ -93,7 +93,7 @@ describe('documentHelper', () => {
       documentId: '123',
       messageId: '456',
     });
-    expect(result).toEqual('/case-detail/abc/documents/123/qc');
+    expect(result).toEqual('/case-detail/abc/documents/123');
   });
 
   // Petition Clerk > Doc QC | My | Batched > Doc Info tab (read only mode)
@@ -107,7 +107,7 @@ describe('documentHelper', () => {
       documentId: '123',
       messageId: '456',
     });
-    expect(result).toEqual('/case-detail/abc/documents/123/qc');
+    expect(result).toEqual('/case-detail/abc/documents/123');
   });
 
   // Petition Clerk > Doc QC | My | Served > Message tab (no doc info tab)
@@ -135,7 +135,7 @@ describe('documentHelper', () => {
       documentId: '123',
       messageId: '456',
     });
-    expect(result).toEqual('/case-detail/abc/documents/123/qc');
+    expect(result).toEqual('/case-detail/abc/documents/123');
   });
 
   // Petition Clerk > Doc QC | Section | Batched > Doc Info tab (read only mode)
@@ -149,7 +149,7 @@ describe('documentHelper', () => {
       documentId: '123',
       messageId: '456',
     });
-    expect(result).toEqual('/case-detail/abc/documents/123/qc');
+    expect(result).toEqual('/case-detail/abc/documents/123');
   });
 
   // Petition Clerk > Doc QC | Section | Served > Message tab (no doc info tab)
