@@ -40,7 +40,7 @@ describe('startScanSequence', () => {
     expect(test.getState('isScanning')).toBeTruthy;
   });
 
-  it('provides a flow for setting a scan source if one isn not cached', async () => {
+  it('provides a flow for setting a scan source if one is not cached', async () => {
     mockItems = {
       scannerSourceIndex: null,
       scannerSourceName: '',
