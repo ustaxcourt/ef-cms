@@ -129,6 +129,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
     )
     .filter(item => item.isInternal === isInternal)
+    .filter(item => (box === 'outbox' ? !item.completedAt : true))
     .map(item =>
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
