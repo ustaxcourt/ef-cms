@@ -5,20 +5,15 @@ exports.getAssociatedCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
 }) => {
-  const mappings = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
+  const trialSession = await client.get({
+    Key: {
+      pk: `trial-session-${trialSessionId}`,
+      sk: `trial-session-${trialSessionId}`,
     },
-    ExpressionAttributeValues: {
-      ':pk': 'associated-with-trial-case-catalog',
-      ':sk': trialSessionId,
-    },
-    KeyConditionExpression: '#pk = :pk and #sk = :sk',
     applicationContext,
   });
 
-  const ids = mappings.map(metadata => metadata.caseId);
+  const ids = (trialSession.caseOrder || []).map(metadata => metadata.caseId);
 
   const results = await client.batchGet({
     applicationContext,

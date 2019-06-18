@@ -182,9 +182,9 @@ describe('Trial Session Eligible Cases - Scenario 8 - Trial details display on t
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('trialSession.caseOrder').length).toEqual(1);
+      expect(test.getState('trialSession.associatedCases').length).toEqual(1);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
-      expect(test.getState('trialSession.caseOrder.0.caseId')).toEqual(
+      expect(test.getState('trialSession.associatedCases.0.caseId')).toEqual(
         createdCases[0],
       );
 
