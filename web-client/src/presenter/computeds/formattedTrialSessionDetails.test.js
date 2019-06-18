@@ -27,9 +27,11 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when all fields have values', async () => {
     const result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: TRIAL_SESSION,
+        trialSession: {
+          ...TRIAL_SESSION,
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -48,9 +50,11 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when address fields are empty', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
+        trialSession: {
+          ...omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -60,9 +64,11 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: omit(TRIAL_SESSION, ['city']),
+        trialSession: {
+          ...omit(TRIAL_SESSION, ['city']),
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -72,9 +78,11 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: omit(TRIAL_SESSION, ['state']),
+        trialSession: {
+          ...omit(TRIAL_SESSION, ['state']),
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -84,9 +92,11 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: omit(TRIAL_SESSION, ['state']),
+        trialSession: {
+          ...omit(TRIAL_SESSION, ['state']),
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -96,9 +106,11 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: omit(TRIAL_SESSION, ['postalCode']),
+        trialSession: {
+          ...omit(TRIAL_SESSION, ['postalCode']),
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -110,14 +122,16 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when session assignments are empty', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: omit(TRIAL_SESSION, [
-          'courtReporter',
-          'irsCalendarAdministrator',
-          'judge',
-          'trialClerk',
-        ]),
+        trialSession: {
+          ...omit(TRIAL_SESSION, [
+            'courtReporter',
+            'irsCalendarAdministrator',
+            'judge',
+            'trialClerk',
+          ]),
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -131,9 +145,12 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session start time', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
-        trialSession: { ...TRIAL_SESSION, startTime: '14:00' },
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '14:00',
+          associatedCases: [],
+          eligibleCases: [],
+        },
       },
     });
     expect(result).toMatchObject({
@@ -144,10 +161,10 @@ describe('formattedTrialSessionDetails', () => {
   it('displays swing session area if session is a swing session', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [],
         trialSession: {
           ...TRIAL_SESSION,
+          associatedCases: [],
+          eligibleCases: [],
           swingSession: true,
           swingSessionId: '1234',
           swingSessionLocation: 'Honolulu, Hawaii',
@@ -162,9 +179,11 @@ describe('formattedTrialSessionDetails', () => {
   it('formats docket numbers with suffixes on eligible cases', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
-        associatedCases: [],
-        eligibleCases: [MOCK_CASE, { ...MOCK_CASE, docketNumberSuffix: 'W' }],
-        trialSession: TRIAL_SESSION,
+        trialSession: {
+          ...TRIAL_SESSION,
+          associatedCases: [],
+          eligibleCases: [MOCK_CASE, { ...MOCK_CASE, docketNumberSuffix: 'W' }],
+        },
       },
     });
     expect(result.formattedEligibleCases.length).toEqual(2);
