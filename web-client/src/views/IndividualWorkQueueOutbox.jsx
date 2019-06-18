@@ -21,7 +21,7 @@ export const IndividualWorkQueueOutbox = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" colSpan="2">
-                Docket
+                <span className="padding-left-2px">Docket</span>
               </th>
               {workQueueHelper.showReceivedColumn && <th>Received</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
