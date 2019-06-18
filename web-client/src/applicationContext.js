@@ -73,6 +73,7 @@ import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePe
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
+import { getAssociatedCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getAssociatedCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
@@ -163,6 +164,7 @@ const allUseCases = {
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
   generatePDFFromPNGData,
+  getAssociatedCasesForTrialSession,
   getCase,
   getCaseTypes,
   getCasesByUser,
