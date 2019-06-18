@@ -39,6 +39,7 @@ export const state = {
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
+  associatedCases: [],
   betaBar: {
     isVisible: true,
   },
@@ -67,6 +68,7 @@ export const state = {
   documentDetailHelper,
   documentHelper,
   documentId: null,
+  eligibleCases: [],
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
