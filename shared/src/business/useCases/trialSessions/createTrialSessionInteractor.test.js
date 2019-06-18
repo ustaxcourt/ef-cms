@@ -92,7 +92,7 @@ describe('createTrialSessionInteractor', () => {
     expect(error).toBeUndefined();
   });
 
-  fit('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
+  it('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
