@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -7,7 +8,26 @@ export const TrialSessionInformation = connect(
   ({ formattedTrialSession }) => {
     return (
       <>
-        <h1>Session Information</h1>
+        <div className="grid-container padding-x-0">
+          <div className="grid-row">
+            <div className="grid-col-11">
+              <h1>Session Information</h1>
+            </div>
+            <div className="grid-col-1">
+              <button
+                className="usa-button usa-button--unstyled float-right margin-top-2"
+                onClick={() => window.print()}
+              >
+                <FontAwesomeIcon
+                  icon="print"
+                  size="1x"
+                  className="margin-right-05"
+                />
+                Print
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="trial-session-details margin-bottom-4">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap margin-bottom-2">
