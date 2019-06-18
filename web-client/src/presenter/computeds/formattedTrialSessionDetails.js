@@ -8,13 +8,27 @@ const formatCase = caseItem => {
   return caseItem;
 };
 
+const compareCasesByDocketNumber = (a, b) => {
+  const [numberA, yearA] = a.docketNumber.split('-');
+  const [numberB, yearB] = b.docketNumber.split('-');
+
+  let yearDifference = +yearA - +yearB;
+  if (yearDifference === 0) {
+    return +numberA - +numberB;
+  } else {
+    return yearDifference;
+  }
+};
+
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const result = get(state.trialSession);
 
-  result.formattedEligibleCases = get(state.trialSession.eligibleCases).map(
-    formatCase,
-  );
-  result.allCases = get(state.trialSession.associatedCases).map(formatCase);
+  result.formattedEligibleCases = (
+    get(state.trialSession.eligibleCases) || []
+  ).map(formatCase);
+  result.allCases = (get(state.trialSession.associatedCases) || [])
+    .map(formatCase)
+    .sort(compareCasesByDocketNumber);
   result.openCases = result.allCases.filter(item => item.status != 'Closed');
   result.closedCases = result.allCases.filter(item => item.status == 'Closed');
 
