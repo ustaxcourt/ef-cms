@@ -2,6 +2,7 @@ import { ActionRequired } from './CaseDetail/ActionRequired';
 import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -51,6 +52,16 @@ export const CaseDetail = connect(
                   >
                     <span aria-hidden="true">Request for Access Pending</span>
                   </span>
+                )}
+                {caseHelper.showFileFirstDocumentButton && (
+                  <a
+                    className="usa-button tablet-full-width push-right margin-right-0"
+                    href={`/case-detail/${caseDetail.docketNumber}/file-document`}
+                    id="button-first-irs-document"
+                  >
+                    <FontAwesomeIcon icon="file" size="1x" /> File First IRS
+                    Document
+                  </a>
                 )}
               </div>
             </div>
