@@ -29,8 +29,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -52,8 +50,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -66,8 +62,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['city']),
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -80,8 +74,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['state']),
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -94,8 +86,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['state']),
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -108,8 +98,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['postalCode']),
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -129,8 +117,6 @@ describe('formattedTrialSessionDetails', () => {
             'judge',
             'trialClerk',
           ]),
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -148,8 +134,6 @@ describe('formattedTrialSessionDetails', () => {
         trialSession: {
           ...TRIAL_SESSION,
           startTime: '14:00',
-          associatedCases: [],
-          eligibleCases: [],
         },
       },
     });
@@ -163,8 +147,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          associatedCases: [],
-          eligibleCases: [],
           swingSession: true,
           swingSessionId: '1234',
           swingSessionLocation: 'Honolulu, Hawaii',
@@ -181,7 +163,6 @@ describe('formattedTrialSessionDetails', () => {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          associatedCases: [],
           eligibleCases: [MOCK_CASE, { ...MOCK_CASE, docketNumberSuffix: 'W' }],
         },
       },
@@ -193,5 +174,29 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
       '101-18W',
     );
+  });
+
+  it('sorts associated cases by docket number', async () => {
+    let result = await runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          associatedCases: [
+            MOCK_CASE,
+            { ...MOCK_CASE, docketNumber: '102-19' },
+            { ...MOCK_CASE, docketNumber: '5000-17' },
+            { ...MOCK_CASE, docketNumber: '500-17' },
+            { ...MOCK_CASE, docketNumber: '90-07' },
+          ],
+        },
+      },
+    });
+    expect(result.allCases).toMatchObject([
+      { docketNumber: '90-07' },
+      { docketNumber: '500-17' },
+      { docketNumber: '5000-17' },
+      { docketNumber: '101-18' },
+      { docketNumber: '102-19' },
+    ]);
   });
 });
