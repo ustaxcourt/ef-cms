@@ -167,7 +167,7 @@ describe('Trial Session Eligible Cases - Scenario 1', () => {
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('eligibleCases').length).toEqual(1);
+      expect(test.getState('trialSession.eligibleCases').length).toEqual(1);
       expect(test.getState('trialSession.status')).toEqual('Upcoming');
     });
 

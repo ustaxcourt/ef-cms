@@ -60,14 +60,6 @@ exports.setTrialSessionCalendar = async ({
         applicationContext,
         caseId,
       });
-
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSessionMappingRecord({
-        applicationContext,
-        caseId,
-        trialSessionId: trialSessionEntity.trialSessionId,
-      });
   }
 
   trialSessionEntity.setAsCalendared();

@@ -56,9 +56,6 @@ const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
-  createCaseTrialSessionMappingRecord,
-} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSessionMappingRecord');
-const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
@@ -367,7 +364,6 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
-        createCaseTrialSessionMappingRecord,
         createCaseTrialSortMappingRecords,
         createDocument,
         createTrialSession,

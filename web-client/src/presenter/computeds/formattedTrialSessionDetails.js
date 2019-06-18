@@ -11,8 +11,10 @@ const formatCase = caseItem => {
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const result = get(state.trialSession);
 
-  result.formattedEligibleCases = get(state.eligibleCases).map(formatCase);
-  result.allCases = get(state.associatedCases).map(formatCase);
+  result.formattedEligibleCases = get(state.trialSession.eligibleCases).map(
+    formatCase,
+  );
+  result.allCases = get(state.trialSession.associatedCases).map(formatCase);
   result.openCases = result.allCases.filter(item => item.status != 'Closed');
   result.closedCases = result.allCases.filter(item => item.status == 'Closed');
 
