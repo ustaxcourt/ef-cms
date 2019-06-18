@@ -1,9 +1,20 @@
 import { compact } from 'lodash';
 import { state } from 'cerebral';
 
+const formatCase = caseItem => {
+  caseItem.docketNumberWithSuffix = `${
+    caseItem.docketNumber
+  }${caseItem.docketNumberSuffix || ''}`;
+  return caseItem;
+};
+
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const result = get(state.trialSession);
-  const eligibleCases = get(state.eligibleCases);
+
+  result.formattedEligibleCases = get(state.eligibleCases).map(formatCase);
+  result.allCases = get(state.associatedCases).map(formatCase);
+  result.openCases = result.allCases.filter(item => item.status != 'Closed');
+  result.closedCases = result.allCases.filter(item => item.status == 'Closed');
 
   result.formattedTerm = `${result.term} ${result.termYear.substr(-2)}`;
 
@@ -44,15 +55,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     !!result.swingSession &&
     !!result.swingSessionId &&
     !!result.swingSessionLocation;
-
-  if (eligibleCases) {
-    result.formattedEligibleCases = eligibleCases.map(item => {
-      item.docketNumberWithSuffix = `${
-        item.docketNumber
-      }${item.docketNumberSuffix || ''}`;
-      return item;
-    });
-  }
 
   return result;
 };
