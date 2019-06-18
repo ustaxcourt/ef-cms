@@ -15,6 +15,7 @@ export const OpenCases = connect(
         <table
           className="usa-table ustc-table trial-sessions subsection"
           id="open-cases"
+          aria-describedby="open-cases-tab"
         >
           <thead>
             <tr>
