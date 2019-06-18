@@ -1,4 +1,5 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
+import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
@@ -22,6 +23,7 @@ import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -30,6 +32,7 @@ import React from 'react';
 
 const pages = {
   AddDocketEntry,
+  AddTrialSession,
   BeforeStartingCase,
   CaseDetail,
   CaseDetailInternal,
@@ -51,6 +54,7 @@ const pages = {
   StartCase,
   StartCaseInternal,
   StyleGuide,
+  TrialSessions,
 };
 
 /**

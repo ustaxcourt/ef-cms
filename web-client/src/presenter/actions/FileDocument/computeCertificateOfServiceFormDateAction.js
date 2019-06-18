@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * computes the date from a month, day and year value
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store object
- * @param {Object} providers.get the cerebral get function
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store object
+ * @param {object} providers.get the cerebral get function
  */
 export const computeCertificateOfServiceFormDateAction = ({ store, get }) => {
   let formDate = null;

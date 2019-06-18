@@ -45,8 +45,10 @@ import { InitialWorkItemMessage } from '../../shared/src/business/entities/Initi
 import { Petition } from '../../shared/src/business/entities/Petition';
 import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
+import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
 import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
@@ -61,6 +63,7 @@ import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
+import { createTrialSession } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
@@ -73,12 +76,15 @@ import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
+import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
@@ -87,9 +93,12 @@ import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkI
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
+import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
+import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -101,12 +110,18 @@ import { validateExternalDocument } from '../../shared/src/business/useCases/ext
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
+import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
+import { validateTrialSession } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
+import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
+import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
+
+const MINUTES = 60 * 1000;
 
 let user;
 
@@ -129,12 +144,11 @@ const allUseCases = {
   assignWorkItems,
   authorizeCode,
   completeWorkItem,
-
   createCase,
   createCaseFromPaper,
   createCoverSheet,
-
   createDocument,
+  createTrialSession,
   createWorkItem,
   downloadDocumentFile,
   fileExternalDocument,
@@ -143,10 +157,12 @@ const allUseCases = {
   forwardWorkItem,
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
+  generatePDFFromPNGData,
   getCase,
   getCaseTypes,
   getCasesByUser,
   getCasesForRespondent,
+  getEligibleCasesForTrialSession,
   getFilingTypes,
   getInternalUsers,
   getItem: getItemUC,
@@ -154,6 +170,7 @@ const allUseCases = {
   getProcedureTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
+  getTrialSessions,
   getUser,
   getUsersInSection,
   getWorkItem,
@@ -163,10 +180,13 @@ const allUseCases = {
   refreshToken,
   removeItem: removeItemUC,
   runBatchProcess,
+  sanitizePdf,
   sendPetitionToIRSHoldingQueue,
   setItem: setItemUC,
+  setTrialSessionAsSwingSession,
   setWorkItemAsRead,
   submitCaseAssociationRequest,
+  submitPendingCaseAssociationRequest,
   updateCase,
   uploadExternalDocument,
   uploadExternalDocuments,
@@ -177,9 +197,13 @@ const allUseCases = {
   validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
+  validatePdf,
   validatePetition,
   validatePetitionFromPaper,
+  validateTrialSession,
   verifyCaseForUser,
+  verifyPendingCaseForUser,
+  virusScanPdf,
 };
 tryCatchDecorator(allUseCases);
 
@@ -225,13 +249,13 @@ const applicationContext = {
     MAX_FILE_SIZE_MB,
     OTHER_TYPES,
     PARTY_TYPES,
-    REFRESH_INTERVAL: 60 * 20 * 1000, // 20 minutes
+    REFRESH_INTERVAL: 20 * MINUTES,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 5000 * 60, // 5 minutes
+    SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
-      1000 * 60 * 55, // 55 minutes
+      55 * MINUTES, // 55 minutes
     TRIAL_CITIES,
   }),
   getCurrentUser,
@@ -245,6 +269,7 @@ const applicationContext = {
     InitialWorkItemMessage,
     Petition,
     PetitionFromPaper,
+    TrialSession,
   }),
   getError: e => {
     return ErrorFactory.getError(e);
@@ -259,6 +284,12 @@ const applicationContext = {
       uploadDocument,
       uploadPdf,
     };
+  },
+  getScanner: getScannerInterface,
+  getScannerResourceUri: () => {
+    return (
+      process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
+    );
   },
   getUniqueId: () => {
     return uuidv4();

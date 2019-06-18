@@ -32,6 +32,8 @@ function WorkItem(rawWorkItem) {
     docketNumberSuffix: rawWorkItem.docketNumberSuffix,
     document: rawWorkItem.document,
     isInitializeCase: rawWorkItem.isInitializeCase,
+    isInternal:
+      rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal,
     isRead: rawWorkItem.isRead,
     messages: rawWorkItem.messages,
     section: rawWorkItem.section,
@@ -126,6 +128,11 @@ joiValidationDecorator(
  */
 WorkItem.prototype.addMessage = function(message) {
   this.messages = [...this.messages, message];
+  return this;
+};
+
+WorkItem.prototype.setAsInternal = function() {
+  this.isInternal = true;
   return this;
 };
 

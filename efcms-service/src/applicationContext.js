@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection */
+/* eslint-disable security/detect-object-injection, security/detect-child-process */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -10,6 +10,10 @@ const uuidv4 = require('uuid/v4');
 const { S3, DynamoDB } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
+
+const util = require('util');
+const { exec } = require('child_process');
+const execPromise = util.promisify(exec);
 
 const {
   addCoverToPDFDocument,
@@ -24,6 +28,9 @@ const {
   associateUserWithCase,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
 const {
+  associateUserWithCasePending,
+} = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
+const {
   checkForReadyForTrialCases,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -35,6 +42,7 @@ const {
 const {
   createCase: createCaseUC,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
+
 const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
@@ -42,8 +50,17 @@ const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
+  createCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
+const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
+const {
+  createTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
+const {
+  createTrialSession: createTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -72,6 +89,9 @@ const {
   forwardWorkItem,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
+  generatePDFFromPNGData,
+} = require('../../shared/src/business/useCases/generatePDFFromPNGDataInteractor');
+const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -99,6 +119,12 @@ const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
+  getEligibleCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
+const {
+  getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
+const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -119,6 +145,15 @@ const {
 const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+const {
+  getTrialSessionById,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
+const {
+  getTrialSessions,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
+const {
+  getTrialSessions: getTrialSessionsUC,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
 const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
@@ -175,6 +210,9 @@ const {
   runBatchProcess,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
+  sanitizePdf,
+} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
+const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -187,6 +225,9 @@ const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  setTrialSessionAsSwingSession,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
+const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
@@ -195,6 +236,9 @@ const {
 const {
   submitCaseAssociationRequest,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
+const {
+  submitPendingCaseAssociationRequest,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
@@ -205,8 +249,14 @@ const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
+  updateTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  validatePdf,
+} = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
@@ -214,9 +264,17 @@ const {
   verifyCaseForUser: verifyCaseForUserUC,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
 const {
+  verifyPendingCaseForUser,
+} = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
+const {
+  verifyPendingCaseForUser: verifyPendingCaseForUserUC,
+} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
+const {
+  virusScanPdf,
+} = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-
 const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
@@ -273,9 +331,12 @@ module.exports = (appContextUser = {}) => {
       return {
         addWorkItemToSectionInbox,
         associateUserWithCase,
+        associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
+        createCaseTrialSortMappingRecords,
         createDocument,
+        createTrialSession,
         createUser,
         createWorkItem,
         deleteDocument,
@@ -287,9 +348,12 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser,
         getCasesForRespondent,
         getDownloadPolicyUrl,
+        getEligibleCasesForTrialSession,
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getTrialSessionById,
+        getTrialSessions,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
@@ -304,8 +368,10 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateDocumentProcessingStatus,
+        updateTrialSession,
         updateWorkItem,
         verifyCaseForUser,
+        verifyPendingCaseForUser,
         zipDocuments,
       };
     },
@@ -331,17 +397,21 @@ module.exports = (appContextUser = {}) => {
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
+        createTrialSession: createTrialSessionUC,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
         fileExternalDocument,
         forwardWorkItem,
+        generatePDFFromPNGData,
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,
+        getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,
         getWorkItem,
@@ -349,11 +419,19 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
+        sanitizePdf: args =>
+          process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setTrialSessionAsSwingSession,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
+        submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
+        validatePdf,
         verifyCaseForUser: verifyCaseForUserUC,
+        verifyPendingCaseForUser: verifyPendingCaseForUserUC,
+        virusScanPdf: args =>
+          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
       };
     },
     irsGateway,
@@ -376,6 +454,13 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    runVirusScan: async ({ filePath }) => {
+      return execPromise(
+        `clamscan ${
+          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
+        } ${filePath}`,
+      );
     },
   };
 };

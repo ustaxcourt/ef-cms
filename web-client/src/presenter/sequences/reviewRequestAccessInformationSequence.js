@@ -3,6 +3,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
@@ -12,6 +13,7 @@ export const reviewRequestAccessInformationSequence = [
   clearAlertsAction,
   set(state.showValidation, true),
   computeCertificateOfServiceFormDateAction,
+  setSupportingDocumentScenarioAction,
   validateCaseAssociationRequestAction,
   {
     error: [

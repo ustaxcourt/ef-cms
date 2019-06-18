@@ -38,6 +38,9 @@
 .usa-button {
   &.usa-button--unstyled {
     padding: 2px;
+    &.no-underline {
+      text-decoration: none;
+    }
     &:disabled {
       color: color($theme-color-base);
     }

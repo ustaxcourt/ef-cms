@@ -187,7 +187,7 @@ describe('creation form', () => {
       expect(xhr.responseBody).to.have.property('docketNumber');
       createdDocketNumber = xhr.responseBody.docketNumber;
     });
-    cy.get('.usa-alert--success', { timeout: 10000 }).should(
+    cy.get('.usa-alert--success', { timeout: 300000 }).should(
       'contain',
       'successfully submitted',
     );

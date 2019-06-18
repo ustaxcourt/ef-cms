@@ -40,6 +40,7 @@ function forEach(children, func) {
  *
  * @param  {Array} children the html children
  * @param {string} attrName a name of the attr
+ * @returns {string} active key
  */
 function getDefaultAttribute(children, attrName) {
   let defaultActiveKey;

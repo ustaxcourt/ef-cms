@@ -14,9 +14,7 @@ const addPetitionDocumentWithWorkItemToCase = (
   caseToAdd,
   documentEntity,
 ) => {
-  const message = `${documentEntity.documentType} filed by ${
-    documentEntity.filedBy
-  } is ready for review.`;
+  const message = `${documentEntity.documentType} filed by ${documentEntity.filedBy} is ready for review.`;
 
   const workItemEntity = new WorkItem({
     assigneeId: user.userId,
@@ -30,6 +28,7 @@ const addPetitionDocumentWithWorkItemToCase = (
       createdAt: documentEntity.createdAt,
     },
     isInitializeCase: documentEntity.isPetitionDocument(),
+    isInternal: false,
     section: user.section,
     sentBy: user.name,
     sentBySection: user.section,

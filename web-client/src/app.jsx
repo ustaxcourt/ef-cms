@@ -1,3 +1,7 @@
+import { AppComponent } from './views/AppComponent';
+import { Container } from '@cerebral/react';
+import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { externalRoute, route, router } from './router';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftRegular,
   faCheckCircle as faCheckCircleRegular,
@@ -19,6 +23,7 @@ import {
   faCheckCircle,
   faClock as faClockSolid,
   faCloudUploadAlt,
+  faCopy as faCopySolid,
   faDollarSign,
   faEdit as faEditSolid,
   faEnvelope as faEnvelopeSolid,
@@ -29,6 +34,7 @@ import {
   faFilePdf,
   faFlag,
   faLaptop,
+  faLink,
   faListUl,
   faPaperclip,
   faPlusCircle,
@@ -43,11 +49,6 @@ import {
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { route, router } from './router';
-
-import { AppComponent } from './views/AppComponent';
-import { Container } from '@cerebral/react';
-import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
@@ -108,6 +109,7 @@ const app = {
       faEnvelopeSolid,
       faExclamationTriangle,
       faExternalLinkAlt,
+      faCopySolid,
       faEyeSlash,
       faFile,
       faFileAlt,
@@ -116,6 +118,7 @@ const app = {
       faFilePdfRegular,
       faFlag,
       faLaptop,
+      faLink,
       faListUl,
       faPaperclip,
       faPlusCircle,
@@ -133,6 +136,7 @@ const app = {
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
+      externalRoute,
       route,
     };
     const cerebralApp = App(presenter, debugTools);

@@ -33,10 +33,6 @@ exports.completeWorkItem = async ({
       workItemId,
     });
 
-  const latestMessageId = new WorkItem(
-    originalWorkItem,
-  ).getLatestMessageEntity().messageId;
-
   const completedWorkItem = new WorkItem(originalWorkItem)
     .setAsCompleted({
       message: completedMessage,
@@ -52,7 +48,6 @@ exports.completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
-    messageId: latestMessageId,
     workItem: completedWorkItem,
   });
 

@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-### Build Status
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. **All work can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging).** For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
 #### develop
 
@@ -12,9 +12,7 @@
 
 API | Front-End | Shared Code
 --- | --------- | -----------
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Known Vulnerabilities](https://snyk.io/test/github/flexion/ef-cms/badge.svg?targetFile=efcms-service%2Fpackage.json)](https://snyk.io/test/github/flexion/ef-cms?targetFile=efcms-service%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Known Vulnerabilities](https://snyk.io/test/github/flexion/ef-cms/badge.svg?targetFile=web-client%2Fpackage.json)](https://snyk.io/test/github/flexion/ef-cms?targetFile=web-client%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Known Vulnerabilities](https://snyk.io/test/github/flexion/ef-cms/badge.svg?targetFile=shared%2Fpackage.json)](https://snyk.io/test/github/flexion/ef-cms?targetFile=shared%2Fpackage.json)
-
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source Electronic Filing / Case Management System (EF-CMS) — software that allows case documents to be filed with the court, and for the court to manage cases. Work is being done by [Flexion](https://www.flexion.us/), which began in October 2018. The output of the most recent biweekly sprint can be found [in the `staging` branch](https://github.com/ustaxcourt/ef-cms/tree/staging) of this repository, with daily work performed in [Flexion's fork of this repository](https://github.com/flexion/ef-cms/). For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq), which was awarded to Flexion in September 2018.
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=efcms-service%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=efcms-service%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=web-client%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=web-client%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=shared%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=shared%2Fpackage.json)
 
 <a href="docs/images/screenshot-new-petition.png"><img src="docs/images/screenshot-new-petition.png" width="49%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot-cases.png"><img src="docs/images/screenshot-cases.png" width="49%" style="float: left;" /></a>
@@ -38,6 +36,14 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 ## AWS diagram
 
 <a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
+
+## Dependency Diagrams
+
+Client:
+<a href="docs/images/client-dependencies.png"><img src="docs/images/client-dependencies.png" style="border: 2px solid #000; " /></a>
+
+Server:
+<a href="docs/images/server-dependencies.png"><img src="docs/images/server-dependencies.png" style="border: 2px solid #000; " /></a>
 
 ## Backlog
 
@@ -72,8 +78,24 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v10.15.3
 - npm 6.4.1
+- Ghostscript v9.23 (see Setup below)
+- ClamAV 0.101.2 (see Setup below)
 
 ### Setup
+
+Follow the installation prerequisites for Ghostscript4JS at https://www.npmjs.com/package/ghostscript4js#prerequisites
+MacOS users can do the following:
+- `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e61385fb91ced20245d063f728401e9727293ce0/Formula/ghostscript.rb`
+- `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
+- `source ~/.bash_profile`
+
+For ClamAV, MacOS users can do the following:
+- `brew install clamav`
+- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
+- `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
+- `echo 'export CLAMAV_CLAMSCAN_PATH="/usr/local/bin/clamscan"' >> ~/.bash_profile`
+- `source ~/.bash_profile`
+- `freshclam` (installs virus definitions)
 
 Both the web-client and efcms-service share code that exists in the `shared` directory; therefore, before you can run either, you need to run `npm install` inside the `shared` directory.
 
@@ -174,4 +196,3 @@ Follow these steps for creating the end of sprint PRs for the court.
 8. When PR comments come in, make changes to master to fix the comments
 9. After the court approves and merges PR, merge master into develop
 10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
-

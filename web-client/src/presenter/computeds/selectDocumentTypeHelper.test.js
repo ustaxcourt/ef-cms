@@ -280,4 +280,17 @@ describe('selectDocumentTypeHelper', () => {
     expect(result.filteredSecondaryDocumentTypes.length).toBeGreaterThan(0);
     expect(result.secondary.showNonstandardForm).toBeFalsy();
   });
+
+  it('should return correct data for a secondary document with no category or documentType selected', async () => {
+    state.form = {
+      category: 'Motion',
+      documentType: 'Motion for Leave to File',
+      secondaryDocument: { something: true },
+    };
+    const result = runCompute(selectDocumentTypeHelper, {
+      state,
+    });
+    expect(result.filteredSecondaryDocumentTypes.length).toEqual(0);
+    expect(result.secondary).toBeUndefined();
+  });
 });

@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * computes the IRS notice date from a month, day and year value
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.get the cerebral get function
- * @param {Object} providers.store the cerebral store object
+ * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store object
  */
 export const computeIrsNoticeDateAction = ({ get, store }) => {
   let form = get(state.form);

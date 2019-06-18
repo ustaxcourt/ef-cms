@@ -2,8 +2,26 @@ import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCas
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractPendingMessagesFromCaseDetailComputed,
+  {
+    getCurrentUser: () => ({
+      role: 'petitionsclerk',
+    }),
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
+      };
+    },
+  },
 );
 
 describe('extractPendingMessagesFromCaseDetail', () => {
@@ -27,6 +45,9 @@ describe('extractPendingMessagesFromCaseDetail', () => {
               workItems: [
                 {
                   caseStatus: 'new',
+                  document: {
+                    createdAt: '2018-03-02T00:00:00.000Z',
+                  },
                   messages: [
                     {
                       createdAt: '2018-03-01T00:00:00.000Z',
@@ -53,6 +74,9 @@ describe('extractPendingMessagesFromCaseDetail', () => {
                 },
                 {
                   caseStatus: 'new',
+                  document: {
+                    createdAt: '2018-03-02T00:00:00.000Z',
+                  },
                   messages: [
                     {
                       createdAt: '2018-02-01T00:00:00.000Z',
@@ -103,6 +127,9 @@ describe('extractPendingMessagesFromCaseDetail', () => {
               workItems: [
                 {
                   caseStatus: 'new',
+                  document: {
+                    createdAt: '2018-03-02T00:00:00.000Z',
+                  },
                   messages: [
                     {
                       message: 'batched for IRS',

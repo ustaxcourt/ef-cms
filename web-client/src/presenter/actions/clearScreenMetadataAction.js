@@ -5,8 +5,8 @@ import { state } from 'cerebral';
  * storing temporary screen metadata values (for instance, showing/hiding
  * hints or success messages)
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store object used for clearing the screenMetadata
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store object used for clearing the screenMetadata
  */
 export const clearScreenMetadataAction = ({ store }) => {
   store.set(state.screenMetadata, {});

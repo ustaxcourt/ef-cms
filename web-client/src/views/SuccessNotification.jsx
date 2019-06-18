@@ -49,7 +49,7 @@ class SuccessNotificationComponent extends React.Component {
                   <div className="tablet:grid-col-2 usa-alert__action">
                     <button
                       type="button"
-                      className="usa-button usa-button--unstyled"
+                      className="usa-button usa-button--unstyled no-underline"
                       onClick={() => dismissAlert()}
                     >
                       Dismiss <FontAwesomeIcon icon="times-circle" />

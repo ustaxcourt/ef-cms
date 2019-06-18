@@ -5,6 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {string} page the name of the page to set
  * @param {string} options an object which contains optional 'force' flag
+ * @returns {Promise} async action
  */
 export const setCurrentPageAction = (page, options = {}) =>
   /**

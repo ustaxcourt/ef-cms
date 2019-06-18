@@ -67,14 +67,18 @@ export const SectionWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th colSpan="3">Select</th>
+              {workQueueHelper.showSelectColumn && <th colSpan="2">Select</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
+              <th aria-label="Status Icon" className="padding-right-0" />
               <th>Document</th>
-              <th>Status</th>
-              <th>To</th>
-              <th>From</th>
-              <th>Section</th>
+              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              <th>Case Status</th>
+              {workQueueHelper.showAssignedToColumn && (
+                <th>{workQueueHelper.assigneeColumnTitle}</th>
+              )}
+              {!workQueueHelper.hideFromColumn && <th>From</th>}
+              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
           {sectionWorkQueue.map((item, idx) => (
@@ -88,50 +92,69 @@ export const SectionWorkQueueInbox = connect(
               }
             >
               <tr>
-                <td className="focus-toggle">
-                  <button
-                    className="focus-button usa-button usa-button--unstyled"
-                    aria-label="Expand message detail"
-                    aria-expanded={item.isFocused}
-                    aria-controls={`detail-${item.workItemId}`}
-                  />{' '}
-                </td>
-                <td className="message-select-control has-icon">
-                  <input
-                    id={item.workItemId}
-                    type="checkbox"
-                    className="usa-checkbox__input"
-                    onChange={e => {
-                      selectWorkItemSequence({
-                        workItem: item,
-                      });
-                      e.stopPropagation();
-                    }}
-                    checked={item.selected}
-                    aria-label="Select work item"
-                  />
-                  <label
-                    htmlFor={item.workItemId}
-                    id={`label-${item.workItemId}`}
-                    className="usa-checkbox__label padding-top-05"
-                  />
-                </td>
-                <td className="message-queue-row has-icon">
-                  {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      icon={['far', 'clock']}
-                      className={item.statusIcon}
-                      aria-hidden="true"
-                    />
-                  )}
-                </td>
+                {workQueueHelper.showSelectColumn && (
+                  <>
+                    <td className="focus-toggle">
+                      <button
+                        className="focus-button usa-button usa-button--unstyled"
+                        aria-label="Expand message detail"
+                        aria-expanded={item.isFocused}
+                        aria-controls={`detail-${item.workItemId}`}
+                      />{' '}
+                    </td>
+                    <td
+                      onClick={e => {
+                        selectWorkItemSequence({
+                          workItem: item,
+                        });
+                        e.stopPropagation();
+                      }}
+                      className="message-select-control"
+                    >
+                      <input
+                        id={item.workItemId}
+                        type="checkbox"
+                        className="usa-checkbox__input"
+                        onChange={e => {
+                          selectWorkItemSequence({
+                            workItem: item,
+                          });
+                          e.stopPropagation();
+                        }}
+                        checked={item.selected}
+                        aria-label="Select work item"
+                      />
+                      <label
+                        htmlFor={item.workItemId}
+                        id={`label-${item.workItemId}`}
+                        className="usa-checkbox__label padding-top-05"
+                      />
+                    </td>
+                  </>
+                )}
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.docketNumberWithSuffix}</span>
                 </td>
                 <td className="message-queue-row">
-                  <span className="no-wrap">
-                    {item.currentMessage.createdAtFormatted}
-                  </span>
+                  <span className="no-wrap">{item.received}</span>
+                </td>
+                <td className="message-queue-row has-icon padding-right-0">
+                  {item.showBatchedStatusIcon && (
+                    <FontAwesomeIcon
+                      icon={['far', 'clock']}
+                      className="iconStatusBatched"
+                      aria-hidden="true"
+                      size="lg"
+                    />
+                  )}
+                  {item.showUnassignedIcon && (
+                    <FontAwesomeIcon
+                      icon={['fas', 'question-circle']}
+                      className="iconStatusUnassigned"
+                      aria-hidden="true"
+                      size="lg"
+                    />
+                  )}
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
@@ -148,19 +171,30 @@ export const SectionWorkQueueInbox = connect(
                       {item.document.documentType}
                     </a>
                   </div>
-                  <div
-                    id={`detail-${item.workItemId}`}
-                    className="message-document-detail"
-                  >
-                    {item.currentMessage.message}
-                  </div>
+                  {workQueueHelper.showMessageContent && (
+                    <div
+                      id={`detail-${item.workItemId}`}
+                      className="message-document-detail"
+                    >
+                      {item.currentMessage.message}
+                    </div>
+                  )}
                 </td>
+                {!workQueueHelper.hideFiledByColumn && (
+                  <td className="message-queue-row">{item.document.filedBy}</td>
+                )}
                 <td className="message-queue-row">{item.caseStatus}</td>
-                <td className="to message-queue-row">{item.assigneeName}</td>
-                <td className="message-queue-row">
-                  {item.currentMessage.from}
-                </td>
-                <td className="message-queue-row">{item.sentBySection}</td>
+                {workQueueHelper.showAssignedToColumn && (
+                  <td className="to message-queue-row">{item.assigneeName}</td>
+                )}
+                {!workQueueHelper.hideFromColumn && (
+                  <td className="message-queue-row">
+                    {item.currentMessage.from}
+                  </td>
+                )}
+                {!workQueueHelper.hideSectionColumn && (
+                  <td className="message-queue-row">{item.sentBySection}</td>
+                )}
               </tr>
             </tbody>
           ))}

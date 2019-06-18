@@ -19,6 +19,7 @@ describe('generateCaseAssociationDocumentTitle', () => {
       applicationContext,
       caseAssociationRequest: {
         documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',
+        documentType: 'Substitution of Counsel',
         representingPrimary: true,
       },
       contactPrimaryName: 'Test Petitioner',

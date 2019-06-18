@@ -19,11 +19,13 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -72,6 +74,7 @@ export const state = {
   form: {},
   formattedCaseDetail,
   formattedCases,
+  formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
   headerHelper,
@@ -83,7 +86,6 @@ export const state = {
   modal: {},
   notifications: {},
   path: '/',
-
   paymentInfo: {
     showDetails: false,
   },
@@ -91,6 +93,8 @@ export const state = {
   petition: {},
   procedureTypes: [],
   requestAccessHelper,
+  scanHelper,
+  scanner: {},
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
@@ -115,6 +119,7 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
+  workQueueIsInternal: true,
   workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };

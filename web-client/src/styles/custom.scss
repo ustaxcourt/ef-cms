@@ -15,6 +15,10 @@ hr {
   margin: 20px 0;
 }
 
+#dwtcontrolContainer {
+  display: none;
+}
+
 .inline-block {
   display: inline-block;
 }
@@ -72,7 +76,7 @@ iframe {
 }
 
 .link.case-link-bold {
-  font-weight: $font-bold;
+  font-weight: $font-semibold;
 }
 
 .address-line {
@@ -145,6 +149,13 @@ select[disabled] {
     h4 {
       margin-top: 30px;
       margin-bottom: 15px;
+    }
+  }
+
+  &.no-margin-last-child {
+    > .usa-form-group:last-child,
+    > .usa-fieldset:last-child {
+      margin-bottom: 0;
     }
   }
 }
@@ -521,7 +532,7 @@ textarea#case-caption {
     top: 50%;
     width: 70px;
     padding: 8px;
-    margin-top: 10px;
+    margin-top: 2px;
     margin-right: 20px;
     background-color: color($theme-color-primary-dark);
     float: left;
@@ -667,7 +678,7 @@ nav.usa-nav {
   .user-dropdown {
     position: relative;
     top: -4px;
-    margin: -4px 0 0 50px;
+    margin: -4px 0 0 30px;
   }
 
   .button-account-login {
@@ -781,10 +792,8 @@ nav.usa-nav {
     }
   }
 
-  a.log-out {
-    font-family: $font-source-sans;
-    font-size: 20px;
-    font-weight: $font-bold;
+  #log-out {
+    color: $color-white;
   }
 }
 
@@ -956,4 +965,10 @@ nav.usa-nav {
       margin-bottom: 0;
     }
   }
+}
+
+.tab-right-button {
+  position: absolute;
+  top: -10px;
+  right: -7px;
 }

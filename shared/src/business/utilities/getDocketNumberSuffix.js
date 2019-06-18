@@ -5,16 +5,16 @@
  * @param procedureType the procedureType (small or regular)
  */
 exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
-  switch (caseType.toLowerCase()) {
-    case 'whistleblower':
+  switch (caseType) {
+    case 'Whistleblower':
       return 'W';
-    case 'passport':
+    case 'Passport':
       return 'P';
-    case 'exempt organization':
+    case 'Declaratory Judgment (Exempt Organization)':
       return 'X';
-    case 'retirement plan':
+    case 'Declaratory Judgment (Retirement Plan)':
       return 'R';
-    case 'cdp (lien/levy)':
+    case 'CDP (Lien/Levy)':
       return procedureType.toLowerCase() === 'small' ? 'SL' : 'L';
     default:
       return procedureType.toLowerCase() === 'small' ? 'S' : null;

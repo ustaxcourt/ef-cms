@@ -13,6 +13,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
+      workQueueIsInternal: true,
     });
     sectionOutboxWorkQueue = test.getState('workQueue');
     answerWorkItem = sectionOutboxWorkQueue.find(
@@ -25,6 +26,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
+      workQueueIsInternal: true,
     });
 
     const sectionWorkQueue = test.getState('workQueue');
@@ -56,6 +58,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'section',
+      workQueueIsInternal: true,
     });
     sectionOutboxWorkQueue = test.getState('workQueue');
     answerWorkItem = sectionOutboxWorkQueue.find(
@@ -65,6 +68,11 @@ export default test => {
       message: 'this is a new thread test message',
     });
 
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+      workQueueIsInternal: false,
+    });
     const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
@@ -77,6 +85,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
+      workQueueIsInternal: true,
     });
   });
 };

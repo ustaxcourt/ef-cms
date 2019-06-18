@@ -1,7 +1,7 @@
 /**
  * returns a generic success alert for when a file is successfully uploaded.
  *
- * @returns {Object} the alertSuccess object containing the generic messages.
+ * @returns {object} the alertSuccess object containing the generic messages.
  */
 export const getFileDocumentAlertSuccessAction = () => {
   return {

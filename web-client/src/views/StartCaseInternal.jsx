@@ -3,18 +3,23 @@ import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
+import { Scan } from '../ustc-ui/Scan/Scan';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const StartCaseInternal = connect(
   {
+    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    scanHelper: state.scanHelper,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
+    startScanSequence: sequences.startScanSequence,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
@@ -24,7 +29,10 @@ export const StartCaseInternal = connect(
   },
   ({
     constants,
+    scanHelper,
     showModal,
+    startScanSequence,
+    completeScanSequence,
     formCancelToggleCancelSequence,
     startCaseHelper,
     submitPetitionFromPaperSequence,
@@ -48,7 +56,7 @@ export const StartCaseInternal = connect(
             Upload Documents to Create a Case
           </h1>
           {showModal === 'FormCancelModalDialogComponent' && (
-            <FormCancelModalDialog />
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
           )}
           <ErrorNotification />
           <h2>Petition Documents</h2>
@@ -202,7 +210,7 @@ export const StartCaseInternal = connect(
                 }
               >
                 Upload the Petition <span className="usa-hint">(required)</span>
-                <span className="success-message">
+                <span className="success-message margin-left-2px">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
@@ -236,6 +244,28 @@ export const StartCaseInternal = connect(
                 bind="validationErrors.petitionFileSize"
               />
             </div>
+            {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
+              <Scan
+                onScanClicked={() => startScanSequence()}
+                onDoneClicked={() =>
+                  completeScanSequence({
+                    onComplete: file => {
+                      limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                        updatePetitionValueSequence({
+                          key: 'petitionFile',
+                          value: file,
+                        });
+                        updatePetitionValueSequence({
+                          key: 'petitionFileSize',
+                          value: file.size,
+                        });
+                        validatePetitionFromPaperSequence();
+                      });
+                    },
+                  })
+                }
+              />
+            )}
           </div>
 
           <h2 className="margin-top-4">Statement of Taxpayer Identification</h2>
@@ -253,7 +283,7 @@ export const StartCaseInternal = connect(
                 }
               >
                 Upload the Statement of Taxpayer Identification
-                <span className="success-message">
+                <span className="success-message margin-left-2px">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
@@ -300,7 +330,7 @@ export const StartCaseInternal = connect(
               }
             >
               Upload the Ownership Disclosure Statement
-              <span className="success-message">
+              <span className="success-message margin-left-2px">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
