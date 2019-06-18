@@ -6,9 +6,9 @@ import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSe
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setAssociatedCasesForTrialSessionAction } from '../actions/TrialSession/setAssociatedCasesForTrialSessionAction';
+import { setAssociatedCasesOnTrialSessionAction } from '../actions/TrialSession/setAssociatedCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setEligibleCasesForTrialSessionAction } from '../actions/TrialSession/setEligibleCasesForTrialSessionAction';
+import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 
@@ -23,11 +23,11 @@ const gotoTrialSessionDetails = [
   {
     no: [
       getEligibleCasesForTrialSessionAction,
-      setEligibleCasesForTrialSessionAction,
+      setEligibleCasesOnTrialSessionAction,
     ],
     yes: [
       getAssociatedCasesForTrialSessionAction,
-      setAssociatedCasesForTrialSessionAction,
+      setAssociatedCasesOnTrialSessionAction,
     ],
   },
   setCurrentPageAction('TrialSessionDetail'),
