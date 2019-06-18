@@ -1,7 +1,7 @@
 const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../helpers/stripInternalKeys');
 
-exports.getAssociatedCasesForTrialSession = async ({
+exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
 }) => {

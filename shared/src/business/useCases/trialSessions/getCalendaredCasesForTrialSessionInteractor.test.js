@@ -1,11 +1,11 @@
 const {
-  getAssociatedCasesForTrialSession,
-} = require('./getAssociatedCasesForTrialSessionInteractor');
+  getCalendaredCasesForTrialSession,
+} = require('./getCalendaredCasesForTrialSessionInteractor');
 const { User } = require('../../entities/User');
 
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('getAssociatedCasesForTrialSessionInteractor', () => {
+describe('getCalendaredCasesForTrialSessionInteractor', () => {
   let applicationContext;
 
   it('throws an exception when the user is unauthorized', async () => {
@@ -18,12 +18,12 @@ describe('getAssociatedCasesForTrialSessionInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        getAssociatedCasesForTrialSession: () => [MOCK_CASE],
+        getCalendaredCasesForTrialSession: () => [MOCK_CASE],
       }),
     };
 
     await expect(
-      getAssociatedCasesForTrialSession({
+      getCalendaredCasesForTrialSession({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
@@ -40,12 +40,12 @@ describe('getAssociatedCasesForTrialSessionInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        getAssociatedCasesForTrialSession: () => [MOCK_CASE],
+        getCalendaredCasesForTrialSession: () => [MOCK_CASE],
       }),
     };
 
     await expect(
-      getAssociatedCasesForTrialSession({
+      getCalendaredCasesForTrialSession({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),

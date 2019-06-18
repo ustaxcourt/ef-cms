@@ -5,12 +5,12 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getAssociatedCasesForTrialSession
+ * getCalendaredCasesForTrialSession
  * @param applicationContext
  * @param trialSessionId
  * @returns {*|Promise<*>}
  */
-exports.getAssociatedCasesForTrialSession = async ({
+exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
 }) => {
@@ -21,7 +21,7 @@ exports.getAssociatedCasesForTrialSession = async ({
 
   return await applicationContext
     .getPersistenceGateway()
-    .getAssociatedCasesForTrialSession({
+    .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
     });

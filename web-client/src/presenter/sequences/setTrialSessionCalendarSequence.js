@@ -1,9 +1,9 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { getAssociatedCasesForTrialSessionAction } from '../actions/TrialSession/getAssociatedCasesForTrialSessionAction';
+import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSession/getSetTrialSessionCalendarAlertSuccessAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setAssociatedCasesOnTrialSessionAction } from '../actions/TrialSession/setAssociatedCasesOnTrialSessionAction';
+import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
@@ -15,8 +15,8 @@ export const setTrialSessionCalendarSequence = [
   clearModalAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
-  getAssociatedCasesForTrialSessionAction,
-  setAssociatedCasesOnTrialSessionAction,
+  getCalendaredCasesForTrialSessionAction,
+  setCalendaredCasesOnTrialSessionAction,
   getSetTrialSessionCalendarAlertSuccessAction,
   setAlertSuccessAction,
   unsetFormSubmittingAction,

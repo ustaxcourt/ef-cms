@@ -104,11 +104,11 @@ const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
-  getAssociatedCasesForTrialSession,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getAssociatedCasesForTrialSession');
+  getCalendaredCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession');
 const {
-  getAssociatedCasesForTrialSession: getAssociatedCasesForTrialSessionUC,
-} = require('../../shared/src/business/useCases/trialSessions/getAssociatedCasesForTrialSessionInteractor');
+  getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor');
 const {
   getCase,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
@@ -374,7 +374,7 @@ module.exports = (appContextUser = {}) => {
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getAllCatalogCases,
-        getAssociatedCasesForTrialSession,
+        getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
@@ -437,7 +437,7 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocument,
         forwardWorkItem,
         generatePDFFromPNGData,
-        getAssociatedCasesForTrialSession: getAssociatedCasesForTrialSessionUC,
+        getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
         getCasesForRespondent: getCasesForRespondentUC,

@@ -176,12 +176,12 @@ describe('formattedTrialSessionDetails', () => {
     );
   });
 
-  it('sorts associated cases by docket number', async () => {
+  it('sorts calendared cases by docket number', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          associatedCases: [
+          calendaredCases: [
             MOCK_CASE,
             { ...MOCK_CASE, docketNumber: '102-19' },
             { ...MOCK_CASE, docketNumber: '5000-17' },
