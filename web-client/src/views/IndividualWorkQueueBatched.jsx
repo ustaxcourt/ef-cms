@@ -21,7 +21,7 @@ export const IndividualWorkQueueBatched = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" colSpan="2">
-                Docket
+                <span className="padding-left-2px">Docket</span>
               </th>
               <th>Received</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
