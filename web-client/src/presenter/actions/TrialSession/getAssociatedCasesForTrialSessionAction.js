@@ -6,13 +6,13 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} contains the associated cases for a trial sessions
  */
-export const getAssociatedCasesForTrialSessionAction = ({
+export const getAssociatedCasesForTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
   const trialSessionId = props.trialSessionId;
 
-  const associatedCases = applicationContext
+  const associatedCases = await applicationContext
     .getUseCases()
     .getAssociatedCasesForTrialSession({
       applicationContext,
