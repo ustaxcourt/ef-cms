@@ -135,6 +135,7 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: { isAssociated: false },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -150,6 +151,7 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '234' }] },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: { notAssociated: true },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -157,5 +159,102 @@ describe('case detail computed', () => {
       },
     });
     expect(result.userHasAccessToCase).toEqual(false);
+  });
+
+  it('should set userHasAccessToCase and showFileDocumentButton to true if user role is respondent and the respondent is associated with the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { respondent: { userId: '789' } },
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'respondent',
+          userId: '789',
+        },
+      },
+    });
+    expect(result.userHasAccessToCase).toEqual(true);
+    expect(result.showFileDocumentButton).toEqual(true);
+    expect(result.showFileFirstDocumentButton).toEqual(false);
+    expect(result.showRequestAccessToCaseButton).toEqual(false);
+  });
+
+  it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { respondent: { userId: '123' } },
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'respondent',
+          userId: '789',
+        },
+      },
+    });
+    expect(result.userHasAccessToCase).toEqual(false);
+    expect(result.showFileDocumentButton).toEqual(false);
+    expect(result.showFileFirstDocumentButton).toEqual(false);
+    expect(result.showRequestAccessToCaseButton).toEqual(true);
+  });
+
+  it('should set showFileFirstDocumentButton to true if user role is respondent and there is no respondent associated with the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'respondent',
+          userId: '789',
+        },
+      },
+    });
+    expect(result.userHasAccessToCase).toEqual(false);
+    expect(result.showFileDocumentButton).toEqual(false);
+    expect(result.showFileFirstDocumentButton).toEqual(true);
+    expect(result.showRequestAccessToCaseButton).toEqual(false);
+  });
+
+  it('should show add docket entry button if current page is CaseDetailInternal and user role is docketclerk', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        user: {
+          role: 'docketclerk',
+          userId: '789',
+        },
+      },
+    });
+    expect(result.showAddDocketEntryButton).toEqual(true);
+  });
+
+  it('should not show add docket entry button if current page is not CaseDetailInternal or user role is not docketclerk', () => {
+    let result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'docketclerk',
+          userId: '789',
+        },
+      },
+    });
+    expect(result.showAddDocketEntryButton).toEqual(false);
+
+    result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'petitioner',
+          userId: '789',
+        },
+      },
+    });
+    expect(result.showAddDocketEntryButton).toEqual(false);
   });
 });

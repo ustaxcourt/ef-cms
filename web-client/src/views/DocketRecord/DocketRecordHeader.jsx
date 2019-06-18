@@ -24,9 +24,7 @@ export const DocketRecordHeader = connect(
               {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button"
-                  href={`/case-detail/${
-                    caseDetail.docketNumber
-                  }/add-docket-entry`}
+                  href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
                   id="button-add-record"
                 >
                   <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Docket
@@ -36,9 +34,7 @@ export const DocketRecordHeader = connect(
               {helper.showFileDocumentButton && (
                 <a
                   className="usa-button hide-on-mobile"
-                  href={`/case-detail/${
-                    caseDetail.docketNumber
-                  }/file-a-document`}
+                  href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
                   id="button-file-document"
                 >
                   <FontAwesomeIcon icon="plus-circle" size="1x" /> File a
