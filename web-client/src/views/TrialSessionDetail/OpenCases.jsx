@@ -4,22 +4,14 @@ import React from 'react';
 
 export const OpenCases = connect(
   {
-    formattedOpenCases:
-      state.formattedTrialSessionDetails.formattedEligibleCases,
+    formattedCases: state.formattedTrialSessionDetails.openCases,
   },
-  ({ formattedOpenCases }) => {
-    if(formattedCases) {
-      return "Foo";
-    } else {
-      return "Bar";
-    }
-    }
-    /*
+  ({ formattedCases }) => {
     return (
       <React.Fragment>
         <table
           className="usa-table ustc-table trial-sessions subsection"
-          id="open-sessions"
+          id="open-cases"
         >
           <thead>
             <tr>
@@ -29,7 +21,7 @@ export const OpenCases = connect(
               <th>Respondent Counsel</th>
             </tr>
           </thead>
-          {formattedOpenCases.map((item, idx) => (
+          {formattedCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
                 <td>
@@ -38,18 +30,17 @@ export const OpenCases = connect(
                   </a>
                 </td>
                 <td>{item.caseCaption}</td>
-                <td aria-hidden="true">
+                <td>
                   {item.practitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>
-                <td aria-hidden="true">{item.respondent}</td>
+                <td>{item.respondent}</td>
               </tr>
             </tbody>
           ))}
         </table>
       </React.Fragment>
     );
-    */
   },
 );

@@ -2,44 +2,44 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const EligibleCases = connect(
+export const AllCases = connect(
   {
-    formattedEligibleCases:
-      state.formattedTrialSessionDetails.formattedEligibleCases,
+    formattedCases: state.formattedTrialSessionDetails.allCases,
   },
-  ({ formattedEligibleCases }) => {
+  ({ formattedCases }) => {
     return (
       <React.Fragment>
         <table
           className="usa-table ustc-table trial-sessions subsection"
-          id="upcoming-sessions"
-          aria-describedby="eligible-cases-tab"
+          id="all-cases"
         >
           <thead>
             <tr>
+              <th>Status</th>
               <th>Docket</th>
               <th>Case Caption</th>
               <th>Petitioner Counsel</th>
-              <th>IRS Counsel</th>
-              <th>Case Type</th>
+              <th>Respondent Counsel</th>
+              <th>Disposition</th>
             </tr>
           </thead>
-          {formattedEligibleCases.map((item, idx) => (
+          {formattedCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
+                <td>{item.status}</td>
                 <td>
                   <a href={`/case-detail/${item.docketNumber}`}>
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
                 <td>{item.caseCaption}</td>
-                <td>
+                <td aria-hidden="true">
                   {item.practitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>
                 <td>{item.respondent}</td>
-                <td>{item.caseType}</td>
+                <td>{item.disposition}</td>
               </tr>
             </tbody>
           ))}

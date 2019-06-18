@@ -1,6 +1,9 @@
+import { AllCases } from './AllCases';
+import { ClosedCases } from './ClosedCases';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenCases } from './OpenCases';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -69,15 +72,15 @@ export const TrialSessionDetail = connect(
             </Tab>
           </Tabs>
         )}
-        {/* 
+
         {formattedTrialSession.isCalendared && (
           <Tabs
             defaultActiveTab="OpenCases"
             bind="trialsessiondetails.calendaredCaseList"
           >
             <Tab tabName="OpenCases" title="Open Cases" id="open-cases-tab">
-              <div id="eligible-cases-tab-content">
-                <p>Open Cases</p>
+              <div id="open-cases-tab-content">
+                <OpenCases />
               </div>
             </Tab>
             <Tab
@@ -85,18 +88,17 @@ export const TrialSessionDetail = connect(
               title="Closed Cases"
               id="closed-cases-tab"
             >
-              <div id="eligible-cases-tab-content">
-                <p>Closed Cases</p>
+              <div id="closed-cases-tab-content">
+                <ClosedCases />
               </div>
             </Tab>
             <Tab tabName="AllCases" title="All Cases" id="all-cases-tab">
               <div id="all-cases-tab-content">
-                <p>All Cases</p>
+                <AllCases />
               </div>
             </Tab>
           </Tabs>
         )}
-        */}
       </section>
     </>
   ),
