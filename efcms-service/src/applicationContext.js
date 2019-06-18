@@ -417,7 +417,7 @@ module.exports = (appContextUser = {}) => {
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
-          region: environment.region,
+          region: 'us-east-1',
           s3ForcePathStyle: true,
         });
       }
