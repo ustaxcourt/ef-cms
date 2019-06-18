@@ -1,12 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import { getAssociatedCasesForTrialSessionAction } from '../actions/TrialSession/getAssociatedCasesForTrialSessionAction';
+import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getEligibleCasesForTrialSessionAction } from '../actions/TrialSession/getEligibleCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setAssociatedCasesOnTrialSessionAction } from '../actions/TrialSession/setAssociatedCasesOnTrialSessionAction';
+import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
@@ -26,8 +26,8 @@ const gotoTrialSessionDetails = [
       setEligibleCasesOnTrialSessionAction,
     ],
     yes: [
-      getAssociatedCasesForTrialSessionAction,
-      setAssociatedCasesOnTrialSessionAction,
+      getCalendaredCasesForTrialSessionAction,
+      setCalendaredCasesOnTrialSessionAction,
     ],
   },
   setCurrentPageAction('TrialSessionDetail'),

@@ -3,7 +3,7 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * get cases associated with a trial session
+ * get cases calendared on a trial session
  *
  * @param {Object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -16,7 +16,7 @@ exports.handler = event =>
       const trialSessionId = (event.pathParameters || {}).trialSessionId;
       const results = await applicationContext
         .getUseCases()
-        .getAssociatedCasesForTrialSession({
+        .getCalendaredCasesForTrialSession({
           applicationContext,
           trialSessionId,
         });
