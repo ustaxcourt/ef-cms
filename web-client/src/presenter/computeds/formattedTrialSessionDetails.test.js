@@ -27,6 +27,8 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when all fields have values', async () => {
     const result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: TRIAL_SESSION,
       },
     });
@@ -46,6 +48,8 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when address fields are empty', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
       },
     });
@@ -56,6 +60,8 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: omit(TRIAL_SESSION, ['city']),
       },
     });
@@ -66,6 +72,8 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: omit(TRIAL_SESSION, ['state']),
       },
     });
@@ -76,6 +84,8 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: omit(TRIAL_SESSION, ['state']),
       },
     });
@@ -86,6 +96,8 @@ describe('formattedTrialSessionDetails', () => {
 
     result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: omit(TRIAL_SESSION, ['postalCode']),
       },
     });
@@ -98,6 +110,8 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session when session assignments are empty', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: omit(TRIAL_SESSION, [
           'courtReporter',
           'irsCalendarAdministrator',
@@ -117,6 +131,8 @@ describe('formattedTrialSessionDetails', () => {
   it('formats trial session start time', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: { ...TRIAL_SESSION, startTime: '14:00' },
       },
     });
@@ -128,6 +144,8 @@ describe('formattedTrialSessionDetails', () => {
   it('displays swing session area if session is a swing session', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
+        eligibleCases: [],
         trialSession: {
           ...TRIAL_SESSION,
           swingSession: true,
@@ -144,6 +162,7 @@ describe('formattedTrialSessionDetails', () => {
   it('formats docket numbers with suffixes on eligible cases', async () => {
     let result = await runCompute(formattedTrialSessionDetails, {
       state: {
+        associatedCases: [],
         eligibleCases: [MOCK_CASE, { ...MOCK_CASE, docketNumberSuffix: 'W' }],
         trialSession: TRIAL_SESSION,
       },

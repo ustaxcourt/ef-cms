@@ -98,7 +98,7 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
-  s3Endpoint: s3.${opt:region}.amazonaws.com
+  s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
