@@ -9,6 +9,9 @@ export const OpenCases = connect(
   ({ formattedCases }) => {
     return (
       <React.Fragment>
+        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+          Count: {formattedCases.length}
+        </div>
         <table
           className="usa-table ustc-table trial-sessions subsection"
           id="open-cases"
