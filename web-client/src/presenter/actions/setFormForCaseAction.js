@@ -3,9 +3,9 @@ import { state } from 'cerebral';
 /**
  * sets the form's irs notice date and pay gov date based on the caseDetail provided in state.caseDetail
  *
- * @param {Object} providers the providers object
+ * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
- * @param {Object} providers.store the cerebral store used for setting the state.form
+ * @param {object} providers.store the cerebral store used for setting the state.form
  */
 export const setFormForCaseAction = ({ applicationContext, get, store }) => {
   const caseDetail = get(state.caseDetail);

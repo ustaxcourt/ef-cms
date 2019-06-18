@@ -25,7 +25,29 @@ describe('trialCitiesHelper', () => {
     });
   });
 
-  it('returns regular trialCitiesByState by default if param is not "small"', async () => {
+  it('returns all trialCitiesByState if param is "All"', async () => {
+    const result = await runCompute(trialCitiesHelper, {
+      state: {
+        constants: {
+          TRIAL_CITIES: {
+            ALL: [
+              {
+                city: 'Chattanooga',
+                state: 'Tennessee',
+              },
+            ],
+          },
+        },
+        getTrialCityName,
+      },
+    });
+    const trialCitiesResult = result('All');
+    expect(trialCitiesResult).toMatchObject({
+      trialCitiesByState: { Tennessee: ['Chattanooga, Tennessee'] },
+    });
+  });
+
+  it('returns regular trialCitiesByState if param is "Regular"', async () => {
     const result = await runCompute(trialCitiesHelper, {
       state: {
         constants: {
@@ -41,7 +63,29 @@ describe('trialCitiesHelper', () => {
         getTrialCityName,
       },
     });
-    const trialCitiesResult = result('not small');
+    const trialCitiesResult = result('Regular');
+    expect(trialCitiesResult).toMatchObject({
+      trialCitiesByState: { Illinois: ['Chicago, Illinois'] },
+    });
+  });
+
+  it('returns regular trialCitiesByState by default if param is not "small" or "all"', async () => {
+    const result = await runCompute(trialCitiesHelper, {
+      state: {
+        constants: {
+          TRIAL_CITIES: {
+            REGULAR: [
+              {
+                city: 'Chicago',
+                state: 'Illinois',
+              },
+            ],
+          },
+        },
+        getTrialCityName,
+      },
+    });
+    const trialCitiesResult = result('not small or all');
     expect(trialCitiesResult).toMatchObject({
       trialCitiesByState: { Illinois: ['Chicago, Illinois'] },
     });

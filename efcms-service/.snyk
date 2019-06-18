@@ -1,9 +1,0 @@
-# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
-# ignores vulnerabilities until expiry date; change duration by modifying expiry date
-ignore:
-  'npm:shelljs:20140723':
-    - serverless-s3-local > shelljs:
-        reason: not available
-        expires: '2019-06-20T15:03:21.846Z'
-patch: {}

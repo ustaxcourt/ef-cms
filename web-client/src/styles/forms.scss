@@ -4,6 +4,24 @@
   margin-bottom: 30px;
 }
 
+.ustc-time-of-day {
+  display: flex;
+}
+.ustc-time-of-day--hour,
+.ustc-time-of-day--minute {
+  width: 3em;
+  flex: 0 0 auto;
+  margin-right: 1rem;  
+  margin-bottom: 0;
+}
+.ustc-time-of-day--am-pm {
+  position: absolute;
+  bottom: 0;
+  width: 9em;
+  margin-right: 1rem;  
+  margin-bottom: 0;
+}
+
 .usa-label,
 .usa-legend,
 label,
@@ -130,6 +148,10 @@ div.usa-radio.usa-radio__inline {
   .usa-radio__label {
     padding-right: 2rem;
     padding-left: 0;
+
+    &.smaller-padding-right {
+      padding-right: 1rem;
+    }
   }
 }
 

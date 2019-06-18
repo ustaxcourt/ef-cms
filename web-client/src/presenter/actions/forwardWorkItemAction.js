@@ -4,12 +4,12 @@ import { state } from 'cerebral';
  * Forwards the workItem associated with props.workItemId to a form.assigneeId and also adds the message set on form.forwardMessage.
  * Displays a success alert on success.
  *
- * @param {Object} providers the providers object
+ * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting state.user.userId, state.form
- * @param {Object} providers.store the cerebral store needed for when setting caseDetail
- * @param {Object} providers.applicationContext needed for getting the forwardWorkItem use case
- * @param {Object} providers.props the cerebral props object containing workItemId
- * @returns {Object} the success alert object used for displayinng a green alert at the top of the page
+ * @param {object} providers.store the cerebral store needed for when setting caseDetail
+ * @param {object} providers.applicationContext needed for getting the forwardWorkItem use case
+ * @param {object} providers.props the cerebral props object containing workItemId
+ * @returns {object} the success alert object used for displayinng a green alert at the top of the page
  */
 export const forwardWorkItemAction = async ({
   get,

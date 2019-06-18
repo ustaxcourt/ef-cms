@@ -1,4 +1,3 @@
-const assert = require('assert');
 const { Document } = require('./Document');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
@@ -22,21 +21,21 @@ describe('Document entity', () => {
     it('Creates a valid document', () => {
       const myDoc = new Document(A_VALID_DOCUMENT);
       myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-      assert.ok(myDoc.isValid());
+      expect(myDoc.isValid()).toBeTruthy();
     });
 
     it('Creates an invalid document with no document type', () => {
       const myDoc = new Document({
         userId: '123',
       });
-      assert.ok(!myDoc.isValid());
+      expect(myDoc.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid document with no userId', () => {
       const myDoc = new Document({
         documentType: 'Petition',
       });
-      assert.ok(!myDoc.isValid());
+      expect(myDoc.isValid()).toBeFalsy();
     });
 
     it('addWorkItem', () => {
@@ -59,13 +58,13 @@ describe('Document entity', () => {
       });
       workItem.addMessage(message);
       myDoc.addWorkItem(new WorkItem({}));
-      assert.ok(!myDoc.isValid());
+      expect(myDoc.isValid()).toBeFalsy();
     });
   });
 
   describe('validate', () => {
     it('should do nothing if valid', () => {
-      let error = null;
+      let error;
       try {
         const document = new Document(A_VALID_DOCUMENT);
         document.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -73,17 +72,17 @@ describe('Document entity', () => {
       } catch (err) {
         error = err;
       }
-      assert.ok(error === null);
+      expect(error).not.toBeDefined();
     });
 
     it('should throw an error on invalid documents', () => {
-      let error = null;
+      let error;
       try {
         new Document({}).validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error !== null);
+      expect(error).toBeDefined();
     });
   });
 
