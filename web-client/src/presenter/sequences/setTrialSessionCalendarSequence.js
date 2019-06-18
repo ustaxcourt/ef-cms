@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { getAssociatedCasesForTrialSessionAction } from '../actions/TrialSession/getAssociatedCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
-import { setAssociatedCasesForTrialSessionAction } from '../actions/TrialSession/setAssociatedCasesForTrialSessionAction';
+import { setAssociatedCasesOnTrialSessionAction } from '../actions/TrialSession/setAssociatedCasesOnTrialSessionAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
@@ -14,6 +14,6 @@ export const setTrialSessionCalendarSequence = [
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
   getAssociatedCasesForTrialSessionAction,
-  setAssociatedCasesForTrialSessionAction,
+  setAssociatedCasesOnTrialSessionAction,
   unsetFormSubmittingAction,
 ];
