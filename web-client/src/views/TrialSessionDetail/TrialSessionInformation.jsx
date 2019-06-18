@@ -32,8 +32,9 @@ export const TrialSessionInformation = connect(
                           <p className="label">Date</p>
                           <p
                             className={
-                              formattedTrialSession.showSwingSession ||
-                              'margin-bottom-0'
+                              formattedTrialSession.showSwingSession
+                                ? ''
+                                : 'margin-bottom-0'
                             }
                           >
                             {formattedTrialSession.formattedStartDate}{' '}
@@ -44,8 +45,9 @@ export const TrialSessionInformation = connect(
                           <p className="label">Max # of Cases</p>
                           <p
                             className={
-                              formattedTrialSession.showSwingSession ||
-                              'margin-bottom-0'
+                              formattedTrialSession.showSwingSession
+                                ? ''
+                                : 'margin-bottom-0'
                             }
                           >
                             {formattedTrialSession.maxCases}
@@ -88,8 +90,11 @@ export const TrialSessionInformation = connect(
                       </div>
 
                       <div
-                        className={`grid-row grid-gap ${formattedTrialSession.showSwingSession &&
-                          'margin-bottom-8'}`}
+                        className={`grid-row grid-gap ${
+                          formattedTrialSession.showSwingSession
+                            ? 'margin-bottom-8'
+                            : ''
+                        }`}
                       >
                         <div className="grid-col-6">
                           <p className="label">Court Reporter</p>
