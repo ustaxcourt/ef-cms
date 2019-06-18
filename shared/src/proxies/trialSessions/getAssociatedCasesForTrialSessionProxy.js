@@ -7,7 +7,7 @@ const { get } = require('../requests');
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.getAssociatedCasesForTrialSessionProxy = ({
+exports.getAssociatedCasesForTrialSession = ({
   applicationContext,
   trialSessionId,
 }) => {
