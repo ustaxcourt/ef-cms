@@ -783,11 +783,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getAssociatedCasesForTrialSession:
-    handler: src/handlers.getAssociatedCasesForTrialSessionLambda
+  getCalendaredCasesForTrialSession:
+    handler: src/handlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
-          path: v1/trialSessions/{trialSessionId}/getAssociatedCases
+          path: v1/trialSessions/{trialSessionId}/getCalendaredCases
           method: get
           cors: true
           authorizer:

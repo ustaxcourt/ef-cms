@@ -26,7 +26,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
   result.formattedEligibleCases = (
     get(state.trialSession.eligibleCases) || []
   ).map(formatCase);
-  result.allCases = (get(state.trialSession.associatedCases) || [])
+  result.allCases = (get(state.trialSession.calendaredCases) || [])
     .map(formatCase)
     .sort(compareCasesByDocketNumber);
   result.openCases = result.allCases.filter(item => item.status != 'Closed');

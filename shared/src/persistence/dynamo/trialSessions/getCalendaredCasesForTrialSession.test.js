@@ -1,11 +1,11 @@
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const {
-  getAssociatedCasesForTrialSession,
-} = require('./getAssociatedCasesForTrialSession');
+  getCalendaredCasesForTrialSession,
+} = require('./getCalendaredCasesForTrialSession');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('getAssociatedCasesForTrialSession', () => {
+describe('getCalendaredCasesForTrialSession', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       caseOrder: [
@@ -25,13 +25,13 @@ describe('getAssociatedCasesForTrialSession', () => {
     client.batchGet.restore();
   });
 
-  it('should get the cases associated with a trial session', async () => {
+  it('should get the cases calendared for a trial session', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
       },
     };
-    const result = await getAssociatedCasesForTrialSession({
+    const result = await getCalendaredCasesForTrialSession({
       applicationContext,
     });
     expect(result).toEqual([MOCK_CASE]);
