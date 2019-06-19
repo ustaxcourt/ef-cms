@@ -96,13 +96,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
   
   origin {
-    # custom_origin_config {
-    #   http_port              = "80"
-    #   https_port             = "443"
-    #   origin_protocol_policy = "http-only"
-    #   origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    # }
-
     domain_name = "${aws_s3_bucket.frontend.bucket_regional_domain_name}"
     origin_id   = "primary-${var.environment}.${var.dns_domain}"
 
@@ -113,13 +106,6 @@ resource "aws_cloudfront_distribution" "distribution" {
 
 
   origin {
-    # custom_origin_config {
-    #   http_port              = "80"
-    #   https_port             = "443"
-    #   origin_protocol_policy = "http-only"
-    #   origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    # }
-
     domain_name = "${aws_s3_bucket.failover.bucket_regional_domain_name}"
     origin_id   = "failover-${var.environment}.${var.dns_domain}"
 
