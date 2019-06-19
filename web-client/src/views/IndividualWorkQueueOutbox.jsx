@@ -14,9 +14,9 @@ export const IndividualWorkQueueOutbox = connect(
     return (
       <React.Fragment>
         <table
+          aria-describedby="tab-my-queue"
           className="usa-table work-queue subsection"
           id="my-work-queue"
-          aria-describedby="tab-my-queue"
         >
           <thead>
             <tr>
@@ -43,10 +43,10 @@ export const IndividualWorkQueueOutbox = connect(
               <tr>
                 <td className="focus-toggle">
                   <button
-                    className="focus-button usa-button usa-button--unstyled"
-                    aria-label="Expand message detail"
-                    aria-expanded={item.isFocused}
                     aria-controls={`detail-${item.workItemId}`}
+                    aria-expanded={item.isFocused}
+                    aria-label="Expand message detail"
+                    className="focus-button usa-button usa-button--unstyled"
                   />{' '}
                 </td>
                 <td className="message-queue-row">
@@ -65,10 +65,10 @@ export const IndividualWorkQueueOutbox = connect(
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
-                      icon={['far', 'clock']}
-                      className="iconStatusBatched"
-                      aria-label="batched for IRS"
                       aria-hidden="false"
+                      aria-label="batched for IRS"
+                      className="iconStatusBatched"
+                      icon={['far', 'clock']}
                       size="lg"
                     />
                   )}
@@ -76,24 +76,24 @@ export const IndividualWorkQueueOutbox = connect(
                 <td className="message-queue-row">
                   <div className="message-document-title">
                     <a
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
+                      className="case-link"
                       href={documentHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
                         workItemIdToMarkAsRead: null,
                       })}
-                      className="case-link"
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
                     >
                       {item.document.documentType}
                     </a>
                   </div>
                   {workQueueHelper.showMessageContent && (
                     <div
-                      id={`detail-${item.workItemId}`}
                       className="message-document-detail"
+                      id={`detail-${item.workItemId}`}
                     >
                       {item.completedMessage || item.currentMessage.message}
                     </div>

@@ -16,14 +16,14 @@ export const IdleLogout = connect(
           contact information.
         </p>
         <button
-          onClick={() => redirectToLoginSequence()}
           className="usa-button align-right"
+          onClick={() => redirectToLoginSequence()}
         >
           Log In
         </button>{' '}
         <a
-          href="https://www.ustaxcourt.gov/"
           className="usa-button usa-button--outline align-right"
+          href="https://www.ustaxcourt.gov/"
         >
           Go to the U.S. Tax Court Website
         </a>

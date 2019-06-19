@@ -15,8 +15,8 @@ export const SectionWorkQueue = connect(
   ({ navigateToPathSequence, queue, workQueueHelper }) => {
     return (
       <Tabs
-        className="classic-horizontal-header3 tab-border"
         bind="workQueueToDisplay.box"
+        className="classic-horizontal-header3 tab-border"
         onSelect={box => {
           navigateToPathSequence({
             path: workQueueHelper.getQueuePath({
@@ -26,16 +26,16 @@ export const SectionWorkQueue = connect(
           });
         }}
       >
-        <Tab tabName="inbox" title="Inbox" id="section-inbox-tab">
+        <Tab id="section-inbox-tab" tabName="inbox" title="Inbox">
           <div id="section-inbox-tab-content">
             <SectionWorkQueueInbox />
           </div>
         </Tab>
         {workQueueHelper.showBatchedForIRSTab && (
           <Tab
+            id="section-batched-for-irs-tab"
             tabName="batched"
             title="Batched for IRS"
-            id="section-batched-for-irs-tab"
           >
             <div id="section-batched-for-irs-tab-content">
               <SectionWorkQueueBatched />
@@ -44,9 +44,9 @@ export const SectionWorkQueue = connect(
         )}
         {workQueueHelper.showSectionSentTab && (
           <Tab
+            id="section-sent-tab"
             tabName="outbox"
             title={workQueueHelper.sentTitle}
-            id="section-sent-tab"
           >
             <div id="section-sent-tab-content">
               <SectionWorkQueueOutbox />
