@@ -34,7 +34,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   } else if (userRole === 'respondent') {
     const caseDetailRespondent = get(state.caseDetail.respondent);
     const userId = get(state.user.userId);
-    associated = caseDetailRespondent.userId === userId;
+    associated = caseDetailRespondent && caseDetailRespondent.userId === userId;
   } else if (userRole === 'petitioner') {
     const caseUserId = get(state.caseDetail.userId);
     const userId = get(state.user.userId);
