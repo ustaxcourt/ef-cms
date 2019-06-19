@@ -16,7 +16,7 @@ describe('associateUserWithCase', () => {
     client.put.restore();
   });
 
-  it('should put item', async () => {
+  it('should persist the mapping record to associate user with case', async () => {
     const result = await associateUserWithCase({
       applicationContext,
       caseId: '234',

@@ -18,6 +18,8 @@ const computeTerm = ({ month, year }) => {
       term = 'Spring';
     } else if (termsByMonth.fall.includes(selectedMonth)) {
       term = 'Fall';
+    } else {
+      term = undefined;
     }
   }
 
