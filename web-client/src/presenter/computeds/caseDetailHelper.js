@@ -2,7 +2,8 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
-  const caseHasRespondent = !!caseDetail && !!caseDetail.respondent;
+  const caseHasRespondent =
+    caseDetail && caseDetail.respondents && !!caseDetail.respondents.length;
   const userRole = get(state.user.role);
   const showActionRequired = !caseDetail.payGovId && userRole === 'petitioner';
   const documentDetailTab = get(state.documentDetail.tab) || 'docketRecord';

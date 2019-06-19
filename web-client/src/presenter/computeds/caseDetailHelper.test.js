@@ -177,7 +177,7 @@ describe('case detail computed', () => {
   it('should set userHasAccessToCase and showFileDocumentButton to true if user role is respondent and the respondent is associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: { respondent: { userId: '789' } },
+        caseDetail: { respondents: [{ userId: '789' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -198,7 +198,7 @@ describe('case detail computed', () => {
   it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: { respondent: { userId: '123' } },
+        caseDetail: { respondents: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {

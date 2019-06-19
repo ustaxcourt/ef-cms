@@ -53,12 +53,12 @@ export const PartyInformation = connect(
             caseDetail.practitioners.map((practitioner, index) => (
               <div className="tablet:grid-col-2" key={index}>
                 {index === 0 && (
-                  <p className="label" id={'petitioner-label'}>
+                  <p className="label" id={'practitioner-label'}>
                     Petitioner Counsel
                   </p>
                 )}
                 <div>
-                  <address aria-labelledby={'petitioner-label'}>
+                  <address aria-labelledby={'practitioner-label'}>
                     {practitioner.name &&
                       addressDisplay({
                         ...practitioner,
@@ -71,24 +71,27 @@ export const PartyInformation = connect(
               </div>
             ))}
 
-          <div className="tablet:grid-col-2">
-            {caseDetail.respondent && (
-              <React.Fragment>
-                <p className="label" id={'respondent-label'}>
-                  Respondent Information
-                </p>
-                <address aria-labelledby={'respondent-label'}>
-                  {addressDisplay({
-                    ...caseDetail.respondent,
-                    name: caseDetail.respondent.formattedName,
-                    address1: caseDetail.respondent.addressLine1,
-                    address2: caseDetail.respondent.addressLine2,
-                    address3: caseDetail.respondent.addressLine3,
-                  })}
-                </address>
-              </React.Fragment>
-            )}
-          </div>
+          {caseDetail.respondents &&
+            caseDetail.respondents.map((respondent, index) => (
+              <div className="tablet:grid-col-2" key={index}>
+                {index === 0 && (
+                  <p className="label" id={'respondent-label'}>
+                    Petitioner Counsel
+                  </p>
+                )}
+                <div>
+                  <address aria-labelledby={'respondent-label'}>
+                    {respondent.name &&
+                      addressDisplay({
+                        ...respondent,
+                        address1: respondent.addressLine1,
+                        address2: respondent.addressLine2,
+                        address3: respondent.addressLine3,
+                      })}
+                  </address>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     );

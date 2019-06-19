@@ -177,10 +177,16 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
     return a.index - b.index;
   });
 
-  if (result.respondent)
-    result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
+  const formatRespondent = respondent => {
+    respondent.formattedName = `${respondent.name} ${
+      respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
+    return respondent;
+  };
+
+  if (result.respondents) {
+    result.respondents = result.respondents.map(formatRespondent);
+  }
 
   if (result.practitioner) {
     let formattedName = result.practitioner.name;
