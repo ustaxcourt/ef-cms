@@ -33,7 +33,7 @@ export default test => {
 
     // check that save occurred
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2017-12-24T00:00:00.000Z',
+      '2017-12-24T05:00:00.000Z',
     );
     expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
     expect(test.getState('alertSuccess.title')).toEqual(

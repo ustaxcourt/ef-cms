@@ -1,42 +1,73 @@
 import { omit } from 'lodash';
 import { state } from 'cerebral';
+import moment from 'moment';
+
+/**
+ * properly casts a variety of inputs to a UTC ISOString
+ * directly using the moment library to inspect the formatting of the input
+ * before sending to application context functions to be transformed
+ *
+ * @param {object} applicationContext the application context
+ * @param {string} dateString the date string to cast to an ISO string
+ * @returns {string} the ISO string.
+ */
+export const castToISO = (applicationContext, dateString) => {
+  if (dateString === '') {
+    return null;
+  }
+
+  const formatDate = ds =>
+    applicationContext.getUtilities().createISODateString(ds, 'YYYY-MM-DD');
+
+  dateString = dateString
+    .split('-')
+    .map(segment => segment.padStart(2, '0'))
+    .join('-');
+  if (moment.utc(`${dateString}-01-01`, 'YYYY-MM-DD', true).isValid()) {
+    return formatDate(`${dateString}-01-01`);
+  } else if (moment.utc(dateString, 'YYYY-MM-DD', true).isValid()) {
+    return formatDate(dateString);
+  } else if (
+    applicationContext.getUtilities().isStringISOFormatted(dateString)
+  ) {
+    return dateString;
+  } else {
+    return '-1';
+  }
+};
 
 /**
  * checks if the new date contains all expected parts; otherwise, it returns the originalDate
  *
- * @param {object} applicationContext the application context
+ * @param {object} applicationContext the application context*
  * @param {string} updatedDateString the new date string to verify
  * @param {string} originalDate the original date to return if the updatedDateString is bad
  * @returns {string} the updatedDateString if everything is correct.
  */
-const determineDate = ({
-  year,
-  month,
-  day,
+export const checkDate = (
   applicationContext,
+  updatedDateString,
   originalDate,
-}) => {
-  let result;
-  const date = `${year}-${month}-${day}`;
-  const validDatePattern = /^\d{4}-\d{2}-\d{2}$/;
-  const hyphenatePattern = /^.+-.+-.+$/;
-  const invalidDate =
-    hyphenatePattern.test(date) && !validDatePattern.test(date);
-
-  if (!year && !month && !day) {
-    result = null;
-  } else if (validDatePattern.test(date)) {
-    // all is valid
-    result = applicationContext
-      .getUtilities()
-      .createISODateString(date, 'YYYY-MM-DD');
-  } else if (invalidDate) {
-    result = '-1';
+) => {
+  const hasAllDateParts = /.+-.+-.+/;
+  if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
+    updatedDateString = null;
   } else {
-    // at least one of year, month, or day is defined
-    result = originalDate || null;
+    if (
+      updatedDateString.indexOf('undefined') === -1 &&
+      hasAllDateParts.test(updatedDateString)
+    ) {
+      updatedDateString = castToISO(applicationContext, updatedDateString);
+    } else {
+      //xx-xx-undefined
+      if (originalDate) {
+        updatedDateString = originalDate;
+      } else {
+        updatedDateString = null;
+      }
+    }
   }
-  return result;
+  return updatedDateString;
 };
 
 /**
@@ -54,11 +85,6 @@ export const getFormCombinedWithCaseDetailAction = ({
 }) => {
   const caseDetail = { ...get(state.caseDetail) };
   let caseCaption = props.caseCaption;
-  let caption;
-  if ((caption = (props.casecaption || '').trim())) {
-    caseDetail.caseCaption = caption;
-  }
-
   const {
     irsYear,
     irsMonth,
@@ -73,34 +99,12 @@ export const getFormCombinedWithCaseDetailAction = ({
     ...get(state.form),
   };
 
-  const irsNoticeDate = determineDate({
-    applicationContext,
-    day: irsDay,
-    month: irsMonth,
-    originalDate: caseDetail.irsNoticeDate,
-    year: irsYear,
-  });
-  const payGovDate = determineDate({
-    applicationContext,
-    day: payGovDay,
-    month: payGovMonth,
-    originalDate: caseDetail.payGovDate,
-    year: payGovYear,
-  });
-  const receivedAt = determineDate({
-    applicationContext,
-    day: receivedAtDay,
-    month: receivedAtMonth,
-    originalDate: caseDetail.receivedAt,
-    year: receivedAtYear,
-  });
-
   const form = omit(
     {
       ...get(state.form),
-      irsNoticeDate,
-      payGovDate,
-      receivedAt,
+      irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
+      payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
+      receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
@@ -116,28 +120,33 @@ export const getFormCombinedWithCaseDetailAction = ({
     ],
   );
 
+  form.irsNoticeDate = checkDate(
+    applicationContext,
+    form.irsNoticeDate,
+    caseDetail.irsNoticeDate,
+  );
+  form.payGovDate = checkDate(
+    applicationContext,
+    form.payGovDate,
+    caseDetail.payGovDate,
+  );
+  form.receivedAt = checkDate(
+    applicationContext,
+    form.receivedAt,
+    caseDetail.receivedAt,
+  );
+
   // cannot store empty strings in persistence
   if (caseDetail.preferredTrialCity === '') {
     delete caseDetail.preferredTrialCity;
   }
-
-  const conditionalYear = year => {
-    if (year == '') return null;
-    if (/^\d{4}$/.test(year)) {
-      return applicationContext
-        .getUtilities()
-        .createISODateString(`${year}-01-01`, 'YYYY-MM-DD');
-    } else {
-      return '-1'; // force validation failure
-    }
-  };
 
   caseDetail.yearAmounts = caseDetail.yearAmounts
     .map(yearAmount => ({
       amount: !yearAmount.amount
         ? null
         : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-      year: conditionalYear(yearAmount.year),
+      year: castToISO(applicationContext, yearAmount.year),
     }))
     .filter(yearAmount => yearAmount.year || yearAmount.amount);
 
