@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 export const requestAccessHelper = (get, applicationContext) => {
   const { PARTY_TYPES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
+  const userRole = get(state.user.role);
   const form = get(state.form);
   const documentType = get(state.form.documentType);
   const validationErrors = get(state.validationErrors);
@@ -31,31 +32,37 @@ export const requestAccessHelper = (get, applicationContext) => {
       eventCode: 'SOC',
       scenario: 'Standard',
     },
-    {
-      documentTitleTemplate: 'Motion to Substitute Parties and Change Caption',
-      documentType: 'Motion to Substitute Parties and Change Caption',
-      eventCode: 'M107',
-      scenario: 'Standard',
-    },
-    {
-      documentTitleTemplate: 'Notice of Intervention',
-      documentType: 'Notice of Intervention',
-      eventCode: 'NOI',
-      scenario: 'Standard',
-    },
-    {
-      documentTitleTemplate: 'Notice of Election to Participate',
-      documentType: 'Notice of Election to Participate',
-      eventCode: 'NOEP',
-      scenario: 'Standard',
-    },
-    {
-      documentTitleTemplate: 'Notice of Election to Intervene',
-      documentType: 'Notice of Election to Intervene',
-      eventCode: 'NOEI',
-      scenario: 'Standard',
-    },
   ];
+
+  if (userRole === 'practitioner') {
+    documents.push(
+      {
+        documentTitleTemplate:
+          'Motion to Substitute Parties and Change Caption',
+        documentType: 'Motion to Substitute Parties and Change Caption',
+        eventCode: 'M107',
+        scenario: 'Standard',
+      },
+      {
+        documentTitleTemplate: 'Notice of Intervention',
+        documentType: 'Notice of Intervention',
+        eventCode: 'NOI',
+        scenario: 'Standard',
+      },
+      {
+        documentTitleTemplate: 'Notice of Election to Participate',
+        documentType: 'Notice of Election to Participate',
+        eventCode: 'NOEP',
+        scenario: 'Standard',
+      },
+      {
+        documentTitleTemplate: 'Notice of Election to Intervene',
+        documentType: 'Notice of Election to Intervene',
+        eventCode: 'NOEI',
+        scenario: 'Standard',
+      },
+    );
+  }
 
   const documentWithExhibits = [
     'Motion to Substitute Parties and Change Caption',
@@ -95,6 +102,8 @@ export const requestAccessHelper = (get, applicationContext) => {
     (documentWithAttachments && !form.attachments) ||
     (documentWithSupportingDocuments && !form.hasSupportingDocuments);
 
+  const showPartiesRepresenting = userRole === 'practitioner';
+
   let exported = {
     certificateOfServiceDateFormatted,
     documentWithAttachments,
@@ -105,6 +114,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     partyValidationError,
     showFilingIncludes,
     showFilingNotIncludes,
+    showPartiesRepresenting,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryParty,
   };
