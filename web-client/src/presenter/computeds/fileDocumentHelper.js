@@ -18,7 +18,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-  const showPrimaryParty = ['petitioner', 'practitioner'].includes(userRole);
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
     entry => {
@@ -65,7 +64,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
 
   let partyPrimaryLabel = 'Myself';
-  if (userRole === 'practitioner') {
+  if (userRole === 'practitioner' || userRole === 'respondent') {
     partyPrimaryLabel = caseDetail.contactPrimary.name;
   }
 
@@ -80,7 +79,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPractitionerParty: userRole === 'practitioner',
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
-    showPrimaryParty,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryFilingNotIncludes,
     showSecondaryParty,
