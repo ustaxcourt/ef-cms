@@ -89,5 +89,17 @@
     "address": "123 Main Street Los Angeles, CA 98089",
     "barnumber": "12345-67",
     "phone": "111-111-1111"
+  },
+  {
+    "role": "respondent",
+    "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
+    "name": "Test Respondent1",
+    "section": "practitioner",
+    "pk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
+    "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
+    "email": "respondent1",
+    "address": "123 Main Street Los Angeles, CA 98089",
+    "barnumber": "12345-67",
+    "phone": "111-111-1111"
   }
 ]

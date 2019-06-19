@@ -1,4 +1,3 @@
-import { some } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
@@ -20,33 +19,43 @@ export const caseDetailHelper = get => {
     ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
+  let showFileFirstDocumentButton = false;
+  let userHasAccessToCase = true;
+
   if (userRole === 'practitioner') {
     if (notAssociated) {
+      userHasAccessToCase = false;
       showFileDocumentButton = false;
       showRequestAccessToCaseButton = true;
       showPendingAccessToCaseButton = false;
-    }
-    if (isAssociated) {
+    } else if (isAssociated) {
       showFileDocumentButton = true;
       showRequestAccessToCaseButton = false;
       showPendingAccessToCaseButton = false;
-    }
-    if (pendingAssociation) {
+    } else if (pendingAssociation) {
+      userHasAccessToCase = false;
       showFileDocumentButton = false;
       showRequestAccessToCaseButton = false;
       showPendingAccessToCaseButton = true;
     }
   }
 
-  let userHasAccessToCase = true;
-  if (userRole === 'practitioner') {
-    userHasAccessToCase = false;
-    if (
-      caseDetail &&
-      caseDetail.practitioners &&
-      some(caseDetail.practitioners, { userId: userId })
-    ) {
-      userHasAccessToCase = true;
+  if (userRole === 'respondent') {
+    const caseHasRespondent = !!caseDetail && !!caseDetail.respondent;
+    if (caseHasRespondent && caseDetail.respondent.userId === userId) {
+      showFileDocumentButton = true;
+      showFileFirstDocumentButton = false;
+      showRequestAccessToCaseButton = false;
+    } else if (caseHasRespondent && caseDetail.respondent.userId !== userId) {
+      userHasAccessToCase = false;
+      showFileDocumentButton = false;
+      showFileFirstDocumentButton = false;
+      showRequestAccessToCaseButton = true;
+    } else {
+      userHasAccessToCase = false;
+      showFileDocumentButton = false;
+      showFileFirstDocumentButton = true;
+      showRequestAccessToCaseButton = false;
     }
   }
 
@@ -65,6 +74,7 @@ export const caseDetailHelper = get => {
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showFileDocumentButton,
+    showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
