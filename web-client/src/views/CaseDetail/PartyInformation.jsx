@@ -76,7 +76,7 @@ export const PartyInformation = connect(
               <div className="tablet:grid-col-2" key={index}>
                 {index === 0 && (
                   <p className="label" id={'respondent-label'}>
-                    Petitioner Counsel
+                    Respondent Information
                   </p>
                 )}
                 <div>
