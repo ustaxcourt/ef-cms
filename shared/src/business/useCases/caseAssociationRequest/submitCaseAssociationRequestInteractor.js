@@ -13,7 +13,10 @@ exports.submitCaseAssociationRequest = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (user.role !== 'practitioner') {
+  const isPractitioner = user.role === 'practitioner';
+  const isRespondent = user.role === 'respondent';
+
+  if (!isPractitioner || !isRespondent) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -41,9 +44,15 @@ exports.submitCaseAssociationRequest = async ({
 
     const caseEntity = new Case(caseToUpdate);
 
-    caseEntity.attachPractitioner({
-      user,
-    });
+    if (isPractitioner) {
+      caseEntity.attachPractitioner({
+        user,
+      });
+    } else if (isRespondent) {
+      caseEntity.attachRespondent({
+        user,
+      });
+    }
 
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
