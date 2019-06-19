@@ -10,7 +10,7 @@ import React from 'react';
 import howToPrepareYourDocuments from '../pdfs/how-to-prepare-your-documents.pdf';
 
 export const DashboardPetitioner = connect(
-  { helper: state.dashboardPetitionerHelper, user: state.user },
+  { helper: state.dashboardExternalHelper, user: state.user },
   ({ helper, user }) => {
     return (
       <React.Fragment>

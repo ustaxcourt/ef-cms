@@ -1,11 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 import { CaseSearchBox } from './CaseSearchBox.jsx';
 
-export const CaseListPractitioner = connect(
+export const CaseListRespondent = connect(
   {
     caseList: state.formattedCases,
     helper: state.dashboardExternalHelper,
@@ -48,24 +47,10 @@ export const CaseListPractitioner = connect(
 
     const renderTitle = () => <h2>Your Cases</h2>;
 
-    const renderStartButton = () => (
-      <a
-        className={
-          'usa-button tablet-full-width ' +
-          (helper.showCaseList ? 'new-case' : '')
-        }
-        href="/start-a-case"
-        id="init-file-petition"
-      >
-        <FontAwesomeIcon icon="file" size="1x" /> File a Petition
-      </a>
-    );
-
     const renderEmptyState = () => (
       <React.Fragment>
         {renderTitle()}
         <p>You are not associated with any cases.</p>
-        <div className="button-box-container">{renderStartButton()}</div>
       </React.Fragment>
     );
 
@@ -75,9 +60,6 @@ export const CaseListPractitioner = connect(
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
               <h2>Your Cases</h2>
-            </div>
-            <div className="tablet:grid-col-6 mobile:grid-col-12 text-right">
-              {renderStartButton()}
             </div>
           </div>
         </div>
@@ -96,7 +78,7 @@ export const CaseListPractitioner = connect(
               {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
             </div>
             <div className="tablet:grid-col-4">
-              {helper.showCaseSearch && <CaseSearchBox />}
+              <CaseSearchBox />
             </div>
           </div>
         </div>
