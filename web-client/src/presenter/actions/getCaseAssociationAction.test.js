@@ -106,7 +106,7 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          respondent: { userId: '789' },
+          respondents: [{ userId: '789' }],
         },
         user: {
           role: 'respondent',
