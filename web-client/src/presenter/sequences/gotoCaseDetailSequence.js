@@ -23,14 +23,22 @@ export const gotoCaseDetailSequence = [
   getUserRoleAction,
   {
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
-    petitioner: [setCurrentPageAction('CaseDetail')],
+    petitioner: [
+      getCaseAssociationAction,
+      setCaseAssociationAction,
+      setCurrentPageAction('CaseDetail'),
+    ],
     petitionsclerk: [setCurrentPageAction('CaseDetailInternal')],
     practitioner: [
       getCaseAssociationAction,
       setCaseAssociationAction,
       setCurrentPageAction('CaseDetail'),
     ],
-    respondent: [setCurrentPageAction('CaseDetail')],
+    respondent: [
+      getCaseAssociationAction,
+      setCaseAssociationAction,
+      setCurrentPageAction('CaseDetail'),
+    ],
     seniorattorney: [setCurrentPageAction('CaseDetailInternal')],
   },
 ];
