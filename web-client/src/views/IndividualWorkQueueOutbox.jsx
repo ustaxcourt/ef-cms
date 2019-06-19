@@ -116,7 +116,9 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {workQueueHelper.showServedColumn && (
-                  <td className="message-queue-row">{item.received}</td>
+                  <td className="message-queue-row">
+                    {item.completedAtFormatted}
+                  </td>
                 )}
               </tr>
             </tbody>
