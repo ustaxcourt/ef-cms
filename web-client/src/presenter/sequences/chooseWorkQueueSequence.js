@@ -38,7 +38,7 @@ export const chooseWorkQueueSequence = [
     sectionbatched: [
       parallel([
         [getNotificationsAction, setNotificationsAction],
-        [getSentWorkItemsForUserAction, setWorkItemsAction],
+        [getSentWorkItemsForSectionAction, setWorkItemsAction],
       ]),
     ],
     sectioninbox: [
