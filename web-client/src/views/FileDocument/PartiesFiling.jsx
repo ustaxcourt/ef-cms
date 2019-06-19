@@ -62,31 +62,26 @@ export const PartiesFiling = connect(
                   </label>
                 </div>
               )}
-              {fileDocumentHelper.showPrimaryParty && (
-                <div className="usa-checkbox">
-                  <input
-                    aria-describedby="who-legend"
-                    checked={form.partyPrimary || false}
-                    className="usa-checkbox__input"
-                    id="party-primary"
-                    name="partyPrimary"
-                    type="checkbox"
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="party-primary"
-                  >
-                    {fileDocumentHelper.partyPrimaryLabel}
-                  </label>
-                </div>
-              )}
+              <div className="usa-checkbox">
+                <input
+                  aria-describedby="who-legend"
+                  checked={form.partyPrimary || false}
+                  className="usa-checkbox__input"
+                  id="party-primary"
+                  name="partyPrimary"
+                  type="checkbox"
+                  onChange={e => {
+                    updateFileDocumentWizardFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
+                <label className="usa-checkbox__label" htmlFor="party-primary">
+                  {fileDocumentHelper.partyPrimaryLabel}
+                </label>
+              </div>
               {fileDocumentHelper.showSecondaryParty && (
                 <div className="usa-checkbox">
                   <input
