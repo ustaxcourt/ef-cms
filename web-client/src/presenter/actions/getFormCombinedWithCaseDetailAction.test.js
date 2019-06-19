@@ -1,14 +1,36 @@
 import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
 import { applicationContext } from '../../applicationContext';
+import { castToISO } from './getFormCombinedWithCaseDetailAction';
 import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
-const modules = {
-  presenter,
-};
-
+const modules = { presenter };
 presenter.providers.applicationContext = applicationContext;
+
+describe('castToISO', () => {
+  it('returns an iso string when the date string passed in is valid', () => {
+    expect(castToISO(applicationContext, '2010-10-10')).toEqual(
+      '2010-10-10T04:00:00.000Z',
+    );
+  });
+
+  it('returns an iso string when the date string of 2009-01-01 passed in is valid', () => {
+    expect(castToISO(applicationContext, '2009-01-01')).toEqual(
+      '2009-01-01T05:00:00.000Z',
+    );
+  });
+
+  it('returns null when the date string passed in is invalid', () => {
+    expect(castToISO(applicationContext, 'x-10-10')).toEqual('-1');
+  });
+
+  it('returns the same iso string passed in when an iso string is passed in', () => {
+    expect(castToISO(applicationContext, '1990-01-01T05:00:00.000Z')).toEqual(
+      '1990-01-01T05:00:00.000Z',
+    );
+  });
+});
 
 describe('getFormCombinedWithCaseDetailAction', () => {
   it('should return the expected combined caseDetail after run', async () => {
@@ -102,8 +124,8 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           payGovMonth: '01',
           payGovYear: 'x',
           receivedAtDay: '01',
-          receivedAtMonth: 'x',
-          receivedAtYear: '2019',
+          receivedAtMonth: '01',
+          receivedAtYear: 'x',
         },
       },
     });
@@ -134,6 +156,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   it('should not delete the date if year is missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
+
       state: {
         caseDetail: {
           irsNoticeDate: '2018-12-24T05:00:00.000Z',
@@ -170,6 +193,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   it('should not delete the date if year and month are missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
+
       state: {
         caseDetail: {
           irsNoticeDate: null,
@@ -207,6 +231,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
   it('clears the irsNoticeDate and payGovDate and receivedAt to null if it was once defined and the user clears the fields', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
+
       state: {
         caseDetail: {
           irsNoticeDate: '2018-12-24T05:00:00.000Z',
@@ -237,9 +262,10 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output.combinedCaseDetailWithForm.receivedAt).toEqual(null);
   });
 
-  it('deletes the payGovDate if the user cleared the form', async () => {
+  it('delets the payGovDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
+
       state: {
         caseDetail: {
           // irsNoticeDate: '2018-12-24T05:00:00.000Z',
