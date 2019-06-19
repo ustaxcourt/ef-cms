@@ -10,7 +10,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: true,
+          isAssociated: true,
         },
         user: {
           role: 'practitioner',
@@ -28,7 +28,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: false,
+          isAssociated: false,
         },
         user: {
           role: 'practitioner',
@@ -45,7 +45,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: true,
+          isAssociated: true,
         },
         user: {
           role: 'petitioner',
@@ -62,7 +62,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: false,
+          isAssociated: false,
           pendingAssociation: true,
         },
         user: {
@@ -80,7 +80,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: false,
+          isAssociated: false,
         },
         user: {
           role: 'practitioner',
@@ -97,7 +97,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: true,
+          isAssociated: true,
         },
         user: {
           role: 'practitioner',
@@ -115,7 +115,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: false,
+          isAssociated: false,
         },
         user: {
           role: 'petitioner',
@@ -132,7 +132,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: true,
+          isAssociated: true,
         },
         user: {
           role: 'petitioner',
@@ -148,7 +148,7 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: { associated: true },
+        screenMetadata: { isAssociated: true },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -164,7 +164,7 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '234' }] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: { associated: false },
+        screenMetadata: { isAssociated: false },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -181,7 +181,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: true,
+          isAssociated: true,
         },
         user: {
           role: 'respondent',
@@ -202,7 +202,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: false,
+          isAssociated: false,
         },
         user: {
           role: 'respondent',
@@ -223,7 +223,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          associated: false,
+          isAssociated: false,
         },
         user: {
           role: 'respondent',
