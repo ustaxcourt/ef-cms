@@ -17,7 +17,7 @@ export const PartiesRepresentingReadOnly = connect(
             Parties You’re Representing
           </h2>
           <button
-            className="link push-right usa-button usa-button--unstyled"
+            className="usa-button usa-button--unstyled margin-left-205"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'RequestAccess' })}
           >

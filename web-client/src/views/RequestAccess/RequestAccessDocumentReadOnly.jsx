@@ -15,7 +15,7 @@ export const RequestAccessDocumentReadOnly = connect(
         <div>
           <h2 className="header-with-link-button">{form.documentTitle}</h2>
           <button
-            className="link push-right usa-button usa-button--unstyled"
+            className="usa-button usa-button--unstyled margin-left-205"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'RequestAccess' })}
           >
