@@ -147,21 +147,19 @@ describe('fileDocumentHelper', () => {
   it('shows Myself as party primary label for user role petitioner', async () => {
     state.user = { role: 'petitioner' };
     const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showPrimaryParty).toEqual(true);
     expect(result.partyPrimaryLabel).toEqual('Myself');
   });
 
   it('shows primary contact name as party primary label for user role practitioner', async () => {
     state.user = { role: 'practitioner' };
     const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showPrimaryParty).toEqual(true);
     expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
   });
 
-  it('does not show primary contact option for user role respondent', async () => {
+  it('shows primary contact name as party primary label for user role respondent', async () => {
     state.user = { role: 'respondent' };
     const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showPrimaryParty).toEqual(false);
+    expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
   });
 
   describe('supporting document', () => {

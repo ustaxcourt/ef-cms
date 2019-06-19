@@ -69,4 +69,16 @@ describe('requestAccessHelper', () => {
     const result = await runCompute(requestAccessHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
+
+  it('returns correct number of document options for user role practitioner', async () => {
+    state.user = { role: 'practitioner' };
+    const result = await runCompute(requestAccessHelper, { state });
+    expect(result.documents.length).toEqual(6);
+  });
+
+  it('returns correct number of document options for user role respondent', async () => {
+    state.user = { role: 'respondent' };
+    const result = await runCompute(requestAccessHelper, { state });
+    expect(result.documents.length).toEqual(2);
+  });
 });
