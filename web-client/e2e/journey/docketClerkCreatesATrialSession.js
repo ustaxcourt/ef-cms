@@ -10,7 +10,7 @@ export default (test, overrides = {}) => {
       maxCases: 'Enter the maximum number of cases allowed for this session.',
       sessionType: 'Session type is required.',
       startDate: 'Date must be in correct format.',
-      term: 'Term is required.',
+      term: 'Term session is not valid.',
       termYear: 'Term year is required.',
       trialLocation: 'Trial Location is required.',
     });
@@ -27,7 +27,7 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'month',
-      value: '12',
+      value: '8',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -43,6 +43,19 @@ export default (test, overrides = {}) => {
     await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || 'Judge Cohen',
+    });
+
+    await test.runSequence('validateTrialSessionSequence');
+
+    expect(test.getState('validationErrors')).toEqual({
+      startDate: 'Term session is not valid.',
+      term: 'Term session is not valid.',
+      trialLocation: 'Trial Location is required.',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'month',
+      value: '12',
     });
 
     await test.runSequence('validateTrialSessionSequence');
