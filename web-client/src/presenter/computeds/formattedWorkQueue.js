@@ -1,3 +1,9 @@
+import {
+  DOCKET_SECTION,
+  IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+  getSectionForRole,
+} from '../../../../shared/src/business/entities/WorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
 
@@ -114,6 +120,78 @@ export const formatWorkItem = (
   return result;
 };
 
+export const filterWorkItems = ({
+  workQueueToDisplay,
+  workQueueIsInternal,
+  user,
+}) => {
+  const { box, queue } = workQueueToDisplay;
+  const userSection = getSectionForRole(user.role);
+
+  return item => {
+    let willShow;
+    const isBatched = item.caseStatus === 'Batched for IRS';
+    const isAssignedToUser = item.assigneeId === user.userId;
+
+    if (box === 'inbox') {
+      const showForCurrentQueue = queue === 'my' ? isAssignedToUser : true;
+
+      willShow =
+        !item.completedAt &&
+        item.isInternal === workQueueIsInternal &&
+        item.section === userSection &&
+        showForCurrentQueue;
+      if (willShow) {
+        console.log(isAssignedToUser, item);
+      }
+    } else if (box === 'outbox') {
+      if (workQueueIsInternal) {
+        if (item.isInternal) {
+          willShow = true;
+        } else {
+          willShow = false;
+        }
+      } else {
+        if (isBatched) {
+          willShow = false;
+        } else {
+          if (!item.isInternal) {
+            willShow = true;
+          } else {
+            willShow = false;
+          }
+        }
+      }
+    } else if (box === 'batched') {
+      if (isBatched) {
+        willShow = true;
+      } else {
+        willShow = false;
+      }
+    } else if (box === 'outbox') {
+      if (workQueueIsInternal) {
+        if (item.isInternal) {
+          willShow = true;
+        } else {
+          willShow = false;
+        }
+      } else {
+        if (isBatched) {
+          willShow = false;
+        } else {
+          if (!item.isInternal) {
+            willShow = true;
+          } else {
+            willShow = false;
+          }
+        }
+      }
+    }
+
+    return willShow;
+  };
+};
+
 export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
   const box = get(state.workQueueToDisplay.box);
@@ -121,13 +199,16 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
-    .filter(item =>
-      box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
-    )
-    .filter(item =>
-      box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
-    )
-    .filter(item => item.isInternal === isInternal)
+    .filter(filterWorkItems)
+    // .filter(item =>
+    //   box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
+    // )
+    // .filter(item =>
+    //   isInternal !== true && box === 'outbox'
+    //     ? item.caseStatus !== 'Batched for IRS'
+    //     : true,
+    // )
+    // .filter(item => item.isInternal === isInternal)
     .map(item =>
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
