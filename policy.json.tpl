@@ -78,10 +78,7 @@
         "cloudfront:GetDistribution",
         "cloudfront:TagResource",
         "cloudfront:CreateDistribution",
-        "cloudfront:ListTagsForResource",
-        "cloudfront:UpdateDistribution",
-        "cloudfront:CreateCloudFrontOriginAccessIdentity",
-        "cloudfront:GetCloudFrontOriginAccessIdentity"
+        "cloudfront:ListTagsForResource"
       ],
       "Resource": "*"
     },
