@@ -1,3 +1,89 @@
+import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
+import { filterWorkItems } from './formattedWorkQueue';
+
+const MY_INBOX = {
+  workQueueIsInternal: true,
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+};
+const MY_BATCHED = {
+  workQueueIsInternal: true,
+  workQueueToDisplay: { box: 'batched', queue: 'my' },
+};
+const MY_OUTBOX = {
+  workQueueIsInternal: true,
+  workQueueToDisplay: { box: 'outbox', queue: 'my' },
+};
+const SECTION_INBOX = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'inbox', queue: 'section' },
+};
+const SECTION_BATCHED = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'batched', queue: 'section' },
+};
+const SECTION_OUTBOX = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'outbox', queue: 'section' },
+};
+
+const petitionsClerk1 = {
+  role: 'petitionsclerk',
+  userId: 'p1',
+};
+
+const petitionsClerk2 = {
+  role: 'petitionsclerk',
+  userId: 'p2',
+};
+
+const docketClerk1 = {
+  role: 'docketclerk',
+  userId: 'd1',
+};
+
+const docketClerk2 = {
+  role: 'docketclerk',
+  userId: 'd2',
+};
+
+const generateWorkItem = data => {
+  const baseWorkItem = {
+    assigneeId: null,
+    assigneeName: null,
+    caseId: '123',
+    caseStatus: 'New',
+    createdAt: '2018-12-27T18:05:54.166Z',
+    docketNumber: '100-01',
+    document: {
+      createdAt: '2018-12-27T18:05:54.164Z',
+      documentId: '456',
+      documentType: 'Answer',
+    },
+    messages: [
+      {
+        createdAt: '2018-12-27T18:05:54.164Z',
+        from: 'Test Respondent',
+        fromUserId: 'respondent',
+        message: 'Answer filed by respondent is ready for review',
+        messageId: '789',
+      },
+      {
+        createdAt: '2018-12-27T18:05:54.164Z',
+        from: 'Test Docketclerk',
+        fromUserId: 'docketclerk',
+        message: '012',
+        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
+      },
+    ],
+    section: 'docket',
+    sentBy: 'respondent',
+    updatedAt: '2018-12-27T18:05:54.164Z',
+    workItemId: 'abc',
+  };
+
+  return { ...baseWorkItem, ...data };
+};
+
 // My Messages Inbox
 // - isInternal === true
 // - item.assigneeId == user.userId
@@ -57,88 +143,6 @@
 // - isInternal === false
 // - !!item.completedAt
 // - item.section === 'docket'
-
-import * as CONSTANTS from '/shared/src/business/entities/WorkQueue';
-import { filterWorkItems } from './formattedWorkQueue';
-
-const MY_INBOX = {
-  workQueueIsInternal: true,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
-};
-const MY_BATCHED = {
-  workQueueIsInternal: true,
-  workQueueToDisplay: { box: 'batched', queue: 'my' },
-};
-const MY_OUTBOX = {
-  workQueueIsInternal: true,
-  workQueueToDisplay: { box: 'outbox', queue: 'my' },
-};
-const SECTION_INBOX = {
-  workQueueIsInternal: false,
-  workQueueToDisplay: { box: 'inbox', queue: 'section' },
-};
-const SECTION_BATCHED = {
-  workQueueIsInternal: false,
-  workQueueToDisplay: { box: 'batched', queue: 'section' },
-};
-const SECTION_OUTBOX = {
-  workQueueIsInternal: false,
-  workQueueToDisplay: { box: 'outbox', queue: 'section' },
-};
-
-const petitionsClerk1 = {
-  userId: 'p1',
-};
-
-const petitionsClerk2 = {
-  userId: 'p2',
-};
-
-const docketClerk1 = {
-  userId: 'd1',
-};
-
-const docketClerk2 = {
-  userId: 'd2',
-};
-
-const generateWorkItem = data => {
-  const baseWorkItem = {
-    assigneeId: null,
-    assigneeName: null,
-    caseId: '123',
-    caseStatus: 'New',
-    createdAt: '2018-12-27T18:05:54.166Z',
-    docketNumber: '100-01',
-    document: {
-      createdAt: '2018-12-27T18:05:54.164Z',
-      documentId: '456',
-      documentType: 'Answer',
-    },
-    messages: [
-      {
-        createdAt: '2018-12-27T18:05:54.164Z',
-        from: 'Test Respondent',
-        fromUserId: 'respondent',
-        message: 'Answer filed by respondent is ready for review',
-        messageId: '789',
-      },
-      {
-        createdAt: '2018-12-27T18:05:54.164Z',
-        from: 'Test Docketclerk',
-        fromUserId: 'docketclerk',
-        message: '012',
-        messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
-      },
-    ],
-    section: 'docket',
-    sentBy: 'respondent',
-    updatedAt: '2018-12-27T18:05:54.164Z',
-    workItemId: 'abc',
-  };
-
-  return { ...baseWorkItem, ...data };
-};
 
 describe('filterWorkItems', () => {
   // Petitions
