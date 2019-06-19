@@ -10,7 +10,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          isAssociated: true,
+          associated: true,
         },
         user: {
           role: 'practitioner',
@@ -28,7 +28,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          notAssociated: true,
+          associated: false,
         },
         user: {
           role: 'practitioner',
@@ -38,12 +38,15 @@ describe('case detail computed', () => {
     expect(result.showFileDocumentButton).toEqual(false);
   });
 
-  it('should set showFileDocumentButton to true if current page is CaseDetail and user role is not practitioner', () => {
+  it('should set showFileDocumentButton to true if current page is CaseDetail, user role is petitioner, and the user is associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: true,
+        },
         user: {
           role: 'petitioner',
         },
@@ -59,6 +62,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
+          associated: false,
           pendingAssociation: true,
         },
         user: {
@@ -76,7 +80,7 @@ describe('case detail computed', () => {
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
-          notAssociated: true,
+          associated: false,
         },
         user: {
           role: 'practitioner',
@@ -92,6 +96,9 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: true,
+        },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -101,12 +108,15 @@ describe('case detail computed', () => {
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
-  it('should set showRequestAccessToCaseButton to false if user role is not practitioner', () => {
+  it('should set showRequestAccessToCaseButton to false if user role is petitioner and user is not associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: false,
+        },
         user: {
           role: 'petitioner',
         },
@@ -115,12 +125,15 @@ describe('case detail computed', () => {
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
-  it('should set userHasAccessToCase to true if user role is not practitioner', () => {
+  it('should set userHasAccessToCase to true if user role is petitioner and user is associated with case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: true,
+        },
         user: {
           role: 'petitioner',
         },
@@ -135,7 +148,7 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: { isAssociated: false },
+        screenMetadata: { associated: true },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -151,7 +164,7 @@ describe('case detail computed', () => {
         caseDetail: { practitioners: [{ userId: '234' }] },
         currentPage: 'CaseDetail',
         form: {},
-        screenMetadata: { notAssociated: true },
+        screenMetadata: { associated: false },
         user: {
           role: 'practitioner',
           userId: '123',
@@ -167,6 +180,9 @@ describe('case detail computed', () => {
         caseDetail: { respondent: { userId: '789' } },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: true,
+        },
         user: {
           role: 'respondent',
           userId: '789',
@@ -185,6 +201,9 @@ describe('case detail computed', () => {
         caseDetail: { respondent: { userId: '123' } },
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: false,
+        },
         user: {
           role: 'respondent',
           userId: '789',
@@ -203,6 +222,9 @@ describe('case detail computed', () => {
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        screenMetadata: {
+          associated: false,
+        },
         user: {
           role: 'respondent',
           userId: '789',
@@ -256,5 +278,35 @@ describe('case detail computed', () => {
       },
     });
     expect(result.showAddDocketEntryButton).toEqual(false);
+  });
+
+  it('should show payment record and not payment options if case is paid', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { payGovId: '123' },
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showPaymentRecord).toEqual(true);
+    expect(result.showPaymentOptions).toEqual(false);
+  });
+
+  it('should not show payment record and show payment options if case is not paid', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showPaymentRecord).toBeUndefined();
+    expect(result.showPaymentOptions).toEqual(true);
   });
 });
