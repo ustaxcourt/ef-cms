@@ -26,7 +26,7 @@ export const RequestAccessDocumentReadOnly = connect(
 
         <div className="blue-container no-margin-last-child">
           <div className="usa-form-group">
-            <label htmlFor="primary-filing" className="usa-label">
+            <label className="usa-label" htmlFor="primary-filing">
               {form.documentTitle}
             </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -35,7 +35,7 @@ export const RequestAccessDocumentReadOnly = connect(
 
           {form.hasSupportingDocuments && (
             <div className="usa-form-group">
-              <label htmlFor="supporting-filing" className="usa-label">
+              <label className="usa-label" htmlFor="supporting-filing">
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -45,7 +45,7 @@ export const RequestAccessDocumentReadOnly = connect(
 
           {requestAccessHelper.showFilingIncludes && (
             <div className="usa-form-group">
-              <label htmlFor="filing-includes" className="usa-label">
+              <label className="usa-label" htmlFor="filing-includes">
                 Filing Includes
               </label>
               <ul className="ustc-unstyled-list without-margins">
@@ -66,7 +66,7 @@ export const RequestAccessDocumentReadOnly = connect(
 
           {requestAccessHelper.showFilingNotIncludes && (
             <div className="usa-form-group">
-              <label htmlFor="filing-not-includes" className="usa-label">
+              <label className="usa-label" htmlFor="filing-not-includes">
                 Filing Does Not Include
               </label>
               <ul className="ustc-unstyled-list without-margins">
@@ -84,7 +84,7 @@ export const RequestAccessDocumentReadOnly = connect(
 
           {requestAccessHelper.documentWithObjections && (
             <div className="usa-form-group">
-              <label htmlFor="objections" className="usa-label">
+              <label className="usa-label" htmlFor="objections">
                 Are There Any Objections to This Document?
               </label>
               {form.objections}
