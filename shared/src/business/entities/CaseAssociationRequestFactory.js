@@ -14,7 +14,6 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
  */
 function CaseAssociationRequestFactory(rawProps) {
   let entityConstructor = function(rawProps) {
-    rawProps.partyPractitioner = true;
     Object.assign(this, {
       attachments: rawProps.attachments,
       certificateOfService: rawProps.certificateOfService,
@@ -27,6 +26,7 @@ function CaseAssociationRequestFactory(rawProps) {
       hasSupportingDocuments: rawProps.hasSupportingDocuments,
       objections: rawProps.objections,
       partyPractitioner: rawProps.partyPractitioner,
+      partyRespondent: rawProps.partyRespondent,
       primaryDocumentFile: rawProps.primaryDocumentFile,
       representingPrimary: rawProps.representingPrimary,
       representingSecondary: rawProps.representingSecondary,
@@ -83,20 +83,24 @@ function CaseAssociationRequestFactory(rawProps) {
     contactPrimaryName,
     contactSecondaryName,
   ) {
-    const petitionerNamesArray = [];
-    if (rawProps.representingPrimary) {
-      petitionerNamesArray.push(contactPrimaryName);
-    }
-    if (rawProps.representingSecondary) {
-      petitionerNamesArray.push(contactSecondaryName);
-    }
     let petitionerNames;
-    if (petitionerNamesArray.length > 1) {
-      petitionerNames = 'Petrs. ';
+    if (rawProps.partyRespondent) {
+      petitionerNames = 'Respondent';
     } else {
-      petitionerNames = 'Petr. ';
+      const petitionerNamesArray = [];
+      if (rawProps.representingPrimary) {
+        petitionerNamesArray.push(contactPrimaryName);
+      }
+      if (rawProps.representingSecondary) {
+        petitionerNamesArray.push(contactSecondaryName);
+      }
+      if (petitionerNamesArray.length > 1) {
+        petitionerNames = 'Petrs. ';
+      } else {
+        petitionerNames = 'Petr. ';
+      }
+      petitionerNames += petitionerNamesArray.join(' & ');
     }
-    petitionerNames += petitionerNamesArray.join(' & ');
 
     if (documentWithConcatentatedPetitionerNames) {
       return replaceBracketed(rawProps.documentTitleTemplate, petitionerNames);
@@ -218,7 +222,8 @@ function CaseAssociationRequestFactory(rawProps) {
 
   if (
     rawProps.representingPrimary !== true &&
-    rawProps.representingSecondary !== true
+    rawProps.representingSecondary !== true &&
+    rawProps.partyRespondent !== true
   ) {
     makeRequired('representingPrimary');
   }
