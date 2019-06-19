@@ -46,8 +46,8 @@ export const CaseDetail = connect(
                 )}
                 {caseHelper.showPendingAccessToCaseButton && (
                   <span
-                    className="usa-tag push-right margin-right-0 padding-x-3"
                     aria-label="Request for Access Pending"
+                    className="usa-tag push-right margin-right-0 padding-x-3"
                   >
                     <span aria-hidden="true">Request for Access Pending</span>
                   </span>
@@ -70,10 +70,10 @@ export const CaseDetail = connect(
           <div className="only-small-screens">
             <div className="margin-bottom-3">
               <select
+                aria-label="additional case info"
                 className="usa-select"
                 id="mobile-document-detail-tab-selector"
                 name="partyType"
-                aria-label="additional case info"
                 value={caseHelper.documentDetailTab}
                 onChange={e => {
                   setDocumentDetailTabSequence({
@@ -88,20 +88,20 @@ export const CaseDetail = connect(
           </div>
           <div className="mobile-document-detail-tabs">
             <Tabs
-              className="classic-horizontal-header3 tab-border"
               bind="documentDetail.tab"
+              className="classic-horizontal-header3 tab-border"
             >
               <Tab
+                id="tab-docket-record"
                 tabName="docketRecord"
                 title="Docket Record"
-                id="tab-docket-record"
               >
                 <DocketRecord />
               </Tab>
               <Tab
+                id="tab-case-info"
                 tabName="caseInfo"
                 title="Case Information"
-                id="tab-case-info"
               >
                 {caseHelper.showCaseInformationPublic && (
                   <CaseInformationPublic />

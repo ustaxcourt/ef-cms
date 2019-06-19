@@ -79,9 +79,9 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <a
-          tabIndex="0"
           className="usa-skipnav"
           href="#main-content"
+          tabIndex="0"
           onClick={this.focusMain}
         >
           Skip to main content
