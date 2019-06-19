@@ -17,7 +17,7 @@ export const PartiesRepresentingReadOnly = connect(
             Parties You’re Representing
           </h2>
           <button
-            className="link push-right usa-button usa-button--unstyled"
+            className="usa-button usa-button--unstyled margin-left-205"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'RequestAccess' })}
           >
@@ -27,7 +27,7 @@ export const PartiesRepresentingReadOnly = connect(
         </div>
         <div className="blue-container no-margin-last-child">
           <div className="usa-form-group">
-            <label htmlFor="filing-parties" className="usa-label">
+            <label className="usa-label" htmlFor="filing-parties">
               Parties
             </label>
             <ul className="ustc-unstyled-list without-margins">

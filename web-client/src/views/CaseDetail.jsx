@@ -56,7 +56,7 @@ export const CaseDetail = connect(
                 {caseHelper.showFileFirstDocumentButton && (
                   <a
                     className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${caseDetail.docketNumber}/file-document`}
+                    href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
                     id="button-first-irs-document"
                   >
                     <FontAwesomeIcon icon="file" size="1x" /> File First IRS
