@@ -16,7 +16,7 @@ exports.submitCaseAssociationRequest = async ({
   const isPractitioner = user.role === 'practitioner';
   const isRespondent = user.role === 'respondent';
 
-  if (!isPractitioner || !isRespondent) {
+  if (!isPractitioner && !isRespondent) {
     throw new UnauthorizedError('Unauthorized');
   }
 
