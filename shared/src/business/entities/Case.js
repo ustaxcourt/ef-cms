@@ -105,7 +105,7 @@ function Case(rawCase) {
     preferredTrialCity: rawCase.preferredTrialCity,
     procedureType: rawCase.procedureType,
     receivedAt: rawCase.receivedAt,
-    respondent: rawCase.respondent,
+    respondents: rawCase.respondents || [],
     status: rawCase.status || statusMap.new,
     trialDate: rawCase.trialDate,
     trialJudge: rawCase.trialJudge,
@@ -250,10 +250,11 @@ joiValidationDecorator(
       .max('now')
       .optional()
       .allow(null),
-    respondent: joi
-      .object()
-      .allow(null)
-      .optional(),
+    respondents: joi.array().items(
+      joi.object().keys({
+        respondentId: joi.string().uuid(uuidVersions),
+      }),
+    ),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
@@ -413,7 +414,7 @@ Case.prototype.attachRespondent = function({ user }) {
     respondentId: user.userId,
   };
 
-  this.respondent = respondent;
+  this.respondents.push(respondent);
 };
 
 Case.prototype.attachPractitioner = function({ user }) {

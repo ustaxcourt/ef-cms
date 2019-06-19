@@ -613,8 +613,8 @@ describe('Case entity', () => {
           userId: 'respondent',
         },
       });
-      expect(caseToVerify.respondent).not.toBeNull();
-      expect(caseToVerify.respondent.userId).toEqual('respondent');
+      expect(caseToVerify.respondents).not.toBeNull();
+      expect(caseToVerify.respondents[0].userId).toEqual('respondent');
     });
   });
 

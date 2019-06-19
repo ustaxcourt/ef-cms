@@ -99,16 +99,18 @@
         "userId": "respondent"
       }
     ],
-    "respondent": {
-      "role": "respondent",
-      "name": "Test Respondent",
-      "custom:role": "respondent",
-      "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-      "iat": 1551480838,
-      "respondentId": "respondent",
-      "email": "respondent",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
-    },
+    "respondents": [
+      {
+        "role": "respondent",
+        "name": "Test Respondent",
+        "custom:role": "respondent",
+        "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+        "iat": 1551480838,
+        "respondentId": "respondent",
+        "email": "respondent",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
+      }
+    ],
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "currentVersion": "0",
