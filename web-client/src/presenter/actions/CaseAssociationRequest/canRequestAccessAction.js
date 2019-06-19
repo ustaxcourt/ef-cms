@@ -9,9 +9,9 @@ import { state } from 'cerebral';
  * @returns {object} the list of section work items
  */
 export const canRequestAccessAction = ({ get, props, path }) => {
-  const associated = props.associated;
+  const isAssociated = props.isAssociated;
   const caseId = get(state.caseDetail.caseId);
-  if (!associated) {
+  if (!isAssociated) {
     return path['proceed']();
   } else {
     return path['unauthorized']({ caseId });

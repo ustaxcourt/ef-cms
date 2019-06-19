@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.caseDetail
  */
 export const setCaseAssociationAction = ({ store, props }) => {
-  store.set(state.screenMetadata.associated, props.associated);
+  store.set(state.screenMetadata.isAssociated, props.isAssociated);
   store.set(state.screenMetadata.pendingAssociation, props.pendingAssociation);
 };

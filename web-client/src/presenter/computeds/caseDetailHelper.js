@@ -14,7 +14,7 @@ export const caseDetailHelper = get => {
     userRole,
   );
 
-  const userAssociatedWithCase = get(state.screenMetadata.associated);
+  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);

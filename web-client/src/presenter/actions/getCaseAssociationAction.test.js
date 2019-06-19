@@ -28,7 +28,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: true,
+      isAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -57,7 +57,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: false,
+      isAssociated: false,
       pendingAssociation: true,
     });
   });
@@ -86,7 +86,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: false,
+      isAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -115,7 +115,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: true,
+      isAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -144,7 +144,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: false,
+      isAssociated: false,
       pendingAssociation: false,
     });
   });
@@ -173,7 +173,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: true,
+      isAssociated: true,
       pendingAssociation: false,
     });
   });
@@ -202,7 +202,7 @@ describe('getCaseAssociation', () => {
       },
     });
     expect(results.output).toEqual({
-      associated: false,
+      isAssociated: false,
       pendingAssociation: false,
     });
   });

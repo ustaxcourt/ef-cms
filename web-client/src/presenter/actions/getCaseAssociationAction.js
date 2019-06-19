@@ -12,7 +12,7 @@ import { state } from 'cerebral';
  */
 export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   const userRole = get(state.user.role);
-  let associated = false;
+  let isAssociated = false;
   let pendingAssociation = false;
 
   if (userRole === 'practitioner') {
@@ -20,9 +20,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const userId = get(state.user.userId);
     const caseId = get(state.caseDetail.caseId);
 
-    associated = some(caseDetailPractitioners, { userId });
+    isAssociated = some(caseDetailPractitioners, { userId });
 
-    if (!associated) {
+    if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
         .verifyPendingCaseForUser({
@@ -34,12 +34,13 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   } else if (userRole === 'respondent') {
     const caseDetailRespondent = get(state.caseDetail.respondent);
     const userId = get(state.user.userId);
-    associated = caseDetailRespondent && caseDetailRespondent.userId === userId;
+    isAssociated =
+      caseDetailRespondent && caseDetailRespondent.userId === userId;
   } else if (userRole === 'petitioner') {
     const caseUserId = get(state.caseDetail.userId);
     const userId = get(state.user.userId);
-    associated = caseUserId === userId;
+    isAssociated = caseUserId === userId;
   }
 
-  return { associated, pendingAssociation };
+  return { isAssociated, pendingAssociation };
 };
