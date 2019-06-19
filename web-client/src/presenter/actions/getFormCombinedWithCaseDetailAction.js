@@ -122,6 +122,7 @@ export const getFormCombinedWithCaseDetailAction = ({
   }
 
   const conditionalYear = year => {
+    if (year == '') return null;
     if (/^\d{4}$/.test(year)) {
       return applicationContext
         .getUtilities()

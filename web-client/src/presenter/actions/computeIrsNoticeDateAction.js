@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  */
 export const computeIrsNoticeDateAction = ({
-  applicationContext,
+  // applicationContext,
   get,
   store,
 }) => {
@@ -26,10 +26,11 @@ export const computeIrsNoticeDateAction = ({
 
     store.set(
       state.form.irsNoticeDate,
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(form.irsNoticeDate)
-        .toISOString(),
+      form.irsNoticeDate,
+      // applicationContext
+      //   .getUtilities()
+      //   .prepareDateFromString(form.irsNoticeDate)
+      //   .toISOString(),
     );
   } else {
     store.set(state.form.irsNoticeDate, undefined);
