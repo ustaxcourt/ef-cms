@@ -91,14 +91,14 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     //set the work item as completed
     initializeCaseWorkItem.setAsSentToIRS();
 
+    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+      applicationContext,
+      workItem: initializeCaseWorkItem,
+    });
+
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-    await applicationContext.getPersistenceGateway().updateWorkItem({
-      applicationContext,
-      workItemToUpdate: initializeCaseWorkItem,
     });
 
     zips = zips.concat({
