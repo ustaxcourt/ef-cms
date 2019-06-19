@@ -73,27 +73,27 @@ export const StartCase = connect(
           </div>
         </div>
         <section
-          id="ustc-start-a-case-form"
           className="usa-section grid-container"
+          id="ustc-start-a-case-form"
         >
           <form
-            role="form"
-            aria-labelledby="start-case-header"
             noValidate
+            aria-labelledby="start-case-header"
+            className="usa-form maxw-none"
+            role="form"
             onSubmit={e => {
               e.preventDefault();
               submitFilePetitionSequence();
             }}
-            className="usa-form maxw-none"
           >
             {showModal === 'FormCancelModalDialogComponent' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
             <ErrorNotification />
             <h1
-              tabIndex="-1"
-              id="start-case-header"
               className="margin-bottom-05"
+              id="start-case-header"
+              tabIndex="-1"
             >
               Start a Case
             </h1>
@@ -119,13 +119,13 @@ export const StartCase = connect(
                     }`}
                   >
                     <label
-                      htmlFor="petition-file"
                       className={
                         'usa-label ustc-upload-petition with-hint ' +
                         (startCaseHelper.showPetitionFileValid
                           ? 'validated'
                           : '')
                       }
+                      htmlFor="petition-file"
                     >
                       Upload Your Petition{' '}
                       <span className="success-message">
@@ -137,12 +137,12 @@ export const StartCase = connect(
                       {constants.MAX_FILE_SIZE_MB}MB.
                     </span>
                     <input
-                      id="petition-file"
-                      type="file"
                       accept=".pdf"
                       aria-describedby="petition-hint"
-                      name="petitionFile"
                       className="usa-input"
+                      id="petition-file"
+                      name="petitionFile"
+                      type="file"
                       onChange={e => {
                         limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                           updatePetitionValueSequence({
@@ -158,12 +158,12 @@ export const StartCase = connect(
                       }}
                     />
                     <Text
-                      className="usa-error-message"
                       bind="validationErrors.petitionFile"
+                      className="usa-error-message"
                     />
                     <Text
-                      className="usa-error-message"
                       bind="validationErrors.petitionFileSize"
+                      className="usa-error-message"
                     />
                   </div>
                 </div>
@@ -180,11 +180,11 @@ export const StartCase = connect(
                 }`}
               >
                 <label
-                  htmlFor="stin-file"
                   className={
                     'usa-label ustc-upload-stin with-hint ' +
                     (startCaseHelper.showStinFileValid ? 'validated' : '')
                   }
+                  htmlFor="stin-file"
                 >
                   Upload Your Statement of Taxpayer Identification
                   <span className="success-message">
@@ -196,11 +196,11 @@ export const StartCase = connect(
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <input
-                  id="stin-file"
-                  type="file"
                   accept=".pdf"
-                  name="stinFile"
                   className="usa-input"
+                  id="stin-file"
+                  name="stinFile"
+                  type="file"
                   onChange={e => {
                     limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                       updatePetitionValueSequence({
@@ -216,12 +216,12 @@ export const StartCase = connect(
                   }}
                 />
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.stinFile"
+                  className="usa-error-message"
                 />
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.stinFileSize"
+                  className="usa-error-message"
                 />
               </div>
             </div>
@@ -246,8 +246,8 @@ export const StartCase = connect(
                     }
                   >
                     <fieldset
-                      id="filing-type-radios"
                       className="usa-fieldset usa-sans"
+                      id="filing-type-radios"
                     >
                       <legend htmlFor="filing-type-radios">
                         I am filing this petition on behalf of …
@@ -255,12 +255,12 @@ export const StartCase = connect(
                       {filingTypes.map((filingType, idx) => (
                         <div className="usa-radio" key={filingType}>
                           <input
-                            id={filingType}
-                            data-type={filingType}
-                            type="radio"
-                            name="filingType"
-                            value={filingType}
                             className="usa-radio__input"
+                            data-type={filingType}
+                            id={filingType}
+                            name="filingType"
+                            type="radio"
+                            value={filingType}
                             onChange={e => {
                               updateStartCaseFormValueSequence({
                                 key: e.target.name,
@@ -270,17 +270,17 @@ export const StartCase = connect(
                             }}
                           />
                           <label
-                            id={`filing-type-${idx}`}
-                            htmlFor={filingType}
                             className="usa-radio__label"
+                            htmlFor={filingType}
+                            id={`filing-type-${idx}`}
                           >
                             {filingType}
                           </label>
                         </div>
                       ))}
                       <Text
-                        className="usa-error-message"
                         bind="validationErrors.partyType"
+                        className="usa-error-message"
                       />
                     </fieldset>
                   </div>
@@ -295,8 +295,8 @@ export const StartCase = connect(
                   }
                 >
                   <fieldset
-                    id="deceased-spouse-radios"
                     className="usa-fieldset usa-sans"
+                    id="deceased-spouse-radios"
                   >
                     <legend htmlFor="deceased-spouse-radios">
                       {startCaseHelper.deceasedSpouseLegend}
@@ -307,10 +307,10 @@ export const StartCase = connect(
                         key={isSpouseDeceased}
                       >
                         <input
-                          id={`isSpouseDeceased-${isSpouseDeceased}`}
-                          type="radio"
-                          name="isSpouseDeceased"
                           className="usa-radio__input"
+                          id={`isSpouseDeceased-${isSpouseDeceased}`}
+                          name="isSpouseDeceased"
+                          type="radio"
                           value={isSpouseDeceased}
                           onChange={e => {
                             updateStartCaseFormValueSequence({
@@ -321,9 +321,9 @@ export const StartCase = connect(
                           }}
                         />
                         <label
-                          id={`is-spouse-deceased-${idx}`}
-                          htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
                           className="usa-radio__label"
+                          htmlFor={`isSpouseDeceased-${isSpouseDeceased}`}
+                          id={`is-spouse-deceased-${idx}`}
                         >
                           {isSpouseDeceased}
                         </label>
@@ -339,7 +339,7 @@ export const StartCase = connect(
                     (validationErrors.partyType ? 'usa-form-group--error' : '')
                   }
                 >
-                  <fieldset id="business-type-radios" className="usa-fieldset">
+                  <fieldset className="usa-fieldset" id="business-type-radios">
                     <legend htmlFor="business-type-radios">
                       What type of business are you filing for?
                     </legend>
@@ -351,11 +351,11 @@ export const StartCase = connect(
                     ].map((businessType, idx) => (
                       <div className="usa-radio" key={businessType}>
                         <input
-                          id={`businessType-${businessType}`}
-                          type="radio"
-                          name="businessType"
-                          value={businessType}
                           className="usa-radio__input"
+                          id={`businessType-${businessType}`}
+                          name="businessType"
+                          type="radio"
+                          value={businessType}
                           onChange={e => {
                             updateStartCaseFormValueSequence({
                               key: e.target.name,
@@ -365,9 +365,9 @@ export const StartCase = connect(
                           }}
                         />
                         <label
-                          id={`is-business-type-${idx}`}
-                          htmlFor={`businessType-${businessType}`}
                           className="usa-radio__label"
+                          htmlFor={`businessType-${businessType}`}
+                          id={`is-business-type-${idx}`}
                         >
                           {businessType}
                         </label>
@@ -383,7 +383,7 @@ export const StartCase = connect(
                     (validationErrors.partyType ? 'usa-form-group--error' : '')
                   }
                 >
-                  <fieldset id="other-type-radios" className="usa-fieldset">
+                  <fieldset className="usa-fieldset" id="other-type-radios">
                     <legend htmlFor="other-type-radios">
                       What other type of taxpayer are you filing for?
                     </legend>
@@ -396,11 +396,11 @@ export const StartCase = connect(
                     ].map((otherType, idx) => (
                       <div className="usa-radio" key={otherType}>
                         <input
-                          id={`otherType-${otherType}`}
-                          type="radio"
-                          name="otherType"
-                          value={otherType}
                           className="usa-radio__input"
+                          id={`otherType-${otherType}`}
+                          name="otherType"
+                          type="radio"
+                          value={otherType}
                           onChange={e => {
                             updateStartCaseFormValueSequence({
                               key: e.target.name,
@@ -410,9 +410,9 @@ export const StartCase = connect(
                           }}
                         />
                         <label
-                          id={`is-other-type-${idx}`}
-                          htmlFor={`otherType-${otherType}`}
                           className="usa-radio__label"
+                          htmlFor={`otherType-${otherType}`}
+                          id={`is-other-type-${idx}`}
                         >
                           {otherType}
                         </label>
@@ -432,8 +432,8 @@ export const StartCase = connect(
                     }
                   >
                     <fieldset
-                      id="estate-type-radios"
                       className="usa-fieldset usa-sans"
+                      id="estate-type-radios"
                     >
                       <legend htmlFor="estate-type-radios">
                         What type of estate or trust are you filing for?
@@ -445,10 +445,10 @@ export const StartCase = connect(
                       ].map((estateType, idx) => (
                         <div className="usa-radio" key={estateType}>
                           <input
-                            id={`estateType-${estateType}`}
-                            type="radio"
-                            name="estateType"
                             className="usa-radio__input"
+                            id={`estateType-${estateType}`}
+                            name="estateType"
+                            type="radio"
                             value={estateType}
                             onChange={e => {
                               updateStartCaseFormValueSequence({
@@ -459,9 +459,9 @@ export const StartCase = connect(
                             }}
                           />
                           <label
-                            id={`is-estate-type-${idx}`}
-                            htmlFor={`estateType-${estateType}`}
                             className="usa-radio__label"
+                            htmlFor={`estateType-${estateType}`}
+                            id={`is-estate-type-${idx}`}
                           >
                             {estateType}
                           </label>
@@ -481,8 +481,8 @@ export const StartCase = connect(
                     }
                   >
                     <fieldset
-                      id="minorIncompetent-type-radios"
                       className="usa-fieldset"
+                      id="minorIncompetent-type-radios"
                     >
                       <legend htmlFor="minorIncompetent-type-radios">
                         {startCaseHelper.minorIncompetentLegend}
@@ -496,10 +496,10 @@ export const StartCase = connect(
                       ].map((minorIncompetentType, idx) => (
                         <div className="usa-radio" key={minorIncompetentType}>
                           <input
-                            id={`minorIncompetentType-${minorIncompetentType}`}
-                            type="radio"
-                            name="minorIncompetentType"
                             className="usa-radio__input"
+                            id={`minorIncompetentType-${minorIncompetentType}`}
+                            name="minorIncompetentType"
+                            type="radio"
                             value={minorIncompetentType}
                             onChange={e => {
                               updateStartCaseFormValueSequence({
@@ -510,9 +510,9 @@ export const StartCase = connect(
                             }}
                           />
                           <label
-                            id={`is-minorIncompetent-type-${idx}`}
-                            htmlFor={`minorIncompetentType-${minorIncompetentType}`}
                             className="usa-radio__label"
+                            htmlFor={`minorIncompetentType-${minorIncompetentType}`}
+                            id={`is-minorIncompetent-type-${idx}`}
                           >
                             {minorIncompetentType}
                           </label>
@@ -524,14 +524,14 @@ export const StartCase = connect(
             </div>
 
             <Contacts
-              parentView="StartCase"
               bind="form"
-              emailBind="user"
-              onChange="updateFormValueSequence"
-              onBlur="validateStartCaseSequence"
               contactsHelper="contactsHelper"
+              emailBind="user"
+              parentView="StartCase"
               showPrimaryContact={startCaseHelper.showPrimaryContact}
               showSecondaryContact={startCaseHelper.showSecondaryContact}
+              onBlur="validateStartCaseSequence"
+              onChange="updateFormValueSequence"
             />
 
             {/*start ods*/}
@@ -545,8 +545,8 @@ export const StartCase = connect(
                   Statement (ODS). Complete your{' '}
                   <a
                     href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     Ownership Disclosure Statement Form 6
                   </a>
@@ -554,13 +554,13 @@ export const StartCase = connect(
                 </p>
                 <div className="blue-container">
                   <label
-                    htmlFor="ownership-disclosure-file"
                     className={
                       'ustc-upload-ods usa-label with-hint ' +
                       (startCaseHelper.showOwnershipDisclosureValid
                         ? 'validated'
                         : '')
                     }
+                    htmlFor="ownership-disclosure-file"
                   >
                     Upload your Ownership Disclosure Statement
                     <span className="success-message">
@@ -572,11 +572,11 @@ export const StartCase = connect(
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <input
-                    id="ownership-disclosure-file"
-                    type="file"
-                    className="usa-input"
                     accept=".pdf"
+                    className="usa-input"
+                    id="ownership-disclosure-file"
                     name="ownershipDisclosureFile"
+                    type="file"
                     onChange={e => {
                       limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                         updatePetitionValueSequence({
@@ -592,12 +592,12 @@ export const StartCase = connect(
                     }}
                   />
                   <Text
-                    className="usa-error-message"
                     bind="validationErrors.ownershipDisclosureFile"
+                    className="usa-error-message"
                   />
                   <Text
-                    className="usa-error-message"
                     bind="validationErrors.ownershipDisclosureFileSize"
+                    className="usa-error-message"
                   />
                 </div>
               </>
@@ -607,13 +607,13 @@ export const StartCase = connect(
             <div className="blue-container">
               <div className="usa-form-group">
                 <fieldset
-                  id="irs-notice-radios"
                   className={
                     'usa-fieldset ' +
                     (validationErrors.hasIrsNotice
                       ? 'usa-form-group--error'
                       : '')
                   }
+                  id="irs-notice-radios"
                 >
                   <legend className="usa-legend">
                     {startCaseHelper.noticeLegend}
@@ -625,9 +625,10 @@ export const StartCase = connect(
                         key={hasIrsNotice}
                       >
                         <input
+                          className="usa-radio__input"
                           id={`hasIrsNotice-${hasIrsNotice}`}
-                          type="radio"
                           name="hasIrsNotice"
+                          type="radio"
                           value={hasIrsNotice === 'Yes'}
                           onChange={e => {
                             updateHasIrsNoticeFormValueSequence({
@@ -636,20 +637,19 @@ export const StartCase = connect(
                             });
                             validateStartCaseSequence();
                           }}
-                          className="usa-radio__input"
                         />
                         <label
-                          id={`hasIrsNotice-${idx}`}
-                          htmlFor={`hasIrsNotice-${hasIrsNotice}`}
                           className="usa-radio__label"
+                          htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                          id={`hasIrsNotice-${idx}`}
                         >
                           {hasIrsNotice}
                         </label>
                       </div>
                     ))}
                     <Text
-                      className="usa-error-message"
                       bind="validationErrors.hasIrsNotice"
+                      className="usa-error-message"
                     />
                   </div>
                 </fieldset>
@@ -657,11 +657,11 @@ export const StartCase = connect(
                 {startCaseHelper.showHasIrsNoticeOptions && (
                   <React.Fragment>
                     <CaseTypeSelect
-                      caseTypes={caseTypeDescriptionHelper.caseTypes}
-                      validation="validateStartCaseSequence"
                       allowDefaultOption={true}
-                      onChange="updateFormValueSequence"
+                      caseTypes={caseTypeDescriptionHelper.caseTypes}
                       legend="Type of Notice / Case"
+                      validation="validateStartCaseSequence"
+                      onChange="updateFormValueSequence"
                     />
                     <div
                       className={
@@ -673,96 +673,96 @@ export const StartCase = connect(
                     >
                       <fieldset className="usa-fieldset">
                         <legend
-                          id="date-of-notice-legend"
                           className="usa-legend"
+                          id="date-of-notice-legend"
                         >
                           Date of Notice
                         </legend>
                         <div className="usa-memorable-date">
                           <div className="usa-form-group usa-form-group--month">
                             <label
-                              htmlFor="date-of-notice-month"
                               aria-hidden="true"
+                              htmlFor="date-of-notice-month"
                             >
                               MM
                             </label>
                             <input
-                              className="usa-input usa-input--inline"
                               aria-describedby="date-of-notice-legend"
-                              id="date-of-notice-month"
-                              name="month"
                               aria-label="month, two digits"
-                              type="number"
-                              min="1"
+                              className="usa-input usa-input--inline"
+                              id="date-of-notice-month"
                               max="12"
+                              min="1"
+                              name="month"
+                              type="number"
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
                               onChange={e => {
                                 updateFormValueSequence({
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
-                                validateStartCaseSequence();
                               }}
                             />
                           </div>
                           <div className="usa-form-group usa-form-group--day">
                             <label
-                              htmlFor="date-of-notice-day"
                               aria-hidden="true"
+                              htmlFor="date-of-notice-day"
                             >
                               DD
                             </label>
                             <input
-                              className="usa-input usa-input--inline"
                               aria-describedby="date-of-notice-legend"
                               aria-label="day, two digits"
+                              className="usa-input usa-input--inline"
                               id="date-of-notice-day"
+                              max="31"
+                              min="1"
                               name="day"
                               type="number"
-                              min="1"
-                              max="31"
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
                               onChange={e => {
                                 updateFormValueSequence({
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
-                              }}
-                              onBlur={() => {
-                                validateStartCaseSequence();
                               }}
                             />
                           </div>
                           <div className="usa-form-group usa-form-group--year">
                             <label
-                              htmlFor="date-of-notice-year"
                               aria-hidden="true"
+                              htmlFor="date-of-notice-year"
                             >
                               YYYY
                             </label>
                             <input
-                              className="usa-input usa-input--inline"
                               aria-describedby="date-of-notice-legend"
                               aria-label="year, four digits"
+                              className="usa-input usa-input--inline"
                               id="date-of-notice-year"
+                              max="2100"
+                              min="1900"
                               name="year"
                               type="number"
-                              min="1900"
-                              max="2100"
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
                               onChange={e => {
                                 updateFormValueSequence({
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
                               }}
-                              onBlur={() => {
-                                validateStartCaseSequence();
-                              }}
                             />
                           </div>
                           <Text
-                            className="usa-error-message"
                             bind="validationErrors.irsNoticeDate"
+                            className="usa-error-message"
                           />
                         </div>
                       </fieldset>
@@ -771,12 +771,12 @@ export const StartCase = connect(
                 )}
                 {startCaseHelper.showNotHasIrsNoticeOptions && (
                   <CaseTypeSelect
-                    caseTypes={caseTypeDescriptionHelper.caseTypes}
-                    validation="validateStartCaseSequence"
-                    onChange="updateFormValueSequence"
                     allowDefaultOption={true}
+                    caseTypes={caseTypeDescriptionHelper.caseTypes}
                     legend="Which topic most closely matches your complaint with the
                 IRS?"
+                    validation="validateStartCaseSequence"
+                    onChange="updateFormValueSequence"
                   />
                 )}
               </div>
@@ -791,10 +791,10 @@ export const StartCase = connect(
             </p>
             <div className="usa-accordion start-a-case">
               <button
-                type="button"
-                className="usa-accordion__button case-difference"
-                aria-expanded={!!screenMetadata.showCaseDifference}
                 aria-controls="case-difference-container"
+                aria-expanded={!!screenMetadata.showCaseDifference}
+                className="usa-accordion__button case-difference"
+                type="button"
                 onClick={() => toggleCaseDifferenceSequence()}
               >
                 <span className="usa-accordion__heading usa-banner__button-text">
@@ -809,15 +809,16 @@ export const StartCase = connect(
                 </span>
               </button>
               <div
-                id="case-difference-container"
-                className="usa-accordion__content"
                 aria-hidden={!screenMetadata.showCaseDifference}
+                className="usa-accordion__content"
+                id="case-difference-container"
               >
                 <CaseDifferenceExplained />
               </div>
             </div>
             <div className="blue-container">
               <ProcedureType
+                legend="Select Case Procedure"
                 value={form.procedureType}
                 onChange={e => {
                   updateFormValueSequence({
@@ -827,23 +828,22 @@ export const StartCase = connect(
                   clearPreferredTrialCitySequence();
                   validateStartCaseSequence();
                 }}
-                legend="Select Case Procedure"
               />
               {startCaseHelper.showSelectTrial && (
                 <TrialCity
-                  showHint={true}
                   label="Select a Trial Location"
-                  showSmallTrialCitiesHint={
-                    startCaseHelper.showSmallTrialCitiesHint
-                  }
+                  showDefaultOption={true}
+                  showHint={true}
                   showRegularTrialCitiesHint={
                     startCaseHelper.showRegularTrialCitiesHint
                   }
-                  showDefaultOption={true}
-                  value={form.preferredTrialCity}
+                  showSmallTrialCitiesHint={
+                    startCaseHelper.showSmallTrialCitiesHint
+                  }
                   trialCitiesByState={
                     trialCitiesHelper(form.procedureType).trialCitiesByState
                   }
+                  value={form.preferredTrialCity}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -854,13 +854,13 @@ export const StartCase = connect(
                 />
               )}
               <Text
-                className="usa-error-message"
                 bind="validationErrors.procedureType"
+                className="usa-error-message"
               />
               {!validationErrors.procedureType && (
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.preferredTrialCity"
+                  className="usa-error-message"
                 />
               )}
             </div>
@@ -892,42 +892,42 @@ export const StartCase = connect(
               >
                 <legend>Review and Sign</legend>
                 <input
-                  id="signature"
-                  type="checkbox"
-                  name="signature"
                   className="usa-checkbox__input"
+                  id="signature"
+                  name="signature"
+                  type="checkbox"
+                  onBlur={() => {
+                    validateStartCaseSequence();
+                  }}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked ? true : undefined,
                     });
                   }}
-                  onBlur={() => {
-                    validateStartCaseSequence();
-                  }}
                 />
-                <label htmlFor="signature" className="usa-checkbox__label">
+                <label className="usa-checkbox__label" htmlFor="signature">
                   Checking this box acts as your digital signature,
                   acknowledging that you’ve verified all information is correct.
                   You won’t be able to edit your case once it’s submitted.
                 </label>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.signature"
+                  className="usa-error-message"
                 />
               </div>
             </div>
 
             <button
+              className="usa-button margin-right-205"
               id="submit-case"
               type="submit"
-              className="usa-button margin-right-205"
             >
               Submit to U.S. Tax Court
             </button>
             <button
-              type="button"
               className="usa-button usa-button--outline"
+              type="button"
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
