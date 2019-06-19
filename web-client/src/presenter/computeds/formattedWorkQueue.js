@@ -121,7 +121,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
-    .filter(item => !item.completedAt)
     .filter(item =>
       box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
     )
