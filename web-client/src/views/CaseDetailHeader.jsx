@@ -23,14 +23,14 @@ export const CaseDetailHeader = connect(
             </h1>
             {caseHelper.showCaptionEditButton && (
               <span
-                className="usa-tag"
                 aria-label={`status: ${caseDetail.status}`}
+                className="usa-tag"
               >
                 <span aria-hidden="true">{caseDetail.status}</span>
               </span>
             )}
           </div>
-          <p id="case-title" className="margin-y-0">
+          <p className="margin-y-0" id="case-title">
             <span>
               {caseDetail.caseTitle}{' '}
               {caseHelper.showCaptionEditButton && (

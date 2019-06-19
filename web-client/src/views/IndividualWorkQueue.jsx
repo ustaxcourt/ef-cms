@@ -26,16 +26,16 @@ export const IndividualWorkQueue = connect(
           });
         }}
       >
-        <Tab tabName="inbox" title="Inbox" id="individual-inbox-tab">
+        <Tab id="individual-inbox-tab" tabName="inbox" title="Inbox">
           <div id="individual-inbox-tab-content">
             <IndividualWorkQueueInbox />
           </div>
         </Tab>
         {workQueueHelper.showBatchedForIRSTab && (
           <Tab
+            id="section-batched-for-irs-tab"
             tabName="batched"
             title="Batched for IRS"
-            id="section-batched-for-irs-tab"
           >
             <div id="section-batched-for-irs-tab-content">
               <IndividualWorkQueueBatched />
@@ -43,9 +43,9 @@ export const IndividualWorkQueue = connect(
           </Tab>
         )}
         <Tab
+          id="individual-sent-tab"
           tabName="outbox"
           title={workQueueHelper.sentTitle}
-          id="individual-sent-tab"
         >
           <div id="individual-sent-tab-content">
             <IndividualWorkQueueOutbox />
