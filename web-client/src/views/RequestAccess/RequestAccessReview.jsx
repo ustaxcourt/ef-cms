@@ -10,14 +10,16 @@ import React from 'react';
 export const RequestAccessReview = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    requestAccessHelper: state.requestAccessHelper,
     showModal: state.showModal,
     submitCaseAssociationRequestSequence:
       sequences.submitCaseAssociationRequestSequence,
   },
   ({
     formCancelToggleCancelSequence,
-    submitCaseAssociationRequestSequence,
+    requestAccessHelper,
     showModal,
+    submitCaseAssociationRequestSequence,
   }) => {
     return (
       <React.Fragment>
@@ -44,7 +46,9 @@ export const RequestAccessReview = connect(
 
         <RequestAccessDocumentReadOnly />
 
-        <PartiesRepresentingReadOnly />
+        {requestAccessHelper.showPartiesRepresenting && (
+          <PartiesRepresentingReadOnly />
+        )}
 
         <div className="button-box-container">
           <button
