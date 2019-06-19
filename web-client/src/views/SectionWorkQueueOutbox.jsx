@@ -109,12 +109,12 @@ export const SectionWorkQueueOutbox = connect(
                 <td className="message-queue-row">{item.caseStatus}</td>
               )}
               {workQueueHelper.showMessagesSentFromColumn && (
-                <td className="message-queue-row">{item.assigneeName}</td>
-              )}
-              {workQueueHelper.showAssignedToColumn && (
                 <td className="message-queue-row">
                   {item.currentMessage.from}
                 </td>
+              )}
+              {workQueueHelper.showAssignedToColumn && (
+                <td className="message-queue-row">{item.currentMessage.to}</td>
               )}
               {workQueueHelper.showProcessedByColumn && (
                 <td className="message-queue-row">{item.completedBy}</td>
