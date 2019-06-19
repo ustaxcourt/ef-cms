@@ -250,11 +250,7 @@ joiValidationDecorator(
       .max('now')
       .optional()
       .allow(null),
-    respondents: joi.array().items(
-      joi.object().keys({
-        respondentId: joi.string().uuid(uuidVersions),
-      }),
-    ),
+    respondents: joi.array().optional(),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
