@@ -11,8 +11,7 @@ import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
-import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
-import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
+import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
@@ -57,8 +56,7 @@ export const state = {
   currentPage: 'Interstitial',
   currentPageHeader: '',
   currentTab: '',
-  dashboardPetitionerHelper,
-  dashboardRespondentHelper,
+  dashboardExternalHelper,
   docketRecordIndex: 0,
   document: {},
   documentDetail: {
