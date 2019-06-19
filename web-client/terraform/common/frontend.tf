@@ -3,16 +3,23 @@ resource "aws_s3_bucket" "frontend" {
 
   policy = "${data.aws_iam_policy_document.allow_public.json}"
 
-  acl = "public-read"
-
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
+  tags {
+    environment = "${var.environment}"
   }
+}
+
+resource "aws_s3_bucket" "failover" {
+  bucket = "failover-ui-${var.environment}.${var.dns_domain}"
+
+  policy = "${data.aws_iam_policy_document.allow_public_failover.json}"
+
+  region = "us-west-1"
 
   tags {
     environment = "${var.environment}"
   }
+
+  provider = "aws.us-west-1"
 }
 
 data "aws_iam_policy_document" "allow_public" {
@@ -26,9 +33,33 @@ data "aws_iam_policy_document" "allow_public" {
     }
 
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::ui-${var.environment}.${var.dns_domain}/*"]
+
+    resources = [
+      "arn:aws:s3:::ui-${var.environment}.${var.dns_domain}/*"
+    ]
   }
 }
+
+
+
+data "aws_iam_policy_document" "allow_public_failover" {
+  statement {
+    sid    = "PublicReadGetObject"
+    effect = "Allow"
+
+    principals {
+      identifiers = ["*"]
+      type        = "AWS"
+    }
+
+    actions   = ["s3:GetObject"]
+
+    resources = [
+      "arn:aws:s3:::failover-ui-${var.environment}.${var.dns_domain}/*"
+    ]
+  }
+}
+
 
 module "ui-certificate" {
   source = "github.com/traveloka/terraform-aws-acm-certificate?ref=v0.1.2"
@@ -43,17 +74,58 @@ module "ui-certificate" {
   product_domain         = "EFCMS"
 }
 
+resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
+  comment = "origin used for cloudfront group origins"
+}
+
 resource "aws_cloudfront_distribution" "distribution" {
-  origin {
-    custom_origin_config {
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+  origin_group {
+    origin_id = "group-${var.environment}.${var.dns_domain}"
+
+    failover_criteria {
+      status_codes = [403, 404, 500, 502, 503, 504]
     }
 
-    domain_name = "${aws_s3_bucket.frontend.website_endpoint}"
-    origin_id   = "ui-${var.environment}.${var.dns_domain}"
+    member {
+      origin_id = "primary-${var.environment}.${var.dns_domain}"
+    }
+
+    member {
+      origin_id = "failover-${var.environment}.${var.dns_domain}"
+    }
+  }
+  
+  origin {
+    # custom_origin_config {
+    #   http_port              = "80"
+    #   https_port             = "443"
+    #   origin_protocol_policy = "http-only"
+    #   origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    # }
+
+    domain_name = "${aws_s3_bucket.frontend.bucket_regional_domain_name}"
+    origin_id   = "primary-${var.environment}.${var.dns_domain}"
+
+    s3_origin_config {
+      origin_access_identity = "${aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path}"
+    }
+  }
+
+
+  origin {
+    # custom_origin_config {
+    #   http_port              = "80"
+    #   https_port             = "443"
+    #   origin_protocol_policy = "http-only"
+    #   origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    # }
+
+    domain_name = "${aws_s3_bucket.failover.bucket_regional_domain_name}"
+    origin_id   = "failover-${var.environment}.${var.dns_domain}"
+
+    s3_origin_config {
+      origin_access_identity = "${aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path}"
+    }
   }
 
   custom_error_response = [
@@ -73,7 +145,7 @@ resource "aws_cloudfront_distribution" "distribution" {
     compress               = true
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "ui-${var.environment}.${var.dns_domain}"
+    target_origin_id       = "group-${var.environment}.${var.dns_domain}"
     min_ttl                = 0
     default_ttl            = "${var.cloudfront_default_ttl}"
     max_ttl                = "${var.cloudfront_max_ttl}"
