@@ -18,6 +18,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+  const showPrimaryParty = ['petitioner', 'practitioner'].includes(userRole);
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
     entry => {
@@ -79,7 +80,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPractitionerParty: userRole === 'practitioner',
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
-    showRespondentParty: !!caseDetail.respondent,
+    showPrimaryParty,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryFilingNotIncludes,
     showSecondaryParty,
