@@ -85,9 +85,9 @@ export const RequestAccessDocumentForm = connect(
                   validationErrors.certificateOfService
                     ? 'usa-form-group--error'
                     : ''
-                }`}
+                } ${!form.certificateOfService ? 'margin-bottom-0' : ''}`}
               >
-                <fieldset className="usa-fieldset">
+                <fieldset className="usa-fieldset margin-bottom-0">
                   <legend>
                     Does Your Filing Include A Certificate of Service?
                   </legend>
@@ -130,14 +130,19 @@ export const RequestAccessDocumentForm = connect(
                     validationErrors.certificateOfServiceDate
                       ? 'usa-form-group--error'
                       : ''
+                  } ${
+                    !requestAccessHelper.documentWithExhibits &&
+                    !requestAccessHelper.documentWithObjections
+                      ? 'margin-bottom-0'
+                      : ''
                   }`}
                 >
-                  <fieldset className="service-date usa-fieldset">
+                  <fieldset className="service-date usa-fieldset margin-bottom-0">
                     <legend className="usa-legend" id="service-date-legend">
                       Service Date
                     </legend>
                     <div className="usa-memorable-date">
-                      <div className="usa-form-group usa-form-group--month">
+                      <div className="usa-form-group usa-form-group--month margin-bottom-0">
                         <label
                           aria-hidden="true"
                           className="usa-label"
@@ -166,7 +171,7 @@ export const RequestAccessDocumentForm = connect(
                           }}
                         />
                       </div>
-                      <div className="usa-form-group usa-form-group--day">
+                      <div className="usa-form-group usa-form-group--day margin-bottom-0">
                         <label
                           aria-hidden="true"
                           className="usa-label"
@@ -195,7 +200,7 @@ export const RequestAccessDocumentForm = connect(
                           }}
                         />
                       </div>
-                      <div className="usa-form-group usa-form-group--year">
+                      <div className="usa-form-group usa-form-group--year margin-bottom-0">
                         <label
                           aria-hidden="true"
                           className="usa-label"
@@ -280,9 +285,13 @@ export const RequestAccessDocumentForm = connect(
                 <div
                   className={`usa-form-group ${
                     validationErrors.attachments ? 'usa-form-group--error' : ''
+                  } ${
+                    !requestAccessHelper.documentWithObjections
+                      ? 'margin-bottom-0'
+                      : ''
                   }`}
                 >
-                  <fieldset className="usa-fieldset">
+                  <fieldset className="usa-fieldset margin-bottom-0">
                     <legend id="attachments-legend">
                       Does Your Filing Include Attachments?
                     </legend>
