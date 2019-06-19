@@ -49,11 +49,11 @@ export const caseDetailHelper = get => {
 
   return {
     documentDetailTab,
+    hidePublicCaseInformation: !isExternalUser,
     showActionRequired,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
-    showCaseInformationPublic: isExternalUser,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
