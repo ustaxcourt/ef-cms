@@ -4,6 +4,7 @@ import {
   PETITIONS_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
 
@@ -128,87 +129,104 @@ export const filterWorkItems = ({
   const { box, queue } = workQueueToDisplay;
   const userSection = getSectionForRole(user.role);
 
-  return item => {
-    let willShow;
-    const isBatched = item.caseStatus === 'Batched for IRS';
-    const isAssignedToUser = item.assigneeId === user.userId;
-
-    if (box === 'inbox') {
-      const showForCurrentQueue = queue === 'my' ? isAssignedToUser : true;
-
-      willShow =
-        !item.completedAt &&
-        item.isInternal === workQueueIsInternal &&
-        item.section === userSection &&
-        showForCurrentQueue;
-      if (willShow) {
-        console.log(isAssignedToUser, item);
-      }
-    } else if (box === 'outbox') {
-      if (workQueueIsInternal) {
-        if (item.isInternal) {
-          willShow = true;
-        } else {
-          willShow = false;
-        }
-      } else {
-        if (isBatched) {
-          willShow = false;
-        } else {
-          if (!item.isInternal) {
-            willShow = true;
-          } else {
-            willShow = false;
-          }
-        }
-      }
-    } else if (box === 'batched') {
-      if (isBatched) {
-        willShow = true;
-      } else {
-        willShow = false;
-      }
-    } else if (box === 'outbox') {
-      if (workQueueIsInternal) {
-        if (item.isInternal) {
-          willShow = true;
-        } else {
-          willShow = false;
-        }
-      } else {
-        if (isBatched) {
-          willShow = false;
-        } else {
-          if (!item.isInternal) {
-            willShow = true;
-          } else {
-            willShow = false;
-          }
-        }
-      }
-    }
-
-    return willShow;
+  const filters = {
+    documentQc: {
+      my: {
+        batched: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.sentByUserId === user.userId &&
+            item.section === IRS_BATCH_SYSTEM_SECTION &&
+            item.caseStatus === STATUS_TYPES.batchedForIRS
+          );
+        },
+        inbox: item => {
+          return (
+            item.assigneeId === user.userId &&
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === userSection
+          );
+        },
+        outbox: item => {
+          return (
+            !item.isInternal &&
+            item.section === IRS_BATCH_SYSTEM_SECTION &&
+            item.completedByUserId &&
+            item.completedByUserId === user.userId &&
+            !!item.completedAt
+          );
+        },
+      },
+      section: {
+        batched: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === IRS_BATCH_SYSTEM_SECTION &&
+            item.caseStatus === STATUS_TYPES.batchedForIRS
+          );
+        },
+        inbox: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === userSection
+          );
+        },
+        outbox: item => {
+          return (
+            !!item.completedAt &&
+            !item.isInternal &&
+            item.section === IRS_BATCH_SYSTEM_SECTION
+          );
+        },
+      },
+    },
+    messages: {
+      my: {
+        inbox: item => {
+          return (
+            !item.completedAt &&
+            item.isInternal &&
+            item.section === userSection &&
+            item.assigneeId === user.userId
+          );
+        },
+        outbox: item => {
+          return (
+            item.isInternal &&
+            item.sentByUserId &&
+            item.sentByUserId === user.userId
+          );
+        },
+      },
+      section: {
+        inbox: item => {
+          return (
+            !item.completedAt && item.isInternal && item.section === userSection
+          );
+        },
+        outbox: item => {
+          return item.isInternal && item.sentBySection === userSection;
+        },
+      },
+    },
   };
+
+  const view = workQueueIsInternal ? 'messages' : 'documentQc';
+  const composedFilter = filters[view][queue][box];
+  return composedFilter;
 };
 
 export const formattedWorkQueue = (get, applicationContext) => {
   const workItems = get(state.workQueue);
-  const box = get(state.workQueueToDisplay.box);
   const isInternal = get(state.workQueueIsInternal);
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
     .filter(filterWorkItems)
-    // .filter(item =>
-    //   box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
-    // )
-    // .filter(item =>
-    //   isInternal !== true && box === 'outbox'
-    //     ? item.caseStatus !== 'Batched for IRS'
-    //     : true,
-    // )
-    // .filter(item => item.isInternal === isInternal)
     .map(item =>
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
