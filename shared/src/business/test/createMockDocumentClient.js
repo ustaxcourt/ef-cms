@@ -72,7 +72,7 @@ const createMockDocumentClient = () => {
             if (pk === value && sk.indexOf(prefix) === 0) {
               arr.push(data[key]);
             }
-          } else if (pk.indexOf(value) !== -1) {
+          } else if (pk.includes(value)) {
             arr.push(data[key]);
           }
         }
@@ -96,7 +96,7 @@ const createMockDocumentClient = () => {
         );
       }
 
-      const hasSet = UpdateExpression.indexOf('SET') !== -1;
+      const hasSet = UpdateExpression.includes('SET');
       UpdateExpression = UpdateExpression.replace('SET', '').trim();
       const expressions = UpdateExpression.split(',').map(t => t.trim());
       const gg = expressions.map(v => v.split('=').map(x => x.trim()));
@@ -106,7 +106,7 @@ const createMockDocumentClient = () => {
         if (v === 'true' || v === 'false') {
           obj[k] = v === 'true';
         } else {
-          if (k.indexOf('documents[') !== -1) {
+          if (k.includes('documents[')) {
             obj = data[`${Key.pk} ${Key.sk}`];
             eval(`obj.${k} = ${JSON.stringify(v)};`);
           } else {
