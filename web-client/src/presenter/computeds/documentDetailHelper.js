@@ -26,7 +26,7 @@ export const documentDetailHelper = (get, applicationContext) => {
       .map(items => {
         const formatted = formatWorkItem(applicationContext, items);
         formatted.messages = formatted.messages.filter(
-          message => message.message.indexOf('Served on IRS') === -1,
+          message => !message.message.includes('Served on IRS'),
         );
         return formatted;
       });

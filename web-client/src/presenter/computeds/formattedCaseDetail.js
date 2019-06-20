@@ -69,7 +69,7 @@ const formatYearAmount = (applicationContext, caseDetailErrors, caseDetail) => (
   return {
     ...yearAmount,
     year:
-      formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+      formattedYear.includes('Invalid') || yearAmount.year.length < 4
         ? yearAmount.year
         : formattedYear,
   };
@@ -219,7 +219,9 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = `Respondent served ${result.irsDateFormatted}`;
+  result.datePetitionSentToIrsMessage = `Respondent served ${
+    result.irsDateFormatted
+  }`;
 
   result.shouldShowIrsNoticeDate =
     result.hasVerifiedIrsNotice ||
@@ -304,7 +306,7 @@ const getDocketRecordSortFunc = sortBy => {
 
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
-  const isReversed = sortBy.indexOf('Desc') > -1;
+  const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable

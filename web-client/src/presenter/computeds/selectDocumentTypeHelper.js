@@ -117,7 +117,7 @@ export const getPreviouslyFiledDocuments = (
     .filter(
       document =>
         !documentIdWhitelist ||
-        documentIdWhitelist.indexOf(document.documentId) > -1,
+        documentIdWhitelist.includes(document.documentId),
     )
     .map(document => {
       return document.documentTitle || document.documentType;
