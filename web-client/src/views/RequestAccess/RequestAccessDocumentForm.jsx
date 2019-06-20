@@ -85,7 +85,13 @@ export const RequestAccessDocumentForm = connect(
                   validationErrors.certificateOfService
                     ? 'usa-form-group--error'
                     : ''
-                } ${!form.certificateOfService ? 'margin-bottom-0' : ''}`}
+                } ${
+                  !form.certificateOfService &&
+                  !requestAccessHelper.documentWithExhibits &&
+                  !requestAccessHelper.documentWithObjections
+                    ? 'margin-bottom-0'
+                    : ''
+                }`}
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
                   <legend>
@@ -333,9 +339,13 @@ export const RequestAccessDocumentForm = connect(
                 <div
                   className={`usa-form-group ${
                     validationErrors.objections ? 'usa-form-group--error' : ''
+                  } ${
+                    !requestAccessHelper.documentWithSupportingDocuments
+                      ? 'margin-bottom-0'
+                      : ''
                   }`}
                 >
-                  <fieldset className="usa-fieldset">
+                  <fieldset className="usa-fieldset margin-bottom-0">
                     <legend id="objections-legend">
                       Are There Any Objections to This Document?
                     </legend>
