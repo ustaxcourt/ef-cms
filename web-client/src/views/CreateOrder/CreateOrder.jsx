@@ -15,14 +15,7 @@ export const CreateOrder = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-5">
-                <div className="blue-container">Editor goes here</div>
-              </div>
-              <div className="grid-col-7"></div>
-            </div>
-          </div>
+          <div className="blue-container">Editor goes here</div>
         </section>
       </>
     );
