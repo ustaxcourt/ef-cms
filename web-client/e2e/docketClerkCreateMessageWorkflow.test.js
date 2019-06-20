@@ -16,6 +16,10 @@ import {
 const test = setupTest();
 
 describe('a docketclerk user creates a new message for another docketclerk user', () => {
+  beforeEach(() => {
+    jest.setTimeout(300000);
+  });
+
   let caseDetail;
   let qcSectionInboxCountBefore;
   let notificationsBefore;
