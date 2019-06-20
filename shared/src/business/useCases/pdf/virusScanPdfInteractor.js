@@ -5,7 +5,7 @@ const tmp = require('tmp');
  * virusScanDocument
  * @param applicationContext
  * @param documentId
- * @returns {Object} errors (null if no errors)
+ * @returns {object} errors (null if no errors)
  */
 exports.virusScanPdf = async ({ applicationContext, documentId }) => {
   applicationContext.logger.time('Fetching S3 File');
