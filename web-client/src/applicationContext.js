@@ -78,7 +78,6 @@ import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/tria
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
-import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
@@ -169,7 +168,6 @@ const allUseCases = {
   getCase,
   getCaseTypes,
   getCasesByUser,
-  getCasesForRespondent,
   getEligibleCasesForTrialSession,
   getFilingTypes,
   getInternalUsers,
