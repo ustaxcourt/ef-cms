@@ -1,7 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
-import { TextEditor } from './TextEditor';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
@@ -19,9 +18,7 @@ export const CreateOrder = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <div className="blue-container">
-                  <TextEditor />
-                </div>
+                <div className="blue-container">Editor goes here</div>
               </div>
               <div className="grid-col-7"></div>
             </div>
