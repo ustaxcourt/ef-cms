@@ -785,7 +785,7 @@ Case.prototype.checkForReadyForTrial = function() {
 /**
  * generates sort tags used for sorting trials for calendaring
  *
- * @returns {Object} the sort tags
+ * @returns {object} the sort tags
  */
 Case.prototype.generateTrialSortTags = function() {
   const {
@@ -839,7 +839,7 @@ Case.prototype.generateTrialSortTags = function() {
 /**
  * set as calendared
  *
- * @param {Object} trialSessionEntity - the trial session that is associated with the case
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
  * @returns {Case}
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
