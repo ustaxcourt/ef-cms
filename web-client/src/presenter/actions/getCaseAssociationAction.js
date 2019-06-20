@@ -32,10 +32,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
         });
     }
   } else if (userRole === 'respondent') {
-    const caseDetailRespondent = get(state.caseDetail.respondent);
+    const caseDetailRespondents = get(state.caseDetail.respondents);
     const userId = get(state.user.userId);
-    isAssociated =
-      caseDetailRespondent && caseDetailRespondent.userId === userId;
+    isAssociated = some(caseDetailRespondents, { userId });
   } else if (userRole === 'petitioner') {
     const caseUserId = get(state.caseDetail.userId);
     const userId = get(state.user.userId);

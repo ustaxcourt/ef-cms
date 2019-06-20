@@ -92,9 +92,21 @@
   },
   {
     "role": "respondent",
+    "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Respondent",
+    "section": "respondent",
+    "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "respondent",
+    "address": "123 Main Street Los Angeles, CA 98089",
+    "barnumber": "12345-67",
+    "phone": "111-111-1111"
+  },
+  {
+    "role": "respondent",
     "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "name": "Test Respondent1",
-    "section": "practitioner",
+    "section": "respondent",
     "pk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "email": "respondent1",

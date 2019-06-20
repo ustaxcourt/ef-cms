@@ -23,7 +23,7 @@ export const RequestAccessWizard = connect(
           )}
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs asSwitch defaultActiveTab="RequestAccess" bind="wizardStep">
+          <Tabs asSwitch bind="wizardStep" defaultActiveTab="RequestAccess">
             <Tab tabName="RequestAccess">
               <RequestAccess />
             </Tab>
