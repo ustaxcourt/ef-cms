@@ -51,7 +51,7 @@ test = CerebralTest(presenter);
 
 describe('Case journey', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

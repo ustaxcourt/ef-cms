@@ -73,7 +73,7 @@ test = CerebralTest(presenter);
 
 describe('Respondent requests access to a case', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

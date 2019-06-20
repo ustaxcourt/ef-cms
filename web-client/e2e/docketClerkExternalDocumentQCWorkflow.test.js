@@ -16,7 +16,7 @@ const test = setupTest();
 
 describe('Create a work item', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
   });
 
   let caseDetail;

@@ -78,7 +78,7 @@ test = CerebralTest(presenter);
 
 describe('Trial Session Eligible Cases - Scenario 6 - L and P case types get prioritized before any other type of case; and then sequentially based upon the date petition was filed (FIFO)', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

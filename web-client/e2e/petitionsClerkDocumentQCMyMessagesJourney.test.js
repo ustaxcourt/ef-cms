@@ -103,7 +103,7 @@ test = CerebralTest(presenter);
 
 describe('Petitions Clerk Document QC Journey', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

@@ -17,7 +17,7 @@ const test = setupTest();
 
 describe('a docketclerk user creates a new message for another docketclerk user', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
   });
 
   let caseDetail;
