@@ -1,12 +1,17 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
+import { TextEditor } from './TextEditor';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CreateOrder = connect(
-  {},
-  () => {
+  {
+    form: state.form,
+    updateFormValueSequence: sequences.updateFormValueSequence,
+  },
+  ({ form, updateFormValueSequence }) => {
     return (
       <>
         <BigHeader text="Create Order" />
@@ -15,7 +20,13 @@ export const CreateOrder = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <div className="blue-container">Editor goes here</div>
+          <div className="blue-container">
+            <TextEditor
+              form={form}
+              updateFormValueSequence={updateFormValueSequence}
+            />
+            {form.richText}
+          </div>
         </section>
       </>
     );
