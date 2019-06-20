@@ -65,7 +65,7 @@ class AccountMenuContentComponent extends React.Component {
 
   handleClick(e) {
     const targetClasses = Array.from(e.target.classList);
-    if (targetClasses.indexOf('account-menu-item') > -1) {
+    if (targetClasses.includes('account-menu-item')) {
       return true;
     } else {
       // set a small delay to account for state updates in parent
