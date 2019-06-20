@@ -43,7 +43,6 @@ resource "aws_route53_record" "record" {
   zone_id = "${data.aws_route53_zone.zone.id}"
   records = [
     "${aws_acm_certificate.us-east-1.domain_validation_options.0.resource_record_value}",
-    "${aws_acm_certificate.us-west-1.domain_validation_options.0.resource_record_value}"
   ]
   ttl     = 60
 }
