@@ -21,7 +21,7 @@ export const CaseDetailHeader = connect(
                 Docket Number: {caseDetail.docketNumberWithSuffix}
               </a>
             </h1>
-            {caseDetail.hidePublicCaseInformation && (
+            {caseHelper.hidePublicCaseInformation && (
               <span
                 aria-label={`status: ${caseDetail.status}`}
                 className="usa-tag"
