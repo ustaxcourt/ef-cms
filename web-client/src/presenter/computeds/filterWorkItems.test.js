@@ -1,27 +1,52 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
 import { filterWorkItems } from './formattedWorkQueue';
 
-const MY_INBOX = {
+const MY_MESSAGES_INBOX = {
   workQueueIsInternal: true,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
-const MY_BATCHED = {
-  workQueueIsInternal: true,
-  workQueueToDisplay: { box: 'batched', queue: 'my' },
-};
-const MY_OUTBOX = {
+const MY_MESSAGES_OUTBOX = {
   workQueueIsInternal: true,
   workQueueToDisplay: { box: 'outbox', queue: 'my' },
 };
-const SECTION_INBOX = {
+
+const SECTION_MESSAGES_INBOX = {
+  workQueueIsInternal: true,
+  workQueueToDisplay: { box: 'inbox', queue: 'section' },
+};
+
+const SECTION_MESSAGES_OUTBOX = {
+  workQueueIsInternal: true,
+  workQueueToDisplay: { box: 'outbox', queue: 'section' },
+};
+
+const MY_DOCUMENT_QC_INBOX = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+};
+
+const MY_DOCUMENT_QC_BATCHED = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'batched', queue: 'my' },
+};
+
+const MY_DOCUMENT_QC_OUTBOX = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'outbox', queue: 'my' },
+};
+
+const SECTION_DOCUMENT_QC_INBOX = {
   workQueueIsInternal: false,
   workQueueToDisplay: { box: 'inbox', queue: 'section' },
 };
-const SECTION_BATCHED = {
+
+const SECTION_DOCUMENT_QC_BATCHED = {
   workQueueIsInternal: false,
   workQueueToDisplay: { box: 'batched', queue: 'section' },
 };
-const SECTION_OUTBOX = {
+
+const SECTION_DOCUMENT_QC_OUTBOX = {
   workQueueIsInternal: false,
   workQueueToDisplay: { box: 'outbox', queue: 'section' },
 };
@@ -113,6 +138,8 @@ const generateWorkItem = data => {
 // - isInternal === false
 // - item.section === 'irsBatchSection'
 // - item.sentByUserId === user.userId
+// - item.caseStatus = 'Batched for IRS'
+// - !item.completedAt
 
 // My Document QC Served
 // - isInternal === false
@@ -133,6 +160,8 @@ const generateWorkItem = data => {
 // Section Document QC Batched
 // - isInternal === false
 // - item.section === 'irsBatchSection'
+// - item.caseStatus = 'Batched for IRS'
+// - !item.completedAt
 
 // Section Document QC Served
 // - isInternal = false
@@ -162,11 +191,11 @@ describe('filterWorkItems', () => {
   let workItemDocketSectionMessagesInbox;
   let workItemDocketSectionMessagesSent;
   let workItemDocketMyDocumentQCInbox;
-  let workItemDocketMyMessagesProcessed;
   let workItemDocketSectionDocumentQCInbox;
-  let workItemDocketSectionDocumentQCProcessed;
 
-  let workQueue;
+  let workQueueInbox;
+  let workQueueBatched;
+  let workQueueOutbox;
 
   beforeEach(() => {
     workItemPetitionsMyMessagesInbox = generateWorkItem({
@@ -178,9 +207,10 @@ describe('filterWorkItems', () => {
     });
 
     workItemPetitionsMyMessagesSent = generateWorkItem({
-      assigneeId: petitionsClerk1.userId,
+      assigneeId: petitionsClerk2.userId,
       docketNumber: '100-02',
       isInternal: true,
+      section: CONSTANTS.PETITIONS_SECTION,
       sentBySection: CONSTANTS.PETITIONS_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
@@ -207,7 +237,7 @@ describe('filterWorkItems', () => {
     });
 
     workItemPetitionsMyDocumentQCBatched = generateWorkItem({
-      caseStatus: 'Batched for IRS',
+      caseStatus: STATUS_TYPES.batchedForIRS,
       docketNumber: '100-06',
       isInternal: false,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
@@ -234,7 +264,7 @@ describe('filterWorkItems', () => {
 
     workItemPetitionsSectionDocumentQCBatched = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
-      caseStatus: 'Batched for IRS',
+      caseStatus: STATUS_TYPES.batchedForIRS,
       docketNumber: '100-09',
       isInternal: false,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
@@ -244,7 +274,7 @@ describe('filterWorkItems', () => {
       assigneeId: petitionsClerk2.userId,
       caseStatus: 'Calendared',
       completedAt: '2019-07-18T18:05:54.166Z',
-      completedByUserId: petitionsClerk1.userId,
+      completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
       isInternal: false,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
@@ -256,11 +286,11 @@ describe('filterWorkItems', () => {
       completedAt: null,
       docketNumber: '100-11',
       isInternal: true,
-      section: CONSTANTS.PETITIONS_SECTION,
+      section: CONSTANTS.DOCKET_SECTION,
     });
 
     workItemDocketMyMessagesSent = generateWorkItem({
-      assigneeId: docketClerk1.userId,
+      assigneeId: docketClerk2.userId,
       docketNumber: '100-12',
       isInternal: true,
       sentBySection: CONSTANTS.DOCKET_SECTION,
@@ -289,14 +319,6 @@ describe('filterWorkItems', () => {
       section: CONSTANTS.DOCKET_SECTION,
     });
 
-    workItemDocketMyMessagesProcessed = generateWorkItem({
-      assigneeId: docketClerk1.userId,
-      completedByUserId: docketClerk1.userId,
-      docketNumber: '100-16',
-      isInternal: true,
-      section: CONSTANTS.DOCKET_SECTION,
-    });
-
     workItemDocketSectionDocumentQCInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-17',
@@ -304,45 +326,307 @@ describe('filterWorkItems', () => {
       section: CONSTANTS.DOCKET_SECTION,
     });
 
-    workItemDocketSectionDocumentQCProcessed = generateWorkItem({
-      completedAt: '2019-07-18T18:05:54.166Z',
-      docketNumber: '100-18',
-      isInternal: false,
-      section: CONSTANTS.DOCKET_SECTION,
-    });
-
-    workQueue = [
+    workQueueInbox = [
       workItemPetitionsMyMessagesInbox,
-      workItemPetitionsMyMessagesSent,
       workItemPetitionsSectionMessagesInbox,
-      workItemPetitionsSectionMessagesSent,
       workItemPetitionsMyDocumentQCInbox,
-      workItemPetitionsMyDocumentQCBatched,
-      workItemPetitionsMyDocumentQCServed,
       workItemPetitionsSectionDocumentQCInbox,
-      workItemPetitionsSectionDocumentQCBatched,
-      workItemPetitionsSectionDocumentQCServed,
       workItemDocketMyMessagesInbox,
-      workItemDocketMyMessagesSent,
       workItemDocketSectionMessagesInbox,
-      workItemDocketSectionMessagesSent,
       workItemDocketMyDocumentQCInbox,
-      workItemDocketMyMessagesProcessed,
       workItemDocketSectionDocumentQCInbox,
-      workItemDocketSectionDocumentQCProcessed,
+    ];
+
+    workQueueBatched = [
+      workItemPetitionsMyDocumentQCBatched,
+      workItemPetitionsSectionDocumentQCBatched,
+    ];
+
+    workQueueOutbox = [
+      workItemPetitionsMyMessagesSent,
+      workItemPetitionsSectionMessagesSent,
+      workItemPetitionsMyDocumentQCServed,
+      workItemPetitionsSectionDocumentQCServed,
+      workItemDocketMyMessagesSent,
+      workItemDocketSectionMessagesSent,
     ];
   });
 
-  it('Returns internal messages for a user in My Inbox', async () => {
-    const filtered = workQueue.filter(
-      filterWorkItems({ ...MY_INBOX, user: petitionsClerk1 }),
+  // PETITIONS CLERK
+
+  it('Returns internal messages for a Petitions Clerk in My Messages Inbox', async () => {
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...MY_MESSAGES_INBOX, user: petitionsClerk1 }),
     );
-    console.log(filtered);
+
+    expect(filtered.length).toEqual(1);
+    expect(filtered[0].docketNumber).toEqual(
+      workItemPetitionsMyMessagesInbox.docketNumber,
+    );
+  });
+
+  it('Returns sent messages for a Petitions Clerk in My Messages Outbox', async () => {
+    const filtered = workQueueOutbox.filter(
+      filterWorkItems({ ...MY_MESSAGES_OUTBOX, user: petitionsClerk1 }),
+    );
     expect(filtered.length).toEqual(1);
   });
 
-  it('Returns sent messages for a user in My Outbox', async () => {});
-  it('Returns assigned work items for a user in My Document QC', async () => {});
-  it('Returns batched work items for Batched for IRS', async () => {});
-  it('Returns work items that were previously batched after running IRS Batch Process (Served)', async () => {});
+  it('Returns work items for a Petitions Clerk in Section Messages Inbox', async () => {
+    const user = petitionsClerk1;
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...SECTION_MESSAGES_INBOX, user }),
+    );
+    let assigned = null;
+    let unassigned = null;
+
+    filtered.forEach(item => {
+      if (item.assigneeId === user.userId) {
+        assigned = item.docketNumber;
+      } else {
+        unassigned = item.docketNumber;
+      }
+    });
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is assigned to user
+    expect(assigned).toEqual(workItemPetitionsMyMessagesInbox.docketNumber);
+    // One item is assigend to another user
+    expect(unassigned).toEqual(
+      workItemPetitionsSectionMessagesInbox.docketNumber,
+    );
+  });
+
+  it('Returns sent work items for a Petitions Clerk in Section Messages Outbox', async () => {
+    const user = petitionsClerk1;
+    const filtered = workQueueOutbox.filter(
+      filterWorkItems({ ...SECTION_MESSAGES_OUTBOX, user }),
+    );
+
+    let sentByUser = null;
+    let sentByOtherUser = null;
+
+    filtered.forEach(item => {
+      if (item.sentByUserId === user.userId) {
+        sentByUser = item.docketNumber;
+      } else {
+        sentByOtherUser = item.docketNumber;
+      }
+    });
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is sent from our user
+    expect(sentByUser).toEqual(workItemPetitionsMyMessagesSent.docketNumber);
+    // One item is from another user
+    expect(sentByOtherUser).toEqual(
+      workItemPetitionsSectionMessagesSent.docketNumber,
+    );
+  });
+
+  it('Returns assigned messages for a Petitions Clerk in My Document QC Inbox', async () => {
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...MY_DOCUMENT_QC_INBOX, user: petitionsClerk1 }),
+    );
+    expect(filtered.length).toEqual(1);
+  });
+
+  it('Returns batched items for a Petitions Clerk in My Document QC Batched', async () => {
+    const filtered = workQueueBatched.filter(
+      filterWorkItems({ ...MY_DOCUMENT_QC_BATCHED, user: petitionsClerk1 }),
+    );
+
+    expect(filtered.length).toEqual(1);
+    expect(filtered[0].docketNumber).toEqual(
+      workItemPetitionsMyDocumentQCBatched.docketNumber,
+    );
+  });
+
+  it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', async () => {
+    const filtered = workQueueOutbox.filter(
+      filterWorkItems({ ...MY_DOCUMENT_QC_OUTBOX, user: petitionsClerk1 }),
+    );
+
+    expect(filtered.length).toEqual(1);
+    expect(filtered[0].docketNumber).toEqual(
+      workItemPetitionsMyDocumentQCServed.docketNumber,
+    );
+  });
+
+  it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', async () => {
+    const user = petitionsClerk1;
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...SECTION_DOCUMENT_QC_INBOX, user }),
+    );
+    let assigned = null;
+    let unassigned = null;
+
+    filtered.forEach(item => {
+      if (item.assigneeId === user.userId) {
+        assigned = item.docketNumber;
+      } else {
+        unassigned = item.docketNumber;
+      }
+    });
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is assigned to user
+    expect(assigned).toEqual(workItemPetitionsMyDocumentQCInbox.docketNumber);
+    // One item is assigend to another user
+    expect(unassigned).toEqual(
+      workItemPetitionsSectionDocumentQCInbox.docketNumber,
+    );
+  });
+
+  it('Returns batched work items for a Petitions Clerk in Section Document QC Batched', async () => {
+    const user = petitionsClerk1;
+    const filtered = workQueueBatched.filter(
+      filterWorkItems({ ...SECTION_DOCUMENT_QC_BATCHED, user }),
+    );
+    let sentByUser = null;
+    let sentByOtherUser = null;
+
+    filtered.forEach(item => {
+      if (item.sentByUserId === user.userId) {
+        sentByUser = item.docketNumber;
+      } else {
+        sentByOtherUser = item.docketNumber;
+      }
+    });
+
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is sent from our user
+    expect(sentByUser).toEqual(
+      workItemPetitionsMyDocumentQCBatched.docketNumber,
+    );
+    // One item is sent from another user
+    expect(sentByOtherUser).toEqual(
+      workItemPetitionsSectionDocumentQCBatched.docketNumber,
+    );
+  });
+
+  it('Returns sent work items for a Petitions Clerk in Section Document QC Outbox', async () => {
+    const user = petitionsClerk1;
+    const filtered = workQueueOutbox.filter(
+      filterWorkItems({ ...SECTION_DOCUMENT_QC_OUTBOX, user }),
+    );
+    let sentByUser = null;
+    let sentByOtherUser = null;
+
+    filtered.forEach(item => {
+      if (item.sentByUserId === user.userId) {
+        sentByUser = item.docketNumber;
+      } else {
+        sentByOtherUser = item.docketNumber;
+      }
+    });
+
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is sent from our user
+    expect(sentByUser).toEqual(
+      workItemPetitionsMyDocumentQCServed.docketNumber,
+    );
+    // One item is from another user
+    expect(sentByOtherUser).toEqual(
+      workItemPetitionsSectionDocumentQCServed.docketNumber,
+    );
+  });
+
+  // DOCKET CLERK
+
+  it('Returns internal messages for a Docket Clerk in My Messages Inbox', async () => {
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...MY_MESSAGES_INBOX, user: docketClerk1 }),
+    );
+    expect(filtered.length).toEqual(1);
+  });
+
+  it('Returns sent messages for a Docket Clerk in My Messages Outbox', async () => {
+    const filtered = workQueueOutbox.filter(
+      filterWorkItems({ ...MY_MESSAGES_OUTBOX, user: docketClerk1 }),
+    );
+    expect(filtered.length).toEqual(1);
+  });
+
+  it('Returns work items for a Docket Clerk in Section Messages Inbox', async () => {
+    const user = docketClerk1;
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...SECTION_MESSAGES_INBOX, user }),
+    );
+    let assigned = null;
+    let unassigned = null;
+
+    filtered.forEach(item => {
+      if (item.assigneeId === user.userId) {
+        assigned = item.docketNumber;
+      } else {
+        unassigned = item.docketNumber;
+      }
+    });
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is assigned to user
+    expect(assigned).toEqual(workItemDocketMyMessagesInbox.docketNumber);
+    // One item is assigend to another user
+    expect(unassigned).toEqual(workItemDocketSectionMessagesInbox.docketNumber);
+  });
+
+  it('Returns sent work items for a Docket Clerk in Section Messages Outbox', async () => {
+    const user = docketClerk1;
+    const filtered = workQueueOutbox.filter(
+      filterWorkItems({ ...SECTION_MESSAGES_OUTBOX, user }),
+    );
+    let sentByUser = null;
+    let sentByOtherUser = null;
+
+    filtered.forEach(item => {
+      if (item.sentByUserId === user.userId) {
+        sentByUser = item.docketNumber;
+      } else {
+        sentByOtherUser = item.docketNumber;
+      }
+    });
+
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is from our user
+    expect(sentByUser).toEqual(workItemDocketMyMessagesSent.docketNumber);
+    // One item is from another user
+    expect(sentByOtherUser).toEqual(
+      workItemDocketSectionMessagesSent.docketNumber,
+    );
+  });
+
+  it('Returns assigned messages for a Docket Clerk in My Document QC Inbox', async () => {
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...MY_DOCUMENT_QC_INBOX, user: docketClerk1 }),
+    );
+    expect(filtered.length).toEqual(1);
+  });
+
+  it('Returns section work items for a Docket Clerk in Section Document QC Inbox', async () => {
+    const user = docketClerk1;
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...SECTION_DOCUMENT_QC_INBOX, user }),
+    );
+    let assigned = null;
+    let unassigned = null;
+
+    filtered.forEach(item => {
+      if (item.assigneeId === user.userId) {
+        assigned = item.docketNumber;
+      } else {
+        unassigned = item.docketNumber;
+      }
+    });
+    // Two total items in the section queue
+    expect(filtered.length).toEqual(2);
+    // One item is assigned to user
+    expect(assigned).toEqual(workItemDocketMyDocumentQCInbox.docketNumber);
+    // One item is assigend to another user
+    expect(unassigned).toEqual(
+      workItemDocketSectionDocumentQCInbox.docketNumber,
+    );
+  });
 });
