@@ -2,12 +2,12 @@ import { some } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * Determines if there is a pending association of the practitioner to the case
+ * Determines if the user is associated with the case or not, and if there is a
+ * pending association to the case for practitioners
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @param {object} providers.applicationContext needed for getting the getCase use case
- * @param {object} providers.props the cerebral props object containing props.docketNumber
  * @returns {object} contains the association returned from the use case
  */
 export const getCaseAssociationAction = async ({ applicationContext, get }) => {
