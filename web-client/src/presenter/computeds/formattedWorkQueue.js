@@ -1,7 +1,5 @@
 import {
-  DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
-  PETITIONS_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
@@ -221,12 +219,20 @@ export const filterWorkItems = ({
 };
 
 export const formattedWorkQueue = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
+  const workQueueToDisplay = get(state.workQueueToDisplay);
   const isInternal = get(state.workQueueIsInternal);
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
-    .filter(filterWorkItems)
+    .filter(
+      filterWorkItems({
+        user,
+        workQueueIsInternal: isInternal,
+        workQueueToDisplay,
+      }),
+    )
     .map(item =>
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
