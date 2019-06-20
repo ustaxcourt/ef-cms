@@ -125,12 +125,6 @@ const {
   getCasesByUser: getCasesByUserUC,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
-  getCasesForRespondent,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesForRespondent');
-const {
-  getCasesForRespondent: getCasesForRespondentUC,
-} = require('../../shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
-const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
@@ -378,7 +372,6 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
-        getCasesForRespondent,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
         getInternalUsers,
@@ -440,7 +433,6 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
-        getCasesForRespondent: getCasesForRespondentUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
