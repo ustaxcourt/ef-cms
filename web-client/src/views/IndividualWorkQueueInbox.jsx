@@ -34,8 +34,6 @@ export const IndividualWorkQueueInbox = connect(
             </tr>
           </thead>
           {workQueue.map((item, idx) => {
-            const workItemUnread =
-              item.showUnreadStatusIcon && item.showUnreadIndicators;
             return (
               <tbody key={idx}>
                 <tr>
@@ -94,7 +92,7 @@ export const IndividualWorkQueueInbox = connect(
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,
-                          workItemIdToMarkAsRead: workItemUnread
+                          workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,
                         })}
