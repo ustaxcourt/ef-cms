@@ -59,7 +59,7 @@ test = CerebralTest(presenter);
 
 describe('Docket Clerk Creates A Trial', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

@@ -78,7 +78,7 @@ test = CerebralTest(presenter);
 
 describe('Trial Session Eligible Cases - Scenario 8 - Trial details display on the case detail page', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,
