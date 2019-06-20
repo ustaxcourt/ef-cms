@@ -54,6 +54,7 @@ export const caseDetailHelper = get => {
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
+    showCaseInformationPublic: isExternalUser,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
