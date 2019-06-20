@@ -15,6 +15,10 @@ import {
 const test = setupTest();
 
 describe('Create a work item', () => {
+  beforeEach(() => {
+    jest.setTimeout(300000);
+  });
+
   let caseDetail;
   let qcMyInboxCountBefore;
   let qcSectionInboxCountBefore;
