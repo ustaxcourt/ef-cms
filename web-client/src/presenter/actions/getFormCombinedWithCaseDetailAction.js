@@ -54,7 +54,7 @@ export const checkDate = (
     updatedDateString = null;
   } else {
     if (
-      !updatedDateString.includes('undefined') === -1 &&
+      !updatedDateString.includes('undefined') &&
       hasAllDateParts.test(updatedDateString)
     ) {
       updatedDateString = castToISO(applicationContext, updatedDateString);
