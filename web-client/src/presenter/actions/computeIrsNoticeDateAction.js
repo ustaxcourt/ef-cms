@@ -7,11 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const computeIrsNoticeDateAction = ({
-  // applicationContext,
-  get,
-  store,
-}) => {
+export const computeIrsNoticeDateAction = ({ get, store }) => {
   let form = get(state.form);
 
   if (form.hasIrsNotice) {
@@ -24,14 +20,7 @@ export const computeIrsNoticeDateAction = ({
       .map(segment => (segment = segment.padStart(2, '0')))
       .join('-');
 
-    store.set(
-      state.form.irsNoticeDate,
-      form.irsNoticeDate,
-      // applicationContext
-      //   .getUtilities()
-      //   .prepareDateFromString(form.irsNoticeDate)
-      //   .toISOString(),
-    );
+    store.set(state.form.irsNoticeDate, form.irsNoticeDate);
   } else {
     store.set(state.form.irsNoticeDate, undefined);
   }

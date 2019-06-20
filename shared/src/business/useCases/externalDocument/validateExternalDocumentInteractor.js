@@ -2,7 +2,7 @@
  * validateExternalDocument
  * @param applicationContext
  * @param documentMetadata
- * @returns {Object} errors (null if no errors)
+ * @returns {object} errors (null if no errors)
  */
 exports.validateExternalDocument = ({
   applicationContext,

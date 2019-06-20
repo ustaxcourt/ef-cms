@@ -4,7 +4,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
 /**
  * lambda which is used for checking for ready for trial cases.
  *
- * @param {Object} event the AWS event object
+ * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>

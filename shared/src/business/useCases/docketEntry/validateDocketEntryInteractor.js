@@ -2,7 +2,7 @@
  * validateDocketEntry
  * @param applicationContext
  * @param entryMetadata
- * @returns {Object} errors (null if no errors)
+ * @returns {object} errors (null if no errors)
  */
 exports.validateDocketEntry = ({ applicationContext, entryMetadata }) => {
   const docketEntry = applicationContext
