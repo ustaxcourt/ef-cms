@@ -202,7 +202,7 @@ TrialSession.prototype.setAsCalendared = function() {
 /**
  * add case to calendar
  *
- * @param {Object} caseEntity
+ * @param {object} caseEntity
  * @returns {TrialSession}
  */
 TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
