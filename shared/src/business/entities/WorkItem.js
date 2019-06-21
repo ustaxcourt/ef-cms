@@ -243,6 +243,10 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 
 /**
  * complete the work item as the IRS user with the message 'Served on IRS'
+ *
+ * @param opts
+ * @param opts.batchedByUserId
+ * @param opts.batchedByName
  */
 WorkItem.prototype.setAsSentToIRS = function({
   batchedByUserId,
