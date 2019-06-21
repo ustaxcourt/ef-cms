@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const {
-  UnauthorizedError,
   NotFoundError,
+  UnauthorizedError,
 } = require('../../../shared/src/errors/errors');
 
 const headers = {

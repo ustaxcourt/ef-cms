@@ -1,16 +1,15 @@
-const { Case } = require('../../entities/Case');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
-const { DocketRecord } = require('../../entities/DocketRecord');
-const { Document } = require('../../entities/Document');
-const { Message } = require('../../entities/Message');
-const { WorkItem } = require('../../entities/WorkItem');
-
 const {
   isAuthorized,
   FILE_EXTERNAL_DOCUMENT,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
+const { Case } = require('../../entities/Case');
+const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DocketRecord } = require('../../entities/DocketRecord');
+const { Document } = require('../../entities/Document');
+const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *

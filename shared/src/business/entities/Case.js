@@ -789,12 +789,12 @@ Case.prototype.checkForReadyForTrial = function() {
  */
 Case.prototype.generateTrialSortTags = function() {
   const {
-    preferredTrialCity,
     caseId,
     caseType,
     createdAt,
-    receivedAt,
+    preferredTrialCity,
     procedureType,
+    receivedAt,
   } = this;
 
   const caseProcedureSymbol =

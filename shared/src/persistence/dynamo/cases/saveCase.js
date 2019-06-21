@@ -1,9 +1,9 @@
 const client = require('../../dynamodbClientService');
 
 exports.saveVersionedCase = async ({
-  existingVersion,
-  caseToSave,
   applicationContext,
+  caseToSave,
+  existingVersion,
 }) => {
   // used for associating a case to the latest version
   const currentVersion = existingVersion;

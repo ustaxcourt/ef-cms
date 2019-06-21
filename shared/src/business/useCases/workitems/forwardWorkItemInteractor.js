@@ -17,10 +17,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
  */
 exports.forwardWorkItem = async ({
-  workItemId,
+  applicationContext,
   assigneeId,
   message,
-  applicationContext,
+  workItemId,
 }) => {
   const user = applicationContext.getCurrentUser();
 

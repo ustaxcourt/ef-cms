@@ -106,8 +106,8 @@ exports.createCaseFromPaper = async ({
     userId: user.userId,
   });
   const {
-    workItem: newWorkItem,
     message: newMessage,
+    workItem: newWorkItem,
   } = addPetitionDocumentWithWorkItemToCase(
     user,
     caseToAdd,

@@ -11,8 +11,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {Promise<*|*>}
  */
 exports.getSentWorkItemsForSection = async ({
-  section,
   applicationContext,
+  section,
 }) => {
   const user = applicationContext.getCurrentUser();
 

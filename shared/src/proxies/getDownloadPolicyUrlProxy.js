@@ -4,7 +4,7 @@ const { get } = require('./requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
+exports.getDownloadPolicyUrl = ({ applicationContext, documentId }) => {
   return get({
     applicationContext,
     endpoint: `/documents/${documentId}/downloadPolicyUrl`,

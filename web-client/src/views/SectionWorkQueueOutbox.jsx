@@ -13,8 +13,8 @@ export const SectionWorkQueueOutbox = connect(
   ({
     documentHelper,
     sectionWorkQueue,
-    workQueueSectionHelper,
     workQueueHelper,
+    workQueueSectionHelper,
   }) => {
     return (
       <table

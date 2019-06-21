@@ -175,7 +175,7 @@ TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
  * @returns {string} the sort key prefix
  */
 TrialSession.prototype.generateSortKeyPrefix = function() {
-  const { trialLocation, sessionType } = this;
+  const { sessionType, trialLocation } = this;
 
   const caseProcedureSymbol =
     {

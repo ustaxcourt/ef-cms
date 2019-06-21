@@ -1,9 +1,9 @@
 const {
-  PDFDocumentFactory,
-  PDFDocumentWriter,
-  drawText,
   drawImage,
   drawLinesOfText,
+  drawText,
+  PDFDocumentFactory,
+  PDFDocumentWriter,
 } = require('pdf-lib');
 const { Case } = require('../entities/Case');
 const { coverLogo } = require('../assets/coverLogo');
@@ -40,7 +40,7 @@ exports.addCoverToPDFDocument = async ({
   );
 
   const isLodged = documentEntity.lodged;
-  const isPaper = documentEntity.isPaper;
+  const { isPaper } = documentEntity;
 
   const dateServedFormatted =
     (caseEntity.irsSendDate &&
@@ -465,10 +465,10 @@ exports.addCoverToPDFDocument = async ({
     const {
       centerTextAt,
       content,
+      fontName,
+      fontSize,
       xPos,
       yPos,
-      fontSize,
-      fontName,
     } = contentArea;
 
     const params = {

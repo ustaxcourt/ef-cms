@@ -14,7 +14,7 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
     });
 
   for (let caseRecord of caseCatalog) {
-    const caseId = caseRecord.caseId;
+    const { caseId } = caseRecord;
     const caseToCheck = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({

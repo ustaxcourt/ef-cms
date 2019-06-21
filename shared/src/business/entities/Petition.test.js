@@ -1,6 +1,6 @@
 const {
-  MAX_FILE_SIZE_MB,
   MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
 } = require('../../persistence/s3/getUploadPolicy');
 const { Petition } = require('./Petition');
 

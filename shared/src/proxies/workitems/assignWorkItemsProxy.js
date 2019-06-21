@@ -8,10 +8,10 @@ const { put } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.assignWorkItems = ({
-  workItemId,
+  applicationContext,
   assigneeId,
   assigneeName,
-  applicationContext,
+  workItemId,
 }) => {
   return put({
     applicationContext,

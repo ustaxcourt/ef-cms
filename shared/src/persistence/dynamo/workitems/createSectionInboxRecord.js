@@ -9,7 +9,7 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.createSectionInboxRecord = async ({ workItem, applicationContext }) => {
+exports.createSectionInboxRecord = async ({ applicationContext, workItem }) => {
   await put({
     Item: {
       pk: `section-${workItem.section}`,

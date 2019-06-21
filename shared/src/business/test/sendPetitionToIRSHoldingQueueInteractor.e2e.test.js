@@ -109,9 +109,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const workItemId = petitionSectionInbox[0].workItemId;
-    const caseId = petitionSectionInbox[0].caseId;
-    const documentId = petitionSectionInbox[0].document.documentId;
+    const { workItemId } = petitionSectionInbox[0];
+    const { caseId } = petitionSectionInbox[0];
+    const { documentId } = petitionSectionInbox[0].document;
 
     await assignWorkItems({
       applicationContext,
