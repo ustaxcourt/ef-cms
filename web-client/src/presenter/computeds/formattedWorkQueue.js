@@ -1,5 +1,7 @@
 import {
+  DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
+  SENIOR_ATTORNEY_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
@@ -126,6 +128,8 @@ export const filterWorkItems = ({
 }) => {
   const { box, queue } = workQueueToDisplay;
   const userSection = getSectionForRole(user.role);
+  const docQCUserSection =
+    userSection === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : userSection;
 
   const filters = {
     documentQc: {
@@ -172,7 +176,7 @@ export const filterWorkItems = ({
           return (
             !item.completedAt &&
             !item.isInternal &&
-            item.section === userSection
+            item.section === docQCUserSection
           );
         },
         outbox: item => {
