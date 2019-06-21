@@ -198,6 +198,7 @@ export const filterWorkItems = ({
         },
         outbox: item => {
           return (
+            !item.completedAt &&
             item.isInternal &&
             item.sentByUserId &&
             item.sentByUserId === user.userId
@@ -211,7 +212,11 @@ export const filterWorkItems = ({
           );
         },
         outbox: item => {
-          return item.isInternal && item.sentBySection === userSection;
+          return (
+            !item.completedAt &&
+            item.isInternal &&
+            item.sentBySection === userSection
+          );
         },
       },
     },
