@@ -89,6 +89,13 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/create-order',
+      checkLoggedIn(docketNumber => {
+        document.title = `Create an order ${pageTitleSuffix}`;
+        app.getSequence('gotoCreateOrderSequence')({ docketNumber });
+      }),
+    );
+    route(
       '/case-detail/*/add-docket-entry',
       checkLoggedIn(docketNumber => {
         document.title = `Add docket entry ${pageTitleSuffix}`;
