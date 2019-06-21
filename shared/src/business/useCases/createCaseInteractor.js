@@ -104,11 +104,12 @@ exports.createCase = async ({
   });
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     practitioner: practitioners[0],
     userId: user.userId,
   });
@@ -129,7 +130,7 @@ exports.createCase = async ({
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
     documentType: Document.initialDocumentTypes.stin,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     practitioner: practitioners[0],
     userId: user.userId,
   });
@@ -140,7 +141,7 @@ exports.createCase = async ({
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
-      filedBy: user.name,
+      filedBy: caseCaptionNames,
       practitioner: practitioners[0],
       userId: user.userId,
     });
