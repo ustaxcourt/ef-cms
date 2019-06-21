@@ -5,7 +5,10 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/Case');
 const { Document } = require('../entities/Document');
-const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
+const {
+  IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+} = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -92,14 +95,15 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     const batchedByUserId = lastMessage.fromUserId;
     const batchedByName = lastMessage.from;
 
-    //set the work item as completed
     initializeCaseWorkItem.setAsSentToIRS({
       batchedByName,
       batchedByUserId,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
       applicationContext,
+      section: PETITIONS_SECTION,
+      userId: batchedByUserId,
       workItem: initializeCaseWorkItem,
     });
 
