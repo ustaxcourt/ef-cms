@@ -103,6 +103,7 @@ describe('fileExternalDocument', () => {
     let error;
     let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
     let saveWorkItemForNonPaperSpy = sinon.spy();
+    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
     let updateCaseSpy = sinon.spy();
     try {
       applicationContext = {
@@ -116,6 +117,7 @@ describe('fileExternalDocument', () => {
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
+          saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
