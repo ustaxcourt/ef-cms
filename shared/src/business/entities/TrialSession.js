@@ -21,6 +21,8 @@ const STATUS_TYPES = {
   upcoming: 'Upcoming',
 };
 
+const SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+
 exports.STATUS_TYPES = STATUS_TYPES;
 
 /**
@@ -63,7 +65,7 @@ TrialSession.errorToMessageMap = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter a valid zip code.',
+      message: 'Enter a valid ZIP code.',
     },
   ],
   sessionType: 'Session type is required.',
@@ -76,7 +78,7 @@ TrialSession.errorToMessageMap = {
   ],
   startTime: 'Start time value provided is invalid.',
   swingSessionId: 'You must select a swing session.',
-  term: 'Term is required.',
+  term: 'Term session is not valid.',
   termYear: 'Term year is required.',
   trialLocation: 'Trial Location is required.',
 };
@@ -137,7 +139,10 @@ joiValidationDecorator(
         .uuid(uuidVersions)
         .required(),
     }),
-    term: joi.string().required(),
+    term: joi
+      .string()
+      .valid(SESSION_TERMS)
+      .required(),
     termYear: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
@@ -197,7 +202,7 @@ TrialSession.prototype.setAsCalendared = function() {
 /**
  * add case to calendar
  *
- * @param {Object} caseEntity
+ * @param {object} caseEntity
  * @returns {TrialSession}
  */
 TrialSession.prototype.addCaseToCalendar = function(caseEntity) {

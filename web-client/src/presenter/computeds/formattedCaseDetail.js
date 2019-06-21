@@ -69,7 +69,7 @@ const formatYearAmount = (applicationContext, caseDetailErrors, caseDetail) => (
   return {
     ...yearAmount,
     year:
-      formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+      formattedYear.includes('Invalid') || yearAmount.year.length < 4
         ? yearAmount.year
         : formattedYear,
   };
@@ -177,10 +177,16 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
     return a.index - b.index;
   });
 
-  if (result.respondent)
-    result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
+  const formatRespondent = respondent => {
+    respondent.formattedName = `${respondent.name} ${
+      respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
+    return respondent;
+  };
+
+  if (result.respondents) {
+    result.respondents = result.respondents.map(formatRespondent);
+  }
 
   if (result.practitioner) {
     let formattedName = result.practitioner.name;
@@ -213,7 +219,9 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = `Respondent served ${result.irsDateFormatted}`;
+  result.datePetitionSentToIrsMessage = `Respondent served ${
+    result.irsDateFormatted
+  }`;
 
   result.shouldShowIrsNoticeDate =
     result.hasVerifiedIrsNotice ||
@@ -298,7 +306,7 @@ const getDocketRecordSortFunc = sortBy => {
 
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
-  const isReversed = sortBy.indexOf('Desc') > -1;
+  const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable

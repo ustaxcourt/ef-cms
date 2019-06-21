@@ -37,14 +37,14 @@ export const CaseSearchBox = connect(
                   }`}
                 >
                   <div>
-                    <label htmlFor="docket-search-field" className="usa-label">
+                    <label className="usa-label" htmlFor="docket-search-field">
                       Docket Number
                     </label>
                     <input
-                      id="docket-search-field"
-                      type="text"
-                      name="searchTerm"
                       className="usa-input"
+                      id="docket-search-field"
+                      name="searchTerm"
+                      type="text"
                       value={searchTerm}
                       onChange={e => {
                         updateSearchTermSequence({
@@ -61,8 +61,8 @@ export const CaseSearchBox = connect(
                   )}
                 </div>
                 <button
-                  type="submit"
                   className="usa-button usa-button--outline margin-top-2"
+                  type="submit"
                 >
                   <span className="usa-search-submit-text">Search</span>
                 </button>

@@ -34,7 +34,7 @@ function getFormattedValidationErrorsHelper(entity) {
       for (let errorObject of errorMap) {
         if (
           typeof errorObject === 'object' &&
-          errors[key].indexOf(errorObject.contains) > -1
+          errors[key].includes(errorObject.contains)
         ) {
           errors[key] = errorObject.message;
           break;

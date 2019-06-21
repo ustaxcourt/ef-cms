@@ -45,26 +45,26 @@ export const CaseDifferenceExplained = () => (
     </table>
 
     <h3>If You File as a Small Tax Case, You’ll Have:</h3>
-    <div role="list" className="small-case-features grid-container padding-x-0">
+    <div className="small-case-features grid-container padding-x-0" role="list">
       <div className="grid-row">
-        <div role="listitem" className="grid-col-3 feature">
+        <div className="grid-col-3 feature" role="listitem">
           <h4>More Location Options</h4>
           <p>
             Small case trials are held in 15 more locations than regular cases
           </p>
         </div>
-        <div role="listitem" className="grid-col-3 feature">
+        <div className="grid-col-3 feature" role="listitem">
           <h4>Less Formal Procedures</h4>
           <p>
             Small case pre-trial and trial procedures are less formal than
             regular cases
           </p>
         </div>
-        <div role="listitem" className="grid-col-3 feature">
+        <div className="grid-col-3 feature" role="listitem">
           <h4>Relaxed Evidence Rules</h4>
           <p>Judges can consider any evidence that’s relevant</p>
         </div>
-        <div role="listitem" className="grid-col-3 feature warning">
+        <div className="grid-col-3 feature warning" role="listitem">
           <h4>
             <FontAwesomeIcon icon="exclamation-triangle" />
             No Appeals Process

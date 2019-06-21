@@ -1,74 +1,70 @@
-import { some } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
+  const caseHasRespondent =
+    !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
   const userRole = get(state.user.role);
   const showActionRequired = !caseDetail.payGovId && userRole === 'petitioner';
   const documentDetailTab = get(state.documentDetail.tab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
-  const userId = get(state.user.userId);
+  const caseIsPaid = caseDetail.payGovId && !form.paymentType;
+  const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
+    userRole,
+  );
 
-  const isAssociated = get(state.screenMetadata.isAssociated);
+  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
-  const notAssociated = get(state.screenMetadata.notAssociated);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
     ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
-  if (userRole === 'practitioner') {
-    if (notAssociated) {
-      showFileDocumentButton = false;
-      showRequestAccessToCaseButton = true;
-      showPendingAccessToCaseButton = false;
-    }
-    if (isAssociated) {
+  let showFileFirstDocumentButton = false;
+  let userHasAccessToCase = false;
+
+  if (isExternalUser) {
+    if (userAssociatedWithCase) {
+      userHasAccessToCase = true;
       showFileDocumentButton = true;
       showRequestAccessToCaseButton = false;
       showPendingAccessToCaseButton = false;
-    }
-    if (pendingAssociation) {
+      showFileFirstDocumentButton = false;
+    } else {
       showFileDocumentButton = false;
-      showRequestAccessToCaseButton = false;
-      showPendingAccessToCaseButton = true;
+      if (userRole === 'practitioner') {
+        showRequestAccessToCaseButton = !pendingAssociation;
+        showPendingAccessToCaseButton = pendingAssociation;
+      }
+      if (userRole === 'respondent') {
+        showFileFirstDocumentButton = !caseHasRespondent;
+        showRequestAccessToCaseButton = caseHasRespondent;
+      }
     }
-  }
-
-  let userHasAccessToCase = true;
-  if (userRole === 'practitioner') {
-    userHasAccessToCase = false;
-    if (
-      caseDetail &&
-      caseDetail.practitioners &&
-      some(caseDetail.practitioners, { userId: userId })
-    ) {
-      userHasAccessToCase = true;
-    }
+  } else {
+    userHasAccessToCase = true;
   }
 
   return {
     documentDetailTab,
+    hidePublicCaseInformation: !isExternalUser,
     showActionRequired,
     showAddDocketEntryButton,
     showCaptionEditButton:
-      caseDetail.status !== 'Batched for IRS' &&
-      userRole !== 'petitioner' &&
-      userRole !== 'practitioner' &&
-      userRole !== 'respondent',
-    showCaseInformationPublic:
-      userRole === 'petitioner' || userRole === 'practitioner',
+      caseDetail.status !== 'Batched for IRS' && !isExternalUser,
+    showCaseInformationPublic: isExternalUser,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showFileDocumentButton,
+    showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
-    showPaymentOptions: !(caseDetail.payGovId && !form.paymentType),
-    showPaymentRecord: caseDetail.payGovId && !form.paymentType,
+    showPaymentOptions: !caseIsPaid,
+    showPaymentRecord: caseIsPaid,
     showPendingAccessToCaseButton,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',

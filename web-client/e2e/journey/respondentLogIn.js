@@ -1,9 +1,9 @@
-export default test => {
+export default (test, token = 'respondent') => {
   return it('Respondent logs in', async () => {
     await test.runSequence('gotoLoginSequence');
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
-      value: 'respondent',
+      value: token,
     });
     await test.runSequence('submitLoginSequence');
   });

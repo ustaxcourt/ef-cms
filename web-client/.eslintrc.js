@@ -17,6 +17,16 @@ module.exports = {
     'sort-keys-fix',
   ],
   rules: {
+    'react/jsx-sort-props': [
+      'error',
+      {
+        callbacksLast: true,
+        shorthandFirst: true,
+        shorthandLast: false,
+        ignoreCase: false,
+        noSortAlphabetically: false,
+      },
+    ],
     'arrow-parens': ['error', 'as-needed'],
     'jsdoc/check-param-names': 1,
     'jsdoc/check-types': 1,

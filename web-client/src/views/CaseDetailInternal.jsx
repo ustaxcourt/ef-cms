@@ -43,10 +43,10 @@ export const CaseDetailInternal = connect(
           <div className="only-small-screens">
             <div className="margin-bottom-3">
               <select
+                aria-label="additional case info"
                 className="usa-select"
                 id="mobile-document-detail-tab-selector"
                 name="partyType"
-                aria-label="additional case info"
                 value={caseHelper.documentDetailTab}
                 onChange={e => {
                   setDocumentDetailTabSequence({
@@ -61,20 +61,20 @@ export const CaseDetailInternal = connect(
           </div>
           <div className="mobile-document-detail-tabs">
             <Tabs
-              className="classic-horizontal-header3 tab-border"
               bind="documentDetail.tab"
+              className="classic-horizontal-header3 tab-border"
             >
               <Tab
+                id="tab-docket-record"
                 tabName="docketRecord"
                 title="Docket Record"
-                id="tab-docket-record"
               >
                 <DocketRecord />
               </Tab>
               <Tab
+                id="tab-case-info"
                 tabName="caseInfo"
                 title="Case Information"
-                id="tab-case-info"
               >
                 <CaseInformationInternal />
                 <div className="case-detail-party-info">
@@ -90,13 +90,13 @@ export const CaseDetailInternal = connect(
             <>
               {caseDetail.contactPrimary && (
                 <a
+                  aria-label="View PDF"
                   href={`${baseUrl}/documents/${
                     caseDetail.docketNumber
                   }_${caseDetail.contactPrimary.name.replace(
                     /\s/g,
                     '_',
                   )}.zip/documentDownloadUrl?token=${token}`}
-                  aria-label="View PDF"
                 >
                   <FontAwesomeIcon icon={['far', 'file-pdf']} />
                   Batch Zip Download

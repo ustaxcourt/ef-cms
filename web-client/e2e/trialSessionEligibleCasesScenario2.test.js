@@ -78,7 +78,7 @@ test = CerebralTest(presenter);
 
 describe('Trial Session Eligible Cases - Scenario 2 - Only small cases get scheduled to small trial sessions', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,
