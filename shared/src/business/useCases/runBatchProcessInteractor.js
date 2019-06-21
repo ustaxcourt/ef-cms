@@ -88,8 +88,15 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       workItem => workItem.isInitializeCase,
     );
 
+    const lastMessage = initializeCaseWorkItem.getLatestMessageEntity();
+    const batchedByUserId = lastMessage.fromUserId;
+    const batchedByName = lastMessage.from;
+
     //set the work item as completed
-    initializeCaseWorkItem.setAsSentToIRS();
+    initializeCaseWorkItem.setAsSentToIRS({
+      batchedByName,
+      batchedByUserId,
+    });
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
