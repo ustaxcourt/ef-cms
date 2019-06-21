@@ -150,7 +150,9 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             !item.isInternal &&
-            item.section === IRS_BATCH_SYSTEM_SECTION &&
+            (user.role === 'petitionsclerk'
+              ? item.section === IRS_BATCH_SYSTEM_SECTION
+              : true) &&
             item.completedByUserId &&
             item.completedByUserId === user.userId &&
             !!item.completedAt
@@ -177,7 +179,9 @@ export const filterWorkItems = ({
           return (
             !!item.completedAt &&
             !item.isInternal &&
-            item.section === IRS_BATCH_SYSTEM_SECTION
+            (user.role === 'petitionsclerk'
+              ? item.section === IRS_BATCH_SYSTEM_SECTION
+              : true)
           );
         },
       },
