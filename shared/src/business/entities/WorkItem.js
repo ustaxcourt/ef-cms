@@ -244,9 +244,14 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 /**
  * complete the work item as the IRS user with the message 'Served on IRS'
  */
-WorkItem.prototype.setAsSentToIRS = function() {
+WorkItem.prototype.setAsSentToIRS = function({
+  batchedByUserId,
+  batchedByName,
+}) {
   this.completedAt = new Date().toISOString();
   this.completedMessage = 'Served on IRS';
+  this.completedBy = batchedByName;
+  this.completedByUserId = batchedByUserId;
 
   this.addMessage(
     new Message({
