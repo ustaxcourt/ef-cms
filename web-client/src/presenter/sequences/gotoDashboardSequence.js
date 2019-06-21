@@ -2,7 +2,6 @@ import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
-import { getCasesForRespondentAction } from '../actions/getCasesForRespondentAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -50,7 +49,7 @@ const goToDashboard = [
     ],
     respondent: [
       clearAlertsAction,
-      getCasesForRespondentAction,
+      getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],

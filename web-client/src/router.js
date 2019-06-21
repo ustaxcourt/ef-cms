@@ -119,7 +119,7 @@ const router = {
           'document-qc/section/batched',
         ];
 
-        if (path && validPaths.indexOf(path) === -1) {
+        if (path && !validPaths.includes(path)) {
           app.getSequence('notFoundErrorSequence')({
             error: {},
           });
@@ -207,7 +207,7 @@ const router = {
           'messages/section/batched',
         ];
 
-        if (path && validPaths.indexOf(path) === -1) {
+        if (path && !validPaths.includes(path)) {
           app.getSequence('notFoundErrorSequence')({
             error: {},
           });

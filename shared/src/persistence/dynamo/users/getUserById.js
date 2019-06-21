@@ -61,6 +61,16 @@ exports.userMap = {
     section: 'petitions',
     userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
   },
+  respondent1: {
+    addressLine1: '123 Main Street',
+    addressLine2: 'Los Angeles, CA 98089',
+    'custom:role': 'respondent',
+    email: 'respondent1@example.com',
+    name: 'Test Respondent1',
+    role: 'respondent',
+    section: 'petitions',
+    userId: '5fb6e815-b5d3-459b-b08b-49c61f0fce5e',
+  },
   seniorattorney: {
     'custom:role': 'seniorattorney',
     email: 'seniorattorney@example.com',

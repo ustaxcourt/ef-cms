@@ -19,10 +19,10 @@ describe('TabsComponent', () => {
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Tabs bind="tab" className="yeah">
-          <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <Tab id="tab-work-queue" tabName="section" title="Section Queue">
             <div id="tab-section-panel">Section</div>
           </Tab>
-          <Tab tabName="my" title="My Queue" id="tab-my-queue">
+          <Tab id="tab-my-queue" tabName="my" title="My Queue">
             <div id="tab-individual-panel">Indy</div>
           </Tab>
         </Tabs>
@@ -53,10 +53,10 @@ describe('TabsComponent', () => {
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Tabs bind="tab" className="yeah">
-          <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+          <Tab id="tab-work-queue" tabName="section" title="Section Queue">
             <div id="tab-section-panel">Section</div>
           </Tab>
-          <Tab tabName="my" title="My Queue" id="tab-my-queue">
+          <Tab id="tab-my-queue" tabName="my" title="My Queue">
             <div id="tab-individual-panel">Indy</div>
           </Tab>
         </Tabs>
@@ -95,10 +95,10 @@ describe('TabsComponent', () => {
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Tabs asSwitch bind="tab" className="yeah">
-          <Tab tabName="section" title="asdlkj" id="tab-work-queue">
+          <Tab id="tab-work-queue" tabName="section" title="asdlkj">
             <div id="tab-section-panel">Section</div>
           </Tab>
-          <Tab tabName="my" id="tab-my-queue">
+          <Tab id="tab-my-queue" tabName="my">
             <div id="tab-individual-panel">Indy</div>
           </Tab>
         </Tabs>

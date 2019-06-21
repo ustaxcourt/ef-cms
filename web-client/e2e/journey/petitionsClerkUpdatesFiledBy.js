@@ -1,9 +1,3 @@
-import { runCompute } from 'cerebral/test';
-
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
 export default (test, overrides = {}) => {
   return it('Petitions clerk updates filed by', async () => {
     expect(test.getState('caseDetailErrors')).toEqual({});
@@ -34,7 +28,7 @@ export default (test, overrides = {}) => {
     });
 
     expect(test.getState('caseDetail.receivedAt')).toEqual(
-      `${overrides.receivedAtYear}-${overrides.receivedAtMonth}-${overrides.receivedAtDay}T00:00:00.000Z`,
+      `${overrides.receivedAtYear}-${overrides.receivedAtMonth}-${overrides.receivedAtDay}T05:00:00.000Z`,
     );
   });
 };

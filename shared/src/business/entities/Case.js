@@ -105,7 +105,7 @@ function Case(rawCase) {
     preferredTrialCity: rawCase.preferredTrialCity,
     procedureType: rawCase.procedureType,
     receivedAt: rawCase.receivedAt,
-    respondent: rawCase.respondent,
+    respondents: rawCase.respondents || [],
     status: rawCase.status || statusMap.new,
     trialDate: rawCase.trialDate,
     trialJudge: rawCase.trialJudge,
@@ -250,10 +250,7 @@ joiValidationDecorator(
       .max('now')
       .optional()
       .allow(null),
-    respondent: joi
-      .object()
-      .allow(null)
-      .optional(),
+    respondents: joi.array().optional(),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
@@ -413,7 +410,7 @@ Case.prototype.attachRespondent = function({ user }) {
     respondentId: user.userId,
   };
 
-  this.respondent = respondent;
+  this.respondents.push(respondent);
 };
 
 Case.prototype.attachPractitioner = function({ user }) {
@@ -788,7 +785,7 @@ Case.prototype.checkForReadyForTrial = function() {
 /**
  * generates sort tags used for sorting trials for calendaring
  *
- * @returns {Object} the sort tags
+ * @returns {object} the sort tags
  */
 Case.prototype.generateTrialSortTags = function() {
   const {
@@ -842,7 +839,7 @@ Case.prototype.generateTrialSortTags = function() {
 /**
  * set as calendared
  *
- * @param {Object} trialSessionEntity - the trial session that is associated with the case
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
  * @returns {Case}
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {

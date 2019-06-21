@@ -31,7 +31,7 @@ export const BeforeStartingCase = () => (
       <div className="grid-container padding-x-0" role="list">
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">
-            <div role="listitem" className="caseItem">
+            <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </div>
@@ -53,7 +53,7 @@ export const BeforeStartingCase = () => (
                 </p>
               </div>
             </div>
-            <div role="listitem" className="margin-bottom-0 caseItem">
+            <div className="margin-bottom-0 caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'edit']} />
               </div>
@@ -66,8 +66,8 @@ export const BeforeStartingCase = () => (
                   Complete the Petition form,{' '}
                   <a
                     href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     USTC Form 2
                   </a>
@@ -75,8 +75,8 @@ export const BeforeStartingCase = () => (
                   requirements of the{' '}
                   <a
                     href="https://www.ustaxcourt.gov/rules.htm"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     Tax Court Rules of Practice and Procedure
                   </a>
@@ -90,8 +90,8 @@ export const BeforeStartingCase = () => (
                   Complete the Statement of Taxpayer Identification form,{' '}
                   <a
                     href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     USTC Form 4
                   </a>
@@ -107,8 +107,8 @@ export const BeforeStartingCase = () => (
                   submit the Ownership Disclosure Statement,{' '}
                   <a
                     href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     USTC Form 6
                   </a>
@@ -118,7 +118,7 @@ export const BeforeStartingCase = () => (
             </div>
           </div>
           <div className="tablet:grid-col-6">
-            <div role="listitem" className="caseItem">
+            <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['fa', 'shield-alt']} />
               </div>
@@ -139,7 +139,7 @@ export const BeforeStartingCase = () => (
               </div>
             </div>
 
-            <div role="listitem" className="caseItem">
+            <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'file-pdf']} />
               </div>
@@ -154,21 +154,21 @@ export const BeforeStartingCase = () => (
                   {MAX_FILE_SIZE_MB}MB.{' '}
                   <a
                     href={howToMergePDFs}
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     Learn more about how to merge files into one PDF.
                   </a>
                 </p>
               </div>
             </div>
-            <div role="listitem" className="caseItem">
+            <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
                 <div className="svg-wrapper">
                   <img
-                    src={paperclipSlashIcon}
-                    className="svg"
                     aria-hidden="true"
+                    className="svg"
+                    src={paperclipSlashIcon}
                   />
                 </div>
               </div>

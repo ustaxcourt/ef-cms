@@ -16,6 +16,8 @@ export const fileExternalDocumentAction = async ({
   path,
 }) => {
   const { docketNumber, caseId } = get(state.caseDetail);
+  const userRole = get(state.user.role);
+  const isRespondent = userRole === 'respondent';
 
   let {
     primaryDocumentFile,
@@ -52,6 +54,13 @@ export const fileExternalDocumentAction = async ({
       secondarySupportingDocumentFile,
       supportingDocumentFile,
     });
+
+    if (isRespondent) {
+      await applicationContext.getUseCases().submitCaseAssociationRequest({
+        applicationContext,
+        caseId,
+      });
+    }
   } catch (err) {
     return path.error();
   }

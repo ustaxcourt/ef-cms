@@ -78,7 +78,7 @@ test = CerebralTest(presenter);
 
 describe('Trial Session Eligible Cases - Scenario 7 - Case status is automatically set to “Calendared for Trial" once a case is scheduled to a session', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

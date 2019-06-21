@@ -53,7 +53,7 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentLogIn from './journey/respondentLogIn';
-import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
+import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
 import seniorAttorneyMarksStipulatedWorkItemAsCompleted from './journey/seniorAttorneyMarksStipulatedWorkItemAsCompleted';
@@ -108,7 +108,7 @@ test = CerebralTest(presenter);
 
 describe('Case journey', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,
@@ -154,7 +154,7 @@ describe('Case journey', () => {
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
-  respondentViewsCaseDetail(test);
+  respondentViewsCaseDetailOfBatchedCase(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);

@@ -66,6 +66,16 @@ describe('computeTrialSessionFormDataAction', () => {
       termYear: '2019',
     });
 
+    form.month = '13';
+    form.year = '2019';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      term: undefined,
+      termYear: '2019',
+    });
+
     form.month = '5';
     form.year = '';
     result = await runAction(computeTrialSessionFormDataAction, {

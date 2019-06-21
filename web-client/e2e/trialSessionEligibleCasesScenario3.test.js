@@ -78,7 +78,7 @@ test = CerebralTest(presenter);
 
 describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get scheduled to the trial session that has a regular case session type', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

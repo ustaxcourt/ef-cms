@@ -8,7 +8,7 @@ import { CaseSearchBox } from './CaseSearchBox.jsx';
 export const CaseListPractitioner = connect(
   {
     caseList: state.formattedCases,
-    helper: state.dashboardPetitionerHelper,
+    helper: state.dashboardExternalHelper,
   },
   ({ caseList, helper }) => {
     const renderTable = () => (

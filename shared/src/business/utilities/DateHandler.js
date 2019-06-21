@@ -9,6 +9,10 @@ const dateFormats = {
 
 const USTC_TZ = 'America/New_York';
 
+module.exports.isStringISOFormatted = dateString => {
+  return moment.utc(dateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
+};
+
 /**
  *
  * @param {string} dateString a string representing a date

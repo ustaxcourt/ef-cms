@@ -76,7 +76,7 @@ describe('submitCaseAssociationRequest', () => {
     expect(updateCaseSpy.called).toEqual(false);
   });
 
-  it('should add mapping', async () => {
+  it('should add mapping for a practitioner', async () => {
     let associateUserWithCaseSpy = sinon.spy();
     let verifyCaseForUserSpy = sinon.stub().returns(false);
     let updateCaseSpy = sinon.spy();
@@ -87,6 +87,38 @@ describe('submitCaseAssociationRequest', () => {
         return {
           name: 'Olivia Jade',
           role: 'practitioner',
+          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        };
+      },
+      getPersistenceGateway: () => ({
+        associateUserWithCase: associateUserWithCaseSpy,
+        getCaseByCaseId: async () => caseRecord,
+        updateCase: updateCaseSpy,
+        verifyCaseForUser: verifyCaseForUserSpy,
+      }),
+    };
+
+    await submitCaseAssociationRequest({
+      applicationContext,
+      caseId: caseRecord.caseId,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(associateUserWithCaseSpy.called).toEqual(true);
+    expect(updateCaseSpy.called).toEqual(true);
+  });
+
+  it('should add mapping for a respondent', async () => {
+    let associateUserWithCaseSpy = sinon.spy();
+    let verifyCaseForUserSpy = sinon.stub().returns(false);
+    let updateCaseSpy = sinon.spy();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          name: 'Olivia Jade',
+          role: 'respondent',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },

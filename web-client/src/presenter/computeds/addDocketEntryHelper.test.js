@@ -112,13 +112,13 @@ describe('addDocketEntryHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('does not show respondent option under Parties Filing if respondent is not associated with case', async () => {
+  it('does not show respondent option under Parties Filing if no respondent is associated with case', async () => {
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showRespondentParty).toBeFalsy();
   });
 
-  it('shows respondent option under Parties Filing if respondent is associated with case', async () => {
-    state.caseDetail.respondent = { name: 'Test Respondent' };
+  it('shows respondent option under Parties Filing if a respondent is associated with case', async () => {
+    state.caseDetail.respondents = [{ name: 'Test Respondent' }];
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showRespondentParty).toBeTruthy();
   });
