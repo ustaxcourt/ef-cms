@@ -123,6 +123,7 @@ const generateWorkItem = data => {
 // My Messages Sent
 // - isInternal === true
 // - item.sentByUserId == user.userId
+// - !item.completedAt
 
 // Section Inbox Messages
 // - isInternal === true
@@ -132,6 +133,7 @@ const generateWorkItem = data => {
 // Section Outbox Messages
 // - isInternal === true
 // - item.sentBySection === user role section
+// - !item.completedAt
 
 // My DocumentQC Inbox
 // - isInternal === false
@@ -376,10 +378,17 @@ describe('filterWorkItems', () => {
   });
 
   it('Returns sent messages for a Petitions Clerk in My Messages Outbox', async () => {
-    const filtered = workQueueOutbox.filter(
+    const completedItemDoNotShow = {
+      ...workItemPetitionsMyMessagesSent,
+      completedAt: '2019-07-18T18:05:54.166Z',
+    };
+    const filtered = [...workQueueOutbox, completedItemDoNotShow].filter(
       filterWorkItems({ ...MY_MESSAGES_OUTBOX, user: petitionsClerk1 }),
     );
     expect(filtered.length).toEqual(1);
+    expect(filtered[0].docketNumber).toEqual(
+      workItemPetitionsMyMessagesSent.docketNumber,
+    );
   });
 
   it('Returns work items for a Petitions Clerk in Section Messages Inbox', async () => {
@@ -409,7 +418,11 @@ describe('filterWorkItems', () => {
 
   it('Returns sent work items for a Petitions Clerk in Section Messages Outbox', async () => {
     const user = petitionsClerk1;
-    const filtered = workQueueOutbox.filter(
+    const completedItemDoNotShow = {
+      ...workItemPetitionsSectionMessagesSent,
+      completedAt: '2019-07-18T18:05:54.166Z',
+    };
+    const filtered = [...workQueueOutbox, completedItemDoNotShow].filter(
       filterWorkItems({ ...SECTION_MESSAGES_OUTBOX, user }),
     );
 
