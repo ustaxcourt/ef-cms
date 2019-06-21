@@ -5,19 +5,29 @@ import {
 import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
+import moment from 'moment';
 
 const formatDateIfToday = (date, applicationContext) => {
   const now = applicationContext
     .getUtilities()
-    .formatDateString(undefined, 'MMDDYY');
+    .formatDateString(new Date(), 'MMDDYY');
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
+  const yesterday = applicationContext.getUtilities().formatDateString(
+    moment(new Date())
+      .add(-1, 'days')
+      .toDate(),
+    'MMDDYY',
+  );
+
   let formattedDate;
   if (now == then) {
     formattedDate = applicationContext
       .getUtilities()
       .formatDateString(date, 'TIME');
+  } else if (then === yesterday) {
+    formattedDate = 'Yesterday';
   } else {
     formattedDate = then;
   }
