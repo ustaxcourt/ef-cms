@@ -231,6 +231,9 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
+  saveWorkItemForDocketClerkFilingExternalDocument
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument')
+const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
@@ -392,6 +395,7 @@ module.exports = (appContextUser = {}) => {
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocument,
+        saveWorkItemForDocketClerkFilingExternalDocument,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setWorkItemAsRead,
