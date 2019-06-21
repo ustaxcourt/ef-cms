@@ -1,11 +1,14 @@
 const sanitize = require('sanitize-filename');
 const {
+  IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+} = require('../entities/WorkQueue');
+const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/Case');
 const { Document } = require('../entities/Document');
-const { IRS_BATCH_SYSTEM_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -88,8 +91,21 @@ exports.runBatchProcess = async ({ applicationContext }) => {
       workItem => workItem.isInitializeCase,
     );
 
-    //set the work item as completed
-    initializeCaseWorkItem.setAsSentToIRS();
+    const lastMessage = initializeCaseWorkItem.getLatestMessageEntity();
+    const batchedByUserId = lastMessage.fromUserId;
+    const batchedByName = lastMessage.from;
+
+    initializeCaseWorkItem.setAsSentToIRS({
+      batchedByName,
+      batchedByUserId,
+    });
+
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+      applicationContext,
+      section: PETITIONS_SECTION,
+      userId: batchedByUserId,
+      workItem: initializeCaseWorkItem,
+    });
 
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,

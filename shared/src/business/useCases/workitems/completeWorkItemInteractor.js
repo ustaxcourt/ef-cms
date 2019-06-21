@@ -43,7 +43,10 @@ exports.completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    workItem: completedWorkItem,
+    workItem: {
+      ...completedWorkItem,
+      createdAt: new Date().toISOString(),
+    },
   });
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({

@@ -1,3 +1,8 @@
+import {
+  IRS_BATCH_SYSTEM_SECTION,
+  getSectionForRole,
+} from '../../../../shared/src/business/entities/WorkQueue';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
 
@@ -114,21 +119,124 @@ export const formatWorkItem = (
   return result;
 };
 
+export const filterWorkItems = ({
+  workQueueToDisplay,
+  workQueueIsInternal,
+  user,
+}) => {
+  const { box, queue } = workQueueToDisplay;
+  const userSection = getSectionForRole(user.role);
+
+  const filters = {
+    documentQc: {
+      my: {
+        batched: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.sentByUserId === user.userId &&
+            item.section === IRS_BATCH_SYSTEM_SECTION &&
+            item.caseStatus === STATUS_TYPES.batchedForIRS
+          );
+        },
+        inbox: item => {
+          return (
+            item.assigneeId === user.userId &&
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === userSection
+          );
+        },
+        outbox: item => {
+          return (
+            !item.isInternal &&
+            (user.role === 'petitionsclerk'
+              ? item.section === IRS_BATCH_SYSTEM_SECTION
+              : true) &&
+            item.completedByUserId &&
+            item.completedByUserId === user.userId &&
+            !!item.completedAt
+          );
+        },
+      },
+      section: {
+        batched: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === IRS_BATCH_SYSTEM_SECTION &&
+            item.caseStatus === STATUS_TYPES.batchedForIRS
+          );
+        },
+        inbox: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === userSection
+          );
+        },
+        outbox: item => {
+          return (
+            !!item.completedAt &&
+            !item.isInternal &&
+            (user.role === 'petitionsclerk'
+              ? item.section === IRS_BATCH_SYSTEM_SECTION
+              : true)
+          );
+        },
+      },
+    },
+    messages: {
+      my: {
+        inbox: item => {
+          return (
+            !item.completedAt &&
+            item.isInternal &&
+            item.section === userSection &&
+            item.assigneeId === user.userId
+          );
+        },
+        outbox: item => {
+          return (
+            item.isInternal &&
+            item.sentByUserId &&
+            item.sentByUserId === user.userId
+          );
+        },
+      },
+      section: {
+        inbox: item => {
+          return (
+            !item.completedAt && item.isInternal && item.section === userSection
+          );
+        },
+        outbox: item => {
+          return item.isInternal && item.sentBySection === userSection;
+        },
+      },
+    },
+  };
+
+  const view = workQueueIsInternal ? 'messages' : 'documentQc';
+  const composedFilter = filters[view][queue][box];
+  return composedFilter;
+};
+
 export const formattedWorkQueue = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
-  const box = get(state.workQueueToDisplay.box);
+  const workQueueToDisplay = get(state.workQueueToDisplay);
   const isInternal = get(state.workQueueIsInternal);
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
-    .filter(item => !item.completedAt)
-    .filter(item =>
-      box === 'batched' ? item.caseStatus === 'Batched for IRS' : true,
+    .filter(
+      filterWorkItems({
+        user,
+        workQueueIsInternal: isInternal,
+        workQueueToDisplay,
+      }),
     )
-    .filter(item =>
-      box === 'outbox' ? item.caseStatus !== 'Batched for IRS' : true,
-    )
-    .filter(item => item.isInternal === isInternal)
     .map(item =>
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );

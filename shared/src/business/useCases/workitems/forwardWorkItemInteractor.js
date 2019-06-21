@@ -98,7 +98,10 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    workItem: workItemToForward.validate().toRawObject(),
+    workItem: {
+      ...workItemToForward.validate().toRawObject(),
+      createdAt: new Date().toISOString(),
+    },
   });
 
   return workItemToForward.toRawObject();

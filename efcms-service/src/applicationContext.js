@@ -216,6 +216,9 @@ const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
+  putWorkItemInUsersOutbox
+} = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
+const {
   recallPetitionFromIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
@@ -387,6 +390,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
+        putWorkItemInUsersOutbox,
         saveDocument,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
