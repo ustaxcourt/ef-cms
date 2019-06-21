@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const { getCase } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 
-const documents = MOCK_CASE.documents;
+const { documents } = MOCK_CASE;
 
 describe('Get case', () => {
   let applicationContext;

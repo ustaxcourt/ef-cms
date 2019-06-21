@@ -9,10 +9,10 @@ const { put } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.forwardWorkItem = ({
-  workItemId,
+  applicationContext,
   assigneeId,
   message,
-  applicationContext,
+  workItemId,
 }) => {
   return put({
     applicationContext,

@@ -4,7 +4,7 @@
  * @param applicationContext
  * @returns {Promise<{petitionFileId}>}
  */
-exports.validatePetition = ({ petition, applicationContext }) => {
+exports.validatePetition = ({ applicationContext, petition }) => {
   const errors = new (applicationContext.getEntityConstructors()).Petition(
     petition,
   ).getFormattedValidationErrors();

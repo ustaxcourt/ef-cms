@@ -8,8 +8,8 @@ const client = require('../../dynamodbClientService');
  * @returns {*}
  */
 exports.deleteCaseTrialSortMappingRecords = async ({
-  caseId,
   applicationContext,
+  caseId,
 }) => {
   const records = await client.query({
     ExpressionAttributeNames: {

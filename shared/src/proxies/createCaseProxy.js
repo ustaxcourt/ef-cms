@@ -8,10 +8,10 @@ const { post } = require('./requests');
  * @returns {Promise<*>}
  */
 exports.createCase = ({
-  petitionMetadata,
-  petitionFileId,
-  ownershipDisclosureFileId,
   applicationContext,
+  ownershipDisclosureFileId,
+  petitionFileId,
+  petitionMetadata,
   stinFileId,
 }) => {
   return post({

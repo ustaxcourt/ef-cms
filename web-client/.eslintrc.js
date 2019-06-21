@@ -14,6 +14,7 @@ module.exports = {
     'jsx-a11y',
     'prettier',
     'react',
+    'sort-destructure-keys',
     'sort-keys-fix',
   ],
   rules: {
@@ -68,11 +69,30 @@ module.exports = {
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       },
     ],
-
     'sort-keys-fix/sort-keys-fix': [
       'error',
       'asc',
       { caseSensitive: true, natural: true },
+    ],
+    'sort-destructure-keys/sort-destructure-keys': [
+      2,
+      { caseSensitive: false },
+    ],
+    'prefer-destructuring': [
+      'error',
+      {
+        VariableDeclarator: {
+          array: false,
+          object: true,
+        },
+        AssignmentExpression: {
+          array: false,
+          object: true,
+        },
+      },
+      {
+        enforceForRenamedProperties: false,
+      },
     ],
   },
   settings: {

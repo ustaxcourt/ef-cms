@@ -1,9 +1,9 @@
 const client = require('../../dynamodbClientService');
 
 exports.setWorkItemAsRead = async ({
+  applicationContext,
   userId,
   workItemId,
-  applicationContext,
 }) => {
   await client.update({
     ExpressionAttributeNames: {

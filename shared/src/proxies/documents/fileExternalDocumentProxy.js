@@ -8,12 +8,12 @@ const { post } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.fileExternalDocument = ({
+  applicationContext,
   documentMetadata,
   primaryDocumentFileId,
   secondaryDocumentFileId,
   secondarySupportingDocumentFileId,
   supportingDocumentFileId,
-  applicationContext,
 }) => {
   const { caseId } = documentMetadata;
   return post({

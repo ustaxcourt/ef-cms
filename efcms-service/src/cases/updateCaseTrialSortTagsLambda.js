@@ -1,7 +1,7 @@
 const createApplicationContext = require('../applicationContext');
 const {
-  handle,
   getUserFromAuthHeader,
+  handle,
 } = require('../middleware/apiGatewayHelper');
 
 /**

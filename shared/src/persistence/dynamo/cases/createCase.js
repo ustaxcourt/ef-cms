@@ -15,7 +15,7 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
  * @param applicationContext
  * @returns {*}
  */
-exports.createCase = async ({ caseToCreate, applicationContext }) => {
+exports.createCase = async ({ applicationContext, caseToCreate }) => {
   const [results] = await Promise.all([
     saveVersionedCase({
       applicationContext,

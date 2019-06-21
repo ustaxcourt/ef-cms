@@ -179,9 +179,9 @@ WorkItem.prototype.setStatus = function(status) {
  * @param userId
  */
 WorkItem.prototype.assignToIRSBatchSystem = function({
-  userRole,
-  userId,
   name,
+  userId,
+  userRole,
 }) {
   this.assignToUser({
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
@@ -249,8 +249,8 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
  * @param opts.batchedByName
  */
 WorkItem.prototype.setAsSentToIRS = function({
-  batchedByUserId,
   batchedByName,
+  batchedByUserId,
 }) {
   this.completedAt = new Date().toISOString();
   this.completedMessage = 'Served on IRS';

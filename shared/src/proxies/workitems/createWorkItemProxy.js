@@ -9,11 +9,11 @@ const { post } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.createWorkItem = ({
+  applicationContext,
   assigneeId,
   caseId,
   documentId,
   message,
-  applicationContext,
 }) => {
   return post({
     applicationContext,

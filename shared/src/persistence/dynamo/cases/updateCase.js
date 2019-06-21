@@ -15,7 +15,7 @@ const { saveVersionedCase } = require('./saveCase');
  * @param applicationContext
  * @returns {*}
  */
-exports.updateCase = async ({ caseToUpdate, applicationContext }) => {
+exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const oldCase = await client.get({
     Key: {
       pk: caseToUpdate.caseId,

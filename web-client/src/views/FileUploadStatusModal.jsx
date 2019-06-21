@@ -13,7 +13,7 @@ class FileUploadStatusComponent extends ModalDialog {
   }
 
   renderBody() {
-    const { cancelUploadSequence, percentComplete, helper } = this.props;
+    const { cancelUploadSequence, helper, percentComplete } = this.props;
     return (
       <div>
         <div className="status-message">{helper.statusMessage}</div>
