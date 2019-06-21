@@ -212,7 +212,6 @@ export const filterWorkItems = ({
         },
         outbox: item => {
           return (
-            !item.completedAt &&
             item.isInternal &&
             item.sentByUserId &&
             item.sentByUserId === user.userId
@@ -226,11 +225,7 @@ export const filterWorkItems = ({
           );
         },
         outbox: item => {
-          return (
-            !item.completedAt &&
-            item.isInternal &&
-            item.sentBySection === userSection
-          );
+          return item.isInternal && item.sentBySection === userSection;
         },
       },
     },
@@ -260,7 +255,17 @@ export const formattedWorkQueue = (get, applicationContext) => {
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
 
-  workQueue = _.orderBy(workQueue, 'receivedAt', 'desc');
+  let sortField = 'receivedAt';
+
+  // Document QC
+  // - sort by batchedAt on Batched box
+  // - sort by completedAt on Served tab
+  sortField =
+    !isInternal && workQueueToDisplay.box === 'batched'
+      ? 'batchedAt'
+      : 'completedAt';
+
+  workQueue = _.orderBy(workQueue, sortField, 'desc');
 
   return workQueue;
 };
