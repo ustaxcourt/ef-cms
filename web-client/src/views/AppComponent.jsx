@@ -3,6 +3,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
+import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
@@ -37,6 +38,7 @@ const pages = {
   BeforeStartingCase,
   CaseDetail,
   CaseDetailInternal,
+  CreateOrder,
   DashboardDocketClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,

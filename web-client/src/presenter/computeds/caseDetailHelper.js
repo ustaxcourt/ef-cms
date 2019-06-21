@@ -21,6 +21,9 @@ export const caseDetailHelper = get => {
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
     ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
+  let showCreateOrderButton =
+    ['CaseDetailInternal'].includes(currentPage) &&
+    userRole === 'petitionsclerk';
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -56,6 +59,7 @@ export const caseDetailHelper = get => {
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
     showCaseInformationPublic: isExternalUser,
+    showCreateOrderButton,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
