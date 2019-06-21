@@ -71,6 +71,11 @@ const docketClerk2 = {
   userId: 'd2',
 };
 
+const seniorAttorney = {
+  role: 'seniorattorney',
+  userId: 'd2',
+};
+
 const generateWorkItem = data => {
   const baseWorkItem = {
     assigneeId: null,
@@ -172,6 +177,11 @@ const generateWorkItem = data => {
 // - isInternal === false
 // - !!item.completedAt
 // - item.section === 'docket'
+
+// Sr Attny Document QC Inbox
+// - item.section == 'docket'
+// - isInternal === false
+// - !item.completedAt
 
 describe('filterWorkItems', () => {
   // Petitions
@@ -628,5 +638,17 @@ describe('filterWorkItems', () => {
     expect(unassigned).toEqual(
       workItemDocketSectionDocumentQCInbox.docketNumber,
     );
+  });
+
+  it('Returns docket section work items for a Senior Attorney in Document QC Inbox', async () => {
+    const user = seniorAttorney;
+    const filtered = workQueueInbox.filter(
+      filterWorkItems({ ...SECTION_DOCUMENT_QC_INBOX, user }),
+    );
+
+    expect(filtered).toMatchObject([
+      workItemDocketMyDocumentQCInbox,
+      workItemDocketSectionDocumentQCInbox,
+    ]);
   });
 });
