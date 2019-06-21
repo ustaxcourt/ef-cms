@@ -235,6 +235,7 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
+        workQueueIsInternal: true,
         workQueueToDisplay: { box: 'outbox', queue: 'section' },
       },
     });

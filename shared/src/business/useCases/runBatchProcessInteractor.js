@@ -1,14 +1,14 @@
 const sanitize = require('sanitize-filename');
 const {
+  IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+} = require('../entities/WorkQueue');
+const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/Case');
 const { Document } = require('../entities/Document');
-const {
-  IRS_BATCH_SYSTEM_SECTION,
-  PETITIONS_SECTION,
-} = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -110,6 +110,11 @@ exports.runBatchProcess = async ({ applicationContext }) => {
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: initializeCaseWorkItem,
     });
 
     zips = zips.concat({
