@@ -1,16 +1,14 @@
-import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-
 import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { CerebralTest } from 'cerebral/test';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
+import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
+import FormData from 'form-data';
 const {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 const DOCKET_CLERK_1_ID = '2805d1ab-18d0-43ec-bafb-654e83405416';
@@ -133,11 +131,11 @@ function createWorkItem(test) {
 }
 
 async function findWorkItemInWorkQueue({
-  test,
+  box,
   docketNumber,
   message,
-  box,
   queue,
+  test,
   workQueueIsInternal = true,
 }) {
   await test.runSequence('chooseWorkQueueSequence', {
