@@ -94,6 +94,7 @@
     "node-sass": "^4.12.0",
     "pa11y-ci": "^2.3.0",
     "parcel-bundler": "^1.12.3",
+    "pdfjs-dist": "^2.0.943",
     "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
