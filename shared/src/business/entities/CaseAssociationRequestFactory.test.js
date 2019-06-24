@@ -221,6 +221,18 @@ describe('CaseAssociationRequestFactory', () => {
           caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
         ).toEqual('Motion to Substitute Parties and Change Caption');
       });
+
+      it('should generate valid title when party is respondent', () => {
+        const caseAssoc = CaseAssociationRequestFactory({
+          documentTitleTemplate:
+            'Substitution of Counsel for [Petitioner Names]',
+          documentType: 'Substitution of Counsel',
+          partyRespondent: true,
+        });
+        expect(caseAssoc.getDocumentTitle()).toEqual(
+          'Substitution of Counsel for Respondent',
+        );
+      });
     });
   });
 });
