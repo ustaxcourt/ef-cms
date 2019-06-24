@@ -2,16 +2,18 @@ import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { TextEditor } from './TextEditor';
+import { PdfPreview } from '../../ustc-ui/PdfPreview';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CreateOrder = connect(
   {
+    convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ form, updateFormValueSequence }) => {
+  ({ convertHtml2PdfSequence, form, updateFormValueSequence }) => {
     return (
       <>
         <BigHeader text="Create Order" />
@@ -39,7 +41,7 @@ export const CreateOrder = connect(
 
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-8">
+              <div className="grid-col-6">
                 <div className="blue-container">
                   <TextEditor
                     form={form}
@@ -47,7 +49,7 @@ export const CreateOrder = connect(
                   />
                 </div>
               </div>
-              <div className="grid-col-4">
+              <div className="grid-col-6">
                 <PdfPreview />
               </div>
             </div>

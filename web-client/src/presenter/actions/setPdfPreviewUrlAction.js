@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.alertError
  */
 export const setPdfPreviewUrlAction = ({ get, props, store }) => {
-  const previousUrl = get(state.pdfPreviewUrl);
+  const previousUrl = get(state.blobUrl);
   if (previousUrl) URL.revokeObjectURL(previousUrl); // cleanup
   store.set(state.pdfPreviewUrl, props.blobUrl);
 };
