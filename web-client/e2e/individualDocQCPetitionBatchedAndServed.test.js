@@ -1,7 +1,3 @@
-import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-
 import {
   CASE_CAPTION_POSTFIX,
   STATUS_TYPES,
@@ -11,17 +7,18 @@ import {
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import { CerebralTest } from 'cerebral/test';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { isFunction, mapValues } from 'lodash';
+import FormData from 'form-data';
 const {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
-
 import { Document } from '../../shared/src/business/entities/Document';
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
