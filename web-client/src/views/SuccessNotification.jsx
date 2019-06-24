@@ -18,8 +18,8 @@ class SuccessNotificationComponent extends React.Component {
   }
 
   render() {
-    const alertSuccess = this.props.alertSuccess;
-    const dismissAlert = this.props.dismissAlert;
+    const { alertSuccess } = this.props;
+    const { dismissAlert } = this.props;
     this.notificationRef = React.createRef();
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;

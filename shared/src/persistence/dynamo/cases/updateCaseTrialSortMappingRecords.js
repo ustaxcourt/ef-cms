@@ -11,9 +11,9 @@ const {
  * @returns {*}
  */
 exports.updateCaseTrialSortMappingRecords = async ({
+  applicationContext,
   caseId,
   caseSortTags,
-  applicationContext,
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
 

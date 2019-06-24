@@ -5,13 +5,13 @@ const {
 const { UnauthorizedError } = require('../../errors/errors');
 
 exports.filePetition = async ({
-  petitionMetadata,
-  petitionFile,
-  ownershipDisclosureFile,
-  stinFile,
   applicationContext,
+  ownershipDisclosureFile,
   ownershipDisclosureUploadProgress,
+  petitionFile,
+  petitionMetadata,
   petitionUploadProgress,
+  stinFile,
   stinUploadProgress,
 }) => {
   const user = applicationContext.getCurrentUser();

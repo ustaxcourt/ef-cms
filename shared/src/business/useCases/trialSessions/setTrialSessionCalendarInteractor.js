@@ -43,7 +43,7 @@ exports.setTrialSessionCalendar = async ({
     });
 
   for (let caseRecord of eligibleCases) {
-    const caseId = caseRecord.caseId;
+    const { caseId } = caseRecord;
     const caseEntity = new Case(caseRecord);
 
     caseEntity.setAsCalendared(trialSessionEntity);

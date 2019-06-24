@@ -1,9 +1,9 @@
 const client = require('../../dynamodbClientService');
 
 exports.updateWorkItemDocketNumberSuffix = async ({
-  workItemId,
-  docketNumberSuffix,
   applicationContext,
+  docketNumberSuffix,
+  workItemId,
 }) => {
   const workItems = await client.query({
     ExpressionAttributeNames: {

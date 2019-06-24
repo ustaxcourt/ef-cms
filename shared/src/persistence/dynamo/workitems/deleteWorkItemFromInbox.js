@@ -2,9 +2,9 @@ const { deleteSectionInboxRecord } = require('./deleteSectionInboxRecord');
 const { deleteUserInboxRecord } = require('./deleteUserInboxRecord');
 
 exports.deleteWorkItemFromInbox = ({
-  workItem,
   applicationContext,
   deleteFromSection = true,
+  workItem,
 }) => {
   const requests = [];
   if (workItem.assigneeId) {

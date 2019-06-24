@@ -28,18 +28,18 @@ export const StartCaseInternal = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    completeScanSequence,
     constants,
+    formCancelToggleCancelSequence,
     scanHelper,
     showModal,
-    startScanSequence,
-    completeScanSequence,
-    formCancelToggleCancelSequence,
     startCaseHelper,
+    startScanSequence,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
     updatePetitionValueSequence,
-    validationErrors,
     validatePetitionFromPaperSequence,
+    validationErrors,
   }) => {
     return (
       <section className="usa-section grid-container">

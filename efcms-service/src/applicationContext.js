@@ -7,7 +7,7 @@ const AWS =
     : require('aws-sdk');
 
 const uuidv4 = require('uuid/v4');
-const { S3, DynamoDB } = AWS;
+const { DynamoDB, S3 } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
 

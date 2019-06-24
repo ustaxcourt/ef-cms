@@ -3,8 +3,8 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getEligibleCasesForTrialSession = async ({
   applicationContext,
-  skPrefix,
   limit,
+  skPrefix,
 }) => {
   const mappings = await client.query({
     ExpressionAttributeNames: {

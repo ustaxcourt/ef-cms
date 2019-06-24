@@ -1,9 +1,9 @@
 const {
-  NotFoundError,
-  UnknownUserError,
-  UnauthorizedError,
-  UnprocessableEntityError,
   InvalidEntityError,
+  NotFoundError,
+  UnauthorizedError,
+  UnknownUserError,
+  UnprocessableEntityError,
 } = require('./errors');
 
 describe('NotFoundError', () => {

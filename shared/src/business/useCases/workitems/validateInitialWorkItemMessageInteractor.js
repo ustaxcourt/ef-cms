@@ -4,7 +4,7 @@
  * @param message
  * @returns {object} errors (null if no errors)
  */
-exports.validateInitialWorkItemMessage = ({ message, applicationContext }) => {
+exports.validateInitialWorkItemMessage = ({ applicationContext, message }) => {
   return new (applicationContext.getEntityConstructors()).InitialWorkItemMessage(
     message,
   ).getFormattedValidationErrors();

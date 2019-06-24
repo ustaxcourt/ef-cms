@@ -10,7 +10,7 @@ export const IndividualWorkQueueOutbox = connect(
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, workQueue, workQueueSectionHelper, workQueueHelper }) => {
+  ({ documentHelper, workQueue, workQueueHelper, workQueueSectionHelper }) => {
     return (
       <React.Fragment>
         <table

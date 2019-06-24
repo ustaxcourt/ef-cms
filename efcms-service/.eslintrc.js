@@ -5,6 +5,7 @@ module.exports = {
     'jsdoc',
     'prettier',
     'security',
+    'sort-destructure-keys',
     'sort-keys-fix',
     'sort-requires',
   ],
@@ -33,6 +34,26 @@ module.exports = {
       'error',
       'asc',
       { caseSensitive: true, natural: true },
+    ],
+    'sort-destructure-keys/sort-destructure-keys': [
+      2,
+      { caseSensitive: false },
+    ],
+    'prefer-destructuring': [
+      'error',
+      {
+        VariableDeclarator: {
+          array: false,
+          object: true,
+        },
+        AssignmentExpression: {
+          array: false,
+          object: true,
+        },
+      },
+      {
+        enforceForRenamedProperties: false,
+      },
     ],
   },
   env: {
