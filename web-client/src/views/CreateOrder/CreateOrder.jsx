@@ -16,7 +16,24 @@ export const CreateOrder = connect(
       <>
         <BigHeader text="Create Order" />
         <section className="usa-section grid-container DocumentDetail">
-          <h2 className="heading-1">Header</h2>
+          <div className="grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">
+                <h2 className="heading-1">Create Order</h2>
+              </div>
+              <div className="grid-col-6">
+                <button
+                  className="usa-button"
+                  onClick={() => {
+                    convertHtml2PdfSequence();
+                  }}
+                >
+                  Refresh PDF Preview
+                </button>
+              </div>
+            </div>
+          </div>
+
           <SuccessNotification />
           <ErrorNotification />
 
@@ -28,14 +45,19 @@ export const CreateOrder = connect(
                     form={form}
                     updateFormValueSequence={updateFormValueSequence}
                   />
-                  <br></br>
-                  {form.richText}
                 </div>
               </div>
-              <div className="grid-col-4"></div>
+              <div className="grid-col-4">
+                <PdfPreview />
+              </div>
             </div>
           </div>
         </section>
+        <div
+          className="pdf-preview-div"
+          dangerouslySetInnerHTML={{ __html: form.richText }}
+          style={{ display: 'none' }}
+        ></div>
       </>
     );
   },
