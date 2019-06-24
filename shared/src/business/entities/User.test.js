@@ -50,4 +50,26 @@ describe('User entity', () => {
     });
     expect(user.role).toBe('petitioner');
   });
+
+  describe('isExternalUser', () => {
+    it('should return true when the user has the role of petitioner', () => {
+      const u = new User({ role: 'petitioner' });
+      expect(u.isExternalUser()).toEqual(true);
+    });
+    it('should return true when the user has the role of practitioner', () => {
+      const u = new User({ role: 'practitioner' });
+      expect(u.isExternalUser()).toEqual(true);
+    });
+    it('should return true when the user has the role of respondent', () => {
+      const u = new User({ role: 'respondent' });
+      expect(u.isExternalUser()).toEqual(true);
+    });
+  });
+
+  describe('isInternalUser', () => {
+    it('should return true when the user has the role of docketclerk', () => {
+      const u = new User({ role: 'docketclerk' });
+      expect(u.isInternalUser()).toEqual(true);
+    });
+  });
 });
