@@ -20,8 +20,16 @@ exports.createTrialSession = async ({ applicationContext, trialSession }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext.getPersistenceGateway().createTrialSession({
-    applicationContext,
-    trialSession: trialSessionEntity.validate().toRawObject(),
-  });
+  if (['Motion/Hearing', 'Special'].includes(trialSessionEntity.sessionType)) {
+    trialSessionEntity.setAsCalendared();
+  }
+
+  const createdTrialSession = await applicationContext
+    .getPersistenceGateway()
+    .createTrialSession({
+      applicationContext,
+      trialSession: trialSessionEntity.validate().toRawObject(),
+    });
+
+  return createdTrialSession;
 };

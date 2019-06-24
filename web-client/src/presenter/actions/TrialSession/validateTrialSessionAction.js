@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -11,27 +12,48 @@ import { state } from 'cerebral';
  */
 export const validateTrialSessionAction = ({
   applicationContext,
-  path,
   get,
+  path,
+  props,
 }) => {
-  const trialSession = {
-    ...get(state.form),
-  };
+  const startDate = // AAAA-BB-CC
+    (props.computedDate &&
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString(props.computedDate)
+        .toISOString()) ||
+    null;
+
+  const trialSession = omit(
+    {
+      ...get(state.form),
+    },
+    ['year', 'month', 'day'],
+  );
 
   const errors = applicationContext.getUseCases().validateTrialSession({
     applicationContext,
-    trialSession,
+    trialSession: { ...trialSession, startDate },
   });
 
   if (!errors) {
     return path.success();
   } else {
-    // const errorDisplayOrder = [];
+    errors.startDate = errors.startDate || errors.term;
+    const errorDisplayOrder = [
+      'startDate',
+      'startTime',
+      'swingSessionId',
+      'sessionType',
+      'maxCases',
+      'trialLocation',
+      'postalCode',
+    ];
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      // errorDisplayOrder,
+      errorDisplayOrder,
       errors,
     });
   }

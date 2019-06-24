@@ -5,13 +5,13 @@ const { handle } = require('../middleware/apiGatewayHelper');
 /**
  * returns the users inbox
  *
- * @param {Object} event the AWS event object
+ * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
   handle(event, async () => {
     const user = getUserFromAuthHeader(event);
-    const userId = event.pathParameters.userId;
+    const {userId} = event.pathParameters;
     const applicationContext = createApplicationContext(user);
     try {
       const results = await applicationContext

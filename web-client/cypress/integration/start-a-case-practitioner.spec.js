@@ -22,7 +22,6 @@ describe('Assign a work item ', () => {
 
   it('fills in the start a case form', () => {
     fillInAndSubmitForm();
-    cy.wait(300000);
   });
 
   it('expect the cast list to be displayed with 1 item now', () => {

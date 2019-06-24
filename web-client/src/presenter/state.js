@@ -11,14 +11,14 @@ import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
-import { dashboardPetitionerHelper } from './computeds/dashboardPetitionerHelper';
-import { dashboardRespondentHelper } from './computeds/dashboardRespondentHelper';
+import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
@@ -56,8 +56,7 @@ export const state = {
   currentPage: 'Interstitial',
   currentPageHeader: '',
   currentTab: '',
-  dashboardPetitionerHelper,
-  dashboardRespondentHelper,
+  dashboardExternalHelper,
   docketRecordIndex: 0,
   document: {},
   documentDetail: {
@@ -74,6 +73,7 @@ export const state = {
   form: {},
   formattedCaseDetail,
   formattedCases,
+  formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
@@ -85,7 +85,6 @@ export const state = {
   },
   modal: {},
   notifications: {},
-
   path: '/',
   paymentInfo: {
     showDetails: false,
@@ -120,6 +119,7 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
+  workQueueIsInternal: true,
   workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };

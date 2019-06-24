@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -13,23 +14,42 @@ export const createTrialSessionAction = async ({
   applicationContext,
   get,
   path,
+  props,
 }) => {
-  const trialSession = get(state.form);
+  const startDate = // AAAA-BB-CC
+    (props.computedDate &&
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString(props.computedDate)
+        .toISOString()) ||
+    null;
 
-  let createTrialSessionResult;
+  const trialSession = omit(
+    {
+      ...get(state.form),
+    },
+    ['year', 'month', 'day'],
+  );
 
+  let result;
   try {
-    createTrialSessionResult = await applicationContext
-      .getUseCases()
-      .createTrialSession({
+    result = await applicationContext.getUseCases().createTrialSession({
+      applicationContext,
+      trialSession: { ...trialSession, startDate },
+    });
+
+    if (trialSession.swingSession && trialSession.swingSessionId) {
+      await applicationContext.getUseCases().setTrialSessionAsSwingSession({
         applicationContext,
-        trialSession,
+        swingSessionId: result.trialSessionId,
+        trialSessionId: trialSession.swingSessionId,
       });
+    }
   } catch (err) {
     return path.error();
   }
 
   return path.success({
-    trialSession: createTrialSessionResult,
+    trialSession: result.trialSessionId,
   });
 };

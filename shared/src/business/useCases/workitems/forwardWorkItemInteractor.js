@@ -17,10 +17,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
  */
 exports.forwardWorkItem = async ({
-  workItemId,
+  applicationContext,
   assigneeId,
   message,
-  applicationContext,
+  workItemId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -50,10 +50,8 @@ exports.forwardWorkItem = async ({
     toUserId: userToForwardTo.userId,
   });
 
-  const latestMessageId = new WorkItem(fullWorkItem).getLatestMessageEntity()
-    .messageId;
-
   const workItemToForward = new WorkItem(fullWorkItem)
+    .setAsInternal()
     .assignToUser({
       assigneeId: userToForwardTo.userId,
       assigneeName: userToForwardTo.name,
@@ -75,7 +73,6 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
-    messageId: latestMessageId,
     workItem: fullWorkItem,
   });
 
@@ -101,7 +98,10 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    workItem: workItemToForward.validate().toRawObject(),
+    workItem: {
+      ...workItemToForward.validate().toRawObject(),
+      createdAt: new Date().toISOString(),
+    },
   });
 
   return workItemToForward.toRawObject();

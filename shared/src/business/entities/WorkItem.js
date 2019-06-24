@@ -32,6 +32,8 @@ function WorkItem(rawWorkItem) {
     docketNumberSuffix: rawWorkItem.docketNumberSuffix,
     document: rawWorkItem.document,
     isInitializeCase: rawWorkItem.isInitializeCase,
+    isInternal:
+      rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal,
     isRead: rawWorkItem.isRead,
     messages: rawWorkItem.messages,
     section: rawWorkItem.section,
@@ -129,6 +131,11 @@ WorkItem.prototype.addMessage = function(message) {
   return this;
 };
 
+WorkItem.prototype.setAsInternal = function() {
+  this.isInternal = true;
+  return this;
+};
+
 /**
  * get the latest message (by createdAt)
  * @returns {Message}
@@ -172,9 +179,9 @@ WorkItem.prototype.setStatus = function(status) {
  * @param userId
  */
 WorkItem.prototype.assignToIRSBatchSystem = function({
-  userRole,
-  userId,
   name,
+  userId,
+  userRole,
 }) {
   this.assignToUser({
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
@@ -236,10 +243,19 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 
 /**
  * complete the work item as the IRS user with the message 'Served on IRS'
+ *
+ * @param opts
+ * @param opts.batchedByUserId
+ * @param opts.batchedByName
  */
-WorkItem.prototype.setAsSentToIRS = function() {
+WorkItem.prototype.setAsSentToIRS = function({
+  batchedByName,
+  batchedByUserId,
+}) {
   this.completedAt = new Date().toISOString();
   this.completedMessage = 'Served on IRS';
+  this.completedBy = batchedByName;
+  this.completedByUserId = batchedByUserId;
 
   this.addMessage(
     new Message({

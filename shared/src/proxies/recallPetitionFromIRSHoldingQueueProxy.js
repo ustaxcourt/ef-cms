@@ -7,8 +7,8 @@ const { remove } = require('./requests');
  * @returns {Promise<*>}
  */
 exports.recallPetitionFromIRSHoldingQueue = ({
-  caseId,
   applicationContext,
+  caseId,
 }) => {
   return remove({
     applicationContext,

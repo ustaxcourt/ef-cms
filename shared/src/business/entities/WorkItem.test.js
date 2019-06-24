@@ -1,4 +1,3 @@
-const assert = require('assert');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 
@@ -18,7 +17,7 @@ describe('WorkItem', () => {
         section: 'docket',
         sentBy: 'bob',
       });
-      assert.ok(workItem.isValid());
+      expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Update a valid workitem with a workItemId', () => {
@@ -36,7 +35,7 @@ describe('WorkItem', () => {
         sentBy: 'bob',
         workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       });
-      assert.ok(workItem.isValid());
+      expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Update a valid workitem with a isRead', () => {
@@ -55,7 +54,7 @@ describe('WorkItem', () => {
         sentBy: 'bob',
         workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       });
-      assert.ok(workItem.isValid());
+      expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Create a valid workitem without messages', () => {
@@ -71,7 +70,7 @@ describe('WorkItem', () => {
         section: 'docket',
         sentBy: 'bob',
       });
-      assert.ok(workItem.isValid());
+      expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Create a valid workitem with real message', () => {
@@ -94,7 +93,7 @@ describe('WorkItem', () => {
         section: 'docket',
         sentBy: 'bob',
       });
-      assert.ok(workItem.isValid());
+      expect(workItem.isValid()).toBeTruthy();
     });
   });
 
@@ -119,7 +118,7 @@ describe('WorkItem', () => {
           message: 'abc',
         }),
       );
-      assert.ok(workItem.messages.length === 1);
+      expect(workItem.messages.length).toEqual(1);
     });
 
     it('no message added when set as completed', () => {
@@ -154,7 +153,10 @@ describe('WorkItem', () => {
         messages: [],
         sentBy: 'bob',
       });
-      workItem.setAsSentToIRS();
+      workItem.setAsSentToIRS({
+        batchedByName: 'bob',
+        batchedByUserId: 'abc',
+      });
       expect(workItem.messages.length === 1).toBe(true);
       expect(workItem.completedMessage).toEqual('Served on IRS');
     });

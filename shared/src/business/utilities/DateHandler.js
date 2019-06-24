@@ -3,10 +3,15 @@ const moment = require('moment-timezone');
 const dateFormats = {
   DATE_TIME: 'MM/DD/YY hh:mm a',
   MMDDYY: 'MM/DD/YY',
-  TIME: 'LT',
+  MMDDYYYY: 'MM/DD/YYYY',
+  TIME: 'hh:mm a',
 };
 
 const USTC_TZ = 'America/New_York';
+
+module.exports.isStringISOFormatted = dateString => {
+  return moment.utc(dateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
+};
 
 /**
  *
@@ -30,7 +35,7 @@ module.exports.createISODateString = (dateString, inputFormat) => {
   if (!dateString) {
     result = moment();
   } else {
-    result = prepareDateFromString(dateString, inputFormat, USTC_TZ);
+    result = prepareDateFromString(dateString, inputFormat);
   }
 
   return result.toISOString();
@@ -42,6 +47,7 @@ module.exports.createISODateString = (dateString, inputFormat) => {
  * @returns {string} a formatted date string
  */
 module.exports.formatDateString = (dateString, formatStr) => {
+  if (!dateString) return;
   formatStr = dateFormats[formatStr] || formatStr;
   return prepareDateFromString(dateString).format(formatStr);
 };

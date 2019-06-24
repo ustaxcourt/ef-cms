@@ -13,13 +13,20 @@ import { state } from 'cerebral';
  * @returns {*} returns the next action in the sequence's path
  */
 export const chooseWorkQueueAction = ({ store, props, path, get }) => {
-  if (props && props.queue && props.box) {
-    store.set(state.workQueueToDisplay, { box: props.box, queue: props.queue });
-  } else if (props && props.box) {
-    // sometimes it queue is set in another sequence and this is called without a queue.
+  if (props.hasOwnProperty('workQueueIsInternal')) {
+    store.set(state.workQueueIsInternal, props.workQueueIsInternal);
+  }
+
+  if (props && props.queue) {
+    store.set(state.workQueueToDisplay.queue, props.queue);
+  }
+
+  if (props && props.box) {
     store.set(state.workQueueToDisplay.box, props.box);
   }
+
   let queuePrefs = get(state.workQueueToDisplay);
   const workQueuePath = `${queuePrefs.queue}${queuePrefs.box}`;
+
   return path[workQueuePath]();
 };

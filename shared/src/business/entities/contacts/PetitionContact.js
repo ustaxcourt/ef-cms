@@ -123,7 +123,7 @@ exports.OTHER_TYPES = {
  *
  * @param {options} options the options object
  * @param {options} options.countryType the country type of the contact
- * @returns {Object} the joi validaiton object
+ * @returns {object} the joi validaiton object
  */
 exports.getValidationObject = ({
   countryType = exports.COUNTRY_TYPES.DOMESTIC,
@@ -138,7 +138,7 @@ exports.getValidationObject = ({
  *
  * @param {options} options the options object
  * @param {options} options.countryType the country type of the contact
- * @returns {Object} the error message map object which maps errors to custom messages
+ * @returns {object} the error message map object which maps errors to custom messages
  */
 exports.getErrorToMessageMap = ({
   countryType = exports.COUNTRY_TYPES.DOMESTIC,
@@ -151,12 +151,12 @@ exports.getErrorToMessageMap = ({
 /**
  * used for getting the contact constructor depending on the party type and contact type
  *
- * @param {Object} options the options object
+ * @param {object} options the options object
  * @param {string} partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @param {string} countryType typically either 'domestic' or 'international'
  * @param {string} contactType typically either 'primary' or 'secondary'
  */
-const getContactConstructor = ({ partyType, countryType, contactType }) => {
+const getContactConstructor = ({ contactType, countryType, partyType }) => {
   const {
     getPetitionerConservatorContact,
   } = require('./PetitionerConservatorContact');
@@ -270,12 +270,12 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
 /**
  * used for instantiating the primary and secondary contact objects which are later used in the Petition entity.
  *
- * @param {Object} options the options object
+ * @param {object} options the options object
  * @param {string} partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @param {string} contactInfo object which should contain primary and secondary used for creating the contact entities
- * @returns {Object} contains the primary and secondary contacts constructed
+ * @returns {object} contains the primary and secondary contacts constructed
  */
-exports.instantiateContacts = ({ partyType, contactInfo }) => {
+exports.instantiateContacts = ({ contactInfo, partyType }) => {
   const primaryConstructor = getContactConstructor({
     contactType: 'primary',
     countryType: (contactInfo.primary || {}).countryType,
@@ -299,9 +299,9 @@ exports.instantiateContacts = ({ partyType, contactInfo }) => {
 /**
  * creates a contact entities with additional error mappings and validation if needed.
  *
- * @param {Object} options the options object
- * @param {Object} options.additionalErrorMappings the error mappings object for any custom error messages or for overwriting existing ones
- * @param {Object} options.additionalValidation the joi validation object that defines additional validations on top of the generic country type ones
+ * @param {object} options the options object
+ * @param {object} options.additionalErrorMappings the error mappings object for any custom error messages or for overwriting existing ones
+ * @param {object} options.additionalValidation the joi validation object that defines additional validations on top of the generic country type ones
  * @returns {Function} the entity constructor function
  */
 exports.createContactFactory = ({

@@ -13,7 +13,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getWorkItem = async ({ workItemId, applicationContext }) => {
+exports.getWorkItem = async ({ applicationContext, workItemId }) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({

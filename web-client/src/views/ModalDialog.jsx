@@ -90,27 +90,27 @@ export class ModalDialog extends React.Component {
         <dialog
           open
           className="modal-screen"
-          onClick={this.blurDialog}
           role="dialog"
+          onClick={this.blurDialog}
         >
           <div
-            className={`modal-dialog padding-205 ${modal.classNames}`}
             aria-live={this.ariaLiveMode || 'assertive'}
             aria-modal="true"
+            className={`modal-dialog padding-205 ${modal.classNames}`}
             role="status"
             onClick={event => event.stopPropagation()}
           >
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
                 <div className="mobile-lg:grid-col-9">
-                  <h3 tabIndex="-1" className="modal-header__title">
+                  <h3 className="modal-header__title" tabIndex="-1">
                     {modal.title}
                   </h3>
                 </div>
                 <div className="mobile-lg:grid-col-3">
                   <button
-                    type="button"
                     className="text-no-underline usa-button usa-button--unstyled hide-on-mobile float-right"
+                    type="button"
                     onClick={this.runCancelSequence}
                   >
                     Close{' '}
@@ -123,16 +123,16 @@ export class ModalDialog extends React.Component {
             {this.renderBody && this.renderBody()}
             <div className="button-box-container">
               <button
+                className="usa-button margin-right-205"
                 type="button"
                 onClick={this.runConfirmSequence}
-                className="usa-button margin-right-205"
               >
                 {modal.confirmLabel}
               </button>
               <button
+                className="usa-button usa-button--outline"
                 type="button"
                 onClick={this.runCancelSequence}
-                className="usa-button usa-button--outline"
               >
                 {modal.cancelLabel}
               </button>

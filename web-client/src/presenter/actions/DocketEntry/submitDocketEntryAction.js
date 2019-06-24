@@ -7,6 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
+ * @returns {Promise} async action
  */
 export const submitDocketEntryAction = async ({
   get,
@@ -47,6 +48,29 @@ export const submitDocketEntryAction = async ({
     };
   }
 
+  const documentIds = [primaryDocumentFileId, secondaryDocumentFileId].filter(
+    documentId => documentId,
+  );
+
+  for (let documentId of documentIds) {
+    if (documentId) {
+      await applicationContext.getUseCases().virusScanPdf({
+        applicationContext,
+        documentId,
+      });
+
+      await applicationContext.getUseCases().validatePdf({
+        applicationContext,
+        documentId,
+      });
+
+      await applicationContext.getUseCases().sanitizePdf({
+        applicationContext,
+        documentId,
+      });
+    }
+  }
+
   const caseDetail = await applicationContext
     .getUseCases()
     .fileExternalDocument({
@@ -58,10 +82,6 @@ export const submitDocketEntryAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().sanitizePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
         caseId: caseDetail.caseId,

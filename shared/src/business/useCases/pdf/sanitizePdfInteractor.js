@@ -62,6 +62,7 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
       '-dDownsampleMonoImages=true',
       '-dDownsampleGrayImages=true',
       '-dDownsampleColorImages=true',
+      `-dPrinted=true`,
       `-sOutputFile=${outputPdf.name}`,
       `-f ${intermediatePostscript.name}`,
     ].join(' ');
@@ -78,6 +79,18 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
     intermediatePostscript.removeCallback();
     outputPdf.removeCallback();
   } catch (err) {
+    applicationContext.getStorageClient().putObjectTagging({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+      Tagging: {
+        TagSet: [
+          {
+            Key: 'sanitize-pdf',
+            Value: 'error',
+          },
+        ],
+      },
+    });
     throw err;
   }
 
@@ -86,6 +99,19 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
     .getPersistenceGateway()
     .saveDocument({ applicationContext, document: newPdfData, documentId });
   applicationContext.logger.timeEnd('Saving S3 Document');
+
+  applicationContext.getStorageClient().putObjectTagging({
+    Bucket: applicationContext.environment.documentsBucketName,
+    Key: documentId,
+    Tagging: {
+      TagSet: [
+        {
+          Key: 'sanitize-pdf',
+          Value: 'success',
+        },
+      ],
+    },
+  });
 
   return newPdfData;
 };

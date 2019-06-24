@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection */
+/* eslint-disable security/detect-object-injection, security/detect-child-process */
 const AWSXRay = require('aws-xray-sdk');
 
 const AWS =
@@ -7,9 +7,19 @@ const AWS =
     : require('aws-sdk');
 
 const uuidv4 = require('uuid/v4');
-const { S3, DynamoDB } = AWS;
+const { DynamoDB, S3 } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
+
+const util = require('util');
+const { exec } = require('child_process');
+const execPromise = util.promisify(exec);
+
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
 
 const {
   addCoverToPDFDocument,
@@ -46,6 +56,9 @@ const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
+  createCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
+const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
 const {
@@ -66,6 +79,9 @@ const {
 const {
   createWorkItem: createWorkItemUC,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
+const {
+  deleteCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
 const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
@@ -88,6 +104,12 @@ const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
+  getCalendaredCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession');
+const {
+  getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor');
+const {
   getCase,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
@@ -103,14 +125,14 @@ const {
   getCasesByUser: getCasesByUserUC,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
-  getCasesForRespondent,
-} = require('../../shared/src/persistence/dynamo/cases/getCasesForRespondent');
-const {
-  getCasesForRespondent: getCasesForRespondentUC,
-} = require('../../shared/src/business/useCases/respondent/getCasesForRespondentInteractor');
-const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
+const {
+  getEligibleCasesForTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
+const {
+  getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+} = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -132,6 +154,12 @@ const {
 const {
   getSentWorkItemsForUser: getSentWorkItemsForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+const {
+  getTrialSessionById,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
+const {
+  getTrialSessionDetails,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
 const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
@@ -188,6 +216,9 @@ const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
+  putWorkItemInUsersOutbox
+} = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
+const {
   recallPetitionFromIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
@@ -200,6 +231,9 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
+  saveWorkItemForDocketClerkFilingExternalDocument
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument')
+const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
@@ -208,6 +242,15 @@ const {
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
+const {
+  setCaseToReadyForTrial,
+} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
+const {
+  setTrialSessionAsSwingSession,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
+const {
+  setTrialSessionCalendar,
+} = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
@@ -227,11 +270,23 @@ const {
   updateCase: updateCaseUC,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
+  updateCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
+const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
+  updateTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
+const {
+  updateWorkItemInCase,
+} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  validatePdf,
+} = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
@@ -250,7 +305,6 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-
 const { User } = require('../../shared/src/business/entities/User');
 
 const environment = {
@@ -310,22 +364,26 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
+        createCaseTrialSortMappingRecords,
         createDocument,
         createTrialSession,
         createUser,
         createWorkItem,
+        deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getAllCatalogCases,
+        getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
-        getCasesForRespondent,
         getDownloadPolicyUrl,
+        getEligibleCasesForTrialSession,
         getInternalUsers,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
+        getTrialSessionById,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
@@ -335,13 +393,18 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
+        putWorkItemInUsersOutbox,
         saveDocument,
+        saveWorkItemForDocketClerkFilingExternalDocument,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setWorkItemAsRead,
         updateCase,
+        updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
+        updateTrialSession,
         updateWorkItem,
+        updateWorkItemInCase,
         verifyCaseForUser,
         verifyPendingCaseForUser,
         zipDocuments,
@@ -351,7 +414,7 @@ module.exports = (appContextUser = {}) => {
       if (!s3Cache) {
         s3Cache = new S3({
           endpoint: environment.s3Endpoint,
-          region: environment.region,
+          region: 'us-east-1',
           s3ForcePathStyle: true,
         });
       }
@@ -375,13 +438,15 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocument,
         forwardWorkItem,
         generatePDFFromPNGData,
+        getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
-        getCasesForRespondent: getCasesForRespondentUC,
+        getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getTrialSessionDetails,
         getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,
@@ -390,15 +455,28 @@ module.exports = (appContextUser = {}) => {
         getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
-        sanitizePdf,
+        sanitizePdf: args =>
+          process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
         sendPetitionToIRSHoldingQueue,
+        setCaseToReadyForTrial,
+        setTrialSessionAsSwingSession,
+        setTrialSessionCalendar,
         setWorkItemAsRead: setWorkItemAsReadUC,
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
+        validatePdf,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,
-        virusScanPdf,
+        virusScanPdf: args =>
+          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
+      };
+    },
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
       };
     },
     irsGateway,
@@ -421,6 +499,13 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    runVirusScan: async ({ filePath }) => {
+      return execPromise(
+        `clamscan ${
+          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
+        } ${filePath}`,
+      );
     },
   };
 };

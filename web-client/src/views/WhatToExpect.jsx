@@ -9,9 +9,9 @@ export const WhatToExpect = () => (
         <div className="bullet-icon-wrapper">
           <div className="bullet-icon-circle">
             <FontAwesomeIcon
+              className="bullet-icon"
               icon={['far', 'file-pdf']}
               size="lg"
-              className="bullet-icon"
             />
           </div>
         </div>
@@ -24,9 +24,9 @@ export const WhatToExpect = () => (
         <div className="bullet-icon-wrapper">
           <div className="bullet-icon-circle">
             <FontAwesomeIcon
+              className="bullet-icon"
               icon={'dollar-sign'}
               size="lg"
-              className="bullet-icon"
             />
           </div>
         </div>
@@ -38,9 +38,9 @@ export const WhatToExpect = () => (
         <div className="bullet-icon-wrapper">
           <div className="bullet-icon-circle">
             <FontAwesomeIcon
+              className="bullet-icon"
               icon={'laptop'}
               size="lg"
-              className="bullet-icon"
             />
           </div>
         </div>

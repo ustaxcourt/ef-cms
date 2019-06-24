@@ -1,13 +1,12 @@
-const assert = require('assert');
 const moment = require('moment');
 const {
-  Case,
   ANSWER_CUTOFF_AMOUNT,
   ANSWER_CUTOFF_UNIT,
+  Case,
   STATUS_TYPES,
 } = require('./Case');
 const { DocketRecord } = require('./DocketRecord');
-const { MOCK_CASE, MOCK_CASE_WITHOUT_NOTICE } = require('../../test/mockCase');
+const { MOCK_CASE } = require('../../test/mockCase');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
 const { WorkItem } = require('./WorkItem');
 
@@ -50,17 +49,17 @@ describe('Case entity', () => {
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE);
-      assert.ok(myCase.isValid());
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates a valid case from an already existing case json', () => {
       const myCase = new Case(MOCK_CASE);
-      assert.ok(myCase.isValid());
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('adds a paygov date to an already existing case json', () => {
       const myCase = new Case({ payGovId: '1234', ...MOCK_CASE });
-      assert.ok(myCase.isValid());
+      expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates an invalid case with a document', () => {
@@ -73,26 +72,26 @@ describe('Case entity', () => {
         ],
         petitioners: [{ name: 'Test Taxpayer' }],
       });
-      assert.ok(!myCase.isValid());
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with no documents', () => {
       const myCase = new Case({
         documents: [],
       });
-      assert.ok(!myCase.isValid());
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with empty object', () => {
       const myCase = new Case({});
-      assert.ok(!myCase.isValid());
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with no petitioners', () => {
       const myCase = new Case({
         petitioners: [],
       });
-      assert.ok(!myCase.isValid());
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('creates a case with year amounts', () => {
@@ -103,7 +102,7 @@ describe('Case entity', () => {
           { amount: '34.50', year: '2001' },
         ],
       });
-      assert.ok(!myCase.isValid());
+      expect(myCase.isValid()).toBeFalsy();
     });
 
     it('should not be valid because of duplicate years in yearAmounts', () => {
@@ -142,112 +141,47 @@ describe('Case entity', () => {
 
   describe('validate', () => {
     it('should do nothing if valid', () => {
-      let error = null;
+      let error;
       try {
         new Case(MOCK_CASE).validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error === null);
-    });
-
-    describe('should pass when hasIrsNotice is provided', () => {
-      it('and hasIrsNotice is true and all required fields are provided', () => {
-        let error = null;
-        try {
-          new Case(MOCK_CASE).validate();
-        } catch (err) {
-          error = err;
-        }
-        assert.ok(error === null);
-      });
-
-      it('and hasIrsNotice is false and is missing irsNoticeDate', () => {
-        let error = null;
-        let rawCase = Object.assign(
-          { caseType: 'Other', hasIrsNotice: false },
-          MOCK_CASE_WITHOUT_NOTICE,
-        );
-        try {
-          new Case(rawCase).validate();
-        } catch (err) {
-          error = err;
-        }
-        assert.ok(error === null);
-      });
-    });
-
-    describe('should fail when hasIRSnotice is true', () => {
-      it('and is missing irsNoticeDate', () => {
-        let error = null;
-        let rawCase = Object.assign(
-          { caseType: 'Other', hasIrsNotice: true },
-          MOCK_CASE_WITHOUT_NOTICE,
-        );
-        try {
-          new Case(rawCase).validate();
-        } catch (err) {
-          error = err;
-        }
-        expect(error).toBeDefined();
-      });
-
-      it('and is missing hasIrsNotice', () => {
-        let error = null;
-        let rawCase = Object.assign(
-          { caseType: 'Other', irsNoticeDate: '2018-03-01T00:00:00.000Z' },
-          MOCK_CASE_WITHOUT_NOTICE,
-        );
-        try {
-          new Case(rawCase).validate();
-        } catch (err) {
-          error = err;
-        }
-        expect(error).toBeDefined();
-      });
-    });
-
-    it('should do nothing if valid', () => {
-      let error = null;
-      try {
-        new Case(MOCK_CASE).validate();
-      } catch (err) {
-        error = err;
-      }
-      assert.ok(error === null);
+      expect(error).not.toBeDefined();
     });
 
     it('should throw an error on invalid cases', () => {
-      let error = null;
+      let error;
       try {
         new Case({}).validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error !== null);
+      expect(error).toBeDefined();
     });
   });
 
   describe('isValidCaseId', () => {
     it('returns true if a valid uuid', () => {
-      assert.ok(Case.isValidCaseId('c54ba5a9-b37b-479d-9201-067ec6e335bb'));
+      expect(
+        Case.isValidCaseId('c54ba5a9-b37b-479d-9201-067ec6e335bb'),
+      ).toBeTruthy();
     });
 
     it('returns false if a invalid uuid', () => {
-      assert.equal(
+      expect(
         Case.isValidCaseId('XXX54ba5a9-b37b-479d-9201-067ec6e335bb'),
-        false,
-      );
+      ).toBeFalsy();
     });
   });
 
   describe('isValidDocketNumber', () => {
     it('returns true if a valid docketNumber', () => {
-      assert.ok(Case.isValidDocketNumber('00101-00'));
+      expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
     });
 
     it('returns false if a invalid docketnumber', () => {
-      assert.equal(Case.isValidDocketNumber('00'), false);
+      expect(Case.isValidDocketNumber('00')).toBeFalsy();
     });
   });
 
@@ -255,7 +189,7 @@ describe('Case entity', () => {
     it('sets irsSendDate', () => {
       const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      assert.ok(caseRecord.irsSendDate);
+      expect(caseRecord.irsSendDate).toBeDefined();
     });
     it('updates docket record status on petition documents', () => {
       const caseRecord = new Case({
@@ -275,7 +209,7 @@ describe('Case entity', () => {
         ],
       });
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
-      assert.ok(caseRecord.irsSendDate);
+      expect(caseRecord.irsSendDate).toBeDefined();
       expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
       expect(caseRecord.docketRecord[1].status).toBeUndefined();
     });
@@ -532,7 +466,7 @@ describe('Case entity', () => {
     it('sets pay gov fields', () => {
       const caseRecord = new Case(MOCK_CASE);
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      assert.ok(caseRecord.payGovDate);
+      expect(caseRecord.payGovDate).toBeDefined();
     });
 
     it('should add item to docket record when paid', () => {
@@ -553,6 +487,24 @@ describe('Case entity', () => {
       caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
       caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
       expect(docketLength).toEqual(caseRecord.docketRecord.length);
+    });
+
+    it('should overwrite existing docket record entry if one already exists', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(
+        new DocketRecord({
+          description: 'Some Description',
+          filingDate: new Date().toISOString(),
+        }),
+      );
+      caseRecord.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing fee paid',
+          filingDate: new Date().toISOString(),
+        }),
+      );
+      caseRecord.markAsPaidByPayGov(new Date().toISOString());
+      expect(caseRecord.docketRecord.length).toEqual(2);
     });
   });
 
@@ -624,19 +576,19 @@ describe('Case entity', () => {
       } catch (e) {
         error = e;
       }
-      assert.ok(error);
+      expect(error).toBeDefined();
       expect(error.message).toContain('Imarealerror');
     });
 
     it('does not pass back an error passed in if valid', () => {
-      let error = null;
+      let error;
       const caseRecord = new Case(MOCK_CASE);
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
       } catch (e) {
         error = e;
       }
-      assert.ok(!error);
+      expect(error).not.toBeDefined();
     });
   });
 
@@ -661,8 +613,8 @@ describe('Case entity', () => {
           userId: 'respondent',
         },
       });
-      expect(caseToVerify.respondent).not.toBeNull();
-      expect(caseToVerify.respondent.userId).toEqual('respondent');
+      expect(caseToVerify.respondents).not.toBeNull();
+      expect(caseToVerify.respondents[0].userId).toEqual('respondent');
     });
   });
 
@@ -993,6 +945,76 @@ describe('Case entity', () => {
       expect(caseToCheck.status).toEqual(
         STATUS_TYPES.generalDocketReadyForTrial,
       );
+    });
+  });
+
+  describe('generateTrialSortTags', () => {
+    it('should generate sort tags for a regular case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        createdAt: '2018-12-12T05:00:00Z',
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+
+    it('should generate sort tags for a small case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        createdAt: '2018-12-12T05:00:00Z',
+        procedureType: 'Small',
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-S-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+
+    it('should generate sort tags for a prioritized P case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        createdAt: '2018-12-12T05:00:00Z',
+        caseType: 'passport',
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+
+    it('should generate sort tags for a prioritized L case', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+        createdAt: '2018-12-12T05:00:00Z',
+        caseType: 'cdp (lien/levy)',
+      });
+      expect(myCase.generateTrialSortTags()).toEqual({
+        hybrid:
+          'WashingtonDC-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        nonHybrid:
+          'WashingtonDC-R-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    });
+  });
+
+  describe('setAsCalendared', () => {
+    it('should set case as calendared', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.setAsCalendared({
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.status).toEqual(STATUS_TYPES.calendared);
     });
   });
 });

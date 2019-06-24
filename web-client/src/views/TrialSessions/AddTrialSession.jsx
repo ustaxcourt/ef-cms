@@ -13,13 +13,16 @@ export const AddTrialSession = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    submitTrialSessionSequence: sequences.submitTrialSessionSequence,
+    updateTrialSessionFormDataSequence:
+      sequences.updateTrialSessionFormDataSequence,
   },
   ({
     form,
     formCancelToggleCancelSequence,
     showModal,
-    updateFormValueSequence,
+    updateTrialSessionFormDataSequence,
+    submitTrialSessionSequence,
   }) => {
     return (
       <>
@@ -32,11 +35,12 @@ export const AddTrialSession = connect(
             noValidate
             onSubmit={e => {
               e.preventDefault();
+              submitTrialSessionSequence();
             }}
             className="usa-form maxw-none"
           >
             {showModal === 'FormCancelModalDialogComponent' && (
-              <FormCancelModalDialog />
+              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
             )}
             <ErrorNotification />
 
@@ -59,8 +63,9 @@ export const AddTrialSession = connect(
                   id="notes"
                   name="notes"
                   value={form.notes}
+                  maxLength="400"
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateTrialSessionFormDataSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -70,7 +75,7 @@ export const AddTrialSession = connect(
             </div>
 
             <div className="button-box-container">
-              <button type="submit" className="usa-button" onClick={() => {}}>
+              <button type="submit" className="usa-button">
                 Add Session
               </button>
               <button

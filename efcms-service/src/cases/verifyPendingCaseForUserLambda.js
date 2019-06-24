@@ -5,13 +5,13 @@ const { handle } = require('../middleware/apiGatewayHelper');
 /**
  * used for determining if a user has pending association with a case or not
  *
- * @param {Object} event the AWS event object
+ * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
   handle(event, async () => {
-    const userId = (event.pathParameters || {}).userId;
-    const caseId = (event.pathParameters || {}).caseId;
+    const {userId} = event.pathParameters || {};
+    const {caseId} = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {

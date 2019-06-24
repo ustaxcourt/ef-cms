@@ -24,21 +24,26 @@ export const DocketRecordHeader = connect(
               {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button"
-                  href={`/case-detail/${
-                    caseDetail.docketNumber
-                  }/add-docket-entry`}
+                  href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
                   id="button-add-record"
                 >
                   <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Docket
                   Entry
                 </a>
               )}
+              {helper.showCreateOrderButton && (
+                <a
+                  className="usa-button"
+                  href={`/case-detail/${caseDetail.docketNumber}/create-order`}
+                  id="button-create-order"
+                >
+                  <FontAwesomeIcon icon="plus-circle" size="1x" /> Create Order
+                </a>
+              )}
               {helper.showFileDocumentButton && (
                 <a
                   className="usa-button hide-on-mobile"
-                  href={`/case-detail/${
-                    caseDetail.docketNumber
-                  }/file-a-document`}
+                  href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
                   id="button-file-document"
                 >
                   <FontAwesomeIcon icon="plus-circle" size="1x" /> File a
@@ -49,9 +54,9 @@ export const DocketRecordHeader = connect(
             <div className="tablet:grid-offset-2 tablet:grid-col-2">
               <div className="only-large-screens">
                 <select
-                  name={`docketRecordSort.${caseDetail.caseId}`}
-                  className="usa-select margin-top-0 margin-bottom-2 sort"
                   aria-label="docket record"
+                  className="usa-select margin-top-0 margin-bottom-2 sort"
+                  name={`docketRecordSort.${caseDetail.caseId}`}
                   value={caseDetail.docketRecordSort}
                   onChange={e => {
                     updateSessionMetadataSequence({

@@ -27,7 +27,7 @@ exports.get = ({ applicationContext, endpoint, params }) =>
  * @param status
  * @returns {Promise<*>}
  */
-exports.post = ({ applicationContext, endpoint, body }) =>
+exports.post = ({ applicationContext, body, endpoint }) =>
   applicationContext
     .getHttpClient()
     .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
@@ -46,7 +46,7 @@ exports.post = ({ applicationContext, endpoint, body }) =>
  * @param status
  * @returns {Promise<*>}
  */
-exports.put = ({ applicationContext, endpoint, body }) =>
+exports.put = ({ applicationContext, body, endpoint }) =>
   applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {

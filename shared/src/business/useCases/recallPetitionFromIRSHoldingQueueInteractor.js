@@ -2,14 +2,14 @@ const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
+  InvalidEntityError,
+  NotFoundError,
+  UnauthorizedError,
+} = require('../../errors/errors');
+const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const {
-  UnauthorizedError,
-  InvalidEntityError,
-  NotFoundError,
-} = require('../../errors/errors');
 const { Case, STATUS_TYPES } = require('../entities/Case');
 const { Document } = require('../entities/Document');
 
@@ -22,6 +22,9 @@ const {
 const {
   deleteUserOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
+const {
+  deleteWorkItemFromInbox,
+} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 /**
  *
  * @param caseId
@@ -29,8 +32,8 @@ const {
  * @returns {Promise<*>}
  */
 exports.recallPetitionFromIRSHoldingQueue = async ({
-  caseId,
   applicationContext,
+  caseId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -70,6 +73,11 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   }
 
   if (initializeCaseWorkItem) {
+    await deleteWorkItemFromInbox({
+      applicationContext,
+      workItem: initializeCaseWorkItem,
+    });
+
     initializeCaseWorkItem.recallFromIRSBatchSystem({
       user,
     });
@@ -91,8 +99,8 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
       message => message.message === 'Petition batched for IRS',
     );
 
-    const fromUserId = batchedMessage.fromUserId;
-    const createdAt = batchedMessage.createdAt;
+    const { fromUserId } = batchedMessage;
+    const { createdAt } = initializeCaseWorkItem;
 
     await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,

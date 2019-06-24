@@ -2,10 +2,28 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWor
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
+  getCurrentUser: () => ({
+    role: 'petitionsclerk',
+    userId: 'abc',
+  }),
+  getUtilities: () => {
+    return {
+      createISODateString,
+      formatDateString,
+      prepareDateFromString,
+    };
+  },
+});
 
 const FORMATTED_WORK_ITEM = {
-  assigneeId: null,
+  assigneeId: 'abc',
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
   caseStatus: 'General Docket - Not at Issue',
@@ -51,7 +69,7 @@ const FORMATTED_WORK_ITEM = {
       to: 'Unassigned',
     },
   ],
-  section: 'docket',
+  section: 'petitions',
   selected: true,
   sentBy: 'respondent',
   showComplete: true,
@@ -60,7 +78,7 @@ const FORMATTED_WORK_ITEM = {
 };
 describe('formatted work queue computed', () => {
   const workItem = {
-    assigneeId: null,
+    assigneeId: 'abc',
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     caseStatus: 'General Docket - Not at Issue',
@@ -71,6 +89,7 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
+    isInternal: true,
     messages: [
       {
         createdAt: '2018-12-27T18:05:54.164Z',
@@ -87,7 +106,7 @@ describe('formatted work queue computed', () => {
         messageId: '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
       },
     ],
-    section: 'docket',
+    section: 'petitions',
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
     workItemId: 'af60fe99-37dc-435c-9bdf-24be67769344',
@@ -99,6 +118,11 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [workItem],
         workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
       },
     });
   });
@@ -126,6 +150,11 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
       },
     });
     expect(result2[0].showSendTo).toBeFalsy();
@@ -137,6 +166,11 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeFalsy();
@@ -148,6 +182,11 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
       },
     });
     expect(result2[0].showBatchedStatusIcon).toBeTruthy();
@@ -160,9 +199,47 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
       },
     });
     expect(result2[0].showRecalledStatusIcon).toBeTruthy();
     expect(result2[0].showUnreadIndicators).toEqual(true);
+  });
+
+  it('should not show a workItem in user messages outbox if it is completed', () => {
+    workItem.completedAt = '2019-06-17T15:27:55.801Z';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        selectedWorkItems: [],
+        workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result).toEqual([]);
+  });
+
+  it('should not show a workItem in section messages outbox if it is completed', () => {
+    workItem.completedAt = '2019-06-17T15:27:55.801Z';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        selectedWorkItems: [],
+        workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: { box: 'outbox', queue: 'section' },
+      },
+    });
+
+    expect(result).toEqual([]);
   });
 });

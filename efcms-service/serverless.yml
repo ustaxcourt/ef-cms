@@ -54,6 +54,24 @@ custom:
       - functionErrors
       - functionInvocations
       - functionDuration
+      - errorExceptions
+    definitions:
+      errorExceptions:
+        description: 'Internal Error Exception Alarm'
+        namespace: 'AWS/Lambda'
+        metric: Errors
+        threshold: 1
+        statistic: Sum
+        period: 60
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanThreshold
+        pattern: 'ERROR'
+    topics:
+      alarm:
+        topic: ${self:provider.stage}-cloudwatch-alerts
+        notifications:
+          - protocol: email
+            endpoint: jsutton@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -80,24 +98,27 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
-  s3Endpoint: s3.${opt:region}.amazonaws.com
+  s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
+  clamavDefDir: /opt/var/lib/clamav
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
-    DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-${opt:region}
+    DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
+    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -193,11 +214,18 @@ resources:
 
 layers:
   clamav:
+    compatibleRuntimes:
+      - nodejs10.x
     path: runtimes/clamav
     exclude:
       - freshclam.conf
       - build.sh
+      - Dockerfile
+      - Dockerfile.clamscan
+      - clamav_lambda_layer.tar.gz
   ghostscript:
+    compatibleRuntimes:
+      - nodejs10.x
     path: runtimes/ghostscript
     exclude:
       - build.sh
@@ -264,7 +292,7 @@ functions:
           path: v1/cases/{caseId}/documents/{documentId}/coversheet
           method: post
           cors: true
-          async: true
+          # async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -272,6 +300,8 @@ functions:
 
   sanitizePdf:
     handler: src/handlers.sanitizePdfLambda
+    layers:
+      - { Ref: GhostscriptLambdaLayer }
     memorySize: 3008
     timeout: 900
     events:
@@ -279,7 +309,7 @@ functions:
           path: v1/documents/{documentId}/sanitize
           method: post
           cors: true
-          async: true
+          # async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -290,6 +320,30 @@ functions:
     events:
       - http:
           path: v1/cases/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseTrialSortTags:
+    handler: src/handlers.updateCaseTrialSortTagsLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/updateCaseTrialSortTags
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setCaseToReadyForTrial:
+    handler: src/handlers.setCaseToReadyForTrialLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/setToReadyForTrial
           method: put
           cors: true
           authorizer:
@@ -399,18 +453,6 @@ functions:
       - http:
           path: v1/users/{userId}/case/{caseId}/pending
           method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCasesForRespondent:
-    handler: src/handlers.getCasesForRespondentLambda
-    events:
-      - http:
-          path: v1/respondents/{respondentId}/cases
-          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -616,11 +658,7 @@ functions:
   checkForReadyForTrialCases:
     handler: src/handlers.checkForReadyForTrialCases
     events:
-      - schedule: cron(0 * * * ? *)
-      - http:
-          path: v1/checkForReadyForTrialCases
-          method: get
-          cors: true
+      - schedule: cron(0 7 * * ? *)
 
   swagger:
     handler: src/handlers.swaggerLambda
@@ -640,6 +678,8 @@ functions:
 
   virusScan:
     handler: src/handlers.virusScanPdfLambda
+    memorySize: 3008
+    timeout: 900
     layers:
       - { Ref: ClamavLambdaLayer }
     events:
@@ -647,6 +687,17 @@ functions:
           path: v1/documents/{documentId}/virus-scan
           method: post
           cors: true
+          async: true
+
+  validate:
+    handler: src/handlers.validatePdfLambda
+    events:
+      - http:
+          path: v1/documents/{documentId}/validate
+          method: post
+          cors: true
+    alarms:
+      - errorExceptions
 
   getTrialSessions:
     handler: src/handlers.getTrialSessionsLambda
@@ -666,6 +717,66 @@ functions:
       - http:
           path: v1/trialSessions
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getTrialSessionDetails:
+    handler: src/handlers.getTrialSessionDetailsLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionAsSwingSession:
+    handler: src/handlers.setTrialSessionAsSwingSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/setSwingSession
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getEligibleCasesForTrialSession:
+    handler: src/handlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/eligible-cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionCalendar:
+    handler: src/handlers.setTrialSessionCalendarLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/setCalendar
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCalendaredCasesForTrialSession:
+    handler: src/handlers.getCalendaredCasesForTrialSessionLambda
+    events:
+      - http:
+          path: v1/trialSessions/{trialSessionId}/getCalendaredCases
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

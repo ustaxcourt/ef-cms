@@ -1,15 +1,11 @@
 const fs = require('fs');
 const tmp = require('tmp');
-const util = require('util');
-const { exec } = require('child_process');
-
-const execPromise = util.promisify(exec);
 
 /**
  * virusScanDocument
  * @param applicationContext
  * @param documentId
- * @returns {Object} errors (null if no errors)
+ * @returns {object} errors (null if no errors)
  */
 exports.virusScanPdf = async ({ applicationContext, documentId }) => {
   applicationContext.logger.time('Fetching S3 File');
@@ -20,24 +16,59 @@ exports.virusScanPdf = async ({ applicationContext, documentId }) => {
       Key: documentId,
     })
     .promise();
+  applicationContext.logger.timeEnd('Fetching S3 File');
 
   const inputPdf = tmp.fileSync();
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
   fs.closeSync(inputPdf.fd);
 
-  let results;
   try {
-    const scanResults = await execPromise(`clamscan ${inputPdf.name}`);
-    applicationContext.logger.time(scanResults);
-    results = 'clean';
+    applicationContext.logger.time('Running Clamscan');
+    await applicationContext.runVirusScan({ filePath: inputPdf.name });
+    applicationContext.logger.timeEnd('Running Clamscan');
+    applicationContext.getStorageClient().putObjectTagging({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+      Tagging: {
+        TagSet: [
+          {
+            Key: 'virus-scan',
+            Value: 'clean',
+          },
+        ],
+      },
+    });
+    return 'clean';
   } catch (e) {
-    applicationContext.logger.time(e);
+    applicationContext.logger.error(e);
     if (e.code === 1) {
-      results = 'infected';
+      applicationContext.getStorageClient().putObjectTagging({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: documentId,
+        Tagging: {
+          TagSet: [
+            {
+              Key: 'virus-scan',
+              Value: 'infected',
+            },
+          ],
+        },
+      });
+      throw new Error('infected');
     } else {
-      results = 'error';
+      applicationContext.getStorageClient().putObjectTagging({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: documentId,
+        Tagging: {
+          TagSet: [
+            {
+              Key: 'virus-scan',
+              Value: 'error',
+            },
+          ],
+        },
+      });
+      throw new Error('error scanning PDF');
     }
   }
-
-  return results;
 };

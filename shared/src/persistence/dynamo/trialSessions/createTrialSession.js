@@ -7,11 +7,12 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.createTrialSession = async ({ trialSession, applicationContext }) => {
-  await put({
+exports.createTrialSession = async ({ applicationContext, trialSession }) => {
+  return await put({
     Item: {
-      pk: `trial-session`,
-      sk: `${trialSession.trialSessionId}`,
+      pk: `trial-session-${trialSession.trialSessionId}`,
+      sk: `trial-session-${trialSession.trialSessionId}`,
+      gsi1pk: 'trial-session-catalog',
       ...trialSession,
     },
     applicationContext,
