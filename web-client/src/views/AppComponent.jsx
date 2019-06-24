@@ -19,6 +19,7 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { PDFSigner } from './PDFSigner';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
@@ -52,6 +53,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  PDFSigner,
   RequestAccessWizard,
   SelectDocumentType,
   StartCase,
@@ -77,7 +79,8 @@ class App extends React.Component {
   }
 
   render() {
-    const CurrentPage = pages[this.props.currentPage];
+    //const CurrentPage = pages[this.props.currentPage];
+    const CurrentPage = PDFSigner;
     return (
       <React.Fragment>
         <a
