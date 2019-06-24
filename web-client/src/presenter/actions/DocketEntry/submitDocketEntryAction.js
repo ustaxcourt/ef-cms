@@ -29,7 +29,8 @@ export const submitDocketEntryAction = async ({
     isPaper: true,
     docketNumber,
     caseId,
-    // createdAt: documentMetadata.dateReceived,
+    createdAt: new Date().toISOString(),
+    receivedAt: documentMetadata.dateReceived,
   };
 
   if (documentMetadata.secondaryDocument) {

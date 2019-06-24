@@ -118,11 +118,12 @@ exports.createCaseFromPaper = async ({
 
   if (stinFileId) {
     const stinDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
+      createdAt: caseToAdd.createdAt,
       documentId: stinFileId,
       documentType: Document.initialDocumentTypes.stin,
       filedBy: caseCaptionNames,
       isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     });
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
@@ -130,11 +131,12 @@ exports.createCaseFromPaper = async ({
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
+      createdAt: caseToAdd.createdAt,
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,
       isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     });
     caseToAdd.addDocument(odsDocumentEntity);
