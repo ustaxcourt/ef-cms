@@ -3,7 +3,11 @@ import 'react-quill/dist/quill.snow.css';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
+
+const Size = Quill.import('attributors/style/size');
+Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px'];
+Quill.register(Size, true);
 
 export const TextEditor = connect(
   {
@@ -21,6 +25,31 @@ export const TextEditor = connect(
               value: e,
             });
           }}
+          modules={{
+            toolbar: [
+              [
+                {
+                  size: ['10px', '12px', '14px', '16px', '18px', '20px'],
+                },
+              ],
+              ['bold', 'italic', 'underline'],
+              [
+                { list: 'bullet' },
+                { list: 'ordered' },
+                { indent: '-1' },
+                { indent: '+1' },
+              ],
+            ],
+          }}
+          formats={[
+            'size',
+            'bold',
+            'italic',
+            'underline',
+            'bullet',
+            'list',
+            'indent',
+          ]}
         />
       );
     }
