@@ -55,7 +55,7 @@ const createMockDocumentClient = () => {
         promise: async () => null,
       };
     },
-    query: ({ IndexName, ExpressionAttributeValues }) => {
+    query: ({ ExpressionAttributeValues, IndexName }) => {
       const arr = [];
       for (let key in data) {
         if (IndexName === 'gsi1') {
@@ -84,9 +84,9 @@ const createMockDocumentClient = () => {
       };
     },
     update: ({
-      Key,
       ExpressionAttributeNames,
       ExpressionAttributeValues,
+      Key,
       UpdateExpression,
     }) => {
       for (let name in ExpressionAttributeNames) {
@@ -121,7 +121,7 @@ const createMockDocumentClient = () => {
           ...obj,
         };
       } else {
-        let id = (data[`${Key.pk} ${Key.sk}`] || {}).id;
+        let { id } = data[`${Key.pk} ${Key.sk}`] || {};
         data[`${Key.pk} ${Key.sk}`] = {
           id: (id || 0) + 1,
         };

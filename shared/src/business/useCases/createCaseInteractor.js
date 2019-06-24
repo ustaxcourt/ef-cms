@@ -74,7 +74,7 @@ exports.createCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const Petition = applicationContext.getEntityConstructors().Petition;
+  const { Petition } = applicationContext.getEntityConstructors();
   const petitionEntity = new Petition(petitionMetadata).validate();
 
   // invoke the createCase interactor

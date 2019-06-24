@@ -2,10 +2,10 @@ const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getSortRecords = async ({
+  afterDate,
   applicationContext,
   key,
   type,
-  afterDate,
 }) => {
   const records = await client.query({
     ExpressionAttributeNames: {

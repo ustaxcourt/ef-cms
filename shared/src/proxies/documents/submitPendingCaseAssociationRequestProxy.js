@@ -8,8 +8,8 @@ const { put } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.submitPendingCaseAssociationRequest = ({
-  caseId,
   applicationContext,
+  caseId,
 }) => {
   const user = applicationContext.getCurrentUser();
   return put({

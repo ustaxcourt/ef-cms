@@ -17,10 +17,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {Promise<*>}
  */
 exports.assignWorkItems = async ({
-  workItemId,
+  applicationContext,
   assigneeId,
   assigneeName,
-  applicationContext,
+  workItemId,
 }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, WORKITEM)) {

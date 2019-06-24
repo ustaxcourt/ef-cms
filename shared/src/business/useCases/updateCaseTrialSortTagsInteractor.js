@@ -3,7 +3,7 @@ const {
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 const { Case, STATUS_TYPES } = require('../entities/Case');
-const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
  * updates the case trial sort tags

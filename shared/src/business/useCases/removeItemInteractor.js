@@ -1,4 +1,4 @@
-exports.removeItem = async ({ key, applicationContext }) => {
+exports.removeItem = async ({ applicationContext, key }) => {
   return applicationContext.getPersistenceGateway().removeItem({
     applicationContext,
     key,

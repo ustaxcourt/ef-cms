@@ -16,9 +16,9 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {*}
  */
 exports.completeWorkItem = async ({
+  applicationContext,
   completedMessage,
   workItemId,
-  applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
 

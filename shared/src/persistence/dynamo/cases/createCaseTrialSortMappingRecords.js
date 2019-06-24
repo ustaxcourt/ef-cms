@@ -9,9 +9,9 @@ const { put } = require('../../dynamodbClientService');
  * @returns {*}
  */
 exports.createCaseTrialSortMappingRecords = async ({
+  applicationContext,
   caseId,
   caseSortTags,
-  applicationContext,
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
 

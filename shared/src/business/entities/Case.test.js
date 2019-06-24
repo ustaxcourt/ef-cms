@@ -1,8 +1,8 @@
 const moment = require('moment');
 const {
-  Case,
   ANSWER_CUTOFF_AMOUNT,
   ANSWER_CUTOFF_UNIT,
+  Case,
   STATUS_TYPES,
 } = require('./Case');
 const { DocketRecord } = require('./DocketRecord');

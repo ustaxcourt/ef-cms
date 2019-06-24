@@ -11,7 +11,7 @@ export const CaseDetailHeader = connect(
     openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     showModal: state.showModal,
   },
-  ({ caseDetail, caseHelper, showModal, openCaseCaptionModalSequence }) => {
+  ({ caseDetail, caseHelper, openCaseCaptionModalSequence, showModal }) => {
     return (
       <div className="big-blue-header">
         <div className="grid-container">

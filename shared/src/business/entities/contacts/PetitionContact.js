@@ -156,7 +156,7 @@ exports.getErrorToMessageMap = ({
  * @param {string} countryType typically either 'domestic' or 'international'
  * @param {string} contactType typically either 'primary' or 'secondary'
  */
-const getContactConstructor = ({ partyType, countryType, contactType }) => {
+const getContactConstructor = ({ contactType, countryType, partyType }) => {
   const {
     getPetitionerConservatorContact,
   } = require('./PetitionerConservatorContact');
@@ -275,7 +275,7 @@ const getContactConstructor = ({ partyType, countryType, contactType }) => {
  * @param {string} contactInfo object which should contain primary and secondary used for creating the contact entities
  * @returns {object} contains the primary and secondary contacts constructed
  */
-exports.instantiateContacts = ({ partyType, contactInfo }) => {
+exports.instantiateContacts = ({ contactInfo, partyType }) => {
   const primaryConstructor = getContactConstructor({
     contactType: 'primary',
     countryType: (contactInfo.primary || {}).countryType,

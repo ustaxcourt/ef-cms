@@ -9,9 +9,9 @@ const { put } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.completeWorkItem = ({
+  applicationContext,
   completedMessage,
   workItemId,
-  applicationContext,
 }) => {
   return put({
     applicationContext,

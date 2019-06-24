@@ -9,7 +9,7 @@ export const IndividualWorkQueueInbox = connect(
     workQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ workQueue, workQueueHelper, documentHelper }) => {
+  ({ documentHelper, workQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table

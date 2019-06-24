@@ -17,8 +17,8 @@ class ErrorNotificationComponent extends React.Component {
   }
 
   render() {
-    const alertHelper = this.props.alertHelper;
-    const alertError = this.props.alertError;
+    const { alertHelper } = this.props;
+    const { alertError } = this.props;
 
     this.notificationRef = React.createRef();
 

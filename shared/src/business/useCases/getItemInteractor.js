@@ -1,4 +1,4 @@
-exports.getItem = async ({ key, applicationContext }) => {
+exports.getItem = async ({ applicationContext, key }) => {
   return applicationContext.getPersistenceGateway().getItem({
     applicationContext,
     key,

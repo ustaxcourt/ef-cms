@@ -4,7 +4,7 @@
  * @param message
  * @returns {object} errors (null if no errors)
  */
-exports.validateForwardMessage = ({ message, applicationContext }) => {
+exports.validateForwardMessage = ({ applicationContext, message }) => {
   return new (applicationContext.getEntityConstructors()).ForwardMessage(
     message,
   ).getFormattedValidationErrors();

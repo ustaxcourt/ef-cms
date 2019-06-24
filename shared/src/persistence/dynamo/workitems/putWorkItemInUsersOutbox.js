@@ -2,10 +2,10 @@ const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
 const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 
 exports.putWorkItemInUsersOutbox = async ({
-  userId,
-  section,
-  workItem,
   applicationContext,
+  section,
+  userId,
+  workItem,
 }) => {
   await createUserOutboxRecord({
     applicationContext,

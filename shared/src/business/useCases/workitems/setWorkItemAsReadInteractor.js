@@ -1,6 +1,6 @@
 const {
-  isAuthorized,
   GET_READ_MESSAGES,
+  isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
