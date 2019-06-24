@@ -142,7 +142,7 @@ exports.fileExternalDocument = async ({
         new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
-          filingDate: documentEntity.createdAt,
+          filingDate: documentEntity.receivedAt,
         }),
       );
     }

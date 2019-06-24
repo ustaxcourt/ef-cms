@@ -40,6 +40,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
         caseCaption: 'Bob Jones, Petitioner',
+        createdAt: CREATED_DATE,
         receivedAt: RECEIVED_DATE,
       },
     });
@@ -67,9 +68,10 @@ describe('createCaseFromPaperInteractor integration test', () => {
       ],
       documents: [
         {
-          createdAt: RECEIVED_DATE,
+          createdAt: CREATED_DATE,
           documentType: 'Petition',
           filedBy: 'Bob Jones',
+          receivedAt: RECEIVED_DATE,
           workItems: [
             {
               assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -127,7 +129,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: null,
         document: {
-          createdAt: RECEIVED_DATE,
+          createdAt: CREATED_DATE,
           documentType: 'Petition',
         },
         isInitializeCase: true,
@@ -155,7 +157,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: null,
         document: {
-          createdAt: RECEIVED_DATE,
+          createdAt: CREATED_DATE,
           documentType: 'Petition',
         },
         isInitializeCase: true,
