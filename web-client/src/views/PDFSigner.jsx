@@ -7,8 +7,7 @@ import React from 'react';
 const pdfUrl =
   'http://localhost:3000/v1/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7/documentDownloadUrl?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uc2NsZXJrIiwiZW1haWwiOiJwZXRpdGlvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IFBldGl0aW9uc2NsZXJrIiwicm9sZSI6InBldGl0aW9uc2NsZXJrIiwic2VjdGlvbiI6InBldGl0aW9ucyIsInVzZXJJZCI6IjM4MDVkMWFiLTE4ZDAtNDNlYy1iYWZiLTY1NGU4MzQwNTQxNiIsInN1YiI6IjM4MDVkMWFiLTE4ZDAtNDNlYy1iYWZiLTY1NGU4MzQwNTQxNiIsImlhdCI6MTU2MTEzOTQyMX0.JoZKSvEEkpuTXRbzzVFLQxEaU-ImEqlcRUyTnN_5E2g';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.worker.min.js';
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 // pdf document id
 export const PDFSigner = connect(
