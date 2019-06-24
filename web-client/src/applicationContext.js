@@ -14,6 +14,8 @@ import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';
 
+const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
+
 import {
   createISODateString,
   formatDateString,
@@ -74,6 +76,7 @@ import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePe
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
+import { generatePdfUrlFactory } from '../../shared/src/business/utilities/generatePdfUrlFactory';
 import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
@@ -311,6 +314,7 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
+      generatePdfBlobUrl: generatePdfUrlFactory(jsPDF),
       isStringISOFormatted,
       prepareDateFromString,
     };

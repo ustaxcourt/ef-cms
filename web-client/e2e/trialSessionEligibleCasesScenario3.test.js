@@ -38,8 +38,8 @@ import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 
 const {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;
