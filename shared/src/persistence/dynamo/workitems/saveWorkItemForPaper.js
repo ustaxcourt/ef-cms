@@ -14,7 +14,7 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.saveWorkItemForPaper = async ({ workItem, applicationContext }) => {
+exports.saveWorkItemForPaper = async ({ applicationContext, workItem }) => {
   return Promise.all([
     put({
       Item: {

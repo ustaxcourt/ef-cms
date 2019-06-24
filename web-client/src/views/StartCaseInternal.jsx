@@ -28,35 +28,35 @@ export const StartCaseInternal = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    completeScanSequence,
     constants,
+    formCancelToggleCancelSequence,
     scanHelper,
     showModal,
-    startScanSequence,
-    completeScanSequence,
-    formCancelToggleCancelSequence,
     startCaseHelper,
+    startScanSequence,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
     updatePetitionValueSequence,
-    validationErrors,
     validatePetitionFromPaperSequence,
+    validationErrors,
   }) => {
     return (
       <section className="usa-section grid-container">
         <form
-          role="form"
-          aria-labelledby="start-case-header"
           noValidate
+          aria-labelledby="start-case-header"
+          role="form"
           onSubmit={e => {
             e.preventDefault();
             submitPetitionFromPaperSequence();
           }}
         >
-          <h1 tabIndex="-1" id="start-case-header">
+          <h1 id="start-case-header" tabIndex="-1">
             Upload Documents to Create a Case
           </h1>
           {showModal === 'FormCancelModalDialogComponent' && (
-            <FormCancelModalDialog />
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
           )}
           <ErrorNotification />
           <h2>Petition Documents</h2>
@@ -69,99 +69,99 @@ export const StartCaseInternal = connect(
             >
               <fieldset className="usa-fieldset">
                 <legend
-                  id="date-received-legend with-hint"
                   className="usa-legend"
+                  id="date-received-legend with-hint"
                 >
                   Date Received <span className="usa-hint">(required)</span>
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month">
                     <label
-                      htmlFor="date-received-month"
-                      className="usa-label"
                       aria-hidden="true"
+                      className="usa-label"
+                      htmlFor="date-received-month"
                     >
                       MM
                     </label>
                     <input
-                      className="usa-input usa-input-inline"
                       aria-describedby="date-received-legend"
-                      id="date-received-month"
-                      name="month"
                       aria-label="month, two digits"
-                      type="number"
-                      min="1"
+                      className="usa-input usa-input-inline"
+                      id="date-received-month"
                       max="12"
+                      min="1"
+                      name="month"
+                      type="number"
+                      onBlur={() => {
+                        validatePetitionFromPaperSequence();
+                      }}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                      }}
-                      onBlur={() => {
-                        validatePetitionFromPaperSequence();
                       }}
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day">
                     <label
-                      htmlFor="date-received-day"
-                      className="usa-label"
                       aria-hidden="true"
+                      className="usa-label"
+                      htmlFor="date-received-day"
                     >
                       DD
                     </label>
                     <input
-                      className="usa-input usa-input-inline"
                       aria-describedby="date-received-legend"
                       aria-label="day, two digits"
+                      className="usa-input usa-input-inline"
                       id="date-received-day"
+                      max="31"
+                      min="1"
                       name="day"
                       type="number"
-                      min="1"
-                      max="31"
+                      onBlur={() => {
+                        validatePetitionFromPaperSequence();
+                      }}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                      }}
-                      onBlur={() => {
-                        validatePetitionFromPaperSequence();
                       }}
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year">
                     <label
-                      htmlFor="date-received-year"
-                      className="usa-label"
                       aria-hidden="true"
+                      className="usa-label"
+                      htmlFor="date-received-year"
                     >
                       YYYY
                     </label>
                     <input
-                      className="usa-input usa-input-inline"
                       aria-describedby="date-received-legend"
                       aria-label="year, four digits"
+                      className="usa-input usa-input-inline"
                       id="date-received-year"
+                      max="2100"
+                      min="1900"
                       name="year"
                       type="number"
-                      min="1900"
-                      max="2100"
+                      onBlur={() => {
+                        validatePetitionFromPaperSequence();
+                      }}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
                       }}
-                      onBlur={() => {
-                        validatePetitionFromPaperSequence();
-                      }}
                     />
                   </div>
                   <Text
-                    className="usa-error-message"
                     bind="validationErrors.receivedAt"
+                    className="usa-error-message"
                   />
                 </div>
               </fieldset>
@@ -173,27 +173,27 @@ export const StartCaseInternal = connect(
                 (validationErrors.caseCaption ? 'usa-form-group--error' : '')
               }
             >
-              <label htmlFor="case-caption" className="usa-label">
+              <label className="usa-label" htmlFor="case-caption">
                 Case Caption <span className="usa-hint">(required)</span>
               </label>
               <textarea
+                className="usa-textarea"
                 id="case-caption"
                 name="caseCaption"
-                className="usa-textarea"
+                onBlur={() => {
+                  validatePetitionFromPaperSequence();
+                }}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
-                onBlur={() => {
-                  validatePetitionFromPaperSequence();
-                }}
               />
               {constants.CASE_CAPTION_POSTFIX}
               <Text
-                className="usa-error-message"
                 bind="validationErrors.caseCaption"
+                className="usa-error-message"
               />
             </div>
 
@@ -203,24 +203,24 @@ export const StartCaseInternal = connect(
               }`}
             >
               <label
-                htmlFor="petition-file"
                 className={
                   'usa-label ustc-upload-petition ' +
                   (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                 }
+                htmlFor="petition-file"
               >
                 Upload the Petition <span className="usa-hint">(required)</span>
-                <span className="success-message">
+                <span className="success-message margin-left-2px">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
               <input
-                id="petition-file"
-                type="file"
                 accept=".pdf"
                 aria-describedby="petition-hint"
-                name="petitionFile"
                 className="usa-input"
+                id="petition-file"
+                name="petitionFile"
+                type="file"
                 onChange={e => {
                   limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                     updatePetitionValueSequence({
@@ -236,17 +236,16 @@ export const StartCaseInternal = connect(
                 }}
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.petitionFile"
+                className="usa-error-message"
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.petitionFileSize"
+                className="usa-error-message"
               />
             </div>
             {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
               <Scan
-                onScanClicked={() => startScanSequence()}
                 onDoneClicked={() =>
                   completeScanSequence({
                     onComplete: file => {
@@ -264,6 +263,7 @@ export const StartCaseInternal = connect(
                     },
                   })
                 }
+                onScanClicked={() => startScanSequence()}
               />
             )}
           </div>
@@ -276,23 +276,23 @@ export const StartCaseInternal = connect(
               }`}
             >
               <label
-                htmlFor="stin-file"
                 className={
                   'usa-label ustc-upload-stin ' +
                   (startCaseHelper.showStinFileValid ? 'validated' : '')
                 }
+                htmlFor="stin-file"
               >
                 Upload the Statement of Taxpayer Identification
-                <span className="success-message">
+                <span className="success-message margin-left-2px">
                   <FontAwesomeIcon icon="check-circle" size="sm" />
                 </span>
               </label>
               <input
-                id="stin-file"
-                type="file"
                 accept=".pdf"
-                name="stinFile"
                 className="usa-input"
+                id="stin-file"
+                name="stinFile"
+                type="file"
                 onChange={e => {
                   limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                     updatePetitionValueSequence({
@@ -308,12 +308,12 @@ export const StartCaseInternal = connect(
                 }}
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.stinFile"
+                className="usa-error-message"
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.stinFileSize"
+                className="usa-error-message"
               />
             </div>
           </div>
@@ -321,25 +321,25 @@ export const StartCaseInternal = connect(
           <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
           <div className="blue-container">
             <label
-              htmlFor="ownership-disclosure-file"
               className={
                 'usa-label ustc-upload-ods ' +
                 (startCaseHelper.showOwnershipDisclosureValid
                   ? 'validated'
                   : '')
               }
+              htmlFor="ownership-disclosure-file"
             >
               Upload the Ownership Disclosure Statement
-              <span className="success-message">
+              <span className="success-message margin-left-2px">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
             <input
-              id="ownership-disclosure-file"
-              type="file"
               accept=".pdf"
-              name="ownershipDisclosureFile"
               className="usa-input"
+              id="ownership-disclosure-file"
+              name="ownershipDisclosureFile"
+              type="file"
               onChange={e => {
                 limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                   updatePetitionValueSequence({
@@ -354,21 +354,21 @@ export const StartCaseInternal = connect(
               }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.ownershipDisclosureFileSize"
+              className="usa-error-message"
             />
           </div>
           <div className="margin-top-4">
             <button
+              className="usa-button margin-bottom-2"
               id="submit-case"
               type="submit"
-              className="usa-button margin-bottom-2"
             >
               Create Case
             </button>
             <button
-              type="button"
               className="usa-button usa-button--outline"
+              type="button"
               onClick={() => {
                 formCancelToggleCancelSequence();
                 return false;

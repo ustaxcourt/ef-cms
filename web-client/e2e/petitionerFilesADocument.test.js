@@ -35,6 +35,7 @@ global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  externalRoute: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
@@ -64,7 +65,7 @@ test = CerebralTest(presenter);
 
 describe('Taxpayer files document', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,

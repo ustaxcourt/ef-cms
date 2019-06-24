@@ -5,9 +5,10 @@ import React from 'react';
 export const SessionAssignmentsForm = connect(
   {
     form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateTrialSessionFormDataSequence:
+      sequences.updateTrialSessionFormDataSequence,
   },
-  ({ form, updateFormValueSequence }) => {
+  ({ form, updateTrialSessionFormDataSequence }) => {
     return (
       <>
         <h2 className="margin-top-4">Session Assignments</h2>
@@ -22,7 +23,7 @@ export const SessionAssignmentsForm = connect(
               aria-describedby="judge-label"
               className="usa-select"
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -78,7 +79,7 @@ export const SessionAssignmentsForm = connect(
               aria-describedby="trial-clerk-label"
               className="usa-select"
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -105,7 +106,7 @@ export const SessionAssignmentsForm = connect(
               autoCapitalize="none"
               value={form.courtReporter || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -126,7 +127,7 @@ export const SessionAssignmentsForm = connect(
               autoCapitalize="none"
               value={form.irsCalendarAdministrator || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });

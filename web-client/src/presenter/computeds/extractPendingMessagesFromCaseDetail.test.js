@@ -2,8 +2,26 @@ import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCas
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractPendingMessagesFromCaseDetailComputed,
+  {
+    getCurrentUser: () => ({
+      role: 'petitionsclerk',
+    }),
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
+      };
+    },
+  },
 );
 
 describe('extractPendingMessagesFromCaseDetail', () => {
@@ -27,24 +45,27 @@ describe('extractPendingMessagesFromCaseDetail', () => {
               workItems: [
                 {
                   caseStatus: 'new',
+                  document: {
+                    createdAt: '2018-03-02T05:00:00.000Z',
+                  },
                   messages: [
                     {
-                      createdAt: '2018-03-01T00:00:00.000Z',
+                      createdAt: '2018-03-01T05:00:00.000Z',
                       message: 'there',
                       messageId: 'gl',
                     },
                     {
-                      createdAt: '2018-03-02T00:00:00.000Z',
+                      createdAt: '2018-03-02T05:00:00.000Z',
                       message: 'is',
                       messageId: 'a',
                     },
                     {
-                      createdAt: '2018-03-03T00:00:00.000Z',
+                      createdAt: '2018-03-03T05:00:00.000Z',
                       message: 'no',
                       messageId: 'b',
                     },
                     {
-                      createdAt: '2018-03-04T00:00:00.000Z',
+                      createdAt: '2018-03-04T05:00:00.000Z',
                       message: 'level',
                       messageId: 'c',
                     },
@@ -53,19 +74,22 @@ describe('extractPendingMessagesFromCaseDetail', () => {
                 },
                 {
                   caseStatus: 'new',
+                  document: {
+                    createdAt: '2018-03-02T05:00:00.000Z',
+                  },
                   messages: [
                     {
-                      createdAt: '2018-02-01T00:00:00.000Z',
+                      createdAt: '2018-02-01T05:00:00.000Z',
                       message: 'yup',
                       messageId: '1',
                     },
                     {
-                      createdAt: '2018-03-01T00:00:00.000Z',
+                      createdAt: '2018-03-01T05:00:00.000Z',
                       message: 'nope',
                       messageId: '2',
                     },
                     {
-                      createdAt: '2018-04-01T00:00:00.000Z',
+                      createdAt: '2018-04-01T05:00:00.000Z',
                       message: 'gg',
                       messageId: '3',
                     },
@@ -103,6 +127,9 @@ describe('extractPendingMessagesFromCaseDetail', () => {
               workItems: [
                 {
                   caseStatus: 'new',
+                  document: {
+                    createdAt: '2018-03-02T00:00:00.000Z',
+                  },
                   messages: [
                     {
                       message: 'batched for IRS',

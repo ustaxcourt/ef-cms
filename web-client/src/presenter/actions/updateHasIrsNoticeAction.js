@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const updateHasIrsNoticeAction = async ({ store }) => {
+export const updateHasIrsNoticeAction = ({ store }) => {
   store.set(state.form.caseType, undefined);
   store.set(state.form.month, undefined);
   store.set(state.form.day, undefined);

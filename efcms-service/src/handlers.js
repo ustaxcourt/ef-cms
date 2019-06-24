@@ -17,17 +17,21 @@ module.exports = {
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
+  getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
+    .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
-  getCasesForRespondentLambda: require('./cases/getCasesForRespondentLambda')
-    .handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')
+    .handler,
+  getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
     .handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
   getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda')
     .handler,
   getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda')
+    .handler,
+  getTrialSessionDetailsLambda: require('./trialSessions/getTrialSessionDetailsLambda')
     .handler,
   getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
     .handler,
@@ -48,11 +52,20 @@ module.exports = {
   sanitizePdfLambda: require('./documents/sanitizePdfLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
+  setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
+    .handler,
+  setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
+    .handler,
+  setTrialSessionCalendarLambda: require('./trialSessions/setTrialSessionCalendarLambda')
+    .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
     .handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
+  updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
+    .handler,
+  validatePdfLambda: require('./documents/validatePdfLambda').handler,
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,

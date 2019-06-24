@@ -115,19 +115,19 @@
       }
     },
     "/v1/cases/{caseId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["cases"],
         "summary": "get a case by caseId",
         "description": "Get a case by caseId.\n",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "caseId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "200 response",
@@ -192,6 +192,14 @@
       }
     },
     "/v1/cases/{caseId}/documents": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "post": {
         "tags": ["documents"],
         "summary": "create a new document inside of a case",
@@ -236,6 +244,14 @@
       }
     },
     "/v1/cases/{caseId}/irsPetitionPackage": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "post": {
         "tags": ["cases"],
         "summary": "sends the case to the holding queue",
@@ -262,6 +278,14 @@
         ]
       },
       "delete": {
+        "parameters": [
+          {
+            "name": "caseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "tags": ["cases"],
         "summary": "deletes the petition on the case from the holding queue",
         "description": "Deletes the petition on the case from the holding queue.\n",
@@ -355,6 +379,14 @@
       }
     },
     "/v1/documents/{documentId}/documentDownloadUrl": {
+      "parameters": [
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["documents"],
         "summary": "redirects to the s3 url for downloading a document",
@@ -394,6 +426,14 @@
       }
     },
     "/v1/documents/{documentId}/downloadPolicyUrl": {
+      "parameters": [
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["documents"],
         "summary": "create a pre-signed url for downloads",
@@ -437,7 +477,64 @@
         }
       }
     },
+    "/v1/documents/{documentId}/sanitize": {
+      "parameters": [
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["documents"],
+        "summary": "triggers the PDF sanitizer function",
+        "description": "Endpoint that triggers the sanitize function for the specified document.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/documents/{documentId}/virus-scan": {
+      "parameters": [
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "post": {
         "tags": ["documents"],
         "summary": "triggers the virus scan function",
@@ -478,7 +575,64 @@
         }
       }
     },
+    "/v1/documents/{documentId}/validate": {
+      "parameters": [
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["documents"],
+        "summary": "triggers the pdf validation function",
+        "description": "Endpoint that triggers the PDF validation function for the specified document.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/respondents/{respondentId}/cases": {
+      "parameters": [
+        {
+          "name": "respondentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["cases"],
         "summary": "get all cases for a user",
@@ -542,6 +696,14 @@
       }
     },
     "/v1/sections/{section}/inbox": {
+      "parameters": [
+        {
+          "name": "section",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["workitems"],
         "summary": "get all workitems in the sections inbox",
@@ -587,6 +749,20 @@
     },
 
     "/v1/cases/{caseId}/documents/{documentId}/workitems": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "post": {
         "tags": ["workitems"],
         "summary": "creates a new work item and attaches it to the case document",
@@ -631,6 +807,14 @@
       }
     },
     "/v1/sections/{section}/outbox": {
+      "parameters": [
+        {
+          "name": "section",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["workitems"],
         "summary": "get all workitems in the sections outbox",
@@ -675,6 +859,14 @@
       }
     },
     "/v1/sections/{section}/users": {
+      "parameters": [
+        {
+          "name": "section",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["workitems"],
         "summary": "get all users in a section",
@@ -720,7 +912,12 @@
     },
     "/v1/swagger": {
       "get": {
-        "responses": {}
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -748,7 +945,12 @@
     },
     "/v1/swagger.json": {
       "get": {
-        "responses": {}
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -913,6 +1115,14 @@
       }
     },
     "/v1/users/{userId}/cases": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["cases"],
         "summary": "get all cases for a user",
@@ -957,6 +1167,20 @@
       }
     },
     "/v1/users/{userId}/case/{caseId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["cases"],
         "summary": "verify if user is associated with the case",
@@ -1017,6 +1241,20 @@
       }
     },
     "/v1/users/{userId}/case/{caseId}/pending": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["cases"],
         "summary": "verify if user has pending association with the case",
@@ -1074,6 +1312,14 @@
       }
     },
     "/v1/users/{userId}/inbox": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["workitems"],
         "summary": "get a users work item inbox",
@@ -1118,6 +1364,14 @@
       }
     },
     "/v1/users/{userId}/outbox": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["workitems"],
         "summary": "get a users work item outbox",
@@ -1206,6 +1460,14 @@
       }
     },
     "/v1/workitems/{workItemId}": {
+      "parameters": [
+        {
+          "name": "workItemId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["workitems"],
         "summary": "get a workitem by workItemId",
@@ -1269,6 +1531,14 @@
       }
     },
     "/v1/workitems/{workItemId}/assignee": {
+      "parameters": [
+        {
+          "name": "workItemId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "put": {
         "tags": ["workitems"],
         "summary": "sets the assigneeId of the workitem to a new user",
@@ -1313,6 +1583,20 @@
       }
     },
     "/v1/cases/{caseId}/documents/{documentId}/coversheet": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "post": {
         "tags": ["workitems"],
         "summary": "creates a coversheet and prepends it to the existing s3 document",
@@ -1354,6 +1638,14 @@
       }
     },
     "/v1/workitems/{workItemId}/complete": {
+      "parameters": [
+        {
+          "name": "workItemId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "put": {
         "tags": ["workitems"],
         "summary": "marks the workitem complete",
@@ -1364,6 +1656,329 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/workItem"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions": {
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets all trial sessions",
+        "description": "gets all trial sessions.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "creates a new trial session",
+        "description": "creates a new trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets a trial session",
+        "description": "gets a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/setSwingSession": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "sets a trial session as a swing session",
+        "description": "sets a trial session as a swing session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/eligible-cases": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets eligible cases for a trial session",
+        "description": "gets eligible cases for a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/setCalendar": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "sets the calendar for a trial session",
+        "description": "sets the calendar for a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trialSessions/{trialSessionId}/getAssociatedCases": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets the cases associated with a trial session",
+        "description": "gets the cases associated with a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
             }
           }
         },
@@ -1671,6 +2286,40 @@
         }
       },
       "description": "a case response"
+    },
+    "trialSession": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "description": "date trial session created"
+        },
+        "sessionType": {
+          "type": "string",
+          "description": "type of the session"
+        },
+        "maxCases": {
+          "type": "string",
+          "description": "max number of cases on the session"
+        },
+        "startDate": {
+          "type": "string",
+          "description": "start date of the session"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "start time of the session"
+        },
+        "trialLocation": {
+          "type": "string",
+          "description": "location of the session"
+        },
+        "trialSessionId": {
+          "type": "string",
+          "description": "id of trial session"
+        }
+      },
+      "description": "a trial session"
     }
   }
 }

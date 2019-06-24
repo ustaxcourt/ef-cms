@@ -26,16 +26,16 @@ export const WorkQueue = connect(
             >
               Create a Case
             </a>
+            <If bind="workQueueHelper.showRunBatchIRSProcessButton">
+              <button
+                className="usa-button usa-button--outline margin-left-1"
+                onClick={() => runBatchProcessSequence()}
+              >
+                Run IRS Batch Process
+              </button>
+            </If>
           </div>
         )}
-        <If bind="workQueueHelper.showRunBatchIRSProcessButton">
-          <button
-            className="usa-button usa-button--outline"
-            onClick={() => runBatchProcessSequence()}
-          >
-            Run IRS Batch Process
-          </button>
-        </If>
       </React.Fragment>
     );
   },

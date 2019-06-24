@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * fetches the work items that are associated with the user's section
  *
@@ -5,13 +7,23 @@
  * @param {object} providers.applicationContext the application context used for getting the getWorkItemsBySection use case
  * @returns {object} the list of section work items
  */
-export const getWorkItemsForSectionAction = async ({ applicationContext }) => {
+export const getWorkItemsForSectionAction = async ({
+  applicationContext,
+  get,
+}) => {
   const user = applicationContext.getCurrentUser();
+  const workQueueIsInternal = get(state.workQueueIsInternal);
+
+  let section = user.section;
+  if (!workQueueIsInternal && user.role !== 'petitionsclerk') {
+    section = 'docket';
+  }
+
   let sectionWorkItems = await applicationContext
     .getUseCases()
     .getWorkItemsBySection({
       applicationContext,
-      section: user.section,
+      section,
       userId: user.userId,
     });
   return { workItems: sectionWorkItems };

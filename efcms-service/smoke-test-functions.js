@@ -65,16 +65,16 @@ async function deleteCase(context, events, done) {
       await client.delete({
         applicationContext,
         key: {
-          pk: workItem.workItemId,
-          sk: workItem.workItemId,
+          pk: `workitem-${workItem.workItemId}`,
+          sk: `workitem-${workItem.workItemId}`,
         },
       });
 
       await client.delete({
         applicationContext,
         key: {
-          pk: 'petitions|workItem',
-          sk: workItem.workItemId,
+          pk: 'section-petitions',
+          sk: `workitem-${workItem.workItemId}`,
         },
       });
     }

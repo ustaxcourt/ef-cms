@@ -72,7 +72,7 @@ describe('formatted case details computed', () => {
           {
             caseCaption: 'Brett Osborne, Petitioner',
             petitioners: [{ name: 'bob' }],
-            respondent: { barNumber: '123', name: 'test' },
+            respondents: [{ barNumber: '123', name: 'test' }],
           },
         ],
         constants: {
@@ -80,6 +80,6 @@ describe('formatted case details computed', () => {
         },
       },
     });
-    expect(result[0].respondent.formattedName).toContain('test 123');
+    expect(result[0].respondents[0].formattedName).toContain('test 123');
   });
 });

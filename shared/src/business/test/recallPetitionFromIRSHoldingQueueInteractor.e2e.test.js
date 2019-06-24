@@ -101,7 +101,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -157,7 +157,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
@@ -201,7 +201,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },

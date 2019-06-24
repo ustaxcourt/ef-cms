@@ -6,9 +6,9 @@
  */
 exports.uploadPdf = async ({
   applicationContext,
-  policy,
   file,
   onUploadProgress,
+  policy,
 }) => {
   const documentId = applicationContext.getUniqueId();
   const formData = new FormData();

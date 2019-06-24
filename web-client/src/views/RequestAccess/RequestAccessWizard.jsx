@@ -19,11 +19,11 @@ export const RequestAccessWizard = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           {showModal == 'FormCancelModalDialogComponent' && (
-            <FormCancelModalDialog />
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
           )}
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs asSwitch defaultActiveTab="RequestAccess" bind="wizardStep">
+          <Tabs asSwitch bind="wizardStep" defaultActiveTab="RequestAccess">
             <Tab tabName="RequestAccess">
               <RequestAccess />
             </Tab>

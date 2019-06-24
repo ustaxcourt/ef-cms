@@ -3,10 +3,11 @@ import { state } from 'cerebral';
 /**
  * sets a scanner source
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.applicationContext the application context used for getting the scanner API
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context used for getting the scanner API
  * @param {Function} providers.props the cerebral props object used for getting the props.scannerSourceName
  * @param {Function} providers.store the cerebral store used for setting state.scanner.scannerSourceName
+ * @returns {Promise} async action
  */
 export const setScannerSourceAction = async ({
   applicationContext,
@@ -21,6 +22,13 @@ export const setScannerSourceAction = async ({
       applicationContext,
       key: 'scannerSourceName',
       value: props.scannerSourceName,
+    });
+
+    // also need to keep track of the index due to some scanners showing up twice as a source with duplicate name
+    await applicationContext.getUseCases().setItem({
+      applicationContext,
+      key: 'scannerSourceIndex',
+      value: props.scannerSourceIndex,
     });
 
     // This may not be necessary

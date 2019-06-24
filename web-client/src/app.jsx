@@ -1,3 +1,7 @@
+import { AppComponent } from './views/AppComponent';
+import { Container } from '@cerebral/react';
+import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { externalRoute, route, router } from './router';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftRegular,
   faCheckCircle as faCheckCircleRegular,
@@ -12,6 +16,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
+  faCalendarCheck,
   faCaretDown,
   faCaretLeft,
   faCaretUp,
@@ -19,6 +24,7 @@ import {
   faCheckCircle,
   faClock as faClockSolid,
   faCloudUploadAlt,
+  faCopy as faCopySolid,
   faDollarSign,
   faEdit as faEditSolid,
   faEnvelope as faEnvelopeSolid,
@@ -33,6 +39,7 @@ import {
   faListUl,
   faPaperclip,
   faPlusCircle,
+  faPrint,
   faQuestionCircle,
   faSearch,
   faShareSquare,
@@ -44,11 +51,6 @@ import {
   faSync,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
-import { route, router } from './router';
-
-import { AppComponent } from './views/AppComponent';
-import { Container } from '@cerebral/react';
-import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
@@ -92,6 +94,7 @@ const app = {
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
+      faCalendarCheck,
       faCaretDown,
       faCaretLeft,
       faCaretUp,
@@ -103,6 +106,7 @@ const app = {
       faClone,
       faCloudUploadAlt,
       faCopy,
+      faCopySolid,
       faDollarSign,
       faEdit,
       faEditSolid,
@@ -121,6 +125,7 @@ const app = {
       faListUl,
       faPaperclip,
       faPlusCircle,
+      faPrint,
       faQuestionCircle,
       faSearch,
       faShareSquare,
@@ -135,6 +140,7 @@ const app = {
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
+      externalRoute,
       route,
     };
     const cerebralApp = App(presenter, debugTools);

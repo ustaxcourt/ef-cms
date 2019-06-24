@@ -5,6 +5,7 @@ import _ from 'lodash';
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object containing the props.caseDetail
+ * @returns {object} docket number and documentId
  */
 export const setPetitionIdAction = ({ props }) => {
   const docketNumber = props.caseDetail.docketNumber;

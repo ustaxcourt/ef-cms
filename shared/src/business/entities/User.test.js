@@ -1,4 +1,3 @@
-const assert = require('assert');
 const { User } = require('./User');
 
 describe('User entity', () => {
@@ -9,7 +8,7 @@ describe('User entity', () => {
       role: 'petitioner',
       userId: 'taxpayer',
     });
-    assert.ok(user.isValid());
+    expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates a valid petitioner user', () => {
@@ -19,7 +18,7 @@ describe('User entity', () => {
       role: 'Tester',
       userId: 'petitioner',
     });
-    assert.ok(user.isValid());
+    expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates a valid respondent user', () => {
@@ -31,7 +30,7 @@ describe('User entity', () => {
       token: 'abc',
       userId: 'respondent',
     });
-    assert.ok(user.isValid());
+    expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates a valid respondent user', () => {
@@ -39,7 +38,7 @@ describe('User entity', () => {
       role: 'respondent',
       userId: 'respondent',
     });
-    assert.ok(user.isValid());
+    expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates a user with default role of petitioner if not provided', () => {

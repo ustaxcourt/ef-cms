@@ -76,7 +76,7 @@ iframe {
 }
 
 .link.case-link-bold {
-  font-weight: $font-bold;
+  font-weight: $font-semibold;
 }
 
 .address-line {
@@ -532,7 +532,7 @@ textarea#case-caption {
     top: 50%;
     width: 70px;
     padding: 8px;
-    margin-top: 10px;
+    margin-top: 2px;
     margin-right: 20px;
     background-color: color($theme-color-primary-dark);
     float: left;
@@ -678,7 +678,7 @@ nav.usa-nav {
   .user-dropdown {
     position: relative;
     top: -4px;
-    margin: -4px 0 0 50px;
+    margin: -4px 0 0 30px;
   }
 
   .button-account-login {
@@ -792,10 +792,8 @@ nav.usa-nav {
     }
   }
 
-  a.log-out {
-    font-family: $font-source-sans;
-    font-size: 20px;
-    font-weight: $font-bold;
+  #log-out {
+    color: $color-white;
   }
 }
 
@@ -880,6 +878,10 @@ nav.usa-nav {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
+
+    &.ustc-tag--yellow {
+      background: color($theme-color-warning);
+    }
   }
   .unread {
     position: relative;
@@ -975,7 +977,6 @@ nav.usa-nav {
   right: -7px;
 }
 
-.radio-container {
-  position: absolute;
-  bottom: 0;
+.quill {
+  background: $color-white;
 }

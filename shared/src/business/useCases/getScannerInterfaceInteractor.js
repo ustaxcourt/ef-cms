@@ -1,5 +1,5 @@
 exports.getScannerInterface = () => {
-  const Dynamsoft = window.Dynamsoft;
+  const { Dynamsoft } = window;
   if (typeof Dynamsoft !== 'undefined') {
     Dynamsoft.WebTwainEnv.ScanDirectly = true;
     const DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
@@ -22,28 +22,28 @@ exports.getScannerInterface = () => {
             );
           }),
         );
-
-        return await Promise.all(promises)
-          .then(async blobs => {
-            const blobBuffers = [];
-
-            for (let blob of blobs) {
-              blobBuffers.push(
-                new Uint8Array(await new Response(blob).arrayBuffer()),
-              );
-            }
-            response.scannedBuffer = blobBuffers;
-            return response;
-          })
-          .catch(err => {
-            response.error = err;
-            return response;
-          })
-          .finally(() => {
-            DWObject.RemoveAllImages();
-            DWObject.CloseSource();
-          });
       }
+
+      return await Promise.all(promises)
+        .then(async blobs => {
+          const blobBuffers = [];
+
+          for (let blob of blobs) {
+            blobBuffers.push(
+              new Uint8Array(await new Response(blob).arrayBuffer()),
+            );
+          }
+          response.scannedBuffer = blobBuffers;
+          return response;
+        })
+        .catch(err => {
+          response.error = err;
+          return response;
+        })
+        .finally(() => {
+          DWObject.RemoveAllImages();
+          DWObject.CloseSource();
+        });
     };
 
     const getScanCount = () => DWObject.HowManyImagesInBuffer;
@@ -76,6 +76,11 @@ exports.getScannerInterface = () => {
       return DWObject.SelectSourceByIndex(index) > -1;
     };
 
+    const getSourceNameByIndex = index => {
+      const sources = getSources();
+      return sources[index];
+    };
+
     const setSourceByName = sourceName => {
       const sources = getSources();
       const index = sources.indexOf(sourceName);
@@ -98,6 +103,7 @@ exports.getScannerInterface = () => {
       completeScanSession,
       getScanCount,
       getScanError,
+      getSourceNameByIndex,
       getSourceStatus,
       getSources,
       setSourceByIndex,

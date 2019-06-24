@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
 
-export const formatDocument = (document, applicationContext) => {
+export const formatDocument = (applicationContext, document) => {
   const result = _.cloneDeep(document);
   result.createdAtFormatted = applicationContext
     .getUtilities()
@@ -12,7 +12,7 @@ export const formatDocument = (document, applicationContext) => {
   return result;
 };
 
-const formatDocketRecord = (docketRecord, applicationContext) => {
+const formatDocketRecord = (applicationContext, docketRecord) => {
   const result = _.cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
@@ -45,7 +45,7 @@ const processDuplicateError = (caseDetail, caseDetailErrors) => {
   });
 };
 
-const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
+const formatYearAmount = (applicationContext, caseDetailErrors, caseDetail) => (
   yearAmount,
   idx,
 ) => {
@@ -69,16 +69,16 @@ const formatYearAmount = (caseDetailErrors, caseDetail, applicationContext) => (
   return {
     ...yearAmount,
     year:
-      formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+      formattedYear.includes('Invalid') || yearAmount.year.length < 4
         ? yearAmount.year
         : formattedYear,
   };
 };
 
 export const formatYearAmounts = (
-  caseDetail,
-  caseDetailErrors = {},
   applicationContext,
+  caseDetail = {},
+  caseDetailErrors = {},
 ) => {
   caseDetail.canAddYearAmount =
     (caseDetail.yearAmounts || []).filter(yearAmount => {
@@ -89,16 +89,15 @@ export const formatYearAmounts = (
     caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
   } else {
     caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
-      formatYearAmount(caseDetailErrors, caseDetail, applicationContext),
+      formatYearAmount(applicationContext, caseDetailErrors, caseDetail),
     );
   }
 };
 
 const formatDocketRecordWithDocument = (
-  caseDetail,
+  applicationContext,
   docketRecords = [],
   documents = [],
-  applicationContext,
 ) => {
   const documentMap = documents.reduce((acc, document) => {
     acc[document.documentId] = document;
@@ -151,7 +150,7 @@ const formatDocketRecordWithDocument = (
   });
 };
 
-const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
+const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
   if (_.isEmpty(caseDetail)) {
     return {};
   }
@@ -160,17 +159,16 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
 
   if (result.documents)
     result.documents = result.documents.map(d =>
-      formatDocument(d, applicationContext),
+      formatDocument(applicationContext, d),
     );
   if (result.docketRecord) {
     result.docketRecord = result.docketRecord.map(d =>
-      formatDocketRecord(d, applicationContext),
+      formatDocketRecord(applicationContext, d),
     );
     result.docketRecordWithDocument = formatDocketRecordWithDocument(
-      caseDetail,
+      applicationContext,
       result.docketRecord,
       result.documents,
-      applicationContext,
     );
   }
 
@@ -179,10 +177,16 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
     return a.index - b.index;
   });
 
-  if (result.respondent)
-    result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
+  const formatRespondent = respondent => {
+    respondent.formattedName = `${respondent.name} ${
+      respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
+    return respondent;
+  };
+
+  if (result.respondents) {
+    result.respondents = result.respondents.map(formatRespondent);
+  }
 
   if (result.practitioner) {
     let formattedName = result.practitioner.name;
@@ -232,7 +236,29 @@ const formatCase = (caseDetail, caseDetailErrors, applicationContext) => {
     caseDetail.caseCaption || '',
   );
 
-  formatYearAmounts(result, caseDetailErrors, applicationContext);
+  formatYearAmounts(applicationContext, result, caseDetailErrors);
+
+  result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
+  result.formattedTrialDate = 'Not scheduled';
+  result.formattedTrialJudge = 'Not assigned';
+
+  if (result.trialSessionId) {
+    result.formattedTrialCity = result.trialLocation || 'Not assigned';
+    result.formattedTrialJudge = result.trialJudge || 'Not assigned';
+    result.formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(result.trialDate, 'YYYY-MM-DD');
+    if (result.trialTime) {
+      result.formattedTrialDate += `T${result.trialTime}:00`;
+      result.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(result.formattedTrialDate, 'DATE_TIME');
+    } else {
+      result.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(result.formattedTrialDate, 'MMDDYY');
+    }
+  }
 
   return result;
 };
@@ -280,7 +306,7 @@ const getDocketRecordSortFunc = sortBy => {
 
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
-  const isReversed = sortBy.indexOf('Desc') > -1;
+  const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
@@ -291,7 +317,7 @@ const sortDocketRecords = (docketRecords = [], sortBy = '') => {
 
 export const formattedCases = (get, applicationContext) => {
   const cases = get(state.cases);
-  return cases.map(myCase => formatCase(myCase, undefined, applicationContext));
+  return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
 export const formattedCaseDetail = (get, applicationContext) => {
@@ -302,7 +328,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
   const caseDetailErrors = get(state.caseDetailErrors);
-  const result = formatCase(caseDetail, caseDetailErrors, applicationContext);
+  const result = formatCase(applicationContext, caseDetail, caseDetailErrors);
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,

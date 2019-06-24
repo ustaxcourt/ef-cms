@@ -16,9 +16,9 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {*}
  */
 exports.completeWorkItem = async ({
+  applicationContext,
   completedMessage,
   workItemId,
-  applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -33,10 +33,6 @@ exports.completeWorkItem = async ({
       workItemId,
     });
 
-  const latestMessageId = new WorkItem(
-    originalWorkItem,
-  ).getLatestMessageEntity().messageId;
-
   const completedWorkItem = new WorkItem(originalWorkItem)
     .setAsCompleted({
       message: completedMessage,
@@ -47,12 +43,14 @@ exports.completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    workItem: completedWorkItem,
+    workItem: {
+      ...completedWorkItem,
+      createdAt: new Date().toISOString(),
+    },
   });
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,
-    messageId: latestMessageId,
     workItem: completedWorkItem,
   });
 

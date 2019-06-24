@@ -2,8 +2,8 @@ const client = require('../../dynamodbClientService');
 
 exports.associateUserWithCasePending = async ({
   applicationContext,
-  userId,
   caseId,
+  userId,
 }) => {
   return client.put({
     Item: {

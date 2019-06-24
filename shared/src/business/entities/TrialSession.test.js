@@ -1,11 +1,11 @@
-const assert = require('assert');
 const { TrialSession } = require('./TrialSession');
 
 const VALID_TRIAL_SESSION = {
   maxCases: 100,
   sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
+  startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',
+  termYear: '2025',
   trialLocation: 'Birmingham, AL',
 };
 
@@ -13,7 +13,7 @@ describe('TrialSession entity', () => {
   describe('isValid', () => {
     it('creates a valid trial session', () => {
       const trialSession = new TrialSession(VALID_TRIAL_SESSION);
-      assert.ok(trialSession.isValid());
+      expect(trialSession.isValid()).toBeTruthy();
     });
 
     it('creates an invalid trial session with startDate in the past', () => {
@@ -21,7 +21,7 @@ describe('TrialSession entity', () => {
         ...VALID_TRIAL_SESSION,
         startDate: '2000-03-01T00:00:00.000Z',
       });
-      assert.ok(!trialSession.isValid());
+      expect(trialSession.isValid()).toBeFalsy();
     });
 
     it('creates an invalid trial session with invalid sessionType', () => {
@@ -29,31 +29,79 @@ describe('TrialSession entity', () => {
         ...VALID_TRIAL_SESSION,
         sessionType: 'Something Else',
       });
-      assert.ok(!trialSession.isValid());
+      expect(trialSession.isValid()).toBeFalsy();
     });
   });
 
   describe('validate', () => {
     it('should do nothing if valid', () => {
-      let error = null;
+      let error;
       try {
         const trialSession = new TrialSession(VALID_TRIAL_SESSION);
         trialSession.validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error === null);
+      expect(error).not.toBeDefined();
     });
 
     it('should throw an error on invalid documents', () => {
-      let error = null;
+      let error;
       try {
         const trialSession = new TrialSession({});
         trialSession.validate();
       } catch (err) {
         error = err;
       }
-      assert.ok(error !== null);
+      expect(error).toBeDefined();
+    });
+  });
+
+  describe('generateSortKeyPrefix', () => {
+    it('should generate correct sort key prefix for a regular trial session', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Regular',
+      });
+      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-R');
+    });
+
+    it('should generate correct sort key prefix for a small trial session', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Small',
+      });
+      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-S');
+    });
+
+    it('should generate correct sort key prefix for a hybrid trial session', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-H');
+    });
+  });
+
+  describe('setAsCalendared', () => {
+    it('should set trial session as calendared', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      trialSession.setAsCalendared();
+      expect(trialSession.isCalendared).toEqual(true);
+    });
+  });
+
+  describe('addCaseToCalendar', () => {
+    it('should add case to calendar', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      trialSession.addCaseToCalendar({ caseId: '123' });
+      expect(trialSession.caseOrder[0]).toEqual({ caseId: '123' });
     });
   });
 });

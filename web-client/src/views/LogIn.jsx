@@ -9,14 +9,14 @@ export const LogIn = connect(
     submitLoginSequence: sequences.submitLoginSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ form, updateFormValueSequence, submitLoginSequence }) => {
+  ({ form, submitLoginSequence, updateFormValueSequence }) => {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex="-1">Log in</h1>
         <ErrorNotification />
         <form
-          id="log-in"
           noValidate
+          id="log-in"
           onSubmit={event => {
             event.preventDefault();
             submitLoginSequence();
@@ -24,7 +24,7 @@ export const LogIn = connect(
         >
           <div className="blue-container">
             <div className="usa-form-group">
-              <label htmlFor="name" className="usa-label">
+              <label className="usa-label" htmlFor="name">
                 Name
               </label>
               <input
@@ -44,7 +44,7 @@ export const LogIn = connect(
             </div>
           </div>
           <div className="button-box-container">
-            <button id="log-in-button" className="usa-button" type="submit">
+            <button className="usa-button" id="log-in-button" type="submit">
               Log in
             </button>
           </div>

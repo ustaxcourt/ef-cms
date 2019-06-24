@@ -6,9 +6,10 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { DocketRecord } = require('./DocketRecord');
 const { Document } = require('./Document');
+const { find, includes, uniqBy } = require('lodash');
+const { formatDateString } = require('../utilities/DateHandler');
 const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
 const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { uniqBy, includes } = require('lodash');
 const { YearAmount } = require('./YearAmount');
 
 const uuidVersions = {
@@ -17,6 +18,7 @@ const uuidVersions = {
 
 const statusMap = {
   batchedForIRS: 'Batched for IRS',
+  calendared: 'Calendared',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
@@ -25,8 +27,8 @@ const statusMap = {
 
 exports.STATUS_TYPES = statusMap;
 
-exports.ANSWER_CUTOFF_AMOUNT = 5; //Should be 45
-exports.ANSWER_CUTOFF_UNIT = 'minute'; //Should be 'day'
+exports.ANSWER_CUTOFF_AMOUNT = 45;
+exports.ANSWER_CUTOFF_UNIT = 'day';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -103,8 +105,13 @@ function Case(rawCase) {
     preferredTrialCity: rawCase.preferredTrialCity,
     procedureType: rawCase.procedureType,
     receivedAt: rawCase.receivedAt,
-    respondent: rawCase.respondent,
+    respondents: rawCase.respondents || [],
     status: rawCase.status || statusMap.new,
+    trialDate: rawCase.trialDate,
+    trialJudge: rawCase.trialJudge,
+    trialLocation: rawCase.trialLocation,
+    trialSessionId: rawCase.trialSessionId,
+    trialTime: rawCase.trialTime,
     userId: rawCase.userId,
     workItems: rawCase.workItems,
     yearAmounts: rawCase.yearAmounts,
@@ -243,14 +250,23 @@ joiValidationDecorator(
       .max('now')
       .optional()
       .allow(null),
-    respondent: joi
-      .object()
-      .allow(null)
-      .optional(),
+    respondents: joi.array().optional(),
     status: joi
       .string()
       .valid(Object.keys(statusMap).map(key => statusMap[key]))
       .optional(),
+    trialDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
+    trialJudge: joi.string().optional(),
+    trialLocation: joi.string().optional(),
+    trialSessionId: joi
+      .string()
+      .uuid(uuidVersions)
+      .optional(),
+    trialTime: joi.string().optional(),
     userId: joi
       .string()
       // .uuid(uuidVersions)
@@ -328,71 +344,43 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name}, Petitioner`;
       break;
     case PARTY_TYPES.petitionerSpouse:
-      caseCaption = `${rawCase.contactPrimary.name} & ${
-        rawCase.contactSecondary.name
-      }, Petitioners`;
+      caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      caseCaption = `${rawCase.contactPrimary.name} & ${
-        rawCase.contactSecondary.name
-      }, Deceased, ${
-        rawCase.contactPrimary.name
-      }, Surviving Spouse, Petitioners`;
+      caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
     case PARTY_TYPES.estate:
-      caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${
-        rawCase.contactPrimary.name
-      }, ${rawCase.contactPrimary.title}, Petitioner(s)`;
+      caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
     case PARTY_TYPES.estateWithoutExecutor:
-      caseCaption = `Estate of ${
-        rawCase.contactPrimary.name
-      }, Deceased, Petitioner`;
+      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
       break;
     case PARTY_TYPES.trust:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, Trustee, Petitioner(s)`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Trustee, Petitioner(s)`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, Tax Matters Partner, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipOtherThanTaxMatters:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, A Partner Other Than the Tax Matters Partner, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipBBA:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, Partnership Representative, Petitioner(s)`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Partnership Representative, Petitioner(s)`;
       break;
     case PARTY_TYPES.conservator:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, Conservator, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Conservator, Petitioner`;
       break;
     case PARTY_TYPES.guardian:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, Guardian, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Guardian, Petitioner`;
       break;
     case PARTY_TYPES.custodian:
-      caseCaption = `${rawCase.contactSecondary.name}, ${
-        rawCase.contactPrimary.name
-      }, Custodian, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Custodian, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForMinor:
-      caseCaption = `${rawCase.contactSecondary.name}, Minor, ${
-        rawCase.contactPrimary.name
-      }, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, Minor, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForIncompetentPerson:
-      caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${
-        rawCase.contactPrimary.name
-      }, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.donor:
       caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
@@ -401,9 +389,7 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
       break;
     case PARTY_TYPES.survivingSpouse:
-      caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${
-        rawCase.contactPrimary.name
-      }, Surviving Spouse, Petitioner`;
+      caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;
@@ -424,7 +410,7 @@ Case.prototype.attachRespondent = function({ user }) {
     respondentId: user.userId,
   };
 
-  this.respondent = respondent;
+  this.respondents.push(respondent);
 };
 
 Case.prototype.attachPractitioner = function({ user }) {
@@ -507,9 +493,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
   if (hasTitleChanged) {
     this.addDocketRecord(
       new DocketRecord({
-        description: `Caption of case is amended from '${lastTitle}' to '${
-          this.caseTitle
-        }'`,
+        description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
         filingDate: new Date().toISOString(),
       }),
     );
@@ -599,12 +583,13 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   let datesMatch;
 
   this.docketRecord.forEach((docketRecord, index) => {
-    found = found || docketRecord.description === newDocketItem.description;
-    docketRecordIndex = found ? index : docketRecordIndex;
-    datesMatch =
-      datesMatch ||
-      (docketRecord.description === newDocketItem.description &&
-        docketRecord.filingDate === newDocketItem.filingDate);
+    if (docketRecord.description === newDocketItem.description) {
+      found = true;
+      docketRecordIndex = index;
+      if (docketRecord.filingDate === newDocketItem.filingDate) {
+        datesMatch = true;
+      }
+    }
   });
 
   if (payGovDate && !found) {
@@ -623,15 +608,9 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
 Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
   this.preferredTrialCity = preferredTrialCity;
 
-  let found;
-  let docketRecordIndex;
-
-  this.docketRecord.forEach((docketRecord, index) => {
-    found =
-      found ||
-      docketRecord.description.indexOf('Request for Place of Trial') !== -1;
-    docketRecordIndex = found ? index : docketRecordIndex;
-  });
+  const found = find(this.docketRecord, item =>
+    item.description.includes('Request for Place of Trial'),
+  );
 
   if (preferredTrialCity && !found) {
     this.addDocketRecord(
@@ -800,5 +779,75 @@ Case.prototype.checkForReadyForTrial = function() {
     });
   }
 
+  return this;
+};
+
+/**
+ * generates sort tags used for sorting trials for calendaring
+ *
+ * @returns {object} the sort tags
+ */
+Case.prototype.generateTrialSortTags = function() {
+  const {
+    caseId,
+    caseType,
+    createdAt,
+    preferredTrialCity,
+    procedureType,
+    receivedAt,
+  } = this;
+
+  const caseProcedureSymbol =
+    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
+
+  let casePrioritySymbol = 'C';
+
+  if (caseType.toLowerCase() === 'cdp (lien/levy)') {
+    casePrioritySymbol = 'A';
+  } else if (caseType.toLowerCase() === 'passport') {
+    casePrioritySymbol = 'B';
+  }
+
+  const formattedFiledTime = formatDateString(
+    receivedAt || createdAt,
+    'YYYYMMDDHHmmss',
+  );
+  const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
+
+  const nonHybridSortKey = [
+    formattedTrialCity,
+    caseProcedureSymbol,
+    casePrioritySymbol,
+    formattedFiledTime,
+    caseId,
+  ].join('-');
+
+  const hybridSortKey = [
+    formattedTrialCity,
+    'H', // Hybrid Tag
+    casePrioritySymbol,
+    formattedFiledTime,
+    caseId,
+  ].join('-');
+
+  return {
+    hybrid: hybridSortKey,
+    nonHybrid: nonHybridSortKey,
+  };
+};
+
+/**
+ * set as calendared
+ *
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
+ * @returns {Case}
+ */
+Case.prototype.setAsCalendared = function(trialSessionEntity) {
+  this.trialSessionId = trialSessionEntity.trialSessionId;
+  this.trialDate = trialSessionEntity.startDate;
+  this.trialTime = trialSessionEntity.startTime;
+  this.trialJudge = trialSessionEntity.judge;
+  this.trialLocation = trialSessionEntity.trialLocation;
+  this.status = statusMap.calendared;
   return this;
 };

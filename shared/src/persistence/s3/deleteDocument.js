@@ -1,4 +1,4 @@
-exports.deleteDocument = ({ key, applicationContext }) => {
+exports.deleteDocument = ({ applicationContext, key }) => {
   return applicationContext
     .getStorageClient()
     .deleteObject({

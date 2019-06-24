@@ -1,14 +1,16 @@
 const { query } = require('../../dynamodbClientService');
+const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 exports.getTrialSessions = async ({ applicationContext }) => {
-  return query({
+  return await query({
     ExpressionAttributeNames: {
-      '#pk': 'pk',
+      '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':pk': 'trial-session',
+      ':gsi1pk': `trial-session-catalog`,
     },
-    KeyConditionExpression: '#pk = :pk',
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
-  });
+  }).then(stripInternalKeys);
 };

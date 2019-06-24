@@ -1,12 +1,12 @@
 const {
-  redirect,
-  handle,
   getAuthHeader,
   getUserFromAuthHeader,
+  handle,
+  redirect,
 } = require('./apiGatewayHelper');
 const {
-  UnauthorizedError,
   NotFoundError,
+  UnauthorizedError,
 } = require('../../../shared/src/errors/errors');
 
 const EXPECTED_HEADERS = {

@@ -8,6 +8,7 @@ import {
 import {
   CASE_CAPTION_POSTFIX,
   Case,
+  STATUS_TYPES,
 } from '../../shared/src/business/entities/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
@@ -16,6 +17,7 @@ import uuidv4 from 'uuid/v4';
 import {
   createISODateString,
   formatDateString,
+  isStringISOFormatted,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 
@@ -72,10 +74,11 @@ import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePe
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
+import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
-import { getCasesForRespondent } from '../../shared/src/proxies/respondent/getCasesForRespondentProxy';
+import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
@@ -83,6 +86,7 @@ import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedu
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
@@ -94,11 +98,15 @@ import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInt
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
+import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
+import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -108,6 +116,7 @@ import { validateExternalDocument } from '../../shared/src/business/useCases/ext
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
+import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validateTrialSession } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -155,10 +164,11 @@ const allUseCases = {
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
   generatePDFFromPNGData,
+  getCalendaredCasesForTrialSession,
   getCase,
   getCaseTypes,
   getCasesByUser,
-  getCasesForRespondent,
+  getEligibleCasesForTrialSession,
   getFilingTypes,
   getInternalUsers,
   getItem: getItemUC,
@@ -166,6 +176,7 @@ const allUseCases = {
   getProcedureTypes,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
+  getTrialSessionDetails,
   getTrialSessions,
   getUser,
   getUsersInSection,
@@ -178,11 +189,15 @@ const allUseCases = {
   runBatchProcess,
   sanitizePdf,
   sendPetitionToIRSHoldingQueue,
+  setCaseToReadyForTrial,
   setItem: setItemUC,
+  setTrialSessionAsSwingSession,
+  setTrialSessionCalendar,
   setWorkItemAsRead,
   submitCaseAssociationRequest,
   submitPendingCaseAssociationRequest,
   updateCase,
+  updateCaseTrialSortTags,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,
@@ -192,6 +207,7 @@ const allUseCases = {
   validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
+  validatePdf,
   validatePetition,
   validatePetitionFromPaper,
   validateTrialSession,
@@ -250,11 +266,13 @@ const applicationContext = {
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
+    STATUS_TYPES,
     TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    Case,
     CaseAssociationRequestFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
@@ -293,6 +311,7 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
+      isStringISOFormatted,
       prepareDateFromString,
     };
   },

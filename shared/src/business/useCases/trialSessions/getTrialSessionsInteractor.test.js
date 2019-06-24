@@ -12,6 +12,28 @@ const MOCK_TRIAL_SESSION = {
 describe('Get trial sessions', () => {
   let applicationContext;
 
+  it('throws error if user is unauthorized', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitioner',
+          userId: 'petitioner',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          getTrialSessions: () => {},
+        };
+      },
+    };
+    await expect(
+      getTrialSessions({
+        applicationContext,
+      }),
+    ).rejects.toThrow();
+  });
+
   it('throws an error if the entity returned from persistence is invalid', async () => {
     applicationContext = {
       environment: { stage: 'local' },

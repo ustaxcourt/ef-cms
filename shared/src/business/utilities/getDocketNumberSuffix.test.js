@@ -23,7 +23,7 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns X for "Exempt Organization" caseType', () => {
     const suffix = getDocketNumberSuffix({
-      caseType: 'Exempt Organization',
+      caseType: 'Declaratory Judgment (Exempt Organization)',
       docketNumber: '101-18',
       procedureType: 'small',
     });
@@ -33,7 +33,7 @@ describe('getDocketNumberSuffix', () => {
 
   it('returns R for "Retirement Plan" caseType', () => {
     const suffix = getDocketNumberSuffix({
-      caseType: 'Retirement Plan',
+      caseType: 'Declaratory Judgment (Retirement Plan)',
       docketNumber: '101-18',
       procedureType: 'small',
     });

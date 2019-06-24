@@ -14,7 +14,7 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
     });
 
   for (let caseRecord of caseCatalog) {
-    const caseId = caseRecord.caseId;
+    const { caseId } = caseRecord;
     const caseToCheck = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
@@ -33,6 +33,14 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
             applicationContext,
             caseToUpdate: caseEntity.validate().toRawObject(),
           });
+
+          await applicationContext
+            .getPersistenceGateway()
+            .createCaseTrialSortMappingRecords({
+              applicationContext,
+              caseId,
+              caseSortTags: caseEntity.validate().generateTrialSortTags(),
+            });
         }
       }
     }

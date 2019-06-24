@@ -1,4 +1,4 @@
-import { TrialCity } from '../StartCase/TrialCity';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,26 +7,63 @@ export const LocationInformationForm = connect(
   {
     form: state.form,
     trialCitiesHelper: state.trialCitiesHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateTrialSessionFormDataSequence:
+      sequences.updateTrialSessionFormDataSequence,
+    validateTrialSessionSequence: sequences.validateTrialSessionSequence,
+    validationErrors: state.validationErrors,
   },
-  ({ form, trialCitiesHelper, updateFormValueSequence }) => {
+  ({
+    form,
+    trialCitiesHelper,
+    updateTrialSessionFormDataSequence,
+    validateTrialSessionSequence,
+    validationErrors,
+  }) => {
     return (
       <>
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
-          <TrialCity
-            showHint={false}
-            label="Trial Location"
-            showDefaultOption={true}
-            value={form.trialLocation}
-            trialCitiesByState={trialCitiesHelper('All').trialCitiesByState}
-            onChange={e => {
-              updateFormValueSequence({
-                key: 'trialLocation',
-                value: e.target.value || null,
-              });
-            }}
-          />
+          <div
+            className={`usa-form-group ${
+              validationErrors.trialLocation ? 'usa-form-group--error' : ''
+            }`}
+          >
+            <label htmlFor="trial-location" className="usa-label">
+              Trial Location
+            </label>
+            <select
+              name="trialLocation"
+              id="trial-location"
+              className="usa-select"
+              onChange={e => {
+                updateTrialSessionFormDataSequence({
+                  key: e.target.name,
+                  value: e.target.value || null,
+                });
+                validateTrialSessionSequence();
+              }}
+              value={form.trialLocation}
+            >
+              <option value="">-- Select --</option>
+              {Object.keys(trialCitiesHelper('All').trialCitiesByState).map(
+                (state, idx) => (
+                  <optgroup key={idx} label={state}>
+                    {trialCitiesHelper('All').trialCitiesByState[state].map(
+                      (trialCity, cityIdx) => (
+                        <option key={cityIdx} value={trialCity}>
+                          {trialCity}
+                        </option>
+                      ),
+                    )}
+                  </optgroup>
+                ),
+              )}
+            </select>
+            <Text
+              className="usa-error-message"
+              bind="validationErrors.trialLocation"
+            />
+          </div>
 
           <div className="usa-form-group">
             <label htmlFor="courthouse-name" className="usa-label">
@@ -40,7 +77,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.courthouseName || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -60,7 +97,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.address1 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -80,7 +117,7 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.address2 || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -102,7 +139,7 @@ export const LocationInformationForm = connect(
                   autoCapitalize="none"
                   value={form.city || ''}
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateTrialSessionFormDataSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -119,7 +156,7 @@ export const LocationInformationForm = connect(
                   name="state"
                   value={form.state || ''}
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateTrialSessionFormDataSequence({
                       key: e.target.name,
                       value: e.target.value,
                     });
@@ -197,7 +234,11 @@ export const LocationInformationForm = connect(
             </div>
           </div>
 
-          <div className="usa-form-group margin-bottom-0">
+          <div
+            className={`usa-form-group margin-bottom-0 ${
+              validationErrors.postalCode ? 'usa-form-group--error' : ''
+            }`}
+          >
             <label
               htmlFor="postal-code"
               className="usa-label"
@@ -213,11 +254,18 @@ export const LocationInformationForm = connect(
               autoCapitalize="none"
               value={form.postalCode || ''}
               onChange={e => {
-                updateFormValueSequence({
+                updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
+              onBlur={() => {
+                validateTrialSessionSequence();
+              }}
+            />
+            <Text
+              className="usa-error-message"
+              bind="validationErrors.postalCode"
             />
           </div>
         </div>

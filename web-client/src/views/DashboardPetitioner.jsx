@@ -10,7 +10,7 @@ import React from 'react';
 import howToPrepareYourDocuments from '../pdfs/how-to-prepare-your-documents.pdf';
 
 export const DashboardPetitioner = connect(
-  { helper: state.dashboardPetitionerHelper, user: state.user },
+  { helper: state.dashboardExternalHelper, user: state.user },
   ({ helper, user }) => {
     return (
       <React.Fragment>
@@ -30,14 +30,14 @@ export const DashboardPetitioner = connect(
                   <hr />
                   <p>
                     <FontAwesomeIcon
+                      className="fa-icon-blue"
                       icon="file-pdf"
                       size="1x"
-                      className="fa-icon-blue"
                     />
                     <a
                       href={howToPrepareYourDocuments}
-                      target="_blank"
                       rel="noopener noreferrer"
+                      target="_blank"
                     >
                       Petition Filing Guide
                     </a>
@@ -45,29 +45,29 @@ export const DashboardPetitioner = connect(
                   <p>
                     <a
                       href="https://www.ustaxcourt.gov/dpt_cities.htm"
-                      target="_blank"
                       rel="noopener noreferrer"
+                      target="_blank"
                     >
                       Find a court location
                     </a>
                     <FontAwesomeIcon
+                      className="fa-icon-blue margin-left-05"
                       icon="external-link-alt"
                       size="sm"
-                      className="fa-icon-blue margin-left-05"
                     />
                   </p>
                   <p>
                     <a
                       href="https://www.ustaxcourt.gov/forms.htm"
-                      target="_blank"
                       rel="noopener noreferrer"
+                      target="_blank"
                     >
                       View forms
                     </a>
                     <FontAwesomeIcon
+                      className="fa-icon-blue margin-left-05"
                       icon="external-link-alt"
                       size="sm"
-                      className="fa-icon-blue margin-left-05"
                     />
                   </p>
                 </div>
@@ -77,13 +77,13 @@ export const DashboardPetitioner = connect(
                   <h3>Other Filing Options</h3>
                   <hr />
                   <p>
-                    <a href="/" target="_blank" rel="noopener noreferrer">
+                    <a href="/" rel="noopener noreferrer" target="_blank">
                       How to file a case by mail or in person
                     </a>
                     <FontAwesomeIcon
+                      className="fa-icon-blue margin-left-05"
                       icon="external-link-alt"
                       size="sm"
-                      className="fa-icon-blue margin-left-05"
                     />
                   </p>
                 </div>

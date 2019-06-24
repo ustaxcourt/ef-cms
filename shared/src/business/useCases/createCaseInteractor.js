@@ -24,6 +24,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
       createdAt: documentEntity.createdAt,
     },
     isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
+    isInternal: false,
     section: PETITIONS_SECTION,
     sentBy: user.userId,
   });
@@ -32,9 +33,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
   if (documentEntity.documentType === 'Petition') {
     const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
-    message = `${
-      documentEntity.documentType
-    } filed by ${caseCaptionNames} is ready for review.`;
+    message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
   } else {
     message = `${documentEntity.documentType} filed by ${capitalize(
       user.role,
@@ -75,7 +74,7 @@ exports.createCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const Petition = applicationContext.getEntityConstructors().Petition;
+  const { Petition } = applicationContext.getEntityConstructors();
   const petitionEntity = new Petition(petitionMetadata).validate();
 
   // invoke the createCase interactor
@@ -105,11 +104,12 @@ exports.createCase = async ({
   });
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     practitioner: practitioners[0],
     userId: user.userId,
   });
@@ -122,9 +122,7 @@ exports.createCase = async ({
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
-      description: `Request for Place of Trial at ${
-        caseToAdd.preferredTrialCity
-      }`,
+      description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
       filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
     }),
   );
@@ -132,7 +130,7 @@ exports.createCase = async ({
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
     documentType: Document.initialDocumentTypes.stin,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     practitioner: practitioners[0],
     userId: user.userId,
   });
@@ -143,7 +141,7 @@ exports.createCase = async ({
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
-      filedBy: user.name,
+      filedBy: caseCaptionNames,
       practitioner: practitioners[0],
       userId: user.userId,
     });

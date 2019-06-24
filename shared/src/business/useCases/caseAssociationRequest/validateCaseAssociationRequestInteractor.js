@@ -2,11 +2,11 @@
  * validateCaseAssociationRequest
  * @param applicationContext
  * @param caseAssociationRequest
- * @returns {Object}
+ * @returns {object}
  */
 exports.validateCaseAssociationRequest = ({
-  caseAssociationRequest,
   applicationContext,
+  caseAssociationRequest,
 }) => {
   const errors = applicationContext
     .getEntityConstructors()
