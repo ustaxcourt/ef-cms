@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for clearing the form
  * @param {object} providers.props the cerebral props object containing workItemId
  */
-export const clearForwardFormAction = ({ store, props }) => {
+export const clearForwardFormAction = ({ props, store }) => {
   store.set(state.form[props.workItemId], {});
   store.set(state.workItemMetadata, {});
 };

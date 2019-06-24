@@ -10,20 +10,20 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if creation was successful or error
  */
 export const fileExternalDocumentAction = async ({
-  get,
-  store,
   applicationContext,
+  get,
   path,
+  store,
 }) => {
-  const { docketNumber, caseId } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
   const userRole = get(state.user.role);
   const isRespondent = userRole === 'respondent';
 
   let {
     primaryDocumentFile,
     secondaryDocumentFile,
-    supportingDocumentFile,
     secondarySupportingDocumentFile,
+    supportingDocumentFile,
     ...documentMetadata
   } = get(state.form);
 

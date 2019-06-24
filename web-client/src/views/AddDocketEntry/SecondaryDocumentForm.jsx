@@ -18,11 +18,11 @@ export const SecondaryDocumentForm = connect(
   },
   ({
     addDocketEntryHelper,
+    constants,
     form,
     updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
-    constants,
   }) => {
     return (
       <React.Fragment>
@@ -38,14 +38,14 @@ export const SecondaryDocumentForm = connect(
             }`}
           >
             <label
-              htmlFor="secondary-document"
-              id="secondary-document-label"
               className={
                 'usa-label ustc-upload with-hint ' +
                 (addDocketEntryHelper.showSecondaryDocumentValid
                   ? 'validated'
                   : '')
               }
+              htmlFor="secondary-document"
+              id="secondary-document-label"
             >
               Add Document{' '}
               <span className="success-message">
@@ -57,15 +57,15 @@ export const SecondaryDocumentForm = connect(
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <StateDrivenFileInput
+              aria-describedby="secondary-document-label"
               id="secondary-document"
               name="secondaryDocumentFile"
-              aria-describedby="secondary-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.secondaryDocumentFile"
+              className="usa-error-message"
             />
           </div>
 
@@ -89,32 +89,32 @@ export const SecondaryDocumentForm = connect(
               Additional Info 1
             </label>
             <input
+              aria-describedby="secondary-additional-info-label"
+              autoCapitalize="none"
               className="usa-input"
               id="secondary-additional-info"
-              type="text"
-              aria-describedby="secondary-additional-info-label"
               name="secondaryDocument.additionalInfo"
-              autoCapitalize="none"
+              type="text"
               value={form.secondaryDocument.additionalInfo || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateDocketEntrySequence();
-              }}
             />
           </div>
           <div className="usa-form-group">
             <div className="usa-checkbox">
               <input
-                id="secondary-add-to-coversheet"
-                className="usa-checkbox__input"
-                type="checkbox"
-                name="secondaryDocument.addToCoversheet"
                 checked={form.secondaryDocument.addToCoversheet}
+                className="usa-checkbox__input"
+                id="secondary-add-to-coversheet"
+                name="secondaryDocument.addToCoversheet"
+                type="checkbox"
                 onChange={e => {
                   updateDocketEntryFormValueSequence({
                     key: e.target.name,
@@ -124,8 +124,8 @@ export const SecondaryDocumentForm = connect(
                 }}
               />
               <label
-                htmlFor="secondary-add-to-coversheet"
                 className="usa-checkbox__label"
+                htmlFor="secondary-add-to-coversheet"
               >
                 Add to Cover Sheet
               </label>
@@ -134,28 +134,28 @@ export const SecondaryDocumentForm = connect(
 
           <div className="usa-form-group margin-bottom-0">
             <label
+              className="usa-label"
               htmlFor="secondary-additional-info2"
               id="secondary-additional-info2-label"
-              className="usa-label"
             >
               Additional Info 2
             </label>
             <input
+              aria-describedby="secondary-additional-info2-label"
+              autoCapitalize="none"
               className="usa-input"
               id="secondary-additional-info2"
-              type="text"
-              aria-describedby="secondary-additional-info2-label"
               name="secondaryDocument.additionalInfo2"
-              autoCapitalize="none"
+              type="text"
               value={form.secondaryDocument.additionalInfo2 || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-              }}
-              onBlur={() => {
-                validateDocketEntrySequence();
               }}
             />
           </div>

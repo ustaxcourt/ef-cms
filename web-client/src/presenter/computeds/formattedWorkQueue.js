@@ -132,9 +132,9 @@ export const formatWorkItem = (
 };
 
 export const filterWorkItems = ({
-  workQueueToDisplay,
-  workQueueIsInternal,
   user,
+  workQueueIsInternal,
+  workQueueToDisplay,
 }) => {
   const { box, queue } = workQueueToDisplay;
   const userSection = getSectionForRole(user.role);

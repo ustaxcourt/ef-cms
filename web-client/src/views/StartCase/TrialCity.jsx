@@ -15,15 +15,15 @@ export const TrialCity = connect(
     value: props.value,
   },
   ({
-    value,
     label,
-    showHint,
     onChange,
-    showSmallTrialCitiesHint,
-    showRegularTrialCitiesHint,
-    validationErrors,
-    trialCitiesByState,
     showDefaultOption,
+    showHint,
+    showRegularTrialCitiesHint,
+    showSmallTrialCitiesHint,
+    trialCitiesByState,
+    validationErrors,
+    value,
   }) => {
     return (
       <div
@@ -33,8 +33,8 @@ export const TrialCity = connect(
         }
       >
         <label
-          htmlFor="preferred-trial-city"
           className={`usa-label ${showHint ? 'with-hint' : ''}`}
+          htmlFor="preferred-trial-city"
         >
           {label}
         </label>
@@ -56,11 +56,11 @@ export const TrialCity = connect(
           </span>
         )}
         <select
-          name="preferredTrialCity"
-          id="preferred-trial-city"
           className="usa-select"
-          onChange={onChange}
+          id="preferred-trial-city"
+          name="preferredTrialCity"
           value={value}
+          onChange={onChange}
         >
           {showDefaultOption && <option value="">-- Select --</option>}
           {Object.keys(trialCitiesByState).map((state, idx) => (

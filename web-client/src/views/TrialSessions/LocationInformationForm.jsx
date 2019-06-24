@@ -28,13 +28,14 @@ export const LocationInformationForm = connect(
               validationErrors.trialLocation ? 'usa-form-group--error' : ''
             }`}
           >
-            <label htmlFor="trial-location" className="usa-label">
+            <label className="usa-label" htmlFor="trial-location">
               Trial Location
             </label>
             <select
-              name="trialLocation"
-              id="trial-location"
               className="usa-select"
+              id="trial-location"
+              name="trialLocation"
+              value={form.trialLocation}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
@@ -42,7 +43,6 @@ export const LocationInformationForm = connect(
                 });
                 validateTrialSessionSequence();
               }}
-              value={form.trialLocation}
             >
               <option value="">-- Select --</option>
               {Object.keys(trialCitiesHelper('All').trialCitiesByState).map(
@@ -60,21 +60,21 @@ export const LocationInformationForm = connect(
               )}
             </select>
             <Text
-              className="usa-error-message"
               bind="validationErrors.trialLocation"
+              className="usa-error-message"
             />
           </div>
 
           <div className="usa-form-group">
-            <label htmlFor="courthouse-name" className="usa-label">
+            <label className="usa-label" htmlFor="courthouse-name">
               Courthouse Name <span className="usa-hint">(optional)</span>
             </label>
             <input
-              id="courthouse-name"
-              type="text"
-              name="courthouseName"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="courthouse-name"
+              name="courthouseName"
+              type="text"
               value={form.courthouseName || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
@@ -86,15 +86,15 @@ export const LocationInformationForm = connect(
           </div>
 
           <div className="usa-form-group">
-            <label htmlFor="address1" className="usa-label">
+            <label className="usa-label" htmlFor="address1">
               Address Line 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
-              id="address1"
-              type="text"
-              name="address1"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="address1"
+              name="address1"
+              type="text"
               value={form.address1 || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
@@ -106,15 +106,15 @@ export const LocationInformationForm = connect(
           </div>
 
           <div className="usa-form-group">
-            <label htmlFor="address2" className="usa-label">
+            <label className="usa-label" htmlFor="address2">
               Address Line 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
-              id="address2"
-              type="text"
-              name="address2"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="address2"
+              name="address2"
+              type="text"
               value={form.address2 || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
@@ -128,15 +128,15 @@ export const LocationInformationForm = connect(
           <div className="usa-form-group">
             <div className="grid-row grid-gap state-and-city">
               <div className="grid-col-8">
-                <label htmlFor="city" className="usa-label">
+                <label className="usa-label" htmlFor="city">
                   City <span className="usa-hint">(optional)</span>
                 </label>
                 <input
-                  id="city"
-                  type="text"
-                  name="city"
-                  className="usa-input usa-input--inline"
                   autoCapitalize="none"
+                  className="usa-input usa-input--inline"
+                  id="city"
+                  name="city"
+                  type="text"
                   value={form.city || ''}
                   onChange={e => {
                     updateTrialSessionFormDataSequence({
@@ -147,7 +147,7 @@ export const LocationInformationForm = connect(
                 />
               </div>
               <div className="grid-col-4">
-                <label htmlFor="state" className="usa-label">
+                <label className="usa-label" htmlFor="state">
                   State <span className="usa-hint">(optional)</span>
                 </label>
                 <select
@@ -240,32 +240,32 @@ export const LocationInformationForm = connect(
             }`}
           >
             <label
-              htmlFor="postal-code"
-              className="usa-label"
               aria-label="zip code"
+              className="usa-label"
+              htmlFor="postal-code"
             >
               ZIP Code <span className="usa-hint">(optional)</span>
             </label>
             <input
-              id="postal-code"
-              type="text"
-              name="postalCode"
-              className="usa-input usa-input--medium"
               autoCapitalize="none"
+              className="usa-input usa-input--medium"
+              id="postal-code"
+              name="postalCode"
+              type="text"
               value={form.postalCode || ''}
+              onBlur={() => {
+                validateTrialSessionSequence();
+              }}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateTrialSessionSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.postalCode"
+              className="usa-error-message"
             />
           </div>
         </div>

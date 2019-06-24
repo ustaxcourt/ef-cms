@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.sessionMetadata.docketRecordSort
  * @param {object} providers.get the cerebral store used for getting state.sessionMetadata.docketRecordSort
  */
-export const toggleMobileDocketSortAction = ({ store, get }) => {
+export const toggleMobileDocketSortAction = ({ get, store }) => {
   const caseId = get(state.caseDetail.caseId);
   const currentSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   let newSort;

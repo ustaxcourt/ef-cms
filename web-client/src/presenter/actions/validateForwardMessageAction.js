@@ -11,10 +11,10 @@ import { state } from 'cerebral';
  * @returns {object} path.success or path.error
  */
 export const validateForwardMessageAction = ({
+  applicationContext,
+  get,
   path,
   props,
-  get,
-  applicationContext,
 }) => {
   const form = get(state.form)[props.workItemId] || {};
 

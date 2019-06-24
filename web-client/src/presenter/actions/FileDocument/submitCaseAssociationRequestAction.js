@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const submitCaseAssociationRequestAction = async ({
+  applicationContext,
   get,
   props,
-  applicationContext,
 }) => {
-  const { docketNumber, caseId } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId, supportingDocumentFileId } = props;
   const user = get(state.user);
 
