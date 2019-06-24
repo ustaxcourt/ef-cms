@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const submitDocketEntryAction = async ({
+  applicationContext,
   get,
   props,
-  applicationContext,
 }) => {
-  const { docketNumber, caseId } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId, secondaryDocumentFileId } = props;
 
   let documentMetadata = omit(
@@ -29,7 +29,8 @@ export const submitDocketEntryAction = async ({
     isPaper: true,
     docketNumber,
     caseId,
-    createdAt: documentMetadata.dateReceived,
+    createdAt: new Date().toISOString(),
+    receivedAt: documentMetadata.dateReceived,
   };
 
   if (documentMetadata.secondaryDocument) {
