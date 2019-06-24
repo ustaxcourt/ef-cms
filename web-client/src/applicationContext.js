@@ -314,7 +314,7 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
-      generatePdfBlobUrl: generatePdfUrlFactory(jsPDF),
+      generatePdfUrl: generatePdfUrlFactory(jsPDF),
       isStringISOFormatted,
       prepareDateFromString,
     };
