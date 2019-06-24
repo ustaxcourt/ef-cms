@@ -12,7 +12,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {*} returns the next action in the sequence's path
  */
-export const chooseWorkQueueAction = ({ store, props, path, get }) => {
+export const chooseWorkQueueAction = ({ get, path, props, store }) => {
   if (props.hasOwnProperty('workQueueIsInternal')) {
     store.set(state.workQueueIsInternal, props.workQueueIsInternal);
   }

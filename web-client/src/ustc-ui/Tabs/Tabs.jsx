@@ -11,16 +11,16 @@ import classNames from 'classnames';
 export function Tab() {}
 
 export function TabsComponent({
-  id,
   asSwitch,
   bind,
-  value,
-  simpleSetter,
-  onSelect,
-  children,
-  defaultActiveTab,
-  className,
   boxed,
+  children,
+  className,
+  defaultActiveTab,
+  id,
+  onSelect,
+  simpleSetter,
+  value,
 }) {
   let activeKey, setTab;
 
@@ -37,7 +37,7 @@ export function TabsComponent({
   setTab = decorateWithPostCallback(setTab, onSelect);
 
   function renderTab(child) {
-    const { title, tabName, id } = child.props;
+    const { id, tabName, title } = child.props;
 
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
@@ -54,11 +54,11 @@ export function TabsComponent({
     return (
       <li className={liClass}>
         <button
-          role="tab"
-          type="button"
-          id={id}
           aria-controls={tabContentId}
           aria-selected={isActiveTab}
+          id={id}
+          role="tab"
+          type="button"
           onClick={() => setTab(tabName)}
         >
           <span>{title}</span>
@@ -121,7 +121,7 @@ export function TabsComponent({
     <div {...baseProps}>
       {hasNav && (
         <nav className={classNames({ 'grid-container padding-x-0': boxed })}>
-          <ul role="tablist" className={classNames({ 'grid-row': boxed })}>
+          <ul className={classNames({ 'grid-row': boxed })} role="tablist">
             {map(children, renderTab)}
           </ul>
         </nav>

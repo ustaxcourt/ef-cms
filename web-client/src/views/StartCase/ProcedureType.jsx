@@ -11,7 +11,7 @@ export const ProcedureType = connect(
     validationErrors: state.validationErrors,
     value: props.value,
   },
-  ({ procedureTypes, value, validationErrors, onChange, legend }) => {
+  ({ legend, onChange, procedureTypes, validationErrors, value }) => {
     return (
       <div
         className={
@@ -20,24 +20,24 @@ export const ProcedureType = connect(
             : 'usa-form-group'
         }
       >
-        <fieldset id="procedure-type-radios" className="usa-fieldset">
+        <fieldset className="usa-fieldset" id="procedure-type-radios">
           <legend className="usa-legend">{legend}</legend>
           {procedureTypes.map((procedureType, idx) => (
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
-                id={procedureType}
-                data-type={procedureType}
-                type="radio"
-                name="procedureType"
-                className="usa-radio__input"
                 checked={value === procedureType}
+                className="usa-radio__input"
+                data-type={procedureType}
+                id={procedureType}
+                name="procedureType"
+                type="radio"
                 value={procedureType}
                 onChange={onChange}
               />
               <label
-                id={`proc-type-${idx}`}
-                htmlFor={procedureType}
                 className="usa-radio__label"
+                htmlFor={procedureType}
+                id={`proc-type-${idx}`}
               >
                 {procedureType} case
               </label>

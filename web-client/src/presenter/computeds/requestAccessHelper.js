@@ -11,7 +11,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
-  const certificateOfServiceDate = form.certificateOfServiceDate;
+  const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = applicationContext

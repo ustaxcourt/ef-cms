@@ -21,8 +21,8 @@ export const AddTrialSession = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    updateTrialSessionFormDataSequence,
     submitTrialSessionSequence,
+    updateTrialSessionFormDataSequence,
   }) => {
     return (
       <>
@@ -30,14 +30,14 @@ export const AddTrialSession = connect(
 
         <section className="usa-section grid-container DocumentDetail">
           <form
-            role="form"
-            aria-labelledby="start-case-header"
             noValidate
+            aria-labelledby="start-case-header"
+            className="usa-form maxw-none"
+            role="form"
             onSubmit={e => {
               e.preventDefault();
               submitTrialSessionSequence();
             }}
-            className="usa-form maxw-none"
           >
             {showModal === 'FormCancelModalDialogComponent' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
@@ -54,16 +54,16 @@ export const AddTrialSession = connect(
             <h2 className="margin-top-4">Session Notes</h2>
             <div className="blue-container">
               <div className="usa-form-group margin-bottom-0">
-                <label htmlFor="notes" className="usa-label">
+                <label className="usa-label" htmlFor="notes">
                   Trial Session Notes{' '}
                   <span className="usa-hint">(optional)</span>
                 </label>
                 <textarea
                   className="usa-textarea"
                   id="notes"
+                  maxLength="400"
                   name="notes"
                   value={form.notes}
-                  maxLength="400"
                   onChange={e => {
                     updateTrialSessionFormDataSequence({
                       key: e.target.name,
@@ -75,12 +75,12 @@ export const AddTrialSession = connect(
             </div>
 
             <div className="button-box-container">
-              <button type="submit" className="usa-button">
+              <button className="usa-button" type="submit">
                 Add Session
               </button>
               <button
-                type="button"
                 className="usa-button usa-button--outline"
+                type="button"
                 onClick={() => {
                   formCancelToggleCancelSequence();
                 }}

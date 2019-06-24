@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 
 export const If = connect(props => {
-  const { get, bind, children } = props;
+  const { bind, children, get } = props;
 
   let show = false;
 

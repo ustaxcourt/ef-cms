@@ -33,11 +33,11 @@ export const CaseTypeSelect = connect(
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">{legend}</legend>
             <select
-              name="caseType"
-              id="case-type"
               aria-labelledby="case-type"
-              value={value}
               className="usa-select"
+              id="case-type"
+              name="caseType"
+              value={value}
               onChange={e => {
                 onChange({
                   key: e.target.name,
@@ -58,8 +58,8 @@ export const CaseTypeSelect = connect(
             </select>
           </fieldset>
           <Text
-            className="usa-error-message"
             bind="validationErrors.caseType"
+            className="usa-error-message"
           />
         </div>
       </div>

@@ -18,13 +18,15 @@ export const TextEditor = connect(
     render() {
       return (
         <ReactQuill
-          value={this.props.form.richText}
-          onChange={e => {
-            this.props.updateFormValueSequence({
-              key: 'richText',
-              value: e,
-            });
-          }}
+          formats={[
+            'size',
+            'bold',
+            'italic',
+            'underline',
+            'bullet',
+            'list',
+            'indent',
+          ]}
           modules={{
             toolbar: [
               [
@@ -41,15 +43,13 @@ export const TextEditor = connect(
               ],
             ],
           }}
-          formats={[
-            'size',
-            'bold',
-            'italic',
-            'underline',
-            'bullet',
-            'list',
-            'indent',
-          ]}
+          value={this.props.form.richText}
+          onChange={e => {
+            this.props.updateFormValueSequence({
+              key: 'richText',
+              value: e,
+            });
+          }}
         />
       );
     }

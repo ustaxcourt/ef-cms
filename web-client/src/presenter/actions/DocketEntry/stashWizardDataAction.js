@@ -14,13 +14,13 @@ export const stashWizardDataAction = ({ get, props, store }) => {
 
     const {
       dateReceived,
-      dateReceivedMonth,
       dateReceivedDay,
+      dateReceivedMonth,
       dateReceivedYear,
       lodged,
       partyPrimary,
-      partySecondary,
       partyRespondent,
+      partySecondary,
       practitioner,
     } = get(state.form);
 

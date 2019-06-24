@@ -25,7 +25,7 @@ export const setupPercentDone = (files, store) => {
   const createOnUploadProgress = key => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { loaded, total, isDone } = progressEvent;
+      const { isDone, loaded, total } = progressEvent;
       if (total) {
         totalSizes[key] = total;
       }
@@ -68,11 +68,11 @@ export const setupPercentDone = (files, store) => {
 export const createCaseFromPaperAction = async ({
   applicationContext,
   get,
-  store,
-  props,
   path,
+  props,
+  store,
 }) => {
-  const { petitionFile, ownershipDisclosureFile, stinFile } = get(
+  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
     state.petition,
   );
 

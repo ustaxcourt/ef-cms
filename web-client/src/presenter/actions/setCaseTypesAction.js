@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.caseTypes
  * @param {object} providers.props the cerebral props object used for passing the props.caseTypes
  */
-export const setCaseTypesAction = ({ store, props }) => {
+export const setCaseTypesAction = ({ props, store }) => {
   store.set(state.caseTypes, props.caseTypes);
 };

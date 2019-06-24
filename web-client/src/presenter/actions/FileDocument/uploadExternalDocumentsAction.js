@@ -9,10 +9,10 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const uploadExternalDocumentsAction = async ({
-  get,
-  store,
-  path,
   applicationContext,
+  get,
+  path,
+  store,
 }) => {
   const {
     primaryDocumentFile,

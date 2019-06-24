@@ -9,9 +9,9 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.workItemActions
  * @param {object} providers.props the cerebral props object used for getting the props.action and props.workItemId
  */
-export const setWorkItemActionMapAction = ({ get, store, props }) => {
+export const setWorkItemActionMapAction = ({ get, props, store }) => {
   const actions = get(state.workItemActions);
-  const workItemId = props.workItemId;
+  const { workItemId } = props;
   if (!props.action) {
     delete actions[workItemId];
   } else if (props.action === actions[workItemId]) {

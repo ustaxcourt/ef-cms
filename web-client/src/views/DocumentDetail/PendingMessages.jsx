@@ -43,15 +43,15 @@ export const PendingMessages = connect(
     return (
       <div className="blue-container">
         <button
-          type="button"
-          id="create-message-button"
-          onClick={() => openCreateMessageModalSequence()}
           className="usa-button usa-button margin-bottom-2"
+          id="create-message-button"
+          type="button"
+          onClick={() => openCreateMessageModalSequence()}
         >
           <FontAwesomeIcon
+            className="margin-right-1"
             icon="plus-circle"
             size="lg"
-            className="margin-right-1"
           />
           Create Message
         </button>
@@ -68,12 +68,12 @@ export const PendingMessages = connect(
           documentDetailHelper.formattedDocument.workItems.map(
             (workItem, idx) => (
               <div
+                aria-labelledby="tab-pending-messages"
                 className={`card workitem-${workItem.workItemId} ${
                   workItem.currentMessage.messageId === messageId
                     ? 'highlight'
                     : ''
                 }`}
-                aria-labelledby="tab-pending-messages"
                 key={idx}
               >
                 <div className="content-wrapper">
@@ -100,13 +100,11 @@ export const PendingMessages = connect(
                     <div className="grid-row">
                       <div className="grid-col-4 padding-x-0">
                         <button
-                          role="tab"
-                          id={`history-tab-${idx}`}
+                          aria-controls={`history-card-${idx}`}
                           aria-selected={documentDetailHelper.showAction(
                             'history',
                             workItem.workItemId,
                           )}
-                          aria-controls={`history-card-${idx}`}
                           className={`usa-button ${
                             documentDetailHelper.showAction(
                               'history',
@@ -115,6 +113,8 @@ export const PendingMessages = connect(
                               ? 'selected'
                               : 'unselected'
                           }`}
+                          id={`history-tab-${idx}`}
+                          role="tab"
                           onClick={() =>
                             setWorkItemActionSequence({
                               action: 'history',
@@ -130,13 +130,11 @@ export const PendingMessages = connect(
                       <div className="grid-col-4 padding-x-0">
                         {workItem.showComplete && (
                           <button
-                            role="tab"
-                            id={`complete-tab-${idx}`}
+                            aria-controls={`history-card-${idx}`}
                             aria-selected={documentDetailHelper.showAction(
                               'complete',
                               workItem.workItemId,
                             )}
-                            aria-controls={`history-card-${idx}`}
                             className={`usa-button ${
                               documentDetailHelper.showAction(
                                 'complete',
@@ -145,6 +143,8 @@ export const PendingMessages = connect(
                                 ? 'selected'
                                 : 'unselected'
                             }`}
+                            id={`complete-tab-${idx}`}
+                            role="tab"
                             onClick={() =>
                               setWorkItemActionSequence({
                                 action: 'complete',
@@ -164,14 +164,11 @@ export const PendingMessages = connect(
                       <div className="grid-col-4 padding-x-0">
                         {workItem.showSendTo && (
                           <button
-                            role="tab"
-                            id={`forward-tab-${idx}`}
+                            aria-controls={`forward-card-${idx}`}
                             aria-selected={documentDetailHelper.showAction(
                               'forward',
                               workItem.workItemId,
                             )}
-                            aria-controls={`forward-card-${idx}`}
-                            data-workitemid={workItem.workItemId}
                             className={`usa-button send-to ${
                               documentDetailHelper.showAction(
                                 'forward',
@@ -180,6 +177,9 @@ export const PendingMessages = connect(
                                 ? 'selected'
                                 : 'unselected'
                             }`}
+                            data-workitemid={workItem.workItemId}
+                            id={`forward-tab-${idx}`}
+                            role="tab"
                             onClick={() =>
                               setWorkItemActionSequence({
                                 action: 'forward',
@@ -200,15 +200,15 @@ export const PendingMessages = connect(
                   workItem.workItemId,
                 ) && (
                   <div
-                    id={`complete-card-${idx}`}
-                    role="tabpanel"
                     aria-labelledby={`complete-tab-${idx}`}
                     className="content-wrapper actions-wrapper"
+                    id={`complete-card-${idx}`}
+                    role="tabpanel"
                   >
                     <form
+                      noValidate
                       id={`complete-form-${idx}`}
                       role="form"
-                      noValidate
                       onSubmit={e => {
                         e.preventDefault();
                         submitCompleteSequence({
@@ -221,15 +221,15 @@ export const PendingMessages = connect(
                       }}
                     >
                       <label
-                        htmlFor={`complete-message-${idx}`}
                         className="usa-label"
+                        htmlFor={`complete-message-${idx}`}
                       >
                         Add Message <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
                         className="usa-textarea"
-                        name="completeMessage"
                         id={`complete-message-${idx}`}
+                        name="completeMessage"
                         onChange={e => {
                           updateCompleteFormValueSequence({
                             key: e.target.name,
@@ -239,7 +239,7 @@ export const PendingMessages = connect(
                         }}
                       />
                       <div className="button-box-container">
-                        <button type="submit" className="usa-button">
+                        <button className="usa-button" type="submit">
                           <span>Complete</span>
                         </button>
                       </div>
@@ -252,10 +252,10 @@ export const PendingMessages = connect(
                 ) &&
                   !workItem.historyMessages.length && (
                     <div
-                      id={`history-card-${idx}`}
-                      className="content-wrapper actions-wrapper"
-                      role="tabpanel"
                       aria-labelledby={`history-tab-${idx}`}
+                      className="content-wrapper actions-wrapper"
+                      id={`history-card-${idx}`}
+                      role="tabpanel"
                     >
                       No additional messages are available.
                     </div>
@@ -266,10 +266,10 @@ export const PendingMessages = connect(
                 ) &&
                   workItem.historyMessages.length > 0 && (
                     <div
+                      aria-labelledby={`history-tab-${idx}`}
                       className="content-wrapper actions-wrapper"
                       id={`history-card-${idx}`}
                       role="tabpanel"
-                      aria-labelledby={`history-tab-${idx}`}
                     >
                       {workItem.historyMessages.map((message, mIdx) => (
                         <div key={mIdx}>
@@ -298,16 +298,16 @@ export const PendingMessages = connect(
                   workItem.workItemId,
                 ) && (
                   <div
+                    className="content-wrapper actions-wrapper"
                     id={`forward-card-${idx}`}
                     role="tabpanel"
-                    className="content-wrapper actions-wrapper"
                   >
                     <form
-                      aria-labelledby={`forward-tab-${idx}`}
-                      data-workitemid={workItem.workItemId}
-                      className="forward-form"
-                      role="form"
                       noValidate
+                      aria-labelledby={`forward-tab-${idx}`}
+                      className="forward-form"
+                      data-workitemid={workItem.workItemId}
+                      role="form"
                       onSubmit={e => {
                         e.preventDefault();
                         submitForwardSequence({
@@ -316,16 +316,16 @@ export const PendingMessages = connect(
                       }}
                     >
                       <Select
-                        id={`section-${idx}`}
-                        name="section"
-                        label="Select Section"
-                        values={constants.SECTIONS}
-                        keys={v => v}
-                        formatter={workQueueSectionHelper.sectionDisplay}
                         error={
                           validationErrors[workItem.workItemId] &&
                           validationErrors[workItem.workItemId].section
                         }
+                        formatter={workQueueSectionHelper.sectionDisplay}
+                        id={`section-${idx}`}
+                        keys={v => v}
+                        label="Select Section"
+                        name="section"
+                        values={constants.SECTIONS}
                         onChange={e => {
                           updateForwardFormValueSequence({
                             form: `form.${workItem.workItemId}`,
@@ -342,16 +342,16 @@ export const PendingMessages = connect(
 
                       {workItemMetadata.showChambersSelect && (
                         <Select
-                          id={`chambers-${idx}`}
-                          name="chambers"
-                          label="Select Chambers"
-                          values={constants.CHAMBERS_SECTIONS}
-                          keys={v => v}
-                          formatter={workQueueSectionHelper.chambersDisplay}
                           error={
                             validationErrors[workItem.workItemId] &&
                             validationErrors[workItem.workItemId].section
                           }
+                          formatter={workQueueSectionHelper.chambersDisplay}
+                          id={`chambers-${idx}`}
+                          keys={v => v}
+                          label="Select Chambers"
+                          name="chambers"
+                          values={constants.CHAMBERS_SECTIONS}
                           onChange={e => {
                             updateForwardFormValueSequence({
                               form: `form.${workItem.workItemId}`,
@@ -368,20 +368,26 @@ export const PendingMessages = connect(
                       )}
 
                       <Select
-                        id={`assignee-id-${idx}`}
-                        name="assigneeId"
-                        values={users}
-                        label="Select Recipient"
-                        disabled={
-                          !form[workItem.workItemId] ||
-                          !form[workItem.workItemId].section
-                        }
                         aria-disabled={
                           !form[workItem.workItemId] ||
                           !form[workItem.workItemId].section
                             ? 'true'
                             : 'false'
                         }
+                        disabled={
+                          !form[workItem.workItemId] ||
+                          !form[workItem.workItemId].section
+                        }
+                        error={
+                          validationErrors[workItem.workItemId] &&
+                          validationErrors[workItem.workItemId].assigneeId
+                        }
+                        formatter={user => user.name}
+                        id={`assignee-id-${idx}`}
+                        keys={user => user.userId}
+                        label="Select Recipient"
+                        name="assigneeId"
+                        values={users}
                         onChange={e => {
                           updateForwardFormValueSequence({
                             key: e.target.name,
@@ -392,22 +398,16 @@ export const PendingMessages = connect(
                             workItemId: workItem.workItemId,
                           });
                         }}
-                        keys={user => user.userId}
-                        formatter={user => user.name}
-                        error={
-                          validationErrors[workItem.workItemId] &&
-                          validationErrors[workItem.workItemId].assigneeId
-                        }
                       />
 
                       <TextArea
-                        label="Add Message"
+                        aria-labelledby={`message-label-${idx}`}
                         error={
                           validationErrors[workItem.workItemId] &&
                           validationErrors[workItem.workItemId].forwardMessage
                         }
-                        aria-labelledby={`message-label-${idx}`}
                         id={`forward-message-${idx}`}
+                        label="Add Message"
                         name="forwardMessage"
                         onChange={e => {
                           updateForwardFormValueSequence({
@@ -422,7 +422,7 @@ export const PendingMessages = connect(
                       />
 
                       <div className="button-box-container">
-                        <button type="submit" className="usa-button">
+                        <button className="usa-button" type="submit">
                           Send
                         </button>
                       </div>

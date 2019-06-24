@@ -11,8 +11,8 @@ import { state } from 'cerebral';
  */
 export const validateDocketEntryAction = ({
   applicationContext,
-  path,
   get,
+  path,
 }) => {
   const entryMetadata = get(state.form);
 

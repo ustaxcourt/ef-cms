@@ -9,9 +9,9 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const generateCaseAssociationTitleAction = ({
-  store,
-  get,
   applicationContext,
+  get,
+  store,
 }) => {
   const caseAssociationRequest = get(state.form);
   const contactPrimaryName = get(state.caseDetail.contactPrimary.name);
