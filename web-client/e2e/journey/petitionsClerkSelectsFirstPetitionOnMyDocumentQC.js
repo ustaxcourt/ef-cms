@@ -4,8 +4,8 @@ export default test => {
       .getState('workQueue')
       .find(workItem => workItem.docketNumber === test.docketNumber);
 
-    const documentId = workItem.documentId;
-    const messageId = workItem.messages[0].messageId;
+    const { documentId } = workItem;
+    const { messageId } = workItem.messages[0];
 
     test.documentId = documentId;
     test.messageId = messageId;

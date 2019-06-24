@@ -51,8 +51,8 @@ export default test => {
     // the first item in the outbox should be the Petition batched for IRS from the previous test
     expect(workItem).toBeDefined();
     // goto the first work item in the section queue outbox, the one we just batched for IRS
-    const docketNumber = workItem.docketNumber;
-    const documentId = workItem.document.documentId;
+    const { docketNumber } = workItem;
+    const { documentId } = workItem.document;
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber,
       documentId,

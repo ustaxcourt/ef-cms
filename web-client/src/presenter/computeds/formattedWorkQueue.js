@@ -9,6 +9,16 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
 
+const isDateToday = (date, applicationContext) => {
+  const now = applicationContext
+    .getUtilities()
+    .formatDateString(new Date(), 'MMDDYY');
+  const then = applicationContext
+    .getUtilities()
+    .formatDateString(date, 'MMDDYY');
+  return now === then;
+};
+
 const formatDateIfToday = (date, applicationContext) => {
   const now = applicationContext
     .getUtilities()
@@ -109,7 +119,9 @@ export const formatWorkItem = (
 
   result.receivedAt = isInternal
     ? result.currentMessage.createdAt
-    : result.document.createdAt;
+    : isDateToday(result.document.receivedAt, applicationContext)
+    ? result.document.createdAt
+    : result.document.receivedAt;
   result.received = formatDateIfToday(result.receivedAt, applicationContext);
 
   result.sentDateFormatted = formatDateIfToday(
@@ -132,9 +144,9 @@ export const formatWorkItem = (
 };
 
 export const filterWorkItems = ({
-  workQueueToDisplay,
-  workQueueIsInternal,
   user,
+  workQueueIsInternal,
+  workQueueToDisplay,
 }) => {
   const { box, queue } = workQueueToDisplay;
   const userSection = getSectionForRole(user.role);

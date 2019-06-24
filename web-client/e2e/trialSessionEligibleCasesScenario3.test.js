@@ -13,11 +13,9 @@ import {
 } from '../../shared/src/business/entities/Document';
 import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
-
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -36,7 +34,6 @@ import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
-
 const {
   COUNTRY_TYPES,
   PARTY_TYPES,
