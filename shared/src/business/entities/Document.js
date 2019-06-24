@@ -47,6 +47,7 @@ function Document(rawDocument) {
     practitioner: rawDocument.practitioner,
     previousDocument: rawDocument.previousDocument,
     processingStatus: rawDocument.processingStatus,
+    receivedAt: rawDocument.receivedAt || new Date().toISOString(),
     relationship: rawDocument.relationship,
     reviewDate: rawDocument.reviewDate,
     reviewUser: rawDocument.reviewUser,
@@ -129,6 +130,10 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
+    receivedAt: joi
+      .date()
+      .iso()
+      .optional(),
     reviewDate: joi
       .date()
       .iso()

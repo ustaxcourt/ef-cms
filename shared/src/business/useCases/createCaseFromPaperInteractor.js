@@ -98,13 +98,15 @@ exports.createCaseFromPaper = async ({
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
-    createdAt: caseToAdd.receivedAt,
+    createdAt: caseToAdd.createdAt,
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
     filedBy: caseCaptionNames,
     isPaper: true,
+    receivedAt: caseToAdd.receivedAt,
     userId: user.userId,
   });
+
   const {
     message: newMessage,
     workItem: newWorkItem,
