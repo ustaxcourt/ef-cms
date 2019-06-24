@@ -71,5 +71,8 @@
     "sinon": "^7.3.2",
     "tmp": "^0.1.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "jspdf": "^1.5.3"
   }
 }
