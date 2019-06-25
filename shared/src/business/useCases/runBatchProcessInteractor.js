@@ -7,7 +7,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 

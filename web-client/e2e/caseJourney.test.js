@@ -1,7 +1,7 @@
 import {
   CASE_CAPTION_POSTFIX,
   STATUS_TYPES,
-} from '../../shared/src/business/entities/Case';
+} from '../../shared/src/business/entities/cases/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
