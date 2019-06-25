@@ -12,8 +12,8 @@ const { put } = require('../../dynamodbClientService');
  * @returns {*}
  */
 exports.saveWorkItemForDocketClerkFilingExternalDocument = async ({
-  workItem,
   applicationContext,
+  workItem,
 }) => {
   await put({
     Item: {

@@ -1,8 +1,8 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
+import { PdfPreview } from '../../ustc-ui/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { TextEditor } from './TextEditor';
-import { PdfPreview } from '../../ustc-ui/PdfPreview';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
