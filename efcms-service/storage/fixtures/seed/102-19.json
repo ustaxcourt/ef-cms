@@ -175,6 +175,7 @@
     "docketNumberSuffix": "P",
     "caseStatus": "New",
     "document": {
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T21:42:29.073Z",
       "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
       "documentType": "Petition",
