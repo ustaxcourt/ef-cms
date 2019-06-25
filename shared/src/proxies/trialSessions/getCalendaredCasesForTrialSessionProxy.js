@@ -13,6 +13,6 @@ exports.getCalendaredCasesForTrialSession = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/trialSessions/${trialSessionId}/getCalendaredCases`,
+    endpoint: `/trial-sessions/${trialSessionId}/get-calendared-cases`,
   });
 };
