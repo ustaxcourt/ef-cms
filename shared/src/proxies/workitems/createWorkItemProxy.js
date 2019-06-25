@@ -21,6 +21,6 @@ exports.createWorkItem = ({
       assigneeId,
       message,
     },
-    endpoint: `/cases/${caseId}/documents/${documentId}/workitems`,
+    endpoint: `/cases/${caseId}/documents/${documentId}/work-items`,
   });
 };

@@ -10,6 +10,6 @@ const { get } = require('../requests');
 exports.getTrialSessionDetails = ({ applicationContext, trialSessionId }) => {
   return get({
     applicationContext,
-    endpoint: `/trialSessions/${trialSessionId}`,
+    endpoint: `/trial-sessions/${trialSessionId}`,
   });
 };
