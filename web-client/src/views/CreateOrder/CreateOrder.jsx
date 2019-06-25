@@ -48,18 +48,35 @@ export const CreateOrder = connect(
                     updateFormValueSequence={updateFormValueSequence}
                   />
                 </div>
+                <textarea
+                  defaultValue={form.richText}
+                  style={{ height: '200px', width: '100%' }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: 'richText',
+                      value: e.target.value,
+                    });
+                  }}
+                >
+                  {form.richText}
+                </textarea>{' '}
+                <div
+                  className="pdf-preview-div"
+                  dangerouslySetInnerHTML={{ __html: form.richText }}
+                  style={{
+                    border: '1px dotted gray',
+                    display: 'block',
+                    margin: '1em',
+                  }}
+                ></div>
               </div>
+
               <div className="grid-col-6">
                 <PdfPreview />
               </div>
             </div>
           </div>
         </section>
-        <div
-          className="pdf-preview-div"
-          dangerouslySetInnerHTML={{ __html: form.richText }}
-          style={{ display: 'none' }}
-        ></div>
       </>
     );
   },
