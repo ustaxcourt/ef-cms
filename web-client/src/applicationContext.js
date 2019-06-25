@@ -93,6 +93,7 @@ import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSect
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
+import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
@@ -183,6 +184,7 @@ const allUseCases = {
   getWorkItem,
   getWorkItemsBySection,
   getWorkItemsForUser,
+  loadPDFForSigning,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
   removeItem: removeItemUC,
