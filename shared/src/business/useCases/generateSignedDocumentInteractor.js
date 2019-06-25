@@ -1,4 +1,4 @@
-const { PDFDocumentFactory, PDFDocumentWriter, drawImage } = require('pdf-lib');
+const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
 
 /**
  * generateSignedDocumentInteractor
@@ -12,8 +12,8 @@ const { PDFDocumentFactory, PDFDocumentWriter, drawImage } = require('pdf-lib');
  */
 
 exports.generateSignedDocumentInteractor = async ({
-  pdfData,
   pageIndex,
+  pdfData,
   posX,
   posY,
   scale = 1,
