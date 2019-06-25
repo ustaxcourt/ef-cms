@@ -3,7 +3,7 @@ const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');

@@ -1,5 +1,5 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
-import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/cases/Case';
 import { filterWorkItems } from './formattedWorkQueue';
 
 const MY_MESSAGES_INBOX = {

@@ -9,7 +9,8 @@ const {
 const { instantiateContacts } = require('./contacts/PetitionContact');
 
 /**
- *
+ * Petition Entity
+ * Represents a Case with required documents that a Petitioner is attempting to add to the system.
  * @param rawPetition
  * @constructor
  */

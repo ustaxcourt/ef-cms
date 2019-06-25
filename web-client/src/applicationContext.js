@@ -9,7 +9,7 @@ import {
   CASE_CAPTION_POSTFIX,
   Case,
   STATUS_TYPES,
-} from '../../shared/src/business/entities/Case';
+} from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import axios from 'axios';
 import uuidv4 from 'uuid/v4';

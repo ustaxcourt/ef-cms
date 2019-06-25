@@ -4,7 +4,7 @@ import {
   SENIOR_ATTORNEY_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
-import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';

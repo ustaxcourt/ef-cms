@@ -1,4 +1,4 @@
-const { Case, STATUS_TYPES } = require('../entities/Case');
+const { Case, STATUS_TYPES } = require('../entities/cases/Case');
 
 /**
  * @param applicationContext

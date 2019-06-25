@@ -1,7 +1,7 @@
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('./sendPetitionToIRSHoldingQueueInteractor');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCase } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
