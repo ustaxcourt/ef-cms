@@ -16,6 +16,6 @@ exports.completeWorkItem = ({
   return put({
     applicationContext,
     body: { completedMessage },
-    endpoint: `/workitems/${workItemId}/complete`,
+    endpoint: `/work-items/${workItemId}/complete`,
   });
 };

@@ -10,6 +10,6 @@ const { post } = require('../requests');
 exports.setWorkItemAsRead = ({ applicationContext, workItemId }) => {
   return post({
     applicationContext,
-    endpoint: `/workitems/${workItemId}/read`,
+    endpoint: `/work-items/${workItemId}/read`,
   });
 };
