@@ -13,6 +13,6 @@ exports.getEligibleCasesForTrialSession = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/trialSessions/${trialSessionId}/eligible-cases`,
+    endpoint: `/trial-sessions/${trialSessionId}/eligible-cases`,
   });
 };

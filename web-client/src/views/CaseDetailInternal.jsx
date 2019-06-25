@@ -96,7 +96,7 @@ export const CaseDetailInternal = connect(
                   }_${caseDetail.contactPrimary.name.replace(
                     /\s/g,
                     '_',
-                  )}.zip/documentDownloadUrl?token=${token}`}
+                  )}.zip/document-download-url?token=${token}`}
                 >
                   <FontAwesomeIcon icon={['far', 'file-pdf']} />
                   Batch Zip Download
