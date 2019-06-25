@@ -11,6 +11,6 @@ exports.createTrialSession = ({ applicationContext, trialSession }) => {
   return post({
     applicationContext,
     body: trialSession,
-    endpoint: `/trialSessions`,
+    endpoint: `/trial-sessions`,
   });
 };

@@ -10,6 +10,6 @@ const { put } = require('./requests');
 exports.setCaseToReadyForTrial = ({ applicationContext, caseId }) => {
   return put({
     applicationContext,
-    endpoint: `/cases/${caseId}/setToReadyForTrial`,
+    endpoint: `/cases/${caseId}/set-to-ready-for-trial`,
   });
 };
