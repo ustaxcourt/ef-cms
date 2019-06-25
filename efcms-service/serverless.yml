@@ -790,9 +790,5 @@ functions:
     events:
       - http:
           path: v1/court-issued-order
-          method: post
+          method: get
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer

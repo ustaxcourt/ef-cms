@@ -1,5 +1,4 @@
 const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
@@ -10,7 +9,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 exports.handler = event =>
   handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
+    const user = {}; //getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
       const results = await applicationContext
