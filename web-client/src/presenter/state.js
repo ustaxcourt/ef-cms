@@ -89,6 +89,10 @@ export const state = {
   paymentInfo: {
     showDetails: false,
   },
+  pdfForSigning: {
+    pageNumber: 1,
+    pdfjsObj: null,
+  },
   percentComplete: 0,
   petition: {},
   procedureTypes: [],

@@ -43,6 +43,7 @@ import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
+import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
@@ -67,6 +68,7 @@ import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTrialSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
@@ -196,6 +198,7 @@ export const presenter = {
     gotoLoginSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
+    gotoSignPDFDocumentSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     gotoTrialSessionDetailSequence,
@@ -220,6 +223,7 @@ export const presenter = {
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
+    setCanvasForPDFSigningSequence,
     setCaseCaptionSequence,
     setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
