@@ -19,6 +19,7 @@ export const DocumentDetail = connect(
     baseUrl: state.baseUrl,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
+    gotoSignPDFDocumentSequence: sequences.gotoSignPDFDocumentSequence,
     helper: state.documentDetailHelper,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
@@ -28,6 +29,7 @@ export const DocumentDetail = connect(
     baseUrl,
     caseHelper,
     clickServeToIrsSequence,
+    gotoSignPDFDocumentSequence,
     helper,
     setModalDialogNameSequence,
     showModal,
@@ -136,6 +138,18 @@ export const DocumentDetail = connect(
                         </button>
                       </span>
                     )}
+                  <button
+                    className="usa-button serve-to-irs margin-right-0"
+                    onClick={() =>
+                      gotoSignPDFDocumentSequence({
+                        documentId: helper.formattedDocument.documentId,
+                        pageNumber: 1,
+                      })
+                    }
+                  >
+                    <FontAwesomeIcon icon={['far', 'edit']} />
+                    Sign This Document
+                  </button>
                 </div>
 
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
