@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
  */
-export const generateTitleAction = ({ store, get, applicationContext }) => {
+export const generateTitleAction = ({ applicationContext, get, store }) => {
   const documentMetadata = get(state.form);
 
   let documentTitle = applicationContext.getUseCases().generateDocumentTitle({

@@ -32,33 +32,33 @@ export const ActionRequired = connect(
       <ul className="usa-accordion">
         <li>
           <button
-            className="usa-accordion__button"
-            aria-expanded={showDetails}
             aria-controls="paymentInfo"
+            aria-expanded={showDetails}
+            className="usa-accordion__button"
             id="actions-button"
             onClick={() => togglePaymentDetailsSequence()}
           >
             <span>
-              <FontAwesomeIcon icon="flag" className="action-flag" size="sm" />{' '}
+              <FontAwesomeIcon className="action-flag" icon="flag" size="sm" />{' '}
               Pay $60.00 Filing Fee
             </span>
           </button>
           {showDetails && (
             <div
-              id="paymentInfo"
-              className="usa-accordion-content grid-container padding-x-0 margin-top-3"
               aria-hidden="false"
+              className="usa-accordion-content grid-container padding-x-0 margin-top-3"
+              id="paymentInfo"
             >
               <div className="grid-row">
                 <div className="tablet:grid-col-6">
                   <h2>Pay by Debit / Credit Card</h2>
                   <p>Copy your docket number(s) and pay online.</p>
                   <a
+                    aria-label="pay.gov u.s. tax court filing fees"
                     className="usa-button tablet-full-width margin-bottom-3"
                     href="https://pay.gov/public/form/start/60485840"
-                    aria-label="pay.gov u.s. tax court filing fees"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                   >
                     Pay Now
                   </a>
@@ -79,10 +79,10 @@ export const ActionRequired = connect(
                     <p>
                       You may be eligible for a filing fee waiver.{' '}
                       <a
-                        href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                         aria-label="View download application pdf"
-                        target="_blank"
+                        href="https://www.ustaxcourt.gov/forms/Application_for_Waiver_of_Filing_Fee.pdf"
                         rel="noopener noreferrer"
+                        target="_blank"
                       >
                         File an application
                       </a>{' '}

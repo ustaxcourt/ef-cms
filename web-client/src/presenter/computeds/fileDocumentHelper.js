@@ -7,7 +7,7 @@ export const supportingDocumentFreeTextTypes = [
 ];
 
 export const fileDocumentHelper = (get, applicationContext) => {
-  const { PARTY_TYPES, CATEGORY_MAP } = get(state.constants);
+  const { CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -43,7 +43,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     validationErrors.partySecondary ||
     validationErrors.partyRespondent;
 
-  const certificateOfServiceDate = form.certificateOfServiceDate;
+  const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = applicationContext

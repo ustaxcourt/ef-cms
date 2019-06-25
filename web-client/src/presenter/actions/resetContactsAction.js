@@ -12,7 +12,7 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  */
 export const resetContactsAction = ({ get, store }) => {
   const partyType = get(state.caseDetail.partyType);
-  const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
+  const { COUNTRY_TYPES, PARTY_TYPES } = get(state.constants);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   store.set(state.caseDetail.contactPrimary, {

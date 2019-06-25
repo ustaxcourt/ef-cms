@@ -40,9 +40,9 @@ export const CaseInfo = connect(
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
                     <label
+                      aria-hidden="true"
                       className="usa-label"
                       htmlFor="received-at-month"
-                      aria-hidden="true"
                     >
                       MM
                     </label>
@@ -72,9 +72,9 @@ export const CaseInfo = connect(
                   </div>
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
                     <label
+                      aria-hidden="true"
                       className="usa-label"
                       htmlFor="received-at-day"
-                      aria-hidden="true"
                     >
                       DD
                     </label>
@@ -104,9 +104,9 @@ export const CaseInfo = connect(
                   </div>
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
                     <label
+                      aria-hidden="true"
                       className="usa-label"
                       htmlFor="received-at-year"
-                      aria-hidden="true"
                     >
                       YYYY
                     </label>
@@ -147,6 +147,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <ProcedureType
+            legend="Case Procedure"
             value={caseDetail.procedureType}
             onChange={e => {
               updateCaseValueSequence({
@@ -159,16 +160,15 @@ export const CaseInfo = connect(
               });
               autoSaveCaseSequence();
             }}
-            legend="Case Procedure"
           />
 
           <div className="order-checkbox">
             <input
+              checked={caseDetail.orderToShowCause}
               className="usa-checkbox__input"
               id="order-to-show-cause"
-              type="checkbox"
               name="orderToShowCause"
-              checked={caseDetail.orderToShowCause}
+              type="checkbox"
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -178,8 +178,8 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              htmlFor="order-to-show-cause"
               className="usa-checkbox__label"
+              htmlFor="order-to-show-cause"
             >
               Order to Show Cause
             </label>
@@ -188,14 +188,14 @@ export const CaseInfo = connect(
 
         <TrialCity
           label="Trial Location"
-          showHint={false}
-          showSmallTrialCitiesHint={false}
-          showRegularTrialCitiesHint={false}
           showDefaultOption={true}
-          value={caseDetail.preferredTrialCity}
+          showHint={false}
+          showRegularTrialCitiesHint={false}
+          showSmallTrialCitiesHint={false}
           trialCitiesByState={
             trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
           }
+          value={caseDetail.preferredTrialCity}
           onChange={e => {
             updateCaseValueSequence({
               key: 'preferredTrialCity',
@@ -211,7 +211,7 @@ export const CaseInfo = connect(
           }`}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
-            <legend id="fee-payment-date-legend" className="usa-legend">
+            <legend className="usa-legend" id="fee-payment-date-legend">
               Fee Payment Date
             </legend>
             <div className="usa-memorable-date">
@@ -227,8 +227,8 @@ export const CaseInfo = connect(
                   max="12"
                   min="1"
                   name="payGovMonth"
-                  type="number"
                   placeholder="MM"
+                  type="number"
                   value={form.payGovMonth || ''}
                   onBlur={() => {
                     autoSaveCaseSequence();
@@ -253,8 +253,8 @@ export const CaseInfo = connect(
                   max="31"
                   min="1"
                   name="payGovDay"
-                  type="number"
                   placeholder="DD"
+                  type="number"
                   value={form.payGovDay || ''}
                   onBlur={() => {
                     autoSaveCaseSequence();
@@ -279,8 +279,8 @@ export const CaseInfo = connect(
                   max="2100"
                   min="1900"
                   name="payGovYear"
-                  type="number"
                   placeholder="YYYY"
+                  type="number"
                   value={form.payGovYear || ''}
                   onBlur={() => {
                     autoSaveCaseSequence();
@@ -303,12 +303,12 @@ export const CaseInfo = connect(
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="fee-payment-id" className="usa-label">
+          <label className="usa-label" htmlFor="fee-payment-id">
             Fee Payment ID
           </label>
           <input
-            id="fee-payment-id"
             className="usa-input"
+            id="fee-payment-id"
             name="payGovId"
             type="number"
             value={caseDetail.payGovId || ''}
@@ -326,11 +326,11 @@ export const CaseInfo = connect(
 
         <div className="order-checkbox">
           <input
+            checked={caseDetail.orderForFilingFee}
             className="usa-checkbox__input"
             id="order-for-filing-fee"
-            type="checkbox"
             name="orderForFilingFee"
-            checked={caseDetail.orderForFilingFee}
+            type="checkbox"
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
@@ -339,24 +339,24 @@ export const CaseInfo = connect(
               autoSaveCaseSequence();
             }}
           />
-          <label htmlFor="order-for-filing-fee" className="usa-checkbox__label">
+          <label className="usa-checkbox__label" htmlFor="order-for-filing-fee">
             Order for Filing Fee
           </label>
         </div>
 
         <h3 id="orders-needed">Orders Needed</h3>
         <div
+          aria-labelledby="orders-needed"
           className="orders-needed"
           role="list"
-          aria-labelledby="orders-needed"
         >
           <div className="usa-form-group" role="listitem">
             <input
+              checked={caseDetail.orderForRatification}
               className="usa-checkbox__input"
               id="order-for-ratification"
-              type="checkbox"
               name="orderForRatification"
-              checked={caseDetail.orderForRatification}
+              type="checkbox"
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -366,19 +366,19 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              htmlFor="order-for-ratification"
               className="usa-checkbox__label"
+              htmlFor="order-for-ratification"
             >
               Order for Ratification of Petition
             </label>
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              checked={caseDetail.noticeOfAttachments}
               className="usa-checkbox__input"
               id="notice-of-attachments"
-              type="checkbox"
               name="noticeOfAttachments"
-              checked={caseDetail.noticeOfAttachments}
+              type="checkbox"
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -388,19 +388,19 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              htmlFor="notice-of-attachments"
               className="usa-checkbox__label"
+              htmlFor="notice-of-attachments"
             >
               Notice of Attachments in the Nature of Evidence
             </label>
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              checked={caseDetail.orderForAmendedPetition}
               className="usa-checkbox__input"
               id="order-for-amended-petition"
-              type="checkbox"
               name="orderForAmendedPetition"
-              checked={caseDetail.orderForAmendedPetition}
+              type="checkbox"
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -410,19 +410,19 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              htmlFor="order-for-amended-petition"
               className="usa-checkbox__label"
+              htmlFor="order-for-amended-petition"
             >
               Order for Amended Petition
             </label>
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              checked={caseDetail.orderForAmendedPetitionAndFilingFee}
               className="usa-checkbox__input"
               id="order-for-amended-petition-and-filing-fee"
-              type="checkbox"
               name="orderForAmendedPetitionAndFilingFee"
-              checked={caseDetail.orderForAmendedPetitionAndFilingFee}
+              type="checkbox"
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -432,8 +432,8 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              htmlFor="order-for-amended-petition-and-filing-fee"
               className="usa-checkbox__label"
+              htmlFor="order-for-amended-petition-and-filing-fee"
             >
               Order for Amended Petition and Filing Fee
             </label>

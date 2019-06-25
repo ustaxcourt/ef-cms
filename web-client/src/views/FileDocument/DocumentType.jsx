@@ -33,12 +33,13 @@ export const DocumentType = connect(
             Document Category
           </label>
           <select
-            name="category"
+            aria-label="category"
             className={`usa-select ${
               validationErrors.category ? 'usa-select--error' : ''
             }`}
             id="document-category"
-            aria-label="category"
+            name="category"
+            value={form.category || ''}
             onChange={e => {
               updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
@@ -46,7 +47,6 @@ export const DocumentType = connect(
               });
               validateSelectDocumentTypeSequence();
             }}
-            value={form.category || ''}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -58,8 +58,8 @@ export const DocumentType = connect(
             })}
           </select>
           <Text
-            className="usa-error-message"
             bind="validationErrors.category"
+            className="usa-error-message"
           />
         </div>
         {form.category && (
@@ -73,11 +73,12 @@ export const DocumentType = connect(
                 Document Type
               </label>
               <select
-                id="document-type"
-                name="documentType"
                 className={`usa-select documentType ${
                   validationErrors.category ? 'usa-select--error' : ''
                 }`}
+                id="document-type"
+                name="documentType"
+                value={form.documentType || ''}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
@@ -85,7 +86,6 @@ export const DocumentType = connect(
                   });
                   validateSelectDocumentTypeSequence();
                 }}
-                value={form.documentType || ''}
               >
                 <option value="">- Select -</option>
                 {(constants.CATEGORY_MAP[form.category] || []).map(entry => (
@@ -95,8 +95,8 @@ export const DocumentType = connect(
                 ))}
               </select>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.documentType"
+                className="usa-error-message"
               />
             </div>
             <div className="usa-form-group only-small-screens">
@@ -105,13 +105,13 @@ export const DocumentType = connect(
                 {(constants.CATEGORY_MAP[form.category] || []).map(
                   (entry, index) => (
                     <div
-                      key={entry.documentType}
                       className="usa-radio ustc-hide-radio-button"
+                      key={entry.documentType}
                     >
                       <input
                         id={`documentType-${index}`}
-                        type="radio"
                         name="documentType"
+                        type="radio"
                         value={entry.documentType}
                         onClick={e => {
                           updateFileDocumentWizardFormValueSequence({
@@ -122,8 +122,8 @@ export const DocumentType = connect(
                         }}
                       />
                       <label
-                        htmlFor={`documentType-${index}`}
                         className="usa-label"
+                        htmlFor={`documentType-${index}`}
                       >
                         {entry.documentType}
                       </label>
@@ -136,9 +136,9 @@ export const DocumentType = connect(
         )}
         <div className="only-large-screens">
           <button
-            type="submit"
             className="usa-button"
             id="select-document"
+            type="submit"
             onClick={() => {
               selectDocumentSequence();
             }}

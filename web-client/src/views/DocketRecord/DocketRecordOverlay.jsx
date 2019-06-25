@@ -63,7 +63,7 @@ class DocketRecordOverlayComponent extends React.Component {
 
   renderModalContent() {
     const closeFunc = this.props.dismissModalSequence;
-    const { record, document } = this.props.caseDetail.docketRecordWithDocument[
+    const { document, record } = this.props.caseDetail.docketRecordWithDocument[
       this.props.docketRecordIndex
     ];
     const { baseUrl, token } = this.props;
@@ -74,15 +74,15 @@ class DocketRecordOverlayComponent extends React.Component {
           className="modal-screen overlay mobile-document-details-overlay"
         >
           <div
+            aria-modal="true"
             className={'modal-overlay'}
             data-aria-live="assertive"
-            aria-modal="true"
             role="dialog"
           >
             <button
+              aria-roledescription="button to return to docket record"
               className="heading-2 usa-button usa-button--unstyled"
               onClick={() => closeFunc()}
-              aria-roledescription="button to return to docket record"
             >
               <FontAwesomeIcon icon="caret-left" />
               Document Details
@@ -90,13 +90,11 @@ class DocketRecordOverlayComponent extends React.Component {
             <hr className="margin-top-1 margin-bottom-2" />
             <h3 tabIndex="-1">{record.description}</h3>
             <a
-              className="usa-button view-pdf-button tablet-full-width"
-              href={`${baseUrl}/documents/${
-                document.documentId
-              }/documentDownloadUrl?token=${token}`}
-              target="_blank"
-              rel="noreferrer noopener"
               aria-label={'View PDF'}
+              className="usa-button view-pdf-button tablet-full-width"
+              href={`${baseUrl}/documents/${document.documentId}/documentDownloadUrl?token=${token}`}
+              rel="noreferrer noopener"
+              target="_blank"
             >
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               View PDF

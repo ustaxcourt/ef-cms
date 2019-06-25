@@ -13,9 +13,9 @@ export const AllCases = connect(
           Count: {formattedCases.length}
         </div>
         <table
+          aria-describedby="all-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
           id="all-cases"
-          aria-describedby="all-cases-tab"
         >
           <thead>
             <tr>

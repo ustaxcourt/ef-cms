@@ -10,7 +10,7 @@ export const getEligibleCasesForTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
-  const trialSessionId = props.trialSessionId;
+  const { trialSessionId } = props;
   const eligibleCases = await applicationContext
     .getUseCases()
     .getEligibleCasesForTrialSession({

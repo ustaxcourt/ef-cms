@@ -68,7 +68,7 @@ export const CaseInformationInternal = connect(
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
   },
-  ({ helper, caseDetail }) => {
+  ({ caseDetail, helper }) => {
     return (
       <div className="internal-information">
         <div className="grid-container padding-x-0">
