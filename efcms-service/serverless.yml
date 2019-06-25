@@ -784,7 +784,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCourtIssuedOrderPdfFromHtml:
-    handler: src/handlers.createCourtIssuedOrderPdfFromHtml
+    handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
     memorySize: 3008
     timeout: 900
     events:
