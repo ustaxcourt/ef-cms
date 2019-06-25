@@ -21,7 +21,7 @@ export const DocumentTypeReadOnly = connect(
   }) => {
     return (
       <div className="document-type-read-only">
-        <div role="alert" aria-live="polite">
+        <div aria-live="polite" role="alert">
           <div
             className={`usa-form-group ${
               !selectDocumentTypeHelper.primary.showNonstandardForm
@@ -31,7 +31,7 @@ export const DocumentTypeReadOnly = connect(
           >
             <div>
               <Focus className="header-with-link-button">
-                <label htmlFor="category" tabIndex="-1" className="focusable">
+                <label className="focusable" htmlFor="category" tabIndex="-1">
                   Selected Document Type
                 </label>
               </Focus>

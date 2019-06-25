@@ -20,13 +20,13 @@ export const RequestAccessDocumentForm = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    constants,
     fileDocumentHelper,
-    requestAccessHelper,
     form,
+    requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
     validationErrors,
-    constants,
   }) => {
     return (
       <React.Fragment>

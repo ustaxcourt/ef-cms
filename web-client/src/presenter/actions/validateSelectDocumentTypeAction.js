@@ -12,8 +12,8 @@ import { state } from 'cerebral';
  */
 export const validateSelectDocumentTypeAction = ({
   applicationContext,
-  path,
   get,
+  path,
 }) => {
   const documentMetadata = get(state.form);
 

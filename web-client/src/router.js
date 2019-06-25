@@ -164,7 +164,7 @@ const router = {
       app.getSequence('gotoIdleLogoutSequence')();
     });
     route('/log-in...', () => {
-      const { token, code, path } = queryStringDecoder();
+      const { code, path, token } = queryStringDecoder();
       if (code) {
         app.getSequence('loginWithCodeSequence')({ code, path });
       } else {
@@ -236,7 +236,7 @@ const router = {
     );
 
     route('/mock-login...', () => {
-      const { token, path } = queryStringDecoder();
+      const { path, token } = queryStringDecoder();
       if (token) {
         document.title = `Mock Login ${pageTitleSuffix}`;
         app.getSequence('submitLoginSequence')({ path, token });

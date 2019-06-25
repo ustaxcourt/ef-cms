@@ -15,7 +15,7 @@ export const Email = connect(
             <Hint>To change your email, go to your Account Settings.</Hint>
           </div>
           <div className="mobile-lg:grid-col-5 email-input margin-bottom-4">
-            <label htmlFor="email" className="usa-label">
+            <label className="usa-label" htmlFor="email">
               Email Address
             </label>
             {email}

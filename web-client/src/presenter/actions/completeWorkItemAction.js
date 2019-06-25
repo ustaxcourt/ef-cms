@@ -11,8 +11,8 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const completeWorkItemAction = async ({
-  get,
   applicationContext,
+  get,
   props,
 }) => {
   const completeForm = get(state.completeForm);

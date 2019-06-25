@@ -9,12 +9,12 @@ export const Contacts = connect(
     ...props,
   },
   ({
-    parentView,
     bind,
-    emailBind,
-    onChange,
-    onBlur,
     contactsHelper,
+    emailBind,
+    onBlur,
+    onChange,
+    parentView,
     showPrimaryContact,
     showSecondaryContact,
   }) => {
@@ -22,21 +22,21 @@ export const Contacts = connect(
       <React.Fragment>
         {showPrimaryContact && (
           <ContactPrimary
-            parentView={parentView}
             bind={bind}
-            emailBind={emailBind}
-            onChange={onChange}
-            onBlur={onBlur}
             contactsHelper={contactsHelper}
+            emailBind={emailBind}
+            parentView={parentView}
+            onBlur={onBlur}
+            onChange={onChange}
           />
         )}
         {showSecondaryContact && (
           <ContactSecondary
-            parentView={parentView}
             bind={bind}
-            onChange={onChange}
-            onBlur={onBlur}
             contactsHelper={contactsHelper}
+            parentView={parentView}
+            onBlur={onBlur}
+            onChange={onChange}
           />
         )}
       </React.Fragment>

@@ -1,6 +1,6 @@
 const {
-  isAuthorized,
   FILE_EXTERNAL_DOCUMENT,
+  isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/Case');
@@ -47,9 +47,9 @@ exports.fileExternalDocument = async ({
   const workItems = [];
 
   const {
-    supportingDocumentMetadata,
     secondaryDocument,
     secondarySupportingDocumentMetadata,
+    supportingDocumentMetadata,
     ...primaryDocumentMetadata
   } = documentMetadata;
 

@@ -107,7 +107,7 @@ const formatDocketRecordWithDocument = (
   return docketRecords.map(record => {
     let document;
 
-    const index = record.index;
+    const { index } = record;
 
     if (record.documentId) {
       document = documentMap[record.documentId];
@@ -219,9 +219,7 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = `Respondent served ${
-    result.irsDateFormatted
-  }`;
+  result.datePetitionSentToIrsMessage = `Respondent served ${result.irsDateFormatted}`;
 
   result.shouldShowIrsNoticeDate =
     result.hasVerifiedIrsNotice ||

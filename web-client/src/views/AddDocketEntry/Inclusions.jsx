@@ -13,8 +13,8 @@ export const Inclusions = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    marginClass,
     form,
+    marginClass,
     updateDocketEntryFormValueSequence,
     validateDocketEntrySequence,
     validationErrors,
@@ -25,11 +25,11 @@ export const Inclusions = connect(
           <legend className="usa-legend">Inclusions</legend>
           <div className="usa-checkbox">
             <input
-              id="exhibits"
-              type="checkbox"
-              name="exhibits"
-              className="usa-checkbox__input"
               checked={form.exhibits || false}
+              className="usa-checkbox__input"
+              id="exhibits"
+              name="exhibits"
+              type="checkbox"
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -38,17 +38,17 @@ export const Inclusions = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="exhibits" className="usa-checkbox__label">
+            <label className="usa-checkbox__label" htmlFor="exhibits">
               Exhibit(s)
             </label>
           </div>
           <div className="usa-checkbox">
             <input
-              id="attachments"
-              type="checkbox"
-              name="attachments"
-              className="usa-checkbox__input"
               checked={form.attachments || false}
+              className="usa-checkbox__input"
+              id="attachments"
+              name="attachments"
+              type="checkbox"
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -57,17 +57,17 @@ export const Inclusions = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label htmlFor="attachments" className="usa-checkbox__label">
+            <label className="usa-checkbox__label" htmlFor="attachments">
               Attachment(s)
             </label>
           </div>
           <div className="usa-checkbox">
             <input
-              id="certificate-of-service"
-              type="checkbox"
-              name="certificateOfService"
-              className="usa-checkbox__input"
               checked={form.certificateOfService || false}
+              className="usa-checkbox__input"
+              id="certificate-of-service"
+              name="certificateOfService"
+              type="checkbox"
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -77,8 +77,8 @@ export const Inclusions = connect(
               }}
             />
             <label
-              htmlFor="certificate-of-service"
               className="usa-checkbox__label"
+              htmlFor="certificate-of-service"
             >
               Certificate of Service
             </label>
@@ -92,85 +92,85 @@ export const Inclusions = connect(
                         }`}
               >
                 <legend
-                  id="service-date-legend"
                   className="usa-legend usa-sr-only"
+                  id="service-date-legend"
                 >
                   Certificate of Service
                 </legend>
                 <div className="usa-memorable-date margin-top-2">
                   <div className="usa-form-group usa-form-group--month">
                     <input
+                      aria-describedby="service-date-legend"
+                      aria-label="month, two digits"
                       className="usa-input usa-input--inline"
                       id="service-date-month"
-                      aria-label="month, two digits"
-                      aria-describedby="service-date-legend"
-                      name="certificateOfServiceMonth"
-                      value={form.certificateOfServiceMonth || ''}
-                      type="number"
-                      min="1"
                       max="12"
+                      min="1"
+                      name="certificateOfServiceMonth"
                       placeholder="MM"
+                      type="number"
+                      value={form.certificateOfServiceMonth || ''}
+                      onBlur={() => {
+                        validateDocketEntrySequence();
+                      }}
                       onChange={e => {
                         updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                      }}
-                      onBlur={() => {
-                        validateDocketEntrySequence();
                       }}
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day">
                     <input
+                      aria-describedby="service-date-legend"
+                      aria-label="day, two digits"
                       className="usa-input usa-input--inline"
                       id="service-date-day"
-                      name="certificateOfServiceDay"
-                      value={form.certificateOfServiceDay || ''}
-                      aria-label="day, two digits"
-                      aria-describedby="service-date-legend"
-                      type="number"
-                      min="1"
                       max="31"
+                      min="1"
+                      name="certificateOfServiceDay"
                       placeholder="DD"
+                      type="number"
+                      value={form.certificateOfServiceDay || ''}
+                      onBlur={() => {
+                        validateDocketEntrySequence();
+                      }}
                       onChange={e => {
                         updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                      }}
-                      onBlur={() => {
-                        validateDocketEntrySequence();
                       }}
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year">
                     <input
+                      aria-describedby="service-date-legend"
+                      aria-label="year, four digits"
                       className="usa-input usa-input--inline"
                       id="service-date-year"
-                      aria-label="year, four digits"
-                      aria-describedby="service-date-legend"
-                      name="certificateOfServiceYear"
-                      value={form.certificateOfServiceYear || ''}
-                      type="number"
-                      min="1900"
                       max="2100"
+                      min="1900"
+                      name="certificateOfServiceYear"
                       placeholder="YYYY"
+                      type="number"
+                      value={form.certificateOfServiceYear || ''}
+                      onBlur={() => {
+                        validateDocketEntrySequence();
+                      }}
                       onChange={e => {
                         updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
                       }}
-                      onBlur={() => {
-                        validateDocketEntrySequence();
-                      }}
                     />
                   </div>
                 </div>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.certificateOfServiceDate"
+                  className="usa-error-message"
                 />
               </fieldset>
             )}

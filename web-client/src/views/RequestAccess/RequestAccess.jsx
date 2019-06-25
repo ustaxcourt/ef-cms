@@ -22,12 +22,12 @@ export const RequestAccess = connect(
   },
   ({
     form,
-    requestAccessHelper,
     formCancelToggleCancelSequence,
+    requestAccessHelper,
     reviewRequestAccessInformationSequence,
-    validationErrors,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
+    validationErrors,
   }) => {
     return (
       <React.Fragment>

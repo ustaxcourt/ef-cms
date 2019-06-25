@@ -19,9 +19,9 @@ export const TrialSessionInformation = connect(
                 onClick={() => window.print()}
               >
                 <FontAwesomeIcon
+                  className="margin-right-05"
                   icon="print"
                   size="1x"
-                  className="margin-right-05"
                 />
                 Print
               </button>

@@ -84,17 +84,17 @@ export const getFormCombinedWithCaseDetailAction = ({
   props,
 }) => {
   const caseDetail = { ...get(state.caseDetail) };
-  let caseCaption = props.caseCaption;
+  let { caseCaption } = props;
   const {
-    irsYear,
-    irsMonth,
     irsDay,
-    payGovYear,
-    payGovMonth,
+    irsMonth,
+    irsYear,
     payGovDay,
-    receivedAtYear,
-    receivedAtMonth,
+    payGovMonth,
+    payGovYear,
     receivedAtDay,
+    receivedAtMonth,
+    receivedAtYear,
   } = {
     ...get(state.form),
   };
