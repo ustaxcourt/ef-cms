@@ -8,7 +8,8 @@ const {
 } = require('../../persistence/s3/getUploadPolicy');
 
 /**
- *
+ * PetitionFromPaper Entity
+ * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
  * @param rawPetition
  * @constructor
  */
