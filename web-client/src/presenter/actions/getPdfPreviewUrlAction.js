@@ -13,8 +13,11 @@ export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
     throw new Error('No markup found in documentHtml');
   }
 
+  const fromDomElement = document.getElementById('pdf-preview-iframe')
+    .contentDocument.body;
+
   const pdfUrl = await applicationContext
     .getUtilities()
-    .generatePdfUrl(document.querySelector('.pdf-preview-div'));
+    .generatePdfUrl(fromDomElement);
   return { pdfUrl };
 };
