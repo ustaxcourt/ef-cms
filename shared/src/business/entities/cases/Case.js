@@ -2,15 +2,17 @@ const joi = require('joi-browser');
 const moment = require('moment');
 const uuid = require('uuid');
 const {
+  getDocketNumberSuffix,
+} = require('../../utilities/getDocketNumberSuffix');
+const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
-const { DocketRecord } = require('./DocketRecord');
-const { Document } = require('./Document');
+} = require('../../../utilities/JoiValidationDecorator');
+const { DocketRecord } = require('../DocketRecord');
+const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
-const { formatDateString } = require('../utilities/DateHandler');
-const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { YearAmount } = require('./YearAmount');
+const { formatDateString } = require('../../utilities/DateHandler');
+const { PARTY_TYPES } = require('../contacts/PetitionContact');
+const { YearAmount } = require('../YearAmount');
 
 const uuidVersions = {
   version: ['uuidv4'],

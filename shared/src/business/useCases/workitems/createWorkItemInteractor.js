@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { Message } = require('../../entities/Message');
 const { WorkItem } = require('../../entities/WorkItem');
 

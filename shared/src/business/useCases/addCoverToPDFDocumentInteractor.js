@@ -5,7 +5,7 @@ const {
   PDFDocumentFactory,
   PDFDocumentWriter,
 } = require('pdf-lib');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
 const { flattenDeep } = require('lodash');
 
