@@ -79,8 +79,7 @@ class App extends React.Component {
   }
 
   render() {
-    //const CurrentPage = pages[this.props.currentPage];
-    const CurrentPage = PDFSigner;
+    const CurrentPage = pages[this.props.currentPage];
     return (
       <React.Fragment>
         <a
