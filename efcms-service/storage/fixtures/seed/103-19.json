@@ -190,6 +190,7 @@
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "document": {
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T22:53:50.098Z",
       "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
       "documentType": "Petition",
@@ -225,6 +226,7 @@
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "document": {
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "createdAt": "2019-03-01T22:53:50.098Z",
       "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
       "documentType": "Petition",
@@ -261,6 +263,7 @@
     "caseStatus": "New",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
       "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
       "documentType": "Answer",
