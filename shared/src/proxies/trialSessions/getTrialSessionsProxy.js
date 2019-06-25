@@ -9,6 +9,6 @@ const { get } = require('../requests');
 exports.getTrialSessions = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: `/trialSessions`,
+    endpoint: `/trial-sessions`,
   });
 };

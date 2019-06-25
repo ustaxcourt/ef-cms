@@ -20,6 +20,6 @@ exports.forwardWorkItem = ({
       assigneeId,
       message,
     },
-    endpoint: `/workitems/${workItemId}/assignee`,
+    endpoint: `/work-items/${workItemId}/assignee`,
   });
 };

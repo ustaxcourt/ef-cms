@@ -92,7 +92,7 @@ class DocketRecordOverlayComponent extends React.Component {
             <a
               aria-label={'View PDF'}
               className="usa-button view-pdf-button tablet-full-width"
-              href={`${baseUrl}/documents/${document.documentId}/documentDownloadUrl?token=${token}`}
+              href={`${baseUrl}/documents/${document.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >
