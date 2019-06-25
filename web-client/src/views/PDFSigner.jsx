@@ -1,85 +1,95 @@
-import * as pdfjsLib from 'pdfjs-dist';
+import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 
 import React from 'react';
 
-const pdfUrl =
-  'http://localhost:3000/v1/documents/f1aa4aa2-c214-424c-8870-d0049c5744d7/documentDownloadUrl?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uc2NsZXJrIiwiZW1haWwiOiJwZXRpdGlvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IFBldGl0aW9uc2NsZXJrIiwicm9sZSI6InBldGl0aW9uc2NsZXJrIiwic2VjdGlvbiI6InBldGl0aW9ucyIsInVzZXJJZCI6IjM4MDVkMWFiLTE4ZDAtNDNlYy1iYWZiLTY1NGU4MzQwNTQxNiIsInN1YiI6IjM4MDVkMWFiLTE4ZDAtNDNlYy1iYWZiLTY1NGU4MzQwNTQxNiIsImlhdCI6MTU2MTEzOTQyMX0.JoZKSvEEkpuTXRbzzVFLQxEaU-ImEqlcRUyTnN_5E2g';
+class PDFSignerComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.canvasRef = React.createRef();
+    this.signatureRef = React.createRef();
+    this.start = this.start.bind(this);
+    this.stop = this.stop.bind(this);
+    this.moveSig = this.moveSig.bind(this);
+  }
+  componentDidMount() {
+    const canvas = this.canvasRef.current;
+    const signature = this.signatureRef.current;
+    const context = canvas.getContext('2d');
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    this.props.pdfObj.getPage(this.props.currentPageNumber).then(page => {
+      const scale = 1;
+      const viewport = page.getViewport(scale);
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
 
-// pdf document id
-export const PDFSigner = connect(
-  {},
-  () => {
-    const loadingTask = pdfjsLib.getDocument(pdfUrl);
-    const scale = 1;
+      var renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+      };
+      page.render(renderContext);
+      this.start(canvas, signature);
+    });
+  }
 
-    let x = 0;
-    let y = 0;
-    let xWithOffset = 0;
-    let yWithOffset = 0;
+  moveSig(sig, x, y) {
+    sig.style.top = y + 'px';
+    sig.style.left = x + 'px';
+  }
 
-    const moveSig = (sig, x, y) => {
-      sig.style.top = y + 'px';
-      sig.style.left = x + 'px';
+  stop(canvasEl) {
+    canvasEl.onmousemove = null;
+  }
+
+  start(canvasEl, sigEl) {
+    canvasEl.onmousemove = e => {
+      const { offsetLeft, offsetTop } = canvasEl;
+
+      const x = e.pageX - offsetLeft;
+      const y = e.pageY - offsetTop;
+
+      this.moveSig(sigEl, x + offsetLeft, y + offsetTop);
     };
 
-    const stop = canvasEl => {
-      canvasEl.onmousemove = null;
+    canvasEl.onmousedown = () => {
+      this.stop(canvasEl);
     };
 
-    const start = (canvasEl, sigEl) => {
-      canvasEl.onmousemove = function(e) {
-        const { offsetLeft, offsetTop } = canvasEl;
-
-        x = e.pageX - this.offsetLeft;
-        y = e.pageY - this.offsetTop;
-        moveSig(sigEl, x + offsetLeft, y + offsetTop);
-      };
-
-      canvasEl.onmousedown = function() {
-        console.log(x, y);
-        stop(canvasEl);
-      };
-
-      sigEl.onmousedown = function() {
-        console.log(x, y);
-        stop(canvasEl);
-      };
+    sigEl.onmousedown = () => {
+      this.stop(canvasEl);
     };
+  }
 
-    loadingTask.promise.then(
-      function(pdf) {
-        const canvas = document.getElementById('the-canvas');
-        const signature = document.getElementById('signature');
-
-        var context = canvas.getContext('2d');
-
-        pdf.getPage(2).then(function(page) {
-          const viewport = page.getViewport(scale);
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          var renderContext = {
-            canvasContext: context,
-            viewport: viewport,
-          };
-          page.render(renderContext);
-          start(canvas, signature);
-        });
-      },
-      err => console.log(err),
-    );
-
+  render() {
     return (
       <div>
-        <span id="signature" style={{ position: 'absolute' }}>
+        <span
+          id="signature"
+          ref={this.signatureRef}
+          style={{ position: 'absolute' }}
+        >
           (Signed) Joseph Dredd
         </span>
-        <canvas id="the-canvas"></canvas>
+        <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
       </div>
     );
+  }
+}
+
+PDFSignerComponent.propTypes = {
+  currentPageNumber: PropTypes.number,
+  pdfForSigning: PropTypes.object,
+  pdfObj: PropTypes.object,
+  setCanvas: PropTypes.func,
+};
+
+export const PDFSigner = connect(
+  {
+    currentPageNumber: state.pdfForSigning.pageNumber,
+    pdfForSigning: state.pdfForSigning,
+    pdfObj: state.pdfForSigning.pdfjsObj,
+    setCanvas: sequences.setCanvasForPDFSigningSequence,
   },
+  PDFSignerComponent,
 );
