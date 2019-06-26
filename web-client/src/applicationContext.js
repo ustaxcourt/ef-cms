@@ -10,24 +10,20 @@ import {
   Case,
   STATUS_TYPES,
 } from '../../shared/src/business/entities/cases/Case';
+import {
+  CATEGORIES,
+  CATEGORY_MAP,
+  INTERNAL_CATEGORY_MAP,
+} from '../../shared/src/business/entities/Document';
 import { Document } from '../../shared/src/business/entities/Document';
-import axios from 'axios';
-import uuidv4 from 'uuid/v4';
-
-const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
-
 import {
   createISODateString,
   formatDateString,
   isStringISOFormatted,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
-
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
+import axios from 'axios';
+import uuidv4 from 'uuid/v4';
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const {
   MAX_FILE_SIZE_BYTES,
@@ -40,28 +36,18 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { CaseExternal } from '../../shared/src/business/entities/CaseExternal';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import { Petition } from '../../shared/src/business/entities/Petition';
 import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
-import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
-
-import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
-import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
-import { setItem as setItemUC } from '../../shared/src/business/useCases/setItemInteractor';
-
-import { getItem } from '../../shared/src/persistence/localStorage/getItem';
-import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
-import { setItem } from '../../shared/src/persistence/localStorage/setItem';
-
 import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -77,6 +63,7 @@ import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePe
 import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
+import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 import { generatePdfUrlFactory } from '../../shared/src/business/utilities/generatePdfUrlFactory';
 import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
@@ -85,6 +72,8 @@ import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
+import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
@@ -99,10 +88,14 @@ import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWor
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
+import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
+import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+import { setItem as setItemUC } from '../../shared/src/business/useCases/setItemInteractor';
 import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -130,6 +123,8 @@ import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfPro
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
+
+const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
 
 const MINUTES = 60 * 1000;
 
@@ -279,12 +274,12 @@ const applicationContext = {
   getEntityConstructors: () => ({
     Case,
     CaseAssociationRequestFactory,
+    CaseExternal,
     DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
-    Petition,
     PetitionFromPaper,
     TrialSession,
   }),
