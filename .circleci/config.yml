@@ -135,7 +135,7 @@ workflows:
     jobs:
     #   - build
     #   - e2e
-      - deploy:
+      - deploy
         #   requires:
         #     - build
         #     - e2e
