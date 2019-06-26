@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-xray-sdk": "^2.3.3",
+    "chrome-aws-lambda": "^1.18.0",
     "eslint-plugin-sort-requires": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
+    "puppeteer": "^1.18.0",
     "uuid": "^3.3.2"
   },
   "license": "CC0-1.0",

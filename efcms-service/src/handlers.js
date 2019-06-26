@@ -7,6 +7,8 @@ module.exports = {
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
+  createCourtIssuedOrderPdfFromHtmlLambda: require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda')
+    .handler,
   createDocumentLambda: require('./users/createDocumentLambda').handler,
   createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
     .handler,

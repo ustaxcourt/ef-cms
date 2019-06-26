@@ -766,3 +766,17 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  createCourtIssuedOrderPdfFromHtml:
+    handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: v1/court-issued-order
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
