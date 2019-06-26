@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @returns {object} a list of selected work items
  */
 export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
-  const htmlString = get(state.form.richText);
+  const htmlString = get(state.createOrderHelper.pdfTemplate);
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
