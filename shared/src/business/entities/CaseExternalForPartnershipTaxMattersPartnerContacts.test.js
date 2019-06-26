@@ -1,14 +1,14 @@
-const { Petition } = require('./Petition');
+const { CaseExternal } = require('./CaseExternal');
 
-describe('Petition', () => {
-  describe('for Petitioner And Spouse Contacts', () => {
+describe('CaseExternal', () => {
+  describe('for Partnership (as the tax matters partner) Contacts', () => {
     it('should not validate without contacts', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Petitioner & Spouse',
+        partyType: 'Partnership (as the tax matters partner)',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -20,8 +20,8 @@ describe('Petition', () => {
       expect(petition.isValid()).toEqual(false);
     });
 
-    it('can validate primary contact name', () => {
-      const petition = new Petition({
+    it('can validate contacts', () => {
+      const petition = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -35,19 +35,21 @@ describe('Petition', () => {
           state: 'AK',
         },
         contactSecondary: {
-          address1: '1599 Pennsylvania Ave',
-          city: 'Walla Walla',
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
           countryType: 'domestic',
           email: 'someone@example.com',
-          name: 'Betty Crocker',
+          inCareOf: 'USTC',
+          name: 'Jimmy Dean',
           phone: '1234567890',
-          postalCode: '78774',
-          state: 'WA',
+          postalCode: '05198',
+          state: 'AK',
         },
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Petitioner & Spouse',
+        partyType: 'Partnership (as the tax matters partner)',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
