@@ -33,7 +33,9 @@ export const CreateOrder = connect(
                 <button
                   className="usa-button"
                   onClick={() => {
-                    convertHtml2PdfSequence();
+                    convertHtml2PdfSequence({
+                      htmlString: createOrderHelper.pdfTemplate,
+                    });
                   }}
                 >
                   Refresh PDF Preview
@@ -52,12 +54,6 @@ export const CreateOrder = connect(
                   <TextEditor
                     form={form}
                     updateFormValueSequence={updateFormValueSequence}
-                  />
-                </div>
-                <div className="display-none">
-                  <iframe
-                    id="temp-preview-iframe"
-                    srcDoc={createOrderHelper.pdfTemplate}
                   />
                 </div>
               </div>

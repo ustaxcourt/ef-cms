@@ -100,6 +100,7 @@
     "pug": "^2.0.3",
     "qs": "^6.7.0",
     "query-string": "5.1.0",
+    "quill-delta-to-html": "^0.10.11",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-focus-lock": "^2.0.0",
