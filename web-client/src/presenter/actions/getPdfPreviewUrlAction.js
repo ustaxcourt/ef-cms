@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @returns {object} a list of selected work items
  */
 export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
-  const htmlMarkup = get(state.form.richText);
-  if (!htmlMarkup) {
+  const htmlString = get(state.form.richText);
+  if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
 
@@ -17,7 +17,10 @@ export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
 
   const pdfUrl = await applicationContext
     .getUseCases()
-    .createCourtIssuedOrderPdfFromHtml({ applicationContext, htmlMarkup });
+    .createCourtIssuedOrderPdfFromHtml({
+      applicationContext,
+      htmlString,
+    });
 
   return { pdfUrl };
 };
