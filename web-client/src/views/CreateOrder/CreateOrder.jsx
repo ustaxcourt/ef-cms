@@ -48,7 +48,7 @@ export const CreateOrder = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <div className="blue-container height-20">
+                <div className="blue-container">
                   <TextEditor
                     form={form}
                     updateFormValueSequence={updateFormValueSequence}
