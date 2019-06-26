@@ -13,8 +13,11 @@ export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
     throw new Error('No markup found in documentHtml');
   }
 
+  //touch
+
   const pdfUrl = await applicationContext
-    .getUtilities()
-    .generatePdfUrl(document.querySelector('.pdf-preview-div'));
+    .getUseCases()
+    .createCourtIssuedOrderPdfFromHtml({ applicationContext, htmlMarkup });
+
   return { pdfUrl };
 };

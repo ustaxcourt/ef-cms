@@ -6,6 +6,7 @@ const AWS =
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
 
+const chromium = require('chrome-aws-lambda');
 const uuidv4 = require('uuid/v4');
 const { DynamoDB, S3 } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -338,6 +339,7 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
+    getChromium: () => chromium,
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';

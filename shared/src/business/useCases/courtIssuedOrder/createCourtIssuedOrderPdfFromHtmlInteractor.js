@@ -1,5 +1,3 @@
-const chromium = require('chrome-aws-lambda');
-
 /**
  *
  * createCourtIssuedOrderPdfFromHtml
@@ -14,18 +12,24 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
   let browser;
   let result;
   try {
+    const chromium = applicationContext.getChromium();
+
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+      headless: true,
     });
 
     let page = await browser.newPage();
 
-    await page.goto('https://example.com');
+    console.log(htmlString);
+    await page.setContent(htmlString);
 
-    result = await page.title();
+    result = await page.pdf({
+      format: 'letter',
+      path: 'asd.pdf',
+    });
   } catch (error) {
     throw error;
   } finally {
