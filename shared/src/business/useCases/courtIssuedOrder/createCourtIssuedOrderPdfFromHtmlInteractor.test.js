@@ -1,6 +1,6 @@
 const {
   createCourtIssuedOrderPdfFromHtml,
-} = require('./createCourtIssuedOrderPdfFromHtml');
+} = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
 
 describe('createCourtIssuedOrderPdfFromHtml', () => {
   it('returns the htmlString back', () => {
