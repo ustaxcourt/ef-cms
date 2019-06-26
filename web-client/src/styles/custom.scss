@@ -981,10 +981,11 @@ nav.usa-nav {
   background: $color-white;
 }
 
+.sign-pdf-control {
+  text-align: center;
+}
+
 .sign-pdf-interface {
-  .sign-pdf-control {
-    text-align: center;
-  }
   #signature {
     position: absolute;
   }
