@@ -1,9 +1,9 @@
-const { Petition } = require('./Petition');
+const { CaseExternal } = require('./CaseExternal');
 
-describe('Petition', () => {
+describe('CaseExternal', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
     it('should not validate without contact', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -22,7 +22,7 @@ describe('Petition', () => {
     });
 
     it('should validate without inCareOf', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -52,7 +52,7 @@ describe('Petition', () => {
     });
 
     it('can validate primary contact', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
