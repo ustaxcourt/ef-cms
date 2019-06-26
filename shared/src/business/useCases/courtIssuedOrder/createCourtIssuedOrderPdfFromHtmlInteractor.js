@@ -23,12 +23,10 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
 
     let page = await browser.newPage();
 
-    console.log(htmlString);
     await page.setContent(htmlString);
 
     result = await page.pdf({
       format: 'letter',
-      path: 'asd.pdf',
     });
   } catch (error) {
     throw error;

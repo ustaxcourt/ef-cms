@@ -1,6 +1,39 @@
 const createApplicationContext = require('../applicationContext');
+const {
+  NotFoundError,
+  UnauthorizedError,
+} = require('../../../shared/src/errors/errors');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { handle } = require('../middleware/apiGatewayHelper');
+const { sendError, sendOk } = require('../middleware/apiGatewayHelper');
+
+const customHandle = async (event, fun) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    return sendOk('Lambda is warm!');
+  }
+  try {
+    const pdfBuffer = await fun();
+    return {
+      body: pdfBuffer.toString('base64'),
+      headers: {
+        'Content-type': 'application/pdf',
+        'accept-ranges': 'bytes',
+      },
+      isBase64Encoded: true,
+      statusCode: 200,
+    };
+  } catch (err) {
+    console.error('err', err);
+    if (err instanceof NotFoundError) {
+      err.statusCode = 404;
+      return sendError(err);
+    } else if (err instanceof UnauthorizedError) {
+      err.statusCode = 403;
+      return sendError(err);
+    } else {
+      return sendError(err);
+    }
+  }
+};
 
 /**
  * create court issued order pdf from html
@@ -9,7 +42,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
+  customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
