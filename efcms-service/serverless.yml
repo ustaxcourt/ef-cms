@@ -9,6 +9,7 @@ plugins:
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
+  - serverless-latest-layer-version
 
 custom:
   prune:
@@ -175,6 +176,7 @@ package:
     - .nyc_output/**
     - dist/**
     - src/handlers.js.map
+    - runtimes/**
 
   excludeDevDependencies: true
 
@@ -211,24 +213,6 @@ resources:
             LoggingLevel: INFO
             ResourcePath: '/*'
             MetricsEnabled: true
-
-layers:
-  clamav:
-    compatibleRuntimes:
-      - nodejs10.x
-    path: runtimes/clamav
-    exclude:
-      - freshclam.conf
-      - build.sh
-      - Dockerfile
-      - Dockerfile.clamscan
-      - clamav_lambda_layer.tar.gz
-  ghostscript:
-    compatibleRuntimes:
-      - nodejs10.x
-    path: runtimes/ghostscript
-    exclude:
-      - build.sh
 
 functions:
   createDocument:
@@ -301,7 +285,7 @@ functions:
   sanitizePdf:
     handler: src/handlers.sanitizePdfLambda
     layers:
-      - { Ref: GhostscriptLambdaLayer }
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
     memorySize: 3008
     timeout: 900
     events:
@@ -681,7 +665,7 @@ functions:
     memorySize: 3008
     timeout: 900
     layers:
-      - { Ref: ClamavLambdaLayer }
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
     events:
       - http:
           path: v1/documents/{documentId}/virus-scan
