@@ -10,10 +10,16 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
+    createOrderHelper: state.createOrderHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ convertHtml2PdfSequence, form, updateFormValueSequence }) => {
+  ({
+    convertHtml2PdfSequence,
+    createOrderHelper,
+    form,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <BigHeader text="Create Order" />
@@ -49,7 +55,10 @@ export const CreateOrder = connect(
                   />
                 </div>
                 <div className="display-none">
-                  <iframe id="pdf-preview-iframe" srcDoc={form.richText} />
+                  <iframe
+                    id="temp-preview-iframe"
+                    srcDoc={createOrderHelper.pdfTemplate}
+                  />
                 </div>
               </div>
 

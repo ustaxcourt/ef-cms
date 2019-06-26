@@ -3,6 +3,7 @@ const {
 } = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
 
 const pageMock = {
+  addStyleTag: () => {},
   pdf: () => {
     return 'Hello World';
   },

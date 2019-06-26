@@ -7,6 +7,6 @@ export const PdfPreview = connect(
     blobUrl: state.pdfPreviewUrl,
   },
   ({ blobUrl }) => {
-    return <>{blobUrl && <iframe src={blobUrl} />}</>;
+    return <>{blobUrl && <iframe id="pdf-preview-iframe" src={blobUrl} />}</>;
   },
 );
