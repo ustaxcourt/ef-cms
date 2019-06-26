@@ -6,10 +6,22 @@ const AWS =
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
 
+const chromium = require('chrome-aws-lambda');
+const uuidv4 = require('uuid/v4');
+const { DynamoDB, S3 } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
+
 const util = require('util');
-const uuidv4 = require('uuid/v4');
+const { exec } = require('child_process');
+const execPromise = util.promisify(exec);
+
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
+
 const {
   addCoverToPDFDocument,
 } = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
@@ -37,6 +49,7 @@ const {
 const {
   createCase: createCaseUC,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
+
 const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
@@ -47,13 +60,11 @@ const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
+  createCourtIssuedOrderPdfFromHtml,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
+const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
-const {
-  createISODateString,
-  formatDateString,
-  prepareDateFromString,
-} = require('../../shared/src/business/utilities/DateHandler');
 const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
@@ -298,11 +309,7 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
-
-const { DynamoDB, S3 } = AWS;
-const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -332,6 +339,7 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
+    getChromium: () => chromium,
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
@@ -351,7 +359,7 @@ module.exports = (appContextUser = {}) => {
       return environment.documentsBucketName;
     },
     getEntityConstructors: () => ({
-      CaseExternal: PetitionWithoutFiles,
+      Petition: PetitionWithoutFiles,
       PetitionFromPaper: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {
@@ -429,6 +437,7 @@ module.exports = (appContextUser = {}) => {
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
+        createCourtIssuedOrderPdfFromHtml,
         createTrialSession: createTrialSessionUC,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
