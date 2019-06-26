@@ -3,7 +3,7 @@ const {
   checkForReadyForTrialCases,
 } = require('./checkForReadyForTrialCasesInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { STATUS_TYPES } = require('../entities/Case');
+const { STATUS_TYPES } = require('../entities/cases/Case');
 
 describe('checkForReadyForTrialCases', () => {
   let applicationContext;

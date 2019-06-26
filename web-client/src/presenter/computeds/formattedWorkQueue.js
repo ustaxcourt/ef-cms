@@ -4,7 +4,7 @@ import {
   SENIOR_ATTORNEY_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
-import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
@@ -272,17 +272,37 @@ export const formattedWorkQueue = (get, applicationContext) => {
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
 
-  let sortField = 'receivedAt';
+  const sortFields = {
+    documentQc: {
+      my: {
+        batched: 'batchedAt',
+        inbox: 'receivedAt',
+        outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
+      },
+      section: {
+        batched: 'batchedAt',
+        inbox: 'receivedAt',
+        outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
+      },
+    },
+    messages: {
+      my: {
+        inbox: 'receivedAt',
+        outbox: 'receivedAt',
+      },
+      section: {
+        inbox: 'receivedAt',
+        outbox: 'receivedAt',
+      },
+    },
+  };
 
-  // Document QC
-  // - sort by batchedAt on Batched box
-  // - sort by completedAt on Served tab
-  sortField =
-    !isInternal && workQueueToDisplay.box === 'batched'
-      ? 'batchedAt'
-      : 'completedAt';
+  const sortField =
+    sortFields[isInternal ? 'messages' : 'documentQc'][
+      workQueueToDisplay.queue
+    ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, sortField, 'desc');
+  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], 'desc');
 
   return workQueue;
 };

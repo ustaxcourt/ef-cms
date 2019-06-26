@@ -13,8 +13,6 @@ export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
     throw new Error('No markup found in documentHtml');
   }
 
-  //touch
-
   const pdfUrl = await applicationContext
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtml({

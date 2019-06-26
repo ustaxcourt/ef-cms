@@ -1,4 +1,4 @@
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,

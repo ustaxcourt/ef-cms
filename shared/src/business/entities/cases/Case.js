@@ -2,15 +2,17 @@ const joi = require('joi-browser');
 const moment = require('moment');
 const uuid = require('uuid');
 const {
+  getDocketNumberSuffix,
+} = require('../../utilities/getDocketNumberSuffix');
+const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
-const { DocketRecord } = require('./DocketRecord');
-const { Document } = require('./Document');
+} = require('../../../utilities/JoiValidationDecorator');
+const { DocketRecord } = require('../DocketRecord');
+const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
-const { formatDateString } = require('../utilities/DateHandler');
-const { getDocketNumberSuffix } = require('../utilities/getDocketNumberSuffix');
-const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { YearAmount } = require('./YearAmount');
+const { formatDateString } = require('../../utilities/DateHandler');
+const { PARTY_TYPES } = require('../contacts/PetitionContact');
+const { YearAmount } = require('../YearAmount');
 
 const uuidVersions = {
   version: ['uuidv4'],
@@ -65,7 +67,8 @@ exports.CASE_CAPTION_POSTFIX =
   'v. Commissioner of Internal Revenue, Respondent';
 
 /**
- * Case
+ * Case Entity
+ * Represents a Case that has already been accepted into the system.
  * @param rawCase
  * @constructor
  */
@@ -79,12 +82,12 @@ function Case(rawCase) {
     createdAt: rawCase.createdAt || new Date().toISOString(),
     currentVersion: rawCase.currentVersion,
     docketNumber: rawCase.docketNumber,
-    docketNumberSuffix: getDocketNumberSuffix(rawCase),
+    docketNumberSuffix: getDocketNumberSuffix(rawCase), // should be a derived property
     docketRecord: rawCase.docketRecord,
     documents: rawCase.documents,
     filingType: rawCase.filingType,
-    hasIrsNotice: rawCase.hasIrsNotice,
-    hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
+    hasIrsNotice: rawCase.hasIrsNotice, // should be a derived property
+    hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice, // should be a derived property
     initialDocketNumberSuffix: rawCase.initialDocketNumberSuffix,
     initialTitle: rawCase.initialTitle,
     irsNoticeDate: rawCase.irsNoticeDate,
@@ -732,8 +735,6 @@ Case.prototype.getWorkItems = function() {
   return workItems;
 };
 
-exports.Case = Case;
-
 /**
  * check a case to see whether it should change to ready for trial.
  *
@@ -851,3 +852,5 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.status = statusMap.calendared;
   return this;
 };
+
+exports.Case = Case;

@@ -4,7 +4,9 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
- *
+ * PetitionFromPaperWithoutFiles
+ * Represents a Case without required documents that a Petitions Clerk is attempting to add to the system.
+ * After the Case's files have been saved, a PetitionFromPaper is created to include the document metadata.
  * @param rawPetition
  * @constructor
  */
