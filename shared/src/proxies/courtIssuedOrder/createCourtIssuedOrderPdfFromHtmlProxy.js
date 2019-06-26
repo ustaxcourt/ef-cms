@@ -11,11 +11,19 @@ exports.createCourtIssuedOrderPdfFromHtml = ({
   applicationContext,
   htmlString,
 }) => {
-  return post({
-    applicationContext,
-    body: {
-      htmlString,
-    },
-    endpoint: '/court-issued-order',
-  });
+  return applicationContext
+    .getHttpClient()
+    .post(
+      `${applicationContext.getBaseUrl()}/court-issued-order`,
+      {
+        htmlString,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        },
+        responseType: 'blob',
+      },
+    )
+    .then(response => window.URL.createObjectURL(new Blob([response.data])));
 };
