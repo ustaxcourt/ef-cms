@@ -78,6 +78,7 @@ import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
+import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
@@ -233,6 +234,7 @@ export const presenter = {
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
     setPDFPageForSigningSequence,
+    setPDFSignatureDataSequence,
     setScannerSourceSequence,
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
