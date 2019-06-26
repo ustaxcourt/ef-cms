@@ -61,7 +61,7 @@
     "acorn": "^6.1.1",
     "ajv": "^6.10.0",
     "autoprefixer": "^9.6.0",
-    "aws-sdk": "^2.482.0",
+    "aws-sdk": "^2.483.0",
     "axios": "^0.19.0",
     "axios-mock-adapter": "^1.16.0",
     "babel-jest": "^24.8.0",
