@@ -1,4 +1,4 @@
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../applicationContext';
 import { castToISO } from './getFormCombinedWithCaseDetailAction';
 import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';

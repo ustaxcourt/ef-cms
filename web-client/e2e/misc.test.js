@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 

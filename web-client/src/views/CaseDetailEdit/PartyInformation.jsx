@@ -30,7 +30,7 @@ export const PartyInformation = connect(
       <div className="blue-container document-detail-one-third">
         <div className="subsection">
           <div className="usa-form-group">
-            <label htmlFor="case-caption" className="usa-label">
+            <label className="usa-label" htmlFor="case-caption">
               Case Caption
             </label>
             <textarea
@@ -38,14 +38,14 @@ export const PartyInformation = connect(
               id="case-caption"
               name="caseCaption"
               value={caseDetail.caseCaption}
+              onBlur={() => {
+                autoSaveCaseSequence();
+              }}
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-              }}
-              onBlur={() => {
-                autoSaveCaseSequence();
               }}
             />
             <span className="display-inline-block margin-top-1">
@@ -55,7 +55,7 @@ export const PartyInformation = connect(
         </div>
         <div className="subsection party-type">
           <div className="usa-form-group">
-            <label htmlFor="party-type" className="usa-label">
+            <label className="usa-label" htmlFor="party-type">
               Party Type
             </label>
             <select
@@ -86,17 +86,15 @@ export const PartyInformation = connect(
         {caseDetailEditHelper.showOwnershipDisclosureStatement && (
           <div className="subsection">
             <div className="usa-form-group">
-              <label htmlFor="ods-link" className="usa-label">
+              <label className="usa-label" htmlFor="ods-link">
                 Ownership Disclosure Statement
               </label>
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
-                  href={`${baseUrl}/documents/${
-                    caseDetailEditHelper.ownershipDisclosureStatementDocumentId
-                  }/documentDownloadUrl?token=${token}`}
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  target="_blank"
+                  href={`${baseUrl}/documents/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <FontAwesomeIcon icon="file-pdf" />
                   Ownership Disclosure Statement
@@ -106,11 +104,11 @@ export const PartyInformation = connect(
                 'No file uploaded'}
               <div className="order-checkbox">
                 <input
-                  id="order-for-ods"
-                  className="usa-checkbox__input"
-                  type="checkbox"
-                  name="orderForOds"
                   checked={caseDetail.orderForOds}
+                  className="usa-checkbox__input"
+                  id="order-for-ods"
+                  name="orderForOds"
+                  type="checkbox"
                   onChange={e => {
                     updateCaseValueSequence({
                       key: e.target.name,
@@ -119,7 +117,7 @@ export const PartyInformation = connect(
                     autoSaveCaseSequence();
                   }}
                 />
-                <label htmlFor="order-for-ods" className="usa-checkbox__label">
+                <label className="usa-checkbox__label" htmlFor="order-for-ods">
                   Order for Ownership Disclosure Statement
                 </label>
               </div>
@@ -130,14 +128,14 @@ export const PartyInformation = connect(
           caseDetailEditHelper.showSecondaryContact) && (
           <div className="subsection contacts">
             <Contacts
-              parentView="CaseDetail"
               bind="caseDetail"
-              emailBind="caseDetail.contactPrimary"
-              onChange="updateCaseValueSequence"
-              onBlur="autoSaveCaseSequence"
               contactsHelper="caseDetailEditContactsHelper"
+              emailBind="caseDetail.contactPrimary"
+              parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
+              onBlur="autoSaveCaseSequence"
+              onChange="updateCaseValueSequence"
             />
           </div>
         )}

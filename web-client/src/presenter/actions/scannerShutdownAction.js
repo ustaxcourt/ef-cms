@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get helper function
  */
 
-export const scannerShutdownAction = ({ store, get }) => {
+export const scannerShutdownAction = ({ get, store }) => {
   const dynanScriptClass = get(state.scanner.dynanScriptClass);
   if (dynanScriptClass) {
     const injectedScripts = Array.from(

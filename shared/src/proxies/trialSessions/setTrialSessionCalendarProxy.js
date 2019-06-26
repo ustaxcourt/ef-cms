@@ -10,6 +10,6 @@ const { post } = require('../requests');
 exports.setTrialSessionCalendar = ({ applicationContext, trialSessionId }) => {
   return post({
     applicationContext,
-    endpoint: `/trialSessions/${trialSessionId}/setCalendar`,
+    endpoint: `/trial-sessions/${trialSessionId}/set-calendar`,
   });
 };

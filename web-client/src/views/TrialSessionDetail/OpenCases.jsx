@@ -13,9 +13,9 @@ export const OpenCases = connect(
           Count: {formattedCases.length}
         </div>
         <table
+          aria-describedby="open-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
           id="open-cases"
-          aria-describedby="open-cases-tab"
         >
           <thead>
             <tr>

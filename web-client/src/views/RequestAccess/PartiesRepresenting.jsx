@@ -14,8 +14,8 @@ export const PartiesRepresenting = connect(
   },
   ({
     caseDetail,
-    requestAccessHelper,
     form,
+    requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
   }) => {

@@ -1,20 +1,17 @@
-import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
-
 import { applicationContext } from '../src/applicationContext';
+import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
+import FormData from 'form-data';
 import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
 import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
 import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
@@ -28,7 +25,6 @@ import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocu
 import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
 import petitionsClerkViewsUnreadMessage from './journey/petitionsClerkViewsUnreadMessage';
-
 import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerAddNewCaseToTestObj from './journey/taxpayerAddNewCaseToTestObj';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
@@ -36,10 +32,9 @@ import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-
 const {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;

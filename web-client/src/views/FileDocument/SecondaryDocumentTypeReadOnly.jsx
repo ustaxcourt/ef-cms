@@ -16,8 +16,8 @@ export const SecondaryDocumentTypeReadOnly = connect(
   },
   ({
     closeDocumentCategoryAccordionSequence,
-    form,
     editSelectedSecondaryDocumentSequence,
+    form,
     selectDocumentTypeHelper,
   }) => {
     return (
@@ -31,7 +31,7 @@ export const SecondaryDocumentTypeReadOnly = connect(
         >
           <div>
             <Focus className="header-with-link-button">
-              <label htmlFor="category" tabIndex="-1" className="focusable">
+              <label className="focusable" htmlFor="category" tabIndex="-1">
                 Selected Secondary Document Type
               </label>
             </Focus>

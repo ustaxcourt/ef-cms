@@ -7,10 +7,10 @@ export const Forms = () => (
     <form className="usa-form usa-form--large">
       <div className="blue-container margin-bottom-4">
         <div className="usa-form-group">
-          <label htmlFor="input-text" className="usa-label">
+          <label className="usa-label" htmlFor="input-text">
             Text input
           </label>
-          <input id="input-text" className="usa-input" type="text" />
+          <input className="usa-input" id="input-text" type="text" />
         </div>
 
         <div className="usa-form-group">
@@ -18,92 +18,92 @@ export const Forms = () => (
             Text input with hint text
           </label>
           <span className="usa-hint">This is your hint!</span>
-          <input id="input-text-hint" className="usa-input" type="text" />
+          <input className="usa-input" id="input-text-hint" type="text" />
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="input-text-optional" className="usa-label">
+          <label className="usa-label" htmlFor="input-text-optional">
             Text input <span className="usa-hint">(optional)</span>
           </label>
-          <input id="input-text-optional" className="usa-input" type="text" />
+          <input className="usa-input" id="input-text-optional" type="text" />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="input-text-error" className="usa-label">
+          <label className="usa-label" htmlFor="input-text-error">
             Text input with error
           </label>
           <input
-            id="input-text-error"
             className="usa-input usa-input--error"
+            id="input-text-error"
             type="text"
           />
           <span className="usa-error-message">Error message</span>
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="input-email" className="usa-label">
+          <label className="usa-label" htmlFor="input-email">
             Email input
           </label>
-          <input id="input-email" className="usa-input" type="email" />
+          <input className="usa-input" id="input-email" type="email" />
         </div>
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="input-email-error" className="usa-label">
+          <label className="usa-label" htmlFor="input-email-error">
             Email input with error
           </label>
           <input
-            id="input-email-error"
             className="usa-input usa-input--error"
+            id="input-email-error"
             type="email"
           />
           <span className="usa-error-message">Error message</span>
         </div>
         <div className="usa-form-group">
-          <label htmlFor="input-number" className="usa-label">
+          <label className="usa-label" htmlFor="input-number">
             Number input
           </label>
-          <input id="input-number" className="usa-input" type="number" />
+          <input className="usa-input" id="input-number" type="number" />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="input-number-error" className="usa-label">
+          <label className="usa-label" htmlFor="input-number-error">
             Number input with error
           </label>
           <input
-            id="input-number-error"
             className="usa-input usa-input--error"
+            id="input-number-error"
             type="number"
           />
           <span className="usa-error-message">Error message</span>
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="input-tel" className="usa-label">
+          <label className="usa-label" htmlFor="input-tel">
             Phone input
           </label>
-          <input id="input-tel" className="usa-input" type="tel" />
+          <input className="usa-input" id="input-tel" type="tel" />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="input-tel-error" className="usa-label">
+          <label className="usa-label" htmlFor="input-tel-error">
             Phone input with error
           </label>
           <input
-            id="input-tel-error"
             className="usa-input usa-input--error"
+            id="input-tel-error"
             type="tel"
           />
           <span className="usa-error-message">Error message</span>
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="input-file" className="usa-label">
+          <label className="usa-label" htmlFor="input-file">
             File input
           </label>
           <input id="input-file" type="file" />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="input-file-error" className="usa-label">
+          <label className="usa-label" htmlFor="input-file-error">
             File input with error
           </label>
           <input id="input-file-error" type="file" />
@@ -111,7 +111,7 @@ export const Forms = () => (
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="options" className="usa-label">
+          <label className="usa-label" htmlFor="options">
             Dropdown label
           </label>
           <select className="usa-select" id="options">
@@ -122,10 +122,10 @@ export const Forms = () => (
           </select>
         </div>
         <div className="usa-form-group">
-          <label htmlFor="options-disabled" className="usa-label">
+          <label className="usa-label" htmlFor="options-disabled">
             Dropdown label (disabled)
           </label>
-          <select className="usa-select" id="options-disabled" disabled>
+          <select disabled className="usa-select" id="options-disabled">
             <option value>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
@@ -134,7 +134,7 @@ export const Forms = () => (
         </div>
 
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="options-error" className="usa-label">
+          <label className="usa-label" htmlFor="options-error">
             Dropdown label with error
           </label>
           <select className="usa-select usa-select--error" id="options-error">
@@ -147,19 +147,19 @@ export const Forms = () => (
         </div>
 
         <div className="usa-form-group">
-          <label htmlFor="textarea" className="usa-label">
+          <label className="usa-label" htmlFor="textarea">
             Text Area
           </label>
-          <textarea id="textarea" className="usa-textarea" />
+          <textarea className="usa-textarea" id="textarea" />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
-          <label htmlFor="textarea-error" className="usa-label">
+          <label className="usa-label" htmlFor="textarea-error">
             Text Area with error
           </label>
           <textarea
-            id="textarea-error"
             className="usa-textarea usa-textarea--error"
+            id="textarea-error"
           />
           <span className="usa-error-message">Error message</span>
         </div>
@@ -170,11 +170,11 @@ export const Forms = () => (
             <input
               className="usa-checkbox__input"
               id="truth"
-              type="checkbox"
               name="historical-figures-1"
+              type="checkbox"
               value="truth"
             />
-            <label htmlFor="truth" className="usa-checkbox__label">
+            <label className="usa-checkbox__label" htmlFor="truth">
               Sojourner Truth
             </label>
           </div>
@@ -182,11 +182,11 @@ export const Forms = () => (
             <input
               className="usa-checkbox__input"
               id="douglass"
-              type="checkbox"
               name="historical-figures-1"
+              type="checkbox"
               value="douglass"
             />
-            <label htmlFor="douglass" className="usa-checkbox__label">
+            <label className="usa-checkbox__label" htmlFor="douglass">
               Frederick Douglass
             </label>
           </div>
@@ -194,23 +194,23 @@ export const Forms = () => (
             <input
               className="usa-checkbox__input"
               id="washington"
-              type="checkbox"
               name="historical-figures-1"
+              type="checkbox"
               value="washington"
             />
-            <label htmlFor="washington" className="usa-checkbox__label">
+            <label className="usa-checkbox__label" htmlFor="washington">
               Booker T. Washington
             </label>
           </div>
           <div className="usa-checkbox">
             <input
+              disabled
               className="usa-checkbox__input"
               id="carver"
-              type="checkbox"
               name="historical-figures-1"
-              disabled
+              type="checkbox"
             />
-            <label htmlFor="carver" className="usa-checkbox__label">
+            <label className="usa-checkbox__label" htmlFor="carver">
               George Washington Carver
             </label>
           </div>
@@ -220,11 +220,11 @@ export const Forms = () => (
           <legend className="usa-legend">Radio Buttons</legend>
           <div className="usa-radio">
             <input
+              defaultChecked
               className="usa-radio__input"
               id="stanton"
-              type="radio"
-              defaultChecked
               name="historical-figures-2"
+              type="radio"
               value="stanton"
             />
             <label className="usa-radio__label" htmlFor="stanton">
@@ -235,8 +235,8 @@ export const Forms = () => (
             <input
               className="usa-radio__input"
               id="anthony"
-              type="radio"
               name="historical-figures-2"
+              type="radio"
               value="anthony"
             />
             <label className="usa-radio__label" htmlFor="anthony">
@@ -247,8 +247,8 @@ export const Forms = () => (
             <input
               className="usa-radio__input"
               id="tubman"
-              type="radio"
               name="historical-figures-2"
+              type="radio"
               value="tubman"
             />
             <label className="usa-radio__label" htmlFor="tubman">
@@ -261,11 +261,11 @@ export const Forms = () => (
           <legend className="usa-legend">Inline Radio Buttons</legend>
           <div className="usa-radio usa-radio__inline">
             <input
+              defaultChecked
               className="usa-radio__input"
               id="fieri"
-              type="radio"
-              defaultChecked
               name="celebrity-chefs-2"
+              type="radio"
               value="fieri"
             />
             <label className="usa-radio__label" htmlFor="fieri">
@@ -276,8 +276,8 @@ export const Forms = () => (
             <input
               className="usa-radio__input"
               id="flay"
-              type="radio"
               name="celebrity-chefs-2"
+              type="radio"
               value="flay"
             />
             <label className="usa-radio__label" htmlFor="flay">
@@ -288,8 +288,8 @@ export const Forms = () => (
             <input
               className="usa-radio__input"
               id="ramsay"
-              type="radio"
               name="celebrity-chefs-2"
+              type="radio"
               value="ramsay"
             />
             <label className="usa-radio__label" htmlFor="ramsay">
@@ -308,14 +308,14 @@ export const Forms = () => (
                 Month
               </label>
               <input
-                className="usa-input usa-input--inline"
                 aria-describedby="dobHint"
+                className="usa-input usa-input--inline"
+                defaultValue=""
                 id="date_of_birth_1"
+                max="12"
+                min="1"
                 name="date_of_birth_1"
                 type="number"
-                min="1"
-                max="12"
-                defaultValue=""
               />
             </div>
             <div className="usa-form-group usa-form-group--day">
@@ -323,14 +323,14 @@ export const Forms = () => (
                 Day
               </label>
               <input
-                className="usa-input usa-input--inline"
                 aria-describedby="dobHint"
+                className="usa-input usa-input--inline"
+                defaultValue=""
                 id="date_of_birth_2"
+                max="31"
+                min="1"
                 name="date_of_birth_2"
                 type="number"
-                min="1"
-                max="31"
-                defaultValue=""
               />
             </div>
             <div className="usa-form-group usa-form-group--year">
@@ -338,14 +338,14 @@ export const Forms = () => (
                 Year
               </label>
               <input
-                className="usa-input usa-input--inline"
                 aria-describedby="dobHint"
+                className="usa-input usa-input--inline"
+                defaultValue=""
                 id="date_of_birth_3"
+                max="2000"
+                min="1900"
                 name="date_of_birth_3"
                 type="number"
-                min="1900"
-                max="2000"
-                defaultValue=""
               />
             </div>
           </div>
@@ -412,8 +412,8 @@ export const Forms = () => (
               className="usa-input usa-input--medium"
               id="zip"
               name="zip"
-              type="text"
               pattern="[\d]{5}(-[\d]{4})?"
+              type="text"
             />
           </div>
         </fieldset>

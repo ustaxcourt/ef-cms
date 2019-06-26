@@ -19,7 +19,7 @@ const getInternalDocumentTypes = typeMap => {
 };
 
 export const addDocketEntryHelper = (get, applicationContext) => {
-  const { PARTY_TYPES, INTERNAL_CATEGORY_MAP } = get(state.constants);
+  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -57,7 +57,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     validationErrors.partySecondary ||
     validationErrors.partyRespondent;
 
-  const certificateOfServiceDate = form.certificateOfServiceDate;
+  const { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = applicationContext

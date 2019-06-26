@@ -20,10 +20,10 @@ export const AddDocketEntry = connect(
   },
   ({
     caseDetail,
-    submitDocketEntrySequence,
-    updateScreenMetadataSequence,
     screenMetadata,
     showModal,
+    submitDocketEntrySequence,
+    updateScreenMetadataSequence,
   }) => {
     return (
       <>
@@ -36,8 +36,8 @@ export const AddDocketEntry = connect(
               <div className="mobile-lg:grid-col-4">
                 <Tabs
                   asSwitch
-                  defaultActiveTab="PrimaryDocumentForm"
                   bind="wizardStep"
+                  defaultActiveTab="PrimaryDocumentForm"
                 >
                   <Tab tabName="PrimaryDocumentForm">
                     <PrimaryDocumentForm />
@@ -53,9 +53,9 @@ export const AddDocketEntry = connect(
 
           <div className="button-box-container">
             <button
+              className="usa-button"
               id="save-and-finish"
               type="submit"
-              className="usa-button"
               onClick={() => {
                 updateScreenMetadataSequence({
                   key: 'supportingDocument',
@@ -67,9 +67,9 @@ export const AddDocketEntry = connect(
               Finish
             </button>
             <button
-              type="button"
-              id="save-and-add-supporting"
               className="usa-button usa-button--outline"
+              id="save-and-add-supporting"
+              type="button"
               onClick={() => {
                 updateScreenMetadataSequence({
                   key: 'supportingDocument',

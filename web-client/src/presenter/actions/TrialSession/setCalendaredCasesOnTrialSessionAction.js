@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.calendaredCases
  * @param {object} providers.store the cerebral store used for setting the state.calendaredCases
  */
-export const setCalendaredCasesOnTrialSessionAction = ({ store, props }) => {
+export const setCalendaredCasesOnTrialSessionAction = ({ props, store }) => {
   store.set(state.trialSession.calendaredCases, props.calendaredCases);
 };

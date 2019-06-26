@@ -18,9 +18,9 @@ export const SecondaryDocumentType = connect(
   },
   ({
     constants,
-    selectDocumentTypeHelper,
     form,
     selectDocumentSequence,
+    selectDocumentTypeHelper,
     updateFileDocumentWizardFormValueSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
@@ -40,14 +40,15 @@ export const SecondaryDocumentType = connect(
               : ''
           }`}
         >
-          <label htmlFor="document-secondary-category" className="usa-label">
+          <label className="usa-label" htmlFor="document-secondary-category">
             Document Category
           </label>
           <select
-            name="secondaryDocument.category"
-            id="document-secondary-category"
             aria-label="secondaryCategory"
             className="usa-select"
+            id="document-secondary-category"
+            name="secondaryDocument.category"
+            value={form.secondaryDocument.category || ''}
             onChange={e => {
               updateFileDocumentWizardFormValueSequence({
                 key: e.target.name,
@@ -55,7 +56,6 @@ export const SecondaryDocumentType = connect(
               });
               validateSelectDocumentTypeSequence();
             }}
-            value={form.secondaryDocument.category || ''}
           >
             <option value="">- Select -</option>
             {constants.CATEGORIES.map(category => {
@@ -67,8 +67,8 @@ export const SecondaryDocumentType = connect(
             })}
           </select>
           <Text
-            className="usa-error-message"
             bind="validationErrors.secondaryDocument.category"
+            className="usa-error-message"
           />
         </div>
         {form.secondaryDocument && (
@@ -82,15 +82,16 @@ export const SecondaryDocumentType = connect(
               }`}
             >
               <label
-                htmlFor="secondary-doc-secondary-document-type"
                 className="usa-label"
+                htmlFor="secondary-doc-secondary-document-type"
               >
                 Document Type
               </label>
               <select
+                className="secondaryDocumentType usa-select"
                 id="secondary-doc-secondary-document-type"
                 name="secondaryDocument.documentType"
-                className="secondaryDocumentType usa-select"
+                value={form.secondaryDocument.documentType || ''}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
                     key: e.target.name,
@@ -98,7 +99,6 @@ export const SecondaryDocumentType = connect(
                   });
                   validateSelectDocumentTypeSequence();
                 }}
-                value={form.secondaryDocument.documentType || ''}
               >
                 <option value="">- Select -</option>
                 {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
@@ -110,8 +110,8 @@ export const SecondaryDocumentType = connect(
                 )}
               </select>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.secondaryDocument.documentType"
+                className="usa-error-message"
               />
             </div>
             <div className="usa-form-group only-small-screens">
@@ -120,13 +120,13 @@ export const SecondaryDocumentType = connect(
                 {selectDocumentTypeHelper.filteredSecondaryDocumentTypes.map(
                   (entry, index) => (
                     <div
-                      key={entry.documentType}
                       className="usa-radio ustc-hide-radio-button"
+                      key={entry.documentType}
                     >
                       <input
                         id={`secondaryDocumentType-${index}`}
-                        type="radio"
                         name="secondaryDocument.documentType"
+                        type="radio"
                         value={entry.documentType || ''}
                         onClick={e => {
                           updateFileDocumentWizardFormValueSequence({
@@ -137,8 +137,8 @@ export const SecondaryDocumentType = connect(
                         }}
                       />
                       <label
-                        htmlFor={`secondaryDocumentType-${index}`}
                         className="usa-label"
+                        htmlFor={`secondaryDocumentType-${index}`}
                       >
                         {entry.documentType}
                       </label>
@@ -151,9 +151,9 @@ export const SecondaryDocumentType = connect(
         )}
         <div className="only-large-screens">
           <button
-            type="submit"
             className="usa-button"
             id="select-secondary-document"
+            type="submit"
             onClick={() => {
               selectDocumentSequence();
             }}

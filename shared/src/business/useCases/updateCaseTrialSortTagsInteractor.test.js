@@ -2,10 +2,10 @@ const sinon = require('sinon');
 const {
   updateCaseTrialSortTags,
 } = require('./updateCaseTrialSortTagsInteractor');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
-const { STATUS_TYPES } = require('../entities/Case');
+const { STATUS_TYPES } = require('../entities/cases/Case');
 const { User } = require('../entities/User');
 
 describe('Update case trial sort tags', () => {

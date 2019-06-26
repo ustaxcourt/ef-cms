@@ -8,7 +8,7 @@ module.exports = {
     'jest',
     'jsdoc',
     'prettier',
-    // 'sort-destructure-keys',
+    'sort-destructure-keys',
     'sort-keys-fix',
     'sort-requires',
   ],
@@ -19,10 +19,10 @@ module.exports = {
     'jsdoc/require-param': 1,
     'no-console': ['error', { allow: ['warn', 'error'] }],
     'prettier/prettier': 'error',
-    // 'sort-destructure-keys/sort-destructure-keys': [
-    //   2,
-    //   { caseSensitive: false },
-    // ],
+    'sort-destructure-keys/sort-destructure-keys': [
+      2,
+      { caseSensitive: false },
+    ],
     'sort-requires/sort-requires': 2,
     'prefer-destructuring': [
       'error',

@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for clearing secondaryDocument
  * @param {object} providers.get the cerebral get function
  */
-export const defaultSecondaryDocumentAction = ({ store, get }) => {
+export const defaultSecondaryDocumentAction = ({ get, store }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (!secondaryDocument) {

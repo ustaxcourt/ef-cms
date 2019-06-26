@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validatePetitionAction = ({ applicationContext, path, get }) => {
+export const validatePetitionAction = ({ applicationContext, get, path }) => {
   const petition = get(state.petition);
 
   const form = omit(

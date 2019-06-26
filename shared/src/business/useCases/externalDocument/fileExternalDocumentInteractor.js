@@ -1,9 +1,9 @@
 const {
-  isAuthorized,
   FILE_EXTERNAL_DOCUMENT,
+  isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -47,9 +47,9 @@ exports.fileExternalDocument = async ({
   const workItems = [];
 
   const {
-    supportingDocumentMetadata,
     secondaryDocument,
     secondarySupportingDocumentMetadata,
+    supportingDocumentMetadata,
     ...primaryDocumentMetadata
   } = documentMetadata;
 
@@ -142,7 +142,7 @@ exports.fileExternalDocument = async ({
         new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
-          filingDate: documentEntity.createdAt,
+          filingDate: documentEntity.receivedAt,
         }),
       );
     }

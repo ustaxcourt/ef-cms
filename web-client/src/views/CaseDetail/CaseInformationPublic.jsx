@@ -56,7 +56,7 @@ export const CaseInformationPublic = connect(
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
   },
-  ({ helper, caseDetail }) => {
+  ({ caseDetail, helper }) => {
     return (
       <div className="petitions-details">
         <div className="grid-container padding-x-0">

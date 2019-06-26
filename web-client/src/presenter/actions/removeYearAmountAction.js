@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for knowing which year amount index to remove
  * @param {object} providers.store the cerebral store object needed for setting the state.caseDetails.yearAmounts
  */
-export const removeYearAmountAction = ({ store, get, props }) => {
+export const removeYearAmountAction = ({ get, props, store }) => {
   const caseDetail = get(state.caseDetail);
   const { index } = props;
   store.set(

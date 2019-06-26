@@ -28,72 +28,72 @@ export const Address = connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.address1`} className="usa-label">
+          <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing Address Line 1
           </label>
           <input
-            id={`${type}.address1`}
-            type="text"
-            name={`${type}.address1`}
-            className="usa-input"
             autoCapitalize="none"
+            className="usa-input"
+            id={`${type}.address1`}
+            name={`${type}.address1`}
+            type="text"
             value={data[type].address1 || ''}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-            }}
-            onBlur={() => {
-              validateStartCaseSequence();
             }}
           />
           <Text
-            className="usa-error-message"
             bind={`validationErrors.${type}.address1`}
+            className="usa-error-message"
           />
         </div>
         <div className="usa-form-group">
-          <label htmlFor={`${type}.address2`} className="usa-label">
+          <label className="usa-label" htmlFor={`${type}.address2`}>
             Address Line 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
-            id={`${type}.address2`}
-            type="text"
-            name={`${type}.address2`}
-            className="usa-input"
             autoCapitalize="none"
+            className="usa-input"
+            id={`${type}.address2`}
+            name={`${type}.address2`}
+            type="text"
             value={data[type].address2 || ''}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-            }}
-            onBlur={() => {
-              validateStartCaseSequence();
             }}
           />
         </div>
         <div className="usa-form-group">
-          <label htmlFor={`${type}.address3`} className="usa-label">
+          <label className="usa-label" htmlFor={`${type}.address3`}>
             Address Line 3 <span className="usa-hint">(optional)</span>
           </label>
           <input
-            id={`${type}.address3`}
-            type="text"
-            name={`${type}.address3`}
             autoCapitalize="none"
             className="usa-input"
+            id={`${type}.address3`}
+            name={`${type}.address3`}
+            type="text"
             value={data[type].address3 || ''}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-            }}
-            onBlur={() => {
-              validateStartCaseSequence();
             }}
           />
         </div>
@@ -109,29 +109,29 @@ export const Address = connect(
         >
           <div className="grid-row grid-gap state-and-city">
             <div className="mobile-lg:grid-col-8">
-              <label htmlFor={`${type}.city`} className="usa-label">
+              <label className="usa-label" htmlFor={`${type}.city`}>
                 City
               </label>
               <input
-                id={`${type}.city`}
-                type="text"
-                name={`${type}.city`}
-                className="usa-input usa-input--inline"
                 autoCapitalize="none"
+                className="usa-input usa-input--inline"
+                id={`${type}.city`}
+                name={`${type}.city`}
+                type="text"
                 value={data[type].city || ''}
+                onBlur={() => {
+                  validateStartCaseSequence();
+                }}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
-                onBlur={() => {
-                  validateStartCaseSequence();
-                }}
               />
             </div>
             <div className="mobile-lg:grid-col-4">
-              <label htmlFor={`${type}.state`} className="usa-label">
+              <label className="usa-label" htmlFor={`${type}.state`}>
                 State
               </label>
               <select
@@ -217,12 +217,12 @@ export const Address = connect(
               </select>
             </div>
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${type}.city`}
+              className="usa-error-message"
             />
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${type}.state`}
+              className="usa-error-message"
             />
           </div>
         </div>
@@ -237,32 +237,32 @@ export const Address = connect(
           }
         >
           <label
-            htmlFor={`${type}.postalCode`}
-            className="usa-label"
             aria-label="zip code"
+            className="usa-label"
+            htmlFor={`${type}.postalCode`}
           >
             ZIP Code
           </label>
           <input
-            id={`${type}.postalCode`}
-            type="text"
-            name={`${type}.postalCode`}
-            className="usa-input usa-input--medium"
             autoCapitalize="none"
+            className="usa-input usa-input--medium"
+            id={`${type}.postalCode`}
+            name={`${type}.postalCode`}
+            type="text"
             value={data[type].postalCode || ''}
+            onBlur={() => {
+              validateStartCaseSequence();
+            }}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
             }}
-            onBlur={() => {
-              validateStartCaseSequence();
-            }}
           />
           <Text
-            className="usa-error-message"
             bind={`validationErrors.${type}.postalCode`}
+            className="usa-error-message"
           />
         </div>
       </React.Fragment>

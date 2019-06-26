@@ -1,7 +1,7 @@
 const {
   setCaseToReadyForTrial,
 } = require('./setCaseToReadyForTrialInteractor');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');

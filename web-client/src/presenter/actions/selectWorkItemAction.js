@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the state.selectedWorkItems
  * @returns {undefined} doesn't return anything
  */
-export const selectWorkItemAction = ({ props, store, get }) => {
+export const selectWorkItemAction = ({ get, props, store }) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   if (
     selectedWorkItems.find(
