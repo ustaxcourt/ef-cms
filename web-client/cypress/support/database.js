@@ -5,7 +5,7 @@ AWS.config.accessKeyId = 'noop';
 AWS.config.secretAccessKey = 'noop';
 AWS.config.region = 'us-east-1';
 
-const data = require('../../../efcms-service/storage/fixtures/seed');
+const data = require('../../../web-api/storage/fixtures/seed');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',

@@ -1,5 +1,5 @@
 {
-  "name": "efcms-service",
+  "name": "web-api",
   "description": "US Tax Court Document Service API ",
   "version": "0.1.0",
   "dependencies": {
