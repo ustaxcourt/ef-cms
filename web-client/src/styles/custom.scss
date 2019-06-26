@@ -980,3 +980,16 @@ nav.usa-nav {
 .quill {
   background: $color-white;
 }
+
+.sign-pdf-interface {
+  .sign-pdf-control {
+    text-align: center;
+  }
+  #signature {
+    position: absolute;
+  }
+  #sign-pdf-canvas {
+    display: block;
+    margin: auto;
+  }
+}
