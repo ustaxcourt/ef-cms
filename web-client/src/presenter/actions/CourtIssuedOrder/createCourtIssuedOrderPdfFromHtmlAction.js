@@ -1,19 +1,24 @@
 import { state } from 'cerebral';
 
 /**
- * get the selected work items from state
+ * generate pdf url from html string
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function used for getting the selectedWorkItems
- * @returns {object} a list of selected work items
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get helper function
+ * @returns {object} the prop object with the pdf url
  */
-export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
+export const createCourtIssuedOrderPdfFromHtmlAction = ({
+  applicationContext,
+  get,
+}) => {
   const htmlString = get(state.form.richText);
+
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
 
-  const pdfUrl = await applicationContext
+  let pdfUrl = applicationContext
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtml({
       applicationContext,
