@@ -74,8 +74,8 @@ exports.createCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { Petition } = applicationContext.getEntityConstructors();
-  const petitionEntity = new Petition(petitionMetadata).validate();
+  const { CaseExternal } = applicationContext.getEntityConstructors();
+  const petitionEntity = new CaseExternal(petitionMetadata).validate();
 
   // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
