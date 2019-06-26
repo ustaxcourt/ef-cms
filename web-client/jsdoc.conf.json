@@ -2,7 +2,7 @@
   "plugins": [],
   "recurseDepth": 10,
   "source": {
-    "include": ["./src/", "../shared/src/", "../efcms-service/src/"],
+    "include": ["./src/", "../shared/src/", "../web-api/src/"],
     "includePattern": ".+\\.js$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
