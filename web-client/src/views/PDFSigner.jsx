@@ -1,8 +1,9 @@
 import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
+
+import { PDFSignerToolbar } from './PDFSignerToolbar';
 
 class PDFSignerComponent extends React.Component {
   constructor(props) {
@@ -13,8 +14,6 @@ class PDFSignerComponent extends React.Component {
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
     this.moveSig = this.moveSig.bind(this);
-    this.getPreviousPage = this.getPreviousPage.bind(this);
-    this.getNextPage = this.getNextPage.bind(this);
   }
 
   componentDidMount() {
@@ -22,7 +21,9 @@ class PDFSignerComponent extends React.Component {
   }
 
   componentDidUpdate() {
-    this.renderPDFPage(this.props.currentPageNumber);
+    if (this.props.signatureData === null) {
+      this.renderPDFPage(this.props.currentPageNumber);
+    }
   }
 
   renderPDFPage(pageNumber) {
@@ -50,69 +51,47 @@ class PDFSignerComponent extends React.Component {
     sig.style.left = x + 'px';
   }
 
-  stop(canvasEl) {
+  stop(canvasEl, x, y, scale = 1) {
+    this.props.setSignatureData({ signatureData: { scale, x, y } });
     canvasEl.onmousemove = null;
   }
 
   start(canvasEl, sigEl) {
+    let x;
+    let y;
+
+    // clear current signature data
+    this.props.setSignatureData({ signatureData: null });
+
     canvasEl.onmousemove = e => {
       const { offsetLeft, offsetTop } = canvasEl;
 
-      const x = e.pageX - offsetLeft;
-      const y = e.pageY - offsetTop;
+      x = e.pageX - offsetLeft;
+      y = e.pageY - offsetTop;
 
       this.moveSig(sigEl, x + offsetLeft, y + offsetTop);
     };
 
     canvasEl.onmousedown = () => {
-      this.stop(canvasEl);
+      this.stop(canvasEl, x, y);
     };
 
     sigEl.onmousedown = () => {
-      this.stop(canvasEl);
+      this.stop(canvasEl, x, y);
     };
   }
 
-  getPreviousPage() {
-    const { currentPageNumber, setPage } = this.props;
-    const previousPageNumber =
-      currentPageNumber === 1 ? 1 : currentPageNumber - 1;
-    setPage({ pageNumber: previousPageNumber });
-  }
-
-  getNextPage() {
-    const { currentPageNumber, pdfObj, setPage } = this.props;
-    const totalPages = pdfObj.numPages;
-    const nextPageNumber =
-      currentPageNumber === totalPages ? totalPages : currentPageNumber + 1;
-    setPage({ pageNumber: nextPageNumber });
-  }
   render() {
-    const { currentPageNumber, pdfObj } = this.props;
-    const totalPages = pdfObj.numPages;
     return (
-      <div className="sign-pdf-interface">
-        <div className="sign-pdf-control">
-          <button
-            className="usa-button"
-            disabled={currentPageNumber === 1}
-            onClick={this.getPreviousPage}
-          >
-            Previous Page
-          </button>
-          <button
-            className="usa-button margin-left-2"
-            disabled={currentPageNumber === totalPages}
-            onClick={this.getNextPage}
-          >
-            Next Page
-          </button>
+      <>
+        <PDFSignerToolbar />
+        <div className="sign-pdf-interface">
+          <span id="signature" ref={this.signatureRef}>
+            (Signed) Joseph Dredd
+          </span>
+          <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
         </div>
-        <span id="signature" ref={this.signatureRef}>
-          (Signed) Joseph Dredd
-        </span>
-        <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
-      </div>
+      </>
     );
   }
 }
@@ -123,6 +102,8 @@ PDFSignerComponent.propTypes = {
   pdfObj: PropTypes.object,
   setCanvas: PropTypes.func,
   setPage: PropTypes.func,
+  setSignatureData: PropTypes.func,
+  signatureData: PropTypes.object,
 };
 
 export const PDFSigner = connect(
@@ -131,7 +112,8 @@ export const PDFSigner = connect(
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     setCanvas: sequences.setCanvasForPDFSigningSequence,
-    setPage: sequences.setPDFPageForSigningSequence,
+    setSignatureData: sequences.setPDFSignatureDataSequence,
+    signatureData: state.pdfForSigning.signatureData,
   },
   PDFSignerComponent,
 );

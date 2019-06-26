@@ -90,8 +90,10 @@ export const state = {
     showDetails: false,
   },
   pdfForSigning: {
+    documentId: null,
     pageNumber: 1,
     pdfjsObj: null,
+    signatureData: null,
   },
   percentComplete: 0,
   petition: {},
