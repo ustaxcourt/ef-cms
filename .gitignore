@@ -3,10 +3,10 @@
 .terraform/
 /cypress
 aws.json
-efcms-service/runtimes/clamav/bin
-efcms-service/runtimes/clamav/lib
-efcms-service/runtimes/ghostscript/bin
-efcms-service/runtimes/ghostscript/lib
+web-api/runtimes/clamav/bin
+web-api/runtimes/clamav/lib
+web-api/runtimes/ghostscript/bin
+web-api/runtimes/ghostscript/lib
 gen.conf
 graph-generators/node_modules/
 policy.json
