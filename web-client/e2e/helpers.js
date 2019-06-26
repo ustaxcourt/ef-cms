@@ -45,6 +45,28 @@ exports.getFormattedDocumentQCSectionInbox = async test => {
   });
 };
 
+exports.getFormattedDocumentQCMyOutbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'outbox',
+    queue: 'my',
+    workQueueIsInternal: false,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+exports.getFormattedDocumentQCSectionOutbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'outbox',
+    queue: 'section',
+    workQueueIsInternal: false,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
 exports.getFormattedMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
