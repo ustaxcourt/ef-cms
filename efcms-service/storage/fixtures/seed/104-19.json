@@ -158,6 +158,7 @@
     "caseStatus": "New",
     "document": {
       "createdAt": "2019-03-05T17:34:13.490Z",
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
@@ -193,6 +194,7 @@
     "caseStatus": "New",
     "document": {
       "createdAt": "2019-03-05T17:34:13.490Z",
+      "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",

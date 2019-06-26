@@ -1,4 +1,4 @@
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
