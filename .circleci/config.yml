@@ -79,7 +79,7 @@ jobs:
           command: cd efcms-service/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: echo "export ENV=$(./get-env.sh develop)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "GIT_ACCESS_TOKEN=${GIT_ACCESS_TOKEN}" -e "PRODUCT_KEYS=${PRODUCT_KEYS}" -e "DYNAMSOFT_REPO=${DYNAMSOFT_REPO}" -e "DYNAMSOFT_ZIP_NAME=${DYNAMSOFT_ZIP_NAME}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
