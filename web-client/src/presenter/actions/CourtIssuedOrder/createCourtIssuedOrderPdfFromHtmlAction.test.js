@@ -1,28 +1,26 @@
 import { createCourtIssuedOrderPdfFromHtmlAction } from './createCourtIssuedOrderPdfFromHtmlAction';
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     createCourtIssuedOrderPdfFromHtml: () =>
-      'hello from create court issued order pdf from html',
+      '<i>hello from create court issued order pdf from html</i>',
   }),
 };
 
 describe('createCourtIssuedOrderPdfFromHtmlAction', () => {
-  it('updates createCourtIssuedOrderPdfFromHtml', async () => {
+  it('calls createCourtIssuedOrderPdfFromHtml use case and return pdf url', async () => {
     const result = await runAction(createCourtIssuedOrderPdfFromHtmlAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          richText: 'hello from create court issued order pdf from html',
+          richText: '<i>hello from create court issued order pdf from html</i>',
         },
       },
     });
-    expect(result).toEqual(
-      'hello from create court issued order pdf from html',
-    );
+    expect(result.output.pdfUrl).toBeTruthy();
   });
 });
