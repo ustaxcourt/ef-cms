@@ -5,7 +5,7 @@
  * @returns {Promise<{petitionFileId}>}
  */
 exports.validatePetition = ({ applicationContext, petition }) => {
-  const errors = new (applicationContext.getEntityConstructors()).Petition(
+  const errors = new (applicationContext.getEntityConstructors()).CaseExternal(
     petition,
   ).getFormattedValidationErrors();
   if (!errors) return null;
