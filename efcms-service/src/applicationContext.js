@@ -6,6 +6,7 @@ const AWS =
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
 
+const chromium = require('chrome-aws-lambda');
 const uuidv4 = require('uuid/v4');
 const { DynamoDB, S3 } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -58,6 +59,9 @@ const {
 const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
+const {
+  createCourtIssuedOrderPdfFromHtml,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
@@ -216,7 +220,7 @@ const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  putWorkItemInUsersOutbox
+  putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
   recallPetitionFromIRSHoldingQueue,
@@ -231,8 +235,8 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
-  saveWorkItemForDocketClerkFilingExternalDocument
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument')
+  saveWorkItemForDocketClerkFilingExternalDocument,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -335,6 +339,7 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
+    getChromium: () => chromium,
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
@@ -432,6 +437,7 @@ module.exports = (appContextUser = {}) => {
         completeWorkItem,
         createCase: createCaseUC,
         createCaseFromPaper,
+        createCourtIssuedOrderPdfFromHtml,
         createTrialSession: createTrialSessionUC,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
