@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 export const createOrderHelper = get => {
   const richText = get(state.form.richText);
-  const docketNumber = get(state.caseDetail.docketNumber);
   const caseCaption = get(state.caseDetail.caseCaption);
 
   let pdfTemplate = `
@@ -12,10 +11,17 @@ export const createOrderHelper = get => {
         <style type="text/css">
           @page {
             size: 8.5in 11in;
-            margin: 2cm;
+            margin: 2cm 0;
+          }
+          .main {
+            margin: 0 2cm;
           }
           .court-header {
             text-align: center;
+          }
+          .order-title-header {
+            text-align: center;
+            font-weight: bold;
           }
           .caption-header {
             margin-bottom: 20px;
@@ -43,6 +49,9 @@ export const createOrderHelper = get => {
               <div class="more-indent">
                 Respondent
               </div>
+            </div>
+            <div class="order-title-header">
+              ORDER OF DISMISSAL FOR LACK OF JURISDICTION
             </div>
           </div>
           ${richText}
