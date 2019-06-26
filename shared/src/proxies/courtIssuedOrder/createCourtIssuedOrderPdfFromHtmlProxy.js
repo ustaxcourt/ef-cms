@@ -1,5 +1,3 @@
-const { post } = require('../requests');
-
 /**
  * createCourtIssuedOrderPdfFromHtml
  *

@@ -2,8 +2,8 @@
  *
  * createCourtIssuedOrderPdfFromHtml
  * @param applicationContext
- * @param entryMetadata
- * @returns {object} errors (null if no errors)
+ * @param htmlString
+ * @returns Buffer result the pdf as a binary buffer
  */
 exports.createCourtIssuedOrderPdfFromHtml = async ({
   applicationContext,
