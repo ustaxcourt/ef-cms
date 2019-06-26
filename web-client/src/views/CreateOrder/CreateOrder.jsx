@@ -48,18 +48,17 @@ export const CreateOrder = connect(
                     updateFormValueSequence={updateFormValueSequence}
                   />
                 </div>
+                <div className="display-none">
+                  <iframe id="pdf-preview-iframe" srcDoc={form.richText} />
+                </div>
               </div>
+
               <div className="grid-col-6">
                 <PdfPreview />
               </div>
             </div>
           </div>
         </section>
-        <div
-          className="pdf-preview-div"
-          dangerouslySetInnerHTML={{ __html: form.richText }}
-          style={{ display: 'none' }}
-        ></div>
       </>
     );
   },

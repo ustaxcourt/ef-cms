@@ -6,7 +6,7 @@ const {
   UnauthorizedError,
   UnprocessableEntityError,
 } = require('../../errors/errors');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {

@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/cases/Case';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
   formattedCases as formattedCasesComputed,

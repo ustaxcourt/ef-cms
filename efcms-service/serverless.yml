@@ -9,6 +9,7 @@ plugins:
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
+  - serverless-latest-layer-version
 
 custom:
   prune:
@@ -175,6 +176,7 @@ package:
     - .nyc_output/**
     - dist/**
     - src/handlers.js.map
+    - runtimes/**
 
   excludeDevDependencies: true
 
@@ -212,24 +214,6 @@ resources:
             ResourcePath: '/*'
             MetricsEnabled: true
 
-layers:
-  clamav:
-    compatibleRuntimes:
-      - nodejs10.x
-    path: runtimes/clamav
-    exclude:
-      - freshclam.conf
-      - build.sh
-      - Dockerfile
-      - Dockerfile.clamscan
-      - clamav_lambda_layer.tar.gz
-  ghostscript:
-    compatibleRuntimes:
-      - nodejs10.x
-    path: runtimes/ghostscript
-    exclude:
-      - build.sh
-
 functions:
   createDocument:
     handler: src/handlers.createDocumentLambda
@@ -247,7 +231,7 @@ functions:
     handler: src/handlers.getUploadPolicyLambda
     events:
       - http:
-          path: v1/documents/uploadPolicy
+          path: v1/documents/upload-policy
           method: get
           cors: true
           authorizer:
@@ -259,7 +243,7 @@ functions:
     handler: src/handlers.getDocumentDownloadUrlLambda
     events:
       - http:
-          path: v1/documents/{documentId}/documentDownloadUrl
+          path: v1/documents/{documentId}/document-download-url
           method: get
           cors: true
 
@@ -267,7 +251,7 @@ functions:
     handler: src/handlers.setWorkItemAsReadLambda
     events:
       - http:
-          path: v1/workitems/{workItemId}/read
+          path: v1/work-items/{workItemId}/read
           method: post
           cors: true
 
@@ -275,7 +259,7 @@ functions:
     handler: src/handlers.downloadPolicyUrlLambda
     events:
       - http:
-          path: v1/documents/{documentId}/downloadPolicyUrl
+          path: v1/documents/{documentId}/download-policy-url
           method: get
           cors: true
           authorizer:
@@ -301,7 +285,7 @@ functions:
   sanitizePdf:
     handler: src/handlers.sanitizePdfLambda
     layers:
-      - { Ref: GhostscriptLambdaLayer }
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
     memorySize: 3008
     timeout: 900
     events:
@@ -331,7 +315,7 @@ functions:
     handler: src/handlers.updateCaseTrialSortTagsLambda
     events:
       - http:
-          path: v1/cases/{caseId}/updateCaseTrialSortTags
+          path: v1/cases/{caseId}/update-case-trial-sort-tags
           method: put
           cors: true
           authorizer:
@@ -343,7 +327,7 @@ functions:
     handler: src/handlers.setCaseToReadyForTrialLambda
     events:
       - http:
-          path: v1/cases/{caseId}/setToReadyForTrial
+          path: v1/cases/{caseId}/set-to-ready-for-trial
           method: put
           cors: true
           authorizer:
@@ -479,7 +463,7 @@ functions:
     handler: src/handlers.sendPetitionToIRSHoldingQueueLambda
     events:
       - http:
-          path: v1/cases/{caseId}/sendToIRSHoldingQueue
+          path: v1/cases/{caseId}/send-to-irs-holding-queue
           method: post
           cors: true
           authorizer:
@@ -491,7 +475,7 @@ functions:
     handler: src/handlers.recallPetitionFromIRSHoldingQueueLambda
     events:
       - http:
-          path: v1/cases/{caseId}/recallFromIRSHoldingQueue
+          path: v1/cases/{caseId}/recall-from-irs-holding-queue
           method: delete
           cors: true
           authorizer:
@@ -503,7 +487,7 @@ functions:
     handler: src/handlers.assignWorkItemsLambda
     events:
       - http:
-          path: v1/workitems
+          path: v1/work-items
           method: put
           cors: true
           authorizer:
@@ -515,7 +499,7 @@ functions:
     handler: src/handlers.getWorkItemLambda
     events:
       - http:
-          path: v1/workitems/{workItemId}
+          path: v1/work-items/{workItemId}
           method: get
           cors: true
           authorizer:
@@ -527,7 +511,7 @@ functions:
     handler: src/handlers.forwardWorkItemLambda
     events:
       - http:
-          path: v1/workitems/{workItemId}/assignee
+          path: v1/work-items/{workItemId}/assignee
           method: put
           cors: true
           authorizer:
@@ -539,7 +523,7 @@ functions:
     handler: src/handlers.completeWorkItemLambda
     events:
       - http:
-          path: v1/workitems/{workItemId}/complete
+          path: v1/work-items/{workItemId}/complete
           method: put
           cors: true
           authorizer:
@@ -551,7 +535,7 @@ functions:
     handler: src/handlers.createWorkItemLambda
     events:
       - http:
-          path: v1/cases/{caseId}/documents/{documentId}/workitems
+          path: v1/cases/{caseId}/documents/{documentId}/work-items
           method: post
           cors: true
           authorizer:
@@ -681,7 +665,7 @@ functions:
     memorySize: 3008
     timeout: 900
     layers:
-      - { Ref: ClamavLambdaLayer }
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
     events:
       - http:
           path: v1/documents/{documentId}/virus-scan
@@ -703,7 +687,7 @@ functions:
     handler: src/handlers.getTrialSessionsLambda
     events:
       - http:
-          path: v1/trialSessions
+          path: v1/trial-sessions
           method: get
           cors: true
           authorizer:
@@ -715,7 +699,7 @@ functions:
     handler: src/handlers.createTrialSessionLambda
     events:
       - http:
-          path: v1/trialSessions
+          path: v1/trial-sessions
           method: post
           cors: true
           authorizer:
@@ -727,7 +711,7 @@ functions:
     handler: src/handlers.getTrialSessionDetailsLambda
     events:
       - http:
-          path: v1/trialSessions/{trialSessionId}
+          path: v1/trial-sessions/{trialSessionId}
           method: get
           cors: true
           authorizer:
@@ -739,7 +723,7 @@ functions:
     handler: src/handlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
-          path: v1/trialSessions/{trialSessionId}/setSwingSession
+          path: v1/trial-sessions/{trialSessionId}/set-swing-session
           method: post
           cors: true
           authorizer:
@@ -751,7 +735,7 @@ functions:
     handler: src/handlers.getEligibleCasesForTrialSessionLambda
     events:
       - http:
-          path: v1/trialSessions/{trialSessionId}/eligible-cases
+          path: v1/trial-sessions/{trialSessionId}/eligible-cases
           method: get
           cors: true
           authorizer:
@@ -763,7 +747,7 @@ functions:
     handler: src/handlers.setTrialSessionCalendarLambda
     events:
       - http:
-          path: v1/trialSessions/{trialSessionId}/setCalendar
+          path: v1/trial-sessions/{trialSessionId}/set-calendar
           method: post
           cors: true
           authorizer:
@@ -775,7 +759,7 @@ functions:
     handler: src/handlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
-          path: v1/trialSessions/{trialSessionId}/getCalendaredCases
+          path: v1/trial-sessions/{trialSessionId}/get-calendared-cases
           method: get
           cors: true
           authorizer:
