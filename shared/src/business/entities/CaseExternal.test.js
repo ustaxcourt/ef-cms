@@ -2,12 +2,12 @@ const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../persistence/s3/getUploadPolicy');
-const { Petition } = require('./Petition');
+const { CaseExternal } = require('./CaseExternal');
 
-describe('Petition entity', () => {
+describe('CaseExternal entity', () => {
   describe('isValid', () => {
     it('requires ownership disclosure if filing type is a business', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         businessType: 'Corporation',
         caseType: 'other',
         filingType: 'A business',
@@ -21,7 +21,7 @@ describe('Petition entity', () => {
       ).toEqual('Ownership Disclosure Statement is required.');
     });
     it('does not require ownership disclosure if filing type not set', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         hasIrsNotice: false,
         irsNoticeDate: null,
@@ -33,7 +33,7 @@ describe('Petition entity', () => {
       ).toBeUndefined();
     });
     it('does not require ownership disclosure if filing type not a business', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'not a biz',
         hasIrsNotice: false,
@@ -46,7 +46,7 @@ describe('Petition entity', () => {
       ).toBeUndefined();
     });
     it('requires stinFile', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         businessType: 'Corporation',
         caseType: 'other',
         filingType: 'A business',
@@ -63,7 +63,7 @@ describe('Petition entity', () => {
 
   describe('irs notice date validation', () => {
     it('should require notice date', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -81,7 +81,7 @@ describe('Petition entity', () => {
     });
 
     it('should not require notice date', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: false,
@@ -99,7 +99,7 @@ describe('Petition entity', () => {
     });
 
     it('should not require case type without indicating they have a notice ', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         filingType: 'Myself',
         hasIrsNotice: undefined,
         partyType:
@@ -114,7 +114,7 @@ describe('Petition entity', () => {
     });
 
     it('should inform you if notice date is in the future', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -135,7 +135,7 @@ describe('Petition entity', () => {
 
   describe('Petition file size', () => {
     it('should inform you if petition file size is greater than 500MB', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -154,7 +154,7 @@ describe('Petition entity', () => {
     });
 
     it('should inform you if petition file size is zero', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -173,7 +173,7 @@ describe('Petition entity', () => {
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -190,7 +190,7 @@ describe('Petition entity', () => {
     });
 
     it('should error on petitionFileSize when petitionFile is defined', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -210,7 +210,7 @@ describe('Petition entity', () => {
 
   describe('STIN file size', () => {
     it('should inform you if stin file size is greater than 500MB', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -229,7 +229,7 @@ describe('Petition entity', () => {
     });
 
     it('should inform you if stin file size is zero', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -248,7 +248,7 @@ describe('Petition entity', () => {
     });
 
     it('should not error on stinFileSize when stinFile is undefined', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -265,7 +265,7 @@ describe('Petition entity', () => {
     });
 
     it('should error on stinFileSize when stinFile is defined', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -285,7 +285,7 @@ describe('Petition entity', () => {
 
   describe('ownership disclosure file size', () => {
     it('should inform you if ownership disclosure file size is greater than 500MB', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -306,7 +306,7 @@ describe('Petition entity', () => {
     });
 
     it('should inform you if ownership disclosure file size is zero', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -325,7 +325,7 @@ describe('Petition entity', () => {
     });
 
     it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -342,7 +342,7 @@ describe('Petition entity', () => {
     });
 
     it('should error on ownershipDisclosureFileSize when ownershipDisclosureFile is defined', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
