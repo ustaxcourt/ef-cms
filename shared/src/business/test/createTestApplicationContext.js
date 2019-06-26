@@ -79,7 +79,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDocumentClient: () => mockDocClient,
     getEntityConstructors: () => ({
-      Petition: PetitionWithoutFiles,
+      CaseExternal: PetitionWithoutFiles,
       PetitionFromPaper: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {

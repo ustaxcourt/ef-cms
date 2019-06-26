@@ -6,21 +6,10 @@ const AWS =
     ? AWSXRay.captureAWS(require('aws-sdk'))
     : require('aws-sdk');
 
-const uuidv4 = require('uuid/v4');
-const { DynamoDB, S3 } = AWS;
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
-
 const util = require('util');
-const { exec } = require('child_process');
-const execPromise = util.promisify(exec);
-
-const {
-  createISODateString,
-  formatDateString,
-  prepareDateFromString,
-} = require('../../shared/src/business/utilities/DateHandler');
-
+const uuidv4 = require('uuid/v4');
 const {
   addCoverToPDFDocument,
 } = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
@@ -48,7 +37,6 @@ const {
 const {
   createCase: createCaseUC,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
-
 const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
@@ -61,6 +49,11 @@ const {
 const {
   createDocument,
 } = require('../../shared/src/business/useCases/createDocumentInteractor');
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../../shared/src/business/utilities/DateHandler');
 const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
@@ -216,7 +209,7 @@ const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  putWorkItemInUsersOutbox
+  putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
   recallPetitionFromIRSHoldingQueue,
@@ -231,8 +224,8 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
-  saveWorkItemForDocketClerkFilingExternalDocument
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument')
+  saveWorkItemForDocketClerkFilingExternalDocument,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -305,7 +298,11 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
+
+const { DynamoDB, S3 } = AWS;
+const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -354,7 +351,7 @@ module.exports = (appContextUser = {}) => {
       return environment.documentsBucketName;
     },
     getEntityConstructors: () => ({
-      Petition: PetitionWithoutFiles,
+      CaseExternal: PetitionWithoutFiles,
       PetitionFromPaper: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {

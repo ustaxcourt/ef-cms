@@ -9,31 +9,31 @@ const {
 const { instantiateContacts } = require('./contacts/PetitionContact');
 
 /**
- * Petition Entity
+ * CaseExternal Entity
  * Represents a Case with required documents that a Petitioner is attempting to add to the system.
- * @param rawPetition
+ * @param rawCase
  * @constructor
  */
-function Petition(rawPetition) {
+function CaseExternal(rawCase) {
   Object.assign(this, {
-    businessType: rawPetition.businessType,
-    caseType: rawPetition.caseType,
-    contactPrimary: rawPetition.contactPrimary,
-    contactSecondary: rawPetition.contactSecondary,
-    countryType: rawPetition.countryType,
-    filingType: rawPetition.filingType,
-    hasIrsNotice: rawPetition.hasIrsNotice,
-    irsNoticeDate: rawPetition.irsNoticeDate,
-    ownershipDisclosureFile: rawPetition.ownershipDisclosureFile,
-    ownershipDisclosureFileSize: rawPetition.ownershipDisclosureFileSize,
-    partyType: rawPetition.partyType,
-    petitionFile: rawPetition.petitionFile,
-    petitionFileSize: rawPetition.petitionFileSize,
-    preferredTrialCity: rawPetition.preferredTrialCity,
-    procedureType: rawPetition.procedureType,
-    signature: rawPetition.signature,
-    stinFile: rawPetition.stinFile,
-    stinFileSize: rawPetition.stinFileSize,
+    businessType: rawCase.businessType,
+    caseType: rawCase.caseType,
+    contactPrimary: rawCase.contactPrimary,
+    contactSecondary: rawCase.contactSecondary,
+    countryType: rawCase.countryType,
+    filingType: rawCase.filingType,
+    hasIrsNotice: rawCase.hasIrsNotice,
+    irsNoticeDate: rawCase.irsNoticeDate,
+    ownershipDisclosureFile: rawCase.ownershipDisclosureFile,
+    ownershipDisclosureFileSize: rawCase.ownershipDisclosureFileSize,
+    partyType: rawCase.partyType,
+    petitionFile: rawCase.petitionFile,
+    petitionFileSize: rawCase.petitionFileSize,
+    preferredTrialCity: rawCase.preferredTrialCity,
+    procedureType: rawCase.procedureType,
+    signature: rawCase.signature,
+    stinFile: rawCase.stinFile,
+    stinFileSize: rawCase.stinFileSize,
   });
 
   const contacts = instantiateContacts({
@@ -47,7 +47,7 @@ function Petition(rawPetition) {
   this.contactSecondary = contacts.secondary;
 }
 
-Petition.errorToMessageMap = {
+CaseExternal.errorToMessageMap = {
   caseType: 'Case Type is a required field.',
   filingType: 'Filing Type is a required field.',
   hasIrsNotice: 'You must indicate whether you received an IRS notice.',
@@ -89,7 +89,7 @@ Petition.errorToMessageMap = {
 };
 
 joiValidationDecorator(
-  Petition,
+  CaseExternal,
   joi.object().keys({
     businessType: joi
       .string()
@@ -157,7 +157,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  Petition.errorToMessageMap,
+  CaseExternal.errorToMessageMap,
 );
 
-module.exports = { Petition };
+module.exports = { CaseExternal };
