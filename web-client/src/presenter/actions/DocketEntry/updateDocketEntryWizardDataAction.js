@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {void}
  */
-export const updateDocketEntryWizardDataAction = ({ get, store, props }) => {
+export const updateDocketEntryWizardDataAction = ({ get, props, store }) => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
   let entry, form;
   let supporting = get(state.screenMetadata.supporting);

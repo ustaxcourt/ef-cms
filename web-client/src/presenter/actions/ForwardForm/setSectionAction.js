@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.form
  * @param {object} providers.props the cerebral props object used for getting the props.workItemId and value
  */
-export const setSectionAction = ({ store, props }) => {
+export const setSectionAction = ({ props, store }) => {
   store.set(state.form[props.workItemId].section, props.value);
 };

@@ -21,6 +21,7 @@ import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAn
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
@@ -177,6 +178,7 @@ export const presenter = {
     closeModalAndReturnToTrialSessionsSequence,
     completeScanSequence,
     confirmStayLoggedInSequence,
+    convertHtml2PdfSequence,
     createWorkItemSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,

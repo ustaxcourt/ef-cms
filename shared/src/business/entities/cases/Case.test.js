@@ -5,10 +5,10 @@ const {
   Case,
   STATUS_TYPES,
 } = require('./Case');
-const { DocketRecord } = require('./DocketRecord');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { PARTY_TYPES } = require('./contacts/PetitionContact');
-const { WorkItem } = require('./WorkItem');
+const { DocketRecord } = require('../DocketRecord');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { PARTY_TYPES } = require('../contacts/PetitionContact');
+const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
   it('defaults the orders to false', () => {

@@ -18,7 +18,7 @@ export const TrialSessionDetail = connect(
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
   },
-  ({ showModal, openSetCalendarModalSequence, formattedTrialSession }) => (
+  ({ formattedTrialSession, openSetCalendarModalSequence, showModal }) => (
     <>
       <div className="big-blue-header">
         <div className="grid-container">
@@ -35,7 +35,7 @@ export const TrialSessionDetail = connect(
               </span>
             </span>
           </div>
-          <p id="case-title" className="margin-y-0">
+          <p className="margin-y-0" id="case-title">
             <span>{formattedTrialSession.formattedStartDate}</span>
           </p>
         </div>
@@ -49,8 +49,8 @@ export const TrialSessionDetail = connect(
 
         {!formattedTrialSession.isCalendared && (
           <Tabs
-            defaultActiveTab="EligibleCases"
             bind="trialsessiondetails.caseList"
+            defaultActiveTab="EligibleCases"
           >
             <button
               className="usa-button tab-right-button"
@@ -62,9 +62,9 @@ export const TrialSessionDetail = connect(
               )}
             </button>
             <Tab
+              id="eligible-cases-tab"
               tabName="EligibleCases"
               title="Eligible Cases"
-              id="eligible-cases-tab"
             >
               <div id="eligible-cases-tab-content">
                 <EligibleCases />
@@ -75,24 +75,24 @@ export const TrialSessionDetail = connect(
 
         {formattedTrialSession.isCalendared && (
           <Tabs
-            defaultActiveTab="OpenCases"
             bind="trialsessiondetails.calendaredCaseList"
+            defaultActiveTab="OpenCases"
           >
-            <Tab tabName="OpenCases" title="Open Cases" id="open-cases-tab">
+            <Tab id="open-cases-tab" tabName="OpenCases" title="Open Cases">
               <div id="open-cases-tab-content">
                 <OpenCases />
               </div>
             </Tab>
             <Tab
+              id="closed-cases-tab"
               tabName="ClosedCases"
               title="Closed Cases"
-              id="closed-cases-tab"
             >
               <div id="closed-cases-tab-content">
                 <ClosedCases />
               </div>
             </Tab>
-            <Tab tabName="AllCases" title="All Cases" id="all-cases-tab">
+            <Tab id="all-cases-tab" tabName="AllCases" title="All Cases">
               <div id="all-cases-tab-content">
                 <AllCases />
               </div>

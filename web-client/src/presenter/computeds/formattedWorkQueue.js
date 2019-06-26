@@ -4,10 +4,20 @@ import {
   SENIOR_ATTORNEY_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
-import { STATUS_TYPES } from '../../../../shared/src/business/entities/Case';
+import { STATUS_TYPES } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
+
+const isDateToday = (date, applicationContext) => {
+  const now = applicationContext
+    .getUtilities()
+    .formatDateString(new Date(), 'MMDDYY');
+  const then = applicationContext
+    .getUtilities()
+    .formatDateString(date, 'MMDDYY');
+  return now === then;
+};
 
 const formatDateIfToday = (date, applicationContext) => {
   const now = applicationContext
@@ -109,7 +119,9 @@ export const formatWorkItem = (
 
   result.receivedAt = isInternal
     ? result.currentMessage.createdAt
-    : result.document.createdAt;
+    : isDateToday(result.document.receivedAt, applicationContext)
+    ? result.document.createdAt
+    : result.document.receivedAt;
   result.received = formatDateIfToday(result.receivedAt, applicationContext);
 
   result.sentDateFormatted = formatDateIfToday(
@@ -132,9 +144,9 @@ export const formatWorkItem = (
 };
 
 export const filterWorkItems = ({
-  workQueueToDisplay,
-  workQueueIsInternal,
   user,
+  workQueueIsInternal,
+  workQueueToDisplay,
 }) => {
   const { box, queue } = workQueueToDisplay;
   const userSection = getSectionForRole(user.role);
@@ -260,17 +272,37 @@ export const formattedWorkQueue = (get, applicationContext) => {
       formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
     );
 
-  let sortField = 'receivedAt';
+  const sortFields = {
+    documentQc: {
+      my: {
+        batched: 'batchedAt',
+        inbox: 'receivedAt',
+        outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
+      },
+      section: {
+        batched: 'batchedAt',
+        inbox: 'receivedAt',
+        outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
+      },
+    },
+    messages: {
+      my: {
+        inbox: 'receivedAt',
+        outbox: 'receivedAt',
+      },
+      section: {
+        inbox: 'receivedAt',
+        outbox: 'receivedAt',
+      },
+    },
+  };
 
-  // Document QC
-  // - sort by batchedAt on Batched box
-  // - sort by completedAt on Served tab
-  sortField =
-    !isInternal && workQueueToDisplay.box === 'batched'
-      ? 'batchedAt'
-      : 'completedAt';
+  const sortField =
+    sortFields[isInternal ? 'messages' : 'documentQc'][
+      workQueueToDisplay.queue
+    ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, sortField, 'desc');
+  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], 'desc');
 
   return workQueue;
 };

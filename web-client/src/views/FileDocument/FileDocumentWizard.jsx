@@ -26,8 +26,8 @@ export const FileDocumentWizard = connect(
           <ErrorNotification />
           <Tabs
             asSwitch
-            defaultActiveTab="SelectDocumentType"
             bind="wizardStep"
+            defaultActiveTab="SelectDocumentType"
           >
             <Tab tabName="SelectDocumentType">
               <SelectDocumentType />

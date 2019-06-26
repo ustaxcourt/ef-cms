@@ -14,21 +14,21 @@ export const SessionAssignmentsForm = connect(
         <h2 className="margin-top-4">Session Assignments</h2>
         <div className="blue-container">
           <div className="usa-form-group">
-            <label htmlFor="judge" id="judge-label" className="usa-label">
+            <label className="usa-label" htmlFor="judge" id="judge-label">
               Judge <span className="usa-hint">(optional)</span>
             </label>
             <select
-              name="judge"
-              id="judge"
               aria-describedby="judge-label"
               className="usa-select"
+              id="judge"
+              name="judge"
+              value={form.judge || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              value={form.judge || ''}
             >
               <option value="">- Select -</option>
               {/* hardcoding these for #1191 - will be dynamic at some point */}
@@ -67,24 +67,24 @@ export const SessionAssignmentsForm = connect(
 
           <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="trial-clerk"
               id="trial-clerk-label"
-              className="usa-label"
             >
               Trial Clerk <span className="usa-hint">(optional)</span>
             </label>
             <select
-              name="trialClerk"
-              id="trial-clerk"
               aria-describedby="trial-clerk-label"
               className="usa-select"
+              id="trial-clerk"
+              name="trialClerk"
+              value={form.trialClerk || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              value={form.trialClerk || ''}
             >
               <option value="">- Select -</option>
               {/* hardcoding these for #1191 - will be dynamic at some point */}
@@ -95,15 +95,15 @@ export const SessionAssignmentsForm = connect(
           </div>
 
           <div className="usa-form-group">
-            <label htmlFor="court-reporter" className="usa-label">
+            <label className="usa-label" htmlFor="court-reporter">
               Court Reporter <span className="usa-hint">(optional)</span>
             </label>
             <input
-              id="court-reporter"
-              type="text"
-              name="courtReporter"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="court-reporter"
+              name="courtReporter"
+              type="text"
               value={form.courtReporter || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
@@ -115,16 +115,16 @@ export const SessionAssignmentsForm = connect(
           </div>
 
           <div className="usa-form-group margin-bottom-0">
-            <label htmlFor="irs-calendar-administrator" className="usa-label">
+            <label className="usa-label" htmlFor="irs-calendar-administrator">
               IRS Calendar Administrator{' '}
               <span className="usa-hint">(optional)</span>
             </label>
             <input
-              id="irs-calendar-administrator"
-              type="text"
-              name="irsCalendarAdministrator"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="irs-calendar-administrator"
+              name="irsCalendarAdministrator"
+              type="text"
               value={form.irsCalendarAdministrator || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({

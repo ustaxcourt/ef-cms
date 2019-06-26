@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.workQueue.myQueue.outbox
  * @param {Function} providers.props the cerebral props object used for getting the props.workItems
  */
-export const setSentWorkItemsForUserAction = ({ store, props }) => {
+export const setSentWorkItemsForUserAction = ({ props, store }) => {
   store.set(state.workQueue.myQueue.outbox, props.workItems);
 };

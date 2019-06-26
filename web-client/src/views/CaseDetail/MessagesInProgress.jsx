@@ -8,7 +8,7 @@ export const MessagesInProgress = connect(
     documentHelper: state.documentHelper,
     extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
   },
-  function MessagesInProgress({ extractedPendingMessages, documentHelper }) {
+  function MessagesInProgress({ documentHelper, extractedPendingMessages }) {
     return (
       <>
         {extractedPendingMessages.length === 0 && (
@@ -40,11 +40,11 @@ export const MessagesInProgress = connect(
                   <td className="padding-extra">
                     <p className="margin-y-0">
                       <a
+                        className="case-link"
                         href={documentHelper({
                           docketNumber: workItem.docketNumber,
                           documentId: workItem.document.documentId,
                         })}
-                        className="case-link"
                       >
                         {workItem.document.documentType}
                       </a>

@@ -18,12 +18,12 @@ export const PrimaryDocumentForm = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    constants,
     fileDocumentHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
-    constants,
   }) => {
     return (
       <React.Fragment>
@@ -48,14 +48,14 @@ export const PrimaryDocumentForm = connect(
                   }`}
                 >
                   <label
-                    htmlFor="primary-document"
-                    id="primary-document-label"
                     className={
                       'usa-label ustc-upload with-hint ' +
                       (fileDocumentHelper.showPrimaryDocumentValid
                         ? 'validated'
                         : '')
                     }
+                    htmlFor="primary-document"
+                    id="primary-document-label"
                   >
                     Upload Your Document{' '}
                     <span className="success-message padding-left-1">
@@ -67,15 +67,15 @@ export const PrimaryDocumentForm = connect(
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <StateDrivenFileInput
+                    aria-describedby="primary-document-label"
                     id="primary-document"
                     name="primaryDocumentFile"
-                    aria-describedby="primary-document-label"
                     updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                     validationSequence="validateExternalDocumentInformationSequence"
                   />
                   <Text
-                    className="usa-error-message"
                     bind="validationErrors.primaryDocumentFile"
+                    className="usa-error-message"
                   />
                 </div>
               </div>
@@ -95,13 +95,13 @@ export const PrimaryDocumentForm = connect(
                 {['Yes', 'No'].map(option => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
-                      id={`certificate-${option}`}
-                      type="radio"
-                      name="certificateOfService"
-                      className="usa-radio__input"
-                      value={option}
                       aria-describedby="certificate-of-service-legend"
                       checked={form.certificateOfService === (option === 'Yes')}
+                      className="usa-radio__input"
+                      id={`certificate-${option}`}
+                      name="certificateOfService"
+                      type="radio"
+                      value={option}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -111,8 +111,8 @@ export const PrimaryDocumentForm = connect(
                       }}
                     />
                     <label
-                      htmlFor={`certificate-${option}`}
                       className="usa-radio__label"
+                      htmlFor={`certificate-${option}`}
                     >
                       {option}
                     </label>
@@ -120,8 +120,8 @@ export const PrimaryDocumentForm = connect(
                 ))}
               </fieldset>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.certificateOfService"
+                className="usa-error-message"
               />
             </div>
 
@@ -134,102 +134,102 @@ export const PrimaryDocumentForm = connect(
                 }`}
               >
                 <fieldset className="service-date usa-fieldset">
-                  <legend id="service-date-legend" className="usa-legend">
+                  <legend className="usa-legend" id="service-date-legend">
                     Service Date
                   </legend>
                   <div className="usa-memorable-date">
                     <div className="usa-form-group usa-form-group--month">
                       <label
-                        htmlFor="service-date-month"
-                        className="usa-label"
                         aria-hidden="true"
+                        className="usa-label"
+                        htmlFor="service-date-month"
                       >
                         MM
                       </label>
                       <input
+                        aria-describedby="service-date-legend"
+                        aria-label="month, two digits"
                         className="usa-input usa-input-inline"
                         id="service-date-month"
-                        aria-label="month, two digits"
-                        aria-describedby="service-date-legend"
-                        name="certificateOfServiceMonth"
-                        value={form.certificateOfServiceMonth}
-                        type="number"
-                        min="1"
                         max="12"
+                        min="1"
+                        name="certificateOfServiceMonth"
+                        type="number"
+                        value={form.certificateOfServiceMonth}
+                        onBlur={() => {
+                          validateExternalDocumentInformationSequence();
+                        }}
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
-                        }}
-                        onBlur={() => {
-                          validateExternalDocumentInformationSequence();
                         }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group--day">
                       <label
-                        htmlFor="service-date-day"
-                        className="usa-label"
                         aria-hidden="true"
+                        className="usa-label"
+                        htmlFor="service-date-day"
                       >
                         DD
                       </label>
                       <input
+                        aria-describedby="service-date-legend"
+                        aria-label="day, two digits"
                         className="usa-input usa-input-inline"
                         id="service-date-day"
-                        name="certificateOfServiceDay"
-                        value={form.certificateOfServiceDay}
-                        aria-label="day, two digits"
-                        aria-describedby="service-date-legend"
-                        type="number"
-                        min="1"
                         max="31"
+                        min="1"
+                        name="certificateOfServiceDay"
+                        type="number"
+                        value={form.certificateOfServiceDay}
+                        onBlur={() => {
+                          validateExternalDocumentInformationSequence();
+                        }}
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
-                        }}
-                        onBlur={() => {
-                          validateExternalDocumentInformationSequence();
                         }}
                       />
                     </div>
                     <div className="usa-form-group usa-form-group--year">
                       <label
-                        htmlFor="service-date-year"
-                        className="usa-label"
                         aria-hidden="true"
+                        className="usa-label"
+                        htmlFor="service-date-year"
                       >
                         YYYY
                       </label>
                       <input
+                        aria-describedby="service-date-legend"
+                        aria-label="year, four digits"
                         className="usa-input usa-input-inline"
                         id="service-date-year"
-                        aria-label="year, four digits"
-                        aria-describedby="service-date-legend"
-                        name="certificateOfServiceYear"
-                        value={form.certificateOfServiceYear}
-                        type="number"
-                        min="1900"
                         max="2100"
+                        min="1900"
+                        name="certificateOfServiceYear"
+                        type="number"
+                        value={form.certificateOfServiceYear}
+                        onBlur={() => {
+                          validateExternalDocumentInformationSequence();
+                        }}
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
-                        }}
-                        onBlur={() => {
-                          validateExternalDocumentInformationSequence();
                         }}
                       />
                     </div>
                   </div>
                 </fieldset>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.certificateOfServiceDate"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -246,13 +246,13 @@ export const PrimaryDocumentForm = connect(
                 {['Yes', 'No'].map(option => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
-                      id={`exhibits-${option}`}
-                      type="radio"
-                      name="exhibits"
                       aria-describedby="exhibits-legend"
-                      className="usa-radio__input"
-                      value={option}
                       checked={form.exhibits === (option === 'Yes')}
+                      className="usa-radio__input"
+                      id={`exhibits-${option}`}
+                      name="exhibits"
+                      type="radio"
+                      value={option}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -262,8 +262,8 @@ export const PrimaryDocumentForm = connect(
                       }}
                     />
                     <label
-                      htmlFor={`exhibits-${option}`}
                       className="usa-radio__label"
+                      htmlFor={`exhibits-${option}`}
                     >
                       {option}
                     </label>
@@ -271,8 +271,8 @@ export const PrimaryDocumentForm = connect(
                 ))}
               </fieldset>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.exhibits"
+                className="usa-error-message"
               />
             </div>
 
@@ -288,13 +288,13 @@ export const PrimaryDocumentForm = connect(
                 {['Yes', 'No'].map(option => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
-                      id={`attachments-${option}`}
-                      type="radio"
-                      name="attachments"
                       aria-describedby="attachments-legend"
-                      value={option}
-                      className="usa-radio__input"
                       checked={form.attachments === (option === 'Yes')}
+                      className="usa-radio__input"
+                      id={`attachments-${option}`}
+                      name="attachments"
+                      type="radio"
+                      value={option}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -304,8 +304,8 @@ export const PrimaryDocumentForm = connect(
                       }}
                     />
                     <label
-                      htmlFor={`attachments-${option}`}
                       className="usa-radio__label"
+                      htmlFor={`attachments-${option}`}
                     >
                       {option}
                     </label>
@@ -313,8 +313,8 @@ export const PrimaryDocumentForm = connect(
                 ))}
               </fieldset>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.attachments"
+                className="usa-error-message"
               />
             </div>
 
@@ -331,13 +331,13 @@ export const PrimaryDocumentForm = connect(
                   {['Yes', 'No', 'Unknown'].map(option => (
                     <div className="usa-radio usa-radio__inline" key={option}>
                       <input
-                        id={`objections-${option}`}
-                        type="radio"
                         aria-describedby="objections-legend"
-                        name="objections"
-                        className="usa-radio__input"
-                        value={option}
                         checked={form.objections === option}
+                        className="usa-radio__input"
+                        id={`objections-${option}`}
+                        name="objections"
+                        type="radio"
+                        value={option}
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
                             key: e.target.name,
@@ -347,8 +347,8 @@ export const PrimaryDocumentForm = connect(
                         }}
                       />
                       <label
-                        htmlFor={`objections-${option}`}
                         className="usa-radio__label"
+                        htmlFor={`objections-${option}`}
                       >
                         {option}
                       </label>
@@ -356,8 +356,8 @@ export const PrimaryDocumentForm = connect(
                   ))}
                 </fieldset>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.objections"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -380,15 +380,15 @@ export const PrimaryDocumentForm = connect(
                 {['Yes', 'No'].map(option => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
-                      id={`supporting-documents-${option}`}
-                      type="radio"
-                      name="hasSupportingDocuments"
-                      className="usa-radio__input"
                       aria-describedby="support-docs-legend"
-                      value={option}
                       checked={
                         form.hasSupportingDocuments === (option === 'Yes')
                       }
+                      className="usa-radio__input"
+                      id={`supporting-documents-${option}`}
+                      name="hasSupportingDocuments"
+                      type="radio"
+                      value={option}
                       onChange={e => {
                         updateFileDocumentWizardFormValueSequence({
                           key: e.target.name,
@@ -398,8 +398,8 @@ export const PrimaryDocumentForm = connect(
                       }}
                     />
                     <label
-                      htmlFor={`supporting-documents-${option}`}
                       className="usa-radio__label"
+                      htmlFor={`supporting-documents-${option}`}
                     >
                       {option}
                     </label>
@@ -407,8 +407,8 @@ export const PrimaryDocumentForm = connect(
                 ))}
               </fieldset>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.hasSupportingDocuments"
+                className="usa-error-message"
               />
             </div>
 
@@ -421,21 +421,22 @@ export const PrimaryDocumentForm = connect(
                 } ${!form.supportingDocument ? 'margin-bottom-0 ' : ''} `}
               >
                 <label
+                  className="usa-label"
                   htmlFor="supporting-document"
                   id="supporting-document-label"
-                  className="usa-label"
                 >
                   Select Supporting Document
                 </label>
                 <select
-                  name="supportingDocument"
-                  id="supporting-document"
                   aria-describedby="supporting-document-label"
                   className={`usa-select ${
                     validationErrors.supportingDocument
                       ? 'usa-select--error'
                       : ''
                   }`}
+                  id="supporting-document"
+                  name="supportingDocument"
+                  value={form.supportingDocument || ''}
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
                       key: 'supportingDocumentMetadata.category',
@@ -455,7 +456,6 @@ export const PrimaryDocumentForm = connect(
                     });
                     validateExternalDocumentInformationSequence();
                   }}
-                  value={form.supportingDocument || ''}
                 >
                   <option value="">- Select -</option>
                   {fileDocumentHelper.supportingDocumentTypeList.map(entry => {
@@ -470,8 +470,8 @@ export const PrimaryDocumentForm = connect(
                   })}
                 </select>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.supportingDocument"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -485,20 +485,23 @@ export const PrimaryDocumentForm = connect(
                 }`}
               >
                 <label
+                  className="usa-label"
                   htmlFor="supporting-document-free-text"
                   id="supporting-document-free-text-label"
-                  className="usa-label"
                 >
                   Supporting Document Signed By
                 </label>
                 <input
-                  id="supporting-document-free-text"
-                  type="text"
                   aria-describedby="supporting-document-free-text-label"
-                  name="supportingDocumentFreeText"
                   autoCapitalize="none"
                   className="usa-input"
+                  id="supporting-document-free-text"
+                  name="supportingDocumentFreeText"
+                  type="text"
                   value={form.supportingDocumentFreeText || ''}
+                  onBlur={() => {
+                    validateExternalDocumentInformationSequence();
+                  }}
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
                       key: 'supportingDocumentMetadata.freeText',
@@ -509,13 +512,10 @@ export const PrimaryDocumentForm = connect(
                       value: e.target.value,
                     });
                   }}
-                  onBlur={() => {
-                    validateExternalDocumentInformationSequence();
-                  }}
                 />
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.supportingDocumentFreeText"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -529,14 +529,14 @@ export const PrimaryDocumentForm = connect(
                 }`}
               >
                 <label
-                  htmlFor="supporting-document-file"
-                  id="supporting-document-file-label"
                   className={
                     'usa-label ustc-upload with-hint ' +
                     (fileDocumentHelper.showSupportingDocumentValid
                       ? 'validated'
                       : '')
                   }
+                  htmlFor="supporting-document-file"
+                  id="supporting-document-file-label"
                 >
                   Upload Your Supporting Document{' '}
                   <span className="success-message">
@@ -548,15 +548,15 @@ export const PrimaryDocumentForm = connect(
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <StateDrivenFileInput
+                  aria-describedby="supporting-document-file-label"
                   id="supporting-document-file"
                   name="supportingDocumentFile"
-                  aria-describedby="supporting-document-file-label"
                   updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                   validationSequence="validateExternalDocumentInformationSequence"
                 />
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.supportingDocumentFile"
+                  className="usa-error-message"
                 />
               </div>
             )}

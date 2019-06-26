@@ -9,8 +9,8 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.workItem
  * @returns {object} continue path for the sequence
  */
-export const getShouldMarkReadAction = ({ store, props, path }) => {
-  const workItemIdToMarkAsRead = props.workItemIdToMarkAsRead;
+export const getShouldMarkReadAction = ({ path, props, store }) => {
+  const { workItemIdToMarkAsRead } = props;
 
   if (workItemIdToMarkAsRead) {
     store.set(state.workItemId, props.workItemIdToMarkAsRead);

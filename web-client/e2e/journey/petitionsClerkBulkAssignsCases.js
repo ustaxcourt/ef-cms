@@ -14,7 +14,7 @@ export default test => {
 
     const result = await test.runSequence('assignSelectedWorkItemsSequence');
 
-    const workQueue = result.state.workQueue;
+    const { workQueue } = result.state;
     selectedWorkItems.forEach(assignedWorkItem => {
       const workItem = workQueue.find(
         item => (item.workItemId = assignedWorkItem.workItemId),
