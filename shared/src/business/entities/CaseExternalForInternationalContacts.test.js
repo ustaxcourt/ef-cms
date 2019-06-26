@@ -1,14 +1,24 @@
-const { Petition } = require('./Petition');
+const { CaseExternal } = require('./CaseExternal');
 
-describe('Petition', () => {
-  describe('for Partnership (as the tax matters partner) Contacts', () => {
-    it('should not validate without contacts', () => {
-      const petition = new Petition({
+describe('CaseExternal', () => {
+  describe('for (international) Contacts', () => {
+    it('should not validate without country', () => {
+      const petition = new CaseExternal({
         caseType: 'other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          countryType: 'international',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType: 'Petitioner',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -17,30 +27,20 @@ describe('Petition', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.isValid()).toEqual(false);
+      expect(petition.getFormattedValidationErrors()).toEqual({
+        contactPrimary: { country: 'Country is a required field.' },
+      });
     });
 
-    it('can validate contacts', () => {
-      const petition = new Petition({
+    it('can validate primary contact', () => {
+      const petition = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
-          countryType: 'domestic',
+          countryType: 'international',
           email: 'someone@example.com',
-          name: 'Jimmy Dean',
-          phone: '1234567890',
-          postalCode: '05198',
-          state: 'AK',
-        },
-        contactSecondary: {
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          country: 'USA',
-          countryType: 'domestic',
-          email: 'someone@example.com',
-          inCareOf: 'USTC',
           name: 'Jimmy Dean',
           phone: '1234567890',
           postalCode: '05198',
@@ -49,7 +49,7 @@ describe('Petition', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType: 'Petitioner',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',

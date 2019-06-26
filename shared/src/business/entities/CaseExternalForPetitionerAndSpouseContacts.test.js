@@ -1,15 +1,14 @@
-const { Petition } = require('./Petition');
+const { CaseExternal } = require('./CaseExternal');
 
-describe('Petition', () => {
-  describe('for Minor without Guardian Contacts', () => {
+describe('CaseExternal', () => {
+  describe('for Petitioner And Spouse Contacts', () => {
     it('should not validate without contacts', () => {
-      const petition = new Petition({
+      const petition = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: 'Petitioner & Spouse',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -21,8 +20,8 @@ describe('Petition', () => {
       expect(petition.isValid()).toEqual(false);
     });
 
-    it('can validate contacts', () => {
-      const petition = new Petition({
+    it('can validate primary contact name', () => {
+      const petition = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -36,22 +35,19 @@ describe('Petition', () => {
           state: 'AK',
         },
         contactSecondary: {
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          country: 'USA',
+          address1: '1599 Pennsylvania Ave',
+          city: 'Walla Walla',
           countryType: 'domestic',
           email: 'someone@example.com',
-          inCareOf: 'USTC',
-          name: 'Jimmy Dean',
+          name: 'Betty Crocker',
           phone: '1234567890',
-          postalCode: '05198',
-          state: 'AK',
+          postalCode: '78774',
+          state: 'WA',
         },
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: 'Petitioner & Spouse',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
