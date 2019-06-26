@@ -8,7 +8,7 @@ config:
 scenarios:
   - flow:
       - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/uploadPolicy'
+          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/upload-policy'
           headers:
             Authorization: 'Bearer {{ token }}'
       - post:

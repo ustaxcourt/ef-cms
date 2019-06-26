@@ -141,7 +141,7 @@ export const DocumentDetail = connect(
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CYPRESS && (
                   <iframe
-                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/documentDownloadUrl?token=${token}`}
+                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
                     title={`Document type: ${helper.formattedDocument.documentType}`}
                   />
                 )}
