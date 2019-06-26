@@ -25,8 +25,27 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
 
     await page.setContent(htmlString);
 
+    const headerTemplate = `
+      <html>
+        <body>
+          <div style='font-size: 14px'>
+            <div style='float: right'>
+              Page <span class='pageNumber'></span> 
+              of <span class='totalPages'></span>
+            </div>
+            <div style='float: left'>
+              Docket 123-19
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
     result = await page.pdf({
+      displayHeaderFooter: true,
+      footerTemplate: '<div></div>',
       format: 'letter',
+      headerTemplate,
     });
   } catch (error) {
     throw error;

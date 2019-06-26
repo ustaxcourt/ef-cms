@@ -10,10 +10,16 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
+    createOrderHelper: state.createOrderHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ convertHtml2PdfSequence, form, updateFormValueSequence }) => {
+  ({
+    convertHtml2PdfSequence,
+    createOrderHelper,
+    form,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <BigHeader text="Create Order" />
@@ -42,14 +48,17 @@ export const CreateOrder = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <div className="blue-container">
+                <div className="blue-container height-20">
                   <TextEditor
                     form={form}
                     updateFormValueSequence={updateFormValueSequence}
                   />
                 </div>
                 <div className="display-none">
-                  <iframe id="pdf-preview-iframe" srcDoc={form.richText} />
+                  <iframe
+                    id="pdf-preview-iframe"
+                    srcDoc={createOrderHelper.pdfTemplate}
+                  />
                 </div>
               </div>
 
