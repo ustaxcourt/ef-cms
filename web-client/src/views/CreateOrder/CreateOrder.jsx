@@ -56,7 +56,7 @@ export const CreateOrder = connect(
                 </div>
                 <div className="display-none">
                   <iframe
-                    id="pdf-preview-iframe"
+                    id="temp-preview-iframe"
                     srcDoc={createOrderHelper.pdfTemplate}
                   />
                 </div>
