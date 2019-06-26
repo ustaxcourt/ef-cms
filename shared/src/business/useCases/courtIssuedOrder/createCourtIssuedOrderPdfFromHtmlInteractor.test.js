@@ -1,3 +1,7 @@
+const {
+  createCourtIssuedOrderPdfFromHtml,
+} = require('./createCourtIssuedOrderPdfFromHtml');
+
 describe('createCourtIssuedOrderPdfFromHtml', () => {
   it('returns the htmlString back', () => {
     const result = createCourtIssuedOrderPdfFromHtml({
