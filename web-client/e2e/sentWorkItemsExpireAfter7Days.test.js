@@ -7,7 +7,7 @@ import {
 } from './helpers';
 import { omit } from 'lodash';
 
-import applicationContextFactory from '../../efcms-service/src/applicationContext';
+import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const test = setupTest();
 
