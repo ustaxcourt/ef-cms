@@ -11,7 +11,7 @@ import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const test = setupTest();
 
-xdescribe('verify old sent work items do not show up in the outbox', () => {
+describe('verify old sent work items do not show up in the outbox', () => {
   let workItem6Days;
   let workItem7Days;
   let workItem8Days;

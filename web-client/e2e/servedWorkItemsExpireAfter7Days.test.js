@@ -11,14 +11,14 @@ import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const test = setupTest();
 
-xdescribe('verify old served work items do not show up in the outbox', () => {
+describe('verify old served work items do not show up in the outbox', () => {
   let workItem6Days;
   let workItem7Days;
   let workItem8Days;
   let caseDetail;
 
   beforeEach(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(300000);
 
     await loginAs(test, 'taxpayer');
     caseDetail = await uploadPetition(test);

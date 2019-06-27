@@ -17,11 +17,11 @@
     "print:success": "../wait-until.sh http://localhost:1234 && echo 'Build successful. You can access the site at http://localhost:1234'",
     "start": "npm run dev",
     "test:all": "IS_TEST=1 npm run lint && npm run test && npm run test:pa11y && npm run cypress",
-    "test:e2e": "IS_TEST=1 jest --runInBand --config jest-e2e.config.js ./e2e/.*test\\.js$",
+    "test:e2e": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop IS_TEST=1 jest --runInBand --config jest-e2e.config.js ./e2e/.*test\\.js$",
     "test:pa11y": "IS_TEST=1 pa11y-ci --config pa11y-ci.config.js",
     "test:unit": "IS_TEST=1 jest --runInBand --config jest-unit.config.js ./src/.*test\\.js$",
     "test:watch": "IS_TEST=1 jest --runInBand --watch .*test\\.js$",
-    "test": "IS_TEST=1 FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$"
+    "test": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop IS_TEST=1 FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$"
   },
   "repository": {
     "type": "git",
@@ -61,7 +61,7 @@
     "acorn": "^6.1.1",
     "ajv": "^6.10.0",
     "autoprefixer": "^9.6.0",
-    "aws-sdk": "^2.483.0",
+    "aws-sdk": "^2.484.0",
     "axios": "^0.19.0",
     "axios-mock-adapter": "^1.16.0",
     "babel-jest": "^24.8.0",
