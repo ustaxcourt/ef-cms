@@ -12,7 +12,7 @@ const replaceWithID = (replacements, domString) => {
   return doc;
 };
 
-export const createOrderHelper = get => {
+export const createOrderAction = ({ get }) => {
   let richText = get(state.form.richText) || '';
   richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
   const caseCaption = get(state.caseDetail.caseCaption);
@@ -28,5 +28,5 @@ export const createOrderHelper = get => {
 
   const result = doc.children[0].innerHTML;
 
-  return { pdfTemplate: result };
+  return { htmlString: result };
 };

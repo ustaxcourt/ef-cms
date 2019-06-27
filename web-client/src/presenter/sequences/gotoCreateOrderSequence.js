@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -17,6 +18,7 @@ const gotoCreateOrder = [
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
+  ...convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
 ];
 
