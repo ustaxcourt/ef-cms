@@ -1,8 +1,10 @@
 import { state } from 'cerebral';
 
 export const createOrderHelper = get => {
-  const richText = get(state.form.richText);
+  let richText = get(state.form.richText) || '';
   const caseCaption = get(state.caseDetail.caseCaption);
+
+  richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 
   let pdfTemplate = `
     <!doctype html>
