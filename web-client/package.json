@@ -83,7 +83,7 @@
     "eslint-plugin-sort-imports-es6-autofix": "^0.4.0",
     "eslint-plugin-sort-keys-fix": "^1.0.1",
     "form-data": "^2.3.3",
-    "husky": "^2.6.0",
+    "husky": "^2.7.0",
     "i": "^0.3.6",
     "jest": "^24.8.0",
     "jsdoc": "^3.6.2",

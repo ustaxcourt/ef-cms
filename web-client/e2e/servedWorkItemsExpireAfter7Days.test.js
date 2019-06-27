@@ -1,8 +1,6 @@
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
-  getFormattedMyOutbox,
-  getFormattedSectionOutbox,
   loginAs,
   setupTest,
   uploadPetition,
@@ -13,7 +11,7 @@ import applicationContextFactory from '../../web-api/src/applicationContext';
 
 const test = setupTest();
 
-describe('verify old served work items do not show up in the outbox', () => {
+xdescribe('verify old served work items do not show up in the outbox', () => {
   let workItem6Days;
   let workItem7Days;
   let workItem8Days;
