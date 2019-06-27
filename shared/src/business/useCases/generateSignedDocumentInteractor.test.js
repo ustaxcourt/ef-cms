@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const {
   generateSignedDocument,
-  getPageDimensions,
 } = require('./generateSignedDocumentInteractor.js');
 const { PDFDocumentFactory } = require('pdf-lib');
 
