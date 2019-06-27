@@ -1,8 +1,10 @@
 import { state } from 'cerebral';
 
 export const createOrderHelper = get => {
-  const richText = get(state.form.richText);
+  let richText = get(state.form.richText) || '';
   const caseCaption = get(state.caseDetail.caseCaption);
+
+  richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 
   let pdfTemplate = `
     <!doctype html>
@@ -11,10 +13,7 @@ export const createOrderHelper = get => {
         <style type="text/css">
           @page {
             size: 8.5in 11in;
-            margin: 2cm 0;
-          }
-          .main {
-            margin: 0 2cm;
+            margin: 2cm;
           }
           .court-header {
             text-align: center;
