@@ -27,7 +27,7 @@ exports.generateSignedDocument = async ({
 }) => {
   const pdfDoc = PDFDocumentFactory.load(pdfData);
   const pages = pdfDoc.getPages();
-  const page = pages[pageIndex];
+  const page = pages[pageIndex - 1];
 
   let pageContentStream;
 
