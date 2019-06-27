@@ -26,8 +26,8 @@ export const FileDocument = connect(
         <Focus>
           <h1
             className="margin-bottom-05"
-            tabIndex="-1"
             id="file-a-document-header"
+            tabIndex="-1"
           >
             File a Document
           </h1>
@@ -65,9 +65,9 @@ export const FileDocument = connect(
 
         <div className="button-box-container margin-top-4">
           <button
+            className="usa-button margin-right-205"
             id="submit-document"
             type="submit"
-            className="usa-button margin-right-205"
             onClick={() => {
               reviewExternalDocumentInformationSequence();
             }}
@@ -75,8 +75,8 @@ export const FileDocument = connect(
             Review Filing
           </button>
           <button
-            type="button"
             className="usa-button usa-button--outline"
+            type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

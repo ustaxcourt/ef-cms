@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.path
  *
  */
-export const startScanAction = async ({ applicationContext, store, props }) => {
+export const startScanAction = async ({ applicationContext, props, store }) => {
   store.set(state.isScanning, true);
 
   const scanner = applicationContext.getScanner();

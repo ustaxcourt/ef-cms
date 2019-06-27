@@ -3,7 +3,7 @@ const {
   PETITION,
 } = require('../../authorization/authorizationClientService');
 const { capitalize } = require('lodash');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
@@ -74,8 +74,8 @@ exports.createCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { Petition } = applicationContext.getEntityConstructors();
-  const petitionEntity = new Petition(petitionMetadata).validate();
+  const { CaseExternal } = applicationContext.getEntityConstructors();
+  const petitionEntity = new CaseExternal(petitionMetadata).validate();
 
   // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(

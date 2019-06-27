@@ -9,7 +9,7 @@ const docketNumberMatcher = /^(\d{3,5}-\d{2})[XPRWSL]?L?(.*)$/;
  * @param {object} providers.store the cerebral store used for setting the state.caseId
  * @returns {object} the caseId set to the docketNumber provided in the search term
  */
-export const setCaseIdFromSearchAction = ({ store, get }) => {
+export const setCaseIdFromSearchAction = ({ get, store }) => {
   const searchTerm = get(state.searchTerm);
   const match = docketNumberMatcher.exec(searchTerm.trim());
   const docketNumber =

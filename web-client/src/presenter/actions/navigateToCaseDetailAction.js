@@ -6,6 +6,6 @@
  * @param {object} providers.props the cerebral props that contain the props.caseId
  * @returns {Promise} async action
  */
-export const navigateToCaseDetailAction = async ({ router, props }) => {
+export const navigateToCaseDetailAction = async ({ props, router }) => {
   await router.route(`/case-detail/${props.caseId}`);
 };

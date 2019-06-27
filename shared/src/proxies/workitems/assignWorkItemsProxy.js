@@ -20,6 +20,6 @@ exports.assignWorkItems = ({
       assigneeName,
       workItemId,
     },
-    endpoint: '/workitems',
+    endpoint: '/work-items',
   });
 };

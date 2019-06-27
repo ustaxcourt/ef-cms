@@ -1,19 +1,16 @@
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
-
 import { applicationContext } from '../src/applicationContext';
+import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
+import FormData from 'form-data';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 const {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;

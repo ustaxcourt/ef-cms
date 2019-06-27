@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.baseUrl
  * @param {object} providers.applicationContext the application context which provides the getBaseUrl function
  */
-export const setBaseUrlAction = ({ store, applicationContext }) => {
+export const setBaseUrlAction = ({ applicationContext, store }) => {
   store.set(state.baseUrl, applicationContext.getBaseUrl());
 };

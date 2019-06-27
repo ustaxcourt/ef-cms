@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get helper function
  * @returns {object} the path to take.
  */
-export const shouldValidateWorkItemAction = ({ path, get }) => {
+export const shouldValidateWorkItemAction = ({ get, path }) => {
   if (get(state.workItemMetadata.showValidation)) return path.validate();
   return path.ignore();
 };
