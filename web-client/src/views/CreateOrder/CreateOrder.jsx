@@ -10,10 +10,16 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
+    createOrderHelper: state.createOrderHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ convertHtml2PdfSequence, form, updateFormValueSequence }) => {
+  ({
+    convertHtml2PdfSequence,
+    createOrderHelper,
+    form,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <BigHeader text="Create Order" />
@@ -27,7 +33,9 @@ export const CreateOrder = connect(
                 <button
                   className="usa-button"
                   onClick={() => {
-                    convertHtml2PdfSequence();
+                    convertHtml2PdfSequence({
+                      htmlString: createOrderHelper.pdfTemplate,
+                    });
                   }}
                 >
                   Refresh PDF Preview
@@ -47,9 +55,6 @@ export const CreateOrder = connect(
                     form={form}
                     updateFormValueSequence={updateFormValueSequence}
                   />
-                </div>
-                <div className="display-none">
-                  <iframe id="pdf-preview-iframe" srcDoc={form.richText} />
                 </div>
               </div>
 
