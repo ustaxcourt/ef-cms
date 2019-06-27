@@ -7,6 +7,7 @@
  */
 exports.createCourtIssuedOrderPdfFromHtml = async ({
   applicationContext,
+  docketNumberWithSuffix,
   htmlString,
 }) => {
   let browser;
@@ -35,7 +36,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
               of <span class="totalPages"></span>
             </div>
             <div style="float: left">
-              Docket 123-19
+              Docket ${docketNumberWithSuffix}
             </div>
           </div>
         </body>

@@ -7,6 +7,7 @@
  */
 exports.createCourtIssuedOrderPdfFromHtml = ({
   applicationContext,
+  docketNumberWithSuffix,
   htmlString,
 }) => {
   return applicationContext
@@ -14,6 +15,7 @@ exports.createCourtIssuedOrderPdfFromHtml = ({
     .post(
       `${applicationContext.getBaseUrl()}/court-issued-order`,
       {
+        docketNumberWithSuffix,
         htmlString,
       },
       {
