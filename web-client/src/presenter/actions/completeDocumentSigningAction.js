@@ -16,7 +16,7 @@ export const completeDocumentSigningAction = async ({
   const signedPdfBytes = await applicationContext
     .getUseCases()
     .generateSignedDocument({
-      pageIndex: pageNumber,
+      pageIndex: pageNumber - 1, // pdf.js starts at 1
       pdfData: await pdfjsObj.getData(),
       posX: x,
       posY: y,
