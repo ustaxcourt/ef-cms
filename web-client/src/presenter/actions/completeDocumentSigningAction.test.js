@@ -9,21 +9,31 @@ describe('completeDocumentSigningAction', () => {
   let signDocumentStub;
 
   beforeEach(() => {
-    presenter.providers.applicationContext = {
-      getPersistenceGateway: () => {
-        return {
-          uploadDocument: () => uploadDocumentStub,
-        };
+    global.window = {
+      pdfjsObj: {
+        getData: sinon.stub(),
       },
-      getUseCases: () => ({
-        generateSignedDocument: generateSignedDocumentStub,
-        signDocument: () => signDocumentStub,
-      }),
     };
+
+    global.File = sinon.stub();
 
     uploadDocumentStub = sinon.stub();
     generateSignedDocumentStub = sinon.stub();
     signDocumentStub = sinon.stub();
+
+    presenter.providers.applicationContext = {
+      getPersistenceGateway: () => ({
+        uploadDocument: uploadDocumentStub,
+      }),
+      getUseCases: () => ({
+        generateSignedDocument: generateSignedDocumentStub,
+        signDocument: signDocumentStub,
+      }),
+    };
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 
   it('should sign a document via executing various use cases', async () => {

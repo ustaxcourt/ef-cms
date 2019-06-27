@@ -7,10 +7,11 @@ export const completeDocumentSigningAction = async ({
   const {
     documentId: originalDocumentId,
     pageNumber,
-    pdfjsObj,
     signatureData: { scale, x, y },
   } = get(state.pdfForSigning);
   const { caseId } = get(state.caseDetail);
+
+  const { pdfjsObj } = window || get(state.pdfForSigning);
 
   // generate signed document to bytes
   const signedPdfBytes = await applicationContext
