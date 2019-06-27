@@ -33,11 +33,14 @@ exports.updateCaseTrialSortTags = async ({ applicationContext, caseId }) => {
   }
 
   if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
+    const caseSortTags = caseEntity.generateTrialSortTags();
+
     await applicationContext
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({
         applicationContext,
         caseId: caseEntity.validate().toRawObject().caseId,
+        caseSortTags,
       });
   }
 };
