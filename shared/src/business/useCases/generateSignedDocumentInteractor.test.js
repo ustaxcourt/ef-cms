@@ -9,7 +9,7 @@ const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
 function testPdfDocBytes() {
-  return fs.readFileSync(testAssetsPath + 'with-coversheet.pdf');
+  return fs.readFileSync(testAssetsPath + 'sample.pdf');
 }
 
 function testSignatureImgBytes() {
