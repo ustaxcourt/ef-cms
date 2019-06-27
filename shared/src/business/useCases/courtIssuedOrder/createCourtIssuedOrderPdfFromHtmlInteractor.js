@@ -49,7 +49,6 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       <html>
         <body>
           <div style="font-size: 14px; width: 100%; margin: 20px 50px 20px 50px;">
-            something
           </div>
         </body>
       </html>
