@@ -27,7 +27,7 @@ exports.updateCaseTrialSortMappingRecords = async ({
       ':pk': 'eligible-for-trial-case-catalog',
     },
     IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pkpk AND #pk = :pk',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk AND #pk = :pk',
     applicationContext,
   });
 
