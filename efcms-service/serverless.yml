@@ -298,6 +298,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  signDocument:
+    handler: src/handlers.signDocumentLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/sign
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   sanitizePdf:
     handler: src/handlers.sanitizePdfLambda
     layers:

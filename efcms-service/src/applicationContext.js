@@ -216,7 +216,7 @@ const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  putWorkItemInUsersOutbox
+  putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
   recallPetitionFromIRSHoldingQueue,
@@ -231,8 +231,11 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
-  saveWorkItemForDocketClerkFilingExternalDocument
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument')
+  saveSignedDocument,
+} = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
+const {
+  saveWorkItemForDocketClerkFilingExternalDocument,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -284,6 +287,9 @@ const {
 const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  uploadDocument,
+} = require('../../shared/src/persistence/s3/uploadDocument');
 const {
   validatePdf,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
@@ -405,6 +411,7 @@ module.exports = (appContextUser = {}) => {
         updateTrialSession,
         updateWorkItem,
         updateWorkItemInCase,
+        uploadDocument,
         verifyCaseForUser,
         verifyPendingCaseForUser,
         zipDocuments,
@@ -457,6 +464,7 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
+        saveSignedDocument,
         sendPetitionToIRSHoldingQueue,
         setCaseToReadyForTrial,
         setTrialSessionAsSwingSession,
