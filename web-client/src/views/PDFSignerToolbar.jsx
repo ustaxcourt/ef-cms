@@ -4,13 +4,21 @@ import React from 'react';
 
 export const PDFSignerToolbar = connect(
   {
+    completeSigning: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     pdfObj: state.pdfForSigning.pdfjsObj,
     setPage: sequences.setPDFPageForSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureData: state.pdfForSigning.signatureData,
   },
-  ({ currentPageNumber, pdfObj, setPage, setSignatureData, signatureData }) => {
+  ({
+    completeSigning,
+    currentPageNumber,
+    pdfObj,
+    setPage,
+    setSignatureData,
+    signatureData,
+  }) => {
     const getPreviousPage = () => {
       const previousPageNumber =
         currentPageNumber === 1 ? 1 : currentPageNumber - 1;
@@ -55,7 +63,9 @@ export const PDFSignerToolbar = connect(
             >
               Reset
             </button>
-            <button className="usa-button">Complete Signing</button>
+            <button className="usa-button" onClick={() => completeSigning()}>
+              Complete Signing
+            </button>
           </>
         )}
       </div>
