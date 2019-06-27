@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import 'react-quill/dist/quill.snow.css';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -43,11 +44,15 @@ export const TextEditor = connect(
               ],
             ],
           }}
-          value={this.props.form.richText}
-          onChange={e => {
+          onChange={(content, delta, source, editor) => {
+            const fullDelta = editor.getContents();
+            const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
+              inlineStyles: true,
+            });
+            const html = converter.convert();
             this.props.updateFormValueSequence({
               key: 'richText',
-              value: e,
+              value: html,
             });
           }}
         />

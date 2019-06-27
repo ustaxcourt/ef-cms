@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * get the selected work items from state
  *
@@ -7,17 +5,18 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the selectedWorkItems
  * @returns {object} a list of selected work items
  */
-export const getPdfPreviewUrlAction = async ({ applicationContext, get }) => {
-  const htmlMarkup = get(state.form.richText);
-  if (!htmlMarkup) {
+export const getPdfPreviewUrlAction = async ({ applicationContext, props }) => {
+  const { htmlString } = props;
+  if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
 
-  const fromDomElement = document.getElementById('pdf-preview-iframe')
-    .contentDocument.body;
-
   const pdfUrl = await applicationContext
-    .getUtilities()
-    .generatePdfUrl(fromDomElement);
+    .getUseCases()
+    .createCourtIssuedOrderPdfFromHtml({
+      applicationContext,
+      htmlString,
+    });
+
   return { pdfUrl };
 };
