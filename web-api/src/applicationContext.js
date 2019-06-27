@@ -359,7 +359,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       CaseExternal: PetitionWithoutFiles,
-      PetitionFromPaper: PetitionFromPaperWithoutFiles,
+      CaseInternal: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {
       return {
