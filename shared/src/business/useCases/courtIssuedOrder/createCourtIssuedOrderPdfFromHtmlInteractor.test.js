@@ -25,6 +25,7 @@ describe('createCourtIssuedOrderPdfFromHtml', () => {
     const result = await createCourtIssuedOrderPdfFromHtml({
       applicationContext: {
         getChromium: () => chromiumMock,
+        logger: { error: () => {} },
       },
       htmlString: 'Hello World from the use case',
     });
