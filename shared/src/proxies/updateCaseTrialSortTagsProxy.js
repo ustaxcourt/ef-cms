@@ -10,6 +10,6 @@ const { put } = require('./requests');
 exports.updateCaseTrialSortTags = ({ applicationContext, caseId }) => {
   return put({
     applicationContext,
-    endpoint: `/cases/${caseId}/updateCaseTrialSortTags`,
+    endpoint: `/cases/${caseId}/update-case-trial-sort-tags`,
   });
 };

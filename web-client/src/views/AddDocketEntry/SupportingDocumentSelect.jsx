@@ -29,15 +29,15 @@ export const SupportingDocumentSelect = connect(
               : ''
           }`}
         >
-          <label htmlFor={'previous-document'} className="usa-label">
+          <label className="usa-label" htmlFor={'previous-document'}>
             Which Document is This Supporting?
           </label>
           <select
-            className="usa-select"
-            name="previousDocument"
-            id="previous-document"
-            value={get(form, 'previousDocument', '')}
             aria-label="previousDocument"
+            className="usa-select"
+            id="previous-document"
+            name="previousDocument"
+            value={get(form, 'previousDocument', '')}
             onChange={e => {
               updateDocketEntryFormValueSequence({
                 key: e.target.name,
@@ -58,8 +58,8 @@ export const SupportingDocumentSelect = connect(
             )}
           </select>
           <Text
-            className="usa-error-message"
             bind="validationErrors.previousDocument"
+            className="usa-error-message"
           />
         </div>
       </React.Fragment>

@@ -2,7 +2,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case, STATUS_TYPES } = require('../entities/Case');
+const { Case, STATUS_TYPES } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -33,11 +33,14 @@ exports.updateCaseTrialSortTags = async ({ applicationContext, caseId }) => {
   }
 
   if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
+    const caseSortTags = caseEntity.generateTrialSortTags();
+
     await applicationContext
       .getPersistenceGateway()
       .updateCaseTrialSortMappingRecords({
         applicationContext,
         caseId: caseEntity.validate().toRawObject().caseId,
+        caseSortTags,
       });
   }
 };

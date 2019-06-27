@@ -1,4 +1,4 @@
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { WorkItem } = require('../entities/WorkItem');
@@ -98,13 +98,15 @@ exports.createCaseFromPaper = async ({
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
-    createdAt: caseToAdd.receivedAt,
+    createdAt: caseToAdd.createdAt,
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
     filedBy: caseCaptionNames,
     isPaper: true,
+    receivedAt: caseToAdd.receivedAt,
     userId: user.userId,
   });
+
   const {
     message: newMessage,
     workItem: newWorkItem,
@@ -116,11 +118,12 @@ exports.createCaseFromPaper = async ({
 
   if (stinFileId) {
     const stinDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
+      createdAt: caseToAdd.createdAt,
       documentId: stinFileId,
       documentType: Document.initialDocumentTypes.stin,
       filedBy: caseCaptionNames,
       isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     });
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
@@ -128,11 +131,12 @@ exports.createCaseFromPaper = async ({
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
+      createdAt: caseToAdd.createdAt,
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,
       isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     });
     caseToAdd.addDocument(odsDocumentEntity);

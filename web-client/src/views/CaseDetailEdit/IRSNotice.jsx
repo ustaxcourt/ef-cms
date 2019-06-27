@@ -23,14 +23,14 @@ export const IRSNotice = connect(
     appendNewYearAmountSequence,
     autoSaveCaseSequence,
     caseDetail,
-    caseTypes,
     caseDetailErrors,
+    caseTypes,
     form,
     formattedCaseDetail,
     removeYearAmountSequence,
+    setIrsNoticeFalseSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
-    setIrsNoticeFalseSequence,
   }) => {
     const renderIrsNoticeRadios = () => {
       return (
@@ -40,11 +40,11 @@ export const IRSNotice = connect(
           </legend>
           <div className="usa-radio usa-radio__inline">
             <input
+              checked={caseDetail.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
-              type="radio"
               name="hasVerifiedIrsNotice"
-              checked={caseDetail.hasVerifiedIrsNotice === true}
+              type="radio"
               value="Yes"
               onChange={e => {
                 updateCaseValueSequence({
@@ -55,20 +55,20 @@ export const IRSNotice = connect(
               }}
             />
             <label
-              id="has-irs-verified-notice-yes"
-              htmlFor="hasVerifiedIrsNotice-yes"
               className="usa-radio__label"
+              htmlFor="hasVerifiedIrsNotice-yes"
+              id="has-irs-verified-notice-yes"
             >
               Yes
             </label>
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
+              checked={caseDetail.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"
-              type="radio"
               name="hasVerifiedIrsNotice"
-              checked={caseDetail.hasVerifiedIrsNotice === false}
+              type="radio"
               value="No"
               onChange={() => {
                 setIrsNoticeFalseSequence();
@@ -76,9 +76,9 @@ export const IRSNotice = connect(
               }}
             />
             <label
-              id="has-irs-verified-notice-no"
-              htmlFor="hasVerifiedIrsNotice-no"
               className="usa-radio__label"
+              htmlFor="hasVerifiedIrsNotice-no"
+              id="has-irs-verified-notice-no"
             >
               No
             </label>
@@ -96,7 +96,7 @@ export const IRSNotice = connect(
           }
         >
           <fieldset className="usa-fieldset margin-bottom-0">
-            <legend id="date-of-notice-legend" className="usa-legend">
+            <legend className="usa-legend" id="date-of-notice-legend">
               Date of Notice
             </legend>
             <div className="usa-memorable-date">
@@ -112,8 +112,8 @@ export const IRSNotice = connect(
                   max="12"
                   min="1"
                   name="irsMonth"
-                  type="number"
                   placeholder="MM"
+                  type="number"
                   value={form.irsMonth || ''}
                   onBlur={() => {
                     autoSaveCaseSequence();
@@ -138,8 +138,8 @@ export const IRSNotice = connect(
                   max="31"
                   min="1"
                   name="irsDay"
-                  type="number"
                   placeholder="DD"
+                  type="number"
                   value={form.irsDay || ''}
                   onBlur={() => {
                     autoSaveCaseSequence();
@@ -164,8 +164,8 @@ export const IRSNotice = connect(
                   max="2100"
                   min="1900"
                   name="irsYear"
-                  type="number"
                   placeholder="YYYY"
+                  type="number"
                   value={form.irsYear || ''}
                   onBlur={() => {
                     autoSaveCaseSequence();
@@ -194,11 +194,11 @@ export const IRSNotice = connect(
         <React.Fragment>
           {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
             <div
-              key={idx}
               className={yearAmount.showError ? ' usa-input-error' : ''}
+              key={idx}
             >
               <div className="inline-input-year">
-                <label htmlFor="year" className="usa-label">
+                <label className="usa-label" htmlFor="year">
                   Year
                 </label>
                 <input
@@ -208,19 +208,19 @@ export const IRSNotice = connect(
                   name="year"
                   type="number"
                   value={yearAmount.year || ''}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.year`,
                       value: e.target.value,
                     });
                   }}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
                 />
               </div>
               <div className="inline-input-amount">
-                <label htmlFor="amount" className="usa-label">
+                <label className="usa-label" htmlFor="amount">
                   Amount
                 </label>
                 <span aria-hidden="true" role="presentation">
@@ -233,14 +233,14 @@ export const IRSNotice = connect(
                   name="amount"
                   type="text"
                   value={Number(yearAmount.amount || 0).toLocaleString('en-US')}
+                  onBlur={() => {
+                    autoSaveCaseSequence();
+                  }}
                   onChange={e => {
                     updateCaseValueSequence({
                       key: `yearAmounts.${idx}.amount`,
                       value: e.target.value.replace(/\D/g, ''),
                     });
-                  }}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
                   }}
                 />
                 <span aria-hidden="true" role="presentation">
@@ -248,9 +248,9 @@ export const IRSNotice = connect(
                 </span>
                 {idx !== 0 && (
                   <button
+                    aria-controls="removeYearAmount"
                     className="usa-button usa-button--unstyled"
                     type="button"
-                    aria-controls="removeYearAmount"
                     onClick={e => {
                       e.preventDefault();
                       removeYearAmountSequence({
@@ -273,10 +273,10 @@ export const IRSNotice = connect(
             </div>
           ))}
           <button
-            className="usa-button usa-button--unstyled"
-            type="button"
             aria-controls="addAnotherYearAmount"
+            className="usa-button usa-button--unstyled"
             disabled={!formattedCaseDetail.canAddYearAmount}
+            type="button"
             onClick={e => {
               e.preventDefault();
               appendNewYearAmountSequence();
@@ -297,11 +297,11 @@ export const IRSNotice = connect(
 
         <CaseTypeSelect
           allowDefaultOption={true}
+          caseTypes={caseTypes}
           legend="Type of Case"
-          onChange="updateCaseValueSequence"
           validation="autoSaveCaseSequence"
           value={caseDetail.caseType}
-          caseTypes={caseTypes}
+          onChange="updateCaseValueSequence"
         />
 
         {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}

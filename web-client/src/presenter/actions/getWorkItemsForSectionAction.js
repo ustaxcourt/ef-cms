@@ -14,7 +14,7 @@ export const getWorkItemsForSectionAction = async ({
   const user = applicationContext.getCurrentUser();
   const workQueueIsInternal = get(state.workQueueIsInternal);
 
-  let section = user.section;
+  let { section } = user;
   if (!workQueueIsInternal && user.role !== 'petitionsclerk') {
     section = 'docket';
   }

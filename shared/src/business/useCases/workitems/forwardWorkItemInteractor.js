@@ -2,7 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');

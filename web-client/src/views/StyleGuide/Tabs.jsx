@@ -9,10 +9,10 @@ export const TabsSection = () => (
     <h2>Primary Tabs</h2>
 
     <Tabs className="classic-horizontal">
-      <Tab tabName="my" title="My Queue" id="tab-my-queue">
+      <Tab id="tab-my-queue" tabName="my" title="My Queue">
         <p>My Queue Content</p>
       </Tab>
-      <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+      <Tab id="tab-work-queue" tabName="section" title="Section Queue">
         <p>Section Queue Content</p>
       </Tab>
     </Tabs>
@@ -26,10 +26,10 @@ export const TabsSection = () => (
     <h2>Base Tabs</h2>
 
     <Tabs>
-      <Tab tabName="my" title="My Queue" id="tab-my-queue">
+      <Tab id="tab-my-queue" tabName="my" title="My Queue">
         <p>My Queue Content</p>
       </Tab>
-      <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+      <Tab id="tab-work-queue" tabName="section" title="Section Queue">
         <p>Section Queue Content</p>
       </Tab>
     </Tabs>
@@ -37,12 +37,12 @@ export const TabsSection = () => (
     <h2>Container Tabs</h2>
 
     <Tabs className="container-tabs">
-      <Tab tabName="my" title="My Queue" id="tab-my-queue">
+      <Tab id="tab-my-queue" tabName="my" title="My Queue">
         <div>
           <h3>My Queue Content</h3>
         </div>
       </Tab>
-      <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+      <Tab id="tab-work-queue" tabName="section" title="Section Queue">
         <p>Section Queue Content</p>
         <div className="blue-container">
           <p>

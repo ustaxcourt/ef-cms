@@ -1,4 +1,4 @@
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { getFilingTypes } = require('./getFilingTypesInteractor');
 
 const validateFilingTypes = filingTypes => {

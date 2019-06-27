@@ -16,6 +16,6 @@ exports.setTrialSessionAsSwingSession = ({
   return post({
     applicationContext,
     body: { swingSessionId },
-    endpoint: `/trialSessions/${trialSessionId}/setSwingSession`,
+    endpoint: `/trial-sessions/${trialSessionId}/set-swing-session`,
   });
 };

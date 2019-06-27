@@ -1,0 +1,51 @@
+config:
+  target: 'https://{{$processEnvironment.API_TARGET}}.execute-api.{{$processEnvironment.API_REGION}}.amazonaws.com'
+  phases:
+    - duration: 1
+      arrivalRate: 1
+      name: 'load test everything'
+  processor: './smoke-test-functions.js'
+scenarios:
+  - flow:
+      - get:
+          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/upload-policy'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+      - post:
+          url: '/{{$processEnvironment.API_STAGE}}/v1/cases'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+          json:
+            stinFileId: '398a0010-c272-4e43-9057-8a1a5b0ff603'
+            petitionFileId: '398a0010-c272-4e43-9057-8a1a5b0ff603'
+            petitionMetadata:
+              contactPrimary:
+                countryType: 'domestic'
+                name: 'Barry Kramer'
+                address1: '944 West First Lane'
+                address2: 'Aut fugiat sed est a'
+                address3: 'Similique minus debi'
+                city: 'Ut aliqua Corporis '
+                postalCode: '49958'
+                phone: '+1 (756) 528-3696'
+                state: 'OR'
+                email: 'taxpayer'
+              filingType: 'Myself'
+              partyType: 'Petitioner'
+              contactSecondary: {}
+              hasIrsNotice: false
+              caseType: 'Whistleblower'
+              procedureType: 'Small'
+              preferredTrialCity: 'Birmingham, Alabama'
+          capture:
+            json: '$.caseId'
+            as: 'caseId'
+      - get:
+          url: '/{{$processEnvironment.API_STAGE}}/v1/users/26b07814-378a-4ebe-9152-b1d6a53bef32/cases'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+      - get:
+          url: '/{{$processEnvironment.API_STAGE}}/v1/cases/{{ caseId }}'
+          headers:
+            Authorization: 'Bearer {{ token }}'
+      - function: 'deleteCase'

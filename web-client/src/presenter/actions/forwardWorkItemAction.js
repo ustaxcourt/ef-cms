@@ -12,10 +12,10 @@ import { state } from 'cerebral';
  * @returns {object} the success alert object used for displayinng a green alert at the top of the page
  */
 export const forwardWorkItemAction = async ({
-  get,
-  store,
   applicationContext,
+  get,
   props,
+  store,
 }) => {
   const { workItemId } = props;
 

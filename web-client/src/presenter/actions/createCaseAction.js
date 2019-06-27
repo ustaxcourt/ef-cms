@@ -11,11 +11,11 @@ import { state } from 'cerebral';
  */
 export const createCaseAction = async ({
   applicationContext,
-  store,
   get,
   path,
+  store,
 }) => {
-  const { petitionFile, ownershipDisclosureFile, stinFile } = get(
+  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
     state.petition,
   );
 

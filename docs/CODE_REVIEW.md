@@ -105,7 +105,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
 - [ ] review static code analysis results in SonarCloud
-- [ ] run a security audit of dependencies (`npm audit`) in `efcms-service`, `web-client`, and `shared`, to ensure that there are no vulnerabilities that will be deployed to production (as opposed to vulnerabilities that only have an impact on the development environment)
+- [ ] run a security audit of dependencies (`npm audit`) in `web-api`, `web-client`, and `shared`, to ensure that there are no vulnerabilities that will be deployed to production (as opposed to vulnerabilities that only have an impact on the development environment)
 - [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
 - [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
 - [ ] review all tests

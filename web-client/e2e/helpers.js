@@ -1,19 +1,17 @@
+import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import { runCompute } from 'cerebral/test';
-import FormData from 'form-data';
-
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper } from '../src/presenter/computeds/workQueueHelper';
-
+import FormData from 'form-data';
 const {
-  PARTY_TYPES,
   COUNTRY_TYPES,
+  PARTY_TYPES,
 } = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
@@ -39,6 +37,28 @@ exports.getFormattedDocumentQCMyInbox = async test => {
 exports.getFormattedDocumentQCSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
+    queue: 'section',
+    workQueueIsInternal: false,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+exports.getFormattedDocumentQCMyOutbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'outbox',
+    queue: 'my',
+    workQueueIsInternal: false,
+  });
+  return runCompute(formattedWorkQueue, {
+    state: test.getState(),
+  });
+};
+
+exports.getFormattedDocumentQCSectionOutbox = async test => {
+  await test.runSequence('chooseWorkQueueSequence', {
+    box: 'outbox',
     queue: 'section',
     workQueueIsInternal: false,
   });
@@ -150,7 +170,7 @@ exports.uploadExternalDecisionDocument = async test => {
   await test.runSequence('submitExternalDocumentSequence');
 };
 
-exports.createMessage = async ({ test, assigneeId, message }) => {
+exports.createMessage = async ({ assigneeId, message, test }) => {
   test.setState('form', {
     assigneeId,
     message,
@@ -289,10 +309,10 @@ exports.setupTest = () => {
 };
 
 exports.viewDocumentDetailMessage = async ({
-  test,
   docketNumber,
   documentId,
   messageId,
+  test,
   workItemIdToMarkAsRead,
 }) => {
   await test.runSequence('gotoDocumentDetailSequence', {

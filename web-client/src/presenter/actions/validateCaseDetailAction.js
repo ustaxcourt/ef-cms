@@ -11,10 +11,10 @@ import { state } from 'cerebral';
  * @returns {object} the alertSuccess and the generated docketNumber
  */
 export const validateCaseDetailAction = ({
-  store,
   applicationContext,
   path,
   props,
+  store,
 }) => {
   const { combinedCaseDetailWithForm } = props;
 
