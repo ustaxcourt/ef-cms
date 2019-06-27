@@ -17,7 +17,5 @@ layers:
     name: ${self:provider.stage}-puppeteer
     compatibleRuntimes:
       - nodejs10.x
-    path: runtimes/puppeteer
     package:
-      exclude:
-        - puppeteer_lambda_layer.tar.gz
+      artifact: runtimes/puppeteer/chrome_aws_lambda.zip
