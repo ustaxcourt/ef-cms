@@ -275,6 +275,9 @@ const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
+  updateCaseTrialSortTags,
+} = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
+const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
@@ -478,6 +481,7 @@ module.exports = (appContextUser = {}) => {
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
+        updateCaseTrialSortTags,
         validatePdf,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,

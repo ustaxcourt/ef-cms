@@ -1,8 +1,6 @@
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
-  getFormattedMyOutbox,
-  getFormattedSectionOutbox,
   loginAs,
   setupTest,
   uploadPetition,
@@ -20,7 +18,7 @@ describe('verify old served work items do not show up in the outbox', () => {
   let caseDetail;
 
   beforeEach(async () => {
-    jest.setTimeout(30000);
+    jest.setTimeout(300000);
 
     await loginAs(test, 'taxpayer');
     caseDetail = await uploadPetition(test);

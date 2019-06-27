@@ -781,6 +781,8 @@ functions:
 
   createCourtIssuedOrderPdfFromHtml:
     handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
     timeout: 900
     events:

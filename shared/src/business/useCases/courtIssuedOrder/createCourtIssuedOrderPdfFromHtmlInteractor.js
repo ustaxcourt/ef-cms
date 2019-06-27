@@ -7,6 +7,7 @@
  */
 exports.createCourtIssuedOrderPdfFromHtml = async ({
   applicationContext,
+  docketNumberWithSuffix,
   htmlString,
 }) => {
   let browser;
@@ -35,24 +36,30 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
               of <span class="totalPages"></span>
             </div>
             <div style="float: left">
-              Docket 123-19
+              Docket ${docketNumberWithSuffix}
             </div>
           </div>
         </body>
       </html>
     `;
-
-    await page.addStyleTag({
-      content: '@page:first {margin-top: 0;} body {margin-top: 1cm;}',
-    });
+    const footerTemplate = `
+      <!doctype html>
+      <html>
+        <body>
+          <div style="font-size: 14px; width: 100%; margin: 20px 50px 20px 50px;">
+          </div>
+        </body>
+      </html>
+    `;
 
     result = await page.pdf({
       displayHeaderFooter: true,
-      footerTemplate: '<div></div>',
+      footerTemplate,
       format: 'letter',
       headerTemplate,
     });
   } catch (error) {
+    applicationContext.logger.error(error);
     throw error;
   } finally {
     if (browser !== null) {
