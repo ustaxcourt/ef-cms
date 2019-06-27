@@ -48,4 +48,6 @@ exports.saveSignedDocument = async ({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  return caseEntity;
 };
