@@ -38,9 +38,6 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
               Docket 123-19
             </div>
           </div>
-          <script>
-            document.write('hello world');
-          </script>
         </body>
       </html>
     `;
