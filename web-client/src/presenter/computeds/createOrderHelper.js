@@ -13,10 +13,7 @@ export const createOrderHelper = get => {
         <style type="text/css">
           @page {
             size: 8.5in 11in;
-            margin: 2cm 0;
-          }
-          .main {
-            margin: 0 2cm;
+            margin: 2cm;
           }
           .court-header {
             text-align: center;

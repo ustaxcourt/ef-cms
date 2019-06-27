@@ -38,17 +38,26 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
               Docket 123-19
             </div>
           </div>
+          <script>
+            document.write('hello world');
+          </script>
+        </body>
+      </html>
+    `;
+    const footerTemplate = `
+      <!doctype html>
+      <html>
+        <body>
+          <div style="font-size: 14px; width: 100%; margin: 20px 50px 20px 50px;">
+            something
+          </div>
         </body>
       </html>
     `;
 
-    await page.addStyleTag({
-      content: '@page:first {margin-top: 0;} body {margin-top: 1cm;}',
-    });
-
     result = await page.pdf({
       displayHeaderFooter: true,
-      footerTemplate: '<div></div>',
+      footerTemplate,
       format: 'letter',
       headerTemplate,
     });
