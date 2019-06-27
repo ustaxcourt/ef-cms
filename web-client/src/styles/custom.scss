@@ -990,6 +990,10 @@ nav.usa-nav {
   max-height: 640px;
   font-family: 'Times New Roman', Times, serif;
   font-size: 14px;
+
+  p {
+    max-width: 100%;
+  }
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
