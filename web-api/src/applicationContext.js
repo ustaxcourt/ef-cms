@@ -133,6 +133,12 @@ const {
   getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
+  getInboxMessagesForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForUser');
+const {
+  getInboxMessagesForUser: getInboxMessagesForUserUC
+} = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
+const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -141,6 +147,12 @@ const {
 const {
   getNotifications,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
+const {
+  getSentMessagesForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForUser');
+const {
+  getSentMessagesForUser: getSentMessagesForUserUC
+} = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
   getSentWorkItemsForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
@@ -384,7 +396,9 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
+        getInboxMessagesForUser,
         getInternalUsers,
+        getSentMessagesForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
         getTrialSessionById,
@@ -447,8 +461,10 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByUser: getCasesByUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+        getInboxMessagesForUser: getInboxMessagesForUserUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
+        getSentMessagesForUser: getSentMessagesForUserUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getTrialSessionDetails,

@@ -579,6 +579,30 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getInboxMessagesForUser:
+    handler: src/handlers.getInboxMessagesForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/messages/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getSentMessagesForUser:
+    handler: src/handlers.getSentMessagesForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/messages/sent
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getWorkItemsForUser:
     handler: src/handlers.getWorkItemsForUserLambda
     events:

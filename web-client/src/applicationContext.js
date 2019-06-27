@@ -71,12 +71,14 @@ import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInt
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
+import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
+import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -120,6 +122,7 @@ import { validateTrialSession } from '../../shared/src/business/useCases/trialSe
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
+
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -170,10 +173,12 @@ const allUseCases = {
   getCasesByUser,
   getEligibleCasesForTrialSession,
   getFilingTypes,
+  getInboxMessagesForUser,
   getInternalUsers,
   getItem: getItemUC,
   getNotifications,
   getProcedureTypes,
+  getSentMessagesForUser,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,
   getTrialSessionDetails,

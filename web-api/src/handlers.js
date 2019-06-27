@@ -27,8 +27,10 @@ module.exports = {
     .handler,
   getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
     .handler,
+  getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda').handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
+  getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda').handler,
   getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda')
     .handler,
   getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda')
@@ -71,5 +73,5 @@ module.exports = {
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,
-  virusScanPdfLambda: require('./documents/virusScanPdfLambda').handler,
+  virusScanPdfLambda: require('./documents/virusScanPdfLambda').handler
 };
