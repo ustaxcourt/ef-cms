@@ -7,7 +7,8 @@ import React from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 
 const Size = Quill.import('attributors/style/size');
-Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px'];
+const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
+Size.whitelist = fontSizes;
 Quill.register(Size, true);
 
 export const TextEditor = connect(
@@ -17,6 +18,12 @@ export const TextEditor = connect(
   },
   class TextEditorComponent extends React.Component {
     render() {
+      const inlineStylesFontSizes = {};
+
+      fontSizes.forEach(item => {
+        inlineStylesFontSizes[item] = `font-size: ${item};`;
+      });
+
       return (
         <ReactQuill
           formats={[
@@ -32,7 +39,7 @@ export const TextEditor = connect(
             toolbar: [
               [
                 {
-                  size: ['10px', '12px', '14px', '16px', '18px', '20px'],
+                  size: fontSizes,
                 },
               ],
               ['bold', 'italic', 'underline'],
@@ -47,7 +54,9 @@ export const TextEditor = connect(
           onChange={(content, delta, source, editor) => {
             const fullDelta = editor.getContents();
             const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
-              inlineStyles: true,
+              inlineStyles: {
+                size: inlineStylesFontSizes,
+              },
             });
             const html = converter.convert();
             this.props.updateFormValueSequence({
