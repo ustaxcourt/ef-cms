@@ -1,63 +1,32 @@
 import { state } from 'cerebral';
+import orderTemplate from '../../views/CreateOrder/orderTemplate.html';
+
+const replaceWithID = (replacements, domString) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(domString, 'text/html');
+
+  Object.keys(replacements).forEach(id => {
+    doc.querySelector(id).innerHTML = replacements[id];
+  });
+
+  return doc;
+};
 
 export const createOrderHelper = get => {
   let richText = get(state.form.richText) || '';
+  richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
   const caseCaption = get(state.caseDetail.caseCaption);
 
-  richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+  const doc = replaceWithID(
+    {
+      '#caseCaption': caseCaption,
+      '#orderBody': richText,
+      '#orderTitleHeader': 'ORDER OF DISMISSAL FOR LACK OF JURISDICTION',
+    },
+    orderTemplate,
+  );
 
-  let pdfTemplate = `
-    <!doctype html>
-    <html>
-      <head>
-        <style type="text/css">
-          @page {
-            size: 8.5in 11in;
-            margin: 2cm;
-          }
-          .court-header {
-            text-align: center;
-          }
-          .order-title-header {
-            text-align: center;
-            font-weight: bold;
-          }
-          .caption-header {
-            margin-bottom: 20px;
-          }
-          .more-indent {
-            margin-left: 100px;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="main">
-          <div class="content-header">
-            <div class="court-header">
-              UNITED STATES TAX COURT<br>
-              Washington, DC 20217
-            </div>
-            <div class="caption-header">
-              ${caseCaption}
-              <br>
-              <div class="more-indent">
-                v.
-              </div>
-              Commissioner of Internal Revenue
-              <br>
-              <div class="more-indent">
-                Respondent
-              </div>
-            </div>
-            <div class="order-title-header">
-              ORDER OF DISMISSAL FOR LACK OF JURISDICTION
-            </div>
-          </div>
-          ${richText}
-        </div>
-      </body>
-    </html>
-  `;
+  const result = doc.children[0].innerHTML;
 
-  return { pdfTemplate };
+  return { pdfTemplate: result };
 };
