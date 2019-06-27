@@ -26,7 +26,12 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
   }
 
   let queuePrefs = get(state.workQueueToDisplay);
-  const workQueuePath = `${queuePrefs.queue}${queuePrefs.box}`;
+  let workQueueIsInternal = get(state.workQueueIsInternal);
+  let workQueuePath = `${queuePrefs.queue}${queuePrefs.box}`;
+
+  if (workQueueIsInternal && queuePrefs.queue === 'my') {
+    workQueuePath = `messages${workQueuePath}`;
+  }
 
   return path[workQueuePath]();
 };
