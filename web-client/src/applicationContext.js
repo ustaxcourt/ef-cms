@@ -37,13 +37,13 @@ import {
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseExternal } from '../../shared/src/business/entities/CaseExternal';
+import { CaseInternal } from '../../shared/src/business/entities/CaseInternal';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -277,12 +277,12 @@ const applicationContext = {
     Case,
     CaseAssociationRequestFactory,
     CaseExternal,
+    CaseInternal,
     DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
-    PetitionFromPaper,
     TrialSession,
   }),
   getError: e => {
