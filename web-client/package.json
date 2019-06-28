@@ -94,13 +94,14 @@
     "node-sass": "^4.12.0",
     "pa11y-ci": "^2.3.0",
     "parcel-bundler": "^1.12.3",
+    "parcel-plugin-static-files-copy": "^2.1.2",
+    "pdfjs-dist": "^2.0.943",
     "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
     "qs": "^6.7.0",
     "query-string": "5.1.0",
     "quill-delta-to-html": "^0.10.11",
-    "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-focus-lock": "^2.0.1",
     "react-idle-timer": "^4.2.6",
@@ -108,13 +109,18 @@
     "react-responsive": "^7.0.0",
     "react-select": "^3.0.4",
     "react-test-renderer": "^16.8.6",
-    "riot": "^4.2.0",
+    "react": "^16.8.6",
     "riot-route": "^3.1.4",
+    "riot": "^4.2.0",
     "sinon": "^7.3.2",
     "stylelint": "^10.1.0",
     "stylelint-config-idiomatic-order": "^7.0.1",
     "stylelint-config-standard": "^18.3.0",
     "uswds": "^2.0.2",
     "wicg-inert": "^2.1.0"
+  },
+  "staticFiles": {
+    "staticPath": "node_modules/pdfjs-dist/build",
+    "watcherGlob": false
   }
 }
