@@ -1,4 +1,5 @@
 import { state } from 'cerebral';
+import _ from 'lodash';
 
 /**
  * Uses state-side signature data (coordinates, page number, PDFJS Object) to apply
@@ -49,5 +50,24 @@ export const completeDocumentSigningAction = async ({
     caseId,
     originalDocumentId,
     signedDocumentId,
+  });
+
+  const workItems = await applicationContext.getUseCases().getWorkItemsForUser({
+    applicationContext,
+    userId: applicationContext.getCurrentUser().userId,
+  });
+
+  const stipulatedWorkItems = workItems.filter(
+    workItem =>
+      workItem.document.documentType === 'Proposed Stipulated Decision' &&
+      !workItem.completedAt,
+  );
+
+  const { workItemId } = _.head(stipulatedWorkItems);
+
+  await applicationContext.getUseCases().completeWorkItem({
+    applicationContext,
+    userId: applicationContext.getCurrentUser().userId,
+    workItemId,
   });
 };
