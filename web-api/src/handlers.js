@@ -62,6 +62,7 @@ module.exports = {
     .handler,
   setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
     .handler,
+  signDocumentLambda: require('./documents/signDocumentLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,

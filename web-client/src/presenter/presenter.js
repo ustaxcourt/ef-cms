@@ -20,6 +20,7 @@ import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumen
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
+import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
@@ -45,6 +46,7 @@ import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
+import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
@@ -69,6 +71,7 @@ import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTrialSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
@@ -77,6 +80,8 @@ import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequen
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
+import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
+import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
@@ -175,6 +180,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
+    completeDocumentSigningSequence,
     completeScanSequence,
     confirmStayLoggedInSequence,
     convertHtml2PdfSequence,
@@ -200,6 +206,7 @@ export const presenter = {
     gotoLoginSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
+    gotoSignPDFDocumentSequence,
     gotoStartCaseSequence,
     gotoStyleGuideSequence,
     gotoTrialSessionDetailSequence,
@@ -224,6 +231,7 @@ export const presenter = {
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
+    setCanvasForPDFSigningSequence,
     setCaseCaptionSequence,
     setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
@@ -231,6 +239,8 @@ export const presenter = {
     setIdleStatusIdleSequence,
     setIrsNoticeFalseSequence,
     setModalDialogNameSequence,
+    setPDFPageForSigningSequence,
+    setPDFSignatureDataSequence,
     setScannerSourceSequence,
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
