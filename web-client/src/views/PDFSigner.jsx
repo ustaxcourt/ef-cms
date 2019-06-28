@@ -4,6 +4,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 import { CaseDetailHeader } from './CaseDetailHeader';
+import { PDFSignerMessage } from './PDFSignerMessage';
 import { PDFSignerToolbar } from './PDFSignerToolbar';
 
 class PDFSignerComponent extends React.Component {
@@ -104,6 +105,8 @@ class PDFSignerComponent extends React.Component {
                 </div>
                 <div className="grid-col-3">
                   <PDFSignerToolbar />
+                  <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
+                  <PDFSignerMessage />
                 </div>
               </div>
             </div>
