@@ -1,4 +1,4 @@
-const { CaseExternal } = require('../CaseExternal');
+const { CaseExternal } = require('../cases/CaseExternal');
 const { PARTY_TYPES } = require('./PetitionContact');
 
 let caseExternal;

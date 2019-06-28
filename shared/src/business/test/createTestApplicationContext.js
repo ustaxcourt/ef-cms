@@ -5,10 +5,10 @@ const {
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
   CaseExternalIncomplete,
-} = require('../entities/CaseExternalIncomplete');
+} = require('../entities/cases/CaseExternalIncomplete');
 const {
   CaseInternalIncomplete,
-} = require('../entities/CaseInternalIncomplete');
+} = require('../entities/cases/CaseInternalIncomplete');
 const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');

@@ -1,29 +1,29 @@
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
-const { instantiateContacts } = require('./contacts/PetitionContact');
+} = require('../../../utilities/JoiValidationDecorator');
+const { instantiateContacts } = require('../contacts/PetitionContact');
 
 /**
  * CaseExternalIncomplete
  * Represents a Case without required documents that a Petitioner is attempting to add to the system.
  * After the Case's files have been saved, a Petition is created to include the document metadata.
- * @param rawPetition
+ * @param rawCase
  * @constructor
  */
-function CaseExternalIncomplete(rawPetition) {
+function CaseExternalIncomplete(rawCase) {
   Object.assign(this, {
-    businessType: rawPetition.businessType,
-    caseType: rawPetition.caseType,
-    contactPrimary: rawPetition.contactPrimary,
-    contactSecondary: rawPetition.contactSecondary,
-    countryType: rawPetition.countryType,
-    filingType: rawPetition.filingType,
-    hasIrsNotice: rawPetition.hasIrsNotice,
-    irsNoticeDate: rawPetition.irsNoticeDate,
-    partyType: rawPetition.partyType,
-    preferredTrialCity: rawPetition.preferredTrialCity,
-    procedureType: rawPetition.procedureType,
+    businessType: rawCase.businessType,
+    caseType: rawCase.caseType,
+    contactPrimary: rawCase.contactPrimary,
+    contactSecondary: rawCase.contactSecondary,
+    countryType: rawCase.countryType,
+    filingType: rawCase.filingType,
+    hasIrsNotice: rawCase.hasIrsNotice,
+    irsNoticeDate: rawCase.irsNoticeDate,
+    partyType: rawCase.partyType,
+    preferredTrialCity: rawCase.preferredTrialCity,
+    procedureType: rawCase.procedureType,
   });
 
   const contacts = instantiateContacts({

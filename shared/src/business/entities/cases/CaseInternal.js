@@ -1,27 +1,27 @@
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
-} = require('../../persistence/s3/getUploadPolicy');
+} = require('../../../persistence/s3/getUploadPolicy');
 
 /**
  * CaseInternal Entity
  * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
- * @param rawPetition
+ * @param rawCase
  * @constructor
  */
-function CaseInternal(rawPetition) {
+function CaseInternal(rawCase) {
   Object.assign(this, {
-    caseCaption: rawPetition.caseCaption,
-    ownershipDisclosureFile: rawPetition.ownershipDisclosureFile,
-    petitionFile: rawPetition.petitionFile,
-    petitionFileSize: rawPetition.petitionFileSize,
-    receivedAt: rawPetition.receivedAt,
-    stinFile: rawPetition.stinFile,
-    stinFileSize: rawPetition.stinFileSize,
+    caseCaption: rawCase.caseCaption,
+    ownershipDisclosureFile: rawCase.ownershipDisclosureFile,
+    petitionFile: rawCase.petitionFile,
+    petitionFileSize: rawCase.petitionFileSize,
+    receivedAt: rawCase.receivedAt,
+    stinFile: rawCase.stinFile,
+    stinFileSize: rawCase.stinFileSize,
   });
 }
 
