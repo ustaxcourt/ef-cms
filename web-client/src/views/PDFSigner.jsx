@@ -92,11 +92,9 @@ class PDFSignerComponent extends React.Component {
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <h2>Proposed Stipulated Decision</h2>
-            </div>
-            <div className="grid-col-12">
               <div className="grid-row">
                 <div className="grid-col-9">
+                  <h2>Proposed Stipulated Decision</h2>
                   <div className="sign-pdf-interface">
                     <span id="signature" ref={this.signatureRef}>
                       (Signed) Joseph Dredd
