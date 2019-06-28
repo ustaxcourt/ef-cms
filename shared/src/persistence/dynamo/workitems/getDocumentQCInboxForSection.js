@@ -1,13 +1,16 @@
 const { query } = require('../../dynamodbClientService');
 
-exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
+exports.getDocumentQCInboxForSection = async ({
+  applicationContext,
+  section,
+}) => {
   const workItems = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `user-${userId}`,
+      ':pk': `section-${section}`,
       ':prefix': 'workitem',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
