@@ -71,6 +71,7 @@ import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInt
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
+import { getInboxMessagesForSection } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
@@ -173,6 +174,7 @@ const allUseCases = {
   getCasesByUser,
   getEligibleCasesForTrialSession,
   getFilingTypes,
+  getInboxMessagesForSection,
   getInboxMessagesForUser,
   getInternalUsers,
   getItem: getItemUC,

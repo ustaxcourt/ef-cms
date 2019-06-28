@@ -133,6 +133,12 @@ const {
   getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
+  getInboxMessagesForSection
+} = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
+const {
+  getInboxMessagesForSection: getInboxMessagesForSectionUC
+} = require('../../shared/src/business/useCases/workitems/getInboxMessagesForSectionInteractor');
+const {
   getInboxMessagesForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForUser');
 const {
@@ -396,6 +402,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
+        getInboxMessagesForSection,
         getInboxMessagesForUser,
         getInternalUsers,
         getSentMessagesForUser,
@@ -461,6 +468,7 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByUser: getCasesByUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+        getInboxMessagesForSection: getInboxMessagesForSectionUC,
         getInboxMessagesForUser: getInboxMessagesForUserUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,

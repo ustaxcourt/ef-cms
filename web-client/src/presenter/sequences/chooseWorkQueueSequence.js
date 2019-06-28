@@ -1,5 +1,6 @@
 import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
+import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getSentMessagesForUserAction } from '../actions/getSentMessagesForUserAction';
@@ -29,6 +30,12 @@ export const chooseWorkQueueSequence = [
       parallel([
         [getNotificationsAction, setNotificationsAction],
         [getSentMessagesForUserAction, setWorkItemsAction],
+      ]),
+    ],
+    messagessectioninbox: [
+      parallel([
+        [getNotificationsAction, setNotificationsAction],
+        [getInboxMessagesForSectionAction, setWorkItemsAction],
       ]),
     ],
     mybatched: [

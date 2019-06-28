@@ -602,6 +602,18 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+              
+  getInboxMessagesForSection:
+    handler: src/handlers.getInboxMessagesForSectionLambda
+    events:
+      - http:
+          path: v1/sections/{section}/messages/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
 
   getWorkItemsForUser:
     handler: src/handlers.getWorkItemsForUserLambda
