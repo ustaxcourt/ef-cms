@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,9 +6,6 @@ export const PDFSignerMessage = connect(
   {
     constants: state.constants,
     form: state.form,
-    pdfObj: state.pdfForSigning.pdfjsObj,
-    setSignatureData: sequences.setPDFSignatureDataSequence,
-    signatureData: state.pdfForSigning.signatureData,
     updateMessageValueSequence: sequences.updateMessageValueSequence,
     users: state.users,
     validateInitialWorkItemMessageSequence:
