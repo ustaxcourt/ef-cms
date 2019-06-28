@@ -41,5 +41,15 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
     workQueuePath = `messages${workQueuePath}`;
   }
 
+  if (
+    !workQueueIsInternal &&
+    queuePrefs.queue === 'my' &&
+    queuePrefs.box === 'inbox'
+  ) {
+    workQueuePath = `documentqc${workQueuePath}`;
+  }
+
+  // console.log('workQueuePath', workQueuePath);
+
   return path[workQueuePath]();
 };

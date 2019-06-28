@@ -25,8 +25,10 @@ module.exports = {
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')
     .handler,
+  getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda').handler,
   getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
     .handler,
+  getInboxMessagesForSectionLambda: require('./workitems/getInboxMessagesForSectionLambda').handler,
   getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda').handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
