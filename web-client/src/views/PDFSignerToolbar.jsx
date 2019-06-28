@@ -1,22 +1,21 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PDFSignerToolbar = connect(
   {
-    completeSigning: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     pdfObj: state.pdfForSigning.pdfjsObj,
     setPage: sequences.setPDFPageForSigningSequence,
-    setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureData: state.pdfForSigning.signatureData,
   },
   ({
-    completeSigning,
+    applySignature,
+    clearSignature,
     currentPageNumber,
     pdfObj,
     setPage,
-    setSignatureData,
     signatureData,
   }) => {
     const getPreviousPage = () => {
@@ -34,40 +33,49 @@ export const PDFSignerToolbar = connect(
 
     return (
       <div className="sign-pdf-control">
-        {signatureData === null && (
-          <>
+        <h2>Sign Document</h2>
+        <>
+          <div className="margin-bottom-3">
+            <FontAwesomeIcon
+              className={
+                'icon-button' + (currentPageNumber === 1 ? ' disabled' : '')
+              }
+              icon={['fas', 'caret-left']}
+              size="3x"
+              onClick={getPreviousPage}
+            />
+            <span className="pages">
+              Page {currentPageNumber} of {pdfObj.numPages}
+            </span>
+            <FontAwesomeIcon
+              className={
+                'icon-button' +
+                (currentPageNumber === pdfObj.numPages ? ' disabled' : '')
+              }
+              icon={['fas', 'caret-right']}
+              size="3x"
+              onClick={getNextPage}
+            />
+          </div>
+          <div className="margin-top-3">
             <button
               className="usa-button"
-              disabled={currentPageNumber === 1}
-              onClick={getPreviousPage}
+              disabled={!!signatureData}
+              onClick={() => applySignature()}
             >
-              Previous Page
+              <FontAwesomeIcon icon={['far', 'edit']} />
+              Apply Signature
             </button>
-            <button
-              className="usa-button margin-left-2"
-              disabled={currentPageNumber === pdfObj.numPages}
-              onClick={getNextPage}
-            >
-              Next Page
-            </button>
-            <div className="margin-top-2">
-              Page {currentPageNumber} of {pdfObj.numPages}
-            </div>
-          </>
-        )}
-        {signatureData !== null && (
-          <>
-            <button
-              className="usa-button usa-button--outline"
-              onClick={() => setSignatureData({ signatureData: null })}
-            >
-              Reset
-            </button>
-            <button className="usa-button" onClick={() => completeSigning()}>
-              Complete Signing
-            </button>
-          </>
-        )}
+            {!!signatureData && (
+              <button
+                className="usa-button usa-button--unstyled"
+                onClick={() => clearSignature()}
+              >
+                Clear Signature
+              </button>
+            )}
+          </div>
+        </>
       </div>
     );
   },
