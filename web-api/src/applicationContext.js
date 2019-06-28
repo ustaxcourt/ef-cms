@@ -8,7 +8,6 @@ const AWS =
 
 // ^ must come first --------------------
 
-const chromium = require('chrome-' + 'aws-lambda');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
@@ -341,7 +340,11 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
-    getChromium: () => chromium,
+    getChromium: () => {
+      // eslint-disable-next-line security/detect-non-literal-require
+      const chromium = require('chrome-' + 'aws-lambda');
+      return chromium;
+    },
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
