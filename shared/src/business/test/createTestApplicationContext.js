@@ -7,6 +7,9 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/CaseExternalIncomplete');
 const {
+  CaseInternalIncomplete,
+} = require('../entities/CaseInternalIncomplete');
+const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');
 const {
@@ -36,9 +39,6 @@ const {
 const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
-const {
-  PetitionFromPaperWithoutFiles,
-} = require('../entities/PetitionFromPaperWithoutFiles');
 const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
@@ -82,7 +82,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentClient: () => mockDocClient,
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: PetitionFromPaperWithoutFiles,
+      CaseInternal: CaseInternalIncomplete,
     }),
     getPersistenceGateway: () => {
       return {

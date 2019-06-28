@@ -32,6 +32,9 @@ const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/CaseExternalIncomplete');
 const {
+  CaseInternalIncomplete,
+} = require('../../shared/src/business/entities/CaseInternalIncomplete');
+const {
   checkForReadyForTrialCases,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -209,9 +212,6 @@ const {
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
-  PetitionFromPaperWithoutFiles,
-} = require('../../shared/src/business/entities/PetitionFromPaperWithoutFiles');
-const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -362,7 +362,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: PetitionFromPaperWithoutFiles,
+      CaseInternal: CaseInternalIncomplete,
     }),
     getPersistenceGateway: () => {
       return {
