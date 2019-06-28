@@ -25,12 +25,21 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
 );
 
 describe('extractPendingMessagesFromCaseDetail', () => {
-  it('should no fail if work items is not defined', async () => {
+  it('should not fail if work items is not defined', async () => {
     const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
         caseDetail: {
           documents: [{}],
         },
+      },
+    });
+    expect(result).toMatchObject([]);
+  });
+
+  it('should not fail if documents is not defined', async () => {
+    const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
+      state: {
+        caseDetail: {},
       },
     });
     expect(result).toMatchObject([]);
