@@ -64,7 +64,6 @@ import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkI
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
-import { generatePdfUrlFactory } from '../../shared/src/business/utilities/generatePdfUrlFactory';
 import { generateSignedDocument } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
@@ -126,8 +125,6 @@ import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfPro
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
-
-const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
 
 const MINUTES = 60 * 1000;
 
@@ -317,7 +314,6 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
-      generatePdfUrl: generatePdfUrlFactory(jsPDF),
       isStringISOFormatted,
       prepareDateFromString,
     };
