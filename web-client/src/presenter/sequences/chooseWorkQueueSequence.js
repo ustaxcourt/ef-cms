@@ -1,5 +1,6 @@
 import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
+import { getDocumentQCInboxForUserAction } from '../actions/getDocumentQCInboxForUserAction';
 import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
@@ -19,72 +20,37 @@ import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction'
 export const chooseWorkQueueSequence = [
   setFormSubmittingAction,
   clearWorkQueueAction,
-  chooseWorkQueueAction,
-  {
-    messagesmyinbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getInboxMessagesForUserAction, setWorkItemsAction],
-      ]),
-    ],
-    messagesmyoutbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getSentMessagesForUserAction, setWorkItemsAction],
-      ]),
-    ],
-    messagessectioninbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getInboxMessagesForSectionAction, setWorkItemsAction],
-      ]),
-    ],
-    messagessectionoutbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getSentMessagesForSectionAction, setWorkItemsAction],
-      ]),
-    ],
-    mybatched: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getSentWorkItemsForUserAction, setWorkItemsAction],
-      ]),
-    ],
-    myinbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getWorkItemsByUserAction, setWorkItemsAction],
-      ]),
-    ],
-    myoutbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getSentWorkItemsForUserAction, setWorkItemsAction],
-      ]),
-    ],
-    sectionbatched: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getSentWorkItemsForSectionAction, setWorkItemsAction],
-      ]),
-    ],
-    sectioninbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [
+  parallel([
+    [getNotificationsAction, setNotificationsAction],
+    [
+      chooseWorkQueueAction,
+      {
+        documentqcmyinbox: [
+          getDocumentQCInboxForUserAction,
+          setWorkItemsAction,
+        ],
+        messagesmyinbox: [getInboxMessagesForUserAction, setWorkItemsAction],
+        messagesmyoutbox: [getSentMessagesForUserAction, setWorkItemsAction],
+        messagessectioninbox: [
+          getInboxMessagesForSectionAction,
+          setWorkItemsAction,
+        ],
+        messagessectionoutbox: [
+          getSentMessagesForSectionAction,
+          setWorkItemsAction,
+        ],
+        mybatched: [getSentWorkItemsForUserAction, setWorkItemsAction],
+        myinbox: [getWorkItemsByUserAction, setWorkItemsAction],
+        myoutbox: [getSentWorkItemsForUserAction, setWorkItemsAction],
+        sectionbatched: [getSentWorkItemsForSectionAction, setWorkItemsAction],
+        sectioninbox: [
           getWorkItemsForSectionAction,
           setWorkItemsAction,
           setSectionInboxCountAction,
         ],
-      ]),
+        sectionoutbox: [getSentWorkItemsForSectionAction, setWorkItemsAction],
+      },
     ],
-    sectionoutbox: [
-      parallel([
-        [getNotificationsAction, setNotificationsAction],
-        [getSentWorkItemsForSectionAction, setWorkItemsAction],
-      ]),
-    ],
-  },
+  ]),
   unsetFormSubmittingAction,
 ];

@@ -627,6 +627,19 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+
+  getDocumentQCInboxForUser:
+    handler: src/handlers.getDocumentQCInboxForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/document-qc/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getWorkItemsForUser:
     handler: src/handlers.getWorkItemsForUserLambda
     events:

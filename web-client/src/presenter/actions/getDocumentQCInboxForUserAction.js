@@ -4,15 +4,13 @@
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{workItems: Array}>} a list of work items
  */
-export const getInboxMessagesForSectionAction = async ({
+export const getDocumentQCInboxForUserAction = async ({
   applicationContext,
 }) => {
-  const user = applicationContext.getCurrentUser();
-
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getInboxMessagesForSection({
+  const workItems = await useCases.getDocumentQCInboxForUser({
     applicationContext,
-    section: user.section,
+    userId: applicationContext.getCurrentUser().userId,
   });
 
   return { workItems };

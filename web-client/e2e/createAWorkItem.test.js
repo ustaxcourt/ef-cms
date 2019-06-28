@@ -144,9 +144,9 @@ async function findWorkItemInWorkQueue({
     workQueueIsInternal,
   });
 
-  const myOutbox = test.getState('workQueue');
+  const workQueue = test.getState('workQueue');
 
-  const workItem = myOutbox.find(
+  const workItem = workQueue.find(
     i => i.docketNumber === docketNumber && i.messages[0].message === message,
   );
 
