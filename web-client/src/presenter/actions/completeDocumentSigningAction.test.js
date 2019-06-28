@@ -7,6 +7,8 @@ describe('completeDocumentSigningAction', () => {
   let uploadDocumentStub;
   let generateSignedDocumentStub;
   let signDocumentStub;
+  let getWorkItemsForUserStub;
+  let completeWorkItemStub;
 
   beforeEach(() => {
     global.window = {
@@ -20,13 +22,25 @@ describe('completeDocumentSigningAction', () => {
     uploadDocumentStub = sinon.stub();
     generateSignedDocumentStub = sinon.stub();
     signDocumentStub = sinon.stub();
+    getWorkItemsForUserStub = sinon.stub().returns([
+      {
+        document: {
+          documentType: 'Proposed Stipulated Decision',
+        },
+        workItemId: '1',
+      },
+    ]);
+    completeWorkItemStub = sinon.stub();
 
     presenter.providers.applicationContext = {
+      getCurrentUser: () => ({ userId: '1' }),
       getPersistenceGateway: () => ({
         uploadDocument: uploadDocumentStub,
       }),
       getUseCases: () => ({
+        completeWorkItem: completeWorkItemStub,
         generateSignedDocument: generateSignedDocumentStub,
+        getWorkItemsForUser: getWorkItemsForUserStub,
         signDocument: signDocumentStub,
       }),
     };
@@ -61,5 +75,7 @@ describe('completeDocumentSigningAction', () => {
     expect(uploadDocumentStub.calledOnce).toEqual(true);
     expect(generateSignedDocumentStub.calledOnce).toEqual(true);
     expect(signDocumentStub.calledOnce).toEqual(true);
+    expect(getWorkItemsForUserStub.calledOnce).toEqual(true);
+    expect(completeWorkItemStub.calledOnce).toEqual(true);
   });
 });
