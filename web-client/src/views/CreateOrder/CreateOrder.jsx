@@ -14,6 +14,7 @@ export const CreateOrder = connect(
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
@@ -21,6 +22,7 @@ export const CreateOrder = connect(
     convertHtml2PdfSequence,
     form,
     formCancelToggleCancelSequence,
+    pdfPreviewUrl,
     showModal,
     updateFormValueSequence,
   }) => {
@@ -82,9 +84,14 @@ export const CreateOrder = connect(
               </div>
 
               <div className="grid-col-4">
-                <button className="usa-button usa-button--outline">
+                <a
+                  className="usa-button usa-button--outline"
+                  href={pdfPreviewUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   View Full PDF
-                </button>
+                </a>
               </div>
             </div>
           </div>
