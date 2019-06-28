@@ -1,5 +1,7 @@
 .usa-button {
-  min-width: 132px;
+  &:not(.usa-button--unstyled) {
+    min-width: 132px;
+  }
 
   &.margin-right-0 {
     margin-right: 0;
