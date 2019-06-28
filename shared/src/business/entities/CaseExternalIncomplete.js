@@ -5,13 +5,13 @@ const {
 const { instantiateContacts } = require('./contacts/PetitionContact');
 
 /**
- * PetitionWithoutFiles
+ * CaseExternalIncomplete
  * Represents a Case without required documents that a Petitioner is attempting to add to the system.
  * After the Case's files have been saved, a Petition is created to include the document metadata.
  * @param rawPetition
  * @constructor
  */
-function PetitionWithoutFiles(rawPetition) {
+function CaseExternalIncomplete(rawPetition) {
   Object.assign(this, {
     businessType: rawPetition.businessType,
     caseType: rawPetition.caseType,
@@ -37,7 +37,7 @@ function PetitionWithoutFiles(rawPetition) {
   this.contactSecondary = contacts.secondary;
 }
 
-PetitionWithoutFiles.errorToMessageMap = {
+CaseExternalIncomplete.errorToMessageMap = {
   caseType: 'Case Type is a required field.',
   filingType: 'Filing Type is a required field.',
   hasIrsNotice: 'You must indicate whether you received an IRS notice.',
@@ -54,7 +54,7 @@ PetitionWithoutFiles.errorToMessageMap = {
 };
 
 joiValidationDecorator(
-  PetitionWithoutFiles,
+  CaseExternalIncomplete,
   joi.object().keys({
     businessType: joi
       .string()
@@ -84,7 +84,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  PetitionWithoutFiles.errorToMessageMap,
+  CaseExternalIncomplete.errorToMessageMap,
 );
 
-module.exports = { PetitionWithoutFiles };
+module.exports = { CaseExternalIncomplete };
