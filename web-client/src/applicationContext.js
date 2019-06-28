@@ -127,8 +127,6 @@ const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
 
-const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
-
 const MINUTES = 60 * 1000;
 
 let user;
@@ -317,7 +315,6 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
-      generatePdfUrl: generatePdfUrlFactory(jsPDF),
       isStringISOFormatted,
       prepareDateFromString,
     };
