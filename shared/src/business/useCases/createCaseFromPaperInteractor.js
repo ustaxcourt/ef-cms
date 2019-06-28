@@ -1,13 +1,12 @@
-const { Case } = require('../entities/cases/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
-const { WorkItem } = require('../entities/WorkItem');
-
 const {
   isAuthorized,
   START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentWithWorkItemToCase = (
   user,
@@ -72,8 +71,8 @@ exports.createCaseFromPaper = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const Petition = applicationContext.getEntityConstructors().PetitionFromPaper;
-  const petitionEntity = new Petition({
+  const { CaseInternal } = applicationContext.getEntityConstructors();
+  const petitionEntity = new CaseInternal({
     ...petitionMetadata,
     ownershipDisclosureFileId,
     petitionFileId,
