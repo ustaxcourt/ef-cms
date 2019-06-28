@@ -272,6 +272,9 @@ const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
+  updateCaseTrialSortTags,
+} = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
+const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
@@ -359,7 +362,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       CaseExternal: PetitionWithoutFiles,
-      PetitionFromPaper: PetitionFromPaperWithoutFiles,
+      CaseInternal: PetitionFromPaperWithoutFiles,
     }),
     getPersistenceGateway: () => {
       return {
@@ -470,6 +473,7 @@ module.exports = (appContextUser = {}) => {
         submitCaseAssociationRequest,
         submitPendingCaseAssociationRequest,
         updateCase: updateCaseUC,
+        updateCaseTrialSortTags,
         validatePdf,
         verifyCaseForUser: verifyCaseForUserUC,
         verifyPendingCaseForUser: verifyPendingCaseForUserUC,

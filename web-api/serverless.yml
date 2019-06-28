@@ -768,6 +768,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCourtIssuedOrderPdfFromHtml:
+    runtime: nodejs8.10
     handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest

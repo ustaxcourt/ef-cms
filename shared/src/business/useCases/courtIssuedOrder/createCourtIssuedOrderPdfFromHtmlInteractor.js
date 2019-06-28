@@ -10,10 +10,13 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
   docketNumberWithSuffix,
   htmlString,
 }) => {
-  let browser;
-  let result;
+  let browser = null;
+  let result = null;
+
   try {
     const chromium = applicationContext.getChromium();
+
+    applicationContext.logger.info('gotChromium');
 
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
@@ -22,7 +25,11 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       headless: true,
     });
 
+    applicationContext.logger.info('have browser');
+
     let page = await browser.newPage();
+
+    applicationContext.logger.info('have page');
 
     await page.setContent(htmlString);
 
@@ -32,7 +39,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
         <body>
           <div style="font-size: 14px; width: 100%; margin: 20px 50px 20px 50px;">
             <div style="float: right">
-              Page <span class="pageNumber"></span> 
+              Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
             </div>
             <div style="float: left">
@@ -59,6 +66,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       headerTemplate,
     });
   } catch (error) {
+    applicationContext.logger.error(error);
     throw error;
   } finally {
     if (browser !== null) {

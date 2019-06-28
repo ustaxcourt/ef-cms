@@ -8,12 +8,12 @@ const {
 } = require('../../persistence/s3/getUploadPolicy');
 
 /**
- * PetitionFromPaper Entity
+ * CaseInternal Entity
  * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
  * @param rawPetition
  * @constructor
  */
-function PetitionFromPaper(rawPetition) {
+function CaseInternal(rawPetition) {
   Object.assign(this, {
     caseCaption: rawPetition.caseCaption,
     ownershipDisclosureFile: rawPetition.ownershipDisclosureFile,
@@ -25,7 +25,7 @@ function PetitionFromPaper(rawPetition) {
   });
 }
 
-PetitionFromPaper.errorToMessageMap = {
+CaseInternal.errorToMessageMap = {
   caseCaption: 'Case Caption is required.',
   petitionFile: 'The Petition file was not selected.',
   petitionFileSize: [
@@ -84,12 +84,12 @@ const paperRequirements = joi.object().keys({
 });
 
 joiValidationDecorator(
-  PetitionFromPaper,
+  CaseInternal,
   paperRequirements,
   function() {
     return !this.getFormattedValidationErrors();
   },
-  PetitionFromPaper.errorToMessageMap,
+  CaseInternal.errorToMessageMap,
 );
 
-module.exports = { PetitionFromPaper };
+module.exports = { CaseInternal };
