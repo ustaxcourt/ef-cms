@@ -782,6 +782,7 @@ functions:
           path: v1/court-issued-order
           method: post
           cors: true
+          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
