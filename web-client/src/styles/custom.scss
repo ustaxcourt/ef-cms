@@ -1000,10 +1000,14 @@ nav.usa-nav {
 }
 
 .ql-editor {
-  min-height: 600px;
-  max-height: 600px;
+  min-height: 640px;
+  max-height: 640px;
   font-family: 'Times New Roman', Times, serif;
   font-size: 14px;
+
+  p {
+    max-width: 100%;
+  }
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
