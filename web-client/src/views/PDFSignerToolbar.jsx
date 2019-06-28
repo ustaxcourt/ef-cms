@@ -5,19 +5,17 @@ import React from 'react';
 
 export const PDFSignerToolbar = connect(
   {
-    completeSigning: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     pdfObj: state.pdfForSigning.pdfjsObj,
     setPage: sequences.setPDFPageForSigningSequence,
-    setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureData: state.pdfForSigning.signatureData,
   },
   ({
-    completeSigning,
+    applySignature,
+    clearSignature,
     currentPageNumber,
     pdfObj,
     setPage,
-    setSignatureData,
     signatureData,
   }) => {
     const getPreviousPage = () => {
@@ -63,17 +61,19 @@ export const PDFSignerToolbar = connect(
             <button
               className="usa-button"
               disabled={!!signatureData}
-              onClick={() => completeSigning()}
+              onClick={() => applySignature()}
             >
               <FontAwesomeIcon icon={['far', 'edit']} />
               Apply Signature
             </button>
-            <button
-              className="usa-button usa-button--unstyled"
-              onClick={() => setSignatureData({ signatureData: null })}
-            >
-              Clear Signature
-            </button>
+            {!!signatureData && (
+              <button
+                className="usa-button usa-button--unstyled"
+                onClick={() => clearSignature()}
+              >
+                Clear Signature
+              </button>
+            )}
           </div>
         </>
       </div>
