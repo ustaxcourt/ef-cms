@@ -35,7 +35,7 @@
     "prettier": "^1.18.2",
     "proxyquire": "^2.1.0",
     "puppeteer": "^1.18.0",
-    "serverless": "^1.46.0",
+    "serverless": "^1.46.1",
     "serverless-domain-manager": "2.6.13",
     "serverless-dynamodb-local": "github:ustaxcourt/serverless-dynamodb-local#new-master",
     "serverless-latest-layer-version": "^1.0.3",
