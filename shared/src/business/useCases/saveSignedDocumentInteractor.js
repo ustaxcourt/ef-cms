@@ -34,7 +34,7 @@ exports.saveSignedDocument = async ({
   );
 
   const signedDocumentEntity = new Document({
-    createdAt: new Date().toISOString(),
+    createdAt: applicationContext.getUtilities().createISODateString(),
     documentId: signedDocumentId,
     documentType: originalDocumentEntity.documentType,
     filedBy: originalDocumentEntity.filedBy,
