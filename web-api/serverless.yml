@@ -89,6 +89,9 @@ custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   vars: ${file(./config/${self:custom.stage}.yml)}
+  apigwBinary:
+    types:
+      - '*/*'
 
 provider:
   name: aws
