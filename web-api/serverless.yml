@@ -10,6 +10,8 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-apigw-binary
+  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -89,6 +91,10 @@ custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   vars: ${file(./config/${self:custom.stage}.yml)}
+  apigwBinary:
+    types:
+      - 'application/pdf'
+      - '*/*'
 
 provider:
   name: aws
@@ -277,6 +283,18 @@ functions:
           method: post
           cors: true
           # async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  signDocument:
+    handler: src/handlers.signDocumentLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/sign
+          method: post
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -779,6 +797,7 @@ functions:
           path: v1/court-issued-order
           method: post
           cors: true
+          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
