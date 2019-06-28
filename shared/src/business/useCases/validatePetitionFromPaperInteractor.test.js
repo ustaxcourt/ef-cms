@@ -1,7 +1,7 @@
 const {
   validatePetitionFromPaper,
 } = require('./validatePetitionFromPaperInteractor');
-const { CaseInternal } = require('../entities/CaseInternal');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { omit } = require('lodash');
 
 describe('validatePetition', () => {

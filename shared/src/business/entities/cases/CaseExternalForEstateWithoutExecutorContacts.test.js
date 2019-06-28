@@ -1,14 +1,15 @@
 const { CaseExternal } = require('./CaseExternal');
 
 describe('CaseExternal', () => {
-  describe('for Partnership (as the tax matters partner) Contacts', () => {
-    it('should not validate without contacts', () => {
-      const petition = new CaseExternal({
+  describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
+    it('should not validate without contact', () => {
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -17,11 +18,11 @@ describe('CaseExternal', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.isValid()).toEqual(false);
+      expect(caseExternal.isValid()).toEqual(false);
     });
 
-    it('can validate contacts', () => {
-      const petition = new CaseExternal({
+    it('should validate without inCareOf', () => {
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -34,7 +35,26 @@ describe('CaseExternal', () => {
           postalCode: '05198',
           state: 'AK',
         },
-        contactSecondary: {
+        filingType: 'Myself',
+        hasIrsNotice: true,
+        irsNoticeDate: '2009-10-13',
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+        petitionFile: {},
+        petitionFileSize: 1,
+        preferredTrialCity: 'Chattanooga, TN',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: {},
+        stinFileSize: 1,
+      });
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('can validate primary contact', () => {
+      const caseExternal = new CaseExternal({
+        caseType: 'other',
+        contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
           country: 'USA',
@@ -49,7 +69,8 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType:
+          'Estate without an Executor/Personal Representative/Fiduciary/etc.',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -58,7 +79,7 @@ describe('CaseExternal', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.getFormattedValidationErrors()).toEqual(null);
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

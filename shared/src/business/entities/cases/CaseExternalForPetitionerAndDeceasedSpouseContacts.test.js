@@ -3,7 +3,7 @@ const { CaseExternal } = require('./CaseExternal');
 describe('CaseExternal', () => {
   describe('for Petitioner And Deceased Spouse Contacts', () => {
     it('should not validate without contacts', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -17,11 +17,11 @@ describe('CaseExternal', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.isValid()).toEqual(false);
+      expect(caseExternal.isValid()).toEqual(false);
     });
 
     it('can validate primary contact name', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -54,7 +54,7 @@ describe('CaseExternal', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.getFormattedValidationErrors()).toEqual(null);
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

@@ -1,12 +1,12 @@
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
-} = require('../../persistence/s3/getUploadPolicy');
-const { instantiateContacts } = require('./contacts/PetitionContact');
+} = require('../../../persistence/s3/getUploadPolicy');
+const { instantiateContacts } = require('../contacts/PetitionContact');
 
 /**
  * CaseExternal Entity

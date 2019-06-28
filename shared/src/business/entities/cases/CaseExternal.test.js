@@ -1,13 +1,13 @@
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
-} = require('../../persistence/s3/getUploadPolicy');
+} = require('../../../persistence/s3/getUploadPolicy');
 const { CaseExternal } = require('./CaseExternal');
 
 describe('CaseExternal entity', () => {
   describe('isValid', () => {
     it('requires ownership disclosure if filing type is a business', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         businessType: 'Corporation',
         caseType: 'other',
         filingType: 'A business',
@@ -17,7 +17,7 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
       });
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFile,
+        caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
       ).toEqual('Ownership Disclosure Statement is required.');
     });
     it('does not require ownership disclosure if filing type not set', () => {
@@ -33,7 +33,7 @@ describe('CaseExternal entity', () => {
       ).toBeUndefined();
     });
     it('does not require ownership disclosure if filing type not a business', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'not a biz',
         hasIrsNotice: false,
@@ -42,11 +42,11 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
       });
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFile,
+        caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
       ).toBeUndefined();
     });
     it('requires stinFile', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         businessType: 'Corporation',
         caseType: 'other',
         filingType: 'A business',
@@ -55,7 +55,7 @@ describe('CaseExternal entity', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       });
-      expect(petition.getFormattedValidationErrors().stinFile).toEqual(
+      expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
         'Statement of Taxpayer Identification Number is required.',
       );
     });
@@ -63,7 +63,7 @@ describe('CaseExternal entity', () => {
 
   describe('irs notice date validation', () => {
     it('should require notice date', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -75,13 +75,13 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
         signature: true,
       });
-      expect(petition.getFormattedValidationErrors().irsNoticeDate).toEqual(
+      expect(caseExternal.getFormattedValidationErrors().irsNoticeDate).toEqual(
         'Notice Date is a required field.',
       );
     });
 
     it('should not require notice date', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: false,
@@ -94,12 +94,12 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().irsNoticeDate,
+        caseExternal.getFormattedValidationErrors().irsNoticeDate,
       ).toBeUndefined();
     });
 
     it('should not require case type without indicating they have a notice ', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         filingType: 'Myself',
         hasIrsNotice: undefined,
         partyType:
@@ -110,11 +110,13 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
         signature: true,
       });
-      expect(petition.getFormattedValidationErrors().caseType).toBeUndefined();
+      expect(
+        caseExternal.getFormattedValidationErrors().caseType,
+      ).toBeUndefined();
     });
 
     it('should inform you if notice date is in the future', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -127,7 +129,7 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
         signature: true,
       });
-      expect(petition.getFormattedValidationErrors().irsNoticeDate).toEqual(
+      expect(caseExternal.getFormattedValidationErrors().irsNoticeDate).toEqual(
         'Notice Date is in the future. Please enter a valid date.',
       );
     });
@@ -135,7 +137,7 @@ describe('CaseExternal entity', () => {
 
   describe('Petition file size', () => {
     it('should inform you if petition file size is greater than 500MB', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -148,13 +150,15 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
         signature: true,
       });
-      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
+      expect(
+        caseExternal.getFormattedValidationErrors().petitionFileSize,
+      ).toEqual(
         `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       );
     });
 
     it('should inform you if petition file size is zero', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -167,13 +171,13 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
         signature: true,
       });
-      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
-        `Your Petition file size is empty.`,
-      );
+      expect(
+        caseExternal.getFormattedValidationErrors().petitionFileSize,
+      ).toEqual(`Your Petition file size is empty.`);
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -185,12 +189,12 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().petitionFileSize,
+        caseExternal.getFormattedValidationErrors().petitionFileSize,
       ).toBeUndefined();
     });
 
     it('should error on petitionFileSize when petitionFile is defined', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -202,15 +206,15 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
         signature: true,
       });
-      expect(petition.getFormattedValidationErrors().petitionFileSize).toEqual(
-        `Your Petition file size is empty.`,
-      );
+      expect(
+        caseExternal.getFormattedValidationErrors().petitionFileSize,
+      ).toEqual(`Your Petition file size is empty.`);
     });
   });
 
   describe('STIN file size', () => {
     it('should inform you if stin file size is greater than 500MB', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -223,13 +227,13 @@ describe('CaseExternal entity', () => {
         stinFile: new File([], 'test.pdf'),
         stinFileSize: MAX_FILE_SIZE_BYTES + 5,
       });
-      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+      expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
         `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       );
     });
 
     it('should inform you if stin file size is zero', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -242,13 +246,13 @@ describe('CaseExternal entity', () => {
         stinFile: new File([], 'test.pdf'),
         stinFileSize: 0,
       });
-      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+      expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
         `Your STIN file size is empty.`,
       );
     });
 
     it('should not error on stinFileSize when stinFile is undefined', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -260,12 +264,12 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().stinFileSize,
+        caseExternal.getFormattedValidationErrors().stinFileSize,
       ).toBeUndefined();
     });
 
     it('should error on stinFileSize when stinFile is defined', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -277,7 +281,7 @@ describe('CaseExternal entity', () => {
         signature: true,
         stinFile: new File([], 'testStinFile.pdf'),
       });
-      expect(petition.getFormattedValidationErrors().stinFileSize).toEqual(
+      expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
         `Your STIN file size is empty.`,
       );
     });
@@ -285,7 +289,7 @@ describe('CaseExternal entity', () => {
 
   describe('ownership disclosure file size', () => {
     it('should inform you if ownership disclosure file size is greater than 500MB', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -299,14 +303,14 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
       ).toEqual(
         `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       );
     });
 
     it('should inform you if ownership disclosure file size is zero', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -320,12 +324,12 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
       ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
     });
 
     it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -337,12 +341,12 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
       ).toBeUndefined();
     });
 
     it('should error on ownershipDisclosureFileSize when ownershipDisclosureFile is defined', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -355,7 +359,7 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(
-        petition.getFormattedValidationErrors().ownershipDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
       ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
     });
   });
