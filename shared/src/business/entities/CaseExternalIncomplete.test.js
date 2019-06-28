@@ -1,9 +1,9 @@
-const { PetitionWithoutFiles } = require('./PetitionWithoutFiles');
+const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
 
-describe('PetitionWithoutFiles entity', () => {
+describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {
-      const petition = new PetitionWithoutFiles({
+      const caseExternalIncomplete = new CaseExternalIncomplete({
         caseType: 'other',
         contactPrimary: {
           address1: '99 South Oak Lane',
@@ -26,7 +26,9 @@ describe('PetitionWithoutFiles entity', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       });
-      expect(petition.getFormattedValidationErrors()).toEqual(null);
+      expect(caseExternalIncomplete.getFormattedValidationErrors()).toEqual(
+        null,
+      );
     });
   });
 });
