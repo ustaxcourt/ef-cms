@@ -2,9 +2,9 @@ FROM cypress/base:10.15.3
 
 WORKDIR /home/build
 
-RUN apt-get install build-essential zip
+COPY package.json /home/build/nodejs/package.json
+COPY package-lock.json /home/build/nodejs/package-lock.json
+RUN cd /home/build/nodejs/ && npm i
+RUN tar -czf puppeteer_lambda_layer.tar.gz nodejs
 
-RUN cd /home/build/ && git clone --depth=1 https://github.com/alixaxel/chrome-aws-lambda.git
-RUN cd /home/build/chrome-aws-lambda && make chrome_aws_lambda.zip
-
-CMD echo "zip has been created"
+CMD echo "tar has been created"
