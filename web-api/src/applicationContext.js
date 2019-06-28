@@ -154,6 +154,12 @@ const {
   getNotifications,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getSentMessagesForSection
+} = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
+const {
+  getSentMessagesForSection: getSentMessagesForSectionUC,
+} = require('../../shared/src/business/useCases/workitems/getSentMessagesForSectionInteractor');
+const {
   getSentMessagesForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForUser');
 const {
@@ -405,6 +411,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSection,
         getInboxMessagesForUser,
         getInternalUsers,
+        getSentMessagesForSection,
         getSentMessagesForUser,
         getSentWorkItemsForSection,
         getSentWorkItemsForUser,
@@ -414,6 +421,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUsersInSection,
         getWorkItemById,
+      
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
@@ -472,6 +480,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUser: getInboxMessagesForUserUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
+        getSentMessagesForSection: getSentMessagesForSectionUC,
         getSentMessagesForUser: getSentMessagesForUserUC,
         getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
         getSentWorkItemsForUser: getSentWorkItemsForUserUC,

@@ -79,6 +79,7 @@ import { getItem as getItemUC } from '../../shared/src/business/useCases/getItem
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
+import { getSentMessagesForSection } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
 import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
@@ -180,6 +181,7 @@ const allUseCases = {
   getItem: getItemUC,
   getNotifications,
   getProcedureTypes,
+  getSentMessagesForSection,
   getSentMessagesForUser,
   getSentWorkItemsForSection,
   getSentWorkItemsForUser,

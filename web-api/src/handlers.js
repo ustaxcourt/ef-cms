@@ -30,6 +30,7 @@ module.exports = {
   getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda').handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
+  getSentMessagesForSectionLambda: require('./workitems/getSentMessagesForSectionLambda').handler,
   getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda').handler,
   getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda')
     .handler,
