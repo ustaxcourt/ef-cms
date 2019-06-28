@@ -14,6 +14,11 @@ describe('saveSignedDocument', () => {
         getCaseByCaseId: () => mockCase,
         updateCase: () => null,
       }),
+      getUtilities: () => {
+        return {
+          createISODateString: () => '2018-06-01T00:00:00.000Z',
+        };
+      },
       logger: {
         time: () => null,
         timeEnd: () => null,

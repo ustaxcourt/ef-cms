@@ -81,4 +81,83 @@ describe('requestAccessHelper', () => {
     const result = await runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);
   });
+
+  it('shows filing includes if certificate of service, exhibits, or attachments is true', async () => {
+    state.form = { certificateOfService: true };
+    let result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingIncludes).toEqual(true);
+
+    state.form = {
+      certificateOfService: false,
+      documentType: 'Notice of Intervention',
+      exhibits: true,
+    };
+    result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingIncludes).toEqual(true);
+
+    state.form = {
+      attachments: true,
+      certificateOfService: false,
+      documentType: 'Notice of Intervention',
+      exhibits: false,
+    };
+    result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingIncludes).toEqual(true);
+  });
+
+  it('does not show filing includes if certificate of service, exhibits, and attachments are false', async () => {
+    state.form = {
+      attachments: false,
+      certificateOfService: false,
+      documentType: 'Notice of Intervention',
+      exhibits: false,
+    };
+    const result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingIncludes).toEqual(false);
+  });
+
+  it('shows filing not includes if certificate of service, exhibits, attachments, or supporting documents is false', async () => {
+    state.form = { certificateOfService: false };
+    let result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(true);
+
+    state.form = {
+      certificateOfService: true,
+      documentType: 'Notice of Intervention',
+      exhibits: false,
+    };
+    result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(true);
+
+    state.form = {
+      attachments: false,
+      certificateOfService: true,
+      documentType: 'Notice of Intervention',
+      exhibits: true,
+    };
+    result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(true);
+
+    state.form = {
+      attachments: true,
+      certificateOfService: true,
+      documentType: 'Motion to Substitute Parties and Change Caption',
+      exhibits: true,
+      hasSupportingDocuments: false,
+    };
+    result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(true);
+  });
+
+  it('does not show filing not includes if certificate of service, exhibits, attachments, and supporting documents are true', async () => {
+    state.form = {
+      attachments: true,
+      certificateOfService: true,
+      documentType: 'Motion to Substitute Parties and Change Caption',
+      exhibits: true,
+      hasSupportingDocuments: true,
+    };
+    const result = await runCompute(requestAccessHelper, { state });
+    expect(result.showFilingNotIncludes).toEqual(false);
+  });
 });
