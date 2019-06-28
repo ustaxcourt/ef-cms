@@ -37,27 +37,29 @@ export const PDFSignerToolbar = connect(
       <div className="sign-pdf-control">
         <h2>Sign Document</h2>
         <>
-          <FontAwesomeIcon
-            className={
-              'icon-button' + (currentPageNumber === 1 ? ' disabled' : '')
-            }
-            icon={['fas', 'caret-left']}
-            size="3x"
-            onClick={getPreviousPage}
-          />
-          <span className="pages">
-            Page {currentPageNumber} of {pdfObj.numPages}
-          </span>
-          <FontAwesomeIcon
-            className={
-              'icon-button' +
-              (currentPageNumber === pdfObj.numPages ? ' disabled' : '')
-            }
-            icon={['fas', 'caret-right']}
-            size="3x"
-            onClick={getNextPage}
-          />
-          <div className="margin-top-2">
+          <div className="margin-bottom-3">
+            <FontAwesomeIcon
+              className={
+                'icon-button' + (currentPageNumber === 1 ? ' disabled' : '')
+              }
+              icon={['fas', 'caret-left']}
+              size="3x"
+              onClick={getPreviousPage}
+            />
+            <span className="pages">
+              Page {currentPageNumber} of {pdfObj.numPages}
+            </span>
+            <FontAwesomeIcon
+              className={
+                'icon-button' +
+                (currentPageNumber === pdfObj.numPages ? ' disabled' : '')
+              }
+              icon={['fas', 'caret-right']}
+              size="3x"
+              onClick={getNextPage}
+            />
+          </div>
+          <div className="margin-top-3">
             <button
               className="usa-button"
               disabled={!!signatureData}
