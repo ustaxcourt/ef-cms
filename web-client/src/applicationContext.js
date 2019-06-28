@@ -64,7 +64,6 @@ import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkI
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
-import { generatePdfUrlFactory } from '../../shared/src/business/utilities/generatePdfUrlFactory';
 import { generateSignedDocument } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
