@@ -124,6 +124,12 @@ const {
   getCasesByUser: getCasesByUserUC,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
+  getDocumentQCBatchedForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
+const {
+  getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
+const {
   getDocumentQCInboxForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
@@ -412,6 +418,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
+        getDocumentQCBatchedForUser,
         getDocumentQCInboxForUser,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
@@ -482,6 +489,7 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
+        getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC,
         getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInboxMessagesForSection: getInboxMessagesForSectionUC,

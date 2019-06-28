@@ -69,6 +69,7 @@ import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/tria
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getDocumentQCBatchedForUser } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
 import { getDocumentQCInboxForUser } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
@@ -174,6 +175,7 @@ const allUseCases = {
   getCase,
   getCaseTypes,
   getCasesByUser,
+  getDocumentQCBatchedForUser,
   getDocumentQCInboxForUser,
   getEligibleCasesForTrialSession,
   getFilingTypes,
