@@ -72,8 +72,7 @@
     "sanitize-filename": "^1.6.1",
     "sinon": "^7.3.2",
     "tmp": "^0.1.0",
-    "uuid": "^3.3.2",
-    "webpack": "^4.35.0"
+    "uuid": "^3.3.2"
   },
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
