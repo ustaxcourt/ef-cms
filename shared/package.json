@@ -62,7 +62,6 @@
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
-    "parcel-plugin-static-files-copy": "^2.1.2",
     "pdf-lib": "^0.6.3",
     "pdfjs-dist": "^2.0.943",
     "prettier": "^1.18.2",
@@ -73,9 +72,5 @@
     "sinon": "^7.3.2",
     "tmp": "^0.1.0",
     "uuid": "^3.3.2"
-  },
-  "staticFiles": {
-    "staticPath": "node_modules/pdfjs-dist/build",
-    "watcherGlob": false
   }
 }
