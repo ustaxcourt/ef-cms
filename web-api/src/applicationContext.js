@@ -8,7 +8,7 @@ const AWS =
 
 // ^ must come first --------------------
 
-const chromium = require('chrome-aws-lambda');
+const chromium = require('chrome-' + 'aws-lambda');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
