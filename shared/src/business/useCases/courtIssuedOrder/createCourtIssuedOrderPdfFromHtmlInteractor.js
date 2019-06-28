@@ -16,7 +16,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
   try {
     const chromium = applicationContext.getChromium();
 
-    applicationContext.logger.info('gotChromium', chromium);
+    applicationContext.logger.info('gotChromium');
 
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
@@ -25,9 +25,11 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       headless: true,
     });
 
-    applicationContext.logger.info('have browser', browser);
+    applicationContext.logger.info('have browser');
 
     let page = await browser.newPage();
+
+    applicationContext.logger.info('have page');
 
     await page.setContent(htmlString);
 
