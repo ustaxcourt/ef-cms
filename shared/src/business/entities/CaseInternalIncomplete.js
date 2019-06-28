@@ -4,13 +4,13 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
- * PetitionFromPaperWithoutFiles
+ * CaseInternalIncomplete
  * Represents a Case without required documents that a Petitions Clerk is attempting to add to the system.
  * After the Case's files have been saved, a PetitionFromPaper is created to include the document metadata.
  * @param rawPetition
  * @constructor
  */
-function PetitionFromPaperWithoutFiles(rawPetition) {
+function CaseInternalIncomplete(rawPetition) {
   Object.assign(this, {
     caseCaption: rawPetition.caseCaption,
     petitionFileId: rawPetition.petitionFileId,
@@ -18,7 +18,7 @@ function PetitionFromPaperWithoutFiles(rawPetition) {
   });
 }
 
-PetitionFromPaperWithoutFiles.errorToMessageMap = {
+CaseInternalIncomplete.errorToMessageMap = {
   caseCaption: 'Case Caption is required.',
   petitionFileId: 'A petition file id is required.',
   receivedAt: [
@@ -48,12 +48,12 @@ const paperRequirements = joi.object().keys({
 });
 
 joiValidationDecorator(
-  PetitionFromPaperWithoutFiles,
+  CaseInternalIncomplete,
   paperRequirements,
   function() {
     return !this.getFormattedValidationErrors();
   },
-  PetitionFromPaperWithoutFiles.errorToMessageMap,
+  CaseInternalIncomplete.errorToMessageMap,
 );
 
-module.exports = { PetitionFromPaperWithoutFiles };
+module.exports = { CaseInternalIncomplete };
