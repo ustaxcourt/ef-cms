@@ -2,6 +2,7 @@ import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
 import { getDocumentQCBatchedForUserAction } from '../actions/getDocumentQCBatchedForUserAction';
 import { getDocumentQCInboxForUserAction } from '../actions/getDocumentQCInboxForUserAction';
+import { getDocumentQCServedForUserAction } from '../actions/getDocumentQCServedForUserAction';
 import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
@@ -32,6 +33,10 @@ export const chooseWorkQueueSequence = [
         ],
         documentqcmyinbox: [
           getDocumentQCInboxForUserAction,
+          setWorkItemsAction,
+        ],
+        documentqcmyoutbox: [
+          getDocumentQCServedForUserAction,
           setWorkItemsAction,
         ],
         messagesmyinbox: [getInboxMessagesForUserAction, setWorkItemsAction],

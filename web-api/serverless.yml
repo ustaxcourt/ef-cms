@@ -651,6 +651,19 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+
+  getDocumentQCServedForUser:
+    handler: src/handlers.getDocumentQCServedForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/document-qc/served
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getWorkItemsForUser:
     handler: src/handlers.getWorkItemsForUserLambda
     events:
