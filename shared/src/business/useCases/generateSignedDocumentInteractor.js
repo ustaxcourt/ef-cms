@@ -74,15 +74,13 @@ exports.generateSignedDocument = async ({
       }),
     );
   } else if (sigTextData) {
-    const [timesRomanRef, timesRomanFont] = pdfDoc.embedStandardFont(
-      'Times-Roman',
-    );
+    const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont('Helvetica');
 
-    page.addFontDictionary('TimesRoman', timesRomanRef);
+    page.addFontDictionary('Helvetica', helveticaRef);
 
     pageContentStream = pdfDoc.createContentStream(
-      drawText(timesRomanFont.encodeText(sigTextData), {
-        font: 'TimesRoman',
+      drawText(helveticaFont.encodeText(sigTextData), {
+        font: 'Helvetica',
         size: 15 * scale,
         x: posX,
         y: pageHeight - posY,
