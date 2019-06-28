@@ -3,6 +3,19 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+// do we need the abbreviations?
+const ORDER_TYPES = {
+  O: 'Order',
+  ODJ: 'Order of Dismissal for Lack of Jurisdiction',
+  OD: 'Order of Dismissal',
+  ODD: 'Order of Dismissal and Decision',
+  OSC: 'Order to Show Cause',
+  OAD: 'Order and Decision',
+  DEC: 'Decision',
+};
+/* eslint-enable sort-keys-fix/sort-keys-fix */
+
 /**
  * @param rawOrder
  * @constructor
@@ -20,6 +33,8 @@ Order.errorToMessageMap = {
   orderTitle: 'Order title is required.',
   orderType: 'Order type is required.',
 };
+
+Order.ORDER_TYPES = ORDER_TYPES;
 
 joiValidationDecorator(
   Order,
