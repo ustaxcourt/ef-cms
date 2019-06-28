@@ -136,6 +136,12 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
+  getDocumentQCServedForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser');
+const {
+  getDocumentQCServedForUser: getDocumentQCServedForUserUC,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
+const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
@@ -420,6 +426,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser,
         getDocumentQCBatchedForUser,
         getDocumentQCInboxForUser,
+        getDocumentQCServedForUser,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
         getInboxMessagesForSection,
@@ -434,8 +441,8 @@ module.exports = (appContextUser = {}) => {
         getUploadPolicy,
         getUserById,
         getUsersInSection,
-        getWorkItemById,
       
+        getWorkItemById,
         getWorkItemsBySection,
         getWorkItemsForUser,
         incrementCounter,
@@ -491,6 +498,7 @@ module.exports = (appContextUser = {}) => {
         getCasesByUser: getCasesByUserUC,
         getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC,
         getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
+        getDocumentQCServedForUser: getDocumentQCServedForUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInboxMessagesForSection: getInboxMessagesForSectionUC,
         getInboxMessagesForUser: getInboxMessagesForUserUC,
