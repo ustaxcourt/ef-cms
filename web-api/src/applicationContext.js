@@ -8,7 +8,6 @@ const AWS =
 
 // ^ must come first --------------------
 
-const chromium = require('chrome-' + 'aws-lambda');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
@@ -230,6 +229,9 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
+  saveSignedDocument,
+} = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
+const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
@@ -287,6 +289,9 @@ const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
 const {
+  uploadDocument,
+} = require('../../shared/src/persistence/s3/uploadDocument');
+const {
   validatePdf,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
@@ -341,7 +346,17 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
-    getChromium: () => chromium,
+    getChromium: () => {
+      // Notice: this require is here to only have the lambdas that need it call it.
+      // This dependency is only available on lambdas with the 'puppeteer' layer,
+      // which means including it globally causes the other lambdas to fail.
+      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
+      // which is wanted as bundling would have the dependency to not be searched for
+      // and found at the layer level and would cause issues.
+      // eslint-disable-next-line security/detect-non-literal-require
+      const chromium = require('chrome-' + 'aws-lambda');
+      return chromium;
+    },
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
@@ -412,6 +427,7 @@ module.exports = (appContextUser = {}) => {
         updateTrialSession,
         updateWorkItem,
         updateWorkItemInCase,
+        uploadDocument,
         verifyCaseForUser,
         verifyPendingCaseForUser,
         zipDocuments,
@@ -465,6 +481,7 @@ module.exports = (appContextUser = {}) => {
         runBatchProcess,
         sanitizePdf: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
+        saveSignedDocument,
         sendPetitionToIRSHoldingQueue,
         setCaseToReadyForTrial,
         setTrialSessionAsSwingSession,

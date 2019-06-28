@@ -66,7 +66,7 @@ import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkI
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
-import { generatePdfUrlFactory } from '../../shared/src/business/utilities/generatePdfUrlFactory';
+import { generateSignedDocument } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
@@ -88,6 +88,7 @@ import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSect
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
 import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
+import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
@@ -101,6 +102,7 @@ import { setItem as setItemUC } from '../../shared/src/business/useCases/setItem
 import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { signDocument } from '../../shared/src/proxies/documents/signDocumentProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -125,8 +127,6 @@ import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfPro
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
-
-const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
 
 const MINUTES = 60 * 1000;
 
@@ -166,6 +166,7 @@ const allUseCases = {
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
   generatePDFFromPNGData,
+  generateSignedDocument,
   getCalendaredCasesForTrialSession,
   getCase,
   getCaseTypes,
@@ -185,6 +186,7 @@ const allUseCases = {
   getWorkItem,
   getWorkItemsBySection,
   getWorkItemsForUser,
+  loadPDFForSigning,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
   removeItem: removeItemUC,
@@ -196,6 +198,7 @@ const allUseCases = {
   setTrialSessionAsSwingSession,
   setTrialSessionCalendar,
   setWorkItemAsRead,
+  signDocument,
   submitCaseAssociationRequest,
   submitPendingCaseAssociationRequest,
   updateCase,
@@ -314,7 +317,6 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
-      generatePdfUrl: generatePdfUrlFactory(jsPDF),
       isStringISOFormatted,
       prepareDateFromString,
     };
