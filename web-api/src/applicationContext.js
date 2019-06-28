@@ -8,7 +8,6 @@ const AWS =
 
 // ^ must come first --------------------
 
-const chromium = require('chrome-aws-lambda');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
@@ -31,6 +30,9 @@ const {
 const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/CaseExternalIncomplete');
+const {
+  CaseInternalIncomplete,
+} = require('../../shared/src/business/entities/CaseInternalIncomplete');
 const {
   checkForReadyForTrialCases,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -209,9 +211,6 @@ const {
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
-  PetitionFromPaperWithoutFiles,
-} = require('../../shared/src/business/entities/PetitionFromPaperWithoutFiles');
-const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -347,7 +346,11 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
-    getChromium: () => chromium,
+    getChromium: () => {
+      // eslint-disable-next-line security/detect-non-literal-require
+      const chromium = require('chrome-' + 'aws-lambda');
+      return chromium;
+    },
     getCurrentUser,
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
@@ -368,7 +371,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: PetitionFromPaperWithoutFiles,
+      CaseInternal: CaseInternalIncomplete,
     }),
     getPersistenceGateway: () => {
       return {
