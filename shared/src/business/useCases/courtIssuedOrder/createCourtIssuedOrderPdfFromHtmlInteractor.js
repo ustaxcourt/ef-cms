@@ -37,7 +37,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 14px; width: 100%; margin: 20px 50px 20px 50px;">
+          <div style="font-size: 14px; width: 100%; margin: 20px 62px 20px 62px;">
             <div style="float: right">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
@@ -49,11 +49,12 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
         </body>
       </html>
     `;
+
     const footerTemplate = `
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 14px; width: 100%; margin: 20px 50px 20px 50px;">
+          <div style="font-size: 14px; width: 100%; margin: 20px 62px 20px 62px;">
           </div>
         </body>
       </html>

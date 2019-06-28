@@ -28,6 +28,12 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  CaseExternalIncomplete,
+} = require('../../shared/src/business/entities/CaseExternalIncomplete');
+const {
+  CaseInternalIncomplete,
+} = require('../../shared/src/business/entities/CaseInternalIncomplete');
+const {
   checkForReadyForTrialCases,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -205,12 +211,6 @@ const {
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
-  PetitionFromPaperWithoutFiles,
-} = require('../../shared/src/business/entities/PetitionFromPaperWithoutFiles');
-const {
-  PetitionWithoutFiles,
-} = require('../../shared/src/business/entities/PetitionWithoutFiles');
-const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -364,8 +364,8 @@ module.exports = (appContextUser = {}) => {
       return environment.documentsBucketName;
     },
     getEntityConstructors: () => ({
-      CaseExternal: PetitionWithoutFiles,
-      CaseInternal: PetitionFromPaperWithoutFiles,
+      CaseExternal: CaseExternalIncomplete,
+      CaseInternal: CaseInternalIncomplete,
     }),
     getPersistenceGateway: () => {
       return {

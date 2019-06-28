@@ -11,16 +11,10 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
-    createOrderHelper: state.createOrderHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({
-    convertHtml2PdfSequence,
-    createOrderHelper,
-    form,
-    updateFormValueSequence,
-  }) => {
+  ({ convertHtml2PdfSequence, form, updateFormValueSequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -40,9 +34,7 @@ export const CreateOrder = connect(
                 <button
                   className="usa-button usa-button--unstyled margin-top-105"
                   onClick={() => {
-                    convertHtml2PdfSequence({
-                      htmlString: createOrderHelper.pdfTemplate,
-                    });
+                    convertHtml2PdfSequence();
                   }}
                 >
                   <FontAwesomeIcon icon="sync" size="sm" />
