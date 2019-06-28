@@ -18,4 +18,4 @@ web-client/node_modules
 web-client/reports
 web-client/tests_output/
 puppeteer_lambda_layer.tar.gz
-chrome_aws_lambda.zip
+parcel-debug-*
