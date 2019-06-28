@@ -986,12 +986,28 @@ nav.usa-nav {
 }
 
 .sign-pdf-control {
-  text-align: center;
+  .icon-button {
+    color: color($theme-color-primary);
+    cursor: pointer;
+
+    &.disabled {
+      color: color($theme-color-base-light);
+      cursor: arrow;
+    }
+  }
+
+  .pages {
+    position: relative;
+    top: -10px;
+    padding: 0 10px;
+    font-size: 24px;
+    font-weight: $font-semibold;
+  }
 }
 
 .sign-pdf-interface {
   #signature {
-    position: absolute;
+    position: fixed;
   }
   #sign-pdf-canvas {
     display: block;
