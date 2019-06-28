@@ -26,7 +26,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: true,
+      workQueueIsInternal: false,
     });
 
     const sectionWorkQueue = test.getState('workQueue');
@@ -85,7 +85,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: true,
+      workQueueIsInternal: false,
     });
   });
 };
