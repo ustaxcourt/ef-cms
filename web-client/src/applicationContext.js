@@ -70,6 +70,7 @@ import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getDocumentQCBatchedForUser } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
+import { getDocumentQCInboxForSection } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { getDocumentQCInboxForUser } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
 import { getDocumentQCServedForUser } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
@@ -177,6 +178,7 @@ const allUseCases = {
   getCaseTypes,
   getCasesByUser,
   getDocumentQCBatchedForUser,
+  getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
   getDocumentQCServedForUser,
   getEligibleCasesForTrialSession,

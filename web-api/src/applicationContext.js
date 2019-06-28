@@ -130,6 +130,9 @@ const {
   getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
 const {
+  getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const {
   getDocumentQCInboxForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
@@ -347,6 +350,7 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { exec } = require('child_process');
+const { getDocumentQCInboxForSection } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const { User } = require('../../shared/src/business/entities/User');
 
 const { DynamoDB, S3 } = AWS;
@@ -425,6 +429,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCasesByUser,
         getDocumentQCBatchedForUser,
+        getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
         getDocumentQCServedForUser,
         getDownloadPolicyUrl,
@@ -497,6 +502,7 @@ module.exports = (appContextUser = {}) => {
         getCase,
         getCasesByUser: getCasesByUserUC,
         getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC,
+        getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC,
         getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
         getDocumentQCServedForUser: getDocumentQCServedForUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
