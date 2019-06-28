@@ -1,6 +1,7 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PdfPreview } from '../../ustc-ui/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { TextEditor } from './TextEditor';
@@ -12,12 +13,23 @@ export const CreateOrder = connect(
   {
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
     form: state.form,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    showModal: state.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ convertHtml2PdfSequence, form, updateFormValueSequence }) => {
+  ({
+    convertHtml2PdfSequence,
+    form,
+    formCancelToggleCancelSequence,
+    showModal,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <CaseDetailHeader />
+        {showModal === 'FormCancelModalDialogComponent' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
         <SuccessNotification />
         <ErrorNotification />
 
@@ -32,7 +44,7 @@ export const CreateOrder = connect(
               </div>
               <div className="grid-col-1">
                 <button
-                  className="usa-button usa-button--unstyled margin-top-105"
+                  className="usa-button usa-button--unstyled margin-top-105 minw-10"
                   onClick={() => {
                     convertHtml2PdfSequence();
                   }}
@@ -59,7 +71,12 @@ export const CreateOrder = connect(
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
                 <button className="usa-button">Complete Order</button>
-                <button className="usa-button usa-button--unstyled margin-left-2">
+                <button
+                  className="usa-button usa-button--unstyled margin-left-2"
+                  onClick={() => {
+                    formCancelToggleCancelSequence();
+                  }}
+                >
                   Cancel
                 </button>
               </div>
