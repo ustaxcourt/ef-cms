@@ -93,7 +93,6 @@ custom:
   vars: ${file(./config/${self:custom.stage}.yml)}
   apigwBinary:
     types:
-      - 'application/pdf'
       - '*/*'
 
 provider:
