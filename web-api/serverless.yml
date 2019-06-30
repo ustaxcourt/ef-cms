@@ -10,7 +10,6 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-apigw-binary
   - serverless-apigwy-binary
 
 custom:
