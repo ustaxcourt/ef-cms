@@ -31,15 +31,6 @@ export const DocketRecordHeader = connect(
                   Entry
                 </a>
               )}
-              {helper.showCreateOrderButton && (
-                <a
-                  className="usa-button"
-                  href={`/case-detail/${caseDetail.docketNumber}/create-order`}
-                  id="button-create-order"
-                >
-                  <FontAwesomeIcon icon="plus-circle" size="1x" /> Create Order
-                </a>
-              )}
               {helper.showFileDocumentButton && (
                 <a
                   className="usa-button hide-on-mobile"
