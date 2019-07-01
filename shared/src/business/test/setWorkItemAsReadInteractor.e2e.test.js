@@ -6,8 +6,8 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
   setWorkItemAsRead,
 } = require('../useCases/workitems/setWorkItemAsReadInteractor');
@@ -83,8 +83,9 @@ describe('setWorkItemAsReadInteractor integration test', () => {
 
     const workItemEntity = new WorkItem(workItem);
 
-    let inbox = await getWorkItemsForUser({
+    let inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toEqual([]);
 
@@ -94,8 +95,9 @@ describe('setWorkItemAsReadInteractor integration test', () => {
       assigneeName: 'richard',
       workItemId: workItem.workItemId,
     });
-    inbox = await getWorkItemsForUser({
+    inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox.isRead).toBeFalsy();
 
@@ -104,8 +106,9 @@ describe('setWorkItemAsReadInteractor integration test', () => {
       workItemId: workItemEntity.workItemId,
     });
 
-    inbox = await getWorkItemsForUser({
+    inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toMatchObject([
       {

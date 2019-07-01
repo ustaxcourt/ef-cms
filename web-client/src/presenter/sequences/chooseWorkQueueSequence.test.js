@@ -4,7 +4,6 @@ import sinon from 'sinon';
 
 let test;
 const setCurrentUserStub = sinon.stub().returns({ section: 'petitions' });
-const getWorkItemsBySectionStub = sinon.stub().returns([{ isInternal: true }]);
 const getInboxMessagesForSectionStub = sinon
   .stub()
   .returns([{ isInternal: true }]);
@@ -16,7 +15,6 @@ presenter.providers.applicationContext = {
     getNotifications: () => {
       return {};
     },
-    getWorkItemsBySection: getWorkItemsBySectionStub,
   }),
   setCurrentUser: setCurrentUserStub,
 };

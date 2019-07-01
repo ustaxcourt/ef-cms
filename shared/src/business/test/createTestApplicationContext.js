@@ -13,23 +13,32 @@ const {
   getCaseByCaseId,
 } = require('../../persistence/dynamo/cases/getCaseByCaseId');
 const {
-  getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
-} = require('../../persistence/dynamo/workitems/getSentWorkItemsForSection');
+  getDocumentQCBatchedForSection,
+} = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForSection');
 const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getSentWorkItemsForUser');
+  getDocumentQCBatchedForUser,
+} = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForUser');
+const {
+  getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
+} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForSection');
+const {
+  getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+} = require('../../persistence/dynamo/workitems/getDocumentQCInboxForUser');
+const {
+  getInboxMessagesForSection,
+} = require('../../persistence/dynamo/workitems/getInboxMessagesForSection');
+const {
+  getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+} = require('../../persistence/dynamo/workitems/getInboxMessagesForUser');
+const {
+  getSentMessagesForUser: getSentMessagesForUserPersistence,
+} = require('../../persistence/dynamo/workitems/getSentMessagesForUser');
 const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
 const {
   getWorkItemById: getWorkItemByIdPersistence,
 } = require('../../persistence/dynamo/workitems/getWorkItemById');
-const {
-  getWorkItemsBySection: getWorkItemsBySectionPersistence,
-} = require('../../persistence/dynamo/workitems/getWorkItemsBySection');
-const {
-  getWorkItemsForUser: getWorkItemsForUserPersistence,
-} = require('../../persistence/dynamo/workitems/getWorkItemsForUser');
 const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
@@ -89,12 +98,15 @@ const createTestApplicationContext = ({ user } = {}) => {
         createWorkItem: createWorkItemPersistence,
         deleteWorkItemFromInbox,
         getCaseByCaseId,
-        getSentWorkItemsForSection: getSentWorkItemsForSectionPersistence,
-        getSentWorkItemsForUser: getSentWorkItemsForUserPersistence,
+        getDocumentQCBatchedForSection,
+        getDocumentQCBatchedForUser,
+        getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
+        getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
+        getInboxMessagesForSection,
+        getInboxMessagesForUser: getInboxMessagesForUserPersistence,
+        getSentMessagesForUser: getSentMessagesForUserPersistence,
         getUserById: getUserByIdPersistence,
         getWorkItemById: getWorkItemByIdPersistence,
-        getWorkItemsBySection: getWorkItemsBySectionPersistence,
-        getWorkItemsForUser: getWorkItemsForUserPersistence,
         incrementCounter,
         putWorkItemInOutbox,
         saveWorkItemForNonPaper,

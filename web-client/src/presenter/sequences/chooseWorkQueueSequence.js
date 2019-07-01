@@ -11,10 +11,6 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getSentMessagesForSectionAction } from '../actions/getSentMessagesForSectionAction';
 import { getSentMessagesForUserAction } from '../actions/getSentMessagesForUserAction';
-import { getSentWorkItemsForSectionAction } from '../actions/getSentWorkItemsForSectionAction';
-import { getSentWorkItemsForUserAction } from '../actions/getSentWorkItemsForUserAction';
-import { getWorkItemsByUserAction } from '../actions/getWorkItemsByUserAction';
-import { getWorkItemsForSectionAction } from '../actions/getWorkItemsForSectionAction';
 import { parallel } from 'cerebral/factories';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';

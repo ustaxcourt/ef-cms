@@ -3,8 +3,8 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -139,7 +139,7 @@ describe('createCase integration test', () => {
       });
     };
 
-    const docketsSectionInbox = await getWorkItemsBySection({
+    const docketsSectionInbox = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'petitions',
     });
