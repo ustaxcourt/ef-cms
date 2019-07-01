@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * validates the docket entry form.
+ * validates the create order modal
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validation use case
