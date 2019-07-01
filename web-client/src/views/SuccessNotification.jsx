@@ -18,8 +18,8 @@ class SuccessNotificationComponent extends React.Component {
   }
 
   render() {
-    const alertSuccess = this.props.alertSuccess;
-    const dismissAlert = this.props.dismissAlert;
+    const { alertSuccess } = this.props;
+    const { dismissAlert } = this.props;
     this.notificationRef = React.createRef();
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
@@ -28,14 +28,14 @@ class SuccessNotificationComponent extends React.Component {
       <React.Fragment>
         {alertSuccess && (
           <div
+            aria-live="polite"
             className={classNames(
               'usa-alert',
               'usa-alert--success',
               isMessageOnly && 'usa-alert-success-message-only',
             )}
-            aria-live="polite"
-            role="alert"
             ref={this.notificationRef}
+            role="alert"
           >
             <div className="usa-alert__body">
               <div className="grid-container padding-x-0">
@@ -48,8 +48,8 @@ class SuccessNotificationComponent extends React.Component {
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action">
                     <button
-                      type="button"
                       className="usa-button usa-button--unstyled no-underline"
+                      type="button"
                       onClick={() => dismissAlert()}
                     >
                       Dismiss <FontAwesomeIcon icon="times-circle" />

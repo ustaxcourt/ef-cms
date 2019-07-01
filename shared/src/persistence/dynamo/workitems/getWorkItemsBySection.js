@@ -1,6 +1,6 @@
 const { query } = require('../../dynamodbClientService');
 
-exports.getWorkItemsBySection = async ({ section, applicationContext }) => {
+exports.getWorkItemsBySection = async ({ applicationContext, section }) => {
   return query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

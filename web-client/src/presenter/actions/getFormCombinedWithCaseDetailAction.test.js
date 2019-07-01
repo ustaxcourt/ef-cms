@@ -1,24 +1,33 @@
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/cases/Case';
+import { applicationContext } from '../../applicationContext';
 import { castToISO } from './getFormCombinedWithCaseDetailAction';
 import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
+
+const modules = { presenter };
+presenter.providers.applicationContext = applicationContext;
 
 describe('castToISO', () => {
   it('returns an iso string when the date string passed in is valid', () => {
-    expect(castToISO('2010-10-10')).toEqual('2010-10-10T00:00:00.000Z');
+    expect(castToISO(applicationContext, '2010-10-10')).toEqual(
+      '2010-10-10T04:00:00.000Z',
+    );
   });
 
   it('returns an iso string when the date string of 2009-01-01 passed in is valid', () => {
-    expect(castToISO('2009-01-01')).toEqual('2009-01-01T00:00:00.000Z');
+    expect(castToISO(applicationContext, '2009-01-01')).toEqual(
+      '2009-01-01T05:00:00.000Z',
+    );
   });
 
   it('returns null when the date string passed in is invalid', () => {
-    expect(castToISO('x-10-10')).toEqual('-1');
+    expect(castToISO(applicationContext, 'x-10-10')).toEqual('-1');
   });
 
   it('returns the same iso string passed in when an iso string is passed in', () => {
-    expect(castToISO('1990-01-01T00:00:00.000Z')).toEqual(
-      '1990-01-01T00:00:00.000Z',
+    expect(castToISO(applicationContext, '1990-01-01T05:00:00.000Z')).toEqual(
+      '1990-01-01T05:00:00.000Z',
     );
   });
 });
@@ -26,6 +35,7 @@ describe('castToISO', () => {
 describe('getFormCombinedWithCaseDetailAction', () => {
   it('should return the expected combined caseDetail after run', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
       state: {
         caseDetail: {
           yearAmounts: [
@@ -61,22 +71,22 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     });
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
-        irsNoticeDate: '2009-01-01T00:00:00.000Z',
-        payGovDate: '2009-01-01T00:00:00.000Z',
+        irsNoticeDate: '2009-01-01T05:00:00.000Z',
+        payGovDate: '2009-01-01T05:00:00.000Z',
         payGovId: undefined,
-        receivedAt: '2009-03-03T00:00:00.000Z',
+        receivedAt: '2009-03-03T05:00:00.000Z',
         yearAmounts: [
           {
             amount: '1',
-            year: '2009-01-01T00:00:00.000Z',
+            year: '2009-01-01T05:00:00.000Z',
           },
           {
             amount: '2',
-            year: '2010-01-01T00:00:00.000Z',
+            year: '2010-01-01T05:00:00.000Z',
           },
           {
             amount: '110322',
-            year: '2011-01-01T00:00:00.000Z',
+            year: '2011-01-01T05:00:00.000Z',
           },
         ],
       },
@@ -85,6 +95,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
 
   it('should leave the dates as -1 if they are invalid', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
       state: {
         caseDetail: {
           yearAmounts: [
@@ -131,11 +142,11 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           },
           {
             amount: '2',
-            year: '2010-01-01T00:00:00.000Z',
+            year: '2010-01-01T05:00:00.000Z',
           },
           {
             amount: '110322',
-            year: '2011-01-01T00:00:00.000Z',
+            year: '2011-01-01T05:00:00.000Z',
           },
         ],
       },
@@ -144,11 +155,13 @@ describe('getFormCombinedWithCaseDetailAction', () => {
 
   it('should not delete the date if year is missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
+
       state: {
         caseDetail: {
-          irsNoticeDate: '2018-12-24T00:00:00.000Z',
-          payGovDate: '2018-12-24T00:00:00.000Z',
-          receivedAt: '2018-12-24T00:00:00.000Z',
+          irsNoticeDate: '2018-12-24T05:00:00.000Z',
+          payGovDate: '2018-12-24T05:00:00.000Z',
+          receivedAt: '2018-12-24T05:00:00.000Z',
           yearAmounts: [],
         },
         constants: {
@@ -169,21 +182,23 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     });
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
-        irsNoticeDate: '2018-12-24T00:00:00.000Z',
-        payGovDate: '2018-12-24T00:00:00.000Z',
+        irsNoticeDate: '2018-12-24T05:00:00.000Z',
+        payGovDate: '2018-12-24T05:00:00.000Z',
         payGovId: undefined,
-        receivedAt: '2018-12-24T00:00:00.000Z',
+        receivedAt: '2018-12-24T05:00:00.000Z',
         yearAmounts: [],
       },
     });
   });
   it('should not delete the date if year and month are missing', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
+
       state: {
         caseDetail: {
           irsNoticeDate: null,
-          payGovDate: '2018-12-24T00:00:00.000Z',
-          receivedAt: '2018-12-24T00:00:00.000Z',
+          payGovDate: '2018-12-24T05:00:00.000Z',
+          receivedAt: '2018-12-24T05:00:00.000Z',
           yearAmounts: [],
         },
         constants: {
@@ -205,9 +220,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: null,
-        payGovDate: '2018-12-24T00:00:00.000Z',
+        payGovDate: '2018-12-24T05:00:00.000Z',
         payGovId: undefined,
-        receivedAt: '2018-12-24T00:00:00.000Z',
+        receivedAt: '2018-12-24T05:00:00.000Z',
         yearAmounts: [],
       },
     });
@@ -215,11 +230,13 @@ describe('getFormCombinedWithCaseDetailAction', () => {
 
   it('clears the irsNoticeDate and payGovDate and receivedAt to null if it was once defined and the user clears the fields', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
+
       state: {
         caseDetail: {
-          irsNoticeDate: '2018-12-24T00:00:00.000Z',
-          payGovDate: '2018-12-24T00:00:00.000Z',
-          receivedAt: '2018-12-24T00:00:00.000Z',
+          irsNoticeDate: '2018-12-24T05:00:00.000Z',
+          payGovDate: '2018-12-24T05:00:00.000Z',
+          receivedAt: '2018-12-24T05:00:00.000Z',
           yearAmounts: [],
         },
         constants: {
@@ -247,10 +264,12 @@ describe('getFormCombinedWithCaseDetailAction', () => {
 
   it('delets the payGovDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
+
       state: {
         caseDetail: {
-          // irsNoticeDate: '2018-12-24T00:00:00.000Z',
-          payGovDate: '2018-12-24T00:00:00.000Z',
+          // irsNoticeDate: '2018-12-24T05:00:00.000Z',
+          payGovDate: '2018-12-24T05:00:00.000Z',
           yearAmounts: [],
         },
         constants: {

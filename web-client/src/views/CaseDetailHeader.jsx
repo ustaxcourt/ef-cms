@@ -11,7 +11,7 @@ export const CaseDetailHeader = connect(
     openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     showModal: state.showModal,
   },
-  ({ caseDetail, caseHelper, showModal, openCaseCaptionModalSequence }) => {
+  ({ caseDetail, caseHelper, openCaseCaptionModalSequence, showModal }) => {
     return (
       <div className="big-blue-header">
         <div className="grid-container">
@@ -21,16 +21,16 @@ export const CaseDetailHeader = connect(
                 Docket Number: {caseDetail.docketNumberWithSuffix}
               </a>
             </h1>
-            {caseHelper.showCaptionEditButton && (
+            {caseHelper.hidePublicCaseInformation && (
               <span
-                className="usa-tag"
                 aria-label={`status: ${caseDetail.status}`}
+                className="usa-tag"
               >
                 <span aria-hidden="true">{caseDetail.status}</span>
               </span>
             )}
           </div>
-          <p id="case-title" className="margin-y-0">
+          <p className="margin-y-0" id="case-title">
             <span>
               {caseDetail.caseTitle}{' '}
               {caseHelper.showCaptionEditButton && (

@@ -4,7 +4,7 @@ const { StringDecoder } = require('string_decoder');
  * validatePdf
  * @param applicationContext
  * @param documentId
- * @returns {Object} errors (null if no errors)
+ * @returns {object} errors (null if no errors)
  */
 exports.validatePdf = async ({ applicationContext, documentId }) => {
   applicationContext.logger.time('Fetching S3 File');

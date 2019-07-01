@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {void}
  */
-export const updateFormValueWithoutEmptyStringAction = ({ store, props }) => {
+export const updateFormValueWithoutEmptyStringAction = ({ props, store }) => {
   if (props.value) {
     store.set(state.form[props.key], props.value);
   } else {

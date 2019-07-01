@@ -4,7 +4,7 @@
  * @param applicationContext
  * @returns {Promise<any>}
  */
-exports.getDownloadPolicyUrl = ({ documentId, applicationContext }) => {
+exports.getDownloadPolicyUrl = ({ applicationContext, documentId }) => {
   return new Promise((resolve, reject) => {
     applicationContext.getStorageClient().getSignedUrl(
       'getObject',

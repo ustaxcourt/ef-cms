@@ -91,4 +91,76 @@ describe('createTrialSessionInteractor', () => {
 
     expect(error).toBeUndefined();
   });
+
+  it('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({
+          name: 'Docket Clerk',
+          role: 'docketclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => ({
+        createTrialSession: trial => trial,
+      }),
+    };
+
+    const result = await createTrialSession({
+      applicationContext,
+      trialSession: {
+        ...MOCK_TRIAL,
+        sessionType: 'Motion/Hearing',
+      },
+    });
+
+    expect(result.trialSession.isCalendared).toEqual(true);
+  });
+
+  it('sets the trial session as calendared if it is a Special session type', async () => {
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({
+          name: 'Docket Clerk',
+          role: 'docketclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => ({
+        createTrialSession: trial => trial,
+      }),
+    };
+
+    const result = await createTrialSession({
+      applicationContext,
+      trialSession: {
+        ...MOCK_TRIAL,
+        sessionType: 'Special',
+      },
+    });
+
+    expect(result.trialSession.isCalendared).toEqual(true);
+  });
+
+  it('does not set the trial session as calendared if it is a Regular session type', async () => {
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({
+          name: 'Docket Clerk',
+          role: 'docketclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => ({
+        createTrialSession: trial => trial,
+      }),
+    };
+
+    const result = await createTrialSession({
+      applicationContext,
+      trialSession: MOCK_TRIAL,
+    });
+
+    expect(result.trialSession.isCalendared).toEqual(false);
+  });
 });

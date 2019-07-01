@@ -3,6 +3,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
+import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
 import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
@@ -18,11 +19,13 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { PDFSigner } from './PDFSigner';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -36,6 +39,7 @@ const pages = {
   BeforeStartingCase,
   CaseDetail,
   CaseDetailInternal,
+  CreateOrder,
   DashboardDocketClerk,
   DashboardPetitioner,
   DashboardPetitionsClerk,
@@ -49,11 +53,13 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  PDFSigner,
   RequestAccessWizard,
   SelectDocumentType,
   StartCase,
   StartCaseInternal,
   StyleGuide,
+  TrialSessionDetail,
   TrialSessions,
 };
 
@@ -77,9 +83,9 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <a
-          tabIndex="0"
           className="usa-skipnav"
           href="#main-content"
+          tabIndex="0"
           onClick={this.focusMain}
         >
           Skip to main content

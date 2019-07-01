@@ -16,6 +16,14 @@ export default test => {
       key: 'irsYear',
       value: '2017',
     });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
     await test.runSequence('autoSaveCaseSequence');
 
     await test.runSequence('clickServeToIrsSequence');
@@ -25,7 +33,7 @@ export default test => {
 
     // check that save occurred
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2017-12-24T00:00:00.000Z',
+      '2017-12-24T05:00:00.000Z',
     );
     expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
     expect(test.getState('alertSuccess.title')).toEqual(

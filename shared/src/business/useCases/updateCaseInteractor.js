@@ -3,10 +3,10 @@ const {
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 const {
-  UnprocessableEntityError,
   UnauthorizedError,
+  UnprocessableEntityError,
 } = require('../../errors/errors');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {
@@ -31,7 +31,7 @@ const setDocumentDetails = (userId, documents) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.updateCase = async ({ caseToUpdate, caseId, applicationContext }) => {
+exports.updateCase = async ({ applicationContext, caseId, caseToUpdate }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, UPDATE_CASE)) {

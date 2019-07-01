@@ -15,9 +15,9 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  * for getting state.form.filingType
  * @returns {object} props
  */
-export const updatePartyTypeAction = async ({ store, props, get }) => {
+export const updatePartyTypeAction = async ({ get, props, store }) => {
   let partyType = '';
-  const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
+  const { COUNTRY_TYPES, PARTY_TYPES } = get(state.constants);
   if (props.key === 'filingType') {
     if (props.value === 'Myself' || props.value === 'Individual petitioner') {
       partyType = PARTY_TYPES.petitioner;

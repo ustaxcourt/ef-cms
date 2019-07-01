@@ -1,5 +1,5 @@
 const pdflib = require('pdf-lib');
-const { PDFDocumentFactory, PDFDocumentWriter, drawImage } = pdflib;
+const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = pdflib;
 
 /**
  * generatePDFFromPNGData

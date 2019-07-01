@@ -9,7 +9,7 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.createUserInboxRecord = async ({ workItem, applicationContext }) => {
+exports.createUserInboxRecord = async ({ applicationContext, workItem }) => {
   await put({
     Item: {
       pk: `user-${workItem.assigneeId}`,

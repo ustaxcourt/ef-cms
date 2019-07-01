@@ -3,13 +3,14 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getCaseAssociationAction } from '../actions/CaseAssociationRequest/getCaseAssociationAction';
+import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
+import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCaseAssociationAction } from '../actions/CaseAssociationRequest/setCaseAssociationAction';
+import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 
@@ -26,8 +27,19 @@ const gotoRequestAccess = [
   canRequestAccessAction,
   {
     proceed: [
-      set(state.wizardStep, 'RequestAccess'),
-      setCurrentPageAction('RequestAccessWizard'),
+      getUserRoleAction,
+      {
+        practitioner: [
+          set(state.form.partyPractitioner, true),
+          set(state.wizardStep, 'RequestAccess'),
+          setCurrentPageAction('RequestAccessWizard'),
+        ],
+        respondent: [
+          set(state.form.partyRespondent, true),
+          set(state.wizardStep, 'RequestAccess'),
+          setCurrentPageAction('RequestAccessWizard'),
+        ],
+      },
     ],
     unauthorized: [navigateToCaseDetailAction],
   },

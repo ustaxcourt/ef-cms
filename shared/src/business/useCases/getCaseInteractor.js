@@ -1,8 +1,8 @@
 const {
-  isAuthorized,
   GET_CASE,
+  isAuthorized,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -13,7 +13,7 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getCase = async ({ caseId, applicationContext }) => {
+exports.getCase = async ({ applicationContext, caseId }) => {
   let caseRecord;
 
   if (Case.isValidCaseId(caseId)) {

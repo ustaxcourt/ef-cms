@@ -1,4 +1,4 @@
-const { Case, STATUS_TYPES } = require('../entities/Case');
+const { Case, STATUS_TYPES } = require('../entities/cases/Case');
 
 /**
  * @param applicationContext
@@ -14,7 +14,7 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
     });
 
   for (let caseRecord of caseCatalog) {
-    const caseId = caseRecord.caseId;
+    const { caseId } = caseRecord;
     const caseToCheck = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({

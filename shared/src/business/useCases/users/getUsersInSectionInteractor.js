@@ -1,6 +1,6 @@
 const {
-  isAuthorized,
   GET_USERS_IN_SECTION,
+  isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 /**
@@ -10,7 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*|{caseId}>}
  */
-exports.getUsersInSection = ({ section, applicationContext }) => {
+exports.getUsersInSection = ({ applicationContext, section }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, GET_USERS_IN_SECTION)) {
     throw new UnauthorizedError('Unauthorized');

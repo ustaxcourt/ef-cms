@@ -10,11 +10,11 @@ export const DocumentCategoryAccordion = () => (
     </p>
 
     <div
-      role="list"
       className="document-category-features grid-container padding-x-0"
+      role="list"
     >
       <div className="grid-row grid-gap-lg">
-        <div role="listitem" className="tablet:grid-col-3">
+        <div className="tablet:grid-col-3" role="listitem">
           <div className="document-feature padding-2">
             <h4>To Request Something From the Court</h4>
             <ul className="padding-left-2">
@@ -24,7 +24,7 @@ export const DocumentCategoryAccordion = () => (
             </ul>
           </div>
         </div>
-        <div role="listitem" className="tablet:grid-col-3">
+        <div className="tablet:grid-col-3" role="listitem">
           <div className="document-feature padding-2">
             <h4>To Notify the Court of a Change</h4>
             <ul className="padding-left-2">
@@ -36,7 +36,7 @@ export const DocumentCategoryAccordion = () => (
             </ul>
           </div>
         </div>
-        <div role="listitem" className="tablet:grid-col-3 ">
+        <div className="tablet:grid-col-3 " role="listitem">
           <div className="document-feature padding-2">
             <h4>To Update or Add to a Previous Document</h4>
             <ul className="padding-left-2">
@@ -45,7 +45,7 @@ export const DocumentCategoryAccordion = () => (
             </ul>
           </div>
         </div>
-        <div role="listitem" className="tablet:grid-col-3">
+        <div className="tablet:grid-col-3" role="listitem">
           <div className="document-feature padding-2">
             <h4>To Respond to a Previous Document</h4>
             <ul className="padding-left-2">

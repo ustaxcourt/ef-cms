@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.currentTab
  * @param {Function} providers.get the cerebral get function used for getting state.documentDetailHelper
  */
-export const setDefaultDocumentDetailTabAction = ({ store, get }) => {
+export const setDefaultDocumentDetailTabAction = ({ get, store }) => {
   const { showDocumentInfoTab } = get(state.documentDetailHelper);
   store.set(
     state.currentTab,

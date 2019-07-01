@@ -127,7 +127,10 @@ describe('updateCase', () => {
       petitioners: [{ name: 'Test Taxpayer' }],
     });
 
-    const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
+    const returnedDocument = omit(updatedCase.documents[0], [
+      'createdAt',
+      'receivedAt',
+    ]);
     const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
     expect(returnedDocument).toEqual(documentToMatch);
   });
@@ -165,7 +168,7 @@ describe('updateCase', () => {
 
     const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
     const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
-    expect(returnedDocument).toEqual(documentToMatch);
+    expect(returnedDocument).toMatchObject(documentToMatch);
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {

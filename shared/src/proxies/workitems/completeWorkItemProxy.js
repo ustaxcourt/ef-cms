@@ -9,13 +9,13 @@ const { put } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.completeWorkItem = ({
+  applicationContext,
   completedMessage,
   workItemId,
-  applicationContext,
 }) => {
   return put({
     applicationContext,
     body: { completedMessage },
-    endpoint: `/workitems/${workItemId}/complete`,
+    endpoint: `/work-items/${workItemId}/complete`,
   });
 };

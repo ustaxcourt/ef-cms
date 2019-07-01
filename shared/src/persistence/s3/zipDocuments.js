@@ -10,9 +10,9 @@ const stream = require('stream');
  * @param applicationContext
  * @returns {*}
  */
-exports.zipDocuments = ({ s3Ids, fileNames, zipName, applicationContext }) => {
+exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
   return new Promise((resolve, reject) => {
-    const region = applicationContext.environment.region;
+    const { region } = applicationContext.environment;
     const bucket = applicationContext.environment.documentsBucketName;
 
     const s3Client = applicationContext.getStorageClient();

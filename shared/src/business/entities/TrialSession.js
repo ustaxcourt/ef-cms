@@ -16,6 +16,15 @@ const SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
+const STATUS_TYPES = {
+  closed: 'Closed',
+  upcoming: 'Upcoming',
+};
+
+const SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+
+exports.STATUS_TYPES = STATUS_TYPES;
+
 /**
  * constructor
  * @param rawSession
@@ -25,11 +34,13 @@ function TrialSession(rawSession) {
   Object.assign(this, {
     address1: rawSession.address1,
     address2: rawSession.address2,
+    caseOrder: rawSession.caseOrder || [],
     city: rawSession.city,
     courtReporter: rawSession.courtReporter,
     courthouseName: rawSession.courthouseName,
     createdAt: rawSession.createdAt || new Date().toISOString(),
     irsCalendarAdministrator: rawSession.irsCalendarAdministrator,
+    isCalendared: rawSession.isCalendared || false,
     judge: rawSession.judge,
     maxCases: rawSession.maxCases,
     notes: rawSession.notes,
@@ -38,6 +49,7 @@ function TrialSession(rawSession) {
     startDate: rawSession.startDate,
     startTime: rawSession.startTime || '10:00',
     state: rawSession.state,
+    status: rawSession.status || STATUS_TYPES.upcoming,
     swingSession: rawSession.swingSession,
     swingSessionId: rawSession.swingSessionId,
     term: rawSession.term,
@@ -53,7 +65,7 @@ TrialSession.errorToMessageMap = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter a valid zip code.',
+      message: 'Enter a valid ZIP code.',
     },
   ],
   sessionType: 'Session type is required.',
@@ -66,7 +78,7 @@ TrialSession.errorToMessageMap = {
   ],
   startTime: 'Start time value provided is invalid.',
   swingSessionId: 'You must select a swing session.',
-  term: 'Term is required.',
+  term: 'Term session is not valid.',
   termYear: 'Term year is required.',
   trialLocation: 'Trial Location is required.',
 };
@@ -76,6 +88,11 @@ joiValidationDecorator(
   joi.object().keys({
     address1: joi.string().optional(),
     address2: joi.string().optional(),
+    caseOrder: joi.array().items(
+      joi.object().keys({
+        caseId: joi.string().uuid(uuidVersions),
+      }),
+    ),
     city: joi.string().optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().optional(),
@@ -84,13 +101,17 @@ joiValidationDecorator(
       .iso()
       .optional(),
     irsCalendarAdministrator: joi.string().optional(),
+    isCalendared: joi.boolean().required(),
     judge: joi.string().optional(),
     maxCases: joi
       .number()
       .greater(0)
       .integer()
       .required(),
-    notes: joi.string().optional(),
+    notes: joi
+      .string()
+      .max(400)
+      .optional(),
     postalCode: joi
       .string()
       .regex(/^\d{5}(-\d{4})?$/)
@@ -106,6 +127,9 @@ joiValidationDecorator(
       .required(),
     startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
     state: joi.string().optional(),
+    status: joi
+      .string()
+      .valid(Object.keys(STATUS_TYPES).map(key => STATUS_TYPES[key])),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -115,7 +139,10 @@ joiValidationDecorator(
         .uuid(uuidVersions)
         .required(),
     }),
-    term: joi.string().required(),
+    term: joi
+      .string()
+      .valid(SESSION_TERMS)
+      .required(),
     termYear: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
@@ -148,7 +175,7 @@ TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
  * @returns {string} the sort key prefix
  */
 TrialSession.prototype.generateSortKeyPrefix = function() {
-  const { trialLocation, sessionType } = this;
+  const { sessionType, trialLocation } = this;
 
   const caseProcedureSymbol =
     {
@@ -160,6 +187,28 @@ TrialSession.prototype.generateSortKeyPrefix = function() {
   const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
   return skPrefix;
+};
+
+/**
+ * set as calendared
+ *
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.setAsCalendared = function() {
+  this.isCalendared = true;
+  return this;
+};
+
+/**
+ * add case to calendar
+ *
+ * @param {object} caseEntity
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
+  const { caseId } = caseEntity;
+  this.caseOrder.push({ caseId });
+  return this;
 };
 
 exports.TrialSession = TrialSession;

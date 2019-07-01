@@ -4,6 +4,12 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  CaseExternalIncomplete,
+} = require('../entities/cases/CaseExternalIncomplete');
+const {
+  CaseInternalIncomplete,
+} = require('../entities/cases/CaseInternalIncomplete');
+const {
   createWorkItem: createWorkItemPersistence,
 } = require('../../persistence/dynamo/workitems/createWorkItem');
 const {
@@ -34,9 +40,6 @@ const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
 const {
-  PetitionFromPaperWithoutFiles,
-} = require('../entities/PetitionFromPaperWithoutFiles');
-const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -52,11 +55,13 @@ const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
+  updateWorkItemInCase,
+} = require('../../persistence/dynamo/cases/updateWorkItemInCase');
+const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
@@ -76,8 +81,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDocumentClient: () => mockDocClient,
     getEntityConstructors: () => ({
-      Petition: PetitionWithoutFiles,
-      PetitionFromPaper: PetitionFromPaperWithoutFiles,
+      CaseExternal: CaseExternalIncomplete,
+      CaseInternal: CaseInternalIncomplete,
     }),
     getPersistenceGateway: () => {
       return {
@@ -99,6 +104,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateWorkItem,
+        updateWorkItemInCase,
         verifyCaseForUser,
       };
     },

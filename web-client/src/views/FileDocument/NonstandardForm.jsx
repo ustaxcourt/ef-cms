@@ -29,8 +29,8 @@ export const NonstandardForm = connect(
     screenMetadata,
     trialCitiesHelper,
     updateSequence,
-    validationErrors,
     validateSequence,
+    validationErrors,
   }) => {
     namespace = namespace ? `${namespace}.` : '';
     return (
@@ -43,29 +43,29 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}free-text`} className="usa-label">
+            <label className="usa-label" htmlFor={`${namespace}free-text`}>
               {helper[level].textInputLabel}
             </label>
             <input
-              id={`${namespace}free-text`}
-              type="text"
-              name={`${namespace}freeText`}
               autoCapitalize="none"
               className="usa-input"
+              id={`${namespace}free-text`}
+              name={`${namespace}freeText`}
+              type="text"
               value={get(form, `${namespace}freeText`, '')}
+              onBlur={() => {
+                validateSequence();
+              }}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${namespace}freeText`}
+              className="usa-error-message"
             />
           </div>
         )}
@@ -78,29 +78,29 @@ export const NonstandardForm = connect(
                 : ''
             }`}
           >
-            <label htmlFor={`${namespace}free-text2`} className="usa-label">
+            <label className="usa-label" htmlFor={`${namespace}free-text2`}>
               {helper[level].textInputLabel2}
             </label>
             <input
-              id={`${namespace}free-text2`}
-              type="text"
-              name={`${namespace}freeText2`}
               autoCapitalize="none"
               className="usa-input"
+              id={`${namespace}free-text2`}
+              name={`${namespace}freeText2`}
+              type="text"
               value={get(form, `${namespace}freeText2`, '')}
+              onBlur={() => {
+                validateSequence();
+              }}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${namespace}freeText2`}
+              className="usa-error-message"
             />
           </div>
         )}
@@ -114,21 +114,21 @@ export const NonstandardForm = connect(
             }`}
           >
             <label
-              htmlFor={`${namespace}previous-document`}
               className="usa-label"
+              htmlFor={`${namespace}previous-document`}
             >
               {helper[level].previousDocumentSelectLabel}
             </label>
             <select
-              name={`${namespace}previousDocument`}
-              id={`${namespace}previous-document`}
-              value={get(form, `${namespace}previousDocument`, '')}
               aria-label="previousDocument"
               className={`usa-select ${
                 validationErrors && validationErrors.previousDocument
                   ? 'usa-select--error'
                   : ''
               }`}
+              id={`${namespace}previous-document`}
+              name={`${namespace}previousDocument`}
+              value={get(form, `${namespace}previousDocument`, '')}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -149,8 +149,8 @@ export const NonstandardForm = connect(
               )}
             </select>
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${namespace}previousDocument`}
+              className="usa-error-message"
             />
           </div>
         )}
@@ -169,9 +169,9 @@ export const NonstandardForm = connect(
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
                   <label
-                    htmlFor={`${namespace}month`}
-                    className="usa-label"
                     aria-hidden="true"
+                    className="usa-label"
+                    htmlFor={`${namespace}month`}
                   >
                     MM
                   </label>
@@ -188,24 +188,24 @@ export const NonstandardForm = connect(
                     max="12"
                     min="1"
                     name={`${namespace}month`}
-                    value={get(form, `${namespace}month`, '')}
                     type="number"
+                    value={get(form, `${namespace}month`, '')}
+                    onBlur={() => {
+                      validateSequence();
+                    }}
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
-                    onBlur={() => {
-                      validateSequence();
-                    }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day margin-bottom-0">
                   <label
-                    htmlFor={`${namespace}day`}
-                    className="usa-label"
                     aria-hidden="true"
+                    className="usa-label"
+                    htmlFor={`${namespace}day`}
                   >
                     DD
                   </label>
@@ -222,24 +222,24 @@ export const NonstandardForm = connect(
                     max="31"
                     min="1"
                     name={`${namespace}day`}
-                    value={get(form, `${namespace}day`, '')}
                     type="number"
+                    value={get(form, `${namespace}day`, '')}
+                    onBlur={() => {
+                      validateSequence();
+                    }}
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
-                    onBlur={() => {
-                      validateSequence();
-                    }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year margin-bottom-0">
                   <label
-                    htmlFor={`${namespace}year`}
-                    className="usa-label"
                     aria-hidden="true"
+                    className="usa-label"
+                    htmlFor={`${namespace}year`}
                   >
                     YYYY
                   </label>
@@ -255,25 +255,25 @@ export const NonstandardForm = connect(
                     id={`${namespace}year`}
                     max="2100"
                     min="1900"
-                    value={get(form, `${namespace}year`, '')}
                     name={`${namespace}year`}
                     type="number"
+                    value={get(form, `${namespace}year`, '')}
+                    onBlur={() => {
+                      validateSequence();
+                    }}
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
                     }}
-                    onBlur={() => {
-                      validateSequence();
-                    }}
                   />
                 </div>
               </div>
             </fieldset>
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${namespace}serviceDate`}
+              className="usa-error-message"
             />
           </div>
         )}
@@ -288,13 +288,13 @@ export const NonstandardForm = connect(
           >
             <TrialCity
               label={helper[level].textInputLabel}
-              showSmallTrialCitiesHint={false}
-              showRegularTrialCitiesHint={false}
               showDefaultOption={true}
-              value={get(form, `${namespace}trialLocation`, '')}
+              showRegularTrialCitiesHint={false}
+              showSmallTrialCitiesHint={false}
               trialCitiesByState={
                 trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
               }
+              value={get(form, `${namespace}trialLocation`, '')}
               onChange={e => {
                 updateSequence({
                   key: `${namespace}trialLocation`,
@@ -304,8 +304,8 @@ export const NonstandardForm = connect(
               }}
             />
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${namespace}trialLocation`}
+              className="usa-error-message"
             />
           </div>
         )}
@@ -320,8 +320,8 @@ export const NonstandardForm = connect(
             }
           >
             <fieldset
-              id={`${namespace}ordinal-field-radios`}
               className="usa-fieldset margin-bottom-0"
+              id={`${namespace}ordinal-field-radios`}
             >
               <legend htmlFor={`${namespace}ordinal-field-radios`}>
                 {helper[level].ordinalField}
@@ -329,14 +329,14 @@ export const NonstandardForm = connect(
               {['First', 'Second', 'Third'].map(ordinalValue => (
                 <div className="usa-radio usa-radio__inline" key={ordinalValue}>
                   <input
-                    id={`${namespace}${ordinalValue}`}
-                    type="radio"
-                    name={`${namespace}ordinalValue`}
-                    value={ordinalValue}
-                    className="usa-radio__input"
                     checked={
                       get(form, `${namespace}ordinalValue`, '') === ordinalValue
                     }
+                    className="usa-radio__input"
+                    id={`${namespace}${ordinalValue}`}
+                    name={`${namespace}ordinalValue`}
+                    type="radio"
+                    value={ordinalValue}
                     onChange={e => {
                       updateSequence({
                         key: e.target.name,
@@ -346,16 +346,16 @@ export const NonstandardForm = connect(
                     }}
                   />
                   <label
-                    htmlFor={`${namespace}${ordinalValue}`}
                     className="usa-radio__label"
+                    htmlFor={`${namespace}${ordinalValue}`}
                   >
                     {ordinalValue}
                   </label>
                 </div>
               ))}
               <Text
-                className="usa-error-message"
                 bind={`validationErrors.${namespace}ordinalValue`}
+                className="usa-error-message"
               />
             </fieldset>
           </div>

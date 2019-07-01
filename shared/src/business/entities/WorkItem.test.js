@@ -153,7 +153,10 @@ describe('WorkItem', () => {
         messages: [],
         sentBy: 'bob',
       });
-      workItem.setAsSentToIRS();
+      workItem.setAsSentToIRS({
+        batchedByName: 'bob',
+        batchedByUserId: 'abc',
+      });
       expect(workItem.messages.length === 1).toBe(true);
       expect(workItem.completedMessage).toEqual('Served on IRS');
     });

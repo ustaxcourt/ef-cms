@@ -1,16 +1,15 @@
-const { Case } = require('../../entities/Case');
+const {
+  FILE_EXTERNAL_DOCUMENT,
+  isAuthorized,
+} = require('../../../authorization/authorizationClientService');
+const { capitalize, pick } = require('lodash');
+const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
-const { WorkItem } = require('../../entities/WorkItem');
-
-const {
-  isAuthorized,
-  FILE_EXTERNAL_DOCUMENT,
-} = require('../../../authorization/authorizationClientService');
-const { capitalize, pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -48,9 +47,9 @@ exports.fileExternalDocument = async ({
   const workItems = [];
 
   const {
-    supportingDocumentMetadata,
     secondaryDocument,
     secondarySupportingDocumentMetadata,
+    supportingDocumentMetadata,
     ...primaryDocumentMetadata
   } = documentMetadata;
 
@@ -93,43 +92,57 @@ exports.fileExternalDocument = async ({
       });
       documentEntity.generateFiledBy(caseToUpdate);
 
-      if (!metadata.isPaper) {
-        const workItem = new WorkItem({
-          assigneeId: null,
-          assigneeName: null,
-          caseId: caseId,
-          caseStatus: caseToUpdate.status,
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          document: {
-            ...documentEntity.toRawObject(),
-            createdAt: documentEntity.createdAt,
-          },
-          isInternal: user.isInternalUser(),
-          section: DOCKET_SECTION,
-          sentBy: user.userId,
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        caseId: caseId,
+        caseStatus: caseToUpdate.status,
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+        document: {
+          ...documentEntity.toRawObject(),
+          createdAt: documentEntity.createdAt,
+        },
+        isInternal: false,
+        section: DOCKET_SECTION,
+        sentBy: user.userId,
+      });
+
+      const message = new Message({
+        from: user.name,
+        fromUserId: user.userId,
+        message: `${documentEntity.documentType} filed by ${capitalize(
+          user.role,
+        )} is ready for review.`,
+      });
+
+      workItem.addMessage(message);
+      documentEntity.addWorkItem(workItem);
+
+      if (metadata.isPaper) {
+        workItem.setAsCompleted({
+          message: 'completed',
+          user,
         });
 
-        const message = new Message({
-          from: user.name,
-          fromUserId: user.userId,
-          message: `${documentEntity.documentType} filed by ${capitalize(
-            user.role,
-          )} is ready for review.`,
+        workItem.assignToUser({
+          assigneeId: user.userId,
+          assigneeName: user.name,
+          role: user.role,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+          sentByUserRole: user.role,
         });
-
-        workItem.addMessage(message);
-        documentEntity.addWorkItem(workItem);
-
-        workItems.push(workItem);
       }
+
+      workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
       caseEntity.addDocketRecord(
         new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
-          filingDate: documentEntity.createdAt,
+          filingDate: documentEntity.receivedAt,
         }),
       );
     }
@@ -140,11 +153,20 @@ exports.fileExternalDocument = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  for (let i = 0; i < workItems.length; i++) {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-      applicationContext,
-      workItem: workItems[i].validate().toRawObject(),
-    });
+  for (let workItem of workItems) {
+    if (workItem.document.isPaper) {
+      await applicationContext
+        .getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument({
+          applicationContext,
+          workItem: workItem.validate().toRawObject(),
+        });
+    } else {
+      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
+    }
   }
 
   return caseEntity.toRawObject();

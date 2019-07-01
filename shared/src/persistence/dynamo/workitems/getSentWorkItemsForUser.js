@@ -1,7 +1,7 @@
 const client = require('../../dynamodbClientService');
 const moment = require('moment');
 
-exports.getSentWorkItemsForUser = async ({ userId, applicationContext }) => {
+exports.getSentWorkItemsForUser = async ({ applicationContext, userId }) => {
   const afterDate = moment
     .utc(new Date().toISOString())
     .startOf('day')

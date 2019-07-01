@@ -36,8 +36,8 @@ export const Interstitial = connect(
               className="progress-indicator"
             >
               <FontAwesomeIcon
-                icon="sync"
                 className="fa-spin spinner"
+                icon="sync"
                 size="6x"
               />
             </div>

@@ -3,8 +3,8 @@ const {
 } = require('../workitems/createSectionInboxRecord');
 
 exports.addWorkItemToSectionInbox = async ({
-  workItem,
   applicationContext,
+  workItem,
 }) => {
   await createSectionInboxRecord({
     applicationContext,

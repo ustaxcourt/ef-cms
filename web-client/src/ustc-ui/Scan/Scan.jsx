@@ -15,7 +15,7 @@ class ScanComponent extends React.Component {
     this.props.scannerShutdown();
   }
   render() {
-    const { isScanning, scanHelper, onDoneClicked, onScanClicked } = this.props;
+    const { isScanning, onDoneClicked, onScanClicked, scanHelper } = this.props;
     return (
       <>
         {scanHelper.hasLoadedScanDependencies && (

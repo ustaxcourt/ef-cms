@@ -1,6 +1,6 @@
 const { query } = require('../../dynamodbClientService');
 
-exports.getWorkItemsForUser = async ({ userId, applicationContext }) => {
+exports.getWorkItemsForUser = async ({ applicationContext, userId }) => {
   return query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

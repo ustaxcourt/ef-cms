@@ -11,9 +11,9 @@ export const SearchBox = connect(
   ({ searchTerm, submitSearchSequence, updateSearchTermSequence }) => {
     return (
       <form
+        noValidate
         className="usa-search"
         id="search-input"
-        noValidate
         onSubmit={e => {
           e.preventDefault();
           submitSearchSequence();
@@ -25,8 +25,8 @@ export const SearchBox = connect(
         <input
           className="usa-input"
           id="search-field"
-          type="search"
           name="searchTerm"
+          type="search"
           value={searchTerm}
           onChange={e => {
             updateSearchTermSequence({
@@ -34,7 +34,7 @@ export const SearchBox = connect(
             });
           }}
         />
-        <button type="submit" className="usa-button">
+        <button className="usa-button" type="submit">
           <span className="usa-search-submit-text">Search</span>
         </button>
       </form>
