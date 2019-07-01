@@ -9,6 +9,7 @@ exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 exports.START_PAPER_CASE = 'startPaperCase';
 exports.GET_READ_MESSAGES = 'getReadMessages';
 exports.TRIAL_SESSIONS = 'trialSessions';
+exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -36,7 +37,7 @@ const AUTHORIZATION_MAP = {
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
     exports.TRIAL_SESSIONS,
-    exports.FILE_EXTERNAL_DOCUMENT,
+    exports.CREATE_COURT_ISSUED_ORDER,
   ],
 
   practitioner: [
