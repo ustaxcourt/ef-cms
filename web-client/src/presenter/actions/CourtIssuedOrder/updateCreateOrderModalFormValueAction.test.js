@@ -79,12 +79,12 @@ describe('updateCreateOrderModalFormValueAction', () => {
     expect(result.state.form.documentType).toBeUndefined();
   });
 
-  it('sets documentTitle if orderTitle is passed in via props', async () => {
+  it('sets documentTitle if documentTitle is passed in via props', async () => {
     const params = {
       modules: {
         presenter,
       },
-      props: { key: 'orderTitle', value: 'Order to Do Something' },
+      props: { key: 'documentTitle', value: 'Order to Do Something' },
       state: {
         constants: {
           ORDER_TYPES_MAP: Order.ORDER_TYPES,
@@ -99,12 +99,12 @@ describe('updateCreateOrderModalFormValueAction', () => {
     expect(result.state.form.documentTitle).toEqual('Order to Do Something');
   });
 
-  it('unsets documentTitle if orderTitle passed in via props is empty', async () => {
+  it('unsets documentTitle if documentTitle passed in via props is empty', async () => {
     const params = {
       modules: {
         presenter,
       },
-      props: { key: 'orderTitle', value: '' },
+      props: { key: 'documentTitle', value: '' },
       state: {
         constants: {
           ORDER_TYPES_MAP: Order.ORDER_TYPES,
@@ -113,6 +113,27 @@ describe('updateCreateOrderModalFormValueAction', () => {
           documentTitle: 'Order to Do Something',
           documentType: 'Order',
           eventCode: 'O',
+        },
+      },
+    };
+    let result = await runAction(updateCreateOrderModalFormValueAction, params);
+    expect(result.state.form.documentTitle).toBeUndefined();
+  });
+
+  it('unsets documentTitle if new eventCode passed in is a generic order', async () => {
+    const params = {
+      modules: {
+        presenter,
+      },
+      props: { key: 'eventCode', value: 'O' },
+      state: {
+        constants: {
+          ORDER_TYPES_MAP: Order.ORDER_TYPES,
+        },
+        form: {
+          documentTitle: 'Order of Dismissal and Decision',
+          documentType: 'Order of Dismissal and Decision',
+          eventCode: 'ODD',
         },
       },
     };
