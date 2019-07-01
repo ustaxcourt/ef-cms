@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * stash wizard data in props
+ * stash create order data entered in modal in screenMetadata
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.props the cerebral props object
+ * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.store the cerebral store function
  */
 export const stashCreateOrderModalDataAction = ({ get, store }) => {
   const { documentTitle, documentType, eventCode } = get(state.form);

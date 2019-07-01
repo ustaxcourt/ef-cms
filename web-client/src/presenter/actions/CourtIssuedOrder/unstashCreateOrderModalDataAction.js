@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * unstash order data into form
+ * unstash order data from screenMetadata into form
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
