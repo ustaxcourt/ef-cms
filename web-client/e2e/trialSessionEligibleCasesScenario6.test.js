@@ -1,6 +1,6 @@
 import {
   CASE_CAPTION_POSTFIX,
-  STATUS_TYPES,
+  Case,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   CATEGORIES,
@@ -90,7 +90,7 @@ describe('Trial Session Eligible Cases - Scenario 6 - L and P case types get pri
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
-      STATUS_TYPES,
+      STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES,
     });
   });
