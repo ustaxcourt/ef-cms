@@ -35,7 +35,8 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
             name="eventCode"
             onChange={e => {
               this.props.updateFormValue({
-                eventCode: e.target.value,
+                key: e.target.name,
+                value: e.target.value,
               });
             }}
           >
