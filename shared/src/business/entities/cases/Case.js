@@ -75,6 +75,8 @@ Case.ANSWER_DOCUMENT_CODES = [
   'AATT',
 ];
 
+Case.name = 'Case';
+
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
@@ -182,8 +184,6 @@ function Case(rawCase) {
   this.orderForRatification = this.orderForRatification || false;
   this.orderToShowCause = this.orderToShowCause || false;
 }
-
-Case.name = 'Case';
 
 joiValidationDecorator(
   Case,

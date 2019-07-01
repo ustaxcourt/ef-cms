@@ -1,4 +1,4 @@
-import { CATEGORY_MAP } from '../../../../../shared/src/business/entities/Document';
+import { Document } from '../../../../../shared/src/business/entities/Document';
 import { runAction } from 'cerebral/test';
 import { setSupportingDocumentScenarioAction } from './setSupportingDocumentScenarioAction';
 
@@ -7,7 +7,7 @@ describe('setSupportingDocumentScenarioAction', () => {
     const result = await runAction(setSupportingDocumentScenarioAction, {
       state: {
         constants: {
-          CATEGORY_MAP,
+          CATEGORY_MAP: Document.CATEGORY_MAP,
         },
         form: {
           supportingDocumentMetadata: {
@@ -30,7 +30,7 @@ describe('setSupportingDocumentScenarioAction', () => {
     const result = await runAction(setSupportingDocumentScenarioAction, {
       state: {
         constants: {
-          CATEGORY_MAP,
+          CATEGORY_MAP: Document.CATEGORY_MAP,
         },
         form: {
           secondarySupportingDocumentMetadata: {

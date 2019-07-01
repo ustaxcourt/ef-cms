@@ -1,6 +1,5 @@
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
@@ -13,11 +12,10 @@ const { WorkItem } = require('./WorkItem');
 
 const petitionDocumentTypes = ['Petition'];
 
-module.exports.CATEGORIES = Object.keys(documentMapExternal);
-module.exports.CATEGORY_MAP = documentMapExternal;
-
-module.exports.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
-module.exports.INTERNAL_CATEGORY_MAP = documentMapInternal;
+Document.CATEGORIES = Object.keys(documentMapExternal);
+Document.CATEGORY_MAP = documentMapExternal;
+Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
+Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
 /**
  * constructor

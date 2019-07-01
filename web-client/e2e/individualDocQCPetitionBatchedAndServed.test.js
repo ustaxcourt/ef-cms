@@ -1,8 +1,3 @@
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -103,11 +98,11 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
 
     test.setState('constants', {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CATEGORIES,
-      CATEGORY_MAP,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
       COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
-      INTERNAL_CATEGORY_MAP,
+      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES,

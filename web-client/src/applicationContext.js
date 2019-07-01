@@ -5,15 +5,9 @@ import {
   OTHER_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/contacts/PetitionContact';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
+import { Order } from '../../shared/src/business/entities/orders/Order';
 import {
   createISODateString,
   formatDateString,
@@ -248,14 +242,14 @@ const applicationContext = {
   getConstants: () => ({
     BUSINESS_TYPES,
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-    CATEGORIES,
-    CATEGORY_MAP,
+    CATEGORIES: Document.CATEGORIES,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
     ESTATE_TYPES,
-    INTERNAL_CATEGORY_MAP,
+    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
     MAX_FILE_SIZE_MB,
     ORDER_TYPES_MAP: Order.ORDER_TYPES,
