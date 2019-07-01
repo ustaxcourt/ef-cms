@@ -20,7 +20,7 @@ const customHandle = async (event, fun) => {
       body: pdfBuffer.toString('base64'),
       headers: {
         ...headers,
-        'Content-type': 'application/pdf',
+        'Content-Type': 'application/pdf',
         'accept-ranges': 'bytes',
       },
       isBase64Encoded: true,
