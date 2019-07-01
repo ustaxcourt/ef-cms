@@ -7,5 +7,5 @@ const { Case } = require('../entities/cases/Case');
  * @returns {Promise<*>}
  */
 exports.getProcedureTypes = async () => {
-  return Case.getProcedureTypes();
+  return Case.PROCEDURE_TYPES;
 };

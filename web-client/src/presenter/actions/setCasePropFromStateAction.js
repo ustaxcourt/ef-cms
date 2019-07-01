@@ -7,7 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {object} caseId
  */
-export const setCaseIdPropFromStateAction = ({ get }) => {
+export const setCasePropFromStateAction = ({ get }) => {
   const caseId = get(state.caseDetail.caseId);
-  return { caseId };
+  const docketNumber = get(state.caseDetail.docketNumber);
+  return { caseId, docketNumber };
 };
