@@ -25,15 +25,15 @@ exports.getDocumentQCInboxForSection = async ({
     );
   }
 
+  const sectionToExcept =
+    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : section;
+
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
-      section,
+      section: sectionToExcept,
     });
 
-  const sectionToExcept =
-    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : section;
-
-  return workItems.filter(workItem => workItem.section === sectionToExcept);
+  return workItems;
 };
