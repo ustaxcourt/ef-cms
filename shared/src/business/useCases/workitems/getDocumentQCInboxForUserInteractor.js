@@ -25,5 +25,8 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
       userId,
     });
 
-  return workItems;
+  return workItems.filter(
+    workItem =>
+      workItem.assigneeId === user.userId && workItem.section === user.section,
+  );
 };

@@ -124,8 +124,11 @@ const {
   getCasesByUser: getCasesByUserUC,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
-  getDocumentQCBatchedForUser
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
+  getDocumentQCBatchedForSection
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
+const {
+  getDocumentQCBatchedForSection: getDocumentQCBatchedForSectionUC, 
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
   getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
@@ -138,6 +141,12 @@ const {
 const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
+const {
+  getDocumentQCServedForSection, 
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection');
+const {
+  getDocumentQCServedForSection: getDocumentQCServedForSectionUC,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor');
 const {
   getDocumentQCServedForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser');
@@ -349,6 +358,9 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const { 
+  getDocumentQCBatchedForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
 const { exec } = require('child_process');
 const { getDocumentQCInboxForSection } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const { User } = require('../../shared/src/business/entities/User');
@@ -428,9 +440,11 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
+        getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
         getDocumentQCInboxForSection,
         getDocumentQCInboxForUser,
+        getDocumentQCServedForSection,
         getDocumentQCServedForUser,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
@@ -501,9 +515,11 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
+        getDocumentQCBatchedForSection: getDocumentQCBatchedForSectionUC,
         getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC,
         getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC,
         getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
+        getDocumentQCServedForSection: getDocumentQCServedForSectionUC,
         getDocumentQCServedForUser: getDocumentQCServedForUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
         getInboxMessagesForSection: getInboxMessagesForSectionUC,

@@ -25,6 +25,7 @@ module.exports = {
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')
     .handler,
+  getDocumentQCBatchedForSectionLambda: require('./workitems/getDocumentQCBatchedForSectionLambda').handler,
   getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda').handler,
   getDocumentQCInboxForSectionLambda: require('./workitems/getDocumentQCInboxForSectionLambda').handler,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda').handler,
