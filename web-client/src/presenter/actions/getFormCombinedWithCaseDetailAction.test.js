@@ -1,4 +1,4 @@
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../applicationContext';
 import { castToISO } from './getFormCombinedWithCaseDetailAction';
 import { getFormCombinedWithCaseDetailAction } from './getFormCombinedWithCaseDetailAction';
@@ -54,7 +54,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           ],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '01',
@@ -114,7 +114,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           ],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '01',
@@ -165,7 +165,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           yearAmounts: [],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '24',
@@ -202,7 +202,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           yearAmounts: [],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '24',
@@ -240,7 +240,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           yearAmounts: [],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '',
@@ -273,7 +273,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           yearAmounts: [],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {
           irsDay: '12',
