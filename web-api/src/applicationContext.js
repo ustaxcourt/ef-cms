@@ -29,10 +29,10 @@ const {
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
   CaseExternalIncomplete,
-} = require('../../shared/src/business/entities/CaseExternalIncomplete');
+} = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
 const {
   CaseInternalIncomplete,
-} = require('../../shared/src/business/entities/CaseInternalIncomplete');
+} = require('../../shared/src/business/entities/cases/CaseInternalIncomplete');
 const {
   checkForReadyForTrialCases,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');

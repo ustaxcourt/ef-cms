@@ -1,20 +1,20 @@
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 
 /**
  * CaseInternalIncomplete
  * Represents a Case without required documents that a Petitions Clerk is attempting to add to the system.
  * After the Case's files have been saved, a PetitionFromPaper is created to include the document metadata.
- * @param rawPetition
+ * @param rawCase
  * @constructor
  */
-function CaseInternalIncomplete(rawPetition) {
+function CaseInternalIncomplete(rawCase) {
   Object.assign(this, {
-    caseCaption: rawPetition.caseCaption,
-    petitionFileId: rawPetition.petitionFileId,
-    receivedAt: rawPetition.receivedAt,
+    caseCaption: rawCase.caseCaption,
+    petitionFileId: rawCase.petitionFileId,
+    receivedAt: rawCase.receivedAt,
   });
 }
 
