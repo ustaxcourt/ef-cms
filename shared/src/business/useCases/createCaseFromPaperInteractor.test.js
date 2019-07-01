@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const uuid = require('uuid');
-const { CaseInternal } = require('../entities/CaseInternal');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCaseFromPaper } = require('./createCaseFromPaperInteractor');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');

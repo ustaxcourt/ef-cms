@@ -2,8 +2,8 @@ const sinon = require('sinon');
 const uuid = require('uuid');
 const {
   CaseExternalIncomplete,
-} = require('../entities/CaseExternalIncomplete');
-const { CaseExternal } = require('../entities/CaseExternal');
+} = require('../entities/cases/CaseExternalIncomplete');
+const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { createCase } = require('./createCaseInteractor');
 const { User } = require('../entities/User');
 

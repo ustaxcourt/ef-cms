@@ -1,15 +1,14 @@
 const { CaseExternal } = require('./CaseExternal');
 
 describe('CaseExternal', () => {
-  describe('for Minor without Guardian Contacts', () => {
+  describe('for Partnership (as the tax matters partner) Contacts', () => {
     it('should not validate without contacts', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: 'Partnership (as the tax matters partner)',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -18,11 +17,11 @@ describe('CaseExternal', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.isValid()).toEqual(false);
+      expect(caseExternal.isValid()).toEqual(false);
     });
 
     it('can validate contacts', () => {
-      const petition = new CaseExternal({
+      const caseExternal = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -50,8 +49,7 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+        partyType: 'Partnership (as the tax matters partner)',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -60,7 +58,7 @@ describe('CaseExternal', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.getFormattedValidationErrors()).toEqual(null);
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
 });

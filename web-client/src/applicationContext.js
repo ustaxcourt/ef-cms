@@ -36,8 +36,8 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
-import { CaseExternal } from '../../shared/src/business/entities/CaseExternal';
-import { CaseInternal } from '../../shared/src/business/entities/CaseInternal';
+import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
+import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
