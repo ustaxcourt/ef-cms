@@ -1,12 +1,12 @@
 import {
-  CASE_CAPTION_POSTFIX,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
-import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import {
+  Case,
+  STATUS_TYPES,
+} from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -83,7 +83,7 @@ describe('Trial Session Eligible Cases - Scenario 8 - Trial details display on t
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CATEGORIES,
       CATEGORY_MAP,
       COUNTRY_TYPES,
