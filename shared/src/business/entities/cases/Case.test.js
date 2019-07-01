@@ -1,10 +1,5 @@
 const moment = require('moment');
-const {
-  ANSWER_CUTOFF_AMOUNT,
-  ANSWER_CUTOFF_UNIT,
-  Case,
-  STATUS_TYPES,
-} = require('./Case');
+const { Case, STATUS_TYPES } = require('./Case');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES } = require('../contacts/PetitionContact');
@@ -592,19 +587,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('getCaseTypes', () => {
-    it('returns the case types for hasIrsNotice true', () => {
-      const caseTypes = Case.getCaseTypes(true);
-      expect(caseTypes).not.toBeNull();
-      expect(caseTypes.length).toBeGreaterThan(1);
-    });
-    it('returns the case types for hasIrsNotice false', () => {
-      const caseTypes = Case.getCaseTypes(false);
-      expect(caseTypes).not.toBeNull();
-      expect(caseTypes.length).toBeGreaterThan(1);
-    });
-  });
-
   describe('attachRespondent', () => {
     it('adds the user to the respondents', () => {
       const caseToVerify = new Case({});
@@ -896,7 +878,7 @@ describe('Case entity', () => {
         documents: [
           {
             createdAt: moment()
-              .subtract(ANSWER_CUTOFF_AMOUNT, ANSWER_CUTOFF_UNIT)
+              .subtract(Case.ANSWER_CUTOFF_AMOUNT, Case.ANSWER_CUTOFF_UNIT)
               .toISOString(),
             eventCode: 'A',
           },
@@ -911,7 +893,7 @@ describe('Case entity', () => {
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
       const createdAt = moment()
-        .subtract(ANSWER_CUTOFF_AMOUNT + 10, ANSWER_CUTOFF_UNIT)
+        .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case({
@@ -929,7 +911,7 @@ describe('Case entity', () => {
 
     it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
       const createdAt = moment()
-        .subtract(ANSWER_CUTOFF_AMOUNT + 10, ANSWER_CUTOFF_UNIT)
+        .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
         .toISOString();
 
       const caseToCheck = new Case({
