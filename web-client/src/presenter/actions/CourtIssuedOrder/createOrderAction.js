@@ -10,6 +10,10 @@ const orderTemplate = `
         margin: 3cm 2cm 2cm;
         size: 8.5in 11in;
       }
+      body {
+        font-size: 14px;
+        font-family: 'Times New Roman', Times, serif;
+      }
       .court-header {
         text-align: center;
       }
