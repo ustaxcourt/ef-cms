@@ -13,6 +13,8 @@ export const getPdfPreviewUrlAction = async ({
   props,
 }) => {
   const { htmlString } = props;
+  const documentTitle = get(state.form.documentTitle);
+
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
@@ -20,7 +22,7 @@ export const getPdfPreviewUrlAction = async ({
     state.formattedCaseDetail.docketNumberWithSuffix,
   );
 
-  const pdfUrl = await applicationContext
+  const pdfBlob = await applicationContext
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtml({
       applicationContext,
@@ -28,5 +30,8 @@ export const getPdfPreviewUrlAction = async ({
       htmlString,
     });
 
-  return { pdfUrl };
+  const pdfUrl = window.URL.createObjectURL(pdfBlob);
+  const pdfFile = new File([pdfBlob], documentTitle);
+
+  return { pdfFile, pdfUrl };
 };

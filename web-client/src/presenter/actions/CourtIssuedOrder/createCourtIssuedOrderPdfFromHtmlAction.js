@@ -34,7 +34,7 @@ export const createCourtIssuedOrderPdfFromHtmlAction = ({
     throw new Error('No markup found in documentHtml');
   }
 
-  let pdfBlob = applicationContext
+  const pdfBlob = applicationContext
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtml({
       applicationContext,
@@ -42,7 +42,7 @@ export const createCourtIssuedOrderPdfFromHtmlAction = ({
     });
 
   const pdfUrl = window.URL.createObjectURL(pdfBlob);
-  const pdfFile = blobToFile(pdfBlob, documentTitle);
+  const pdfFile = blobToFile([pdfBlob], documentTitle);
 
   return { pdfFile, pdfUrl };
 };
