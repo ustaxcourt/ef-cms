@@ -2,8 +2,8 @@ const sinon = require('sinon');
 const {
   checkForReadyForTrialCases,
 } = require('./checkForReadyForTrialCasesInteractor');
+const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { STATUS_TYPES } = require('../entities/cases/Case');
 
 describe('checkForReadyForTrialCases', () => {
   let applicationContext;
@@ -118,7 +118,7 @@ describe('checkForReadyForTrialCases', () => {
               workItems: [],
             },
           ],
-          status: STATUS_TYPES.generalDocket,
+          status: Case.STATUS_TYPES.generalDocket,
         }),
         updateCase: updateCaseSpy,
       }),
@@ -158,7 +158,7 @@ describe('checkForReadyForTrialCases', () => {
         ],
         getCaseByCaseId: () => ({
           ...MOCK_CASE,
-          status: STATUS_TYPES.generalDocket,
+          status: Case.STATUS_TYPES.generalDocket,
         }),
         updateCase: updateCaseSpy,
       }),
