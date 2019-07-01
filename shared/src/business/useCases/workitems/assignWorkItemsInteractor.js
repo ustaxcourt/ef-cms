@@ -2,7 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { cloneDeep } = require('lodash');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -17,10 +17,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {Promise<*>}
  */
 exports.assignWorkItems = async ({
-  workItemId,
+  applicationContext,
   assigneeId,
   assigneeName,
-  applicationContext,
+  workItemId,
 }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, WORKITEM)) {
@@ -65,24 +65,16 @@ exports.assignWorkItems = async ({
     })
     .addMessage(newMessage);
 
-  caseToUpdate.documents.forEach(
-    document =>
-      (document.workItems = document.workItems.map(item => {
-        return item.workItemId === workItemEntity.workItemId
-          ? workItemEntity
-          : item;
-      })),
-  );
-
   await Promise.all([
     applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       deleteFromSection: false,
       workItem: originalWorkItem,
     }),
-    applicationContext.getPersistenceGateway().updateCase({
+    applicationContext.getPersistenceGateway().updateWorkItemInCase({
       applicationContext,
-      caseToUpdate: caseToUpdate.validate().toRawObject(),
+      caseToUpdate,
+      workItem: workItemEntity.validate().toRawObject(),
     }),
     applicationContext.getPersistenceGateway().saveWorkItemForPaper({
       applicationContext,

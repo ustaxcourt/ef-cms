@@ -1,11 +1,11 @@
 const {
-  PDFDocumentFactory,
-  PDFDocumentWriter,
-  drawText,
   drawImage,
   drawLinesOfText,
+  drawText,
+  PDFDocumentFactory,
+  PDFDocumentWriter,
 } = require('pdf-lib');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
 const { flattenDeep } = require('lodash');
 
@@ -40,42 +40,39 @@ exports.addCoverToPDFDocument = async ({
   );
 
   const isLodged = documentEntity.lodged;
-  const isPaper = documentEntity.isPaper;
+  const { isPaper } = documentEntity;
 
-  let dateServedFormatted = '';
-  if (caseEntity.irsSendDate) {
-    const dateServed = new Date(caseEntity.irsSendDate);
-    dateServedFormatted = `SERVED ${dateServed.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    })}`;
-  }
+  const dateServedFormatted =
+    (caseEntity.irsSendDate &&
+      applicationContext
+        .getUtilities()
+        .formatDateString(caseEntity.irsSendDate, 'MMDDYYYY')) ||
+    '';
 
   let dateReceivedFormatted;
-  const dateReceived = new Date(documentEntity.createdAt);
-  const dateReceivedDateFormatted = dateReceived.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
-  const dateReceivedTimeFormatted = dateReceived.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'America/New_York',
-  });
+
   if (isPaper) {
-    dateReceivedFormatted = `${dateReceivedDateFormatted}`;
+    dateReceivedFormatted =
+      (documentEntity.createdAt &&
+        applicationContext
+          .getUtilities()
+          .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
+      null;
   } else {
-    dateReceivedFormatted = `${dateReceivedDateFormatted} ${dateReceivedTimeFormatted}`;
+    dateReceivedFormatted =
+      (documentEntity.createdAt &&
+        applicationContext
+          .getUtilities()
+          .formatDateString(documentEntity.createdAt, 'MM/DD/YYYY hh:mm a')) ||
+      null;
   }
 
-  const dateFiled = new Date(documentEntity.createdAt);
-  const dateFiledFormatted = dateFiled.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  const dateFiledFormatted =
+    (documentEntity.createdAt &&
+      applicationContext
+        .getUtilities()
+        .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
+    null;
 
   const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
@@ -468,10 +465,10 @@ exports.addCoverToPDFDocument = async ({
     const {
       centerTextAt,
       content,
+      fontName,
+      fontSize,
       xPos,
       yPos,
-      fontSize,
-      fontName,
     } = contentArea;
 
     const params = {

@@ -5,13 +5,13 @@ const {
 const { UnauthorizedError } = require('../../errors/errors');
 
 exports.filePetitionFromPaper = async ({
-  petitionMetadata,
-  petitionFile,
-  ownershipDisclosureFile,
-  stinFile,
   applicationContext,
+  ownershipDisclosureFile,
   ownershipDisclosureUploadProgress,
+  petitionFile,
+  petitionMetadata,
   petitionUploadProgress,
+  stinFile,
   stinUploadProgress,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -48,6 +48,29 @@ exports.filePetitionFromPaper = async ({
         document: stinFile,
         onUploadProgress: stinUploadProgress,
       });
+  }
+
+  const documentIds = [
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  ].filter(documentId => documentId);
+
+  for (let documentId of documentIds) {
+    await applicationContext.getUseCases().virusScanPdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().sanitizePdf({
+      applicationContext,
+      documentId,
+    });
   }
 
   return await applicationContext.getUseCases().createCaseFromPaper({

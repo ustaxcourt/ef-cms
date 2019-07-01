@@ -3,9 +3,9 @@ const { stripInternalKeys } = require('./stripInternalKeys');
 
 exports.getRecordViaMapping = async ({
   applicationContext,
+  isVersioned = false,
   key,
   type,
-  isVersioned = false,
 }) => {
   const [mapping] = await client.query({
     ExpressionAttributeNames: {
@@ -20,7 +20,7 @@ exports.getRecordViaMapping = async ({
 
   if (!mapping) return null;
 
-  const sk = mapping.sk;
+  const { sk } = mapping;
 
   const results = await client.get({
     Key: {

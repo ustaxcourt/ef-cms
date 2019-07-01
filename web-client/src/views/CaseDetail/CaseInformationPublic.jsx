@@ -31,17 +31,17 @@ const TrialInformation = ({ caseDetail }) => (
     <div className="grid-row">
       <div className="tablet:grid-col-6">
         <p className="label">Place of Trial</p>
-        <p>{caseDetail.preferredTrialCity}</p>
+        <p>{caseDetail.formattedTrialCity}</p>
       </div>
       <div className="tablet:grid-col-6">
         <p className="label">Trial Date</p>
-        <p>Not scheduled</p>
+        <p>{caseDetail.formattedTrialDate}</p>
       </div>
     </div>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
         <p className="label">Assigned Judge</p>
-        <p>Not assigned</p>
+        <p>{caseDetail.formattedTrialJudge}</p>
       </div>
     </div>
   </React.Fragment>
@@ -56,7 +56,7 @@ export const CaseInformationPublic = connect(
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
   },
-  ({ helper, caseDetail }) => {
+  ({ caseDetail, helper }) => {
     return (
       <div className="petitions-details">
         <div className="grid-container padding-x-0">

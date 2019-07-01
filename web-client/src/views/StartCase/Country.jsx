@@ -13,8 +13,8 @@ export const Country = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    data,
     constants,
+    data,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
@@ -32,7 +32,7 @@ export const Country = connect(
               : '')
           }
         >
-          <label htmlFor={`${type}.countryType`} className="usa-label">
+          <label className="usa-label" htmlFor={`${type}.countryType`}>
             Country
           </label>
           <select
@@ -56,8 +56,8 @@ export const Country = connect(
             </option>
           </select>
           <Text
-            className="usa-error-message"
             bind={`validationErrors.${type}.countryType`}
+            className="usa-error-message"
           />
         </div>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
@@ -71,29 +71,29 @@ export const Country = connect(
                 : '')
             }
           >
-            <label htmlFor={`${type}.country`} className="usa-label">
+            <label className="usa-label" htmlFor={`${type}.country`}>
               Country Name
             </label>
             <input
-              id={`${type}.country`}
-              type="text"
-              className={`${type}-country usa-input`}
-              name={`${type}.country`}
               autoCapitalize="none"
+              className={`${type}-country usa-input`}
+              id={`${type}.country`}
+              name={`${type}.country`}
+              type="text"
               value={data[type].country || ''}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
               onChange={e => {
                 updateFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateStartCaseSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind={`validationErrors.${type}.country`}
+              className="usa-error-message"
             />
           </div>
         )}

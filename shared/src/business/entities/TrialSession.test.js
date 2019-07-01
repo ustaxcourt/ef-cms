@@ -82,4 +82,26 @@ describe('TrialSession entity', () => {
       expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-H');
     });
   });
+
+  describe('setAsCalendared', () => {
+    it('should set trial session as calendared', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      trialSession.setAsCalendared();
+      expect(trialSession.isCalendared).toEqual(true);
+    });
+  });
+
+  describe('addCaseToCalendar', () => {
+    it('should add case to calendar', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      trialSession.addCaseToCalendar({ caseId: '123' });
+      expect(trialSession.caseOrder[0]).toEqual({ caseId: '123' });
+    });
+  });
 });

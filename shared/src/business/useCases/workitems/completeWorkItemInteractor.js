@@ -2,7 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -16,9 +16,9 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {*}
  */
 exports.completeWorkItem = async ({
+  applicationContext,
   completedMessage,
   workItemId,
-  applicationContext,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -43,7 +43,10 @@ exports.completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    workItem: completedWorkItem,
+    workItem: {
+      ...completedWorkItem,
+      createdAt: new Date().toISOString(),
+    },
   });
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({

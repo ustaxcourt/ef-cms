@@ -14,8 +14,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.setTrialSessionAsSwingSession = async ({
   applicationContext,
-  trialSessionId,
   swingSessionId,
+  trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
 

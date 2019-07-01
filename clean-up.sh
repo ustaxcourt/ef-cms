@@ -6,7 +6,7 @@ rm package-lock.json
 npm i
 popd
 
-pushd efcms-service
+pushd web-api
 rm -rf node_modules
 rm package-lock.json
 npm i

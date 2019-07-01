@@ -14,8 +14,8 @@ export const HeaderDashboardInternal = connect(
         <div className="grid-container">
           <h1 tabIndex="-1">{workQueueHelper.workQueueTitle}</h1>
           <span
-            className="unread margin-right-2"
             aria-label="unread work item count"
+            className="unread margin-right-2"
           >
             {workQueueHelper.inboxCount}
           </span>

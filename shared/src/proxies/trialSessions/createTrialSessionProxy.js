@@ -7,10 +7,10 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createTrialSession = ({ trialSession, applicationContext }) => {
+exports.createTrialSession = ({ applicationContext, trialSession }) => {
   return post({
     applicationContext,
     body: trialSession,
-    endpoint: `/trialSessions`,
+    endpoint: `/trial-sessions`,
   });
 };

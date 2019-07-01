@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {undefined}
  */
-export const setSecondaryDocumentScenarioAction = ({ store, get }) => {
+export const setSecondaryDocumentScenarioAction = ({ get, store }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (secondaryDocument && secondaryDocument.documentType) {

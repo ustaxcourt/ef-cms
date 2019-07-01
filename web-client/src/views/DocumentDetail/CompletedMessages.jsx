@@ -23,8 +23,8 @@ export const CompletedMessages = connect(
           documentDetailHelper.formattedDocument.completedWorkItems.map(
             (workItem, idx) => (
               <div
-                className="card completed-card"
                 aria-labelledby="tab-pending-messages"
+                className="card completed-card"
                 key={idx}
               >
                 <div className="content-wrapper">

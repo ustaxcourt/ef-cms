@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const uuid = require('uuid');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { createCaseFromPaper } = require('./createCaseFromPaperInteractor');
-const { PetitionFromPaper } = require('../entities/PetitionFromPaper');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -49,7 +49,7 @@ describe('createCaseFromPaper', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getEntityConstructors: () => ({
-        PetitionFromPaper: PetitionFromPaper,
+        CaseInternal,
       }),
       getPersistenceGateway: () => ({
         createCase: async () => null,

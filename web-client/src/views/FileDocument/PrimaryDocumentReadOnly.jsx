@@ -9,7 +9,7 @@ export const PrimaryDocumentReadOnly = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
-  ({ chooseWizardStepSequence, form, fileDocumentHelper }) => {
+  ({ chooseWizardStepSequence, fileDocumentHelper, form }) => {
     return (
       <React.Fragment>
         <div>
@@ -30,7 +30,7 @@ export const PrimaryDocumentReadOnly = connect(
 
         <div className="blue-container">
           <div className="usa-form-group">
-            <label htmlFor="primary-filing" className="usa-label">
+            <label className="usa-label" htmlFor="primary-filing">
               {form.documentTitle}
             </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -39,7 +39,7 @@ export const PrimaryDocumentReadOnly = connect(
 
           {form.supportingDocumentFile && (
             <div className="usa-form-group">
-              <label htmlFor="supporting-documents" className="usa-label">
+              <label className="usa-label" htmlFor="supporting-documents">
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
@@ -53,7 +53,7 @@ export const PrimaryDocumentReadOnly = connect(
                 !fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''
               }`}
             >
-              <label htmlFor="filing-includes" className="usa-label">
+              <label className="usa-label" htmlFor="filing-includes">
                 Filing Includes
               </label>
               <ul className="ustc-unstyled-list without-margins">
@@ -75,7 +75,7 @@ export const PrimaryDocumentReadOnly = connect(
                 !fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''
               }`}
             >
-              <label htmlFor="filing-not-includes" className="usa-label">
+              <label className="usa-label" htmlFor="filing-not-includes">
                 Filing Does Not Include
               </label>
               <ul className="ustc-unstyled-list without-margins">
@@ -89,7 +89,7 @@ export const PrimaryDocumentReadOnly = connect(
 
           {fileDocumentHelper.showObjection && (
             <div className="usa-form-group margin-bottom-0">
-              <label htmlFor="objections" className="usa-label">
+              <label className="usa-label" htmlFor="objections">
                 Are There Any Objections to This Document?
               </label>
               {form.objections}

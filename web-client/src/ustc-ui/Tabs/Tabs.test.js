@@ -6,11 +6,11 @@ import { Tab, TabsComponent } from './Tabs';
 describe('TabsComponent', () => {
   it('should show the default item', () => {
     const testRenderer = TestRenderer.create(
-      <TabsComponent defaultActiveTab="my" className="yeah">
-        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+      <TabsComponent className="yeah" defaultActiveTab="my">
+        <Tab id="tab-my-queue" tabName="my" title="My Queue">
           <div id="tab-individual-panel">Indy</div>
         </Tab>
-        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+        <Tab id="tab-work-queue" tabName="section" title="Section Queue">
           <div id="tab-section-panel">Section</div>
         </Tab>
       </TabsComponent>,
@@ -30,10 +30,10 @@ describe('TabsComponent', () => {
   it('should be able to click to show an item', () => {
     const testRenderer = TestRenderer.create(
       <TabsComponent defaultActiveTab="my">
-        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+        <Tab id="tab-my-queue" tabName="my" title="My Queue">
           <div id="tab-individual-panel">Indy</div>
         </Tab>
-        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+        <Tab id="tab-work-queue" tabName="section" title="Section Queue">
           <div id="tab-section-panel">Section</div>
         </Tab>
       </TabsComponent>,
@@ -60,11 +60,11 @@ describe('TabsComponent', () => {
 
   it('should show the selected item from bind/value', () => {
     const testRenderer = TestRenderer.create(
-      <TabsComponent value="section" bind="aBind" simpleSetter={v => v.value}>
-        <Tab tabName="my" title="My Queue" id="tab-my-queue">
+      <TabsComponent bind="aBind" simpleSetter={v => v.value} value="section">
+        <Tab id="tab-my-queue" tabName="my" title="My Queue">
           <div id="tab-individual-panel">Indy</div>
         </Tab>
-        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+        <Tab id="tab-work-queue" tabName="section" title="Section Queue">
           <div id="tab-section-panel">Section</div>
         </Tab>
       </TabsComponent>,
@@ -97,10 +97,10 @@ describe('TabsComponent', () => {
   it('should not show tab for items without title (for tabless tabs)', () => {
     const testRenderer = TestRenderer.create(
       <TabsComponent defaultActiveTab="my">
-        <Tab tabName="my" id="tab-my-queue">
+        <Tab id="tab-my-queue" tabName="my">
           <div id="tab-individual-panel">Indy</div>
         </Tab>
-        <Tab tabName="section" title="Section Queue" id="tab-work-queue">
+        <Tab id="tab-work-queue" tabName="section" title="Section Queue">
           <div id="tab-section-panel">Section</div>
         </Tab>
         <div id="non-tab">Non Tab</div>

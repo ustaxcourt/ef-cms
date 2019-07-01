@@ -18,13 +18,15 @@ const computeTerm = ({ month, year }) => {
       term = 'Spring';
     } else if (termsByMonth.fall.includes(selectedMonth)) {
       term = 'Fall';
+    } else {
+      term = undefined;
     }
   }
 
   return { term, termYear };
 };
 
-const compute24HrTime = ({ hours, minutes, extension }) => {
+const compute24HrTime = ({ extension, hours, minutes }) => {
   if (!hours && !minutes) return undefined;
   const TIME_INVALID = '99:99'; // force time validation error
 

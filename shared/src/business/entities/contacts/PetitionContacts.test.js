@@ -1,12 +1,12 @@
+const { CaseExternal } = require('../cases/CaseExternal');
 const { PARTY_TYPES } = require('./PetitionContact');
-const { Petition } = require('../Petition');
 
-let petition;
+let caseExternal;
 
 describe('Petition', () => {
   describe('for Corporation Contacts', () => {
     it('should not validate without contact', () => {
-      petition = new Petition({
+      caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
@@ -20,11 +20,11 @@ describe('Petition', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.isValid()).toEqual(false);
+      expect(caseExternal.isValid()).toEqual(false);
     });
 
     it('can validate primary contact', () => {
-      petition = new Petition({
+      caseExternal = new CaseExternal({
         caseType: 'other',
         contactPrimary: {
           address1: '876 12th Ave',
@@ -50,12 +50,12 @@ describe('Petition', () => {
         stinFile: {},
         stinFileSize: 1,
       });
-      expect(petition.getFormattedValidationErrors()).toEqual(null);
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
   });
 
   it('can validate Petitioner contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -81,11 +81,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('returns true when contactPrimary is defined and everything else is valid', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -111,11 +111,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('returns false for isValid if primary contact is missing', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -129,11 +129,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('a valid petition returns true for isValid', () => {
-    const petition = new Petition({
+    const caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -166,11 +166,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Partnership (BBA Regime) contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -184,11 +184,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Partnership (BBA Regime) contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -223,11 +223,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Trust contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -241,11 +241,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Trust contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -280,11 +280,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Conservator contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -298,11 +298,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Conservator contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -337,11 +337,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Guardian contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -355,11 +355,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Guardian contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -394,11 +394,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Custodian contact', () => {
-    let petition = new Petition({
+    let caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -412,11 +412,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Custodian contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -451,11 +451,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Donor contact', () => {
-    let petition = new Petition({
+    let caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -469,11 +469,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Donor contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -498,11 +498,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
   it('can validate invalid Transferee contact', () => {
-    let petition = new Petition({
+    let caseExternal = new CaseExternal({
       caseType: 'other',
       filingType: 'Myself',
       hasIrsNotice: true,
@@ -516,11 +516,11 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.isValid()).toEqual(false);
+    expect(caseExternal.isValid()).toEqual(false);
   });
 
   it('can validate valid Transferee contact', () => {
-    petition = new Petition({
+    caseExternal = new CaseExternal({
       caseType: 'other',
       contactPrimary: {
         address1: '876 12th Ave',
@@ -545,6 +545,6 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
-    expect(petition.getFormattedValidationErrors()).toEqual(null);
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 });

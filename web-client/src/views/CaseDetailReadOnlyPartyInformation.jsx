@@ -11,9 +11,9 @@ export const CaseDetailReadOnlyPartyInformation = connect(
   },
   ({
     caseDetail,
-    constants,
-    caseDetailEditHelper,
     caseDetailEditContactsHelper,
+    caseDetailEditHelper,
+    constants,
   }) => {
     const addressDisplay = contact => {
       return (

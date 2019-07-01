@@ -10,9 +10,9 @@ import { state } from 'cerebral';
  * @returns {object} path.success or path.error
  */
 export const validateInitialWorkItemMessageAction = ({
-  path,
-  get,
   applicationContext,
+  get,
+  path,
 }) => {
   const message = get(state.form);
 

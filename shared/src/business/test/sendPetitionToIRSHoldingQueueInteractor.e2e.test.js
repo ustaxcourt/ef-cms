@@ -92,7 +92,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         document: {
           documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -109,9 +109,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const workItemId = petitionSectionInbox[0].workItemId;
-    const caseId = petitionSectionInbox[0].caseId;
-    const documentId = petitionSectionInbox[0].document.documentId;
+    const { workItemId } = petitionSectionInbox[0];
+    const { caseId } = petitionSectionInbox[0];
+    const { documentId } = petitionSectionInbox[0].document;
 
     await assignWorkItems({
       applicationContext,
@@ -270,7 +270,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'L',
         document: {
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -318,7 +318,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'L',
         document: {
           documentType: 'Petition',
-          filedBy: 'richard',
+          filedBy: 'Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },

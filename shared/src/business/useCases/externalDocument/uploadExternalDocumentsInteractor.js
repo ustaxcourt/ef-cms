@@ -1,13 +1,13 @@
 const {
-  isAuthorized,
   FILE_EXTERNAL_DOCUMENT,
+  isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadExternalDocuments = async ({
-  onUploadProgresses,
-  documentFiles,
   applicationContext,
+  documentFiles,
+  onUploadProgresses,
 }) => {
   const user = applicationContext.getCurrentUser();
 

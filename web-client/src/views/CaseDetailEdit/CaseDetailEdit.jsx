@@ -24,30 +24,30 @@ export const CaseDetailEdit = connect(
   }) => {
     return (
       <form
-        id="case-edit-form"
         noValidate
-        onSubmit={e => {
-          e.preventDefault();
-          submitCaseDetailEditSaveSequence();
-        }}
+        id="case-edit-form"
         role="form"
         onFocus={() => {
           unsetFormSaveSuccessSequence();
         }}
+        onSubmit={e => {
+          e.preventDefault();
+          submitCaseDetailEditSaveSequence();
+        }}
       >
         <Tabs
+          boxed
+          bind="documentDetail.tab"
           className="container-tabs tab-button-h3"
           id="case-detail-tabs"
-          bind="documentDetail.tab"
-          boxed
         >
-          <Tab tabName="partyInfo" title="Parties" id="tab-parties">
+          <Tab id="tab-parties" tabName="partyInfo" title="Parties">
             <PartyInformation />
           </Tab>
-          <Tab tabName="caseInfo" title="Case Info" id="tab-case-info">
+          <Tab id="tab-case-info" tabName="caseInfo" title="Case Info">
             <CaseInfo />
           </Tab>
-          <Tab tabName="irsNotice" title="IRS Notice" id="tab-irs-notice">
+          <Tab id="tab-irs-notice" tabName="irsNotice" title="IRS Notice">
             <IRSNotice />
           </Tab>
         </Tabs>
@@ -66,7 +66,7 @@ export const CaseDetailEdit = connect(
           Save
         </button>
         {screenMetadata.showSaveSuccess && (
-          <span className="mini-success" aria-live="polite" role="alert">
+          <span aria-live="polite" className="mini-success" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />
             Your changes have been saved.
           </span>

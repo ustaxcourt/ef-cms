@@ -19,12 +19,12 @@ export const SecondaryDocumentForm = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    constants,
     fileDocumentHelper,
     form,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
-    constants,
   }) => {
     return (
       <React.Fragment>
@@ -55,14 +55,14 @@ export const SecondaryDocumentForm = connect(
                   }`}
                 >
                   <label
-                    htmlFor="secondary-document"
-                    id="secondary-document-label"
                     className={
                       'usa-label ustc-upload with-hint ' +
                       (fileDocumentHelper.showSecondaryDocumentValid
                         ? 'validated'
                         : '')
                     }
+                    htmlFor="secondary-document"
+                    id="secondary-document-label"
                   >
                     Upload Your Document{' '}
                     <span className="success-message padding-left-1">
@@ -77,16 +77,16 @@ export const SecondaryDocumentForm = connect(
                     {constants.MAX_FILE_SIZE_MB}MB.
                   </span>
                   <StateDrivenFileInput
+                    aria-describedby="secondary-document-label"
                     id="secondary-document"
                     name="secondaryDocumentFile"
-                    aria-describedby="secondary-document-label"
                     updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                     validationSequence="validateExternalDocumentInformationSequence"
                   />
 
                   <Text
-                    className="usa-error-message"
                     bind="validationErrors.secondaryDocumentFile"
+                    className="usa-error-message"
                   />
                 </div>
               </div>
@@ -115,16 +115,16 @@ export const SecondaryDocumentForm = connect(
                   {['Yes', 'No'].map(option => (
                     <div className="usa-radio usa-radio__inline" key={option}>
                       <input
-                        id={`secondary-supporting-documents-${option}`}
-                        type="radio"
                         aria-describedby="secondary-support-docs"
-                        name="hasSecondarySupportingDocuments"
-                        className="usa-radio__input"
-                        value={option}
                         checked={
                           form.hasSecondarySupportingDocuments ===
                           (option === 'Yes')
                         }
+                        className="usa-radio__input"
+                        id={`secondary-supporting-documents-${option}`}
+                        name="hasSecondarySupportingDocuments"
+                        type="radio"
+                        value={option}
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
                             key: e.target.name,
@@ -134,8 +134,8 @@ export const SecondaryDocumentForm = connect(
                         }}
                       />
                       <label
-                        htmlFor={`secondary-supporting-documents-${option}`}
                         className="usa-radio__label"
+                        htmlFor={`secondary-supporting-documents-${option}`}
                       >
                         {option}
                       </label>
@@ -143,8 +143,8 @@ export const SecondaryDocumentForm = connect(
                   ))}
                 </fieldset>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.hasSecondarySupportingDocuments"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -160,21 +160,22 @@ export const SecondaryDocumentForm = connect(
                 }`}
               >
                 <label
+                  className="usa-label"
                   htmlFor="secondary-supporting-document"
                   id="secondary-supporting-document-label"
-                  className="usa-label"
                 >
                   Select Supporting Document
                 </label>
                 <select
-                  name="secondarySupportingDocument"
-                  id="secondary-supporting-document"
                   aria-describedby="secondary-supporting-document-label"
                   className={`usa-select ${
                     validationErrors.secondarySupportingDocument
                       ? 'usa-select--error'
                       : ''
                   }`}
+                  id="secondary-supporting-document"
+                  name="secondarySupportingDocument"
+                  value={form.secondarySupportingDocument || ''}
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
                       key: 'secondarySupportingDocumentMetadata.category',
@@ -195,7 +196,6 @@ export const SecondaryDocumentForm = connect(
                     });
                     validateExternalDocumentInformationSequence();
                   }}
-                  value={form.secondarySupportingDocument || ''}
                 >
                   <option value="">- Select -</option>
                   {fileDocumentHelper.supportingDocumentTypeList.map(entry => {
@@ -210,8 +210,8 @@ export const SecondaryDocumentForm = connect(
                   })}
                 </select>
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.secondarySupportingDocument"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -225,20 +225,23 @@ export const SecondaryDocumentForm = connect(
                 }`}
               >
                 <label
+                  className="usa-label"
                   htmlFor="secondary-supporting-document-free-text"
                   id="secondary-supporting-document-free-text-label"
-                  className="usa-label"
                 >
                   Supporting Document Signed By
                 </label>
                 <input
-                  id="secondary-supporting-document-free-text"
-                  type="text"
-                  name="secondarySupportingDocumentFreeText"
                   aria-describedby="secondary-supporting-document-free-text-label"
                   autoCapitalize="none"
                   className="usa-input"
+                  id="secondary-supporting-document-free-text"
+                  name="secondarySupportingDocumentFreeText"
+                  type="text"
                   value={form.secondarySupportingDocumentFreeText || ''}
+                  onBlur={() => {
+                    validateExternalDocumentInformationSequence();
+                  }}
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
                       key: 'secondarySupportingDocumentMetadata.freeText',
@@ -249,13 +252,10 @@ export const SecondaryDocumentForm = connect(
                       value: e.target.value,
                     });
                   }}
-                  onBlur={() => {
-                    validateExternalDocumentInformationSequence();
-                  }}
                 />
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.secondarySupportingDocumentFreeText"
+                  className="usa-error-message"
                 />
               </div>
             )}
@@ -269,14 +269,14 @@ export const SecondaryDocumentForm = connect(
                 }`}
               >
                 <label
-                  htmlFor="secondary-supporting-document-file"
-                  id="secondary-supporting-document-file-label"
                   className={
                     'usa-label ustc-upload with-hint ' +
                     (fileDocumentHelper.showSecondarySupportingDocumentValid
                       ? 'validated'
                       : '')
                   }
+                  htmlFor="secondary-supporting-document-file"
+                  id="secondary-supporting-document-file-label"
                 >
                   Upload Your Supporting Document{' '}
                   <span className="success-message padding-left-1">
@@ -288,16 +288,16 @@ export const SecondaryDocumentForm = connect(
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <StateDrivenFileInput
+                  aria-describedby="secondary-supporting-document-file-label"
                   id="secondary-supporting-document-file"
                   name="secondarySupportingDocumentFile"
-                  aria-describedby="secondary-supporting-document-file-label"
                   updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                   validationSequence="validateExternalDocumentInformationSequence"
                 />
 
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.secondarySupportingDocumentFile"
+                  className="usa-error-message"
                 />
               </div>
             )}
