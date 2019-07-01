@@ -109,6 +109,9 @@ provider:
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
