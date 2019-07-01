@@ -95,6 +95,7 @@ import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAsso
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
+import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -124,6 +125,7 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
+import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
@@ -254,6 +256,7 @@ export const presenter = {
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,
+    submitCreateOrderModalSequence,
     submitDocketEntrySequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
@@ -283,6 +286,7 @@ export const presenter = {
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
+    updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
     updateDocumentValueSequence,

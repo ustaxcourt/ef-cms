@@ -74,19 +74,25 @@ class PDFSignerComponent extends React.Component {
 
     this.setState({ signatureApplied: true });
 
-    // clear current signature data
     this.props.setSignatureData({ signatureData: null });
 
     canvasEl.onmousemove = e => {
       const { pageX, pageY } = e;
       const canvasBounds = canvasEl.getBoundingClientRect();
-      const offsetLeft = canvasBounds.x;
-      const offsetTop = canvasBounds.y;
+      const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+      const scrollYOffset = window.scrollY;
 
-      x = pageX - offsetLeft;
-      y = pageY - offsetTop;
+      x = pageX - canvasBounds.x;
+      y = pageY - canvasBounds.y - scrollYOffset;
 
-      this.moveSig(sigEl, pageX, pageY);
+      const uiPosX = pageX - sigParentBounds.x;
+      const uiPosY =
+        pageY -
+        canvasBounds.y -
+        scrollYOffset +
+        (canvasBounds.y - sigParentBounds.y);
+
+      this.moveSig(sigEl, uiPosX, uiPosY);
     };
 
     canvasEl.onmousedown = () => {
@@ -106,7 +112,7 @@ class PDFSignerComponent extends React.Component {
           <div className="grid-row">
             <div className="grid-col-12">
               <div className="grid-row">
-                <div className="grid-col-9">
+                <div className="grid-col-8">
                   <h2>Proposed Stipulated Decision</h2>
                   <div className="sign-pdf-interface">
                     <span
@@ -121,6 +127,7 @@ class PDFSignerComponent extends React.Component {
                     <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
                   </div>
                 </div>
+                <div className="grid-col-1"></div>
                 <div className="grid-col-3">
                   <PDFSignerToolbar
                     applySignature={this.start}
@@ -133,7 +140,7 @@ class PDFSignerComponent extends React.Component {
             </div>
           </div>
           <div className="grid-row">
-            <div className="grid-col-12">
+            <div className="grid-col-12 margin-top-2">
               <button
                 className="usa-button"
                 disabled={!this.props.signatureData}
