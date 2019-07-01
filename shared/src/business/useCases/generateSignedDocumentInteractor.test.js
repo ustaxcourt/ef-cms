@@ -53,7 +53,7 @@ describe('generateSignedDocument', () => {
       posX: 100,
       posY: 100,
       scale: 1,
-      sigTextData: 'Yee Haw',
+      sigTextData: '(Signed) Dr. Yeeing My Last Haw',
     };
 
     const newPdfData = await generateSignedDocument(args);
