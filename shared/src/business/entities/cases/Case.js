@@ -51,9 +51,9 @@ const CASE_TYPES = [
 ];
 
 // This is the order that they appear in the UI
-const PROCEDURE_TYPES = ['Regular', 'Small'];
+Case.PROCEDURE_TYPES = ['Regular', 'Small'];
 
-const FILING_TYPES = {
+Case.FILING_TYPES = {
   petitioner: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
   practitioner: [
     'Individual petitioner',
@@ -704,20 +704,12 @@ Case.areYearsUnique = yearAmounts => {
 };
 
 /**
- * getProcedureTypes
- * @returns {string[]}
- */
-Case.getProcedureTypes = () => {
-  return PROCEDURE_TYPES;
-};
-
-/**
  * getFilingTypes
  * @param userRole - the role of the user logged in
  * @returns {string[]}
  */
 Case.getFilingTypes = userRole => {
-  return FILING_TYPES[userRole] || FILING_TYPES.petitioner;
+  return Case.FILING_TYPES[userRole] || Case.FILING_TYPES.petitioner;
 };
 
 /**
