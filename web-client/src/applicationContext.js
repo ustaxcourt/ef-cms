@@ -5,6 +5,8 @@ import {
   OTHER_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/contacts/PetitionContact';
+import { Order } from '../../shared/src/business/entities/orders/Order';
+
 import {
   CASE_CAPTION_POSTFIX,
   Case,
@@ -260,6 +262,7 @@ const applicationContext = {
     INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
     MAX_FILE_SIZE_MB,
+    ORDER_TYPES_MAP: Order.ORDER_TYPES,
     OTHER_TYPES,
     PARTY_TYPES,
     REFRESH_INTERVAL: 20 * MINUTES,
