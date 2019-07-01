@@ -3,14 +3,11 @@ import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 
 import {
-  CASE_CAPTION_POSTFIX,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
-import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
@@ -84,14 +81,14 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CATEGORIES,
       CATEGORY_MAP,
       COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
-      STATUS_TYPES,
+      STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES,
     });
   });
