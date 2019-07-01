@@ -650,7 +650,7 @@ describe('Case entity', () => {
 
   describe('getProcedureTypes', () => {
     it('returns the procedure types', () => {
-      const procedureTypes = Case.getProcedureTypes();
+      const procedureTypes = Case.PROCEDURE_TYPES;
       expect(procedureTypes).not.toBeNull();
       expect(procedureTypes.length).toEqual(2);
       expect(procedureTypes[0]).toEqual('Regular');
