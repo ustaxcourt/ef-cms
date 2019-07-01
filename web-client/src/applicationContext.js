@@ -42,6 +42,7 @@ import { ExternalDocumentFactory } from '../../shared/src/business/entities/exte
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
+import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -113,6 +114,7 @@ import { validateExternalDocument } from '../../shared/src/business/useCases/ext
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
+import { validateOrderWithoutBody } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
@@ -208,6 +210,7 @@ const allUseCases = {
   validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
+  validateOrderWithoutBody,
   validatePdf,
   validatePetition,
   validatePetitionFromPaper,
@@ -283,6 +286,7 @@ const applicationContext = {
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
+    OrderWithoutBody,
     TrialSession,
   }),
   getError: e => {
