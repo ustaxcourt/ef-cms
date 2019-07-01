@@ -7,6 +7,7 @@ describe('OrderWithoutBody', () => {
         new OrderWithoutBody({
           documentTitle: 'Order to Eat Cake',
           documentType: 'Order',
+          eventCode: 'O',
         }).isValid(),
       ).toBeTruthy();
     });

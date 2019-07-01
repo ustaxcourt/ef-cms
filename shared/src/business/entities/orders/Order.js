@@ -5,7 +5,6 @@ const {
 
 const ORDER_TYPES = [
   {
-    documentTitle: '[orderTitle]',
     documentType: 'Order',
     eventCode: 'O',
   },
