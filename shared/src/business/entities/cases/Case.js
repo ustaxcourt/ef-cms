@@ -61,6 +61,20 @@ Case.FILING_TYPES = {
 
 Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
 
+Case.ANSWER_DOCUMENT_CODES = [
+  'A',
+  'AAPN',
+  'ATAP',
+  'AAAP',
+  'AATP',
+  'APA',
+  'ATSP',
+  'AATS',
+  'ASUP',
+  'ASAP',
+  'AATT',
+];
+
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
@@ -720,20 +734,6 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case}
  */
 Case.prototype.checkForReadyForTrial = function() {
-  const ANSWER_DOCUMENT_CODES = [
-    'A',
-    'AAPN',
-    'ATAP',
-    'AAAP',
-    'AATP',
-    'APA',
-    'ATSP',
-    'AATS',
-    'ASUP',
-    'ASAP',
-    'AATT',
-  ];
-
   let docFiledCutoffDate = moment().subtract(
     Case.ANSWER_CUTOFF_AMOUNT,
     Case.ANSWER_CUTOFF_UNIT,
@@ -745,7 +745,7 @@ Case.prototype.checkForReadyForTrial = function() {
   if (isCaseGeneralDocketNotAtIssue) {
     this.documents.forEach(document => {
       const isAnswerDocument = includes(
-        ANSWER_DOCUMENT_CODES,
+        Case.ANSWER_DOCUMENT_CODES,
         document.eventCode,
       );
 
