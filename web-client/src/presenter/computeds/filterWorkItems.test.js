@@ -1,5 +1,5 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
-import { STATUS_TYPES } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { filterWorkItems } from './formattedWorkQueue';
 
 const MY_MESSAGES_INBOX = {
@@ -249,7 +249,7 @@ describe('filterWorkItems', () => {
     });
 
     workItemPetitionsMyDocumentQCBatched = generateWorkItem({
-      caseStatus: STATUS_TYPES.batchedForIRS,
+      caseStatus: Case.STATUS_TYPES.batchedForIRS,
       docketNumber: '100-06',
       isInternal: false,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
@@ -276,7 +276,7 @@ describe('filterWorkItems', () => {
 
     workItemPetitionsSectionDocumentQCBatched = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
-      caseStatus: STATUS_TYPES.batchedForIRS,
+      caseStatus: Case.STATUS_TYPES.batchedForIRS,
       docketNumber: '100-09',
       isInternal: false,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,

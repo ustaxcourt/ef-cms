@@ -10,7 +10,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case, STATUS_TYPES } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 
 const {
@@ -64,7 +64,7 @@ exports.recallPetitionFromIRSHoldingQueue = async ({
   );
 
   for (let workItem of caseEntity.getWorkItems()) {
-    workItem.setStatus(STATUS_TYPES.recalled);
+    workItem.setStatus(Case.STATUS_TYPES.recalled);
 
     await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,

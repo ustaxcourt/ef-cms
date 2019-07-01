@@ -2,7 +2,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case, STATUS_TYPES } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -32,7 +32,7 @@ exports.updateCaseTrialSortTags = async ({ applicationContext, caseId }) => {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
+  if (caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial) {
     const caseSortTags = caseEntity.generateTrialSortTags();
 
     await applicationContext
