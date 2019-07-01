@@ -140,7 +140,7 @@ class PDFSignerComponent extends React.Component {
             </div>
           </div>
           <div className="grid-row">
-            <div className="grid-col-12">
+            <div className="grid-col-12 margin-top-2">
               <button
                 className="usa-button"
                 disabled={!this.props.signatureData}
