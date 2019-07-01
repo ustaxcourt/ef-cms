@@ -10,6 +10,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -277,6 +278,18 @@ functions:
           method: post
           cors: true
           # async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  signDocument:
+    handler: src/handlers.signDocumentLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/sign
+          method: post
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -779,6 +792,7 @@ functions:
           path: v1/court-issued-order
           method: post
           cors: true
+          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

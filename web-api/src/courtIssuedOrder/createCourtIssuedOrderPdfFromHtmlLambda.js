@@ -1,10 +1,14 @@
 const createApplicationContext = require('../applicationContext');
 const {
+  headers,
+  sendError,
+  sendOk,
+} = require('../middleware/apiGatewayHelper');
+const {
   NotFoundError,
   UnauthorizedError,
 } = require('../../../shared/src/errors/errors');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
-const { sendError, sendOk } = require('../middleware/apiGatewayHelper');
 
 const customHandle = async (event, fun) => {
   if (event.source === 'serverless-plugin-warmup') {
@@ -15,7 +19,8 @@ const customHandle = async (event, fun) => {
     return {
       body: pdfBuffer.toString('base64'),
       headers: {
-        'Content-type': 'application/pdf',
+        ...headers,
+        'Content-Type': 'application/pdf',
         'accept-ranges': 'bytes',
       },
       isBase64Encoded: true,
