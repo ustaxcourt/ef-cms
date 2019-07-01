@@ -22,5 +22,11 @@ exports.getSentMessagesForUser = async ({ applicationContext, userId }) => {
     applicationContext,
   });
 
-  return workItems.filter(workItem => workItem.isInternal);
+  return workItems.filter(
+    workItem =>
+      !workItem.completedAt &&
+      workItem.isInternal &&
+      workItem.sentByUserId &&
+      workItem.sentByUserId === userId,
+  );
 };

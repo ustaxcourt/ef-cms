@@ -29,9 +29,9 @@ exports.getDocumentQCServedForSection = async ({
       section,
     });
 
-  return workItems.filter(workItem => {
-    return user.role === 'petitionsclerk'
+  return workItems.filter(workItem =>
+    user.role === 'petitionsclerk'
       ? workItem.section === IRS_BATCH_SYSTEM_SECTION
-      : true;
-  });
+      : true,
+  );
 };

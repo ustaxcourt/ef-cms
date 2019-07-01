@@ -27,7 +27,6 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
       !workItem.isInternal &&
       workItem.completedByUserId &&
       workItem.completedByUserId === userId &&
-      !!workItem.completedAt &&
-      workItem.section === 'irsBatchSection',
+      !!workItem.completedAt,
   );
 };
