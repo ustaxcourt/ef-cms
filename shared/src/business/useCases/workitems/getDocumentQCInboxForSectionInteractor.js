@@ -1,4 +1,8 @@
 const {
+  DOCKET_SECTION,
+  SENIOR_ATTORNEY_SECTION,
+} = require('../../entities/WorkQueue');
+const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
@@ -28,5 +32,8 @@ exports.getDocumentQCInboxForSection = async ({
       section,
     });
 
-  return workItems;
+  const sectionToExcept =
+    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : section;
+
+  return workItems.filter(workItem => workItem.section === sectionToExcept);
 };

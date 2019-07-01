@@ -25,5 +25,5 @@ exports.getInboxMessagesForUser = async ({ applicationContext, userId }) => {
       userId,
     });
 
-  return workItems;
+  return workItems.filter(workItem => workItem.section === user.section);
 };

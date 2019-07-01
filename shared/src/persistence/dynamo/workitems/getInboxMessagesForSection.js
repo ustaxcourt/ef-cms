@@ -16,5 +16,9 @@ exports.getInboxMessagesForSection = async ({
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
-  return workItems.filter(workItem => workItem.isInternal);
+  return workItems.filter(
+    workItem =>
+      workItem.isInternal &&
+      !workItem.completedAt & (workItem.section === section),
+  );
 };
