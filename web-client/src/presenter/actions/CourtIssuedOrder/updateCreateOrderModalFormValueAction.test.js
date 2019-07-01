@@ -9,7 +9,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
       modules: {
         presenter,
       },
-      props: { eventCode: 'ODD' },
+      props: { key: 'eventCode', value: 'ODD' },
       state: {
         constants: {
           ORDER_TYPES_MAP: Order.ORDER_TYPES,
@@ -26,12 +26,30 @@ describe('updateCreateOrderModalFormValueAction', () => {
     );
   });
 
+  it('sets state.form values correctly if a generic order event code is passed in', async () => {
+    const result = await runAction(updateCreateOrderModalFormValueAction, {
+      modules: {
+        presenter,
+      },
+      props: { key: 'eventCode', value: 'O' },
+      state: {
+        constants: {
+          ORDER_TYPES_MAP: Order.ORDER_TYPES,
+        },
+        form: {},
+      },
+    });
+    expect(result.state.form.eventCode).toEqual('O');
+    expect(result.state.form.documentTitle).toBeUndefined();
+    expect(result.state.form.documentType).toEqual('Order');
+  });
+
   it('unsets state.form values if event code is empty', async () => {
     const params = {
       modules: {
         presenter,
       },
-      props: { eventCode: '' },
+      props: { key: 'eventCode', value: '' },
       state: {
         constants: {
           ORDER_TYPES_MAP: Order.ORDER_TYPES,
@@ -48,7 +66,7 @@ describe('updateCreateOrderModalFormValueAction', () => {
     expect(result.state.form.documentTitle).toBeUndefined();
     expect(result.state.form.documentType).toBeUndefined();
 
-    params.props.eventCode = undefined;
+    params.props.value = undefined;
     result = await runAction(updateCreateOrderModalFormValueAction, params);
     expect(result.state.form.eventCode).toBeUndefined();
     expect(result.state.form.documentTitle).toBeUndefined();
@@ -59,5 +77,46 @@ describe('updateCreateOrderModalFormValueAction', () => {
     expect(result.state.form.eventCode).toBeUndefined();
     expect(result.state.form.documentTitle).toBeUndefined();
     expect(result.state.form.documentType).toBeUndefined();
+  });
+
+  it('sets documentTitle if orderTitle is passed in via props', async () => {
+    const params = {
+      modules: {
+        presenter,
+      },
+      props: { key: 'orderTitle', value: 'Order to Do Something' },
+      state: {
+        constants: {
+          ORDER_TYPES_MAP: Order.ORDER_TYPES,
+        },
+        form: {
+          documentType: 'Order',
+          eventCode: 'O',
+        },
+      },
+    };
+    let result = await runAction(updateCreateOrderModalFormValueAction, params);
+    expect(result.state.form.documentTitle).toEqual('Order to Do Something');
+  });
+
+  it('unsets documentTitle if orderTitle passed in via props is empty', async () => {
+    const params = {
+      modules: {
+        presenter,
+      },
+      props: { key: 'orderTitle', value: '' },
+      state: {
+        constants: {
+          ORDER_TYPES_MAP: Order.ORDER_TYPES,
+        },
+        form: {
+          documentTitle: 'Order to Do Something',
+          documentType: 'Order',
+          eventCode: 'O',
+        },
+      },
+    };
+    let result = await runAction(updateCreateOrderModalFormValueAction, params);
+    expect(result.state.form.documentTitle).toBeUndefined();
   });
 });
