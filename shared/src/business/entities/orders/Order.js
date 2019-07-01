@@ -3,17 +3,42 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-const ORDER_TYPES = {
-  O: 'Order',
-  ODJ: 'Order of Dismissal for Lack of Jurisdiction',
-  OD: 'Order of Dismissal',
-  ODD: 'Order of Dismissal and Decision',
-  OSC: 'Order to Show Cause',
-  OAD: 'Order and Decision',
-  DEC: 'Decision',
-};
-/* eslint-enable sort-keys-fix/sort-keys-fix */
+const ORDER_TYPES = [
+  {
+    documentType: 'Order',
+    eventCode: 'O',
+  },
+  {
+    documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+    documentType: 'Order of Dismissal for Lack of Jurisdiction',
+    eventCode: 'ODJ',
+  },
+  {
+    documentTitle: 'Order of Dismissal',
+    documentType: 'Order of Dismissal',
+    eventCode: 'OD',
+  },
+  {
+    documentTitle: 'Order of Dismissal and Decision',
+    documentType: 'Order of Dismissal and Decision',
+    eventCode: 'ODD',
+  },
+  {
+    documentTitle: 'Order to Show Cause',
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  {
+    documentTitle: 'Order and Decision',
+    documentType: 'Order and Decision',
+    eventCode: 'OAD',
+  },
+  {
+    documentTitle: 'Decision',
+    documentType: 'Decision',
+    eventCode: 'DEC',
+  },
+];
 
 /**
  * @param rawOrder
@@ -21,16 +46,16 @@ const ORDER_TYPES = {
  */
 function Order(rawOrder) {
   Object.assign(this, {
+    documentTitle: rawOrder.documentTitle,
+    documentType: rawOrder.documentType,
     orderBody: rawOrder.orderBody,
-    orderTitle: rawOrder.orderTitle,
-    orderType: rawOrder.orderType,
   });
 }
 
 Order.errorToMessageMap = {
+  documentTitle: 'Order title is required.',
+  documentType: 'Order type is required.',
   orderBody: 'Order body is required.',
-  orderTitle: 'Order title is required.',
-  orderType: 'Order type is required.',
 };
 
 Order.ORDER_TYPES = ORDER_TYPES;
@@ -38,9 +63,9 @@ Order.ORDER_TYPES = ORDER_TYPES;
 joiValidationDecorator(
   Order,
   joi.object().keys({
+    documentTitle: joi.string().required(),
+    documentType: joi.string().required(),
     orderBody: joi.string().required(),
-    orderTitle: joi.string().required(),
-    orderType: joi.string().required(),
   }),
   function() {
     return !this.getFormattedValidationErrors();

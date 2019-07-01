@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
@@ -17,6 +18,7 @@ import { validateInitialWorkItemMessageAction } from '../actions/validateInitial
 
 export const completeDocumentSigningSequence = [
   clearAlertsAction,
+  clearPDFSignatureDataAction,
   startShowValidationAction,
   validateInitialWorkItemMessageAction,
   {
