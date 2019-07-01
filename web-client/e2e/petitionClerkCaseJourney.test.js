@@ -1,4 +1,4 @@
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { applicationContext } from '../src/applicationContext';
@@ -57,7 +57,7 @@ describe('Case journey', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       COUNTRY_TYPES,
       PARTY_TYPES,
       TRIAL_CITIES,

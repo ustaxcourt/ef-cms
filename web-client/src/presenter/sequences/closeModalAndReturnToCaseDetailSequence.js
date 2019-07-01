@@ -1,9 +1,9 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { setCaseIdPropFromStateAction } from '../actions/setCaseIdPropFromStateAction';
+import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 
 export const closeModalAndReturnToCaseDetailSequence = [
   clearModalAction,
-  setCaseIdPropFromStateAction,
+  setCasePropFromStateAction,
   navigateToCaseDetailAction,
 ];

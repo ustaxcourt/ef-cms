@@ -1,8 +1,8 @@
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
 import {
   CATEGORIES,
   CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -70,7 +70,7 @@ describe('Taxpayer files document', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CATEGORIES,
       CATEGORY_MAP,
       COUNTRY_TYPES,

@@ -2,7 +2,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case, STATUS_TYPES } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -60,7 +60,7 @@ exports.sendPetitionToIRSHoldingQueue = async ({
           workItem: workItem.validate().toRawObject(),
         });
     }
-    workItem.setStatus(STATUS_TYPES.batchedForIRS);
+    workItem.setStatus(Case.STATUS_TYPES.batchedForIRS);
 
     await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,
