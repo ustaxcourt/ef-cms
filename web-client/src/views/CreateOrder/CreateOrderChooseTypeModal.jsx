@@ -35,17 +35,19 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
             name="eventCode"
             onChange={e => {
               this.props.updateFormValue({
-                key: e.target.name,
-                value: e.target.value,
+                eventCode: e.target.value,
               });
             }}
           >
             <option value="">- Select -</option>
-            {map(this.props.constants.ORDER_TYPES_MAP, (value, key) => (
-              <option key={key} value={key}>
-                {value}
-              </option>
-            ))}
+            {map(
+              this.props.constants.ORDER_TYPES_MAP,
+              ({ documentType, eventCode }) => (
+                <option key={eventCode} value={eventCode}>
+                  {documentType}
+                </option>
+              ),
+            )}
           </select>
           {this.props.validationErrors.eventCode && (
             <div className="usa-error-message beneath">
@@ -92,11 +94,11 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
 export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.TBD, // TODO
+    confirmSequence: sequences.submitCreateOrderModalSequence,
     constants: state.constants,
     form: state.form,
     modal: state.modal,
-    updateFormValue: sequences.updateFormValueSequence,
+    updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
     validationErrors: state.validationErrors,
   },
   CreateOrderChooseTypeModalComponent,
