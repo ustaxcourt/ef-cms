@@ -11,7 +11,7 @@ export const getSentMessagesForSectionAction = async ({
   const user = applicationContext.getCurrentUser();
   let workItems = await applicationContext
     .getUseCases()
-    .getSentMessageForSection({
+    .getSentMessagesForSection({
       applicationContext,
       section: user.section,
     });
