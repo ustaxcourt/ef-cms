@@ -82,6 +82,7 @@ const replaceWithID = (replacements, domString) => {
 
 export const createOrderAction = ({ get }) => {
   let richText = get(state.form.richText) || '';
+  let documentTitle = get(state.form.documentTitle);
   richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
   const caseCaption = get(state.caseDetail.caseCaption);
   const docketNumberWithSuffix = get(
@@ -93,7 +94,7 @@ export const createOrderAction = ({ get }) => {
       '#caseCaption': caseCaption,
       '#docketNumber': docketNumberWithSuffix,
       '#orderBody': richText,
-      '#orderTitleHeader': 'ORDER OF DISMISSAL FOR LACK OF JURISDICTION',
+      '#orderTitleHeader': documentTitle,
     },
     orderTemplate,
   );
