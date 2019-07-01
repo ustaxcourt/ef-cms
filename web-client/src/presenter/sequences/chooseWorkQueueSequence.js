@@ -1,8 +1,10 @@
 import { chooseWorkQueueAction } from '../actions/chooseWorkQueueAction';
 import { clearWorkQueueAction } from '../actions/clearWorkQueueAction';
+import { getDocumentQCBatchedForSectionAction } from '../actions/getDocumentQCBatchedForSectionAction';
 import { getDocumentQCBatchedForUserAction } from '../actions/getDocumentQCBatchedForUserAction';
 import { getDocumentQCInboxForSectionAction } from '../actions/getDocumentQCInboxForSectionAction';
 import { getDocumentQCInboxForUserAction } from '../actions/getDocumentQCInboxForUserAction';
+import { getDocumentQCServedForSectionAction } from '../actions/getDocumentQCServedForSectionAction';
 import { getDocumentQCServedForUserAction } from '../actions/getDocumentQCServedForUserAction';
 import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesForSectionAction';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
@@ -40,10 +42,18 @@ export const chooseWorkQueueSequence = [
           getDocumentQCServedForUserAction,
           setWorkItemsAction,
         ],
+        documentqcsectionbatched: [
+          getDocumentQCBatchedForSectionAction,
+          setWorkItemsAction,
+        ],
         documentqcsectioninbox: [
           getDocumentQCInboxForSectionAction,
           setWorkItemsAction,
           setSectionInboxCountAction,
+        ],
+        documentqcsectionoutbox: [
+          getDocumentQCServedForSectionAction,
+          setWorkItemsAction,
         ],
         messagesmyinbox: [getInboxMessagesForUserAction, setWorkItemsAction],
         messagesmyoutbox: [getSentMessagesForUserAction, setWorkItemsAction],

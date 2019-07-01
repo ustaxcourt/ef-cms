@@ -73,5 +73,21 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
     workQueuePath = `documentqc${workQueuePath}`;
   }
 
+  if (
+    !workQueueIsInternal &&
+    queuePrefs.queue === 'section' &&
+    queuePrefs.box === 'batched'
+  ) {
+    workQueuePath = `documentqc${workQueuePath}`;
+  }
+
+  if (
+    !workQueueIsInternal &&
+    queuePrefs.queue === 'section' &&
+    queuePrefs.box === 'served'
+  ) {
+    workQueuePath = `documentqc${workQueuePath}`;
+  }
+
   return path[workQueuePath]();
 };

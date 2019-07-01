@@ -1,9 +1,9 @@
 const moment = require('moment');
 const { query } = require('../../dynamodbClientService');
 
-exports.getDocumentQCBatchedForUser = async ({
+exports.getDocumentQCBatchedForSection = async ({
   applicationContext,
-  userId,
+  section,
 }) => {
   const afterDate = moment
     .utc(new Date().toISOString())
@@ -19,7 +19,7 @@ exports.getDocumentQCBatchedForUser = async ({
     },
     ExpressionAttributeValues: {
       ':afterDate': afterDate,
-      ':pk': `user-outbox-${userId}`,
+      ':pk': `section-outbox-${section}`,
     },
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
@@ -27,9 +27,8 @@ exports.getDocumentQCBatchedForUser = async ({
 
   return workItems.filter(
     workItem =>
-      !workItem.completedAt &&
       !workItem.isInternal &&
-      workItem.sentByUserId === userId &&
+      !workItem.completedAt &&
       workItem.section === 'irsBatchSection' &&
       workItem.caseStatus === 'Batched for IRS',
   );

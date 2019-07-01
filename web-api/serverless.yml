@@ -651,6 +651,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getDocumentQCServedForUser:
+    handler: src/handlers.getDocumentQCServedForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/document-qc/served
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getDocumentQCInboxForSection:
     handler: src/handlers.getDocumentQCInboxForSectionLambda
     events:
@@ -663,11 +675,24 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getDocumentQCServedForUser:
-    handler: src/handlers.getDocumentQCServedForUserLambda
+  getDocumentQCBatchedForSection:
+    handler: src/handlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
-          path: v1/users/{userId}/document-qc/served
+          path: v1/sections/{section}/document-qc/batched
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+
+  getDocumentQCServedForSection:
+    handler: src/handlers.getDocumentQCServedForSectionLambda
+    events:
+      - http:
+          path: v1/sections/{section}/document-qc/served
           method: get
           cors: true
           authorizer:
