@@ -6,15 +6,14 @@ import {
   PARTY_TYPES,
 } from '../../shared/src/business/entities/contacts/PetitionContact';
 import {
-  CASE_CAPTION_POSTFIX,
-  Case,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
-import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import {
+  Case,
+  STATUS_TYPES,
+} from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import {
   createISODateString,
@@ -249,7 +248,7 @@ const applicationContext = {
   },
   getConstants: () => ({
     BUSINESS_TYPES,
-    CASE_CAPTION_POSTFIX,
+    CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
     CATEGORIES,
     CATEGORY_MAP,
     CHAMBERS_SECTION,

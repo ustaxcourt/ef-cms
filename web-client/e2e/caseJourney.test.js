@@ -1,12 +1,12 @@
 import {
-  CASE_CAPTION_POSTFIX,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
-import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import {
+  Case,
+  STATUS_TYPES,
+} from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { isFunction, mapValues } from 'lodash';
@@ -114,7 +114,7 @@ describe('Case journey', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CATEGORIES,
       CATEGORY_MAP,
       COUNTRY_TYPES,

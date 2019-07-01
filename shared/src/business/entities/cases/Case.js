@@ -63,8 +63,7 @@ const FILING_TYPES = {
   ],
 };
 
-exports.CASE_CAPTION_POSTFIX =
-  'v. Commissioner of Internal Revenue, Respondent';
+Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
 
 /**
  * Case Entity
@@ -124,9 +123,7 @@ function Case(rawCase) {
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   if (this.caseCaption) {
-    this.caseTitle = `${this.caseCaption.trim()} ${
-      exports.CASE_CAPTION_POSTFIX
-    }`;
+    this.caseTitle = `${this.caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
     this.initialTitle = this.initialTitle || this.caseTitle;
   }
 
