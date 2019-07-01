@@ -985,11 +985,51 @@ nav.usa-nav {
   background: $color-white;
 }
 
+.sign-pdf-control {
+  .icon-button {
+    color: color($theme-color-primary);
+    cursor: pointer;
+
+    &.disabled {
+      color: color($theme-color-base-light);
+      cursor: arrow;
+    }
+  }
+
+  .pages {
+    position: relative;
+    top: -6px;
+    font-size: 18px;
+    font-weight: $font-semibold;
+  }
+}
+
+.sign-pdf-interface {
+  position: relative;
+  padding: 30px 0;
+  background-color: color($theme-color-base);
+  #signature {
+    position: absolute;
+    padding: 20px;
+    border: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  #sign-pdf-canvas {
+    display: block;
+    margin: auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
+
 .ql-editor {
-  min-height: 600px;
-  max-height: 600px;
+  min-height: 640px;
+  max-height: 640px;
   font-family: 'Times New Roman', Times, serif;
   font-size: 14px;
+
+  p {
+    max-width: 100%;
+  }
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,

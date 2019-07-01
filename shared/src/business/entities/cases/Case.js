@@ -18,7 +18,7 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const statusMap = {
+Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
   generalDocket: 'General Docket - Not at Issue',
@@ -27,14 +27,10 @@ const statusMap = {
   recalled: 'Recalled',
 };
 
-exports.STATUS_TYPES = statusMap;
+Case.ANSWER_CUTOFF_AMOUNT = 45;
+Case.ANSWER_CUTOFF_UNIT = 'day';
 
-exports.ANSWER_CUTOFF_AMOUNT = 45;
-exports.ANSWER_CUTOFF_UNIT = 'day';
-
-const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
-
-const CASE_TYPES = [
+Case.CASE_TYPES = [
   'Deficiency',
   'CDP (Lien/Levy)',
   'Innocent Spouse',
@@ -51,9 +47,9 @@ const CASE_TYPES = [
 ];
 
 // This is the order that they appear in the UI
-const PROCEDURE_TYPES = ['Regular', 'Small'];
+Case.PROCEDURE_TYPES = ['Regular', 'Small'];
 
-const FILING_TYPES = {
+Case.FILING_TYPES = {
   petitioner: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
   practitioner: [
     'Individual petitioner',
@@ -63,8 +59,23 @@ const FILING_TYPES = {
   ],
 };
 
-exports.CASE_CAPTION_POSTFIX =
-  'v. Commissioner of Internal Revenue, Respondent';
+Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
+
+Case.ANSWER_DOCUMENT_CODES = [
+  'A',
+  'AAPN',
+  'ATAP',
+  'AAAP',
+  'AATP',
+  'APA',
+  'ATSP',
+  'AATS',
+  'ASUP',
+  'ASAP',
+  'AATT',
+];
+
+const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
  * Case Entity
@@ -109,7 +120,7 @@ function Case(rawCase) {
     procedureType: rawCase.procedureType,
     receivedAt: rawCase.receivedAt,
     respondents: rawCase.respondents || [],
-    status: rawCase.status || statusMap.new,
+    status: rawCase.status || Case.STATUS_TYPES.new,
     trialDate: rawCase.trialDate,
     trialJudge: rawCase.trialJudge,
     trialLocation: rawCase.trialLocation,
@@ -124,9 +135,7 @@ function Case(rawCase) {
     this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   if (this.caseCaption) {
-    this.caseTitle = `${this.caseCaption.trim()} ${
-      exports.CASE_CAPTION_POSTFIX
-    }`;
+    this.caseTitle = `${this.caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
     this.initialTitle = this.initialTitle || this.caseTitle;
   }
 
@@ -158,7 +167,7 @@ function Case(rawCase) {
     this.practitioners = [];
   }
 
-  const isNewCase = this.status === statusMap.new;
+  const isNewCase = this.status === Case.STATUS_TYPES.new;
 
   if (!isNewCase) {
     this.updateDocketNumberRecord();
@@ -256,7 +265,7 @@ joiValidationDecorator(
     respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.keys(statusMap).map(key => statusMap[key]))
+      .valid(Object.keys(Case.STATUS_TYPES).map(key => Case.STATUS_TYPES[key]))
       .optional(),
     trialDate: joi
       .date()
@@ -459,7 +468,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
-  this.status = statusMap.generalDocket;
+  this.status = Case.STATUS_TYPES.generalDocket;
   this.documents.forEach(document => {
     document.status = 'served';
   });
@@ -555,12 +564,12 @@ Case.prototype.updateDocketNumberRecord = function() {
  * @returns {Case}
  */
 Case.prototype.sendToIRSHoldingQueue = function() {
-  this.status = statusMap.batchedForIRS;
+  this.status = Case.STATUS_TYPES.batchedForIRS;
   return this;
 };
 
 Case.prototype.recallFromIRSHoldingQueue = function() {
-  this.status = statusMap.recalled;
+  this.status = Case.STATUS_TYPES.recalled;
   return this;
 };
 
@@ -656,14 +665,6 @@ Case.prototype.updateDocketRecord = function(
 };
 
 /**
- *
- * @returns {Array}
- */
-Case.getCaseTypes = () => {
-  return CASE_TYPES;
-};
-
-/**
  * isValidCaseId
  * @param caseId
  * @returns {*|boolean}
@@ -707,20 +708,12 @@ Case.areYearsUnique = yearAmounts => {
 };
 
 /**
- * getProcedureTypes
- * @returns {string[]}
- */
-Case.getProcedureTypes = () => {
-  return PROCEDURE_TYPES;
-};
-
-/**
  * getFilingTypes
  * @param userRole - the role of the user logged in
  * @returns {string[]}
  */
 Case.getFilingTypes = userRole => {
-  return FILING_TYPES[userRole] || FILING_TYPES.petitioner;
+  return Case.FILING_TYPES[userRole] || Case.FILING_TYPES.petitioner;
 };
 
 /**
@@ -741,41 +734,28 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case}
  */
 Case.prototype.checkForReadyForTrial = function() {
-  const ANSWER_DOCUMENT_CODES = [
-    'A',
-    'AAPN',
-    'ATAP',
-    'AAAP',
-    'AATP',
-    'APA',
-    'ATSP',
-    'AATS',
-    'ASUP',
-    'ASAP',
-    'AATT',
-  ];
-
   let docFiledCutoffDate = moment().subtract(
-    exports.ANSWER_CUTOFF_AMOUNT,
-    exports.ANSWER_CUTOFF_UNIT,
+    Case.ANSWER_CUTOFF_AMOUNT,
+    Case.ANSWER_CUTOFF_UNIT,
   );
 
-  const isCaseGeneralDocketNotAtIssue = this.status === statusMap.generalDocket;
+  const isCaseGeneralDocketNotAtIssue =
+    this.status === Case.STATUS_TYPES.generalDocket;
 
   if (isCaseGeneralDocketNotAtIssue) {
     this.documents.forEach(document => {
       const isAnswerDocument = includes(
-        ANSWER_DOCUMENT_CODES,
+        Case.ANSWER_DOCUMENT_CODES,
         document.eventCode,
       );
 
       const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
         docFiledCutoffDate,
-        exports.ANSWER_CUTOFF_UNIT,
+        Case.ANSWER_CUTOFF_UNIT,
       );
 
       if (isAnswerDocument && docFiledBeforeCutoff) {
-        this.status = statusMap.generalDocketReadyForTrial;
+        this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
       }
     });
   }
@@ -849,7 +829,7 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialTime = trialSessionEntity.startTime;
   this.trialJudge = trialSessionEntity.judge;
   this.trialLocation = trialSessionEntity.trialLocation;
-  this.status = statusMap.calendared;
+  this.status = Case.STATUS_TYPES.calendared;
   return this;
 };
 

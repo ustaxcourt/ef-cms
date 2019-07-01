@@ -11,7 +11,6 @@ import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
-import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
@@ -54,7 +53,6 @@ export const state = {
   cognitoLoginUrl: null,
   completeForm: {},
   contactsHelper,
-  createOrderHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',
   currentTab: '',
@@ -90,6 +88,12 @@ export const state = {
   path: '/',
   paymentInfo: {
     showDetails: false,
+  },
+  pdfForSigning: {
+    documentId: null,
+    pageNumber: 1,
+    pdfjsObj: null,
+    signatureData: null,
   },
   percentComplete: 0,
   petition: {},

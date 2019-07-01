@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { CaseExternal } = require('../entities/CaseExternal');
+const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { omit } = require('lodash');
 const { validatePetition } = require('./validatePetitionInteractor');
 

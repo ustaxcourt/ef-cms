@@ -5,16 +5,14 @@ import {
   OTHER_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/contacts/PetitionContact';
-import {
-  CASE_CAPTION_POSTFIX,
-  Case,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
+import { Order } from '../../shared/src/business/entities/orders/Order';
+
 import {
   CATEGORIES,
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import {
   createISODateString,
@@ -36,14 +34,15 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
-import { CaseExternal } from '../../shared/src/business/entities/CaseExternal';
+import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
+import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
-import { PetitionFromPaper } from '../../shared/src/business/entities/PetitionFromPaper';
+import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -64,7 +63,7 @@ import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkI
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
-import { generatePdfUrlFactory } from '../../shared/src/business/utilities/generatePdfUrlFactory';
+import { generateSignedDocument } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
@@ -92,6 +91,9 @@ import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTria
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
+import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
+import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
@@ -105,6 +107,7 @@ import { setItem as setItemUC } from '../../shared/src/business/useCases/setItem
 import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { signDocument } from '../../shared/src/proxies/documents/signDocumentProxy';
 import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -119,6 +122,7 @@ import { validateExternalDocument } from '../../shared/src/business/useCases/ext
 import { validateExternalDocumentInformation } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
+import { validateOrderWithoutBody } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
@@ -130,8 +134,6 @@ import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfPro
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
-
-const jsPDF = process.env.IS_TEST ? {} : require('jspdf');
 
 const MINUTES = 60 * 1000;
 
@@ -171,6 +173,7 @@ const allUseCases = {
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
   generatePDFFromPNGData,
+  generateSignedDocument,
   getCalendaredCasesForTrialSession,
   getCase,
   getCaseTypes,
@@ -196,6 +199,9 @@ const allUseCases = {
   getUser,
   getUsersInSection,
   getWorkItem,
+  getWorkItemsBySection,
+  getWorkItemsForUser,
+  loadPDFForSigning,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
   removeItem: removeItemUC,
@@ -207,6 +213,7 @@ const allUseCases = {
   setTrialSessionAsSwingSession,
   setTrialSessionCalendar,
   setWorkItemAsRead,
+  signDocument,
   submitCaseAssociationRequest,
   submitPendingCaseAssociationRequest,
   updateCase,
@@ -220,6 +227,7 @@ const allUseCases = {
   validateExternalDocumentInformation,
   validateForwardMessage,
   validateInitialWorkItemMessage,
+  validateOrderWithoutBody,
   validatePdf,
   validatePetition,
   validatePetitionFromPaper,
@@ -259,7 +267,7 @@ const applicationContext = {
   },
   getConstants: () => ({
     BUSINESS_TYPES,
-    CASE_CAPTION_POSTFIX,
+    CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
     CATEGORIES,
     CATEGORY_MAP,
     CHAMBERS_SECTION,
@@ -270,6 +278,7 @@ const applicationContext = {
     INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
     MAX_FILE_SIZE_MB,
+    ORDER_TYPES_MAP: Order.ORDER_TYPES,
     OTHER_TYPES,
     PARTY_TYPES,
     REFRESH_INTERVAL: 20 * MINUTES,
@@ -279,7 +288,7 @@ const applicationContext = {
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
-    STATUS_TYPES,
+    STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES,
   }),
   getCurrentUser,
@@ -288,12 +297,13 @@ const applicationContext = {
     Case,
     CaseAssociationRequestFactory,
     CaseExternal,
+    CaseInternal,
     DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
-    PetitionFromPaper,
+    OrderWithoutBody,
     TrialSession,
   }),
   getError: e => {
@@ -324,7 +334,6 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
-      generatePdfUrl: generatePdfUrlFactory(jsPDF),
       isStringISOFormatted,
       prepareDateFromString,
     };

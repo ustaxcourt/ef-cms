@@ -4,6 +4,8 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 
 export const documentDetailHelper = (get, applicationContext) => {
+  let showSignDocumentButton = false;
+  const currentUser = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
 
   const documentId = get(state.documentId);
@@ -30,6 +32,15 @@ export const documentDetailHelper = (get, applicationContext) => {
         );
         return formatted;
       });
+
+    const stipulatedWorkItem = formattedDocument.workItems.find(
+      workItem =>
+        workItem.document.documentType === 'Proposed Stipulated Decision' &&
+        workItem.assigneeId === currentUser.userId &&
+        !workItem.completedAt,
+    );
+
+    showSignDocumentButton = !!stipulatedWorkItem;
   }
 
   const formattedDocumentIsPetition =
@@ -48,5 +59,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCaseDetailsEdit,
     showCaseDetailsView,
     showDocumentInfoTab,
+    showSignDocumentButton,
   };
 };

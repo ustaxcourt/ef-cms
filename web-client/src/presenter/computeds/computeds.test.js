@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
   formattedCases as formattedCasesComputed,
@@ -30,7 +30,7 @@ describe('formatted case details computed', () => {
           petitioners: [{ name: 'bob' }],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {},
       },
@@ -58,7 +58,7 @@ describe('formatted case details computed', () => {
           },
         ],
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
       },
     });
@@ -76,7 +76,7 @@ describe('formatted case details computed', () => {
           },
         ],
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
       },
     });

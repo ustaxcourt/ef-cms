@@ -20,6 +20,7 @@ exports.createCourtIssuedOrderPdfFromHtml = ({
       },
       {
         headers: {
+          Accept: 'application/pdf',
           Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
         },
         responseType: 'blob',
