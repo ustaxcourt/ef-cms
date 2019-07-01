@@ -5,8 +5,8 @@ describe('OrderWithoutBody', () => {
     it('returns true if required fields are passed in', () => {
       expect(
         new OrderWithoutBody({
-          orderTitle: 'Order to Eat Cake',
-          orderType: 'Order',
+          documentTitle: 'Order to Eat Cake',
+          documentType: 'Order',
         }).isValid(),
       ).toBeTruthy();
     });
