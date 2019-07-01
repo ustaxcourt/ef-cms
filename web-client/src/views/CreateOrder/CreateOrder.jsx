@@ -16,6 +16,7 @@ export const CreateOrder = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.showModal,
+    submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
@@ -24,6 +25,7 @@ export const CreateOrder = connect(
     formCancelToggleCancelSequence,
     pdfPreviewUrl,
     showModal,
+    submitCourtIssuedOrderSequence,
     updateFormValueSequence,
   }) => {
     return (
@@ -72,7 +74,17 @@ export const CreateOrder = connect(
 
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
-                <button className="usa-button">Complete Order</button>
+                <button
+                  className="usa-button"
+                  onClick={() => {
+                    console.log(
+                      'submitCourtIssuedOrderSequence Sdfs hgs  gh df',
+                    );
+                    submitCourtIssuedOrderSequence();
+                  }}
+                >
+                  Complete Order
+                </button>
                 <button
                   className="usa-button usa-button--unstyled margin-left-2"
                   onClick={() => {
