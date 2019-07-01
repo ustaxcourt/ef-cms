@@ -91,8 +91,6 @@ import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTria
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -199,8 +197,6 @@ const allUseCases = {
   getUser,
   getUsersInSection,
   getWorkItem,
-  getWorkItemsBySection,
-  getWorkItemsForUser,
   loadPDFForSigning,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
