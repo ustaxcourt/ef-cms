@@ -4,7 +4,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-// do we need the abbreviations?
 const ORDER_TYPES = {
   O: 'Order',
   ODJ: 'Order of Dismissal for Lack of Jurisdiction',
