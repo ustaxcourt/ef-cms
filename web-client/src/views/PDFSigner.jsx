@@ -112,6 +112,17 @@ class PDFSignerComponent extends React.Component {
           <div className="grid-row">
             <div className="grid-col-12">
               <div className="grid-row">
+                <div className="grid-col-3">
+                  <PDFSignerToolbar
+                    applySignature={this.start}
+                    clearSignature={this.clear}
+                  />
+                  <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
+                  <PDFSignerMessage />
+                </div>
+
+                <div className="grid-col-1"></div>
+
                 <div className="grid-col-8">
                   <h2>Proposed Stipulated Decision</h2>
                   <div className="sign-pdf-interface">
@@ -126,15 +137,6 @@ class PDFSignerComponent extends React.Component {
                     </span>
                     <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
                   </div>
-                </div>
-                <div className="grid-col-1"></div>
-                <div className="grid-col-3">
-                  <PDFSignerToolbar
-                    applySignature={this.start}
-                    clearSignature={this.clear}
-                  />
-                  <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
-                  <PDFSignerMessage />
                 </div>
               </div>
             </div>
