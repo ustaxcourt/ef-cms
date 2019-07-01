@@ -10,6 +10,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -108,6 +109,9 @@ provider:
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
+  apiGateway:
+    binaryMediaTypes:
+      - 'application/pdf'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -277,6 +281,18 @@ functions:
           method: post
           cors: true
           # async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  signDocument:
+    handler: src/handlers.signDocumentLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/documents/{documentId}/sign
+          method: post
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -841,6 +857,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCourtIssuedOrderPdfFromHtml:
+    runtime: nodejs8.10
     handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
@@ -851,6 +868,7 @@ functions:
           path: v1/court-issued-order
           method: post
           cors: true
+          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

@@ -5,7 +5,6 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
-const { STATUS_TYPES } = require('../entities/cases/Case');
 const { User } = require('../entities/User');
 
 describe('Update case trial sort tags', () => {
@@ -43,7 +42,7 @@ describe('Update case trial sort tags', () => {
   });
 
   it('calls persistence if case status is ready for trial', async () => {
-    mockCase.status = STATUS_TYPES.generalDocketReadyForTrial;
+    mockCase.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
     await updateCaseTrialSortTags({
       applicationContext,
       caseId: mockCase.caseId,

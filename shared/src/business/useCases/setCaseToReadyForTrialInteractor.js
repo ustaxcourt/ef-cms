@@ -2,7 +2,7 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case, STATUS_TYPES } = require('../entities/cases/Case');
+const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -32,7 +32,7 @@ exports.setCaseToReadyForTrial = async ({ applicationContext, caseId }) => {
 
   const caseEntity = new Case(caseToUpdate);
 
-  caseEntity.status = STATUS_TYPES.generalDocketReadyForTrial;
+  caseEntity.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()

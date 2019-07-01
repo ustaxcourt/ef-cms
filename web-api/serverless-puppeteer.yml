@@ -15,9 +15,12 @@ provider:
 layers:
   puppeteer:
     name: ${self:provider.stage}-puppeteer
+    description: Chrome headless binary provided via chrome-aws-lambda and puppeteer-core for interaction.
     compatibleRuntimes:
-      - nodejs10.x
+      - nodejs8.10
     path: runtimes/puppeteer
     package:
       exclude:
         - puppeteer_lambda_layer.tar.gz
+    allowedAccounts: # optional, a list of AWS account IDs allowed to access this layer.
+      - '*'

@@ -1,8 +1,10 @@
 const sinon = require('sinon');
 const uuid = require('uuid');
-const { CaseExternal } = require('../entities/CaseExternal');
+const {
+  CaseExternalIncomplete,
+} = require('../entities/cases/CaseExternalIncomplete');
+const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { createCase } = require('./createCaseInteractor');
-const { PetitionWithoutFiles } = require('../entities/PetitionWithoutFiles');
 const { User } = require('../entities/User');
 
 describe('createCase', () => {
@@ -34,7 +36,7 @@ describe('createCase', () => {
         });
       },
       getEntityConstructors: () => ({
-        CaseExternal: PetitionWithoutFiles,
+        CaseExternal: CaseExternalIncomplete,
       }),
       getPersistenceGateway: () => {
         return {
