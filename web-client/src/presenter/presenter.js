@@ -95,6 +95,7 @@ import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAsso
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
+import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -255,6 +256,7 @@ export const presenter = {
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,
+    submitCreateOrderModalSequence,
     submitDocketEntrySequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
