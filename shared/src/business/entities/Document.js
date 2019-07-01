@@ -1,5 +1,7 @@
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
+const { Order } = require('./orders/Order');
+const { ORDER_TYPES } = Order;
 
 const joi = require('joi-browser');
 const {
@@ -90,10 +92,12 @@ Document.getDocumentTypes = () => {
     ...Object.values(documentMapInternal),
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
+  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
   const documentTypes = [
     ...Object.values(Document.initialDocumentTypes),
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
+    ...orderDocTypes,
   ];
 
   return documentTypes;
