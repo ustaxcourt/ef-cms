@@ -1,15 +1,14 @@
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../withAppContext';
-
-import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
+import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
 import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   caseDetail: MOCK_CASE,
   constants: {
-    CATEGORY_MAP,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
     PARTY_TYPES,
   },
   form: {},

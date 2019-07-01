@@ -1,7 +1,3 @@
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
@@ -71,8 +67,8 @@ describe('Taxpayer files document', () => {
 
     test.setState('constants', {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CATEGORIES,
-      CATEGORY_MAP,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
       COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       PARTY_TYPES,
