@@ -18,7 +18,7 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const statusMap = {
+Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
   generalDocket: 'General Docket - Not at Issue',
@@ -27,12 +27,8 @@ const statusMap = {
   recalled: 'Recalled',
 };
 
-exports.STATUS_TYPES = statusMap;
-
 Case.ANSWER_CUTOFF_AMOUNT = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
-
-const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 Case.CASE_TYPES = [
   'Deficiency',
@@ -64,6 +60,8 @@ Case.FILING_TYPES = {
 };
 
 Case.CASE_CAPTION_POSTFIX = 'v. Commissioner of Internal Revenue, Respondent';
+
+const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
  * Case Entity
@@ -108,7 +106,7 @@ function Case(rawCase) {
     procedureType: rawCase.procedureType,
     receivedAt: rawCase.receivedAt,
     respondents: rawCase.respondents || [],
-    status: rawCase.status || statusMap.new,
+    status: rawCase.status || Case.STATUS_TYPES.new,
     trialDate: rawCase.trialDate,
     trialJudge: rawCase.trialJudge,
     trialLocation: rawCase.trialLocation,
@@ -155,7 +153,7 @@ function Case(rawCase) {
     this.practitioners = [];
   }
 
-  const isNewCase = this.status === statusMap.new;
+  const isNewCase = this.status === Case.STATUS_TYPES.new;
 
   if (!isNewCase) {
     this.updateDocketNumberRecord();
@@ -253,7 +251,7 @@ joiValidationDecorator(
     respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.keys(statusMap).map(key => statusMap[key]))
+      .valid(Object.keys(Case.STATUS_TYPES).map(key => Case.STATUS_TYPES[key]))
       .optional(),
     trialDate: joi
       .date()
@@ -456,7 +454,7 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
-  this.status = statusMap.generalDocket;
+  this.status = Case.STATUS_TYPES.generalDocket;
   this.documents.forEach(document => {
     document.status = 'served';
   });
@@ -552,12 +550,12 @@ Case.prototype.updateDocketNumberRecord = function() {
  * @returns {Case}
  */
 Case.prototype.sendToIRSHoldingQueue = function() {
-  this.status = statusMap.batchedForIRS;
+  this.status = Case.STATUS_TYPES.batchedForIRS;
   return this;
 };
 
 Case.prototype.recallFromIRSHoldingQueue = function() {
-  this.status = statusMap.recalled;
+  this.status = Case.STATUS_TYPES.recalled;
   return this;
 };
 
@@ -741,7 +739,8 @@ Case.prototype.checkForReadyForTrial = function() {
     Case.ANSWER_CUTOFF_UNIT,
   );
 
-  const isCaseGeneralDocketNotAtIssue = this.status === statusMap.generalDocket;
+  const isCaseGeneralDocketNotAtIssue =
+    this.status === Case.STATUS_TYPES.generalDocket;
 
   if (isCaseGeneralDocketNotAtIssue) {
     this.documents.forEach(document => {
@@ -756,7 +755,7 @@ Case.prototype.checkForReadyForTrial = function() {
       );
 
       if (isAnswerDocument && docFiledBeforeCutoff) {
-        this.status = statusMap.generalDocketReadyForTrial;
+        this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
       }
     });
   }
@@ -830,7 +829,7 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialTime = trialSessionEntity.startTime;
   this.trialJudge = trialSessionEntity.judge;
   this.trialLocation = trialSessionEntity.trialLocation;
-  this.status = statusMap.calendared;
+  this.status = Case.STATUS_TYPES.calendared;
   return this;
 };
 

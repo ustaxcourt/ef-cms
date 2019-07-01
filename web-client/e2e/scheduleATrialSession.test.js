@@ -3,10 +3,7 @@ import {
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-import {
-  Case,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
 import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
@@ -90,7 +87,7 @@ describe('Schedule A Trial Session', () => {
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP,
       PARTY_TYPES,
-      STATUS_TYPES,
+      STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES,
     });
   });

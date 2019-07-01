@@ -10,10 +10,7 @@ import {
   CATEGORY_MAP,
   INTERNAL_CATEGORY_MAP,
 } from '../../shared/src/business/entities/Document';
-import {
-  Case,
-  STATUS_TYPES,
-} from '../../shared/src/business/entities/cases/Case';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { Document } from '../../shared/src/business/entities/Document';
 import {
   createISODateString,
@@ -268,7 +265,7 @@ const applicationContext = {
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
-    STATUS_TYPES,
+    STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES,
   }),
   getCurrentUser,
