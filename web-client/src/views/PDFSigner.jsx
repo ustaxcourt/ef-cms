@@ -61,9 +61,12 @@ class PDFSignerComponent extends React.Component {
     this.props.setSignatureData({ signatureData: null });
   }
 
-  stop(canvasEl, x, y, scale = 1) {
+  stop(canvasEl, sigEl, x, y, scale = 1) {
     this.props.setSignatureData({ signatureData: { scale, x, y } });
     canvasEl.onmousemove = null;
+    canvasEl.onmousedown = null;
+    sigEl.onmousemove = null;
+    sigEl.onmousedown = null;
   }
 
   start() {
@@ -96,12 +99,13 @@ class PDFSignerComponent extends React.Component {
     };
 
     canvasEl.onmousedown = () => {
-      this.stop(canvasEl, x, y);
+      this.stop(canvasEl, sigEl, x, y);
     };
 
-    sigEl.onmousedown = () => {
-      this.stop(canvasEl, x, y);
-    };
+    // sometimes the cursor falls on top of the signature
+    // and catches these events
+    sigEl.onmousemove = canvasEl.onmousemove;
+    sigEl.onmousedown = canvasEl.onmousedown;
   }
 
   render() {
