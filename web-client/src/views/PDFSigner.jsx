@@ -111,20 +111,41 @@ class PDFSignerComponent extends React.Component {
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <div className="grid-row">
-                <div className="grid-col-3">
-                  <PDFSignerToolbar
-                    applySignature={this.start}
-                    clearSignature={this.clear}
-                  />
-                  <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
-                  <PDFSignerMessage />
+              <h1>Proposed Stipulated Decision</h1>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-4">
+                  <div className="blue-container">
+                    <PDFSignerToolbar
+                      applySignature={this.start}
+                      clearSignature={this.clear}
+                      signatureApplied={this.state.signatureApplied}
+                    />
+                    <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
+                    <PDFSignerMessage />
+                  </div>
+                  <div className="margin-top-2">
+                    <button
+                      className="usa-button"
+                      disabled={!this.props.signatureData}
+                      onClick={() => this.props.completeSigning()}
+                    >
+                      Save & Send
+                    </button>
+                    <button
+                      className="usa-button usa-button--unstyled margin-left-2"
+                      onClick={() =>
+                        this.props.cancel({
+                          docketNumber: this.props.docketNumber,
+                          documentId: this.props.documentId,
+                        })
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid-col-1"></div>
-
                 <div className="grid-col-8">
-                  <h2>Proposed Stipulated Decision</h2>
                   <div className="sign-pdf-interface">
                     <span
                       id="signature"
@@ -139,28 +160,6 @@ class PDFSignerComponent extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="grid-row">
-            <div className="grid-col-12 margin-top-2">
-              <button
-                className="usa-button"
-                disabled={!this.props.signatureData}
-                onClick={() => this.props.completeSigning()}
-              >
-                Save
-              </button>
-              <button
-                className="usa-button usa-button--unstyled margin-left-2"
-                onClick={() =>
-                  this.props.cancel({
-                    docketNumber: this.props.docketNumber,
-                    documentId: this.props.documentId,
-                  })
-                }
-              >
-                Cancel
-              </button>
             </div>
           </div>
         </section>
