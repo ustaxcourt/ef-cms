@@ -13,17 +13,21 @@ export const createCourtIssuedOrderPdfFromHtmlAction = ({
   get,
 }) => {
   const htmlString = get(state.form.richText);
+  const documentTitle = get(state.form.documentTitle);
 
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
 
-  let pdfUrl = applicationContext
+  let pdfBlob = applicationContext
     .getUseCases()
     .createCourtIssuedOrderPdfFromHtml({
       applicationContext,
       htmlString,
     });
 
-  return { pdfUrl };
+  return {
+    pdfFile: new File([pdfBlob], documentTitle),
+    pdfUrl: window.URL.createObjectURL(pdfBlob),
+  };
 };
