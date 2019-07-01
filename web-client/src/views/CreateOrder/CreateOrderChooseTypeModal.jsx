@@ -11,7 +11,7 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
       cancelLabel: 'Cancel',
       classNames: '',
       confirmLabel: 'Continue',
-      title: 'Select Order Type',
+      title: 'Create Order',
     };
   }
   renderBody() {
@@ -20,19 +20,19 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
         <div
           className={
             'usa-form-group ' +
-            (this.props.validationErrors.orderType
+            (this.props.validationErrors.eventCode
               ? 'usa-form-group--error'
               : '')
           }
         >
-          <label className="usa-label" htmlFor="orderType">
-            Order Type
+          <label className="usa-label" htmlFor="eventCode">
+            Select Order Type
           </label>
 
           <select
             className="usa-select"
-            id="orderType"
-            name="orderType"
+            id="eventCode"
+            name="eventCode"
             onChange={e => {
               this.props.updateFormValue({
                 key: e.target.name,
@@ -47,13 +47,13 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
               </option>
             ))}
           </select>
-          {this.props.validationErrors.orderType && (
+          {this.props.validationErrors.eventCode && (
             <div className="usa-error-message beneath">
-              {this.props.validationErrors.orderType}
+              {this.props.validationErrors.eventCode}
             </div>
           )}
         </div>
-        {this.props.form.orderType == 'O' && (
+        {this.props.form.eventCode == 'O' && (
           <div
             className={
               'usa-form-group ' +
@@ -63,7 +63,7 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
             }
           >
             <label className="usa-label" htmlFor="orderTitle">
-              Add Message
+              Order Title
             </label>
             <input
               className="usa-input"
