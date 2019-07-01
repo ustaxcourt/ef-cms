@@ -35,8 +35,10 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
             name="eventCode"
             onChange={e => {
               this.props.updateFormValue({
-                eventCode: e.target.value,
+                key: e.target.name,
+                value: e.target.value,
               });
+              this.props.validateSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -59,29 +61,30 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
           <div
             className={
               'usa-form-group ' +
-              (this.props.validationErrors.orderTitle
+              (this.props.validationErrors.documentTitle
                 ? 'usa-form-group--error'
                 : '')
             }
           >
-            <label className="usa-label" htmlFor="orderTitle">
+            <label className="usa-label" htmlFor="documentTitle">
               Order Title
             </label>
             <input
               className="usa-input"
-              id="orderTitle"
-              name="orderTitle"
+              id="documentTitle"
+              name="documentTitle"
               type="text"
               onChange={e => {
                 this.props.updateFormValue({
                   key: e.target.name,
                   value: e.target.value,
                 });
+                this.props.validateSequence();
               }}
             />
-            {this.props.validationErrors.orderTitle && (
+            {this.props.validationErrors.documentTitle && (
               <div className="usa-error-message beneath">
-                {this.props.validationErrors.orderTitle}
+                {this.props.validationErrors.documentTitle}
               </div>
             )}
           </div>
@@ -99,6 +102,7 @@ export const CreateOrderChooseTypeModal = connect(
     form: state.form,
     modal: state.modal,
     updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
+    validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
   },
   CreateOrderChooseTypeModalComponent,

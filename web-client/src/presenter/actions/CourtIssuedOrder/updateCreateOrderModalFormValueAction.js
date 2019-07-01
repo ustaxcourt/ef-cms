@@ -13,20 +13,33 @@ export const updateCreateOrderModalFormValueAction = ({
   props,
   store,
 }) => {
-  const { eventCode } = props;
-  if (eventCode) {
-    store.set(state.form.eventCode, eventCode);
+  const { key, value } = props;
+  if (key === 'eventCode') {
+    if (value) {
+      const eventCode = value;
+      store.set(state.form.eventCode, eventCode);
 
-    const { ORDER_TYPES_MAP } = get(state.constants);
+      const { ORDER_TYPES_MAP } = get(state.constants);
 
-    const entry = ORDER_TYPES_MAP.find(item => {
-      return item.eventCode === eventCode;
-    });
-    store.set(state.form.documentType, entry.documentType);
-    store.set(state.form.documentTitle, entry.documentTitle);
-  } else {
-    store.unset(state.form.eventCode);
-    store.unset(state.form.documentType);
-    store.unset(state.form.documentTitle);
+      const entry = ORDER_TYPES_MAP.find(item => {
+        return item.eventCode === eventCode;
+      });
+      store.set(state.form.documentType, entry.documentType);
+      if (eventCode !== 'O') {
+        store.set(state.form.documentTitle, entry.documentTitle);
+      } else {
+        store.unset(state.form.documentTitle);
+      }
+    } else {
+      store.unset(state.form.eventCode);
+      store.unset(state.form.documentType);
+      store.unset(state.form.documentTitle);
+    }
+  } else if (key === 'documentTitle') {
+    if (value) {
+      store.set(state.form.documentTitle, value);
+    } else {
+      store.unset(state.form.documentTitle);
+    }
   }
 };
