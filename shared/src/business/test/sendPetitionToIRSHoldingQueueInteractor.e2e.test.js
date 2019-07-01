@@ -9,17 +9,23 @@ const {
   createWorkItem,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
-  getSentWorkItemsForSection,
-} = require('../useCases/workitems/getSentWorkItemsForSectionInteractor');
+  getDocumentQCBatchedForSection,
+} = require('../useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
-  getSentWorkItemsForUser,
-} = require('../useCases/workitems/getSentWorkItemsForUserInteractor');
+  getDocumentQCBatchedForUser,
+} = require('../useCases/workitems/getDocumentQCBatchedForUserInteractor');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
+const {
+  getInboxMessagesForSection,
+} = require('../useCases/workitems/getInboxMessagesForSectionInteractor');
+const {
+  getInboxMessagesForUser,
+} = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
@@ -77,7 +83,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     };
 
     // verify work item in petitions section inbox
-    const petitionSectionInbox = await getWorkItemsBySection({
+    const petitionSectionInbox = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'petitions',
     });
@@ -119,8 +125,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       assigneeName: 'Test Petitionsclerk',
       workItemId,
     });
-    const petitionsUserInbox = await getWorkItemsForUser({
+    const petitionsUserInbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
 
     expect(petitionsUserInbox).toMatchObject([
@@ -167,8 +174,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
-    const docketclerkUserInbox = await getWorkItemsForUser({
+    const docketclerkUserInbox = await getInboxMessagesForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(docketclerkUserInbox).toMatchObject([
       {
@@ -194,7 +202,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const docketSectionInbox = await getWorkItemsBySection({
+    const docketSectionInbox = await getInboxMessagesForSection({
       applicationContext,
       section: 'docket',
     });
@@ -241,13 +249,16 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       caseId,
     });
 
-    const petitionsclerkInboxAfterIRSHoldingQueue = await getWorkItemsForUser({
-      applicationContext,
-    });
+    const petitionsclerkInboxAfterIRSHoldingQueue = await getDocumentQCInboxForUser(
+      {
+        applicationContext,
+        userId: applicationContext.getCurrentUser().userId,
+      },
+    );
 
     expect(petitionsclerkInboxAfterIRSHoldingQueue).toEqual([]);
 
-    const petitionSectionInboxAfterIRSHoldingQueue = await getWorkItemsBySection(
+    const petitionSectionInboxAfterIRSHoldingQueue = await getDocumentQCInboxForSection(
       {
         applicationContext,
         section: 'petitions',
@@ -255,7 +266,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     );
     expect(petitionSectionInboxAfterIRSHoldingQueue).toEqual([]);
 
-    const petitionsclerkOutboxAfterIRSHoldingQueue = await getSentWorkItemsForUser(
+    const petitionsclerkOutboxAfterIRSHoldingQueue = await getDocumentQCBatchedForUser(
       {
         applicationContext,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -303,7 +314,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const petitionsSectionOutboxAfterIRSHoldingQueue = await getSentWorkItemsForSection(
+    const petitionsSectionOutboxAfterIRSHoldingQueue = await getDocumentQCBatchedForSection(
       {
         applicationContext,
         section: 'petitions',
@@ -358,8 +369,9 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
-    const docketClerkInboxAfterIRSQueue = await getWorkItemsForUser({
+    const docketClerkInboxAfterIRSQueue = await getInboxMessagesForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
 
     expect(docketClerkInboxAfterIRSQueue).toMatchObject([
@@ -389,7 +401,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const docketSectionInboxAfterIRSQueue = await getWorkItemsBySection({
+    const docketSectionInboxAfterIRSQueue = await getInboxMessagesForSection({
       applicationContext,
       section: 'docket',
     });

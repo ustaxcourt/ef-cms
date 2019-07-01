@@ -196,18 +196,6 @@ const {
   getSentMessagesForUser: getSentMessagesForUserUC
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
-  getSentWorkItemsForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
-const {
-  getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
-} = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
-const {
-  getSentWorkItemsForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
-const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserUC,
-} = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
-const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
@@ -240,18 +228,6 @@ const {
 const {
   getWorkItemById,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
-const {
-  getWorkItemsBySection,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
-const {
-  getWorkItemsBySection: getWorkItemsBySectionUC,
-} = require('../../shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
-const {
-  getWorkItemsForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
-const {
-  getWorkItemsForUser: getWorkItemsForUserUC,
-} = require('../../shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
@@ -453,17 +429,12 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getSentMessagesForSection,
         getSentMessagesForUser,
-        getSentWorkItemsForSection,
-        getSentWorkItemsForUser,
         getTrialSessionById,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
-      
         getWorkItemById,
-        getWorkItemsBySection,
-        getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
@@ -528,15 +499,11 @@ module.exports = (appContextUser = {}) => {
         getNotifications,
         getSentMessagesForSection: getSentMessagesForSectionUC,
         getSentMessagesForUser: getSentMessagesForUserUC,
-        getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
-        getSentWorkItemsForUser: getSentWorkItemsForUserUC,
         getTrialSessionDetails,
         getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,
         getWorkItem,
-        getWorkItemsBySection: getWorkItemsBySectionUC,
-        getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sanitizePdf: args =>

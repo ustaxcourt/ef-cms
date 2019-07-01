@@ -87,15 +87,11 @@ import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedu
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
 import { getSentMessagesForSection } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
-import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
-import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
 import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
@@ -195,15 +191,11 @@ const allUseCases = {
   getProcedureTypes,
   getSentMessagesForSection,
   getSentMessagesForUser,
-  getSentWorkItemsForSection,
-  getSentWorkItemsForUser,
   getTrialSessionDetails,
   getTrialSessions,
   getUser,
   getUsersInSection,
   getWorkItem,
-  getWorkItemsBySection,
-  getWorkItemsForUser,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
   removeItem: removeItemUC,

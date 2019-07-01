@@ -39,10 +39,6 @@ module.exports = {
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
   getSentMessagesForSectionLambda: require('./workitems/getSentMessagesForSectionLambda').handler,
   getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda').handler,
-  getSentWorkItemsForSectionLambda: require('./workitems/getSentWorkItemsForSectionLambda')
-    .handler,
-  getSentWorkItemsForUserLambda: require('./workitems/getSentWorkItemsForUserLambda')
-    .handler,
   getTrialSessionDetailsLambda: require('./trialSessions/getTrialSessionDetailsLambda')
     .handler,
   getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
@@ -50,10 +46,6 @@ module.exports = {
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,
   getUsersInSectionLambda: require('./users/getUsersInSectionLambda').handler,
   getWorkItemLambda: require('./workitems/getWorkItemLambda').handler,
-  getWorkItemsBySectionLambda: require('./workitems/getWorkItemsBySectionLambda')
-    .handler,
-  getWorkItemsForUserLambda: require('./workitems/getWorkItemsForUserLambda')
-    .handler,
   practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
     .handler,
   practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')

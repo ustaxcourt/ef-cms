@@ -57,7 +57,6 @@ import { openCreateMessageModalSequence } from './sequences/openCreateMessageMod
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
-import { refreshSectionInboxCountSequence } from './sequences/refreshSectionInboxCountSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -211,7 +210,6 @@ export const presenter = {
     openSetCalendarModalSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
-    refreshSectionInboxCountSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,

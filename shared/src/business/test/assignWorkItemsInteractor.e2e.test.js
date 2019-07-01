@@ -6,8 +6,8 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -77,8 +77,9 @@ describe('assignWorkItemsInteractor integration test', () => {
       d => d.documentType === 'Petition',
     ).workItems[0];
 
-    let inbox = await getWorkItemsForUser({
+    let inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toEqual([]);
 
@@ -88,8 +89,9 @@ describe('assignWorkItemsInteractor integration test', () => {
       assigneeName: 'richard',
       workItemId: workItem.workItemId,
     });
-    inbox = await getWorkItemsForUser({
+    inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toMatchObject([
       {

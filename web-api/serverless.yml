@@ -543,42 +543,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  # getSentWorkItemsForSection:
-  #   handler: src/handlers.getSentWorkItemsForSectionLambda
-  #   events:
-  #     - http:
-  #         path: v1/sections/{section}/outbox
-  #         method: get
-  #         cors: true
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # getWorkItemsBySection:
-  #   handler: src/handlers.getWorkItemsBySectionLambda
-  #   events:
-  #     - http:
-  #         path: v1/sections/{section}/inbox
-  #         method: get
-  #         cors: true
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
-  # getSentWorkItemsForUser:
-  #   handler: src/handlers.getSentWorkItemsForUserLambda
-  #   events:
-  #     - http:
-  #         path: v1/users/{userId}/outbox
-  #         method: get
-  #         cors: true
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
-
   getInboxMessagesForUser:
     handler: src/handlers.getInboxMessagesForUserLambda
     events:
@@ -699,18 +663,6 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
-  # getWorkItemsForUser:
-  #   handler: src/handlers.getWorkItemsForUserLambda
-  #   events:
-  #     - http:
-  #         path: v1/users/{userId}/inbox
-  #         method: get
-  #         cors: true
-  #         authorizer:
-  #           type: COGNITO_USER_POOLS
-  #           authorizerId:
-  #             Ref: ApiGatewayAuthorizer
 
   getInternalUsers:
     handler: src/handlers.getInternalUsersLambda
