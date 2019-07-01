@@ -1006,8 +1006,11 @@ nav.usa-nav {
 }
 
 .sign-pdf-interface {
+  position: relative;
+  padding: 30px 0;
+  background-color: color($theme-color-base);
   #signature {
-    position: fixed;
+    position: absolute;
   }
   #sign-pdf-canvas {
     display: block;

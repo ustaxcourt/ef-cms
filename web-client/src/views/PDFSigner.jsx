@@ -74,19 +74,25 @@ class PDFSignerComponent extends React.Component {
 
     this.setState({ signatureApplied: true });
 
-    // clear current signature data
     this.props.setSignatureData({ signatureData: null });
 
     canvasEl.onmousemove = e => {
       const { pageX, pageY } = e;
       const canvasBounds = canvasEl.getBoundingClientRect();
-      const offsetLeft = canvasBounds.x;
-      const offsetTop = canvasBounds.y;
+      const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+      const scrollYOffset = window.scrollY;
 
-      x = pageX - offsetLeft;
-      y = pageY - offsetTop;
+      x = pageX - canvasBounds.x;
+      y = pageY - canvasBounds.y - scrollYOffset;
 
-      this.moveSig(sigEl, pageX, pageY);
+      const uiPosX = pageX - sigParentBounds.x;
+      const uiPosY =
+        pageY -
+        canvasBounds.y -
+        scrollYOffset +
+        (canvasBounds.y - sigParentBounds.y);
+
+      this.moveSig(sigEl, uiPosX, uiPosY);
     };
 
     canvasEl.onmousedown = () => {
