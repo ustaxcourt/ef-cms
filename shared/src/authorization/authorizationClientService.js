@@ -36,6 +36,7 @@ const AUTHORIZATION_MAP = {
     exports.START_PAPER_CASE,
     exports.GET_READ_MESSAGES,
     exports.TRIAL_SESSIONS,
+    exports.FILE_EXTERNAL_DOCUMENT,
   ],
 
   practitioner: [
