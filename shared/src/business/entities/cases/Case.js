@@ -29,12 +29,12 @@ const statusMap = {
 
 exports.STATUS_TYPES = statusMap;
 
-exports.ANSWER_CUTOFF_AMOUNT = 45;
-exports.ANSWER_CUTOFF_UNIT = 'day';
+Case.ANSWER_CUTOFF_AMOUNT = 45;
+Case.ANSWER_CUTOFF_UNIT = 'day';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
-const CASE_TYPES = [
+Case.CASE_TYPES = [
   'Deficiency',
   'CDP (Lien/Levy)',
   'Innocent Spouse',
@@ -653,14 +653,6 @@ Case.prototype.updateDocketRecord = function(
 };
 
 /**
- *
- * @returns {Array}
- */
-Case.getCaseTypes = () => {
-  return CASE_TYPES;
-};
-
-/**
  * isValidCaseId
  * @param caseId
  * @returns {*|boolean}
@@ -745,8 +737,8 @@ Case.prototype.checkForReadyForTrial = function() {
   ];
 
   let docFiledCutoffDate = moment().subtract(
-    exports.ANSWER_CUTOFF_AMOUNT,
-    exports.ANSWER_CUTOFF_UNIT,
+    Case.ANSWER_CUTOFF_AMOUNT,
+    Case.ANSWER_CUTOFF_UNIT,
   );
 
   const isCaseGeneralDocketNotAtIssue = this.status === statusMap.generalDocket;
@@ -760,7 +752,7 @@ Case.prototype.checkForReadyForTrial = function() {
 
       const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
         docFiledCutoffDate,
-        exports.ANSWER_CUTOFF_UNIT,
+        Case.ANSWER_CUTOFF_UNIT,
       );
 
       if (isAnswerDocument && docFiledBeforeCutoff) {
