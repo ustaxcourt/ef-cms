@@ -29,6 +29,7 @@ module.exports = {
   getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda').handler,
   getDocumentQCInboxForSectionLambda: require('./workitems/getDocumentQCInboxForSectionLambda').handler,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda').handler,
+  getDocumentQCServedForSectionLambda: require('./workitems/getDocumentQCServedForSectionLambda').handler,
   getDocumentQCServedForUserLambda: require('./workitems/getDocumentQCServedForUserLambda').handler,
   getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
     .handler,

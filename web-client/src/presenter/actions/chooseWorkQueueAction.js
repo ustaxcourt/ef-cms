@@ -27,67 +27,69 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
 
   let queuePrefs = get(state.workQueueToDisplay);
   let workQueueIsInternal = get(state.workQueueIsInternal);
-  let workQueuePath = `${queuePrefs.queue}${queuePrefs.box}`;
+  let workQueuePath = `${workQueueIsInternal ? 'messages' : 'documentqc'}${
+    queuePrefs.queue
+  }${queuePrefs.box}`;
 
-  if (workQueueIsInternal && queuePrefs.queue === 'my') {
-    workQueuePath = `messages${workQueuePath}`;
-  }
+  // if (workQueueIsInternal && queuePrefs.queue === 'my') {
+  //   workQueuePath = `messages${workQueuePath}`;
+  // }
 
-  if (
-    workQueueIsInternal &&
-    queuePrefs.queue === 'section' &&
-    queuePrefs.box === 'inbox'
-  ) {
-    workQueuePath = `messages${workQueuePath}`;
-  }
+  // if (
+  //   workQueueIsInternal &&
+  //   queuePrefs.queue === 'section' &&
+  //   queuePrefs.box === 'inbox'
+  // ) {
+  //   workQueuePath = `messages${workQueuePath}`;
+  // }
 
-  if (
-    !workQueueIsInternal &&
-    queuePrefs.queue === 'my' &&
-    queuePrefs.box === 'inbox'
-  ) {
-    workQueuePath = `documentqc${workQueuePath}`;
-  }
+  // if (
+  //   !workQueueIsInternal &&
+  //   queuePrefs.queue === 'my' &&
+  //   queuePrefs.box === 'inbox'
+  // ) {
+  //   workQueuePath = `documentqc${workQueuePath}`;
+  // }
 
-  if (
-    !workQueueIsInternal &&
-    queuePrefs.queue === 'my' &&
-    queuePrefs.box === 'batched'
-  ) {
-    workQueuePath = `documentqc${workQueuePath}`;
-  }
+  // if (
+  //   !workQueueIsInternal &&
+  //   queuePrefs.queue === 'my' &&
+  //   queuePrefs.box === 'batched'
+  // ) {
+  //   workQueuePath = `documentqc${workQueuePath}`;
+  // }
 
-  if (
-    !workQueueIsInternal &&
-    queuePrefs.queue === 'my' &&
-    queuePrefs.box === 'outbox'
-  ) {
-    workQueuePath = `documentqc${workQueuePath}`;
-  }
+  // if (
+  //   !workQueueIsInternal &&
+  //   queuePrefs.queue === 'my' &&
+  //   queuePrefs.box === 'outbox'
+  // ) {
+  //   workQueuePath = `documentqc${workQueuePath}`;
+  // }
 
-  if (
-    !workQueueIsInternal &&
-    queuePrefs.queue === 'section' &&
-    queuePrefs.box === 'inbox'
-  ) {
-    workQueuePath = `documentqc${workQueuePath}`;
-  }
+  // if (
+  //   !workQueueIsInternal &&
+  //   queuePrefs.queue === 'section' &&
+  //   queuePrefs.box === 'inbox'
+  // ) {
+  //   workQueuePath = `documentqc${workQueuePath}`;
+  // }
 
-  if (
-    !workQueueIsInternal &&
-    queuePrefs.queue === 'section' &&
-    queuePrefs.box === 'batched'
-  ) {
-    workQueuePath = `documentqc${workQueuePath}`;
-  }
+  // if (
+  //   !workQueueIsInternal &&
+  //   queuePrefs.queue === 'section' &&
+  //   queuePrefs.box === 'batched'
+  // ) {
+  //   workQueuePath = `documentqc${workQueuePath}`;
+  // }
 
-  if (
-    !workQueueIsInternal &&
-    queuePrefs.queue === 'section' &&
-    queuePrefs.box === 'served'
-  ) {
-    workQueuePath = `documentqc${workQueuePath}`;
-  }
+  // if (
+  //   !workQueueIsInternal &&
+  //   queuePrefs.queue === 'section' &&
+  //   queuePrefs.box === 'served'
+  // ) {
+  //   workQueuePath = `documentqc${workQueuePath}`;
+  // }
 
   return path[workQueuePath]();
 };
