@@ -111,7 +111,7 @@ provider:
     serverSideEncryption: AES256
   apiGateway:
     binaryMediaTypes:
-      - '*/*'
+      - 'application/pdf'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
