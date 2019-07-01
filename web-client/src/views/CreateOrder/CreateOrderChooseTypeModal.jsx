@@ -94,7 +94,7 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
 export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.gotoCreateOrderSequence,
+    confirmSequence: sequences.submitCreateOrderModalSequence,
     constants: state.constants,
     form: state.form,
     modal: state.modal,
