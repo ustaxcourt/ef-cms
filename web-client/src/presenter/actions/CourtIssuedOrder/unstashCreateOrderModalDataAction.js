@@ -8,9 +8,9 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const unstashCreateOrderModalDataAction = ({ get, store }) => {
-  const documentTitle = get(state.screenMetadata.documentTitle);
-  const documentType = get(state.screenMetadata.documentType);
-  const eventCode = get(state.screenMetadata.eventCode);
+  const documentTitle = get(state.screenMetadata.orderData.documentTitle);
+  const documentType = get(state.screenMetadata.orderData.documentType);
+  const eventCode = get(state.screenMetadata.orderData.eventCode);
 
   if (documentTitle && documentType && eventCode) {
     store.set(state.form, {
