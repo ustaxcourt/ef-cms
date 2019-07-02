@@ -6,8 +6,8 @@ const {
   fileExternalDocument,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { createCase } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -418,7 +418,7 @@ describe('fileExternalDocument integration test', () => {
       });
     };
 
-    const workItems = await getWorkItemsBySection({
+    const workItems = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'docket',
     });

@@ -6,7 +6,7 @@ export default (test, adjustExpectedCountBy = 0) => {
     const helper = await runCompute(workQueueHelper, {
       state: test.getState(),
     });
-    if (test.petitionsClerkSectionDocumentQCInboxCount) {
+    if (test.petitionsClerkSectionDocumentQCInboxCount !== undefined) {
       expect(helper.inboxCount).toEqual(
         test.petitionsClerkSectionDocumentQCInboxCount + adjustExpectedCountBy,
       );

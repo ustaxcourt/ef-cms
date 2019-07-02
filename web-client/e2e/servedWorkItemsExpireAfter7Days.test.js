@@ -17,6 +17,10 @@ describe('verify old served work items do not show up in the outbox', () => {
   let workItem8Days;
   let caseDetail;
 
+  let workItemId6;
+  let workItemId7;
+  let workItemId8;
+
   beforeEach(async () => {
     jest.setTimeout(300000);
 
@@ -36,9 +40,9 @@ describe('verify old served work items do not show up in the outbox', () => {
     CREATED_7_DAYS_AGO.setDate(new Date().getDate() - 7);
     CREATED_6_DAYS_AGO.setDate(new Date().getDate() - 6);
 
-    const workItemId6 = applicationContext.getUniqueId();
-    const workItemId7 = applicationContext.getUniqueId();
-    const workItemId8 = applicationContext.getUniqueId();
+    workItemId6 = applicationContext.getUniqueId();
+    workItemId7 = applicationContext.getUniqueId();
+    workItemId8 = applicationContext.getUniqueId();
 
     workItem8Days = {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -113,18 +117,22 @@ describe('verify old served work items do not show up in the outbox', () => {
       item => item.docketNumber === caseDetail.docketNumber,
     );
     expect(myOutbox.length).toEqual(2);
-    expect(myOutbox).toMatchObject([
-      omit(workItem6Days, 'sentBySection'),
-      omit(workItem7Days, 'sentBySection'),
-    ]);
+    expect(
+      myOutbox.find(item => item.workItemId === workItemId6),
+    ).toBeDefined();
+    expect(
+      myOutbox.find(item => item.workItemId === workItemId7),
+    ).toBeDefined();
 
     const sectionOutbox = (await getFormattedDocumentQCSectionOutbox(
       test,
     )).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(sectionOutbox.length).toEqual(2);
-    expect(sectionOutbox).toMatchObject([
-      omit(workItem7Days, 'sentBySection'),
-      omit(workItem6Days, 'sentBySection'),
-    ]);
+    expect(
+      sectionOutbox.find(item => item.workItemId === workItemId6),
+    ).toBeDefined();
+    expect(
+      sectionOutbox.find(item => item.workItemId === workItemId7),
+    ).toBeDefined();
   });
 });
