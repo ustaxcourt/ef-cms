@@ -272,6 +272,7 @@ const applicationContext = {
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
     STATUS_TYPES: Case.STATUS_TYPES,
+    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,
