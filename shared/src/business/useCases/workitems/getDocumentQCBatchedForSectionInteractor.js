@@ -2,7 +2,10 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
+const { IRS_BATCH_SYSTEM_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const { Case } = require('../../entities/cases/Case');
 
 /**
  *
@@ -28,5 +31,9 @@ exports.getDocumentQCBatchedForSection = async ({
       section,
     });
 
-  return workItems;
+  return workItems.filter(
+    workItem =>
+      workItem.section === IRS_BATCH_SYSTEM_SECTION &&
+      workItem.caseStatus === Case.STATUS_TYPES.batchedForIRS,
+  );
 };
