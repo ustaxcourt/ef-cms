@@ -4,10 +4,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 /**
  * constructor
  * @param rawMessage
@@ -37,12 +33,16 @@ joiValidationDecorator(
     from: joi.string().required(),
     fromUserId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     message: joi.string().required(),
     messageId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     to: joi
       .string()
@@ -50,7 +50,9 @@ joiValidationDecorator(
       .allow(null),
     toUserId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional()
       .allow(null),
   }),

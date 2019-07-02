@@ -1,6 +1,6 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 const {
@@ -113,7 +113,7 @@ describe('Case journey', () => {
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
-      TRIAL_CITIES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 

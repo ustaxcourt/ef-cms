@@ -30,15 +30,13 @@ CaseInternalIncomplete.errorToMessageMap = {
   ],
 };
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
   petitionFileId: joi
     .string()
-    .uuid(uuidVersions)
+    .uuid({
+      version: ['uuidv4'],
+    })
     .required(),
   receivedAt: joi
     .date()
