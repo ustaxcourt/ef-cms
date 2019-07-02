@@ -1,5 +1,4 @@
 import { runCompute } from 'cerebral/test';
-
 import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
 export default (test, overrides = {}) => {
