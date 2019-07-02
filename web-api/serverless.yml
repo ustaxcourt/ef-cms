@@ -5,7 +5,6 @@ plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -582,7 +581,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-              
+
   getInboxMessagesForSection:
     handler: src/handlers.getInboxMessagesForSectionLambda
     events:
@@ -618,7 +617,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-            
+
   getDocumentQCBatchedForUser:
     handler: src/handlers.getDocumentQCBatchedForUserLambda
     events:
@@ -666,7 +665,6 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
 
   getDocumentQCServedForSection:
     handler: src/handlers.getDocumentQCServedForSectionLambda
