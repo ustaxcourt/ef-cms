@@ -1,8 +1,7 @@
 /**
- * get the sent work items in a section.
+ * fetches the sent messages for a secton.
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting the getSentMessagesForSection use case
+ * @param {object} applicationContext object that contains all the context specific methods
  * @returns {object} a list of sent work items
  */
 export const getSentMessagesForSectionAction = async ({

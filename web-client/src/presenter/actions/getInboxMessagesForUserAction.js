@@ -1,5 +1,5 @@
 /**
- * action for fetching all the work items associated with a user account.
+ * fetches the inbox messages for a user.
  *
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{workItems: Array}>} a list of work items
