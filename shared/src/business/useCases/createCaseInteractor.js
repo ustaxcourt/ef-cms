@@ -62,7 +62,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCase = async ({
+exports.createCaseInteractor = async ({
   applicationContext,
   ownershipDisclosureFileId,
   petitionFileId,

@@ -43,14 +43,14 @@ const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
-  createCase: createCaseUC,
-} = require('../../shared/src/business/useCases/createCaseInteractor');
-const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
 const {
   createCaseFromPaper,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
+const {
+  createCaseInteractor,
+} = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
@@ -493,8 +493,8 @@ module.exports = (appContextUser = {}) => {
         assignWorkItemsInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
-        createCase: createCaseUC,
         createCaseFromPaper,
+        createCaseInteractor,
         createCourtIssuedOrderPdfFromHtml,
         createTrialSession: createTrialSessionUC,
         createUser: createUserUC,
