@@ -2,7 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { instantiateContacts } = require('../contacts/PetitionContact');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
  * CaseExternalIncomplete
@@ -26,7 +26,7 @@ function CaseExternalIncomplete(rawCase) {
     procedureType: rawCase.procedureType,
   });
 
-  const contacts = instantiateContacts({
+  const contacts = ContactFactory.createContacts({
     contactInfo: {
       primary: this.contactPrimary,
       secondary: this.contactSecondary,

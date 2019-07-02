@@ -10,9 +10,8 @@ import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
 const {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
@@ -300,8 +299,8 @@ exports.setupTest = () => {
 
   test.setState('constants', {
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-    COUNTRY_TYPES,
-    PARTY_TYPES,
+    COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+    PARTY_TYPES: ContactFactory.PARTY_TYPES,
     TRIAL_CITIES,
   });
 

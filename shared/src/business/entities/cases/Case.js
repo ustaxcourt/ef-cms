@@ -7,11 +7,11 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
 const { formatDateString } = require('../../utilities/DateHandler');
-const { PARTY_TYPES } = require('../contacts/PetitionContact');
 const { YearAmount } = require('../YearAmount');
 
 const uuidVersions = {
@@ -74,6 +74,8 @@ Case.ANSWER_DOCUMENT_CODES = [
   'ASAP',
   'AATT',
 ];
+
+Case.name = 'Case';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
@@ -182,8 +184,6 @@ function Case(rawCase) {
   this.orderForRatification = this.orderForRatification || false;
   this.orderToShowCause = this.orderToShowCause || false;
 }
-
-Case.name = 'Case';
 
 joiValidationDecorator(
   Case,
@@ -351,56 +351,56 @@ joiValidationDecorator(
 Case.getCaseCaption = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
-    case PARTY_TYPES.corporation:
-    case PARTY_TYPES.petitioner:
+    case ContactFactory.PARTY_TYPES.corporation:
+    case ContactFactory.PARTY_TYPES.petitioner:
       caseCaption = `${rawCase.contactPrimary.name}, Petitioner`;
       break;
-    case PARTY_TYPES.petitionerSpouse:
+    case ContactFactory.PARTY_TYPES.petitionerSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Petitioners`;
       break;
-    case PARTY_TYPES.petitionerDeceasedSpouse:
+    case ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse:
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
-    case PARTY_TYPES.estate:
+    case ContactFactory.PARTY_TYPES.estate:
       caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
-    case PARTY_TYPES.estateWithoutExecutor:
+    case ContactFactory.PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
       break;
-    case PARTY_TYPES.trust:
+    case ContactFactory.PARTY_TYPES.trust:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Trustee, Petitioner(s)`;
       break;
-    case PARTY_TYPES.partnershipAsTaxMattersPartner:
+    case ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Tax Matters Partner, Petitioner`;
       break;
-    case PARTY_TYPES.partnershipOtherThanTaxMatters:
+    case ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
-    case PARTY_TYPES.partnershipBBA:
+    case ContactFactory.PARTY_TYPES.partnershipBBA:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Partnership Representative, Petitioner(s)`;
       break;
-    case PARTY_TYPES.conservator:
+    case ContactFactory.PARTY_TYPES.conservator:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Conservator, Petitioner`;
       break;
-    case PARTY_TYPES.guardian:
+    case ContactFactory.PARTY_TYPES.guardian:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Guardian, Petitioner`;
       break;
-    case PARTY_TYPES.custodian:
+    case ContactFactory.PARTY_TYPES.custodian:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Custodian, Petitioner`;
       break;
-    case PARTY_TYPES.nextFriendForMinor:
+    case ContactFactory.PARTY_TYPES.nextFriendForMinor:
       caseCaption = `${rawCase.contactSecondary.name}, Minor, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
       break;
-    case PARTY_TYPES.nextFriendForIncompetentPerson:
+    case ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson:
       caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
       break;
-    case PARTY_TYPES.donor:
+    case ContactFactory.PARTY_TYPES.donor:
       caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
       break;
-    case PARTY_TYPES.transferee:
+    case ContactFactory.PARTY_TYPES.transferee:
       caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
       break;
-    case PARTY_TYPES.survivingSpouse:
+    case ContactFactory.PARTY_TYPES.survivingSpouse:
       caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioner`;
       break;
   }
