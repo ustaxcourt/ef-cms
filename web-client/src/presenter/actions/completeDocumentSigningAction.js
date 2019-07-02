@@ -27,49 +27,51 @@ export const completeDocumentSigningAction = async ({
 
   const { name } = applicationContext.getCurrentUser();
 
+  console.log('currentUser', applicationContext.getCurrentUser());
+
   // generate signed document to bytes
-  const signedPdfBytes = await applicationContext
-    .getUseCases()
-    .generateSignedDocument({
-      pageIndex: pageNumber - 1, // pdf.js starts at 1
-      pdfData: await pdfjsObj.getData(),
-      posX: x,
-      posY: y,
-      scale,
-      sigTextData: `(Signed) ${name}`,
-    });
-
-  const signedDocumentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocument({
-      applicationContext,
-      document: new File([signedPdfBytes], 'myfile.pdf'),
-      onUploadProgress: () => {},
-    });
-
-  await applicationContext.getUseCases().signDocument({
-    applicationContext,
-    caseId,
-    originalDocumentId,
-    signedDocumentId,
-  });
-
-  const workItems = await applicationContext.getUseCases().getWorkItemsForUser({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-  });
-
-  const stipulatedWorkItems = workItems.filter(
-    workItem =>
-      workItem.document.documentType === 'Proposed Stipulated Decision' &&
-      !workItem.completedAt,
-  );
-
-  const { workItemId } = _.head(stipulatedWorkItems);
-
-  await applicationContext.getUseCases().completeWorkItem({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-    workItemId,
-  });
+  // const signedPdfBytes = await applicationContext
+  //   .getUseCases()
+  //   .generateSignedDocument({
+  //     pageIndex: pageNumber - 1, // pdf.js starts at 1
+  //     pdfData: await pdfjsObj.getData(),
+  //     posX: x,
+  //     posY: y,
+  //     scale,
+  //     sigTextData: `(Signed) ${name}`,
+  //   });
+  //
+  // const signedDocumentId = await applicationContext
+  //   .getPersistenceGateway()
+  //   .uploadDocument({
+  //     applicationContext,
+  //     document: new File([signedPdfBytes], 'myfile.pdf'),
+  //     onUploadProgress: () => {},
+  //   });
+  //
+  // await applicationContext.getUseCases().signDocument({
+  //   applicationContext,
+  //   caseId,
+  //   originalDocumentId,
+  //   signedDocumentId,
+  // });
+  //
+  // const workItems = await applicationContext.getUseCases().getWorkItemsForUser({
+  //   applicationContext,
+  //   userId: applicationContext.getCurrentUser().userId,
+  // });
+  //
+  // const stipulatedWorkItems = workItems.filter(
+  //   workItem =>
+  //     workItem.document.documentType === 'Proposed Stipulated Decision' &&
+  //     !workItem.completedAt,
+  // );
+  //
+  // const { workItemId } = _.head(stipulatedWorkItems);
+  //
+  // await applicationContext.getUseCases().completeWorkItem({
+  //   applicationContext,
+  //   userId: applicationContext.getCurrentUser().userId,
+  //   workItemId,
+  // });
 };
