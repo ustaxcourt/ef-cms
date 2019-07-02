@@ -5,7 +5,7 @@ plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  - serverless-plugin-aws-alerts
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -68,12 +68,12 @@ custom:
         evaluationPeriods: 1
         comparisonOperator: GreaterThanThreshold
         pattern: 'ERROR'
-    # topics:
-    #   alarm:
-    #     topic: ${self:provider.stage}-cloudwatch-alerts
-    #     notifications:
-    #       - protocol: email
-    #         endpoint: jsutton@flexion.us
+    topics:
+      alarm:
+        topic: ${self:provider.stage}-cloudwatch-alerts
+        notifications:
+          - protocol: email
+            endpoint: jsutton@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -582,7 +582,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-              
+
   getInboxMessagesForSection:
     handler: src/handlers.getInboxMessagesForSectionLambda
     events:
@@ -618,7 +618,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-            
+
   getDocumentQCBatchedForUser:
     handler: src/handlers.getDocumentQCBatchedForUserLambda
     events:
@@ -666,7 +666,6 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
 
   getDocumentQCServedForSection:
     handler: src/handlers.getDocumentQCServedForSectionLambda
