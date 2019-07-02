@@ -1,5 +1,6 @@
 const {
   drawImage,
+  drawRectangle,
   drawText,
   PDFDocumentFactory,
   PDFDocumentWriter,
@@ -78,12 +79,25 @@ exports.generateSignedDocument = async ({
 
     page.addFontDictionary('Helvetica', helveticaRef);
 
+    const textSize = 16 * scale;
+    const padding = 20 * scale;
+    const textWidth = helveticaFont.widthOfTextAtSize(sigTextData, textSize);
+    const textHeight = helveticaFont.heightOfFontAtSize(textSize);
+
     pageContentStream = pdfDoc.createContentStream(
       drawText(helveticaFont.encodeText(sigTextData), {
         font: 'Helvetica',
-        size: 15 * scale,
+        size: textSize,
         x: posX,
         y: pageHeight - posY,
+      }),
+      drawRectangle({
+        borderColorRgb: [0, 0, 0],
+        borderWidth: 0.5,
+        height: textHeight + padding,
+        width: textWidth + padding,
+        x: posX - padding / 2 + (textHeight / 100) * padding,
+        y: pageHeight - posY - padding / 2 - (textHeight / 100) * padding,
       }),
     );
   }
