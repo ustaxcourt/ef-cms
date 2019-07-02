@@ -7,10 +7,6 @@ const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
 const { orderBy } = require('lodash');
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 /**
  * constructor
  * @param rawWorkItem
@@ -64,7 +60,9 @@ joiValidationDecorator(
       .optional(), // should be a Message entity at some point
     caseId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     caseStatus: joi.string().optional(),
     completedAt: joi
@@ -77,7 +75,9 @@ joiValidationDecorator(
       .allow(null),
     completedByUserId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional()
       .allow(null),
     completedMessage: joi
@@ -105,7 +105,9 @@ joiValidationDecorator(
     sentBySection: joi.string().optional(),
     sentByUserId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional(),
     updatedAt: joi
       .date()
@@ -113,7 +115,9 @@ joiValidationDecorator(
       .required(),
     workItemId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
   }),
   function() {

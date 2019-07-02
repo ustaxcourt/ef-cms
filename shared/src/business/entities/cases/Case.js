@@ -14,10 +14,6 @@ const { find, includes, uniqBy } = require('lodash');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { YearAmount } = require('../YearAmount');
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
@@ -190,7 +186,9 @@ joiValidationDecorator(
   joi.object().keys({
     caseId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional(),
     caseType: joi.string().optional(),
     createdAt: joi
@@ -276,7 +274,9 @@ joiValidationDecorator(
     trialLocation: joi.string().optional(),
     trialSessionId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional(),
     trialTime: joi.string().optional(),
     userId: joi
