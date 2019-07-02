@@ -26,9 +26,5 @@ exports.createCourtIssuedOrderPdfFromHtml = ({
         responseType: 'blob',
       },
     )
-    .then(response =>
-      window.URL.createObjectURL(
-        new Blob([response.data], { type: 'application/pdf' }),
-      ),
-    );
+    .then(response => new Blob([response.data], { type: 'application/pdf' }));
 };
