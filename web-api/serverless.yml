@@ -559,11 +559,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getSentWorkItemsForSection:
-    handler: src/handlers.getSentWorkItemsForSectionLambda
+  getInboxMessagesForUser:
+    handler: src/handlers.getInboxMessagesForUserLambda
     events:
       - http:
-          path: v1/sections/{section}/outbox
+          path: v1/users/{userId}/messages/inbox
           method: get
           cors: true
           authorizer:
@@ -571,11 +571,23 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getWorkItemsBySection:
-    handler: src/handlers.getWorkItemsBySectionLambda
+  getSentMessagesForUser:
+    handler: src/handlers.getSentMessagesForUserLambda
     events:
       - http:
-          path: v1/sections/{section}/inbox
+          path: v1/users/{userId}/messages/sent
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+              
+  getInboxMessagesForSection:
+    handler: src/handlers.getInboxMessagesForSectionLambda
+    events:
+      - http:
+          path: v1/sections/{section}/messages/inbox
           method: get
           cors: true
           authorizer:
@@ -583,11 +595,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getSentWorkItemsForUser:
-    handler: src/handlers.getSentWorkItemsForUserLambda
+  getSentMessagesForSection:
+    handler: src/handlers.getSentMessagesForSectionLambda
     events:
       - http:
-          path: v1/users/{userId}/outbox
+          path: v1/sections/{section}/messages/sent
           method: get
           cors: true
           authorizer:
@@ -595,11 +607,72 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getWorkItemsForUser:
-    handler: src/handlers.getWorkItemsForUserLambda
+  getDocumentQCInboxForUser:
+    handler: src/handlers.getDocumentQCInboxForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/inbox
+          path: v1/users/{userId}/document-qc/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+            
+  getDocumentQCBatchedForUser:
+    handler: src/handlers.getDocumentQCBatchedForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/document-qc/batched
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getDocumentQCServedForUser:
+    handler: src/handlers.getDocumentQCServedForUserLambda
+    events:
+      - http:
+          path: v1/users/{userId}/document-qc/served
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getDocumentQCInboxForSection:
+    handler: src/handlers.getDocumentQCInboxForSectionLambda
+    events:
+      - http:
+          path: v1/sections/{section}/document-qc/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getDocumentQCBatchedForSection:
+    handler: src/handlers.getDocumentQCBatchedForSectionLambda
+    events:
+      - http:
+          path: v1/sections/{section}/document-qc/batched
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+
+  getDocumentQCServedForSection:
+    handler: src/handlers.getDocumentQCServedForSectionLambda
+    events:
+      - http:
+          path: v1/sections/{section}/document-qc/served
           method: get
           cors: true
           authorizer:

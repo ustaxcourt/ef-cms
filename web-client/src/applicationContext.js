@@ -68,23 +68,29 @@ import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/tria
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getDocumentQCBatchedForSection } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
+import { getDocumentQCBatchedForUser } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
+import { getDocumentQCInboxForSection } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForUser } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
+import { getDocumentQCServedForSection } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
+import { getDocumentQCServedForUser } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
+import { getInboxMessagesForSection } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
+import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
-import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
-import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getSentMessagesForSection } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
+import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -122,6 +128,7 @@ import { validateTrialSession } from '../../shared/src/business/useCases/trialSe
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
+
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -169,21 +176,27 @@ const allUseCases = {
   getCase,
   getCaseTypes,
   getCasesByUser,
+  getDocumentQCBatchedForSection,
+  getDocumentQCBatchedForUser,
+  getDocumentQCInboxForSection,
+  getDocumentQCInboxForUser,
+  getDocumentQCServedForSection,
+  getDocumentQCServedForUser,
   getEligibleCasesForTrialSession,
   getFilingTypes,
+  getInboxMessagesForSection,
+  getInboxMessagesForUser,
   getInternalUsers,
   getItem: getItemUC,
   getNotifications,
   getProcedureTypes,
-  getSentWorkItemsForSection,
-  getSentWorkItemsForUser,
+  getSentMessagesForSection,
+  getSentMessagesForUser,
   getTrialSessionDetails,
   getTrialSessions,
   getUser,
   getUsersInSection,
   getWorkItem,
-  getWorkItemsBySection,
-  getWorkItemsForUser,
   loadPDFForSigning,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,

@@ -6,11 +6,11 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -118,8 +118,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
       yearAmounts: [],
     });
 
-    const docketclerkInbox = await getWorkItemsForUser({
+    const docketclerkInbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
 
     expect(docketclerkInbox).toMatchObject([
@@ -145,7 +146,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       },
     ]);
 
-    const docketsSectionInbox = await getWorkItemsBySection({
+    const docketsSectionInbox = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'docket',
     });

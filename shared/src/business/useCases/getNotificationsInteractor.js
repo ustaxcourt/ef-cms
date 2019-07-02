@@ -6,19 +6,22 @@
  * @returns {Promise<*>}
  */
 exports.getNotifications = async ({ applicationContext }) => {
-  const inbox = await applicationContext
+  const messagesInbox = await applicationContext
     .getPersistenceGateway()
-    .getWorkItemsForUser({
+    .getInboxMessagesForUser({
+      applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
+    });
+
+  const documentQCInbox = await applicationContext
+    .getPersistenceGateway()
+    .getDocumentQCInboxForUser({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
 
   return {
-    myInboxUnreadCount: inbox
-      .filter(item => item.isInternal === true)
-      .filter(item => !item.isRead).length,
-    qcUnreadCount: inbox
-      .filter(item => item.isInternal === false)
-      .filter(item => !item.isRead).length,
+    myInboxUnreadCount: messagesInbox.filter(item => !item.isRead).length,
+    qcUnreadCount: documentQCInbox.filter(item => !item.isRead).length,
   };
 };

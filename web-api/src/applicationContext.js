@@ -129,6 +129,36 @@ const {
   getCasesByUser: getCasesByUserUC,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
+  getDocumentQCBatchedForSection
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
+const {
+  getDocumentQCBatchedForSection: getDocumentQCBatchedForSectionUC, 
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForSectionInteractor');
+const {
+  getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
+const {
+  getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const {
+  getDocumentQCInboxForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
+const {
+  getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
+const {
+  getDocumentQCServedForSection, 
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection');
+const {
+  getDocumentQCServedForSection: getDocumentQCServedForSectionUC,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor');
+const {
+  getDocumentQCServedForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser');
+const {
+  getDocumentQCServedForUser: getDocumentQCServedForUserUC,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
+const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
 const {
@@ -137,6 +167,18 @@ const {
 const {
   getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
+const {
+  getInboxMessagesForSection
+} = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
+const {
+  getInboxMessagesForSection: getInboxMessagesForSectionUC
+} = require('../../shared/src/business/useCases/workitems/getInboxMessagesForSectionInteractor');
+const {
+  getInboxMessagesForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForUser');
+const {
+  getInboxMessagesForUser: getInboxMessagesForUserUC
+} = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -147,17 +189,17 @@ const {
   getNotifications,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getSentWorkItemsForSection,
-} = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForSection');
+  getSentMessagesForSection
+} = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
 const {
-  getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
-} = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForSectionInteractor');
+  getSentMessagesForSection: getSentMessagesForSectionUC,
+} = require('../../shared/src/business/useCases/workitems/getSentMessagesForSectionInteractor');
 const {
-  getSentWorkItemsForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getSentWorkItemsForUser');
+  getSentMessagesForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForUser');
 const {
-  getSentWorkItemsForUser: getSentWorkItemsForUserUC,
-} = require('../../shared/src/business/useCases/workitems/getSentWorkItemsForUserInteractor');
+  getSentMessagesForUser: getSentMessagesForUserUC
+} = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
@@ -191,18 +233,6 @@ const {
 const {
   getWorkItemById,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
-const {
-  getWorkItemsBySection,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsBySection');
-const {
-  getWorkItemsBySection: getWorkItemsBySectionUC,
-} = require('../../shared/src/business/useCases/workitems/getWorkItemsBySectionInteractor');
-const {
-  getWorkItemsForUser,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsForUser');
-const {
-  getWorkItemsForUser: getWorkItemsForUserUC,
-} = require('../../shared/src/business/useCases/workitems/getWorkItemsForUserInteractor');
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
@@ -312,7 +342,11 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const { 
+  getDocumentQCBatchedForUser
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
 const { exec } = require('child_process');
+const { getDocumentQCInboxForSection } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const { User } = require('../../shared/src/business/entities/User');
 
 const { DynamoDB, S3 } = AWS;
@@ -400,19 +434,25 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCasesByUser,
+        getDocumentQCBatchedForSection,
+        getDocumentQCBatchedForUser,
+        getDocumentQCInboxForSection,
+        getDocumentQCInboxForUser,
+        getDocumentQCServedForSection,
+        getDocumentQCServedForUser,
         getDownloadPolicyUrl,
         getEligibleCasesForTrialSession,
+        getInboxMessagesForSection,
+        getInboxMessagesForUser,
         getInternalUsers,
-        getSentWorkItemsForSection,
-        getSentWorkItemsForUser,
+        getSentMessagesForSection,
+        getSentMessagesForUser,
         getTrialSessionById,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
         getUsersInSection,
         getWorkItemById,
-        getWorkItemsBySection,
-        getWorkItemsForUser,
         incrementCounter,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
@@ -465,18 +505,24 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
         getCase,
         getCasesByUser: getCasesByUserUC,
+        getDocumentQCBatchedForSection: getDocumentQCBatchedForSectionUC,
+        getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC,
+        getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC,
+        getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
+        getDocumentQCServedForSection: getDocumentQCServedForSectionUC,
+        getDocumentQCServedForUser: getDocumentQCServedForUserUC,
         getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+        getInboxMessagesForSection: getInboxMessagesForSectionUC,
+        getInboxMessagesForUser: getInboxMessagesForUserUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,
-        getSentWorkItemsForSection: getSentWorkItemsForSectionUC,
-        getSentWorkItemsForUser: getSentWorkItemsForUserUC,
+        getSentMessagesForSection: getSentMessagesForSectionUC,
+        getSentMessagesForUser: getSentMessagesForUserUC,
         getTrialSessionDetails,
         getTrialSessions: getTrialSessionsUC,
         getUser,
         getUsersInSection: getUsersInSectionUC,
         getWorkItem,
-        getWorkItemsBySection: getWorkItemsBySectionUC,
-        getWorkItemsForUser: getWorkItemsForUserUC,
         recallPetitionFromIRSHoldingQueue,
         runBatchProcess,
         sanitizePdf: args =>
