@@ -5,7 +5,6 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { omit } from 'lodash';
 
 import applicationContextFactory from '../../web-api/src/applicationContext';
 

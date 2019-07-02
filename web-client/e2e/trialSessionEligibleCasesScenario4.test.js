@@ -1,7 +1,7 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
@@ -82,7 +82,7 @@ describe('Trial Session Eligible Cases - Scenario 4 - Both small and regular cas
       INTERNAL_CATEGORY_MAP: Document.CATEGORY_MAP,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
-      TRIAL_CITIES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 

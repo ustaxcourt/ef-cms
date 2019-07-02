@@ -3,10 +3,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 /**
  *
  * @param rawMessage
@@ -25,7 +21,9 @@ joiValidationDecorator(
   joi.object().keys({
     assigneeId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     message: joi.string().required(),
     section: joi.string().required(),
