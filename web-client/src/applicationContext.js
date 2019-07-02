@@ -31,7 +31,6 @@ import { ExternalDocumentInformationFactory } from '../../shared/src/business/en
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
@@ -273,7 +272,7 @@ const applicationContext = {
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
     STATUS_TYPES: Case.STATUS_TYPES,
-    TRIAL_CITIES,
+    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,

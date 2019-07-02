@@ -1,17 +1,14 @@
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const { Order } = require('./orders/Order');
-
-const { ORDER_TYPES } = Order;
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const uuidVersions = {
-  version: ['uuidv4'],
-};
 const { flatten } = require('lodash');
+const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
+
+const { ORDER_TYPES } = Order;
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
@@ -118,7 +115,9 @@ joiValidationDecorator(
       .optional(),
     documentId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     documentType: joi
       .string()

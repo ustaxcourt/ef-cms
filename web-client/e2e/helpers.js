@@ -1,6 +1,6 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { isFunction, mapValues } from 'lodash';
@@ -301,7 +301,7 @@ exports.setupTest = () => {
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
-    TRIAL_CITIES,
+    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   });
 
   return test;
