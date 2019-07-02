@@ -26,10 +26,6 @@ exports.getDocumentQCBatchedForSection = async ({
   });
 
   return workItems.filter(
-    workItem =>
-      !workItem.isInternal &&
-      !workItem.completedAt &&
-      workItem.section === 'irsBatchSection' &&
-      workItem.caseStatus === 'Batched for IRS',
+    workItem => !workItem.isInternal && !workItem.completedAt,
   );
 };

@@ -29,8 +29,6 @@ exports.getDocumentQCBatchedForUser = async ({
     workItem =>
       !workItem.completedAt &&
       !workItem.isInternal &&
-      workItem.sentByUserId === userId &&
-      workItem.section === 'irsBatchSection' &&
-      workItem.caseStatus === 'Batched for IRS',
+      workItem.sentByUserId === userId,
   );
 };
