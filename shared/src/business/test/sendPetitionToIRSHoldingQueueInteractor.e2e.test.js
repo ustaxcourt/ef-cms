@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  assignWorkItems,
+  assignWorkItemsInteractor,
 } = require('../useCases/workitems/assignWorkItemsInteractor');
 const {
   createTestApplicationContext,
@@ -119,7 +119,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     const { caseId } = petitionSectionInbox[0];
     const { documentId } = petitionSectionInbox[0].document;
 
-    await assignWorkItems({
+    await assignWorkItemsInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Petitionsclerk',

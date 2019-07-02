@@ -13,7 +13,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .checkForReadyForTrialCases({
+        .checkForReadyForTrialCasesInteractor({
           applicationContext,
         });
       applicationContext.logger.info('Results', results);

@@ -13,13 +13,13 @@ const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
-  addCoverToPDFDocument,
+  addCoverToPDFDocumentInteractor,
 } = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
-  assignWorkItems: assignWorkItemsUC,
+  assignWorkItemsInteractor,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
   associateUserWithCase,
@@ -34,10 +34,10 @@ const {
   CaseInternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseInternalIncomplete');
 const {
-  checkForReadyForTrialCases,
+  checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
-  completeWorkItem,
+  completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
   createCase,
@@ -489,10 +489,10 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
-        addCoverToPDFDocument,
-        assignWorkItems: assignWorkItemsUC,
-        checkForReadyForTrialCases,
-        completeWorkItem,
+        addCoverToPDFDocumentInteractor,
+        assignWorkItemsInteractor,
+        checkForReadyForTrialCasesInteractor,
+        completeWorkItemInteractor,
         createCase: createCaseUC,
         createCaseFromPaper,
         createCourtIssuedOrderPdfFromHtml,

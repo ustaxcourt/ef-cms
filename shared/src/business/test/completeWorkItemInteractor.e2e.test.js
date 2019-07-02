@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  completeWorkItem,
+  completeWorkItemInteractor,
 } = require('../useCases/workitems/completeWorkItemInteractor');
 const {
   createTestApplicationContext,
@@ -21,7 +21,7 @@ const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-describe('completeWorkItem integration test', () => {
+describe('completeWorkItemInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -106,7 +106,7 @@ describe('completeWorkItem integration test', () => {
       },
     ]);
 
-    await completeWorkItem({
+    await completeWorkItemInteractor({
       applicationContext,
       completedMessage: 'game over man',
       workItemId: workItem.workItemId,

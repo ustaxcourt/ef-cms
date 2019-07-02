@@ -16,7 +16,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = async ({
+exports.assignWorkItemsInteractor = async ({
   applicationContext,
   assigneeId,
   assigneeName,

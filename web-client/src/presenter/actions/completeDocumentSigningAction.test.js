@@ -8,7 +8,7 @@ describe('completeDocumentSigningAction', () => {
   let generateSignedDocumentStub;
   let signDocumentStub;
   let getWorkItemsForUserStub;
-  let completeWorkItemStub;
+  let completeWorkItemInteractorStub;
 
   beforeEach(() => {
     global.window = {
@@ -30,7 +30,7 @@ describe('completeDocumentSigningAction', () => {
         workItemId: '1',
       },
     ]);
-    completeWorkItemStub = sinon.stub();
+    completeWorkItemInteractorStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getCurrentUser: () => ({ userId: '1' }),
@@ -38,7 +38,7 @@ describe('completeDocumentSigningAction', () => {
         uploadDocument: uploadDocumentStub,
       }),
       getUseCases: () => ({
-        completeWorkItem: completeWorkItemStub,
+        completeWorkItemInteractor: completeWorkItemInteractorStub,
         generateSignedDocument: generateSignedDocumentStub,
         getWorkItemsForUser: getWorkItemsForUserStub,
         signDocument: signDocumentStub,
@@ -76,6 +76,6 @@ describe('completeDocumentSigningAction', () => {
     expect(generateSignedDocumentStub.calledOnce).toEqual(true);
     expect(signDocumentStub.calledOnce).toEqual(true);
     expect(getWorkItemsForUserStub.calledOnce).toEqual(true);
-    expect(completeWorkItemStub.calledOnce).toEqual(true);
+    expect(completeWorkItemInteractorStub.calledOnce).toEqual(true);
   });
 });

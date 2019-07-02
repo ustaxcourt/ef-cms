@@ -4,7 +4,9 @@ const { Case } = require('../entities/cases/Case');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
+exports.checkForReadyForTrialCasesInteractor = async ({
+  applicationContext,
+}) => {
   applicationContext.logger.info('Time', new Date().toISOString());
 
   const caseCatalog = await applicationContext
