@@ -75,29 +75,49 @@ exports.generateSignedDocument = async ({
       }),
     );
   } else if (sigTextData) {
-    const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont('Helvetica');
+    const { signatureName, signatureTitle } = sigTextData;
 
-    page.addFontDictionary('Helvetica', helveticaRef);
+    const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont(
+      'Helvetica-Bold',
+    );
+
+    page.addFontDictionary('Helvetica-Bold', helveticaRef);
 
     const textSize = 16 * scale;
     const padding = 20 * scale;
-    const textWidth = helveticaFont.widthOfTextAtSize(sigTextData, textSize);
+    const nameTextWidth = helveticaFont.widthOfTextAtSize(
+      signatureName,
+      textSize,
+    );
+    const titleTextWidth = helveticaFont.widthOfTextAtSize(
+      signatureTitle,
+      textSize,
+    );
     const textHeight = helveticaFont.heightOfFontAtSize(textSize);
+    const lineHeight = textHeight / 10;
+    const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
+    const boxHeight = textHeight * 2 + padding * 2;
 
     pageContentStream = pdfDoc.createContentStream(
-      drawText(helveticaFont.encodeText(sigTextData), {
-        font: 'Helvetica',
+      drawText(helveticaFont.encodeText(signatureName), {
+        font: 'Helvetica-Bold',
         size: textSize,
-        x: posX,
-        y: pageHeight - posY,
+        x: posX + (boxWidth - nameTextWidth) / 2,
+        y: pageHeight - posY + boxHeight / 2,
+      }),
+      drawText(helveticaFont.encodeText(signatureTitle), {
+        font: 'Helvetica-Bold',
+        size: textSize,
+        x: posX + (boxWidth - titleTextWidth) / 2,
+        y: pageHeight - posY + (boxHeight - textHeight * 2 - lineHeight) / 2,
       }),
       drawRectangle({
         borderColorRgb: [0, 0, 0],
         borderWidth: 0.5,
-        height: textHeight + padding,
-        width: textWidth + padding,
-        x: posX - padding / 2 + (textHeight / 100) * padding,
-        y: pageHeight - posY - padding / 2 - (textHeight / 100) * padding,
+        height: boxHeight,
+        width: boxWidth,
+        x: posX,
+        y: pageHeight - posY,
       }),
     );
   }
