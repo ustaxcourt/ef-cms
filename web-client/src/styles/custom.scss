@@ -998,9 +998,8 @@ nav.usa-nav {
 
   .pages {
     position: relative;
-    top: -10px;
-    padding: 0 10px;
-    font-size: 24px;
+    top: -6px;
+    font-size: 18px;
     font-weight: $font-semibold;
   }
 }
@@ -1011,10 +1010,14 @@ nav.usa-nav {
   background-color: color($theme-color-base);
   #signature {
     position: absolute;
+    padding: 20px;
+    border: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.8);
   }
   #sign-pdf-canvas {
     display: block;
     margin: auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
 }
 
