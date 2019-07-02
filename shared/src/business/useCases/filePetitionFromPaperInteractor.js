@@ -73,7 +73,7 @@ exports.filePetitionFromPaper = async ({
     });
   }
 
-  return await applicationContext.getUseCases().createCaseFromPaper({
+  return await applicationContext.getUseCases().createCaseFromPaperInteractor({
     applicationContext,
     ownershipDisclosureFileId,
     petitionFileId,

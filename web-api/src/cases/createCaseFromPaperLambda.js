@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .createCaseFromPaper({
+        .createCaseFromPaperInteractor({
           ...JSON.parse(event.body),
           applicationContext,
         });

@@ -46,7 +46,7 @@ const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
 const {
-  createCaseFromPaper,
+  createCaseFromPaperInteractor,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
 const {
   createCaseInteractor,
@@ -493,7 +493,7 @@ module.exports = (appContextUser = {}) => {
         assignWorkItemsInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
-        createCaseFromPaper,
+        createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtml,
         createTrialSession: createTrialSessionUC,

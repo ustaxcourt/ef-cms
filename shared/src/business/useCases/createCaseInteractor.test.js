@@ -7,7 +7,7 @@ const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { createCaseInteractor } = require('./createCaseInteractor');
 const { User } = require('../entities/User');
 
-describe('createCase', () => {
+describe('createCaseInteractor', () => {
   let applicationContext;
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
   const DATE = '2018-11-21T20:49:28.192Z';
@@ -130,7 +130,7 @@ describe('createCase', () => {
       }),
       getPersistenceGateway: () => {
         return {
-          createCaseInteractor: async () => null,
+          createCase: async () => null,
           saveWorkItemForNonPaper: async () => null,
         };
       },
@@ -205,7 +205,7 @@ describe('createCase', () => {
       }),
       getPersistenceGateway: () => {
         return {
-          createCaseInteractor: async () => null,
+          createCase: async () => null,
           getUserById: async () => practitionerUser,
           saveWorkItemForNonPaper: async () => null,
         };
