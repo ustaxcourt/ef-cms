@@ -1,6 +1,6 @@
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -9,7 +9,7 @@ const state = {
   caseDetail: MOCK_CASE,
   constants: {
     CATEGORY_MAP: Document.CATEGORY_MAP,
-    PARTY_TYPES,
+    PARTY_TYPES: ContactFactory.PARTY_TYPES,
   },
   form: {},
   validationErrors: {},
@@ -74,7 +74,7 @@ describe('fileDocumentHelper', () => {
   });
 
   it('shows secondary party for petionerSpouse or petitionerDeceasedSpouse', async () => {
-    state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
+    state.caseDetail.partyType = ContactFactory.PARTY_TYPES.petitionerSpouse;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();
   });

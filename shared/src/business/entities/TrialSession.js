@@ -8,22 +8,18 @@ const uuidVersions = {
   version: ['uuidv4'],
 };
 
-const SESSION_TYPES = [
+TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+TrialSession.SESSION_TYPES = [
   'Regular',
   'Small',
   'Hybrid',
   'Special',
   'Motion/Hearing',
 ];
-
-const STATUS_TYPES = {
+TrialSession.STATUS_TYPES = {
   closed: 'Closed',
   upcoming: 'Upcoming',
 };
-
-const SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
-
-exports.STATUS_TYPES = STATUS_TYPES;
 
 /**
  * constructor
@@ -49,7 +45,7 @@ function TrialSession(rawSession) {
     startDate: rawSession.startDate,
     startTime: rawSession.startTime || '10:00',
     state: rawSession.state,
-    status: rawSession.status || STATUS_TYPES.upcoming,
+    status: rawSession.status || TrialSession.STATUS_TYPES.upcoming,
     swingSession: rawSession.swingSession,
     swingSessionId: rawSession.swingSessionId,
     term: rawSession.term,
@@ -118,7 +114,7 @@ joiValidationDecorator(
       .optional(),
     sessionType: joi
       .string()
-      .valid(SESSION_TYPES)
+      .valid(TrialSession.SESSION_TYPES)
       .required(),
     startDate: joi
       .date()
@@ -129,7 +125,11 @@ joiValidationDecorator(
     state: joi.string().optional(),
     status: joi
       .string()
-      .valid(Object.keys(STATUS_TYPES).map(key => STATUS_TYPES[key])),
+      .valid(
+        Object.keys(TrialSession.STATUS_TYPES).map(
+          key => TrialSession.STATUS_TYPES[key],
+        ),
+      ),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
@@ -141,7 +141,7 @@ joiValidationDecorator(
     }),
     term: joi
       .string()
-      .valid(SESSION_TERMS)
+      .valid(TrialSession.SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
     trialClerk: joi.string().optional(),
@@ -165,7 +165,6 @@ joiValidationDecorator(
 TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
   this.swingSessionId = swingSessionId;
   this.swingSession = true;
-
   return this;
 };
 

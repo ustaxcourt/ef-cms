@@ -26,9 +26,8 @@ import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 const {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 let test;
 global.FormData = FormData;
@@ -78,10 +77,10 @@ describe('Trial Session Eligible Cases - Scenario 8 - Trial details display on t
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,
-      COUNTRY_TYPES,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-      PARTY_TYPES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES,
     });
