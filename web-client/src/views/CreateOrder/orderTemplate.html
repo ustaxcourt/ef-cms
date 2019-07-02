@@ -3,8 +3,12 @@
   <head>
     <style type="text/css">
       @page {
-        margin: 3cm 2cm 2cm;
+        margin: 2.25cm 2cm 6cm;
         size: 8.5in 11in;
+      }
+      @page :first {
+        margin-top: 1cm;
+        margin-bottom: 2cm;
       }
       body {
         font-family: 'Times New Roman', Times, serif;
@@ -29,11 +33,16 @@
       }
       td {
         width: 50%;
-        padding: 7px 20px;
+        padding-top: 7px;
+        padding-right: 20px;
+        padding-bottom: 7px;
         border-left: 1px dashed black;
       }
       table td:first-child {
         border-left: none;
+      }
+      table td:nth-child(2) {
+        padding-left: 30px;
       }
       .more-indent {
         padding-left: 100px;
