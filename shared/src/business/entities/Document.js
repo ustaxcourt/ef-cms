@@ -10,8 +10,7 @@ const uuidVersions = {
 const { flatten } = require('lodash');
 const { WorkItem } = require('./WorkItem');
 
-const petitionDocumentTypes = ['Petition'];
-
+Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
@@ -102,7 +101,7 @@ Document.getDocumentTypes = () => {
  * @returns {boolean}
  */
 Document.prototype.isPetitionDocument = function() {
-  return petitionDocumentTypes.includes(this.documentType);
+  return Document.PETITION_DOCUMENT_TYPES.includes(this.documentType);
 };
 
 joiValidationDecorator(

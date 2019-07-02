@@ -1,9 +1,11 @@
-const { createContactFactory } = require('./PetitionContact');
+const { ContactFactory } = require('./ContactFactory');
 
 /**
  * returns the constructor used for creating the PetitionerPartnershipRepContact entity
  */
-exports.getPetitionerPartnershipRepContact = createContactFactory({
-  additionalErrorMappings: {},
-  additionalValidation: {},
-});
+exports.getPetitionerPartnershipRepContact = ContactFactory.createContactFactory(
+  {
+    additionalErrorMappings: {},
+    additionalValidation: {},
+  },
+);

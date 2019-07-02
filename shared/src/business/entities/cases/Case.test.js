@@ -1,8 +1,8 @@
 const moment = require('moment');
 const { Case } = require('./Case');
+const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES } = require('../contacts/PetitionContact');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -219,7 +219,7 @@ describe('Case entity', () => {
     it('party type Petitioner & Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.petitionerSpouse,
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -230,7 +230,7 @@ describe('Case entity', () => {
     it('party type Petitioner & Deceased Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -243,7 +243,7 @@ describe('Case entity', () => {
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.estate,
+        partyType: ContactFactory.PARTY_TYPES.estate,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -256,7 +256,7 @@ describe('Case entity', () => {
     it('party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.estateWithoutExecutor,
+        partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseTitle).toEqual(
         'Estate of Test Taxpayer, Deceased, Petitioner',
@@ -266,7 +266,7 @@ describe('Case entity', () => {
     it('party type Trust', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.trust,
+        partyType: ContactFactory.PARTY_TYPES.trust,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -279,7 +279,7 @@ describe('Case entity', () => {
     it('party type Corporation', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.corporation,
+        partyType: ContactFactory.PARTY_TYPES.corporation,
       });
       expect(caseTitle).toEqual('Test Taxpayer, Petitioner');
     });
@@ -287,7 +287,7 @@ describe('Case entity', () => {
     it('party type Partnership Tax Matters', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+        partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -300,7 +300,7 @@ describe('Case entity', () => {
     it('party type Partnership Other Than Tax Matters', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
+        partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -313,7 +313,7 @@ describe('Case entity', () => {
     it('party type Partnership BBA', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.partnershipBBA,
+        partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -326,7 +326,7 @@ describe('Case entity', () => {
     it('party type Conservator', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.conservator,
+        partyType: ContactFactory.PARTY_TYPES.conservator,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -339,7 +339,7 @@ describe('Case entity', () => {
     it('party type Guardian', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.guardian,
+        partyType: ContactFactory.PARTY_TYPES.guardian,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -352,7 +352,7 @@ describe('Case entity', () => {
     it('party type Custodian', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.custodian,
+        partyType: ContactFactory.PARTY_TYPES.custodian,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -365,7 +365,7 @@ describe('Case entity', () => {
     it('party type Minor', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.nextFriendForMinor,
+        partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -378,7 +378,7 @@ describe('Case entity', () => {
     it('party type Legally Incompetent Person', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
+        partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -391,7 +391,7 @@ describe('Case entity', () => {
     it('party type Donor', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.donor,
+        partyType: ContactFactory.PARTY_TYPES.donor,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -402,7 +402,7 @@ describe('Case entity', () => {
     it('party type Transferee', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.transferee,
+        partyType: ContactFactory.PARTY_TYPES.transferee,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
@@ -413,7 +413,7 @@ describe('Case entity', () => {
     it('party type Surviving Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: PARTY_TYPES.survivingSpouse,
+        partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },

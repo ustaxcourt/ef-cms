@@ -4,9 +4,61 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
-exports.COUNTRY_TYPES = {
+const ContactFactory = {};
+
+ContactFactory.COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
+};
+
+ContactFactory.PARTY_TYPES = {
+  conservator: 'Conservator',
+  corporation: 'Corporation',
+  custodian: 'Custodian',
+  donor: 'Donor',
+  estate: 'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+  estateWithoutExecutor:
+    'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+  guardian: 'Guardian',
+  nextFriendForIncompetentPerson:
+    'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+  nextFriendForMinor:
+    'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+  partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
+  partnershipBBA:
+    'Partnership (as a partnership representative under the BBA regime)',
+  partnershipOtherThanTaxMatters:
+    'Partnership (as a partner other than tax matters partner)',
+  petitioner: 'Petitioner',
+  petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
+  petitionerSpouse: 'Petitioner & Spouse',
+  survivingSpouse: 'Surviving Spouse',
+  transferee: 'Transferee',
+  trust: 'Trust',
+};
+
+ContactFactory.BUSINESS_TYPES = {
+  corporation: ContactFactory.PARTY_TYPES.corporation,
+  partnershipAsTaxMattersPartner:
+    ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
+  partnershipBBA: ContactFactory.PARTY_TYPES.partnershipBBA,
+  partnershipOtherThanTaxMatters:
+    ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
+};
+
+ContactFactory.ESTATE_TYPES = {
+  estate: ContactFactory.PARTY_TYPES.estate,
+  estateWithoutExecutor: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
+  trust: ContactFactory.PARTY_TYPES.trust,
+};
+
+ContactFactory.OTHER_TYPES = {
+  conservator: ContactFactory.PARTY_TYPES.conservator,
+  custodian: ContactFactory.PARTY_TYPES.custodian,
+  guardian: ContactFactory.PARTY_TYPES.guardian,
+  nextFriendForIncompetentPerson:
+    ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
+  nextFriendForMinor: ContactFactory.PARTY_TYPES.nextFriendForMinor,
 };
 
 const domesticErrorToMessageMap = {
@@ -48,7 +100,7 @@ const domesticValidationObject = {
   ...commonValidationRequirements,
   countryType: joi
     .string()
-    .valid(exports.COUNTRY_TYPES.DOMESTIC)
+    .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
     .required(),
   postalCode: joi
     .string()
@@ -62,60 +114,10 @@ const internationalValidationObject = {
   country: joi.string().required(),
   countryType: joi
     .string()
-    .valid(exports.COUNTRY_TYPES.INTERNATIONAL)
+    .valid(ContactFactory.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
   postalCode: joi.string().required(),
   state: joi.string().optional(),
-};
-
-exports.PARTY_TYPES = {
-  conservator: 'Conservator',
-  corporation: 'Corporation',
-  custodian: 'Custodian',
-  donor: 'Donor',
-  estate: 'Estate with an Executor/Personal Representative/Fiduciary/etc.',
-  estateWithoutExecutor:
-    'Estate without an Executor/Personal Representative/Fiduciary/etc.',
-  guardian: 'Guardian',
-  nextFriendForIncompetentPerson:
-    'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
-  nextFriendForMinor:
-    'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-  partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
-  partnershipBBA:
-    'Partnership (as a partnership representative under the BBA regime)',
-  partnershipOtherThanTaxMatters:
-    'Partnership (as a partner other than tax matters partner)',
-  petitioner: 'Petitioner',
-  petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
-  petitionerSpouse: 'Petitioner & Spouse',
-  survivingSpouse: 'Surviving Spouse',
-  transferee: 'Transferee',
-  trust: 'Trust',
-};
-
-exports.BUSINESS_TYPES = {
-  corporation: exports.PARTY_TYPES.corporation,
-  partnershipAsTaxMattersPartner:
-    exports.PARTY_TYPES.partnershipAsTaxMattersPartner,
-  partnershipBBA: exports.PARTY_TYPES.partnershipBBA,
-  partnershipOtherThanTaxMatters:
-    exports.PARTY_TYPES.partnershipOtherThanTaxMatters,
-};
-
-exports.ESTATE_TYPES = {
-  estate: exports.PARTY_TYPES.estate,
-  estateWithoutExecutor: exports.PARTY_TYPES.estateWithoutExecutor,
-  trust: exports.PARTY_TYPES.trust,
-};
-
-exports.OTHER_TYPES = {
-  conservator: exports.PARTY_TYPES.conservator,
-  custodian: exports.PARTY_TYPES.custodian,
-  guardian: exports.PARTY_TYPES.guardian,
-  nextFriendForIncompetentPerson:
-    exports.PARTY_TYPES.nextFriendForIncompetentPerson,
-  nextFriendForMinor: exports.PARTY_TYPES.nextFriendForMinor,
 };
 
 /**
@@ -125,10 +127,10 @@ exports.OTHER_TYPES = {
  * @param {options} options.countryType the country type of the contact
  * @returns {object} the joi validaiton object
  */
-exports.getValidationObject = ({
-  countryType = exports.COUNTRY_TYPES.DOMESTIC,
+ContactFactory.getValidationObject = ({
+  countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
 }) => {
-  return countryType === exports.COUNTRY_TYPES.DOMESTIC
+  return countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
     ? domesticValidationObject
     : internationalValidationObject;
 };
@@ -140,10 +142,10 @@ exports.getValidationObject = ({
  * @param {options} options.countryType the country type of the contact
  * @returns {object} the error message map object which maps errors to custom messages
  */
-exports.getErrorToMessageMap = ({
-  countryType = exports.COUNTRY_TYPES.DOMESTIC,
+ContactFactory.getErrorToMessageMap = ({
+  countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
 }) => {
-  return countryType === exports.COUNTRY_TYPES.DOMESTIC
+  return countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
     ? domesticErrorToMessageMap
     : internationalErrorToMessageMap;
 };
@@ -192,75 +194,75 @@ const getContactConstructor = ({ contactType, countryType, partyType }) => {
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
   const { getPetitionerTrusteeContact } = require('./PetitionerTrusteeContact');
   return {
-    [exports.PARTY_TYPES.petitioner]: {
+    [ContactFactory.PARTY_TYPES.petitioner]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: null,
     }[contactType],
-    [exports.PARTY_TYPES.transferee]: {
+    [ContactFactory.PARTY_TYPES.transferee]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: null,
     }[contactType],
-    [exports.PARTY_TYPES.donor]: {
+    [ContactFactory.PARTY_TYPES.donor]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: null,
     }[contactType],
-    [exports.PARTY_TYPES.petitionerDeceasedSpouse]: {
+    [ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerDeceasedSpouseContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.survivingSpouse]: {
+    [ContactFactory.PARTY_TYPES.survivingSpouse]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerDeceasedSpouseContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.petitionerSpouse]: {
+    [ContactFactory.PARTY_TYPES.petitionerSpouse]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerSpouseContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.corporation]: {
+    [ContactFactory.PARTY_TYPES.corporation]: {
       primary: getPetitionerCorporationContact({ countryType }),
       secondary: null,
     }[contactType],
-    [exports.PARTY_TYPES.estateWithoutExecutor]: {
+    [ContactFactory.PARTY_TYPES.estateWithoutExecutor]: {
       primary: getPetitionerIntermediaryContact({ countryType }),
       secondary: null,
     }[contactType],
-    [exports.PARTY_TYPES.partnershipAsTaxMattersPartner]: {
+    [ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerIntermediaryContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.partnershipOtherThanTaxMatters]: {
+    [ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerIntermediaryContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.nextFriendForMinor]: {
+    [ContactFactory.PARTY_TYPES.nextFriendForMinor]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerIntermediaryContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.nextFriendForIncompetentPerson]: {
+    [ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson]: {
       primary: getPetitionerPrimaryContact({ countryType }),
       secondary: getPetitionerIntermediaryContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.estate]: {
+    [ContactFactory.PARTY_TYPES.estate]: {
       primary: getPetitionerEstateWithExecutorPrimaryContact({ countryType }),
       secondary: getPetitionerEstateExecutorContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.partnershipBBA]: {
+    [ContactFactory.PARTY_TYPES.partnershipBBA]: {
       primary: getPetitionerIntermediaryContact({ countryType }),
       secondary: getPetitionerPartnershipRepContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.trust]: {
+    [ContactFactory.PARTY_TYPES.trust]: {
       primary: getPetitionerTrustContact({ countryType }),
       secondary: getPetitionerTrusteeContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.conservator]: {
+    [ContactFactory.PARTY_TYPES.conservator]: {
       primary: getPetitionerTaxpayerContact({ countryType }),
       secondary: getPetitionerConservatorContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.guardian]: {
+    [ContactFactory.PARTY_TYPES.guardian]: {
       primary: getPetitionerGuardianContact({ countryType }),
       secondary: getPetitionerTaxpayerContact({ countryType }),
     }[contactType],
-    [exports.PARTY_TYPES.custodian]: {
+    [ContactFactory.PARTY_TYPES.custodian]: {
       primary: getPetitionerCustodianContact({ countryType }),
       secondary: getPetitionerTaxpayerContact({ countryType }),
     }[contactType],
@@ -275,7 +277,7 @@ const getContactConstructor = ({ contactType, countryType, partyType }) => {
  * @param {string} contactInfo object which should contain primary and secondary used for creating the contact entities
  * @returns {object} contains the primary and secondary contacts constructed
  */
-exports.instantiateContacts = ({ contactInfo, partyType }) => {
+ContactFactory.createContacts = ({ contactInfo, partyType }) => {
   const primaryConstructor = getContactConstructor({
     contactType: 'primary',
     countryType: (contactInfo.primary || {}).countryType,
@@ -304,7 +306,7 @@ exports.instantiateContacts = ({ contactInfo, partyType }) => {
  * @param {object} options.additionalValidation the joi validation object that defines additional validations on top of the generic country type ones
  * @returns {Function} the entity constructor function
  */
-exports.createContactFactory = ({
+ContactFactory.createContactFactory = ({
   additionalErrorMappings,
   additionalValidation,
 }) => {
@@ -328,14 +330,14 @@ exports.createContactFactory = ({
     }
 
     GenericContactConstructor.errorToMessageMap = {
-      ...exports.getErrorToMessageMap({ countryType }),
+      ...ContactFactory.getErrorToMessageMap({ countryType }),
       ...additionalErrorMappings,
     };
 
     joiValidationDecorator(
       GenericContactConstructor,
       joi.object().keys({
-        ...exports.getValidationObject({ countryType }),
+        ...ContactFactory.getValidationObject({ countryType }),
         ...additionalValidation,
       }),
       undefined,
@@ -345,3 +347,5 @@ exports.createContactFactory = ({
     return GenericContactConstructor;
   };
 };
+
+exports.ContactFactory = ContactFactory;

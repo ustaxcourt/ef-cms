@@ -1,7 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} from '../../../../shared/src/business/entities/contacts/PetitionContact';
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
@@ -24,8 +21,8 @@ const getFixtures = (props, state = {}) => ({
   state: {
     ...state,
     constants: {
-      COUNTRY_TYPES,
-      PARTY_TYPES,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
     },
     user: {
       role: 'petitioner',
@@ -147,7 +144,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES,
+            COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {
@@ -174,7 +171,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES,
+            COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {
@@ -201,7 +198,7 @@ describe('updatePartyTypeAction', () => {
         },
         {
           constants: {
-            COUNTRY_TYPES,
+            COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
             PARTY_TYPES: [],
           },
           form: {

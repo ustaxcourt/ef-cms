@@ -1,7 +1,7 @@
 import { runCompute } from 'cerebral/test';
 const {
-  PARTY_TYPES,
-} = require('../../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../../shared/src/business/entities/contacts/ContactFactory');
 
 import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
@@ -271,7 +271,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: PARTY_TYPES.partnershipOtherThanTaxMatters,
+      value: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
     });
 
     result = runCompute(startCaseHelper, {
@@ -293,7 +293,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: PARTY_TYPES.partnershipBBA,
+      value: ContactFactory.PARTY_TYPES.partnershipBBA,
     });
 
     result = runCompute(startCaseHelper, {

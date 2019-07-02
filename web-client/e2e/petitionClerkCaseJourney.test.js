@@ -9,9 +9,8 @@ import FormData from 'form-data';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 const {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 let test;
 global.FormData = FormData;
@@ -58,8 +57,8 @@ describe('Case journey', () => {
 
     test.setState('constants', {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      COUNTRY_TYPES,
-      PARTY_TYPES,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
       TRIAL_CITIES,
     });
   });
