@@ -9,14 +9,12 @@ const {
  * @constructor
  */
 function DocketRecord(rawDocketRecord) {
-  Object.assign(this, {
-    description: rawDocketRecord.description,
-    documentId: rawDocketRecord.documentId,
-    filedBy: rawDocketRecord.filedBy,
-    filingDate: rawDocketRecord.filingDate,
-    index: rawDocketRecord.index,
-    status: rawDocketRecord.status,
-  });
+  this.description = rawDocketRecord.description;
+  this.documentId = rawDocketRecord.documentId;
+  this.filedBy = rawDocketRecord.filedBy;
+  this.filingDate = rawDocketRecord.filingDate;
+  this.index = rawDocketRecord.index;
+  this.status = rawDocketRecord.status;
 }
 
 joiValidationDecorator(
