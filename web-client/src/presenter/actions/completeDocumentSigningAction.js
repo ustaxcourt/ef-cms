@@ -67,7 +67,7 @@ export const completeDocumentSigningAction = async ({
 
   const { workItemId } = _.head(stipulatedWorkItems);
 
-  await applicationContext.getUseCases().completeWorkItem({
+  await applicationContext.getUseCases().completeWorkItemInteractor({
     applicationContext,
     userId: applicationContext.getCurrentUser().userId,
     workItemId,

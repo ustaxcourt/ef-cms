@@ -10,12 +10,12 @@ const { coverLogo } = require('../assets/coverLogo');
 const { flattenDeep } = require('lodash');
 
 /**
- * addCoverToPDFDocument
+ * addCoverToPDFDocumentInteractor
  *
  * @param pdfData {Uint8Array}
  * @param coverSheetData
  */
-exports.addCoverToPDFDocument = async ({
+exports.addCoverToPDFDocumentInteractor = async ({
   applicationContext,
   caseId,
   documentId,

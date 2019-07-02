@@ -32,9 +32,9 @@ import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessag
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
-import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
+import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
-import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCase } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCourtIssuedOrderPdfFromHtml } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
@@ -140,9 +140,9 @@ const setCurrentUserToken = newToken => {
 };
 
 const allUseCases = {
-  assignWorkItems,
+  assignWorkItemsInteractor,
   authorizeCode,
-  completeWorkItem,
+  completeWorkItemInteractor,
   createCase,
   createCaseFromPaper,
   createCourtIssuedOrderPdfFromHtml,
@@ -272,7 +272,6 @@ const applicationContext = {
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
     STATUS_TYPES: Case.STATUS_TYPES,
-    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,

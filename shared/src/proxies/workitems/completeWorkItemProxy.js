@@ -1,14 +1,14 @@
 const { put } = require('../requests');
 
 /**
- * completeWorkItem
+ * completeWorkItemInteractor
  *
  * @param completedMessage
  * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.completeWorkItem = ({
+exports.completeWorkItemInteractor = ({
   applicationContext,
   completedMessage,
   workItemId,
