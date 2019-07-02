@@ -1,11 +1,11 @@
 /**
- * createCourtIssuedOrderPdfFromHtml
+ * createCourtIssuedOrderPdfFromHtmlInteractor
  *
  * @param applicationContext
  * @param htmlString
  * @returns {Promise<*>}
  */
-exports.createCourtIssuedOrderPdfFromHtml = ({
+exports.createCourtIssuedOrderPdfFromHtmlInteractor = ({
   applicationContext,
   docketNumberWithSuffix,
   htmlString,

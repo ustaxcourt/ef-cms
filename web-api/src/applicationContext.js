@@ -55,7 +55,7 @@ const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
-  createCourtIssuedOrderPdfFromHtml,
+  createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
   createDocument,
@@ -69,7 +69,7 @@ const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
-  createTrialSession: createTrialSessionUC,
+  createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
   createUser,
@@ -495,8 +495,8 @@ module.exports = (appContextUser = {}) => {
         completeWorkItemInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
-        createCourtIssuedOrderPdfFromHtml,
-        createTrialSession: createTrialSessionUC,
+        createCourtIssuedOrderPdfFromHtmlInteractor,
+        createTrialSessionInteractor,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
         fileExternalDocument,

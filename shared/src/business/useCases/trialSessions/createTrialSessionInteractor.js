@@ -6,12 +6,15 @@ const { TrialSession } = require('../../entities/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * createTrialSession
+ * createTrialSessionInteractor
  * @param trialSession
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.createTrialSession = async ({ applicationContext, trialSession }) => {
+exports.createTrialSessionInteractor = async ({
+  applicationContext,
+  trialSession,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   const trialSessionEntity = new TrialSession(trialSession);

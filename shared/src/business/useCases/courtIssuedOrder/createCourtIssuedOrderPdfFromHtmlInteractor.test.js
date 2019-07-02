@@ -1,5 +1,5 @@
 const {
-  createCourtIssuedOrderPdfFromHtml,
+  createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
 
 const pageMock = {
@@ -20,9 +20,9 @@ const chromiumMock = {
     launch: () => browserMock,
   },
 };
-describe('createCourtIssuedOrderPdfFromHtml', () => {
+describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf result', async () => {
-    const result = await createCourtIssuedOrderPdfFromHtml({
+    const result = await createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext: {
         getChromium: () => chromiumMock,
         logger: { error: () => {}, info: () => {} },

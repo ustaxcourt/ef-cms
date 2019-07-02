@@ -1,11 +1,11 @@
 /**
  *
- * createCourtIssuedOrderPdfFromHtml
+ * createCourtIssuedOrderPdfFromHtmlInteractor
  * @param applicationContext
  * @param htmlString
  * @returns Buffer result the pdf as a binary buffer
  */
-exports.createCourtIssuedOrderPdfFromHtml = async ({
+exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   applicationContext,
   docketNumberWithSuffix,
   htmlString,

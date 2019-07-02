@@ -37,10 +37,10 @@ import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeI
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
-import { createCourtIssuedOrderPdfFromHtml } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
+import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
-import { createTrialSession } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
+import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
@@ -145,10 +145,10 @@ const allUseCases = {
   completeWorkItemInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
-  createCourtIssuedOrderPdfFromHtml,
+  createCourtIssuedOrderPdfFromHtmlInteractor,
   createCoverSheet,
   createDocument,
-  createTrialSession,
+  createTrialSessionInteractor,
   createWorkItem,
   downloadDocumentFile,
   fileExternalDocument,
