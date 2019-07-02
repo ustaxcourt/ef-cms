@@ -35,7 +35,7 @@ import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
-import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
+import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtml } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
@@ -143,7 +143,7 @@ const allUseCases = {
   assignWorkItemsInteractor,
   authorizeCode,
   completeWorkItemInteractor,
-  createCaseFromPaper,
+  createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtml,
   createCoverSheet,
