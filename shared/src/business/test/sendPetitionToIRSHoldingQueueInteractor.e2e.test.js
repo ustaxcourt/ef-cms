@@ -29,7 +29,7 @@ const {
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';
@@ -47,7 +47,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
   });
 
   it('should create the expected work items and update their status when a petition is sent to the irs holding queue', async () => {
-    await createCase({
+    await createCaseInteractor({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {

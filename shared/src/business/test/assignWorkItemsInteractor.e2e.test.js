@@ -8,7 +8,7 @@ const {
 const {
   getDocumentQCInboxForUser,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
@@ -33,7 +33,7 @@ describe('assignWorkItemsInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {

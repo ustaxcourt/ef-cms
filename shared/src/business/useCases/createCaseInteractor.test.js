@@ -4,7 +4,7 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const { CaseExternal } = require('../entities/cases/CaseExternal');
-const { createCase } = require('./createCaseInteractor');
+const { createCaseInteractor } = require('./createCaseInteractor');
 const { User } = require('../entities/User');
 
 describe('createCase', () => {
@@ -52,7 +52,7 @@ describe('createCase', () => {
       }),
     };
     try {
-      await createCase({
+      await createCaseInteractor({
         applicationContext,
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
@@ -92,7 +92,7 @@ describe('createCase', () => {
     };
     let error;
     try {
-      await createCase({
+      await createCaseInteractor({
         applicationContext,
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
@@ -130,7 +130,7 @@ describe('createCase', () => {
       }),
       getPersistenceGateway: () => {
         return {
-          createCase: async () => null,
+          createCaseInteractor: async () => null,
           saveWorkItemForNonPaper: async () => null,
         };
       },
@@ -146,7 +146,7 @@ describe('createCase', () => {
     let result;
 
     try {
-      result = await createCase({
+      result = await createCaseInteractor({
         applicationContext,
         ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
@@ -205,7 +205,7 @@ describe('createCase', () => {
       }),
       getPersistenceGateway: () => {
         return {
-          createCase: async () => null,
+          createCaseInteractor: async () => null,
           getUserById: async () => practitionerUser,
           saveWorkItemForNonPaper: async () => null,
         };
@@ -222,7 +222,7 @@ describe('createCase', () => {
     let result;
 
     try {
-      result = await createCase({
+      result = await createCaseInteractor({
         applicationContext,
         ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',

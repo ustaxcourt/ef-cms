@@ -17,7 +17,7 @@ const {
 const {
   sendPetitionToIRSHoldingQueue,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
@@ -36,7 +36,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
   });
 
   it('should create the expected work items and update their status when a petition is recalled', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
