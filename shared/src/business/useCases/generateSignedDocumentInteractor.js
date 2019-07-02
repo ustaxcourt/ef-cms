@@ -103,13 +103,17 @@ exports.generateSignedDocument = async ({
         font: 'Helvetica-Bold',
         size: textSize,
         x: posX + (boxWidth - nameTextWidth) / 2,
-        y: pageHeight - posY + boxHeight / 2,
+        y: pageHeight - posY + boxHeight / 2 - boxHeight,
       }),
       drawText(helveticaFont.encodeText(signatureTitle), {
         font: 'Helvetica-Bold',
         size: textSize,
         x: posX + (boxWidth - titleTextWidth) / 2,
-        y: pageHeight - posY + (boxHeight - textHeight * 2 - lineHeight) / 2,
+        y:
+          pageHeight -
+          posY +
+          (boxHeight - textHeight * 2 - lineHeight) / 2 -
+          boxHeight,
       }),
       drawRectangle({
         borderColorRgb: [0, 0, 0],
@@ -117,7 +121,7 @@ exports.generateSignedDocument = async ({
         height: boxHeight,
         width: boxWidth,
         x: posX,
-        y: pageHeight - posY,
+        y: pageHeight - posY - boxHeight,
       }),
     );
   }
