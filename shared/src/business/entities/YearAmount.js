@@ -9,10 +9,8 @@ const {
  * @constructor
  */
 function YearAmount(rawYearAmount) {
-  Object.assign(this, {
-    amount: rawYearAmount.amount,
-    year: rawYearAmount.year,
-  });
+  this.amount = rawYearAmount.amount;
+  this.year = rawYearAmount.year;
 }
 
 joiValidationDecorator(

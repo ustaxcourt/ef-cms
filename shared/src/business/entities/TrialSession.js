@@ -112,33 +112,31 @@ TrialSession.STATUS_TYPES = {
  * @constructor
  */
 function TrialSession(rawSession) {
-  Object.assign(this, {
-    address1: rawSession.address1,
-    address2: rawSession.address2,
-    caseOrder: rawSession.caseOrder || [],
-    city: rawSession.city,
-    courtReporter: rawSession.courtReporter,
-    courthouseName: rawSession.courthouseName,
-    createdAt: rawSession.createdAt || new Date().toISOString(),
-    irsCalendarAdministrator: rawSession.irsCalendarAdministrator,
-    isCalendared: rawSession.isCalendared || false,
-    judge: rawSession.judge,
-    maxCases: rawSession.maxCases,
-    notes: rawSession.notes,
-    postalCode: rawSession.postalCode,
-    sessionType: rawSession.sessionType,
-    startDate: rawSession.startDate,
-    startTime: rawSession.startTime || '10:00',
-    state: rawSession.state,
-    status: rawSession.status || TrialSession.STATUS_TYPES.upcoming,
-    swingSession: rawSession.swingSession,
-    swingSessionId: rawSession.swingSessionId,
-    term: rawSession.term,
-    termYear: rawSession.termYear,
-    trialClerk: rawSession.trialClerk,
-    trialLocation: rawSession.trialLocation,
-    trialSessionId: rawSession.trialSessionId || uuid.v4(),
-  });
+  this.address1 = rawSession.address1;
+  this.address2 = rawSession.address2;
+  this.caseOrder = rawSession.caseOrder || [];
+  this.city = rawSession.city;
+  this.courtReporter = rawSession.courtReporter;
+  this.courthouseName = rawSession.courthouseName;
+  this.createdAt = rawSession.createdAt || new Date().toISOString();
+  this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
+  this.isCalendared = rawSession.isCalendared || false;
+  this.judge = rawSession.judge;
+  this.maxCases = rawSession.maxCases;
+  this.notes = rawSession.notes;
+  this.postalCode = rawSession.postalCode;
+  this.sessionType = rawSession.sessionType;
+  this.startDate = rawSession.startDate;
+  this.startTime = rawSession.startTime || '10:00';
+  this.state = rawSession.state;
+  this.status = rawSession.status || TrialSession.STATUS_TYPES.upcoming;
+  this.swingSession = rawSession.swingSession;
+  this.swingSessionId = rawSession.swingSessionId;
+  this.term = rawSession.term;
+  this.termYear = rawSession.termYear;
+  this.trialClerk = rawSession.trialClerk;
+  this.trialLocation = rawSession.trialLocation;
+  this.trialSessionId = rawSession.trialSessionId || uuid.v4();
 }
 
 TrialSession.errorToMessageMap = {

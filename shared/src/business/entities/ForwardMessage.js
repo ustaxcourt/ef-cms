@@ -9,11 +9,9 @@ const {
  * @constructor
  */
 function ForwardMessage(rawMessage) {
-  Object.assign(this, {
-    assigneeId: rawMessage.assigneeId,
-    forwardMessage: rawMessage.forwardMessage,
-    section: rawMessage.section,
-  });
+  this.assigneeId = rawMessage.assigneeId;
+  this.forwardMessage = rawMessage.forwardMessage;
+  this.section = rawMessage.section;
 }
 
 joiValidationDecorator(
