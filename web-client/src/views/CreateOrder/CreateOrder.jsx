@@ -77,9 +77,6 @@ export const CreateOrder = connect(
                 <button
                   className="usa-button"
                   onClick={() => {
-                    console.log(
-                      'submitCourtIssuedOrderSequence Sdfs hgs  gh df',
-                    );
                     submitCourtIssuedOrderSequence();
                   }}
                 >
