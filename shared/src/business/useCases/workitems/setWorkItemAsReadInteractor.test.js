@@ -1,4 +1,6 @@
-const { setWorkItemAsReadInteractor } = require('./setWorkItemAsReadInteractor');
+const {
+  setWorkItemAsReadInteractor,
+} = require('./setWorkItemAsReadInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('setWorkItemAsReadInteractor', () => {
