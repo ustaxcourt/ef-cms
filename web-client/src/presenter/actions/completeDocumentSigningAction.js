@@ -36,7 +36,10 @@ export const completeDocumentSigningAction = async ({
       posX: x,
       posY: y,
       scale,
-      sigTextData: `(Signed) ${name}`,
+      sigTextData: {
+        signatureName: `(Signed) ${name}`,
+        signatureTitle: 'Chief Judge',
+      },
     });
 
   const signedDocumentId = await applicationContext
