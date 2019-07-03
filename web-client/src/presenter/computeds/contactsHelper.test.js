@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { contactsHelper } from './contactsHelper';
 
 describe('contactsHelper', () => {
@@ -8,9 +8,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.conservator },
+        form: { partyType: ContactFactory.PARTY_TYPES.conservator },
         user: {
           role: 'petitioner',
         },
@@ -34,9 +34,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.corporation },
+        form: { partyType: ContactFactory.PARTY_TYPES.corporation },
         user: {
           role: 'petitioner',
         },
@@ -55,9 +55,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.custodian },
+        form: { partyType: ContactFactory.PARTY_TYPES.custodian },
         user: {
           role: 'petitioner',
         },
@@ -81,9 +81,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.donor },
+        form: { partyType: ContactFactory.PARTY_TYPES.donor },
         user: {
           role: 'petitioner',
         },
@@ -101,10 +101,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.estate,
+          partyType: ContactFactory.PARTY_TYPES.estate,
         },
         user: {
           role: 'petitioner',
@@ -129,10 +129,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.estateWithoutExecutor,
+          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
         user: {
           role: 'petitioner',
@@ -152,10 +152,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.guardian,
+          partyType: ContactFactory.PARTY_TYPES.guardian,
         },
         user: {
           role: 'petitioner',
@@ -180,10 +180,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
         user: {
           role: 'petitioner',
@@ -210,10 +210,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.nextFriendForMinor,
+          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
         user: {
           role: 'petitioner',
@@ -238,10 +238,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.partnershipBBA,
+          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
         user: {
           role: 'petitioner',
@@ -266,10 +266,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
         user: {
           role: 'petitioner',
@@ -295,10 +295,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         user: {
           role: 'petitioner',
@@ -323,10 +323,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.petitioner,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         user: {
           role: 'petitioner',
@@ -345,10 +345,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.petitionerSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
         user: {
           role: 'petitioner',
@@ -373,10 +373,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
         user: {
           role: 'petitioner',
@@ -399,10 +399,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.survivingSpouse,
+          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
         user: {
           role: 'petitioner',
@@ -425,10 +425,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.transferee,
+          partyType: ContactFactory.PARTY_TYPES.transferee,
         },
         user: {
           role: 'petitioner',
@@ -447,10 +447,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.trust,
+          partyType: ContactFactory.PARTY_TYPES.trust,
         },
         user: {
           role: 'petitioner',
@@ -475,9 +475,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.conservator },
+        form: { partyType: ContactFactory.PARTY_TYPES.conservator },
         user: {
           role: 'practitioner',
         },
@@ -501,9 +501,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.corporation },
+        form: { partyType: ContactFactory.PARTY_TYPES.corporation },
         user: {
           role: 'practitioner',
         },
@@ -522,9 +522,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.custodian },
+        form: { partyType: ContactFactory.PARTY_TYPES.custodian },
         user: {
           role: 'practitioner',
         },
@@ -548,9 +548,9 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
-        form: { partyType: PARTY_TYPES.donor },
+        form: { partyType: ContactFactory.PARTY_TYPES.donor },
         user: {
           role: 'practitioner',
         },
@@ -568,10 +568,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.estate,
+          partyType: ContactFactory.PARTY_TYPES.estate,
         },
         user: {
           role: 'practitioner',
@@ -596,10 +596,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.estateWithoutExecutor,
+          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
         user: {
           role: 'practitioner',
@@ -619,10 +619,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.guardian,
+          partyType: ContactFactory.PARTY_TYPES.guardian,
         },
         user: {
           role: 'practitioner',
@@ -647,10 +647,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
         user: {
           role: 'practitioner',
@@ -677,10 +677,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.nextFriendForMinor,
+          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
         user: {
           role: 'practitioner',
@@ -705,10 +705,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.partnershipBBA,
+          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
         user: {
           role: 'practitioner',
@@ -733,10 +733,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
         user: {
           role: 'practitioner',
@@ -761,10 +761,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         user: {
           role: 'practitioner',
@@ -789,10 +789,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.petitioner,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         user: {
           role: 'practitioner',
@@ -811,10 +811,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.petitionerSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
         user: {
           role: 'practitioner',
@@ -839,10 +839,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
         user: {
           role: 'practitioner',
@@ -865,10 +865,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.survivingSpouse,
+          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
         user: {
           role: 'practitioner',
@@ -891,10 +891,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.transferee,
+          partyType: ContactFactory.PARTY_TYPES.transferee,
         },
         user: {
           role: 'practitioner',
@@ -913,10 +913,10 @@ describe('contactsHelper', () => {
     const result = await runCompute(contactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
         form: {
-          partyType: PARTY_TYPES.trust,
+          partyType: ContactFactory.PARTY_TYPES.trust,
         },
         user: {
           role: 'practitioner',

@@ -9,11 +9,12 @@ const {
   createWorkItem,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
-  getSentWorkItemsForUser,
-} = require('../useCases/workitems/getSentWorkItemsForUserInteractor');
+  getInboxMessagesForUser,
+} = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getSentMessagesForUser,
+} = require('../useCases/workitems/getSentMessagesForUserInteractor');
+
 const { createCase } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -91,8 +92,9 @@ describe('completeWorkItem integration test', () => {
       message: 'this is a test',
     });
 
-    let inbox = await getWorkItemsForUser({
+    let inbox = await getInboxMessagesForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toMatchObject([
       {
@@ -109,39 +111,11 @@ describe('completeWorkItem integration test', () => {
       completedMessage: 'game over man',
       workItemId: workItem.workItemId,
     });
-    const outbox = await getSentWorkItemsForUser({
+    const outbox = await getSentMessagesForUser({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(outbox).toMatchObject([
-      {
-        assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'Test Petitionsclerk',
-        caseStatus: 'New',
-        completedBy: 'richard',
-        completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        completedMessage: 'game over man',
-        docketNumber: '101-19',
-        docketNumberSuffix: 'S',
-        document: {
-          documentType: 'Petition',
-        },
-        isInitializeCase: false,
-        messages: [
-          {
-            from: 'richard',
-            fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'this is a test',
-            to: 'Test Petitionsclerk',
-            toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-        section: 'petitions',
-        sentBy: 'richard',
-        sentBySection: 'petitions',
-        sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    ]);
+    expect(outbox).toMatchObject([]);
 
     const caseAfterAssign = await getCase({
       applicationContext,

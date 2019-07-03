@@ -29,7 +29,7 @@ exports.runBatchProcess = async ({ applicationContext }) => {
 
   const workItemsInHoldingQueue = await applicationContext
     .getPersistenceGateway()
-    .getWorkItemsBySection({
+    .getDocumentQCInboxForSection({
       applicationContext,
       section: IRS_BATCH_SYSTEM_SECTION,
     });

@@ -1,12 +1,7 @@
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
@@ -33,9 +28,8 @@ import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 const {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 let test;
 
@@ -108,13 +102,13 @@ describe('Petitions Clerk Document QC Journey', () => {
 
     test.setState('constants', {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CATEGORIES,
-      CATEGORY_MAP,
-      COUNTRY_TYPES,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
-      INTERNAL_CATEGORY_MAP,
-      PARTY_TYPES,
-      TRIAL_CITIES,
+      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
   const caseCreationCount = 3;

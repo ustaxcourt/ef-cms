@@ -1,8 +1,7 @@
-import { runCompute } from 'cerebral/test';
-
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
-import { TRIAL_CITIES } from '../../../../shared/src/business/entities/TrialCities';
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { TrialSession } from '../../../../shared/src/business/entities/TrialSession';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
+import { runCompute } from 'cerebral/test';
 import { startCaseHelper } from './startCaseHelper';
 
 describe('start a case computed', () => {
@@ -10,8 +9,8 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
-          TRIAL_CITIES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+          TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
         form: {},
         getTrialCityName,
@@ -25,8 +24,8 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
-          TRIAL_CITIES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+          TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
         form: {},
         getTrialCityName,
@@ -42,8 +41,8 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
-          TRIAL_CITIES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+          TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
         form: {
           filingType: 'A business',
@@ -62,8 +61,8 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
-          TRIAL_CITIES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+          TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
         form: {
           filingType: 'not A business',
@@ -82,8 +81,8 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
-          TRIAL_CITIES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+          TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
         form: {
           hasIrsNotice: true,
@@ -99,8 +98,8 @@ describe('start a case computed', () => {
     const result = runCompute(startCaseHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
-          TRIAL_CITIES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+          TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
         form: {
           hasIrsNotice: false,

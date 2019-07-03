@@ -18,6 +18,7 @@ export const CreateOrder = connect(
     showModal: state.showModal,
     submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   ({
     convertHtml2PdfSequence,
@@ -27,6 +28,7 @@ export const CreateOrder = connect(
     showModal,
     submitCourtIssuedOrderSequence,
     updateFormValueSequence,
+    updateScreenMetadataSequence,
   }) => {
     return (
       <>
@@ -64,6 +66,7 @@ export const CreateOrder = connect(
                 <TextEditor
                   form={form}
                   updateFormValueSequence={updateFormValueSequence}
+                  updateScreenMetadataSequence={updateScreenMetadataSequence}
                 />
               </div>
 

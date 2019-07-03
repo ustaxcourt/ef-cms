@@ -1,10 +1,10 @@
 const joi = require('joi-browser');
-const { createContactFactory } = require('./PetitionContact');
+const { ContactFactory } = require('./ContactFactory');
 
 /**
  * returns the constructor used for creating the PetitionerCorporationContact entity
  */
-exports.getPetitionerCorporationContact = createContactFactory({
+exports.getPetitionerCorporationContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {
     inCareOf: 'In Care Of is a required field.',
   },

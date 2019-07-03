@@ -1,19 +1,7 @@
-import {
-  BUSINESS_TYPES,
-  COUNTRY_TYPES,
-  ESTATE_TYPES,
-  OTHER_TYPES,
-  PARTY_TYPES,
-} from '../../shared/src/business/entities/contacts/PetitionContact';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { Document } from '../../shared/src/business/entities/Document';
+import { Order } from '../../shared/src/business/entities/orders/Order';
 import {
   createISODateString,
   formatDateString,
@@ -43,7 +31,6 @@ import { ExternalDocumentInformationFactory } from '../../shared/src/business/en
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
@@ -68,23 +55,29 @@ import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/tria
 import { getCase } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getDocumentQCBatchedForSection } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
+import { getDocumentQCBatchedForUser } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
+import { getDocumentQCInboxForSection } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForUser } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
+import { getDocumentQCServedForSection } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
+import { getDocumentQCServedForUser } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
+import { getInboxMessagesForSection } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
+import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
-import { getSentWorkItemsForSection } from '../../shared/src/proxies/workitems/getSentWorkItemsForSectionProxy';
-import { getSentWorkItemsForUser } from '../../shared/src/proxies/workitems/getSentWorkItemsForUserProxy';
+import { getSentMessagesForSection } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
+import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { getWorkItemsBySection } from '../../shared/src/proxies/workitems/getWorkItemsBySectionProxy';
-import { getWorkItemsForUser } from '../../shared/src/proxies/workitems/getWorkItemsForUserProxy';
 import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -122,6 +115,7 @@ import { validateTrialSession } from '../../shared/src/business/useCases/trialSe
 import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
+
 const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
@@ -169,21 +163,27 @@ const allUseCases = {
   getCase,
   getCaseTypes,
   getCasesByUser,
+  getDocumentQCBatchedForSection,
+  getDocumentQCBatchedForUser,
+  getDocumentQCInboxForSection,
+  getDocumentQCInboxForUser,
+  getDocumentQCServedForSection,
+  getDocumentQCServedForUser,
   getEligibleCasesForTrialSession,
   getFilingTypes,
+  getInboxMessagesForSection,
+  getInboxMessagesForUser,
   getInternalUsers,
   getItem: getItemUC,
   getNotifications,
   getProcedureTypes,
-  getSentWorkItemsForSection,
-  getSentWorkItemsForUser,
+  getSentMessagesForSection,
+  getSentMessagesForUser,
   getTrialSessionDetails,
   getTrialSessions,
   getUser,
   getUsersInSection,
   getWorkItem,
-  getWorkItemsBySection,
-  getWorkItemsForUser,
   loadPDFForSigning,
   recallPetitionFromIRSHoldingQueue,
   refreshToken,
@@ -249,21 +249,21 @@ const applicationContext = {
     );
   },
   getConstants: () => ({
-    BUSINESS_TYPES,
+    BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-    CATEGORIES,
-    CATEGORY_MAP,
+    CATEGORIES: Document.CATEGORIES,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
-    COUNTRY_TYPES,
+    COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
     DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
-    ESTATE_TYPES,
-    INTERNAL_CATEGORY_MAP,
+    ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
+    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
     MAX_FILE_SIZE_MB,
     ORDER_TYPES_MAP: Order.ORDER_TYPES,
-    OTHER_TYPES,
-    PARTY_TYPES,
+    OTHER_TYPES: ContactFactory.OTHER_TYPES,
+    PARTY_TYPES: ContactFactory.PARTY_TYPES,
     REFRESH_INTERVAL: 20 * MINUTES,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
@@ -272,7 +272,7 @@ const applicationContext = {
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
     STATUS_TYPES: Case.STATUS_TYPES,
-    TRIAL_CITIES,
+    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
   }),
   getCurrentUser,
   getCurrentUserToken,

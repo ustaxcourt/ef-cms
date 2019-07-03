@@ -65,7 +65,8 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteDocument: deleteDocumentStub,
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
-          getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -145,7 +146,8 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteDocument: deleteDocumentStub,
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
-          getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -205,7 +207,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteDocument: deleteDocumentStub,
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
-          getWorkItemsBySection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
