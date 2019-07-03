@@ -1,10 +1,12 @@
 const { omit } = require('lodash');
 const { TrialSession } = require('../../entities/TrialSession');
-const { validateTrialSession } = require('./validateTrialSessionInteractor');
+const {
+  validateTrialSessionInteractor,
+} = require('./validateTrialSessionInteractor');
 
-describe('validateTrialSession', () => {
+describe('validateTrialSessionInteractor', () => {
   it('returns the expected errors object on an empty trial session', () => {
-    const errors = validateTrialSession({
+    const errors = validateTrialSessionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           TrialSession,
@@ -34,7 +36,7 @@ describe('validateTrialSession', () => {
       trialLocation: 'Birmingham, AL',
     };
 
-    const errors = validateTrialSession({
+    const errors = validateTrialSessionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           TrialSession,

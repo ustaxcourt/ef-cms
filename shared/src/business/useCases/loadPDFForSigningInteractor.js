@@ -7,7 +7,10 @@ const pdfjsLib = require('pdfjs-dist');
  * @returns {Object}
  */
 
-exports.loadPDFForSigning = async ({ applicationContext, documentId }) => {
+exports.loadPDFForSigningInteractor = async ({
+  applicationContext,
+  documentId,
+}) => {
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     let pdfData = await applicationContext.getPersistenceGateway().getDocument({

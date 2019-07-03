@@ -1,11 +1,11 @@
 const moment = require('moment');
 const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { omit } = require('lodash');
-const { validatePetition } = require('./validatePetitionInteractor');
+const { validatePetitionInteractor } = require('./validatePetitionInteractor');
 
-describe('validatePetition', () => {
+describe('validatePetitionInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {
-    const errors = validatePetition({
+    const errors = validatePetitionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseExternal,
@@ -27,7 +27,7 @@ describe('validatePetition', () => {
   });
 
   it('returns the expected errors object when caseType is defined', () => {
-    const errors = validatePetition({
+    const errors = validatePetitionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseExternal,
@@ -58,7 +58,7 @@ describe('validatePetition', () => {
   });
 
   it('returns the expected errors object', () => {
-    const errors = validatePetition({
+    const errors = validatePetitionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseExternal,
@@ -85,7 +85,7 @@ describe('validatePetition', () => {
   it('returns an error for a irs notice date in the future', () => {
     const futureDate = moment().add(1, 'days');
 
-    const errors = validatePetition({
+    const errors = validatePetitionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseExternal,

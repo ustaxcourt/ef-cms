@@ -1,11 +1,11 @@
 const {
-  validateOrderWithoutBody,
+  validateOrderWithoutBodyInteractor,
 } = require('./validateOrderWithoutBodyInteractor');
 const { OrderWithoutBody } = require('../../entities/orders/OrderWithoutBody');
 
-describe('validateOrderWithoutBody', () => {
+describe('validateOrderWithoutBodyInteractor', () => {
   it('returns the expected errors object on an empty order object', () => {
-    const errors = validateOrderWithoutBody({
+    const errors = validateOrderWithoutBodyInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           OrderWithoutBody,
@@ -22,7 +22,7 @@ describe('validateOrderWithoutBody', () => {
   });
 
   it('returns no errors when a valid order object is passed through', async () => {
-    const errors = await validateOrderWithoutBody({
+    const errors = await validateOrderWithoutBodyInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           OrderWithoutBody,

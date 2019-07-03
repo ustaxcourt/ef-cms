@@ -18,10 +18,12 @@ export const validateForwardMessageAction = ({
 }) => {
   const form = get(state.form)[props.workItemId] || {};
 
-  const errors = applicationContext.getUseCases().validateForwardMessage({
-    applicationContext,
-    message: form,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateForwardMessageInteractor({
+      applicationContext,
+      message: form,
+    });
 
   if (!errors) {
     return path.success();

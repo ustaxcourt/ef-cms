@@ -1,4 +1,4 @@
-const { getCaseTypes } = require('./getCaseTypesInteractor');
+const { getCaseTypesInteractor } = require('./getCaseTypesInteractor');
 
 describe('Get case types', () => {
   beforeEach(() => {});
@@ -12,7 +12,7 @@ describe('Get case types', () => {
         };
       },
     };
-    const caseTypes = await getCaseTypes({
+    const caseTypes = await getCaseTypesInteractor({
       applicationContext,
     });
     expect(caseTypes.length).toBeGreaterThan(0);
