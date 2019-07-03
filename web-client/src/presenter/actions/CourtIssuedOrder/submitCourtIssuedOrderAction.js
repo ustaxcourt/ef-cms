@@ -35,12 +35,12 @@ export const submitCourtIssuedOrderAction = async ({
   };
 
   if (primaryDocumentFileId) {
-    await applicationContext.getUseCases().virusScanPdf({
+    await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
     });
 
-    await applicationContext.getUseCases().validatePdf({
+    await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,
     });

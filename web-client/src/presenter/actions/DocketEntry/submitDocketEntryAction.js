@@ -55,12 +55,12 @@ export const submitDocketEntryAction = async ({
 
   for (let documentId of documentIds) {
     if (documentId) {
-      await applicationContext.getUseCases().virusScanPdf({
+      await applicationContext.getUseCases().virusScanPdfInteractor({
         applicationContext,
         documentId,
       });
 
-      await applicationContext.getUseCases().validatePdf({
+      await applicationContext.getUseCases().validatePdfInteractor({
         applicationContext,
         documentId,
       });

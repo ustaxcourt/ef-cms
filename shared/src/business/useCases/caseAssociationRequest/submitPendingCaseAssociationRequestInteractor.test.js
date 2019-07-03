@@ -29,7 +29,7 @@ describe('submitPendingCaseAssociationRequest', () => {
           verifyPendingCaseForUser: async () => false,
         }),
         getUseCases: () => ({
-          verifyCaseForUser: async () => caseRecord,
+          verifyCaseForUserInteractor: async () => caseRecord,
         }),
       };
       await submitPendingCaseAssociationRequestInteractor({

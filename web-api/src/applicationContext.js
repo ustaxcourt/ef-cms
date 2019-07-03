@@ -304,7 +304,7 @@ const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
-  updateCaseTrialSortTags,
+  updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
   updateDocumentProcessingStatus,
@@ -322,22 +322,22 @@ const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
 const {
-  validatePdf,
+  validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
-  verifyCaseForUser: verifyCaseForUserUC,
+  verifyCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
 const {
   verifyPendingCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
 const {
-  verifyPendingCaseForUser: verifyPendingCaseForUserUC,
+  verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
 const {
-  virusScanPdf,
+  virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
 const {
   zipDocuments,
@@ -536,12 +536,12 @@ module.exports = (appContextUser = {}) => {
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
         updateCaseInteractor,
-        updateCaseTrialSortTags,
-        validatePdf,
-        verifyCaseForUser: verifyCaseForUserUC,
-        verifyPendingCaseForUser: verifyPendingCaseForUserUC,
-        virusScanPdf: args =>
-          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdf(args),
+        updateCaseTrialSortTagsInteractor,
+        validatePdfInteractor,
+        verifyCaseForUserInteractor,
+        verifyPendingCaseForUserInteractor,
+        virusScanPdfInteractor: args =>
+          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };
     },
     getUtilities: () => {
