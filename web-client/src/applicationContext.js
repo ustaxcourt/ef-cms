@@ -85,18 +85,18 @@ import { removeItem } from '../../shared/src/persistence/localStorage/removeItem
 import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
-import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
-import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
+import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setCaseToReadyForTrialInteractor } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItem as setItemUC } from '../../shared/src/business/useCases/setItemInteractor';
-import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
-import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
-import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
+import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
+import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { signDocument } from '../../shared/src/proxies/documents/signDocumentProxy';
-import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
-import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
+import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
+import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
-import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
+import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
@@ -190,16 +190,16 @@ const allUseCases = {
   removeItem: removeItemUC,
   runBatchProcessInteractor,
   sanitizePdfInteractor,
-  sendPetitionToIRSHoldingQueue,
-  setCaseToReadyForTrial,
+  sendPetitionToIRSHoldingQueueInteractor,
+  setCaseToReadyForTrialInteractor,
   setItem: setItemUC,
-  setTrialSessionAsSwingSession,
-  setTrialSessionCalendar,
-  setWorkItemAsRead,
+  setTrialSessionAsSwingSessionInteractor,
+  setTrialSessionCalendarInteractor,
+  setWorkItemAsReadInteractor,
   signDocument,
-  submitCaseAssociationRequest,
-  submitPendingCaseAssociationRequest,
-  updateCase,
+  submitCaseAssociationRequestInteractor,
+  submitPendingCaseAssociationRequestInteractor,
+  updateCaseInteractor,
   updateCaseTrialSortTags,
   uploadExternalDocument,
   uploadExternalDocuments,

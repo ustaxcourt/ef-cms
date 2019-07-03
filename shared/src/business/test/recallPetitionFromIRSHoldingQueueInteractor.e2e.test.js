@@ -15,7 +15,7 @@ const {
   recallPetitionFromIRSHoldingQueueInteractor,
 } = require('../useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
-  sendPetitionToIRSHoldingQueue,
+  sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -77,7 +77,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
     });
     expect(theCase.status).toEqual('New');
 
-    await sendPetitionToIRSHoldingQueue({
+    await sendPetitionToIRSHoldingQueueInteractor({
       applicationContext,
       caseId,
     });

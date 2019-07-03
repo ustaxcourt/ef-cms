@@ -80,15 +80,19 @@ export const submitCaseAssociationRequestAction = async ({
   ].includes(documentMetadata.documentType);
 
   if (documentWithImmediateAssociation) {
-    await applicationContext.getUseCases().submitCaseAssociationRequest({
-      applicationContext,
-      caseId,
-    });
+    await applicationContext
+      .getUseCases()
+      .submitCaseAssociationRequestInteractor({
+        applicationContext,
+        caseId,
+      });
   } else if (documentWithPendingAssociation) {
-    await applicationContext.getUseCases().submitPendingCaseAssociationRequest({
-      applicationContext,
-      caseId,
-    });
+    await applicationContext
+      .getUseCases()
+      .submitPendingCaseAssociationRequestInteractor({
+        applicationContext,
+        caseId,
+      });
   }
 
   for (let document of caseDetail.documents) {

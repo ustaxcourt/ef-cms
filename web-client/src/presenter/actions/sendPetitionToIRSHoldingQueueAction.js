@@ -14,10 +14,12 @@ export const sendPetitionToIRSHoldingQueueAction = async ({
   get,
   props,
 }) => {
-  await applicationContext.getUseCases().sendPetitionToIRSHoldingQueue({
-    applicationContext,
-    caseId: get(state.caseDetail).caseId,
-  });
+  await applicationContext
+    .getUseCases()
+    .sendPetitionToIRSHoldingQueueInteractor({
+      applicationContext,
+      caseId: get(state.caseDetail).caseId,
+    });
   props.docketNumber = get(state.caseDetail).docketNumber;
   return {
     alertSuccess: {

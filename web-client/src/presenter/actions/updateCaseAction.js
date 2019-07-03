@@ -20,10 +20,12 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
     });
   }
 
-  const caseDetail = await applicationContext.getUseCases().updateCase({
-    applicationContext,
-    caseToUpdate,
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .updateCaseInteractor({
+      applicationContext,
+      caseToUpdate,
+    });
 
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
     const { Case } = applicationContext.getEntityConstructors();

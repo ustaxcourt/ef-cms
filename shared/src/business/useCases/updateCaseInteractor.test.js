@@ -1,6 +1,6 @@
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
-const { updateCase } = require('./updateCaseInteractor');
+const { updateCaseInteractor } = require('./updateCaseInteractor');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -57,7 +57,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCase({
+      await updateCaseInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
@@ -89,7 +89,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCase({
+      await updateCaseInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         petitioners: [{ name: 'Test Taxpayer' }],
@@ -120,7 +120,7 @@ describe('updateCase', () => {
     };
     let updatedCase;
 
-    updatedCase = await updateCase({
+    updatedCase = await updateCaseInteractor({
       applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
@@ -159,7 +159,7 @@ describe('updateCase', () => {
       },
     };
 
-    const updatedCase = await updateCase({
+    const updatedCase = await updateCaseInteractor({
       applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
@@ -187,7 +187,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCase({
+      await updateCaseInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
@@ -217,7 +217,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCase({
+      await updateCaseInteractor({
         applicationContext,
         caseId: '123',
         caseToUpdate: MOCK_CASE,
