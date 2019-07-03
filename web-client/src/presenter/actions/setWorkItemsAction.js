@@ -10,7 +10,7 @@ import _ from 'lodash';
  * @param {object} providers.props the cerebral props object used for getting the props.workItems
  * @returns {undefined}
  */
-export const setWorkItemsAction = ({ applicationContext, store, props }) => {
+export const setWorkItemsAction = ({ applicationContext, props, store }) => {
   const orderedWorkItems = _.orderBy(props.workItems, 'updatedAt', 'desc').map(
     workItem => ({
       ...workItem,

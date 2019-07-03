@@ -26,7 +26,7 @@ export const PartiesFilingReadOnly = connect(
         </h2>
         <div className="blue-container">
           <div className="usa-form-group margin-bottom-0">
-            <label htmlFor="filing-parties" className="usa-label">
+            <label className="usa-label" htmlFor="filing-parties">
               Filing Parties
             </label>
             <ul className="ustc-unstyled-list without-margins">

@@ -75,6 +75,9 @@ describe('uploadExternalDocument', () => {
         }),
         getUseCases: () => ({
           fileExternalDocument: () => {},
+          sanitizePdf: () => null,
+          validatePdf: () => null,
+          virusScanPdf: () => null,
         }),
       };
       await uploadExternalDocument({
@@ -104,6 +107,9 @@ describe('uploadExternalDocument', () => {
         }),
         getUseCases: () => ({
           fileExternalDocument: () => {},
+          sanitizePdf: () => null,
+          validatePdf: () => null,
+          virusScanPdf: () => null,
         }),
       };
       await uploadExternalDocument({
@@ -136,6 +142,9 @@ describe('uploadExternalDocument', () => {
         }),
         getUseCases: () => ({
           fileExternalDocument: () => {},
+          sanitizePdf: () => null,
+          validatePdf: () => null,
+          virusScanPdf: () => null,
         }),
       };
       await uploadExternalDocument({

@@ -1,10 +1,12 @@
-const { Case, STATUS_TYPES } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 
 /**
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
+exports.checkForReadyForTrialCasesInteractor = async ({
+  applicationContext,
+}) => {
   applicationContext.logger.info('Time', new Date().toISOString());
 
   const caseCatalog = await applicationContext
@@ -14,7 +16,7 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
     });
 
   for (let caseRecord of caseCatalog) {
-    const caseId = caseRecord.caseId;
+    const { caseId } = caseRecord;
     const caseToCheck = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
@@ -25,10 +27,12 @@ exports.checkForReadyForTrialCases = async ({ applicationContext }) => {
     if (caseToCheck) {
       const caseEntity = new Case(caseToCheck);
 
-      if (caseEntity.status === STATUS_TYPES.generalDocket) {
+      if (caseEntity.status === Case.STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
 
-        if (caseEntity.status === STATUS_TYPES.generalDocketReadyForTrial) {
+        if (
+          caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial
+        ) {
           await applicationContext.getPersistenceGateway().updateCase({
             applicationContext,
             caseToUpdate: caseEntity.validate().toRawObject(),

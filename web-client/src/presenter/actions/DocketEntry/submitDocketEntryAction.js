@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const submitDocketEntryAction = async ({
+  applicationContext,
   get,
   props,
-  applicationContext,
 }) => {
-  const { docketNumber, caseId } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId, secondaryDocumentFileId } = props;
 
   let documentMetadata = omit(
@@ -29,7 +29,8 @@ export const submitDocketEntryAction = async ({
     isPaper: true,
     docketNumber,
     caseId,
-    createdAt: documentMetadata.dateReceived,
+    createdAt: new Date().toISOString(),
+    receivedAt: documentMetadata.dateReceived,
   };
 
   if (documentMetadata.secondaryDocument) {
@@ -48,6 +49,29 @@ export const submitDocketEntryAction = async ({
     };
   }
 
+  const documentIds = [primaryDocumentFileId, secondaryDocumentFileId].filter(
+    documentId => documentId,
+  );
+
+  for (let documentId of documentIds) {
+    if (documentId) {
+      await applicationContext.getUseCases().virusScanPdf({
+        applicationContext,
+        documentId,
+      });
+
+      await applicationContext.getUseCases().validatePdf({
+        applicationContext,
+        documentId,
+      });
+
+      await applicationContext.getUseCases().sanitizePdf({
+        applicationContext,
+        documentId,
+      });
+    }
+  }
+
   const caseDetail = await applicationContext
     .getUseCases()
     .fileExternalDocument({
@@ -59,21 +83,6 @@ export const submitDocketEntryAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().virusScanPdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
-      await applicationContext.getUseCases().validatePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
-      await applicationContext.getUseCases().sanitizePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
         caseId: caseDetail.caseId,

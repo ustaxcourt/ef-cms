@@ -26,7 +26,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: true,
+      workQueueIsInternal: false,
     });
 
     const sectionWorkQueue = test.getState('workQueue');
@@ -47,6 +47,11 @@ export default test => {
         'Proposed Stipulated Decision filed by Respondent is ready for review.',
     });
 
+    await test.runSequence('chooseWorkQueueSequence', {
+      box: 'inbox',
+      queue: 'section',
+      workQueueIsInternal: true,
+    });
     sectionOutboxWorkQueue = test.getState('workQueue');
     answerWorkItem = sectionOutboxWorkQueue.find(
       workItem => workItem.workItemId === test.answerWorkItemId,
@@ -85,7 +90,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsInternal: true,
+      workQueueIsInternal: false,
     });
   });
 };

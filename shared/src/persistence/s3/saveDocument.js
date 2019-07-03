@@ -1,7 +1,7 @@
 exports.saveDocument = ({
-  documentId: key,
-  document: body,
   applicationContext,
+  document: body,
+  documentId: key,
 }) => {
   return applicationContext
     .getStorageClient()

@@ -69,7 +69,7 @@ const formatYearAmount = (applicationContext, caseDetailErrors, caseDetail) => (
   return {
     ...yearAmount,
     year:
-      formattedYear.indexOf('Invalid') > -1 || yearAmount.year.length < 4
+      formattedYear.includes('Invalid') || yearAmount.year.length < 4
         ? yearAmount.year
         : formattedYear,
   };
@@ -107,7 +107,7 @@ const formatDocketRecordWithDocument = (
   return docketRecords.map(record => {
     let document;
 
-    const index = record.index;
+    const { index } = record;
 
     if (record.documentId) {
       document = documentMap[record.documentId];
@@ -177,10 +177,16 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
     return a.index - b.index;
   });
 
-  if (result.respondent)
-    result.respondent.formattedName = `${result.respondent.name} ${
-      result.respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
+  const formatRespondent = respondent => {
+    respondent.formattedName = `${respondent.name} ${
+      respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
     }`;
+    return respondent;
+  };
+
+  if (result.respondents) {
+    result.respondents = result.respondents.map(formatRespondent);
+  }
 
   if (result.practitioner) {
     let formattedName = result.practitioner.name;
@@ -230,6 +236,28 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
 
   formatYearAmounts(applicationContext, result, caseDetailErrors);
 
+  result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
+  result.formattedTrialDate = 'Not scheduled';
+  result.formattedTrialJudge = 'Not assigned';
+
+  if (result.trialSessionId) {
+    result.formattedTrialCity = result.trialLocation || 'Not assigned';
+    result.formattedTrialJudge = result.trialJudge || 'Not assigned';
+    result.formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(result.trialDate, 'YYYY-MM-DD');
+    if (result.trialTime) {
+      result.formattedTrialDate += `T${result.trialTime}:00`;
+      result.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(result.formattedTrialDate, 'DATE_TIME');
+    } else {
+      result.formattedTrialDate = applicationContext
+        .getUtilities()
+        .formatDateString(result.formattedTrialDate, 'MMDDYY');
+    }
+  }
+
   return result;
 };
 
@@ -276,7 +304,7 @@ const getDocketRecordSortFunc = sortBy => {
 
 const sortDocketRecords = (docketRecords = [], sortBy = '') => {
   const sortFunc = getDocketRecordSortFunc(sortBy);
-  const isReversed = sortBy.indexOf('Desc') > -1;
+  const isReversed = sortBy.includes('Desc');
   const result = docketRecords.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable

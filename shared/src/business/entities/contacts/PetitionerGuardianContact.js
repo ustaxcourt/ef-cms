@@ -1,9 +1,9 @@
-const { createContactFactory } = require('./PetitionContact');
+const { ContactFactory } = require('./ContactFactory');
 
 /**
  * returns the constructor used for creating the PetitionerGuardianContact entity
  */
-exports.getPetitionerGuardianContact = createContactFactory({
+exports.getPetitionerGuardianContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {
     name: 'Name of Guardian is a required field.',
   },

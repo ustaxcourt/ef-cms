@@ -13,8 +13,8 @@ import { state } from 'cerebral';
  */
 export const validatePetitionFromPaperAction = ({
   applicationContext,
-  path,
   get,
+  path,
   props,
 }) => {
   const petition = get(state.petition);

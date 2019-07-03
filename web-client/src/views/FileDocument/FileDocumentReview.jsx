@@ -24,7 +24,7 @@ export const FileDocumentReview = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h1 className="heading-1" tabIndex="-1" id="file-a-document-header">
+          <h1 className="heading-1" id="file-a-document-header" tabIndex="-1">
             Review Your Filing
           </h1>
         </Focus>
@@ -33,7 +33,7 @@ export const FileDocumentReview = connect(
           information appears the way you want it to.
         </p>
 
-        <div id="file-document-hint" className="usa-alert usa-alert--warning">
+        <div className="usa-alert usa-alert--warning" id="file-document-hint">
           <div className="usa-alert__body">
             <h3 className="usa-alert__heading">Before You Submit...</h3>
             <p className="usa-alert__text">
@@ -52,9 +52,9 @@ export const FileDocumentReview = connect(
 
         <div className="button-box-container">
           <button
+            className="usa-button"
             id="submit-document"
             type="submit"
-            className="usa-button"
             onClick={() => {
               submitExternalDocumentSequence();
             }}
@@ -62,8 +62,8 @@ export const FileDocumentReview = connect(
             Submit Your Filing
           </button>
           <button
-            type="button"
             className="usa-button usa-button--outline"
+            type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

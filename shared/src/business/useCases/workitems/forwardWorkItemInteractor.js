@@ -2,7 +2,7 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -17,10 +17,10 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
  */
 exports.forwardWorkItem = async ({
-  workItemId,
+  applicationContext,
   assigneeId,
   message,
-  applicationContext,
+  workItemId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -98,7 +98,10 @@ exports.forwardWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
     applicationContext,
-    workItem: workItemToForward.validate().toRawObject(),
+    workItem: {
+      ...workItemToForward.validate().toRawObject(),
+      createdAt: new Date().toISOString(),
+    },
   });
 
   return workItemToForward.toRawObject();

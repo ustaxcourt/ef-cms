@@ -6,9 +6,9 @@ const { post } = require('./requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.sendPetitionToIRSHoldingQueue = ({ caseId, applicationContext }) => {
+exports.sendPetitionToIRSHoldingQueue = ({ applicationContext, caseId }) => {
   return post({
     applicationContext,
-    endpoint: `/cases/${caseId}/sendToIRSHoldingQueue`,
+    endpoint: `/cases/${caseId}/send-to-irs-holding-queue`,
   });
 };

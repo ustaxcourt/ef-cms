@@ -1,5 +1,5 @@
 /**
- * Fetches the eligible cases for a trial sessions
+ * Fetches the eligible cases for a trial session
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCase use case
@@ -10,7 +10,7 @@ export const getEligibleCasesForTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
-  const trialSessionId = props.trialSessionId;
+  const { trialSessionId } = props;
   const eligibleCases = await applicationContext
     .getUseCases()
     .getEligibleCasesForTrialSession({

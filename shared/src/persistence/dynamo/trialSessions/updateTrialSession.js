@@ -1,8 +1,8 @@
 const client = require('../../dynamodbClientService');
 
 exports.updateTrialSession = async ({
-  trialSessionToUpdate,
   applicationContext,
+  trialSessionToUpdate,
 }) => {
   return await client.put({
     Item: {

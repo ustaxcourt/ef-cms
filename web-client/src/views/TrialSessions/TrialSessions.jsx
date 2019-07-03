@@ -13,15 +13,15 @@ export const TrialSessions = () => (
       <SuccessNotification />
       <ErrorNotification />
 
-      <Tabs defaultActiveTab="Upcoming" bind="trialsessions.group">
-        <a href="/add-a-trial-session" className="usa-button tab-right-button">
+      <Tabs bind="trialsessions.group" defaultActiveTab="Upcoming">
+        <a className="usa-button tab-right-button" href="/add-a-trial-session">
           <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Trial Session
         </a>
 
         <Tab
+          id="upcoming-trialsessions-tab"
           tabName="Upcoming"
           title="Upcoming"
-          id="upcoming-trialsessions-tab"
         >
           <div id="upcoming-trialsessions-tab-content">
             <UpcomingTrialSessions />

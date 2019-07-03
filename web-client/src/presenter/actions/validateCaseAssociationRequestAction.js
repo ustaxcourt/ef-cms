@@ -11,8 +11,8 @@ import { state } from 'cerebral';
  */
 export const validateCaseAssociationRequestAction = ({
   applicationContext,
-  path,
   get,
+  path,
 }) => {
   const caseAssociationRequest = {
     ...get(state.form),

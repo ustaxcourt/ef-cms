@@ -12,8 +12,7 @@ export const extractedPendingMessagesFromCaseDetail = (
     .filter(items => !items.completedAt)
     .map(workItem => formatWorkItem(applicationContext, workItem))
     .filter(
-      workItem =>
-        workItem.currentMessage.message.indexOf('batched for IRS') === -1,
+      workItem => !workItem.currentMessage.message.includes('batched for IRS'),
     );
   workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
   return workQueue;

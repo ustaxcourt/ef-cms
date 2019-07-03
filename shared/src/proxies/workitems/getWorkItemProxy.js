@@ -11,6 +11,6 @@ const { get } = require('../requests');
 exports.getWorkItem = ({ applicationContext, workItemId }) => {
   return get({
     applicationContext,
-    endpoint: `/workitems/${workItemId}`,
+    endpoint: `/work-items/${workItemId}`,
   });
 };

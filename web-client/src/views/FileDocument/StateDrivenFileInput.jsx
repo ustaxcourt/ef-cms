@@ -27,18 +27,16 @@ export const StateDrivenFileInput = connect(
     return (
       <React.Fragment>
         <input
-          id={id}
-          type="file"
           accept=".pdf"
+          aria-describedby={ariaDescribedBy}
+          className="usa-input"
+          id={id}
+          name={name}
+          ref={ref => (inputRef = ref)}
           style={{
             display: form[name] ? 'none' : 'block',
           }}
-          ref={ref => (inputRef = ref)}
-          name={name}
-          aria-describedby={ariaDescribedBy}
-          onClick={e => {
-            if (form[name]) e.preventDefault();
-          }}
+          type="file"
           onChange={e => {
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
               updateFormValueSequence({
@@ -52,7 +50,9 @@ export const StateDrivenFileInput = connect(
               validationSequence();
             });
           }}
-          className="usa-input"
+          onClick={e => {
+            if (form[name]) e.preventDefault();
+          }}
         />
 
         {form[name] && (

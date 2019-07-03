@@ -30,17 +30,17 @@ export const DocketRecord = connect(
         <DocketRecordHeader />
 
         <table
-          className="usa-table case-detail docket-record responsive-table row-border-only"
           aria-label="docket record"
+          className="usa-table case-detail docket-record responsive-table row-border-only"
         >
           <thead>
             <tr>
-              <th className="center-column" aria-label="Number">
+              <th aria-label="Number" className="center-column">
                 No.
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
-              <th className="icon-column" aria-hidden="true" />
+              <th aria-hidden="true" className="icon-column" />
               <th>Filings and Proceedings</th>
               <th>Filed By</th>
               <th>Action</th>
@@ -50,7 +50,7 @@ export const DocketRecord = connect(
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ record, document, index }, arrayIndex) => (
+              ({ document, index, record }, arrayIndex) => (
                 <tr key={index}>
                   <td className="center-column hide-on-mobile">{index}</td>
                   <td>
@@ -60,8 +60,8 @@ export const DocketRecord = connect(
                     {document && document.eventCode}
                   </td>
                   <td
-                    className="filing-type-icon hide-on-mobile"
                     aria-hidden="true"
+                    className="filing-type-icon hide-on-mobile"
                   >
                     {document && document.isPaper && (
                       <FontAwesomeIcon icon={['fas', 'file-alt']} />
@@ -70,16 +70,16 @@ export const DocketRecord = connect(
                       helper.showDirectDownloadLink &&
                       document.processingStatus !== 'complete' && (
                         <FontAwesomeIcon
-                          icon="spinner"
                           className="fa-spin spinner"
+                          icon="spinner"
                         />
                       )}
                   </td>
                   <td>
                     <FilingsAndProceedings
-                      record={record}
-                      document={document}
                       arrayIndex={arrayIndex}
+                      document={document}
+                      record={record}
                     />
                   </td>
                   <td className="hide-on-mobile">

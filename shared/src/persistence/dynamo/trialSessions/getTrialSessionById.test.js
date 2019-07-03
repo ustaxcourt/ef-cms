@@ -23,6 +23,7 @@ describe('getTrialSessionById', () => {
     };
     const result = await getTrialSessionById({
       applicationContext,
+      trialSessionId: '123',
     });
     expect(result).toEqual({ trialSessionId: '123' });
   });

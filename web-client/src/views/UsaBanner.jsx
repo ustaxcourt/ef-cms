@@ -17,15 +17,15 @@ export const UsaBanner = connect(
           <header className="usa-banner__header">
             <div className="grid-container usa-banner__inner">
               <img
+                alt="U.S. flag"
                 className="usa-banner__header-flag"
                 src={usFlag}
-                alt="U.S. flag"
               />
               <p>An official website of the United States government&nbsp;</p>
               <button
-                className="usa-accordion__button usa-banner__button"
-                aria-expanded={showDetails}
                 aria-controls="gov-banner"
+                aria-expanded={showDetails}
+                className="usa-accordion__button usa-banner__button"
                 onClick={() => toggleUsaBannerDetailsSequence()}
               >
                 <span className="usa-banner__button-text">
@@ -36,16 +36,16 @@ export const UsaBanner = connect(
           </header>
           {showDetails && (
             <div
+              aria-hidden="false"
               className="usa-banner__content grid-container usa-accordion__content"
               id="gov-banner"
-              aria-hidden="false"
             >
               <div className="grid-row grid-gap-lg">
                 <div className="usa-banner__guidance tablet:grid-col-6">
                   <img
+                    alt="Dot gov"
                     className="usa-banner__icon usa-media-block__img"
                     src={iconDotGov}
-                    alt="Dot gov"
                   />
                   <div className="usa-media-block__body">
                     <p>
@@ -59,9 +59,9 @@ export const UsaBanner = connect(
                 </div>
                 <div className="usa-banner__guidance tablet:grid-col-6">
                   <img
+                    alt="Https"
                     className="usa-banner__icon usa-media-block__img"
                     src={iconHttps}
-                    alt="Https"
                   />
                   <div className="usa-media-block__body">
                     <p>

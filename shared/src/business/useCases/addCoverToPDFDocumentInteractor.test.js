@@ -2,18 +2,23 @@ const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
 const {
-  addCoverToPDFDocument,
+  addCoverToPDFDocumentInteractor,
 } = require('./addCoverToPDFDocumentInteractor.js');
 const { PDFDocumentFactory } = require('pdf-lib');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../utilities/DateHandler');
 
 function testPdfDocBytes() {
   // sample.pdf is a 1 page document
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 }
 
-describe('addCoverToPDFDocument', () => {
+describe('addCoverToPDFDocumentInteractor', () => {
   let testPdfDoc;
 
   const testingCaseData = {
@@ -96,6 +101,13 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+        getUtilities: () => {
+          return {
+            createISODateString,
+            formatDateString,
+            prepareDateFromString,
+          };
+        },
         logger: {
           time: () => null,
           timeEnd: () => null,
@@ -105,7 +117,7 @@ describe('addCoverToPDFDocument', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    const newPdfData = await addCoverToPDFDocument(params);
+    const newPdfData = await addCoverToPDFDocumentInteractor(params);
 
     const newPdfDoc = PDFDocumentFactory.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
@@ -136,6 +148,13 @@ describe('addCoverToPDFDocument', () => {
         getStorageClient: () => ({
           getObject: getObjectStub,
         }),
+        getUtilities: () => {
+          return {
+            createISODateString,
+            formatDateString,
+            prepareDateFromString,
+          };
+        },
         logger: {
           time: () => null,
           timeEnd: () => null,
@@ -145,7 +164,7 @@ describe('addCoverToPDFDocument', () => {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 
-    const newPdfData = await addCoverToPDFDocument(params);
+    const newPdfData = await addCoverToPDFDocumentInteractor(params);
 
     const newPdfDoc = PDFDocumentFactory.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();

@@ -1,4 +1,4 @@
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 
 /**
  * getProcedureTypes
@@ -7,5 +7,5 @@ const { Case } = require('../entities/Case');
  * @returns {Promise<*>}
  */
 exports.getProcedureTypes = async () => {
-  return Case.getProcedureTypes();
+  return Case.PROCEDURE_TYPES;
 };

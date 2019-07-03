@@ -19,6 +19,7 @@ export const DocumentDetail = connect(
     baseUrl: state.baseUrl,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
+    gotoSignPDFDocumentSequence: sequences.gotoSignPDFDocumentSequence,
     helper: state.documentDetailHelper,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
@@ -28,6 +29,7 @@ export const DocumentDetail = connect(
     baseUrl,
     caseHelper,
     clickServeToIrsSequence,
+    gotoSignPDFDocumentSequence,
     helper,
     setModalDialogNameSequence,
     showModal,
@@ -48,18 +50,18 @@ export const DocumentDetail = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
                 <Tabs
-                  className="no-full-border-bottom tab-button-h2"
                   bind="currentTab"
+                  className="no-full-border-bottom tab-button-h2"
                 >
                   {helper.showDocumentInfoTab && (
                     <Tab
+                      id="tab-document-info"
                       tabName="Document Info"
                       title="Document Info"
-                      id="tab-document-info"
                     >
                       <div
-                        id="tab-document-info-panel"
                         aria-labelledby="tab-document-info"
+                        id="tab-document-info-panel"
                       >
                         {helper.showCaseDetailsEdit && <CaseDetailEdit />}
                         {helper.showCaseDetailsView && <CaseDetailReadOnly />}
@@ -67,31 +69,31 @@ export const DocumentDetail = connect(
                     </Tab>
                   )}
                   <Tab
+                    id="tab-pending-messages"
                     tabName="Messages"
                     title="Messages"
-                    id="tab-pending-messages"
                   >
                     <div
-                      id="tab-pending-messages-panel"
                       aria-labelledby="tab-pending-messages"
+                      id="tab-pending-messages-panel"
                     >
                       <Tabs
+                        boxed
+                        bind="documentDetail.messagesTab"
                         className="container-tabs no-full-border-bottom tab-button-h3"
                         id="case-detail-messages-tabs"
-                        bind="documentDetail.messagesTab"
-                        boxed
                       >
                         <Tab
+                          id="tab-messages-in-progress"
                           tabName="inProgress"
                           title="In Progress"
-                          id="tab-messages-in-progress"
                         >
                           <PendingMessages />
                         </Tab>
                         <Tab
+                          id="tab-messages-completed"
                           tabName="completed"
                           title="Complete"
-                          id="tab-messages-completed"
                         >
                           <CompletedMessages />
                         </Tab>
@@ -136,13 +138,27 @@ export const DocumentDetail = connect(
                         </button>
                       </span>
                     )}
+                  {helper.showSignDocumentButton && (
+                    <button
+                      className="usa-button serve-to-irs margin-right-0"
+                      onClick={() =>
+                        gotoSignPDFDocumentSequence({
+                          documentId: helper.formattedDocument.documentId,
+                          pageNumber: 1,
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon icon={['far', 'edit']} />
+                      Sign This Document
+                    </button>
+                  )}
                 </div>
 
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CYPRESS && (
                   <iframe
+                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
                     title={`Document type: ${helper.formattedDocument.documentType}`}
-                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/documentDownloadUrl?token=${token}`}
                   />
                 )}
               </div>

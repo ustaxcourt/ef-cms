@@ -1,17 +1,23 @@
 const {
-  isAuthorized,
+  CREATE_COURT_ISSUED_ORDER,
   FILE_EXTERNAL_DOCUMENT,
+  isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadExternalDocuments = async ({
-  onUploadProgresses,
-  documentFiles,
   applicationContext,
+  documentFiles,
+  onUploadProgresses,
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (
+    !(
+      isAuthorized(user, FILE_EXTERNAL_DOCUMENT) ||
+      isAuthorized(user, CREATE_COURT_ISSUED_ORDER)
+    )
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
