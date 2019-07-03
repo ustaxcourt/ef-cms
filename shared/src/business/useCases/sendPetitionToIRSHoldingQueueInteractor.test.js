@@ -3,7 +3,7 @@ const {
 } = require('./sendPetitionToIRSHoldingQueueInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { getCase } = require('./getCaseInteractor');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
@@ -97,7 +97,7 @@ describe('Send petition to IRS Holding Queue', () => {
           updateWorkItem: () => Promise.resolve(null),
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
   });
 
@@ -142,7 +142,7 @@ describe('Send petition to IRS Holding Queue', () => {
           updateCase: () => null,
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {
@@ -182,7 +182,7 @@ describe('Send petition to IRS Holding Queue', () => {
           updateWorkItem: () => Promise.resolve(null),
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {

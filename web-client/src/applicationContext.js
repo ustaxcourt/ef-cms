@@ -41,29 +41,29 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
+import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
-import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
+import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
-import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
+import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
-import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
+import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 import { generateSignedDocument } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
-import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
-import { getCase } from '../../shared/src/proxies/getCaseProxy';
+import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
+import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
-import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
-import { getDocumentQCBatchedForSection } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
-import { getDocumentQCBatchedForUser } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
-import { getDocumentQCInboxForSection } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
-import { getDocumentQCInboxForUser } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
-import { getDocumentQCServedForSection } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
-import { getDocumentQCServedForUser } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
-import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
+import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
+import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
+import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
+import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
+import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
+import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
-import { getInboxMessagesForSection } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
+import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
@@ -149,29 +149,29 @@ const allUseCases = {
   createCoverSheet,
   createDocument,
   createTrialSessionInteractor,
-  createWorkItem,
+  createWorkItemInteractor,
   downloadDocumentFile,
-  fileExternalDocument,
+  fileExternalDocumentInteractor,
   filePetition,
   filePetitionFromPaper,
-  forwardWorkItem,
+  forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
-  generatePDFFromPNGData,
+  generatePDFFromPNGDataInteractor,
   generateSignedDocument,
-  getCalendaredCasesForTrialSession,
-  getCase,
+  getCalendaredCasesForTrialSessionInteractor,
+  getCaseInteractor,
   getCaseTypes,
-  getCasesByUser,
-  getDocumentQCBatchedForSection,
-  getDocumentQCBatchedForUser,
-  getDocumentQCInboxForSection,
-  getDocumentQCInboxForUser,
-  getDocumentQCServedForSection,
-  getDocumentQCServedForUser,
-  getEligibleCasesForTrialSession,
+  getCasesByUserInteractor,
+  getDocumentQCBatchedForSectionInteractor,
+  getDocumentQCBatchedForUserInteractor,
+  getDocumentQCInboxForSectionInteractor,
+  getDocumentQCInboxForUserInteractor,
+  getDocumentQCServedForSectionInteractor,
+  getDocumentQCServedForUserInteractor,
+  getEligibleCasesForTrialSessionInteractor,
   getFilingTypes,
-  getInboxMessagesForSection,
+  getInboxMessagesForSectionInteractor,
   getInboxMessagesForUser,
   getInternalUsers,
   getItem: getItemUC,

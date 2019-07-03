@@ -11,7 +11,7 @@ describe('submitCourtIssuedOrderAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        fileExternalDocument: fileExternalDocumentStub,
+        fileExternalDocumentInteractor: fileExternalDocumentStub,
         sanitizePdf: () => {},
         validatePdf: () => {},
         virusScanPdf: () => {},

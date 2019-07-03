@@ -22,7 +22,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.fileExternalDocument = async ({
+exports.fileExternalDocumentInteractor = async ({
   applicationContext,
   documentMetadata,
   primaryDocumentFileId,

@@ -6,22 +6,22 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  createWorkItem,
+  createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
-  getDocumentQCBatchedForSection,
+  getDocumentQCBatchedForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
-  getDocumentQCBatchedForUser,
+  getDocumentQCBatchedForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCBatchedForUserInteractor');
 const {
-  getDocumentQCInboxForSection,
+  getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getDocumentQCInboxForUser,
+  getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
-  getInboxMessagesForSection,
+  getInboxMessagesForSectionInteractor,
 } = require('../useCases/workitems/getInboxMessagesForSectionInteractor');
 const {
   getInboxMessagesForUser,
@@ -83,7 +83,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     };
 
     // verify work item in petitions section inbox
-    const petitionSectionInbox = await getDocumentQCInboxForSection({
+    const petitionSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
       section: 'petitions',
     });
@@ -125,7 +125,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       assigneeName: 'Test Petitionsclerk',
       workItemId,
     });
-    const petitionsUserInbox = await getDocumentQCInboxForUser({
+    const petitionsUserInbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -159,7 +159,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     ]);
 
     // create a new work item on petition for docketclerk
-    await createWorkItem({
+    await createWorkItemInteractor({
       applicationContext,
       assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       caseId,
@@ -202,7 +202,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const docketSectionInbox = await getInboxMessagesForSection({
+    const docketSectionInbox = await getInboxMessagesForSectionInteractor({
       applicationContext,
       section: 'docket',
     });
@@ -249,7 +249,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       caseId,
     });
 
-    const petitionsclerkInboxAfterIRSHoldingQueue = await getDocumentQCInboxForUser(
+    const petitionsclerkInboxAfterIRSHoldingQueue = await getDocumentQCInboxForUserInteractor(
       {
         applicationContext,
         userId: applicationContext.getCurrentUser().userId,
@@ -258,7 +258,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
 
     expect(petitionsclerkInboxAfterIRSHoldingQueue).toEqual([]);
 
-    const petitionSectionInboxAfterIRSHoldingQueue = await getDocumentQCInboxForSection(
+    const petitionSectionInboxAfterIRSHoldingQueue = await getDocumentQCInboxForSectionInteractor(
       {
         applicationContext,
         section: 'petitions',
@@ -266,7 +266,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     );
     expect(petitionSectionInboxAfterIRSHoldingQueue).toEqual([]);
 
-    const petitionsclerkOutboxAfterIRSHoldingQueue = await getDocumentQCBatchedForUser(
+    const petitionsclerkOutboxAfterIRSHoldingQueue = await getDocumentQCBatchedForUserInteractor(
       {
         applicationContext,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -314,7 +314,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const petitionsSectionOutboxAfterIRSHoldingQueue = await getDocumentQCBatchedForSection(
+    const petitionsSectionOutboxAfterIRSHoldingQueue = await getDocumentQCBatchedForSectionInteractor(
       {
         applicationContext,
         section: 'petitions',
@@ -401,10 +401,12 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const docketSectionInboxAfterIRSQueue = await getInboxMessagesForSection({
-      applicationContext,
-      section: 'docket',
-    });
+    const docketSectionInboxAfterIRSQueue = await getInboxMessagesForSectionInteractor(
+      {
+        applicationContext,
+        section: 'docket',
+      },
+    );
     expect(docketSectionInboxAfterIRSQueue).toMatchObject([
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',

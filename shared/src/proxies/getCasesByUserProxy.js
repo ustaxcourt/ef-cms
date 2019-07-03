@@ -6,7 +6,7 @@ const { get } = require('./requests');
  * @param userId
  * @returns {Promise<*>}
  */
-exports.getCasesByUser = ({ applicationContext }) => {
+exports.getCasesByUserInteractor = ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
   return get({
     applicationContext,

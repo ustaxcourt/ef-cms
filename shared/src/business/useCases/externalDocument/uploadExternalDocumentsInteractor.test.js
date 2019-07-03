@@ -44,7 +44,7 @@ describe('uploadExternalDocuments', () => {
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
-        fileExternalDocument: () => {},
+        fileExternalDocumentInteractor: () => {},
       }),
     };
     let error;
@@ -77,7 +77,7 @@ describe('uploadExternalDocuments', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
         }),
       };
       await uploadExternalDocuments({
@@ -107,7 +107,7 @@ describe('uploadExternalDocuments', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
         }),
       };
       const docIds = await uploadExternalDocuments({

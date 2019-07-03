@@ -1,7 +1,7 @@
 const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
-const { createUser } = require('./createUserInteractor');
+const { createUserInteractor } = require('./createUserInteractor');
 
 describe('create user', () => {
   it('creates the user', async () => {
@@ -25,7 +25,7 @@ describe('create user', () => {
       },
     };
     const userToCreate = { userId: 'petitionsclerk1@example.com' };
-    const user = await createUser({
+    const user = await createUserInteractor({
       applicationContext,
       userToCreate,
     });
@@ -55,7 +55,7 @@ describe('create user', () => {
     const userToCreate = { userId: 'petitioner1@example.com' };
     let error;
     try {
-      await createUser({
+      await createUserInteractor({
         applicationContext,
         userToCreate,
       });
