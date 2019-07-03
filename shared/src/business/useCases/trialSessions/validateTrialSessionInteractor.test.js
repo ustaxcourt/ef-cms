@@ -1,8 +1,8 @@
-const { omit } = require('lodash');
-const { TrialSession } = require('../../entities/TrialSession');
 const {
   validateTrialSessionInteractor,
 } = require('./validateTrialSessionInteractor');
+const { omit } = require('lodash');
+const { TrialSession } = require('../../entities/TrialSession');
 
 describe('validateTrialSessionInteractor', () => {
   it('returns the expected errors object on an empty trial session', () => {
