@@ -7,7 +7,10 @@ const { put } = require('./requests');
  * @param caseId
  * @returns {Promise<*>}
  */
-exports.updateCaseTrialSortTagsInteractor = ({ applicationContext, caseId }) => {
+exports.updateCaseTrialSortTagsInteractor = ({
+  applicationContext,
+  caseId,
+}) => {
   return put({
     applicationContext,
     endpoint: `/cases/${caseId}/update-case-trial-sort-tags`,
