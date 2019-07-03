@@ -489,13 +489,13 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         addCoverToPDFDocumentInteractor,
-        createDocumentInteractor,
         assignWorkItemsInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
+        createDocumentInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
