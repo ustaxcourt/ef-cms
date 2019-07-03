@@ -10,10 +10,12 @@ import { state } from 'cerebral';
  * @returns {object} the work item
  */
 export const getWorkItemAction = async ({ applicationContext, get, props }) => {
-  const workItem = await applicationContext.getUseCases().getWorkItem({
-    applicationContext,
-    userId: get(state.user.token),
-    workItemId: props.workItemId,
-  });
+  const workItem = await applicationContext
+    .getUseCases()
+    .getWorkItemInteractor({
+      applicationContext,
+      userId: get(state.user.token),
+      workItemId: props.workItemId,
+    });
   return { workItem };
 };

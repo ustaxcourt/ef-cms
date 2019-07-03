@@ -64,27 +64,27 @@ import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/w
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
-import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
-import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
+import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
+import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
-import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
-import { getSentMessagesForSection } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
-import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
-import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
-import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
-import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
-import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
-import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
+import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
+import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
+import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
+import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
+import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
+import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
-import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
+import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
-import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
-import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
+import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
+import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
@@ -172,24 +172,24 @@ const allUseCases = {
   getEligibleCasesForTrialSessionInteractor,
   getFilingTypes,
   getInboxMessagesForSectionInteractor,
-  getInboxMessagesForUser,
-  getInternalUsers,
+  getInboxMessagesForUserInteractor,
+  getInternalUsersInteractor,
   getItem: getItemUC,
-  getNotifications,
+  getNotificationsInteractor,
   getProcedureTypes,
-  getSentMessagesForSection,
-  getSentMessagesForUser,
-  getTrialSessionDetails,
-  getTrialSessions,
-  getUser,
-  getUsersInSection,
-  getWorkItem,
+  getSentMessagesForSectionInteractor,
+  getSentMessagesForUserInteractor,
+  getTrialSessionDetailsInteractor,
+  getTrialSessionsInteractor,
+  getUserInteractor,
+  getUsersInSectionInteractor,
+  getWorkItemInteractor,
   loadPDFForSigning,
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
   refreshToken,
   removeItem: removeItemUC,
-  runBatchProcess,
-  sanitizePdf,
+  runBatchProcessInteractor,
+  sanitizePdfInteractor,
   sendPetitionToIRSHoldingQueue,
   setCaseToReadyForTrial,
   setItem: setItemUC,

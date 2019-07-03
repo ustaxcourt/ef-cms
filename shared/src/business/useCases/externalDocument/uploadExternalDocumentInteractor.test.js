@@ -75,7 +75,7 @@ describe('uploadExternalDocument', () => {
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
-          sanitizePdf: () => null,
+          sanitizePdfInteractor: () => null,
           validatePdf: () => null,
           virusScanPdf: () => null,
         }),
@@ -107,7 +107,7 @@ describe('uploadExternalDocument', () => {
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
-          sanitizePdf: () => null,
+          sanitizePdfInteractor: () => null,
           validatePdf: () => null,
           virusScanPdf: () => null,
         }),
@@ -142,7 +142,7 @@ describe('uploadExternalDocument', () => {
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
-          sanitizePdf: () => null,
+          sanitizePdfInteractor: () => null,
           validatePdf: () => null,
           virusScanPdf: () => null,
         }),

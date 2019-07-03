@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().getNotifications({
+      const results = await applicationContext.getUseCases().getNotificationsInteractor({
         applicationContext,
       });
       applicationContext.logger.info('User', user);

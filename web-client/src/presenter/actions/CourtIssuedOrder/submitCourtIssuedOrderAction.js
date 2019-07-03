@@ -45,7 +45,7 @@ export const submitCourtIssuedOrderAction = async ({
       documentId,
     });
 
-    await applicationContext.getUseCases().sanitizePdf({
+    await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });

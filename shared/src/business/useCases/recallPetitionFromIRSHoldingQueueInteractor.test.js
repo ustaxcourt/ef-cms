@@ -1,5 +1,5 @@
 const {
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
 } = require('./recallPetitionFromIRSHoldingQueueInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
@@ -87,7 +87,7 @@ describe('Recall petition from IRS Holding Queue', () => {
     };
 
     try {
-      await recallPetitionFromIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'someuser',
@@ -117,7 +117,7 @@ describe('Recall petition from IRS Holding Queue', () => {
     };
     let error;
     try {
-      await recallPetitionFromIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         userId: 'petitionsclerk',
@@ -147,7 +147,7 @@ describe('Recall petition from IRS Holding Queue', () => {
     };
     let error;
     try {
-      await recallPetitionFromIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',

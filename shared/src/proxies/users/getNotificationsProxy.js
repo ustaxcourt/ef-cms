@@ -1,14 +1,14 @@
 const { get } = require('../requests');
 
 /**
- * getNotifications
+ * getNotificationsInteractor
  *
  * @param applicationContext
  * @param caseId
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getNotifications = ({ applicationContext }) => {
+exports.getNotificationsInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
     endpoint: '/notifications',

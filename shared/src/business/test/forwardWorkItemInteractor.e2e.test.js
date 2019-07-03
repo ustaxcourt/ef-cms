@@ -6,10 +6,10 @@ const {
   forwardWorkItemInteractor,
 } = require('../useCases/workitems/forwardWorkItemInteractor');
 const {
-  getInboxMessagesForUser,
+  getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  getSentMessagesForUser,
+  getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -80,13 +80,13 @@ describe('forwardWorkItemInteractor integration test', () => {
       d => d.documentType === 'Petition',
     ).workItems[0];
 
-    let inbox = await getInboxMessagesForUser({
+    let inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toEqual([]);
 
-    let sentWorkItems = await getSentMessagesForUser({
+    let sentWorkItems = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -99,7 +99,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       workItemId: workItem.workItemId,
     });
 
-    sentWorkItems = await getSentMessagesForUser({
+    sentWorkItems = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -136,7 +136,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       });
     };
 
-    inbox = await getInboxMessagesForUser({
+    inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
