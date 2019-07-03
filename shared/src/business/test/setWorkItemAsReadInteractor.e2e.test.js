@@ -9,7 +9,7 @@ const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
-  setWorkItemAsRead,
+  setWorkItemAsReadInteractor,
 } = require('../useCases/workitems/setWorkItemAsReadInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -101,7 +101,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
     });
     expect(inbox.isRead).toBeFalsy();
 
-    await setWorkItemAsRead({
+    await setWorkItemAsReadInteractor({
       applicationContext,
       workItemId: workItemEntity.workItemId,
     });

@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  submitPendingCaseAssociationRequest,
+  submitPendingCaseAssociationRequestInteractor,
 } = require('./submitPendingCaseAssociationRequestInteractor');
 
 describe('submitPendingCaseAssociationRequest', () => {
@@ -32,7 +32,7 @@ describe('submitPendingCaseAssociationRequest', () => {
           verifyCaseForUser: async () => caseRecord,
         }),
       };
-      await submitPendingCaseAssociationRequest({
+      await submitPendingCaseAssociationRequestInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -64,7 +64,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       }),
     };
 
-    await submitPendingCaseAssociationRequest({
+    await submitPendingCaseAssociationRequestInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -94,7 +94,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       }),
     };
 
-    await submitPendingCaseAssociationRequest({
+    await submitPendingCaseAssociationRequestInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -124,7 +124,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       }),
     };
 
-    await submitPendingCaseAssociationRequest({
+    await submitPendingCaseAssociationRequestInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

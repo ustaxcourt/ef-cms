@@ -259,7 +259,7 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
-  saveSignedDocument,
+  saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
   saveWorkItemForDocketClerkFilingExternalDocument,
@@ -271,34 +271,34 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
-  sendPetitionToIRSHoldingQueue,
+  sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
-  setCaseToReadyForTrial,
+  setCaseToReadyForTrialInteractor,
 } = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
 const {
-  setTrialSessionAsSwingSession,
+  setTrialSessionAsSwingSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
 const {
-  setTrialSessionCalendar,
+  setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
 const {
   setWorkItemAsRead,
 } = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
 const {
-  setWorkItemAsRead: setWorkItemAsReadUC,
+  setWorkItemAsReadInteractor,
 } = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
-  submitCaseAssociationRequest,
+  submitCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor');
 const {
-  submitPendingCaseAssociationRequest,
+  submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
-  updateCase: updateCaseUC,
+  updateCaseInteractor,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
   updateCaseTrialSortMappingRecords,
@@ -527,15 +527,15 @@ module.exports = (appContextUser = {}) => {
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
-        saveSignedDocument,
-        sendPetitionToIRSHoldingQueue,
-        setCaseToReadyForTrial,
-        setTrialSessionAsSwingSession,
-        setTrialSessionCalendar,
-        setWorkItemAsRead: setWorkItemAsReadUC,
-        submitCaseAssociationRequest,
-        submitPendingCaseAssociationRequest,
-        updateCase: updateCaseUC,
+        saveSignedDocumentInteractor,
+        sendPetitionToIRSHoldingQueueInteractor,
+        setCaseToReadyForTrialInteractor,
+        setTrialSessionAsSwingSessionInteractor,
+        setTrialSessionCalendarInteractor,
+        setWorkItemAsReadInteractor,
+        submitCaseAssociationRequestInteractor,
+        submitPendingCaseAssociationRequestInteractor,
+        updateCaseInteractor,
         updateCaseTrialSortTags,
         validatePdf,
         verifyCaseForUser: verifyCaseForUserUC,

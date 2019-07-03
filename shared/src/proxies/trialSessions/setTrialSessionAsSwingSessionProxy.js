@@ -1,14 +1,14 @@
 const { post } = require('../requests');
 
 /**
- * setTrialSessionAsSwingSession
+ * setTrialSessionAsSwingSessionInteractor
  *
  * @param applicationContext
  * @param swingSessionId
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.setTrialSessionAsSwingSession = ({
+exports.setTrialSessionAsSwingSessionInteractor = ({
   applicationContext,
   swingSessionId,
   trialSessionId,

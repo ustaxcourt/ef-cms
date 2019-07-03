@@ -1,13 +1,16 @@
 const { put } = require('../requests');
 
 /**
- * submitCaseAssociationRequestProxy
+ * submitCaseAssociationRequestInteractor
  *
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.submitCaseAssociationRequest = ({ applicationContext, caseId }) => {
+exports.submitCaseAssociationRequestInteractor = ({
+  applicationContext,
+  caseId,
+}) => {
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,

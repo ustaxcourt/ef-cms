@@ -13,7 +13,7 @@ presenter.providers.applicationContext = {
     Case,
   }),
   getUseCases: () => ({
-    updateCase: updateCaseStub,
+    updateCaseInteractor: updateCaseStub,
     updateCaseTrialSortTags: updateCaseTrialSortTagsStub,
   }),
 };

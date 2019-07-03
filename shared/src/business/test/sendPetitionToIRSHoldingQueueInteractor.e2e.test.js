@@ -27,7 +27,7 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  sendPetitionToIRSHoldingQueue,
+  sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { User } = require('../entities/User');
@@ -244,7 +244,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       });
     };
 
-    await sendPetitionToIRSHoldingQueue({
+    await sendPetitionToIRSHoldingQueueInteractor({
       applicationContext,
       caseId,
     });

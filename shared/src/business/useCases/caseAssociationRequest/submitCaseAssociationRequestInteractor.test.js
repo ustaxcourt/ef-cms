@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  submitCaseAssociationRequest,
+  submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
 
 describe('submitCaseAssociationRequest', () => {
@@ -33,7 +33,7 @@ describe('submitCaseAssociationRequest', () => {
           verifyCaseForUser: async () => caseRecord,
         }),
       };
-      await submitCaseAssociationRequest({
+      await submitCaseAssociationRequestInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -66,7 +66,7 @@ describe('submitCaseAssociationRequest', () => {
       }),
     };
 
-    await submitCaseAssociationRequest({
+    await submitCaseAssociationRequestInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -98,7 +98,7 @@ describe('submitCaseAssociationRequest', () => {
       }),
     };
 
-    await submitCaseAssociationRequest({
+    await submitCaseAssociationRequestInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -130,7 +130,7 @@ describe('submitCaseAssociationRequest', () => {
       }),
     };
 
-    await submitCaseAssociationRequest({
+    await submitCaseAssociationRequestInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

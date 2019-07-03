@@ -19,8 +19,8 @@ describe('submitCaseAssociationRequestAction', () => {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
         fileExternalDocumentInteractor: fileExternalDocumentStub,
-        submitCaseAssociationRequest: submitCaseAssociationRequestStub,
-        submitPendingCaseAssociationRequest: submitPendingCaseAssociationRequestStub,
+        submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
+        submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,
       }),
     };
   });

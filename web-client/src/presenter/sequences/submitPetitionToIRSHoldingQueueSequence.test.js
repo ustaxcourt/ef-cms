@@ -5,7 +5,7 @@ let test;
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     getCaseInteractor: async () => {},
-    sendPetitionToIRSHoldingQueue: async () => null,
+    sendPetitionToIRSHoldingQueueInteractor: async () => null,
   }),
 };
 

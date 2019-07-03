@@ -23,7 +23,7 @@ const setDocumentDetails = (userId, documents) => {
 };
 
 /**
- * updateCase
+ * updateCaseInteractor
  *
  * @param caseId
  * @param caseToUpdate
@@ -31,7 +31,11 @@ const setDocumentDetails = (userId, documents) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.updateCase = async ({ applicationContext, caseId, caseToUpdate }) => {
+exports.updateCaseInteractor = async ({
+  applicationContext,
+  caseId,
+  caseToUpdate,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, UPDATE_CASE)) {
