@@ -16,6 +16,7 @@ const browserMock = {
 };
 
 const chromiumMock = {
+  font: () => {},
   puppeteer: {
     launch: () => browserMock,
   },
