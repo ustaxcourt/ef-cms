@@ -1,11 +1,11 @@
 const sinon = require('sinon');
 const {
-  checkForReadyForTrialCases,
+  checkForReadyForTrialCasesInteractor,
 } = require('./checkForReadyForTrialCasesInteractor');
+const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { STATUS_TYPES } = require('../entities/cases/Case');
 
-describe('checkForReadyForTrialCases', () => {
+describe('checkForReadyForTrialCasesInteractor', () => {
   let applicationContext;
   let updateCaseSpy;
 
@@ -26,7 +26,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -56,7 +56,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -86,7 +86,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -118,7 +118,7 @@ describe('checkForReadyForTrialCases', () => {
               workItems: [],
             },
           ],
-          status: STATUS_TYPES.generalDocket,
+          status: Case.STATUS_TYPES.generalDocket,
         }),
         updateCase: updateCaseSpy,
       }),
@@ -130,7 +130,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -158,7 +158,7 @@ describe('checkForReadyForTrialCases', () => {
         ],
         getCaseByCaseId: () => ({
           ...MOCK_CASE,
-          status: STATUS_TYPES.generalDocket,
+          status: Case.STATUS_TYPES.generalDocket,
         }),
         updateCase: updateCaseSpy,
       }),
@@ -170,7 +170,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {

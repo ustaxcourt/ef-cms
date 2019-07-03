@@ -2,7 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { instantiateContacts } = require('../contacts/PetitionContact');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
  * CaseExternalIncomplete
@@ -12,26 +12,24 @@ const { instantiateContacts } = require('../contacts/PetitionContact');
  * @constructor
  */
 function CaseExternalIncomplete(rawCase) {
-  Object.assign(this, {
-    businessType: rawCase.businessType,
-    caseType: rawCase.caseType,
-    contactPrimary: rawCase.contactPrimary,
-    contactSecondary: rawCase.contactSecondary,
-    countryType: rawCase.countryType,
-    filingType: rawCase.filingType,
-    hasIrsNotice: rawCase.hasIrsNotice,
-    irsNoticeDate: rawCase.irsNoticeDate,
-    partyType: rawCase.partyType,
-    preferredTrialCity: rawCase.preferredTrialCity,
-    procedureType: rawCase.procedureType,
-  });
+  this.businessType = rawCase.businessType;
+  this.caseType = rawCase.caseType;
+  this.contactPrimary = rawCase.contactPrimary;
+  this.contactSecondary = rawCase.contactSecondary;
+  this.countryType = rawCase.countryType;
+  this.filingType = rawCase.filingType;
+  this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.irsNoticeDate = rawCase.irsNoticeDate;
+  this.partyType = rawCase.partyType;
+  this.preferredTrialCity = rawCase.preferredTrialCity;
+  this.procedureType = rawCase.procedureType;
 
-  const contacts = instantiateContacts({
+  const contacts = ContactFactory.createContacts({
     contactInfo: {
-      primary: this.contactPrimary,
-      secondary: this.contactSecondary,
+      primary: rawCase.contactPrimary,
+      secondary: rawCase.contactSecondary,
     },
-    partyType: this.partyType,
+    partyType: rawCase.partyType,
   });
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;

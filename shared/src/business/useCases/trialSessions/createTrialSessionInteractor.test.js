@@ -1,4 +1,6 @@
-const { createTrialSession } = require('./createTrialSessionInteractor');
+const {
+  createTrialSessionInteractor,
+} = require('./createTrialSessionInteractor');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
@@ -27,7 +29,7 @@ describe('createTrialSessionInteractor', () => {
       }),
     };
     await expect(
-      createTrialSession({
+      createTrialSessionInteractor({
         applicationContext,
         trialSession: MOCK_TRIAL,
       }),
@@ -53,7 +55,7 @@ describe('createTrialSessionInteractor', () => {
     let error;
 
     try {
-      await createTrialSession({
+      await createTrialSessionInteractor({
         applicationContext,
         trialSession: MOCK_TRIAL,
       });
@@ -81,7 +83,7 @@ describe('createTrialSessionInteractor', () => {
     let error;
 
     try {
-      await createTrialSession({
+      await createTrialSessionInteractor({
         applicationContext,
         trialSession: MOCK_TRIAL,
       });
@@ -106,7 +108,7 @@ describe('createTrialSessionInteractor', () => {
       }),
     };
 
-    const result = await createTrialSession({
+    const result = await createTrialSessionInteractor({
       applicationContext,
       trialSession: {
         ...MOCK_TRIAL,
@@ -131,7 +133,7 @@ describe('createTrialSessionInteractor', () => {
       }),
     };
 
-    const result = await createTrialSession({
+    const result = await createTrialSessionInteractor({
       applicationContext,
       trialSession: {
         ...MOCK_TRIAL,
@@ -156,7 +158,7 @@ describe('createTrialSessionInteractor', () => {
       }),
     };
 
-    const result = await createTrialSession({
+    const result = await createTrialSessionInteractor({
       applicationContext,
       trialSession: MOCK_TRIAL,
     });

@@ -57,10 +57,10 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
+import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
-import { refreshSectionInboxCountSequence } from './sequences/refreshSectionInboxCountSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
@@ -94,6 +94,8 @@ import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAsso
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
+import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
+import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -123,6 +125,7 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
+import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
@@ -143,6 +146,7 @@ import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequ
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
+import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
@@ -217,10 +221,10 @@ export const presenter = {
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
     openCreateMessageModalSequence,
+    openCreateOrderChooseTypeModalSequence,
     openSetCalendarModalSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
-    refreshSectionInboxCountSequence,
     removeYearAmountSequence,
     reviewExternalDocumentInformationSequence,
     reviewRequestAccessInformationSequence,
@@ -252,6 +256,8 @@ export const presenter = {
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,
+    submitCourtIssuedOrderSequence,
+    submitCreateOrderModalSequence,
     submitDocketEntrySequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
@@ -281,6 +287,7 @@ export const presenter = {
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
+    updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
     updateDocumentValueSequence,
@@ -301,6 +308,7 @@ export const presenter = {
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,
+    validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
     validateSelectDocumentTypeSequence,
     validateStartCaseSequence,

@@ -6,9 +6,9 @@ const {
   fileExternalDocument,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
@@ -33,7 +33,7 @@ describe('fileExternalDocument integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -418,7 +418,7 @@ describe('fileExternalDocument integration test', () => {
       });
     };
 
-    const workItems = await getWorkItemsBySection({
+    const workItems = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'docket',
     });

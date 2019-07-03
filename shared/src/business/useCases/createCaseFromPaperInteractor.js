@@ -59,7 +59,7 @@ const addPetitionDocumentWithWorkItemToCase = (
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCaseFromPaper = async ({
+exports.createCaseFromPaperInteractor = async ({
   applicationContext,
   ownershipDisclosureFileId,
   petitionFileId,

@@ -20,7 +20,7 @@ export const completeWorkItemAction = async ({
   const completedMessage = (completeForm[props.workItemId] || {})
     .completeMessage;
 
-  await applicationContext.getUseCases().completeWorkItem({
+  await applicationContext.getUseCases().completeWorkItemInteractor({
     applicationContext,
     completedMessage,
     userId: applicationContext.getCurrentUser().userId,

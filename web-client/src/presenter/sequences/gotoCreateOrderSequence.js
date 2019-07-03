@@ -1,31 +1,45 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
-import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
-import { getCaseAction } from '../actions/getCaseAction';
+import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
-import { setCaseAction } from '../actions/setCaseAction';
+import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
+import { unstashCreateOrderModalDataAction } from '../actions/CourtIssuedOrder/unstashCreateOrderModalDataAction';
 
 const gotoCreateOrder = [
+  clearModalAction,
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
   clearAlertsAction,
   clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
+  setCasePropFromStateAction,
+  unstashCreateOrderModalDataAction,
   ...convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
+];
+
+const gotoCaseDetailWithModal = [
+  ...openCreateOrderChooseTypeModalSequence,
+  navigateToCaseDetailAction,
 ];
 
 export const gotoCreateOrderSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoCreateOrder,
+    isLoggedIn: [
+      hasOrderTypeSelectedAction,
+      {
+        no: gotoCaseDetailWithModal,
+        proceed: gotoCreateOrder,
+      },
+    ],
     unauthorized: [redirectToCognitoAction],
   },
 ];

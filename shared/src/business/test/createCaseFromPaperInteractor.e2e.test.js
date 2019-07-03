@@ -1,16 +1,16 @@
 const sinon = require('sinon');
 const {
-  createCaseFromPaper,
+  createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -35,7 +35,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
   });
 
   it('should persist the paper case into the database', async () => {
-    const { caseId } = await createCaseFromPaper({
+    const { caseId } = await createCaseFromPaperInteractor({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
@@ -118,8 +118,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
       yearAmounts: [],
     });
 
-    const docketclerkInbox = await getWorkItemsForUser({
+    const docketclerkInbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
 
     expect(docketclerkInbox).toMatchObject([
@@ -145,7 +146,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       },
     ]);
 
-    const docketsSectionInbox = await getWorkItemsBySection({
+    const docketsSectionInbox = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'docket',
     });
