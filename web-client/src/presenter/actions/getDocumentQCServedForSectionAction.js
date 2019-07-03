@@ -10,7 +10,7 @@ export const getDocumentQCServedForSectionAction = async ({
   const user = applicationContext.getCurrentUser();
   const workItems = await applicationContext
     .getUseCases()
-    .getDocumentQCServedForSection({
+    .getDocumentQCServedForSectionInteractor({
       applicationContext,
       section: user.section,
     });

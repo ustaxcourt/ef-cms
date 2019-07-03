@@ -14,7 +14,7 @@ exports.handler = event =>
     const {workItemId} = event.pathParameters;
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().setWorkItemAsRead({
+      const results = await applicationContext.getUseCases().setWorkItemAsReadInteractor({
         applicationContext,
         workItemId: workItemId,
       });

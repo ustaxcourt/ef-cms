@@ -7,7 +7,7 @@ const { get } = require('../requests');
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.getEligibleCasesForTrialSession = ({
+exports.getEligibleCasesForTrialSessionInteractor = ({
   applicationContext,
   trialSessionId,
 }) => {

@@ -56,10 +56,12 @@ export const fileExternalDocumentAction = async ({
     });
 
     if (isRespondent) {
-      await applicationContext.getUseCases().submitCaseAssociationRequest({
-        applicationContext,
-        caseId,
-      });
+      await applicationContext
+        .getUseCases()
+        .submitCaseAssociationRequestInteractor({
+          applicationContext,
+          caseId,
+        });
     }
   } catch (err) {
     return path.error();

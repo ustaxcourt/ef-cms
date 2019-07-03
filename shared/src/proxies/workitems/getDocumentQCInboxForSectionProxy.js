@@ -1,11 +1,14 @@
 const { get } = require('../requests');
 
 /**
- * getDocumentQCInboxForSection
+ * getDocumentQCInboxForSectionInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCInboxForSection = ({ applicationContext, section }) => {
+exports.getDocumentQCInboxForSectionInteractor = ({
+  applicationContext,
+  section,
+}) => {
   return get({
     applicationContext,
     endpoint: `/sections/${section}/document-qc/inbox`,

@@ -30,8 +30,8 @@ describe('createTrialSessionAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        createTrialSession: createTrialSessionStub,
-        setTrialSessionAsSwingSession: setTrialSessionAsSwingSessionStub,
+        createTrialSessionInteractor: createTrialSessionStub,
+        setTrialSessionAsSwingSessionInteractor: setTrialSessionAsSwingSessionStub,
       }),
     };
   });

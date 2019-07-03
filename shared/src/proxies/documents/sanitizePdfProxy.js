@@ -1,13 +1,13 @@
 const { post } = require('../requests');
 
 /**
- * sanitizePdf
+ * sanitizePdfInteractor
  *
  * @param documentId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.sanitizePdf = ({ applicationContext, documentId }) => {
+exports.sanitizePdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/sanitize`,

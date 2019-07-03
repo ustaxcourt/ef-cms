@@ -3,22 +3,22 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getDocumentQCBatchedForSection,
+  getDocumentQCBatchedForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
-  getDocumentQCInboxForSection,
+  getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getDocumentQCInboxForUser,
+  getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
 } = require('../useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
-  sendPetitionToIRSHoldingQueue,
+  sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';
@@ -36,7 +36,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
   });
 
   it('should create the expected work items and update their status when a petition is recalled', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -71,24 +71,24 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       });
     };
 
-    let theCase = await getCase({
+    let theCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
     expect(theCase.status).toEqual('New');
 
-    await sendPetitionToIRSHoldingQueue({
+    await sendPetitionToIRSHoldingQueueInteractor({
       applicationContext,
       caseId,
     });
 
-    theCase = await getCase({
+    theCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
     expect(theCase.status).toEqual('Batched for IRS');
 
-    let petitionSectionOutbox = await getDocumentQCBatchedForSection({
+    let petitionSectionOutbox = await getDocumentQCBatchedForSectionInteractor({
       applicationContext,
       section: 'petitions',
     });
@@ -127,24 +127,24 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    await recallPetitionFromIRSHoldingQueue({
+    await recallPetitionFromIRSHoldingQueueInteractor({
       applicationContext,
       caseId,
     });
 
-    petitionSectionOutbox = await getDocumentQCBatchedForSection({
+    petitionSectionOutbox = await getDocumentQCBatchedForSectionInteractor({
       applicationContext,
       section: 'petitions',
     });
     expect(petitionSectionOutbox).toMatchObject([]);
 
-    theCase = await getCase({
+    theCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
     expect(theCase.status).toEqual('Recalled');
 
-    const petitionSectionInbox = await getDocumentQCInboxForSection({
+    const petitionSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
       section: 'petitions',
     });
@@ -189,7 +189,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const userSectionInbox = await getDocumentQCInboxForUser({
+    const userSectionInbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });

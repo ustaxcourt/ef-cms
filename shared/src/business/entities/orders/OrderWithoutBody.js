@@ -8,11 +8,9 @@ const {
  * @constructor
  */
 function OrderWithoutBody(rawOrder) {
-  Object.assign(this, {
-    documentTitle: rawOrder.documentTitle,
-    documentType: rawOrder.documentType,
-    eventCode: rawOrder.eventCode,
-  });
+  this.documentTitle = rawOrder.documentTitle;
+  this.documentType = rawOrder.documentType;
+  this.eventCode = rawOrder.eventCode;
 }
 
 OrderWithoutBody.errorToMessageMap = {

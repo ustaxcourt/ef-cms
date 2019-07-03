@@ -1,11 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * get the selected work items from state
+ * get the pdf file and pdf blob url from the passed in htmlString
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function used for getting the selectedWorkItems
- * @returns {object} a list of selected work items
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props the passed in props
+ * @returns {object} pdfFile, pdfUrl
  */
 export const getPdfPreviewUrlAction = async ({
   applicationContext,
@@ -24,7 +25,7 @@ export const getPdfPreviewUrlAction = async ({
 
   const pdfBlob = await applicationContext
     .getUseCases()
-    .createCourtIssuedOrderPdfFromHtml({
+    .createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
       docketNumberWithSuffix,
       htmlString,

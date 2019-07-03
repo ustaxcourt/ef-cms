@@ -43,7 +43,7 @@ describe('uploadExternalDocument', () => {
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
-        fileExternalDocument: () => {},
+        fileExternalDocumentInteractor: () => {},
       }),
     };
     let error;
@@ -74,10 +74,10 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
-          sanitizePdf: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocument({
@@ -106,10 +106,10 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
-          sanitizePdf: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocument({
@@ -141,10 +141,10 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
-          sanitizePdf: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocument({

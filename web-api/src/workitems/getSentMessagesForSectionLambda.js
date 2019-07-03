@@ -16,7 +16,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .getSentMessagesForSection({
+        .getSentMessagesForSectionInteractor({
           applicationContext,
           section,
         });

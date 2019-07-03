@@ -1,9 +1,9 @@
 const {
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
 } = require('./recallPetitionFromIRSHoldingQueueInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { getCase } = require('./getCaseInteractor');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
@@ -76,7 +76,7 @@ describe('Recall petition from IRS Holding Queue', () => {
           updateWorkItem: async () => null,
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
   });
 
@@ -87,7 +87,7 @@ describe('Recall petition from IRS Holding Queue', () => {
     };
 
     try {
-      await recallPetitionFromIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'someuser',
@@ -113,11 +113,11 @@ describe('Recall petition from IRS Holding Queue', () => {
           updateWorkItem: async () => null,
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {
-      await recallPetitionFromIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         userId: 'petitionsclerk',
@@ -143,11 +143,11 @@ describe('Recall petition from IRS Holding Queue', () => {
             Promise.resolve(omit(mockCase, 'docketNumber')),
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {
-      await recallPetitionFromIRSHoldingQueue({
+      await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',

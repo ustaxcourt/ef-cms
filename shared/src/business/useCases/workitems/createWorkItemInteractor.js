@@ -10,7 +10,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * completeWorkItem
+ * createWorkItemInteractor
  *
  * @param workItemId
  * @param message
@@ -18,7 +18,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {*}
  */
-exports.createWorkItem = async ({
+exports.createWorkItemInteractor = async ({
   applicationContext,
   assigneeId,
   caseId,

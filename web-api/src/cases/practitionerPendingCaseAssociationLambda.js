@@ -17,7 +17,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .submitPendingCaseAssociationRequest({
+        .submitPendingCaseAssociationRequestInteractor({
           applicationContext,
           caseId,
           userId,

@@ -18,15 +18,15 @@ There is an HTML style guide, but right now it’s only available when the site 
 
 ## Visual style guide
 
-A [visual style guide](docs/style-guide.pdf) — covering typography, colors, icons, buttons, form elements, etc. — is maintained as a PDF.
+A [visual style guide](style-guide.pdf) — covering typography, colors, icons, buttons, form elements, etc. — is maintained as a PDF.
 
 ## User personas
 
-All user personas are documented in [user-personas.pdf](docs/user-personas.pdf).
+All user personas are documented in [user-personas.pdf](user-personas.pdf).
 
 ## Code review
 
-At the end of each sprint, the vendor files a pull request back to the U.S. Tax Court’s repository. The review process used by the Court is documented in [`CODE_REVIEW.md`](docs/CODE_REVIEW.md).
+At the end of each sprint, the vendor files a pull request back to the U.S. Tax Court’s repository. The review process used by the Court is documented in [`CODE_REVIEW.md`](CODE_REVIEW.md).
 
 ## Accessibility testing
 

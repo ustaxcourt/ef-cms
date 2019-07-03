@@ -3,10 +3,10 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getDocumentQCInboxForSection,
+  getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -30,7 +30,7 @@ describe('createCase integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -57,7 +57,7 @@ describe('createCase integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    const createdCase = await getCase({
+    const createdCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -139,7 +139,7 @@ describe('createCase integration test', () => {
       });
     };
 
-    const docketsSectionInbox = await getDocumentQCInboxForSection({
+    const docketsSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
       section: 'petitions',
     });

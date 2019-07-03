@@ -10,15 +10,13 @@ const {
  * @constructor
  */
 function Message(rawMessage) {
-  Object.assign(this, {
-    createdAt: rawMessage.createdAt || new Date().toISOString(),
-    from: rawMessage.from,
-    fromUserId: rawMessage.fromUserId,
-    message: rawMessage.message,
-    messageId: rawMessage.messageId || uuid.v4(),
-    to: rawMessage.to,
-    toUserId: rawMessage.toUserId,
-  });
+  this.createdAt = rawMessage.createdAt || new Date().toISOString();
+  this.from = rawMessage.from;
+  this.fromUserId = rawMessage.fromUserId;
+  this.message = rawMessage.message;
+  this.messageId = rawMessage.messageId || uuid.v4();
+  this.to = rawMessage.to;
+  this.toUserId = rawMessage.toUserId;
 }
 
 Message.name = 'Message';

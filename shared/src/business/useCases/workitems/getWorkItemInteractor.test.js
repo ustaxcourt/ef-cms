@@ -1,6 +1,6 @@
-const { getWorkItem } = require('./getWorkItemInteractor');
+const { getWorkItemInteractor } = require('./getWorkItemInteractor');
 
-describe('getWorkItem', () => {
+describe('getWorkItemInteractor', () => {
   let applicationContext;
 
   let mockWorkItem = {
@@ -32,7 +32,7 @@ describe('getWorkItem', () => {
     };
     let error;
     try {
-      await getWorkItem({
+      await getWorkItemInteractor({
         applicationContext,
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -57,7 +57,7 @@ describe('getWorkItem', () => {
     };
     let error;
     try {
-      await getWorkItem({
+      await getWorkItemInteractor({
         applicationContext,
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -80,7 +80,7 @@ describe('getWorkItem', () => {
         getWorkItemById: async () => mockWorkItem,
       }),
     };
-    const result = await getWorkItem({
+    const result = await getWorkItemInteractor({
       applicationContext,
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

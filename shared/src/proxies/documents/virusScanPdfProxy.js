@@ -1,13 +1,13 @@
 const { post } = require('../requests');
 
 /**
- * virusScanPdf
+ * virusScanPdfInteractor
  *
  * @param documentId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.virusScanPdf = ({ applicationContext, documentId }) => {
+exports.virusScanPdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/virus-scan`,

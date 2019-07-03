@@ -16,7 +16,7 @@ describe('fileExternalDocumentAction', () => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
-        submitCaseAssociationRequest: submitCaseAssociationRequestStub,
+        submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
         uploadExternalDocument: uploadExternalDocumentStub,
       }),
     };

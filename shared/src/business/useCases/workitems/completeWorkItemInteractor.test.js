@@ -1,6 +1,6 @@
-const { completeWorkItem } = require('./completeWorkItemInteractor');
+const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
 
-describe('completeWorkItem', () => {
+describe('completeWorkItemInteractor', () => {
   let applicationContext;
 
   let mockWorkItem = {
@@ -34,7 +34,7 @@ describe('completeWorkItem', () => {
     };
     let error;
     try {
-      await completeWorkItem({
+      await completeWorkItemInteractor({
         applicationContext,
         completedMessage: 'Completed',
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
