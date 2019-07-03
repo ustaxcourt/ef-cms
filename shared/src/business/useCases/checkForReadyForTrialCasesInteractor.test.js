@@ -1,11 +1,11 @@
 const sinon = require('sinon');
 const {
-  checkForReadyForTrialCases,
+  checkForReadyForTrialCasesInteractor,
 } = require('./checkForReadyForTrialCasesInteractor');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 
-describe('checkForReadyForTrialCases', () => {
+describe('checkForReadyForTrialCasesInteractor', () => {
   let applicationContext;
   let updateCaseSpy;
 
@@ -26,7 +26,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -56,7 +56,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -86,7 +86,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -130,7 +130,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
@@ -170,7 +170,7 @@ describe('checkForReadyForTrialCases', () => {
     let error;
 
     try {
-      await checkForReadyForTrialCases({
+      await checkForReadyForTrialCasesInteractor({
         applicationContext,
       });
     } catch (e) {
