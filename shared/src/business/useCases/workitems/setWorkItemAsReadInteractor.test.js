@@ -1,4 +1,6 @@
-const { setWorkItemAsRead } = require('./setWorkItemAsReadInteractor');
+const {
+  setWorkItemAsReadInteractor,
+} = require('./setWorkItemAsReadInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('setWorkItemAsReadInteractor', () => {
@@ -11,7 +13,7 @@ describe('setWorkItemAsReadInteractor', () => {
     };
     let error;
     try {
-      await setWorkItemAsRead({
+      await setWorkItemAsReadInteractor({
         applicationContext,
         messageId: 'abc',
       });
@@ -35,7 +37,7 @@ describe('setWorkItemAsReadInteractor', () => {
         };
       },
     };
-    const res = await setWorkItemAsRead({
+    const res = await setWorkItemAsReadInteractor({
       applicationContext,
       messageId: 'abc',
     });

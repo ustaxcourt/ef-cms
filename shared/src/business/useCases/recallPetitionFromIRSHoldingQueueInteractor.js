@@ -31,7 +31,7 @@ const {
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.recallPetitionFromIRSHoldingQueue = async ({
+exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
   applicationContext,
   caseId,
 }) => {

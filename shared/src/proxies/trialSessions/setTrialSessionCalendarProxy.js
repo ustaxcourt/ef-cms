@@ -7,7 +7,10 @@ const { post } = require('../requests');
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.setTrialSessionCalendar = ({ applicationContext, trialSessionId }) => {
+exports.setTrialSessionCalendarInteractor = ({
+  applicationContext,
+  trialSessionId,
+}) => {
   return post({
     applicationContext,
     endpoint: `/trial-sessions/${trialSessionId}/set-calendar`,

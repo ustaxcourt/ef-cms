@@ -10,7 +10,7 @@ export const getInboxMessagesForSectionAction = async ({
   const user = applicationContext.getCurrentUser();
 
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getInboxMessagesForSection({
+  const workItems = await useCases.getInboxMessagesForSectionInteractor({
     applicationContext,
     section: user.section,
   });

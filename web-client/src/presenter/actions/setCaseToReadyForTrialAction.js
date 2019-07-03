@@ -16,7 +16,7 @@ export const setCaseToReadyForTrialAction = async ({
 }) => {
   const caseId = get(state.caseDetail.caseId);
 
-  await applicationContext.getUseCases().setCaseToReadyForTrial({
+  await applicationContext.getUseCases().setCaseToReadyForTrialInteractor({
     applicationContext,
     caseId,
   });

@@ -1,9 +1,9 @@
 const {
-  sendPetitionToIRSHoldingQueue,
+  sendPetitionToIRSHoldingQueueInteractor,
 } = require('./sendPetitionToIRSHoldingQueueInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { getCase } = require('./getCaseInteractor');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
@@ -97,12 +97,12 @@ describe('Send petition to IRS Holding Queue', () => {
           updateWorkItem: () => Promise.resolve(null),
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
   });
 
   it('sets the case status to Batched for IRS', async () => {
-    const result = await sendPetitionToIRSHoldingQueue({
+    const result = await sendPetitionToIRSHoldingQueueInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -116,7 +116,7 @@ describe('Send petition to IRS Holding Queue', () => {
     };
     let error;
     try {
-      await sendPetitionToIRSHoldingQueue({
+      await sendPetitionToIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -142,11 +142,11 @@ describe('Send petition to IRS Holding Queue', () => {
           updateCase: () => null,
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {
-      await sendPetitionToIRSHoldingQueue({
+      await sendPetitionToIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         userId: 'petitionsclerk',
@@ -182,11 +182,11 @@ describe('Send petition to IRS Holding Queue', () => {
           updateWorkItem: () => Promise.resolve(null),
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {
-      await sendPetitionToIRSHoldingQueue({
+      await sendPetitionToIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',

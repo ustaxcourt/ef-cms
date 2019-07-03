@@ -18,7 +18,7 @@ exports.handler = event =>
       const {trialSessionId} = event.pathParameters || {};
       const results = await applicationContext
         .getUseCases()
-        .setTrialSessionAsSwingSession({
+        .setTrialSessionAsSwingSessionInteractor({
           applicationContext,
           swingSessionId: JSON.parse(event.body).swingSessionId,
           trialSessionId: trialSessionId,

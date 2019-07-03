@@ -14,7 +14,7 @@ const ELIGIBLE_CASES_BUFFER = 50;
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getEligibleCasesForTrialSession = async ({
+exports.getEligibleCasesForTrialSessionInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {

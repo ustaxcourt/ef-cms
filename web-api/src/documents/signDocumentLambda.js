@@ -21,7 +21,7 @@ exports.handler = event =>
 
     applicationContext.logger.info('Event', event);
     try {
-      await applicationContext.getUseCases().saveSignedDocument({
+      await applicationContext.getUseCases().saveSignedDocumentInteractor({
         applicationContext,
         caseId,
         originalDocumentId,

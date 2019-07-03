@@ -1,5 +1,5 @@
 const {
-  setTrialSessionCalendar,
+  setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
 const { User } = require('../../entities/User');
 
@@ -38,7 +38,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     let error;
 
     try {
-      await setTrialSessionCalendar({
+      await setTrialSessionCalendarInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -70,7 +70,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     let error;
 
     try {
-      await setTrialSessionCalendar({
+      await setTrialSessionCalendarInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });

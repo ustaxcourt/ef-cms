@@ -1,5 +1,5 @@
 const {
-  getDocumentQCServedForSection,
+  getDocumentQCServedForSectionInteractor,
 } = require('./getDocumentQCServedForSectionInteractor');
 
 describe('getDocumentQCServedForSectionInteractor', () => {
@@ -33,7 +33,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     };
     let error;
     try {
-      await getDocumentQCServedForSection({
+      await getDocumentQCServedForSectionInteractor({
         applicationContext,
         section: 'docket',
       });
@@ -58,7 +58,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     };
     let error;
     try {
-      await getDocumentQCServedForSection({
+      await getDocumentQCServedForSectionInteractor({
         applicationContext,
         section: 'docket',
       });
@@ -100,7 +100,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         ],
       }),
     };
-    const result = await getDocumentQCServedForSection({
+    const result = await getDocumentQCServedForSectionInteractor({
       applicationContext,
       section: 'docket',
     });

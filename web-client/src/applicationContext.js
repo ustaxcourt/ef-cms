@@ -41,63 +41,63 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
-import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
+import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
-import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
+import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetition } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { filePetitionFromPaper } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
-import { forwardWorkItem } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
+import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitle } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
-import { generatePDFFromPNGData } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
+import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 import { generateSignedDocument } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
-import { getCalendaredCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
-import { getCase } from '../../shared/src/proxies/getCaseProxy';
+import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
+import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypes } from '../../shared/src/business/useCases/getCaseTypesInteractor';
-import { getCasesByUser } from '../../shared/src/proxies/getCasesByUserProxy';
-import { getDocumentQCBatchedForSection } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
-import { getDocumentQCBatchedForUser } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
-import { getDocumentQCInboxForSection } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
-import { getDocumentQCInboxForUser } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
-import { getDocumentQCServedForSection } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
-import { getDocumentQCServedForUser } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
-import { getEligibleCasesForTrialSession } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
+import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
+import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
+import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
+import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
+import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
+import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
+import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypes } from '../../shared/src/business/useCases/getFilingTypesInteractor';
-import { getInboxMessagesForSection } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
-import { getInboxMessagesForUser } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
-import { getInternalUsers } from '../../shared/src/proxies/users/getInternalUsesProxy';
+import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
+import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
+import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsesProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItem as getItemUC } from '../../shared/src/business/useCases/getItemInteractor';
-import { getNotifications } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypes } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
-import { getSentMessagesForSection } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
-import { getSentMessagesForUser } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
-import { getTrialSessionDetails } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
-import { getTrialSessions } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
-import { getUser } from '../../shared/src/business/useCases/getUserInteractor';
-import { getUsersInSection } from '../../shared/src/proxies/users/getUsersInSectionProxy';
-import { getWorkItem } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
+import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
+import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
+import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
+import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
+import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
+import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigning } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
-import { recallPetitionFromIRSHoldingQueue } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
+import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshToken } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItem as removeItemUC } from '../../shared/src/business/useCases/removeItemInteractor';
-import { runBatchProcess } from '../../shared/src/proxies/runBatchProcessProxy';
-import { sanitizePdf } from '../../shared/src/proxies/documents/sanitizePdfProxy';
-import { sendPetitionToIRSHoldingQueue } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
-import { setCaseToReadyForTrial } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
+import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
+import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
+import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { setCaseToReadyForTrialInteractor } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItem as setItemUC } from '../../shared/src/business/useCases/setItemInteractor';
-import { setTrialSessionAsSwingSession } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
-import { setTrialSessionCalendar } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
-import { setWorkItemAsRead } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
+import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
+import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { signDocument } from '../../shared/src/proxies/documents/signDocumentProxy';
-import { submitCaseAssociationRequest } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
-import { submitPendingCaseAssociationRequest } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
+import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
+import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
-import { updateCase } from '../../shared/src/proxies/updateCaseProxy';
-import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
+import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -108,13 +108,13 @@ import { validateExternalDocumentInformation } from '../../shared/src/business/u
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validateOrderWithoutBody } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
-import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
+import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validateTrialSession } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
-import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
-import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
-import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
+import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
+import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
+import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 
 const {
   uploadDocument,
@@ -149,58 +149,58 @@ const allUseCases = {
   createCoverSheet,
   createDocument,
   createTrialSessionInteractor,
-  createWorkItem,
+  createWorkItemInteractor,
   downloadDocumentFile,
-  fileExternalDocument,
+  fileExternalDocumentInteractor,
   filePetition,
   filePetitionFromPaper,
-  forwardWorkItem,
+  forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitle,
   generateDocumentTitle,
-  generatePDFFromPNGData,
+  generatePDFFromPNGDataInteractor,
   generateSignedDocument,
-  getCalendaredCasesForTrialSession,
-  getCase,
+  getCalendaredCasesForTrialSessionInteractor,
+  getCaseInteractor,
   getCaseTypes,
-  getCasesByUser,
-  getDocumentQCBatchedForSection,
-  getDocumentQCBatchedForUser,
-  getDocumentQCInboxForSection,
-  getDocumentQCInboxForUser,
-  getDocumentQCServedForSection,
-  getDocumentQCServedForUser,
-  getEligibleCasesForTrialSession,
+  getCasesByUserInteractor,
+  getDocumentQCBatchedForSectionInteractor,
+  getDocumentQCBatchedForUserInteractor,
+  getDocumentQCInboxForSectionInteractor,
+  getDocumentQCInboxForUserInteractor,
+  getDocumentQCServedForSectionInteractor,
+  getDocumentQCServedForUserInteractor,
+  getEligibleCasesForTrialSessionInteractor,
   getFilingTypes,
-  getInboxMessagesForSection,
-  getInboxMessagesForUser,
-  getInternalUsers,
+  getInboxMessagesForSectionInteractor,
+  getInboxMessagesForUserInteractor,
+  getInternalUsersInteractor,
   getItem: getItemUC,
-  getNotifications,
+  getNotificationsInteractor,
   getProcedureTypes,
-  getSentMessagesForSection,
-  getSentMessagesForUser,
-  getTrialSessionDetails,
-  getTrialSessions,
-  getUser,
-  getUsersInSection,
-  getWorkItem,
+  getSentMessagesForSectionInteractor,
+  getSentMessagesForUserInteractor,
+  getTrialSessionDetailsInteractor,
+  getTrialSessionsInteractor,
+  getUserInteractor,
+  getUsersInSectionInteractor,
+  getWorkItemInteractor,
   loadPDFForSigning,
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
   refreshToken,
   removeItem: removeItemUC,
-  runBatchProcess,
-  sanitizePdf,
-  sendPetitionToIRSHoldingQueue,
-  setCaseToReadyForTrial,
+  runBatchProcessInteractor,
+  sanitizePdfInteractor,
+  sendPetitionToIRSHoldingQueueInteractor,
+  setCaseToReadyForTrialInteractor,
   setItem: setItemUC,
-  setTrialSessionAsSwingSession,
-  setTrialSessionCalendar,
-  setWorkItemAsRead,
+  setTrialSessionAsSwingSessionInteractor,
+  setTrialSessionCalendarInteractor,
+  setWorkItemAsReadInteractor,
   signDocument,
-  submitCaseAssociationRequest,
-  submitPendingCaseAssociationRequest,
-  updateCase,
-  updateCaseTrialSortTags,
+  submitCaseAssociationRequestInteractor,
+  submitPendingCaseAssociationRequestInteractor,
+  updateCaseInteractor,
+  updateCaseTrialSortTagsInteractor,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,
@@ -211,13 +211,13 @@ const allUseCases = {
   validateForwardMessage,
   validateInitialWorkItemMessage,
   validateOrderWithoutBody,
-  validatePdf,
+  validatePdfInteractor,
   validatePetition,
   validatePetitionFromPaper,
   validateTrialSession,
-  verifyCaseForUser,
-  verifyPendingCaseForUser,
-  virusScanPdf,
+  verifyCaseForUserInteractor,
+  verifyPendingCaseForUserInteractor,
+  virusScanPdfInteractor,
 };
 tryCatchDecorator(allUseCases);
 

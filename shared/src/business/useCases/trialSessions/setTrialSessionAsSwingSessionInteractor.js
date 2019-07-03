@@ -6,13 +6,13 @@ const { TrialSession } = require('../../entities/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * setTrialSessionAsSwingSession
+ * setTrialSessionAsSwingSessionInteractor
  * @param trialSessionId
  * @param swingSessionId
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.setTrialSessionAsSwingSession = async ({
+exports.setTrialSessionAsSwingSessionInteractor = async ({
   applicationContext,
   swingSessionId,
   trialSessionId,

@@ -6,7 +6,7 @@ const { remove } = require('./requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.recallPetitionFromIRSHoldingQueue = ({
+exports.recallPetitionFromIRSHoldingQueueInteractor = ({
   applicationContext,
   caseId,
 }) => {

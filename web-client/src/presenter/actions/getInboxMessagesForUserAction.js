@@ -6,7 +6,7 @@
  */
 export const getInboxMessagesForUserAction = async ({ applicationContext }) => {
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getInboxMessagesForUser({
+  const workItems = await useCases.getInboxMessagesForUserInteractor({
     applicationContext,
     userId: applicationContext.getCurrentUser().userId,
   });

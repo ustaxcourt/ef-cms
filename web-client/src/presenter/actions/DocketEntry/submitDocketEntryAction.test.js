@@ -14,7 +14,7 @@ describe('submitDocketEntryAction', () => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
-        fileExternalDocument: fileExternalDocumentStub,
+        fileExternalDocumentInteractor: fileExternalDocumentStub,
       }),
     };
   });
