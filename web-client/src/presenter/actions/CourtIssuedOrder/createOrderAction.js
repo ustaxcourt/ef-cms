@@ -1,15 +1,17 @@
+import { JSDOM } from 'jsdom';
 import { state } from 'cerebral';
 import orderTemplate from '../../../views/CreateOrder/orderTemplate.html';
 
 const replaceWithID = (replacements, domString) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(domString, 'text/html');
+  const { document } = new JSDOM(domString).window;
 
   Object.keys(replacements).forEach(id => {
-    doc.querySelector(id).innerHTML = replacements[id];
+    if (document.querySelector(id)) {
+      document.querySelector(id).innerHTML = replacements[id];
+    }
   });
 
-  return doc;
+  return document;
 };
 
 export const createOrderAction = ({ applicationContext, get }) => {
