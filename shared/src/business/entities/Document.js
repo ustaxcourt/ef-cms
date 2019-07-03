@@ -1,25 +1,20 @@
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const { Order } = require('./orders/Order');
-const { ORDER_TYPES } = Order;
-
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const uuidVersions = {
-  version: ['uuidv4'],
-};
 const { flatten } = require('lodash');
+const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
 
-const petitionDocumentTypes = ['Petition'];
+const { ORDER_TYPES } = Order;
 
-module.exports.CATEGORIES = Object.keys(documentMapExternal);
-module.exports.CATEGORY_MAP = documentMapExternal;
-
-module.exports.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
-module.exports.INTERNAL_CATEGORY_MAP = documentMapInternal;
+Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.CATEGORIES = Object.keys(documentMapExternal);
+Document.CATEGORY_MAP = documentMapExternal;
+Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
+Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
 /**
  * constructor
@@ -108,7 +103,7 @@ Document.getDocumentTypes = () => {
  * @returns {boolean}
  */
 Document.prototype.isPetitionDocument = function() {
-  return petitionDocumentTypes.includes(this.documentType);
+  return Document.PETITION_DOCUMENT_TYPES.includes(this.documentType);
 };
 
 joiValidationDecorator(
@@ -120,7 +115,9 @@ joiValidationDecorator(
       .optional(),
     documentId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     documentType: joi
       .string()

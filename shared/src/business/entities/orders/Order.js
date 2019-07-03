@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
-const ORDER_TYPES = [
+Order.ORDER_TYPES = [
   {
     documentType: 'Order',
     eventCode: 'O',
@@ -57,8 +57,6 @@ Order.errorToMessageMap = {
   documentType: 'Order type is required.',
   orderBody: 'Order body is required.',
 };
-
-Order.ORDER_TYPES = ORDER_TYPES;
 
 joiValidationDecorator(
   Order,

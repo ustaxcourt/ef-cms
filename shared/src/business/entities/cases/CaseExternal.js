@@ -6,7 +6,7 @@ const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
-const { instantiateContacts } = require('../contacts/PetitionContact');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
  * CaseExternal Entity
@@ -36,7 +36,7 @@ function CaseExternal(rawCase) {
     stinFileSize: rawCase.stinFileSize,
   });
 
-  const contacts = instantiateContacts({
+  const contacts = ContactFactory.createContacts({
     contactInfo: {
       primary: this.contactPrimary,
       secondary: this.contactSecondary,

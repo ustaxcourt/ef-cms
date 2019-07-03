@@ -1,8 +1,4 @@
-import {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} from '../../../../shared/src/business/entities/contacts/PetitionContact';
-
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
@@ -21,11 +17,11 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: PARTY_TYPES.petitioner,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         constants: {
-          COUNTRY_TYPES,
-          PARTY_TYPES,
+          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -34,7 +30,7 @@ describe('resetContactsAction', () => {
         countryType: 'domestic',
         email: 'test@example.com',
       },
-      partyType: PARTY_TYPES.petitioner,
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
     });
   });
 
@@ -52,11 +48,11 @@ describe('resetContactsAction', () => {
             phone: '1234567890',
             zip: '12345',
           },
-          partyType: PARTY_TYPES.petitioner,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         constants: {
-          COUNTRY_TYPES,
-          PARTY_TYPES,
+          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -65,7 +61,7 @@ describe('resetContactsAction', () => {
         countryType: 'domestic',
         email: 'test@example.com',
       },
-      partyType: PARTY_TYPES.petitioner,
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
     });
   });
 
@@ -91,11 +87,11 @@ describe('resetContactsAction', () => {
             state: 'AL',
             zip: '12345',
           },
-          partyType: PARTY_TYPES.petitionerSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
         constants: {
-          COUNTRY_TYPES,
-          PARTY_TYPES,
+          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -105,7 +101,7 @@ describe('resetContactsAction', () => {
         email: 'test@example.com',
       },
       contactSecondary: { countryType: 'domestic' },
-      partyType: PARTY_TYPES.petitionerSpouse,
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
 });

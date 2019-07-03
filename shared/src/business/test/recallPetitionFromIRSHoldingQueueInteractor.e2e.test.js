@@ -3,14 +3,14 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getSentWorkItemsForSection,
-} = require('../useCases/workitems/getSentWorkItemsForSectionInteractor');
+  getDocumentQCBatchedForSection,
+} = require('../useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
-  getWorkItemsBySection,
-} = require('../useCases/workitems/getWorkItemsBySectionInteractor');
+  getDocumentQCInboxForSection,
+} = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
   recallPetitionFromIRSHoldingQueue,
 } = require('../useCases/recallPetitionFromIRSHoldingQueueInteractor');
@@ -88,7 +88,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
     });
     expect(theCase.status).toEqual('Batched for IRS');
 
-    let petitionSectionOutbox = await getSentWorkItemsForSection({
+    let petitionSectionOutbox = await getDocumentQCBatchedForSection({
       applicationContext,
       section: 'petitions',
     });
@@ -132,7 +132,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       caseId,
     });
 
-    petitionSectionOutbox = await getSentWorkItemsForSection({
+    petitionSectionOutbox = await getDocumentQCBatchedForSection({
       applicationContext,
       section: 'petitions',
     });
@@ -144,7 +144,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
     });
     expect(theCase.status).toEqual('Recalled');
 
-    const petitionSectionInbox = await getWorkItemsBySection({
+    const petitionSectionInbox = await getDocumentQCInboxForSection({
       applicationContext,
       section: 'petitions',
     });
@@ -189,8 +189,9 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    const userSectionInbox = await getWorkItemsForUser({
+    const userSectionInbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(userSectionInbox).toMatchObject([
       {
