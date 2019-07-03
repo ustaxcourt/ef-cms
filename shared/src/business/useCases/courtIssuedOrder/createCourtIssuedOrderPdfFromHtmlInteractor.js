@@ -1,3 +1,5 @@
+process.env.FONTCONFIG_PATH = './share/fonts';
+
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
@@ -41,7 +43,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 10px; font-family: 'Noto Serif', serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: 'Times New Roman', Times, serif; width: 100%; margin: 20px 62px 20px 62px;">
             <div style="float: right">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
@@ -58,7 +60,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 10px; font-family: 'Noto Serif', serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: 'Times New Roman', Times, serif; width: 100%; margin: 20px 62px 20px 62px;">
           </div>
         </body>
       </html>
