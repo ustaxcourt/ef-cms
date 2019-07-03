@@ -13,7 +13,7 @@
   "devDependencies": {
     "artillery": "^1.6.0-28",
     "artillery-plugin-fuzzer": "^1.0.1",
-    "aws-sdk": "^2.487.0",
+    "aws-sdk": "^2.488.0",
     "aws-sdk-mock": "^4.5.0",
     "chrome-aws-lambda": "^1.18.1",
     "dynamodb-admin": "^3.1.3",
