@@ -299,4 +299,4 @@ TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
   return this;
 };
 
-exports.TrialSession = TrialSession;
+module.exports = { TrialSession };
