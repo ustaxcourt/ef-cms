@@ -10,10 +10,12 @@
 export const authenticateCodeAction = async ({ applicationContext, props }) => {
   const { code } = props;
 
-  const response = await applicationContext.getUseCases().authorizeCode({
-    applicationContext,
-    code,
-  });
+  const response = await applicationContext
+    .getUseCases()
+    .authorizeCodeInteractor({
+      applicationContext,
+      code,
+    });
 
   return {
     refreshToken: response.refreshToken,

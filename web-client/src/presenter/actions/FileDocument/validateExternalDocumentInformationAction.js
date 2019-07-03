@@ -19,7 +19,7 @@ export const validateExternalDocumentInformationAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateExternalDocumentInformation({
+    .validateExternalDocumentInformationInteractor({
       applicationContext,
       documentMetadata,
     });

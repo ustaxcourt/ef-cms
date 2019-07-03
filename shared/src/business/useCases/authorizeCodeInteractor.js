@@ -11,7 +11,7 @@ const qs = require('qs');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.authorizeCode = async ({ applicationContext, code }) => {
+exports.authorizeCodeInteractor = async ({ applicationContext, code }) => {
   const data = qs.stringify({
     client_id: applicationContext.getCognitoClientId(),
     code,

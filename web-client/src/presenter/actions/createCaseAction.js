@@ -40,7 +40,7 @@ export const createCaseAction = async ({
   let caseDetail;
 
   try {
-    caseDetail = await applicationContext.getUseCases().filePetition({
+    caseDetail = await applicationContext.getUseCases().filePetitionInteractor({
       applicationContext,
       ownershipDisclosureFile,
       ownershipDisclosureUploadProgress: progressFunctions.ownership,
@@ -55,7 +55,7 @@ export const createCaseAction = async ({
   }
 
   for (let document of caseDetail.documents) {
-    await applicationContext.getUseCases().createCoverSheet({
+    await applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,

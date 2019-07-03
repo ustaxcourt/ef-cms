@@ -6,7 +6,7 @@ let test;
 presenter.providers.applicationContext = {
   ...applicationContext,
   getUseCases: () => ({
-    loadPDFForSigning: () => {
+    loadPDFForSigningInteractor: () => {
       1;
     },
   }),

@@ -9,7 +9,7 @@ presenter.providers.applicationContext = {
     setSourceByName: mockSetSourceByName,
   }),
   getUseCases: () => ({
-    setItem: mockSetItem,
+    setItemInteractor: mockSetItem,
   }),
 };
 

@@ -39,9 +39,9 @@ describe('completeDocumentSigningAction', () => {
       }),
       getUseCases: () => ({
         completeWorkItemInteractor: completeWorkItemInteractorStub,
-        generateSignedDocument: generateSignedDocumentStub,
+        generateSignedDocumentInteractor: generateSignedDocumentStub,
         getWorkItemsForUser: getWorkItemsForUserStub,
-        signDocument: signDocumentStub,
+        signDocumentInteractor: signDocumentStub,
       }),
     };
   });

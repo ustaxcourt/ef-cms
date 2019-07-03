@@ -23,7 +23,7 @@ describe('validateOrderWithoutBodyAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateOrderWithoutBody: validateOrderWithoutBodyStub,
+        validateOrderWithoutBodyInteractor: validateOrderWithoutBodyStub,
       }),
     };
 

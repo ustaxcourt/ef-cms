@@ -1,8 +1,8 @@
 const {
-  uploadExternalDocument,
+  uploadExternalDocumentInteractor,
 } = require('./uploadExternalDocumentInteractor');
 
-describe('uploadExternalDocument', () => {
+describe('uploadExternalDocumentInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
@@ -48,7 +48,7 @@ describe('uploadExternalDocument', () => {
     };
     let error;
     try {
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',
@@ -80,7 +80,7 @@ describe('uploadExternalDocument', () => {
           virusScanPdfInteractor: () => null,
         }),
       };
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',
@@ -112,7 +112,7 @@ describe('uploadExternalDocument', () => {
           virusScanPdfInteractor: () => null,
         }),
       };
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',
@@ -147,7 +147,7 @@ describe('uploadExternalDocument', () => {
           virusScanPdfInteractor: () => null,
         }),
       };
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',

@@ -45,7 +45,7 @@ exports.getPageDimensions = page => {
  * @param sigImgData // Array of Uint8Array containing signature img data
  * @returns {ByteArray}
  */
-exports.generateSignedDocument = async ({
+exports.generateSignedDocumentInteractor = async ({
   pageIndex,
   pdfData,
   posX,

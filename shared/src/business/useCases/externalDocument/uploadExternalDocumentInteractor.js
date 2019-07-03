@@ -4,7 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.uploadExternalDocument = async ({
+exports.uploadExternalDocumentInteractor = async ({
   applicationContext,
   documentMetadata,
   onPrimarySupportingUploadProgress,
