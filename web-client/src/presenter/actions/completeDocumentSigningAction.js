@@ -54,10 +54,12 @@ export const completeDocumentSigningAction = async ({
     signedDocumentId,
   });
 
-  const workItems = await applicationContext.getUseCases().getWorkItemsForUser({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-  });
+  const workItems = await applicationContext
+    .getUseCases()
+    .getInboxMessagesForUser({
+      applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
+    });
 
   const stipulatedWorkItems = workItems.filter(
     workItem =>
