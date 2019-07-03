@@ -13,34 +13,32 @@ const { orderBy } = require('lodash');
  * @constructor
  */
 function WorkItem(rawWorkItem) {
-  Object.assign(this, {
-    assigneeId: rawWorkItem.assigneeId,
-    assigneeName: rawWorkItem.assigneeName,
-    caseId: rawWorkItem.caseId,
-    caseStatus: rawWorkItem.caseStatus,
-    caseTitle: rawWorkItem.caseTitle,
-    completedAt: rawWorkItem.completedAt,
-    completedBy: rawWorkItem.completedBy,
-    completedByUserId: rawWorkItem.completedByUserId,
-    completedMessage: rawWorkItem.completedMessage,
-    createdAt: rawWorkItem.createdAt || new Date().toISOString(),
-    docketNumber: rawWorkItem.docketNumber,
-    docketNumberSuffix: rawWorkItem.docketNumberSuffix,
-    document: rawWorkItem.document,
-    isInitializeCase: rawWorkItem.isInitializeCase,
-    isInternal:
-      rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal,
-    isRead: rawWorkItem.isRead,
-    messages: rawWorkItem.messages,
-    section: rawWorkItem.section,
-    sentBy: rawWorkItem.sentBy,
-    sentBySection: rawWorkItem.sentBySection,
-    sentByUserId: rawWorkItem.sentByUserId,
-    updatedAt: rawWorkItem.updatedAt || new Date().toISOString(),
-    workItemId: rawWorkItem.workItemId || uuid.v4(),
-  });
-
-  this.messages = (this.messages || []).map(message => new Message(message));
+  this.assigneeId = rawWorkItem.assigneeId;
+  this.assigneeName = rawWorkItem.assigneeName;
+  this.caseId = rawWorkItem.caseId;
+  this.caseStatus = rawWorkItem.caseStatus;
+  this.caseTitle = rawWorkItem.caseTitle;
+  this.completedAt = rawWorkItem.completedAt;
+  this.completedBy = rawWorkItem.completedBy;
+  this.completedByUserId = rawWorkItem.completedByUserId;
+  this.completedMessage = rawWorkItem.completedMessage;
+  this.createdAt = rawWorkItem.createdAt || new Date().toISOString();
+  this.docketNumber = rawWorkItem.docketNumber;
+  this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
+  this.document = rawWorkItem.document;
+  this.isInitializeCase = rawWorkItem.isInitializeCase;
+  this.isInternal =
+    rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal;
+  this.isRead = rawWorkItem.isRead;
+  this.section = rawWorkItem.section;
+  this.sentBy = rawWorkItem.sentBy;
+  this.sentBySection = rawWorkItem.sentBySection;
+  this.sentByUserId = rawWorkItem.sentByUserId;
+  this.updatedAt = rawWorkItem.updatedAt || new Date().toISOString();
+  this.workItemId = rawWorkItem.workItemId || uuid.v4();
+  this.messages = (rawWorkItem.messages || []).map(
+    message => new Message(message),
+  );
 }
 
 const IRS_BATCH_SYSTEM_USER_ID = '63784910-c1af-4476-8988-a02f92da8e09';

@@ -45,11 +45,9 @@ Order.ORDER_TYPES = [
  * @constructor
  */
 function Order(rawOrder) {
-  Object.assign(this, {
-    documentTitle: rawOrder.documentTitle,
-    documentType: rawOrder.documentType,
-    orderBody: rawOrder.orderBody,
-  });
+  this.documentTitle = rawOrder.documentTitle;
+  this.documentType = rawOrder.documentType;
+  this.orderBody = rawOrder.orderBody;
 }
 
 Order.errorToMessageMap = {
