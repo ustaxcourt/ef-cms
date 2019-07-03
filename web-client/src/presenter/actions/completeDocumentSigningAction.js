@@ -39,11 +39,20 @@ export const completeDocumentSigningAction = async ({
       sigTextData: `(Signed) ${name}`,
     });
 
+  let documentFile;
+
+  if (typeof File === 'function') {
+    documentFile = new File([signedPdfBytes], 'myfile.pdf');
+  } else {
+    documentFile = Buffer.from(signedPdfBytes, 'base64');
+    documentFile.name = 'myfile.pdf';
+  }
+
   const signedDocumentId = await applicationContext
     .getPersistenceGateway()
     .uploadDocument({
       applicationContext,
-      document: new File([signedPdfBytes], 'myfile.pdf'),
+      document: documentFile,
       onUploadProgress: () => {},
     });
 

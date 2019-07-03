@@ -30,6 +30,12 @@ exports.getDocument = async ({ applicationContext, documentId, protocol }) => {
       responseType: 'blob',
       url,
     });
-    return new Blob([fileBlob], { type: 'application/pdf' });
+
+    // Account for diference in response between testing and browser env
+    if (typeof fileBlob === 'string') {
+      return Buffer.from(fileBlob);
+    } else {
+      return new Blob([fileBlob], { type: 'application/pdf' });
+    }
   }
 };
