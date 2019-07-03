@@ -8,7 +8,7 @@ export const getDocumentQCServedForUserAction = async ({
   applicationContext,
 }) => {
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getDocumentQCServedForUser({
+  const workItems = await useCases.getDocumentQCServedForUserInteractor({
     applicationContext,
     userId: applicationContext.getCurrentUser().userId,
   });

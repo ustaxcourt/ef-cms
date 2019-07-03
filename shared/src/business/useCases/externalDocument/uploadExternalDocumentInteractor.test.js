@@ -43,7 +43,7 @@ describe('uploadExternalDocument', () => {
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
-        fileExternalDocument: () => {},
+        fileExternalDocumentInteractor: () => {},
       }),
     };
     let error;
@@ -74,7 +74,7 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
           sanitizePdf: () => null,
           validatePdf: () => null,
           virusScanPdf: () => null,
@@ -106,7 +106,7 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
           sanitizePdf: () => null,
           validatePdf: () => null,
           virusScanPdf: () => null,
@@ -141,7 +141,7 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
           sanitizePdf: () => null,
           validatePdf: () => null,
           virusScanPdf: () => null,

@@ -9,7 +9,7 @@ export const createWorkItemAction = async ({
   const { caseId } = get(state.caseDetail);
   const documentId = get(state.documentId);
 
-  await applicationContext.getUseCases().createWorkItem({
+  await applicationContext.getUseCases().createWorkItemInteractor({
     applicationContext,
     assigneeId,
     caseId,

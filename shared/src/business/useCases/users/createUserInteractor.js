@@ -5,14 +5,14 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * createCase
+ * createUserInteractor
  *
  * @param petition
  * @param documents
  * @param applicationContext
  * @returns {Promise<*|{caseId}>}
  */
-exports.createUser = async ({ applicationContext, user }) => {
+exports.createUserInteractor = async ({ applicationContext, user }) => {
   const requestUser = applicationContext.getCurrentUser();
   if (!isAuthorized(requestUser, CREATE_USER)) {
     throw new UnauthorizedError('Unauthorized');

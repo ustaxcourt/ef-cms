@@ -1,7 +1,7 @@
 const { get } = require('../requests');
 
 /**
- * getCaseProxy
+ * getUsersInSection
  *
  * @param applicationContext
  * @param caseId

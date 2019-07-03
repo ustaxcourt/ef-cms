@@ -3,7 +3,7 @@ const {
 } = require('./recallPetitionFromIRSHoldingQueueInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { getCase } = require('./getCaseInteractor');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
@@ -76,7 +76,7 @@ describe('Recall petition from IRS Holding Queue', () => {
           updateWorkItem: async () => null,
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
   });
 
@@ -113,7 +113,7 @@ describe('Recall petition from IRS Holding Queue', () => {
           updateWorkItem: async () => null,
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {
@@ -143,7 +143,7 @@ describe('Recall petition from IRS Holding Queue', () => {
             Promise.resolve(omit(mockCase, 'docketNumber')),
         };
       },
-      getUseCases: () => ({ getCase }),
+      getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
     try {

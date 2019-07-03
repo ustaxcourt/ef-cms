@@ -3,7 +3,7 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  forwardWorkItem,
+  forwardWorkItemInteractor,
 } = require('../useCases/workitems/forwardWorkItemInteractor');
 const {
   getInboxMessagesForUser,
@@ -12,7 +12,7 @@ const {
   getSentMessagesForUser,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -71,7 +71,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       });
     };
 
-    const createdCase = await getCase({
+    const createdCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -92,7 +92,7 @@ describe('forwardWorkItemInteractor integration test', () => {
     });
     expect(sentWorkItems).toEqual([]);
 
-    await forwardWorkItem({
+    await forwardWorkItemInteractor({
       applicationContext,
       assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'yolo',
@@ -174,7 +174,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       },
     ]);
 
-    const caseAfterAssign = await getCase({
+    const caseAfterAssign = await getCaseInteractor({
       applicationContext,
       caseId,
     });

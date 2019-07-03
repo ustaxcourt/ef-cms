@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const { createWorkItem } = require('./createWorkItemInteractor');
+const { createWorkItemInteractor } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('createWorkItem', () => {
@@ -35,7 +35,7 @@ describe('createWorkItem', () => {
     const applicationContext = createApplicationContext();
     let error;
     try {
-      await createWorkItem({
+      await createWorkItemInteractor({
         applicationContext,
         assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
         caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -56,7 +56,7 @@ describe('createWorkItem', () => {
         userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     });
-    await createWorkItem({
+    await createWorkItemInteractor({
       applicationContext,
       assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -99,7 +99,7 @@ describe('createWorkItem', () => {
         userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     });
-    await createWorkItem({
+    await createWorkItemInteractor({
       applicationContext,
       assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',

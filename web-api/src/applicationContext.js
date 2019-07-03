@@ -75,13 +75,13 @@ const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
-  createUser: createUserUC,
+  createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
   createWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/createWorkItem');
 const {
-  createWorkItem: createWorkItemUC,
+  createWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
   deleteCaseTrialSortMappingRecords,
@@ -96,13 +96,13 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
-  fileExternalDocument,
+  fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  forwardWorkItem,
+  forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
-  generatePDFFromPNGData,
+  generatePDFFromPNGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromPNGDataInteractor');
 const {
   getAllCatalogCases,
@@ -111,11 +111,8 @@ const {
   getCalendaredCasesForTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession');
 const {
-  getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
+  getCalendaredCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor');
-const {
-  getCase,
-} = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
   getCaseByCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByCaseId');
@@ -123,40 +120,43 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getCaseInteractor,
+} = require('../../shared/src/business/useCases/getCaseInteractor');
+const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
 const {
-  getCasesByUser: getCasesByUserUC,
+  getCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
   getDocumentQCBatchedForSection
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
 const {
-  getDocumentQCBatchedForSection: getDocumentQCBatchedForSectionUC, 
+  getDocumentQCBatchedForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
-  getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC
+  getDocumentQCBatchedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
 const {
-  getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC
+  getDocumentQCInboxForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
   getDocumentQCInboxForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
-  getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
+  getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
   getDocumentQCServedForSection, 
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection');
 const {
-  getDocumentQCServedForSection: getDocumentQCServedForSectionUC,
+  getDocumentQCServedForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor');
 const {
   getDocumentQCServedForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser');
 const {
-  getDocumentQCServedForUser: getDocumentQCServedForUserUC,
+  getDocumentQCServedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
 const {
   getDownloadPolicyUrl,
@@ -165,13 +165,13 @@ const {
   getEligibleCasesForTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
 const {
-  getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
+  getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
   getInboxMessagesForSection
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
-  getInboxMessagesForSection: getInboxMessagesForSectionUC
+  getInboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForSectionInteractor');
 const {
   getInboxMessagesForUser
@@ -384,7 +384,7 @@ module.exports = (appContextUser = {}) => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
       // which means including it globally causes the other lambdas to fail.
-      // This also needs to have the string split to cause parcel to not bundle this dependency,
+      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
       // which is wanted as bundling would have the dependency to not be searched for
       // and found at the layer level and would cause issues.
       // eslint-disable-next-line security/detect-non-literal-require
@@ -497,22 +497,22 @@ module.exports = (appContextUser = {}) => {
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
         createTrialSessionInteractor,
-        createUser: createUserUC,
-        createWorkItem: createWorkItemUC,
-        fileExternalDocument,
-        forwardWorkItem,
-        generatePDFFromPNGData,
-        getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionUC,
-        getCase,
-        getCasesByUser: getCasesByUserUC,
-        getDocumentQCBatchedForSection: getDocumentQCBatchedForSectionUC,
-        getDocumentQCBatchedForUser: getDocumentQCBatchedForUserUC,
-        getDocumentQCInboxForSection: getDocumentQCInboxForSectionUC,
-        getDocumentQCInboxForUser: getDocumentQCInboxForUserUC,
-        getDocumentQCServedForSection: getDocumentQCServedForSectionUC,
-        getDocumentQCServedForUser: getDocumentQCServedForUserUC,
-        getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionUC,
-        getInboxMessagesForSection: getInboxMessagesForSectionUC,
+        createUserInteractor,
+        createWorkItemInteractor,
+        fileExternalDocumentInteractor,
+        forwardWorkItemInteractor,
+        generatePDFFromPNGDataInteractor,
+        getCalendaredCasesForTrialSessionInteractor,
+        getCaseInteractor,
+        getCasesByUserInteractor,
+        getDocumentQCBatchedForSectionInteractor,
+        getDocumentQCBatchedForUserInteractor,
+        getDocumentQCInboxForSectionInteractor,
+        getDocumentQCInboxForUserInteractor,
+        getDocumentQCServedForSectionInteractor,
+        getDocumentQCServedForUserInteractor,
+        getEligibleCasesForTrialSessionInteractor,
+        getInboxMessagesForSectionInteractor,
         getInboxMessagesForUser: getInboxMessagesForUserUC,
         getInternalUsers: getInternalUsersUC,
         getNotifications,

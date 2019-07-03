@@ -91,7 +91,7 @@ exports.uploadExternalDocument = async ({
     });
   }
 
-  return await applicationContext.getUseCases().fileExternalDocument({
+  return await applicationContext.getUseCases().fileExternalDocumentInteractor({
     applicationContext,
     documentMetadata,
     primaryDocumentFileId,

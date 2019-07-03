@@ -1,5 +1,5 @@
 const {
-  getCalendaredCasesForTrialSession,
+  getCalendaredCasesForTrialSessionInteractor,
 } = require('./getCalendaredCasesForTrialSessionInteractor');
 const { User } = require('../../entities/User');
 
@@ -23,7 +23,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     };
 
     await expect(
-      getCalendaredCasesForTrialSession({
+      getCalendaredCasesForTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
@@ -45,7 +45,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     };
 
     await expect(
-      getCalendaredCasesForTrialSession({
+      getCalendaredCasesForTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
