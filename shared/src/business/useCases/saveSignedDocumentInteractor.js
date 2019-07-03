@@ -2,7 +2,7 @@ const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 
 /**
- * saveSignedDocument
+ * saveSignedDocumentInteractor
  *
  * @param caseId
  * @param document signed document
@@ -10,7 +10,7 @@ const { Document } = require('../entities/Document');
  * @param applicationContext
  * @returns {*}
  */
-exports.saveSignedDocument = async ({
+exports.saveSignedDocumentInteractor = async ({
   applicationContext,
   caseId,
   originalDocumentId,

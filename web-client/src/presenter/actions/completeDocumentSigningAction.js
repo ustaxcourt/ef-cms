@@ -36,7 +36,10 @@ export const completeDocumentSigningAction = async ({
       posX: x,
       posY: y,
       scale,
-      sigTextData: `(Signed) ${name}`,
+      sigTextData: {
+        signatureName: `(Signed) ${name}`,
+        signatureTitle: 'Chief Judge',
+      },
     });
 
   let documentFile;
@@ -78,7 +81,7 @@ export const completeDocumentSigningAction = async ({
 
   const { workItemId } = _.head(stipulatedWorkItems);
 
-  await applicationContext.getUseCases().completeWorkItem({
+  await applicationContext.getUseCases().completeWorkItemInteractor({
     applicationContext,
     userId: applicationContext.getCurrentUser().userId,
     workItemId,

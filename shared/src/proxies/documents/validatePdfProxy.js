@@ -1,13 +1,13 @@
 const { post } = require('../requests');
 
 /**
- * validatePdf
+ * validatePdfInteractor
  *
  * @param documentId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.validatePdf = ({ applicationContext, documentId }) => {
+exports.validatePdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/validate`,

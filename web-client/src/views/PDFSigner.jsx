@@ -158,7 +158,8 @@ class PDFSignerComponent extends React.Component {
                         display: this.state.signatureApplied ? 'block' : 'none',
                       }}
                     >
-                      (Signed) Joseph Dredd
+                      (Signed) Your Name <br />
+                      Chief Judge
                     </span>
                     <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
                   </div>

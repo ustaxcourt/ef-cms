@@ -14,15 +14,13 @@ const {
  * @constructor
  */
 function CaseInternal(rawCase) {
-  Object.assign(this, {
-    caseCaption: rawCase.caseCaption,
-    ownershipDisclosureFile: rawCase.ownershipDisclosureFile,
-    petitionFile: rawCase.petitionFile,
-    petitionFileSize: rawCase.petitionFileSize,
-    receivedAt: rawCase.receivedAt,
-    stinFile: rawCase.stinFile,
-    stinFileSize: rawCase.stinFileSize,
-  });
+  this.caseCaption = rawCase.caseCaption;
+  this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
+  this.petitionFile = rawCase.petitionFile;
+  this.petitionFileSize = rawCase.petitionFileSize;
+  this.receivedAt = rawCase.receivedAt;
+  this.stinFile = rawCase.stinFile;
+  this.stinFileSize = rawCase.stinFileSize;
 }
 
 CaseInternal.errorToMessageMap = {

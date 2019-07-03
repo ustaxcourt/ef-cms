@@ -82,67 +82,54 @@ const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
  * @constructor
  */
 function Case(rawCase) {
-  Object.assign(this, {
-    caseCaption: rawCase.caseCaption,
-    caseId: rawCase.caseId || uuid.v4(),
-    caseType: rawCase.caseType,
-    contactPrimary: rawCase.contactPrimary,
-    contactSecondary: rawCase.contactSecondary,
-    createdAt: rawCase.createdAt || new Date().toISOString(),
-    currentVersion: rawCase.currentVersion,
-    docketNumber: rawCase.docketNumber,
-    docketNumberSuffix: getDocketNumberSuffix(rawCase), // should be a derived property
-    docketRecord: rawCase.docketRecord,
-    documents: rawCase.documents,
-    filingType: rawCase.filingType,
-    hasIrsNotice: rawCase.hasIrsNotice, // should be a derived property
-    hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice, // should be a derived property
-    initialDocketNumberSuffix: rawCase.initialDocketNumberSuffix,
-    initialTitle: rawCase.initialTitle,
-    irsNoticeDate: rawCase.irsNoticeDate,
-    irsSendDate: rawCase.irsSendDate,
-    isPaper: rawCase.isPaper,
-    noticeOfAttachments: rawCase.noticeOfAttachments,
-    orderForAmendedPetition: rawCase.orderForAmendedPetition,
-    orderForAmendedPetitionAndFilingFee:
-      rawCase.orderForAmendedPetitionAndFilingFee,
-    orderForFilingFee: rawCase.orderForFilingFee,
-    orderForOds: rawCase.orderForOds,
-    orderForRatification: rawCase.orderForRatification,
-    orderToShowCause: rawCase.orderToShowCause,
-    partyType: rawCase.partyType,
-    payGovDate: rawCase.payGovDate,
-    payGovId: rawCase.payGovId,
-    practitioners: rawCase.practitioners,
-    preferredTrialCity: rawCase.preferredTrialCity,
-    procedureType: rawCase.procedureType,
-    receivedAt: rawCase.receivedAt,
-    respondents: rawCase.respondents || [],
-    status: rawCase.status || Case.STATUS_TYPES.new,
-    trialDate: rawCase.trialDate,
-    trialJudge: rawCase.trialJudge,
-    trialLocation: rawCase.trialLocation,
-    trialSessionId: rawCase.trialSessionId,
-    trialTime: rawCase.trialTime,
-    userId: rawCase.userId,
-    workItems: rawCase.workItems,
-    yearAmounts: rawCase.yearAmounts,
-  });
+  this.caseCaption = rawCase.caseCaption;
+  this.caseId = rawCase.caseId || uuid.v4();
+  this.caseType = rawCase.caseType;
+  this.contactPrimary = rawCase.contactPrimary;
+  this.contactSecondary = rawCase.contactSecondary;
+  this.createdAt = rawCase.createdAt || new Date().toISOString();
+  this.currentVersion = rawCase.currentVersion;
+  this.docketNumber = rawCase.docketNumber;
+  this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
+  // this.docketRecord = rawCase.docketRecord;
+  this.filingType = rawCase.filingType;
+  this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
+  this.irsNoticeDate = rawCase.irsNoticeDate;
+  this.irsSendDate = rawCase.irsSendDate;
+  this.isPaper = rawCase.isPaper;
+  this.partyType = rawCase.partyType;
+  this.payGovDate = rawCase.payGovDate;
+  this.payGovId = rawCase.payGovId;
+  this.practitioners = rawCase.practitioners;
+  this.preferredTrialCity = rawCase.preferredTrialCity;
+  this.procedureType = rawCase.procedureType;
+  this.receivedAt = rawCase.receivedAt;
+  this.respondents = rawCase.respondents || [];
+  this.status = rawCase.status || Case.STATUS_TYPES.new;
+  this.trialDate = rawCase.trialDate;
+  this.trialJudge = rawCase.trialJudge;
+  this.trialLocation = rawCase.trialLocation;
+  this.trialSessionId = rawCase.trialSessionId;
+  this.trialTime = rawCase.trialTime;
+  this.userId = rawCase.userId;
 
   this.initialDocketNumberSuffix =
-    this.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
+    rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
-  if (this.caseCaption) {
-    this.caseTitle = `${this.caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
-    this.initialTitle = this.initialTitle || this.caseTitle;
+  if (rawCase.caseCaption) {
+    this.caseTitle = `${rawCase.caseCaption.trim()} ${
+      Case.CASE_CAPTION_POSTFIX
+    }`;
+    this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
 
-  this.yearAmounts = (this.yearAmounts || []).map(
+  this.yearAmounts = (rawCase.yearAmounts || []).map(
     yearAmount => new YearAmount(yearAmount),
   );
 
-  if (Array.isArray(this.documents)) {
-    this.documents = this.documents.map(document => new Document(document));
+  if (Array.isArray(rawCase.documents)) {
+    this.documents = rawCase.documents.map(document => new Document(document));
   } else {
     this.documents = [];
   }
@@ -153,8 +140,8 @@ function Case(rawCase) {
     });
   });
 
-  if (Array.isArray(this.docketRecord)) {
-    this.docketRecord = this.docketRecord.map(
+  if (Array.isArray(rawCase.docketRecord)) {
+    this.docketRecord = rawCase.docketRecord.map(
       docketRecord => new DocketRecord(docketRecord),
     );
   } else {
@@ -171,14 +158,14 @@ function Case(rawCase) {
     this.updateDocketNumberRecord();
   }
 
-  this.noticeOfAttachments = this.noticeOfAttachments || false;
-  this.orderForAmendedPetition = this.orderForAmendedPetition || false;
+  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
-    this.orderForAmendedPetitionAndFilingFee || false;
-  this.orderForFilingFee = this.orderForFilingFee || false;
-  this.orderForOds = this.orderForOds || false;
-  this.orderForRatification = this.orderForRatification || false;
-  this.orderToShowCause = this.orderToShowCause || false;
+    rawCase.orderForAmendedPetitionAndFilingFee || false;
+  this.orderForFilingFee = rawCase.orderForFilingFee || false;
+  this.orderForOds = rawCase.orderForOds || false;
+  this.orderForRatification = rawCase.orderForRatification || false;
+  this.orderToShowCause = rawCase.orderToShowCause || false;
 }
 
 joiValidationDecorator(
@@ -279,10 +266,7 @@ joiValidationDecorator(
       })
       .optional(),
     trialTime: joi.string().optional(),
-    userId: joi
-      .string()
-      // .uuid(uuidVersions)
-      .optional(),
+    userId: joi.string().optional(),
     workItems: joi.array().optional(),
     yearAmounts: joi
       .array()
@@ -833,4 +817,4 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   return this;
 };
 
-exports.Case = Case;
+module.exports = { Case };

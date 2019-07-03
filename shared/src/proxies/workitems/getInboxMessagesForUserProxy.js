@@ -1,11 +1,14 @@
 const { get } = require('../requests');
 
 /**
- * getInboxMessagesForUserProxy
+ * getInboxMessagesForUserInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getInboxMessagesForUser = ({ applicationContext, userId }) => {
+exports.getInboxMessagesForUserInteractor = ({
+  applicationContext,
+  userId,
+}) => {
   return get({
     applicationContext,
     endpoint: `/users/${userId}/messages/inbox`,

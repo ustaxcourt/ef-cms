@@ -16,7 +16,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().virusScanPdf({
+      const results = await applicationContext.getUseCases().virusScanPdfInteractor({
         applicationContext,
         documentId,
       });

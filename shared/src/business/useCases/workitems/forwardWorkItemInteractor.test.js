@@ -1,6 +1,6 @@
-const { forwardWorkItem } = require('./forwardWorkItemInteractor');
+const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 
-describe('forwardWorkItem', () => {
+describe('forwardWorkItemInteractor', () => {
   let applicationContext;
 
   let mockWorkItem = {
@@ -33,7 +33,7 @@ describe('forwardWorkItem', () => {
     };
     let error;
     try {
-      await forwardWorkItem({
+      await forwardWorkItemInteractor({
         applicationContext,
         assigneeId: 'docketclerk',
         message: 'success',

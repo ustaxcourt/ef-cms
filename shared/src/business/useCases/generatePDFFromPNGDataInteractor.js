@@ -2,12 +2,12 @@ const pdflib = require('pdf-lib');
 const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = pdflib;
 
 /**
- * generatePDFFromPNGData
+ * generatePDFFromPNGDataInteractor
  *
  * @param imgData // Array of Uint8Array containing img data
  */
 
-exports.generatePDFFromPNGData = imgData => {
+exports.generatePDFFromPNGDataInteractor = imgData => {
   const pdfDoc = PDFDocumentFactory.create();
 
   function addImageToPage(img) {

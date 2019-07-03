@@ -1,15 +1,15 @@
 const sinon = require('sinon');
 const {
-  assignWorkItems,
+  assignWorkItemsInteractor,
 } = require('../useCases/workitems/assignWorkItemsInteractor');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getDocumentQCInboxForUser,
+  getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -33,7 +33,7 @@ describe('assignWorkItemsInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -68,7 +68,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       });
     };
 
-    const createdCase = await getCase({
+    const createdCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -77,19 +77,19 @@ describe('assignWorkItemsInteractor integration test', () => {
       d => d.documentType === 'Petition',
     ).workItems[0];
 
-    let inbox = await getDocumentQCInboxForUser({
+    let inbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toEqual([]);
 
-    await assignWorkItems({
+    await assignWorkItemsInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'richard',
       workItemId: workItem.workItemId,
     });
-    inbox = await getDocumentQCInboxForUser({
+    inbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -127,7 +127,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       },
     ]);
 
-    const caseAfterAssign = await getCase({
+    const caseAfterAssign = await getCaseInteractor({
       applicationContext,
       caseId,
     });

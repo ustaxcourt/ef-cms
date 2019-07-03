@@ -16,7 +16,7 @@ exports.handler = event =>
 
     applicationContext.logger.info('Event', event);
     try {
-      await applicationContext.getUseCases().sanitizePdf({
+      await applicationContext.getUseCases().sanitizePdfInteractor({
         applicationContext,
         documentId,
       });

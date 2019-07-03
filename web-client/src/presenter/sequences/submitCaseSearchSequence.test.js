@@ -5,11 +5,11 @@ import { presenter } from '../presenter';
 import sinon from 'sinon';
 
 let test;
-let getCase = async () => true;
+let getCaseInteractor = async () => true;
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    getCase,
+    getCaseInteractor,
   }),
 };
 presenter.providers.props = { caseId: () => '111-19' };
@@ -37,7 +37,7 @@ describe('submitCaseSearchSequence', () => {
   });
 
   it('does not navigate AND sets error state if endpoint throws NotFoundError', async () => {
-    getCase = () => {
+    getCaseInteractor = () => {
       return Promise.reject(
         new NotFoundError({ message: "404 Can't find it" }),
       );
@@ -51,7 +51,7 @@ describe('submitCaseSearchSequence', () => {
   });
 
   it('rethrows errors that are not NotFoundError instances', async () => {
-    getCase = async () => {
+    getCaseInteractor = async () => {
       return Promise.reject(
         new InvalidRequestError('something else went wrong'),
       );

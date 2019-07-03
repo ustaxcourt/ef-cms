@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const { Document } = require('../entities/Document');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
-const { runBatchProcess } = require('./runBatchProcessInteractor');
+const { runBatchProcessInteractor } = require('./runBatchProcessInteractor');
 const { User } = require('../entities/User');
 
 const MOCK_WORK_ITEMS = [
@@ -82,7 +82,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     };
     let error;
     try {
-      await runBatchProcess({
+      await runBatchProcessInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -95,7 +95,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   });
 
   it('runs batch process for case in IRS queue', async () => {
-    await runBatchProcess({
+    await runBatchProcessInteractor({
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(0).args[0]).toMatchObject({
@@ -155,7 +155,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
     };
-    await runBatchProcess({
+    await runBatchProcessInteractor({
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
@@ -215,7 +215,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
     };
-    await runBatchProcess({
+    await runBatchProcessInteractor({
       applicationContext,
     });
     expect(deleteWorkItemFromSectionStub.getCall(2).args[0]).toMatchObject({

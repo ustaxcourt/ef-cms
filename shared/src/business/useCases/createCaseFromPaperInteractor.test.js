@@ -1,11 +1,13 @@
 const sinon = require('sinon');
 const uuid = require('uuid');
+const {
+  createCaseFromPaperInteractor,
+} = require('./createCaseFromPaperInteractor');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
-const { createCaseFromPaper } = require('./createCaseFromPaperInteractor');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
-describe('createCaseFromPaper', () => {
+describe('createCaseFromPaperInteractor', () => {
   let applicationContext;
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
   const DATE = '2018-11-21T20:49:28.192Z';
@@ -28,7 +30,7 @@ describe('createCaseFromPaper', () => {
     };
     let error;
     try {
-      await createCaseFromPaper({ applicationContext });
+      await createCaseFromPaperInteractor({ applicationContext });
     } catch (err) {
       error = err;
     }
@@ -56,7 +58,7 @@ describe('createCaseFromPaper', () => {
         saveWorkItemForPaper: async () => null,
       }),
       getUseCases: () => ({
-        getUser: () => ({
+        getUserInteractor: () => ({
           name: 'john doe',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
@@ -67,7 +69,7 @@ describe('createCaseFromPaper', () => {
     let caseFromPaper;
 
     try {
-      caseFromPaper = await createCaseFromPaper({
+      caseFromPaper = await createCaseFromPaperInteractor({
         applicationContext,
         ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',

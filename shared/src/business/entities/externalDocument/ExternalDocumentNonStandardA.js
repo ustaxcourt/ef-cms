@@ -10,12 +10,10 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @constructor
  */
 function ExternalDocumentNonStandardA(rawProps) {
-  Object.assign(this, {
-    category: rawProps.category,
-    documentTitle: rawProps.documentTitle,
-    documentType: rawProps.documentType,
-    previousDocument: rawProps.previousDocument,
-  });
+  this.category = rawProps.category;
+  this.documentTitle = rawProps.documentTitle;
+  this.documentType = rawProps.documentType;
+  this.previousDocument = rawProps.previousDocument;
 }
 
 ExternalDocumentNonStandardA.prototype.getDocumentTitle = function() {

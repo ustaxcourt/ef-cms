@@ -3,18 +3,18 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  fileExternalDocument,
+  fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  getDocumentQCInboxForSection,
+  getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-describe('fileExternalDocument integration test', () => {
+describe('fileExternalDocumentInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('fileExternalDocument integration test', () => {
   });
 
   it('should attach the expected documents to the case', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -60,7 +60,7 @@ describe('fileExternalDocument integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    await fileExternalDocument({
+    await fileExternalDocumentInteractor({
       applicationContext,
       documentMetadata: {
         attachments: false,
@@ -104,7 +104,7 @@ describe('fileExternalDocument integration test', () => {
       supportingDocumentFileId: '22de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    const caseAfterDocument = await getCase({
+    const caseAfterDocument = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -418,7 +418,7 @@ describe('fileExternalDocument integration test', () => {
       });
     };
 
-    const workItems = await getDocumentQCInboxForSection({
+    const workItems = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
       section: 'docket',
     });

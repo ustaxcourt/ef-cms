@@ -1,27 +1,27 @@
 const sinon = require('sinon');
 const {
-  completeWorkItem,
+  completeWorkItemInteractor,
 } = require('../useCases/workitems/completeWorkItemInteractor');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  createWorkItem,
+  createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
-  getInboxMessagesForUser,
+  getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  getSentMessagesForUser,
+  getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 
-const { createCase } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-describe('completeWorkItem integration test', () => {
+describe('completeWorkItemInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('completeWorkItem integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -75,7 +75,7 @@ describe('completeWorkItem integration test', () => {
       });
     };
 
-    const createdCase = await getCase({
+    const createdCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -84,7 +84,7 @@ describe('completeWorkItem integration test', () => {
       d => d.documentType === 'Petition',
     );
 
-    const workItem = await createWorkItem({
+    const workItem = await createWorkItemInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       caseId,
@@ -92,7 +92,7 @@ describe('completeWorkItem integration test', () => {
       message: 'this is a test',
     });
 
-    let inbox = await getInboxMessagesForUser({
+    let inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -106,18 +106,18 @@ describe('completeWorkItem integration test', () => {
       },
     ]);
 
-    await completeWorkItem({
+    await completeWorkItemInteractor({
       applicationContext,
       completedMessage: 'game over man',
       workItemId: workItem.workItemId,
     });
-    const outbox = await getSentMessagesForUser({
+    const outbox = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(outbox).toMatchObject([]);
 
-    const caseAfterAssign = await getCase({
+    const caseAfterAssign = await getCaseInteractor({
       applicationContext,
       caseId,
     });

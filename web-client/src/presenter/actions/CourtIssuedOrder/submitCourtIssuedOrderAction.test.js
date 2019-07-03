@@ -11,10 +11,10 @@ describe('submitCourtIssuedOrderAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        fileExternalDocument: fileExternalDocumentStub,
-        sanitizePdf: () => {},
-        validatePdf: () => {},
-        virusScanPdf: () => {},
+        fileExternalDocumentInteractor: fileExternalDocumentStub,
+        sanitizePdfInteractor: () => {},
+        validatePdfInteractor: () => {},
+        virusScanPdfInteractor: () => {},
       }),
     };
   });
