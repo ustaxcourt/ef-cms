@@ -33,7 +33,7 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
 
     const caseSortTags = caseEntity.generateTrialSortTags();
 
-    await applicationContext.getUseCases().updateCaseTrialSortTags({
+    await applicationContext.getUseCases().updateCaseTrialSortTagsInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       caseSortTags,

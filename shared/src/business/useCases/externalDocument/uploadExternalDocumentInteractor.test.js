@@ -76,8 +76,8 @@ describe('uploadExternalDocument', () => {
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
           sanitizePdfInteractor: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocument({
@@ -108,8 +108,8 @@ describe('uploadExternalDocument', () => {
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
           sanitizePdfInteractor: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocument({
@@ -143,8 +143,8 @@ describe('uploadExternalDocument', () => {
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
           sanitizePdfInteractor: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocument({

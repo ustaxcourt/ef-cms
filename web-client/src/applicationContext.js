@@ -97,7 +97,7 @@ import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
-import { updateCaseTrialSortTags } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { uploadExternalDocument } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocuments } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequest } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
@@ -108,13 +108,13 @@ import { validateExternalDocumentInformation } from '../../shared/src/business/u
 import { validateForwardMessage } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessage } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
 import { validateOrderWithoutBody } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
-import { validatePdf } from '../../shared/src/proxies/documents/validatePdfProxy';
+import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetition } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionFromPaper } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validateTrialSession } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
-import { verifyCaseForUser } from '../../shared/src/proxies/verifyCaseForUserProxy';
-import { verifyPendingCaseForUser } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
-import { virusScanPdf } from '../../shared/src/proxies/documents/virusScanPdfProxy';
+import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
+import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
+import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 
 const {
   uploadDocument,
@@ -200,7 +200,7 @@ const allUseCases = {
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
   updateCaseInteractor,
-  updateCaseTrialSortTags,
+  updateCaseTrialSortTagsInteractor,
   uploadExternalDocument,
   uploadExternalDocuments,
   validateCaseAssociationRequest,
@@ -211,13 +211,13 @@ const allUseCases = {
   validateForwardMessage,
   validateInitialWorkItemMessage,
   validateOrderWithoutBody,
-  validatePdf,
+  validatePdfInteractor,
   validatePetition,
   validatePetitionFromPaper,
   validateTrialSession,
-  verifyCaseForUser,
-  verifyPendingCaseForUser,
-  virusScanPdf,
+  verifyCaseForUserInteractor,
+  verifyPendingCaseForUserInteractor,
+  virusScanPdfInteractor,
 };
 tryCatchDecorator(allUseCases);
 

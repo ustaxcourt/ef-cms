@@ -6,7 +6,7 @@ const { get } = require('./requests');
  * @param caseId
  * @returns {Promise<*>}
  */
-exports.verifyCaseForUser = ({ applicationContext, caseId }) => {
+exports.verifyCaseForUserInteractor = ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
   return get({
     applicationContext,

@@ -14,7 +14,7 @@ presenter.providers.applicationContext = {
   }),
   getUseCases: () => ({
     updateCaseInteractor: updateCaseStub,
-    updateCaseTrialSortTags: updateCaseTrialSortTagsStub,
+    updateCaseTrialSortTagsInteractor: updateCaseTrialSortTagsStub,
   }),
 };
 

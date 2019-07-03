@@ -13,8 +13,8 @@ describe('submitCourtIssuedOrderAction', () => {
       getUseCases: () => ({
         fileExternalDocumentInteractor: fileExternalDocumentStub,
         sanitizePdfInteractor: () => {},
-        validatePdf: () => {},
-        virusScanPdf: () => {},
+        validatePdfInteractor: () => {},
+        virusScanPdfInteractor: () => {},
       }),
     };
   });

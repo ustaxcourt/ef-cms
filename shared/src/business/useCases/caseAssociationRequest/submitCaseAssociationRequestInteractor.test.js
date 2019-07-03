@@ -30,7 +30,7 @@ describe('submitCaseAssociationRequest', () => {
           verifyCaseForUser: async () => true,
         }),
         getUseCases: () => ({
-          verifyCaseForUser: async () => caseRecord,
+          verifyCaseForUserInteractor: async () => caseRecord,
         }),
       };
       await submitCaseAssociationRequestInteractor({

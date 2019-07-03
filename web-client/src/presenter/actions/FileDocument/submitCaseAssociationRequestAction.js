@@ -42,12 +42,12 @@ export const submitCaseAssociationRequestAction = async ({
   );
 
   for (let documentId of documentIds) {
-    await applicationContext.getUseCases().virusScanPdf({
+    await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
     });
 
-    await applicationContext.getUseCases().validatePdf({
+    await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,
     });

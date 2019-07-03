@@ -17,7 +17,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .verifyPendingCaseForUser({
+        .verifyPendingCaseForUserInteractor({
           applicationContext,
           caseId,
           userId,
