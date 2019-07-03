@@ -68,7 +68,7 @@ export const completeDocumentSigningAction = async ({
 
   const workItems = await applicationContext
     .getUseCases()
-    .getInboxMessagesForUser({
+    .getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
