@@ -1,5 +1,3 @@
-process.env.FONTCONFIG_PATH = './share/fonts';
-
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
