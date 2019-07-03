@@ -13,7 +13,7 @@ export default test => {
         item => item.document.documentType === 'Proposed Stipulated Decision',
       );
 
-      expect(stipDecision).toBeNull();
+      expect(stipDecision).toBeUndefined();
     });
   });
 };

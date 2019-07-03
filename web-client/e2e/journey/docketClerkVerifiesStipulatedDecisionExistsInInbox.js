@@ -1,4 +1,4 @@
-import { getFormattedMyOutbox } from '../helpers';
+import { getFormattedMyInbox } from '../helpers';
 export default (test, message) => {
   describe('Docket Clerk navigates to My Inbox', () => {
     it('navigates to inbox', async () => {
@@ -8,13 +8,14 @@ export default (test, message) => {
     });
 
     it('verifies the stipulated decision exists', async () => {
-      const myInbox = await getFormattedMyOutbox(test);
+      const myInbox = await getFormattedMyInbox(test);
       const stipDecision = myInbox.find(
-        item => item.document.documentType === 'Proposed Stipulated Decision',
+        item =>
+          item.document.documentType === 'Proposed Stipulated Decision' &&
+          (message ? item.currentMessage.message === message : true),
       );
 
-      expect(stipDecision).not.toBeNull();
-
+      expect(stipDecision).not.toBeUndefined();
       if (message) {
         expect(stipDecision.currentMessage.message).toEqual(message);
       }
