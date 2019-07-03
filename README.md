@@ -20,14 +20,13 @@ API | Front-End | Shared Code
 <a href="docs/images/screenshot-docket-record.png"><img src="docs/images/screenshot-docket-record.png" width="49%" style="float: left;" /></a>
 <a href="docs/images/screenshot-answer.png"><img src="docs/images/screenshot-answer.png" width="49%" style="float: left;" /></a>
 
-The main fork of this project in which most development is occurring is located at [flexion ef-cms](https://github.com/flexion/ef-cms).
-[Zenhub](https://www.zenhub.com/) can be used to view the project board to see the github issues.
+The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
-Artifacts for on-going development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
+Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki).
 
 ## Technical overview
 
-This is a React-based Javascript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`web-api/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via CircleCI.
+This is a React-based JavaScript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`web-api/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via CircleCI.
 
 ## Documentation
 
@@ -37,7 +36,7 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 <a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
 
-## Dependency Diagrams
+## Dependency diagrams
 
 Client:
 <a href="docs/images/client-dependencies.png"><img src="docs/images/client-dependencies.png" style="border: 2px solid #000; " /></a>
@@ -51,11 +50,11 @@ The backlog is stored [in GitHub Issues in Flexion’s repository](https://githu
 
 ## Building everything
 
-To run the same checks that run in Jenkins (except SonarQube) locally, using Docker containers, run the following:
+To exercise the CI/CD pipeline locally, run the following:
 
 `./build-all.sh`
 
-This will run the lint, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
+This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
 ## Running / verifing the project via Docker
 
@@ -65,9 +64,9 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 
 - You can access the UI at http://localhost:1234
 - You can access the API at http://localhost:3000
-- You can access the dynamodb shell at http://localhost:8000/shell
-- You can access the dynamodb-admin ui at http://localhost:8001
-- You can access s3 local at http://localhost:9000
+- You can access the DynamoDB shell at http://localhost:8000/shell
+- You can access the DynamoDB admin UI at http://localhost:8001
+- You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
 
 ## Running this project locally without Docker
@@ -77,19 +76,18 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 ### Prerequisites
 
 - Node v10.15.3
-- npm 6.4.1
+- npm v6.4.1
 - Ghostscript v9.23 (see Setup below)
-- ClamAV 0.101.2 (see Setup below)
+- ClamAV v0.101.2 (see Setup below)
 
 ### Setup
 
-Follow the installation prerequisites for Ghostscript4JS at https://www.npmjs.com/package/ghostscript4js#prerequisites
-MacOS users can do the following:
+Follow [the installation prerequisites for Ghostscript4JS](https://www.npmjs.com/package/ghostscript4js#prerequisites). macOS users can do the following:
 - `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e61385fb91ced20245d063f728401e9727293ce0/Formula/ghostscript.rb`
 - `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
 - `source ~/.bash_profile`
 
-For ClamAV, MacOS users can do the following:
+For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
@@ -97,7 +95,7 @@ For ClamAV, MacOS users can do the following:
 - `source ~/.bash_profile`
 - `freshclam` (installs virus definitions)
 
-Both the web-client and web-api share code that exists in the `shared` directory; therefore, before you can run either, you need to run `npm install` inside the `shared` directory.
+Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the `shared` directory.
 
 - `cd shared && npm i`
 - `cd ../web-client && npm i`
@@ -111,11 +109,11 @@ Both the web-client and web-api share code that exists in the `shared` directory
 
 - `cd web-api && npm start`
 
-## Login and Test Users
+## Login and test users
 
 There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
 
-## Mock Login
+### Mock login
 
 You can log in using these usernames:
 
@@ -129,9 +127,9 @@ seniorattorney
 
 No password is required.
 
-## AWS Cognito
+### AWS Cognito
 
-To run use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
+To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
 petitioner1@example.com – petitioner5@example.com
@@ -158,7 +156,7 @@ Install the following for best results:
 
 ## Using the application with Internet Explorer 11
 
-If using Internet Explorer 11 with Windows 7, download the Adobe Reader application at https://get.adobe.com/reader/. Install as directed. This will permit PDFs to be viewed in-browser with Internet Explorer 11.
+If using Internet Explorer 11 with Windows 7, [download and install Adobe Reader](https://get.adobe.com/reader/). This will permit PDFs to be viewed in-browser.
 
 ## Forked dependencies
 
@@ -167,6 +165,7 @@ The software has several dependencies that required minor modifications to suit 
 - [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
 - [s3rver](https://github.com/ustaxcourt/s3rver)
 - [serverless-plugin-bind-deployment-id](https://github.com/ustaxcourt/serverless-plugin-bind-deployment-id)
+- [serverless-dynamodb-local](https://github.com/ustaxcourt/serverless-dynamodb-local)
 
 _If these repositories are deleted, the build will fail._ To verify that these repositories are still required, see each of the `package.json` files in the repo (e.g., `find . -name package.json -exec grep "github:ustaxcourt" {} \; |awk 'BEGIN {FS=": ";}{print$2}' |uniq`). Note that `s3rver` is a dependency of `serverless-s3-local`, and so it will not be found in our `package.json` files.
 
@@ -182,17 +181,17 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 >
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
 
-## Sprint PRs
+## Creating end-of-sprint pull requests
 
 Follow these steps for creating the end of sprint PRs for the court.
 
-1. Create a PR from develop -> staging
+1. Create a PR from `develop` -> `staging`
 2. Verify PR passed
-3. Merge PR and verify staging deployed correctly in Jenkins
-4. Create a PR from staging -> master
+3. Merge PR and verify staging deployed correctly in CircleCI
+4. Create a PR from `staging` -> `master`
 5. Verify PR passed
-6. Merge PR and verify prod deployed correctly in Jenkins
-7. Create a PR from flexion/ef-cms master -> ustaxcourt/ef-cms staging
+6. Merge PR and verify prod deployed correctly in CircleCI
+7. Create a PR from `flexion/ef-cms master` -> `ustaxcourt/ef-cms staging`
 8. When PR comments come in, make changes to master to fix the comments
 9. After the court approves and merges PR, merge master into develop
 10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court

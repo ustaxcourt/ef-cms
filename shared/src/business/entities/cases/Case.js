@@ -817,4 +817,4 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   return this;
 };
 
-exports.Case = Case;
+module.exports = { Case };
