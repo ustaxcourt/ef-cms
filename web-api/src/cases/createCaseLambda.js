@@ -13,7 +13,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().createCase({
+      const results = await applicationContext.getUseCases().createCaseInteractor({
         ...JSON.parse(event.body),
         applicationContext,
       });

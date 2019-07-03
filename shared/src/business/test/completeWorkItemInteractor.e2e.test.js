@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  completeWorkItem,
+  completeWorkItemInteractor,
 } = require('../useCases/workitems/completeWorkItemInteractor');
 const {
   createTestApplicationContext,
@@ -15,13 +15,13 @@ const {
   getSentMessagesForUser,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 
-const { createCase } = require('../useCases/createCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-describe('completeWorkItem integration test', () => {
+describe('completeWorkItemInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('completeWorkItem integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -106,7 +106,7 @@ describe('completeWorkItem integration test', () => {
       },
     ]);
 
-    await completeWorkItem({
+    await completeWorkItemInteractor({
       applicationContext,
       completedMessage: 'game over man',
       workItemId: workItem.workItemId,

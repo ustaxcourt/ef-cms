@@ -24,7 +24,7 @@ export const getPdfPreviewUrlAction = async ({
 
   const pdfBlob = await applicationContext
     .getUseCases()
-    .createCourtIssuedOrderPdfFromHtml({
+    .createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext,
       docketNumberWithSuffix,
       htmlString,

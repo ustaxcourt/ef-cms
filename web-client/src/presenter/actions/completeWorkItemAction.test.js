@@ -6,7 +6,7 @@ import { completeWorkItemAction } from './completeWorkItemAction';
 
 import sinon from 'sinon';
 
-const completeWorkItemStub = sinon.stub().returns(null);
+const completeWorkItemInteractorStub = sinon.stub().returns(null);
 
 presenter.providers.applicationContext = {
   getCurrentUser: () => ({
@@ -14,7 +14,7 @@ presenter.providers.applicationContext = {
     userId: 'docketclerk',
   }),
   getUseCases: () => ({
-    completeWorkItem: completeWorkItemStub,
+    completeWorkItemInteractor: completeWorkItemInteractorStub,
   }),
 };
 
@@ -23,7 +23,7 @@ presenter.providers.path = {
   success() {},
 };
 
-describe('completeWorkItem', () => {
+describe('completeWorkItemInteractor', () => {
   it('should have undefined completedMessage if completeForm is empty', async () => {
     await runAction(completeWorkItemAction, {
       modules: {
@@ -54,7 +54,7 @@ describe('completeWorkItem', () => {
       },
     });
     expect(
-      completeWorkItemStub.getCall(0).args[0].completedMessage,
+      completeWorkItemInteractorStub.getCall(0).args[0].completedMessage,
     ).toBeUndefined();
   });
 
@@ -87,8 +87,8 @@ describe('completeWorkItem', () => {
         },
       },
     });
-    expect(completeWorkItemStub.getCall(1).args[0].completedMessage).toEqual(
-      'Completed',
-    );
+    expect(
+      completeWorkItemInteractorStub.getCall(1).args[0].completedMessage,
+    ).toEqual('Completed');
   });
 });

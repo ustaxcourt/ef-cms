@@ -13,13 +13,13 @@ const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
-  addCoverToPDFDocument,
+  addCoverToPDFDocumentInteractor,
 } = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
 const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
-  assignWorkItems: assignWorkItemsUC,
+  assignWorkItemsInteractor,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
   associateUserWithCase,
@@ -34,28 +34,28 @@ const {
   CaseInternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseInternalIncomplete');
 const {
-  checkForReadyForTrialCases,
+  checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
-  completeWorkItem,
+  completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
-  createCase: createCaseUC,
-} = require('../../shared/src/business/useCases/createCaseInteractor');
-const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
 const {
-  createCaseFromPaper,
+  createCaseFromPaperInteractor,
 } = require('../../shared/src/business/useCases/createCaseFromPaperInteractor');
+const {
+  createCaseInteractor,
+} = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
-  createCourtIssuedOrderPdfFromHtml,
+  createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
   createDocument,
@@ -69,7 +69,7 @@ const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
-  createTrialSession: createTrialSessionUC,
+  createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
   createUser,
@@ -489,14 +489,14 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
-        addCoverToPDFDocument,
-        assignWorkItems: assignWorkItemsUC,
-        checkForReadyForTrialCases,
-        completeWorkItem,
-        createCase: createCaseUC,
-        createCaseFromPaper,
-        createCourtIssuedOrderPdfFromHtml,
-        createTrialSession: createTrialSessionUC,
+        addCoverToPDFDocumentInteractor,
+        assignWorkItemsInteractor,
+        checkForReadyForTrialCasesInteractor,
+        completeWorkItemInteractor,
+        createCaseFromPaperInteractor,
+        createCaseInteractor,
+        createCourtIssuedOrderPdfFromHtmlInteractor,
+        createTrialSessionInteractor,
         createUser: createUserUC,
         createWorkItem: createWorkItemUC,
         fileExternalDocument,

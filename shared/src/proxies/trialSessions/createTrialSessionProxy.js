@@ -1,13 +1,16 @@
 const { post } = require('../requests');
 
 /**
- * createTrialSession
+ * createTrialSessionInteractor
  *
  * @param trialSession
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createTrialSession = ({ applicationContext, trialSession }) => {
+exports.createTrialSessionInteractor = ({
+  applicationContext,
+  trialSession,
+}) => {
   return post({
     applicationContext,
     body: trialSession,

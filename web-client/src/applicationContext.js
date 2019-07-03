@@ -32,15 +32,15 @@ import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessag
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
-import { assignWorkItems } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
+import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCode } from '../../shared/src/business/useCases/authorizeCodeInteractor';
-import { completeWorkItem } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
-import { createCase } from '../../shared/src/proxies/createCaseProxy';
-import { createCaseFromPaper } from '../../shared/src/proxies/createCaseFromPaperProxy';
-import { createCourtIssuedOrderPdfFromHtml } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
+import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
+import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
+import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createCoverSheet } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocument } from '../../shared/src/proxies/documents/createDocumentProxy';
-import { createTrialSession } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
+import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItem } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { downloadDocumentFile } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocument } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
@@ -140,15 +140,15 @@ const setCurrentUserToken = newToken => {
 };
 
 const allUseCases = {
-  assignWorkItems,
+  assignWorkItemsInteractor,
   authorizeCode,
-  completeWorkItem,
-  createCase,
-  createCaseFromPaper,
-  createCourtIssuedOrderPdfFromHtml,
+  completeWorkItemInteractor,
+  createCaseFromPaperInteractor,
+  createCaseInteractor,
+  createCourtIssuedOrderPdfFromHtmlInteractor,
   createCoverSheet,
   createDocument,
-  createTrialSession,
+  createTrialSessionInteractor,
   createWorkItem,
   downloadDocumentFile,
   fileExternalDocument,
