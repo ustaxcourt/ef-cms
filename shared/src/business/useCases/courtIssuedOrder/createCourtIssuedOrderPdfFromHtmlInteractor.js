@@ -18,12 +18,6 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   try {
     const chromium = applicationContext.getChromium();
 
-    await chromium.font(
-      'https://rawcdn.githack.com/googlefonts/noto-fonts/7cc126f6c0ebfe750dc911dae951f9167d36213e/unhinted/NotoSerif-Regular.ttf',
-    );
-
-    applicationContext.logger.info('gotChromium');
-
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
@@ -31,11 +25,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       headless: true,
     });
 
-    applicationContext.logger.info('have browser');
-
     let page = await browser.newPage();
-
-    applicationContext.logger.info('have page');
 
     await page.setContent(htmlString);
 
