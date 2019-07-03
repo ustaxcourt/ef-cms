@@ -91,7 +91,7 @@ function Case(rawCase) {
   this.currentVersion = rawCase.currentVersion;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
-  this.docketRecord = rawCase.docketRecord;
+  // this.docketRecord = rawCase.docketRecord;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
@@ -117,9 +117,11 @@ function Case(rawCase) {
   this.initialDocketNumberSuffix =
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
-  if (this.caseCaption) {
-    this.caseTitle = `${this.caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
-    this.initialTitle = this.initialTitle || this.caseTitle;
+  if (rawCase.caseCaption) {
+    this.caseTitle = `${rawCase.caseCaption.trim()} ${
+      Case.CASE_CAPTION_POSTFIX
+    }`;
+    this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
 
   this.yearAmounts = (rawCase.yearAmounts || []).map(
@@ -138,8 +140,8 @@ function Case(rawCase) {
     });
   });
 
-  if (Array.isArray(this.docketRecord)) {
-    this.docketRecord = this.docketRecord.map(
+  if (Array.isArray(rawCase.docketRecord)) {
+    this.docketRecord = rawCase.docketRecord.map(
       docketRecord => new DocketRecord(docketRecord),
     );
   } else {
