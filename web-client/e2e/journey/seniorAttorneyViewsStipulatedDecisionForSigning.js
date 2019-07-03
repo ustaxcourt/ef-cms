@@ -37,7 +37,7 @@ export default test => {
 
       // set message
       test.setState('form', {
-        assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
+        assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         message:
           'Donna, this is not ready to serve. I need to follow up on something first',
         section: 'docket',
@@ -45,6 +45,8 @@ export default test => {
 
       // complete signing
       await test.runSequence('completeDocumentSigningSequence');
+      const newSignatureData = test.getState('pdfForSigning.signatureData');
+      expect(newSignatureData).toBeNull();
     });
   });
 };
