@@ -8,8 +8,6 @@ const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
 
-const { ORDER_TYPES } = Order;
-
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
@@ -87,7 +85,7 @@ Document.getDocumentTypes = () => {
     ...Object.values(documentMapInternal),
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
-  const orderDocTypes = ORDER_TYPES.map(t => t.documentType);
+  const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
   const documentTypes = [
     ...Object.values(Document.initialDocumentTypes),
     ...practitionerAssociationDocumentTypes,

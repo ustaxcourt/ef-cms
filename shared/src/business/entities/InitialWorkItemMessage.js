@@ -9,11 +9,9 @@ const {
  * @constructor
  */
 function InitialWorkItemMessage(rawMessage) {
-  Object.assign(this, {
-    assigneeId: rawMessage.assigneeId,
-    message: rawMessage.message,
-    section: rawMessage.section,
-  });
+  this.assigneeId = rawMessage.assigneeId;
+  this.message = rawMessage.message;
+  this.section = rawMessage.section;
 }
 
 joiValidationDecorator(

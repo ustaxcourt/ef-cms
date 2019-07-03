@@ -4,6 +4,20 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { getSectionForRole } = require('./WorkQueue');
 
+/**
+ * constructor
+ * @param rawUser
+ * @constructor
+ */
+function User(rawUser) {
+  this.email = rawUser.email;
+  this.name = rawUser.name;
+  this.role = rawUser.role || 'petitioner';
+  this.section = getSectionForRole(this.role);
+  this.token = rawUser.token;
+  this.userId = rawUser.userId;
+}
+
 joiValidationDecorator(
   User,
   joi.object().keys({
@@ -13,31 +27,6 @@ joiValidationDecorator(
     userId: joi.string().required(),
   }),
 );
-/**
- * constructor
- * @param rawUser
- * @constructor
- */
-function User(rawUser) {
-  Object.assign(this, {
-    email: rawUser.email,
-    name: rawUser.name,
-    role: rawUser.role,
-    section: rawUser.section,
-    token: rawUser.token,
-    userId: rawUser.userId,
-  });
-  this.section = getSectionForRole(this.role);
-  this.role = this.role || 'petitioner';
-}
-
-/**
- * isValid
- * @returns {boolean}
- */
-User.prototype.isValid = function isValid() {
-  return !!this.userId && !!this.role;
-};
 
 User.prototype.isExternalUser = function() {
   return (
