@@ -12,6 +12,14 @@ RUN fc-cache -f
 
 RUN cp -r /usr/share/fonts/truetype/msttcorefonts/* .fonts
 
+RUN echo "<?xml version='1.0'?>\ 
+<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>\ 
+<fontconfig>\ 
+  <dir>./.fonts/</dir>\ 
+  <cachedir>/tmp/fonts-cache/</cachedir>\
+  <config></config>\
+</fontconfig>" >> .fonts/fonts.conf
+
 COPY package.json /home/build/nodejs/package.json
 COPY package-lock.json /home/build/nodejs/package-lock.json
 RUN cd /home/build/nodejs/ && npm i
