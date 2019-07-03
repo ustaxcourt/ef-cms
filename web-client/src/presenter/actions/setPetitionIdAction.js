@@ -8,10 +8,10 @@ import _ from 'lodash';
  * @returns {object} docket number and documentId
  */
 export const setPetitionIdAction = ({ props }) => {
-  const docketNumber = props.caseDetail.docketNumber;
-  const documentId = _.find(props.caseDetail.documents, {
+  const { docketNumber } = props.caseDetail;
+  const { documentId } = _.find(props.caseDetail.documents, {
     documentType: 'Petition',
-  }).documentId;
+  });
 
   return {
     docketNumber,

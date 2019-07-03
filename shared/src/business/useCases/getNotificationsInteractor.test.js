@@ -1,6 +1,6 @@
 const { getNotifications } = require('./getNotificationsInteractor');
 
-describe('getWorkItemsForUser', () => {
+describe('getNotificationsInteractor', () => {
   let applicationContext;
 
   it('returns an unread count for my messages', async () => {
@@ -10,7 +10,13 @@ describe('getWorkItemsForUser', () => {
         userId: 'abc',
       }),
       getPersistenceGateway: () => ({
-        getWorkItemsForUser: () => [
+        getDocumentQCInboxForUser: () => [
+          {
+            isInternal: true,
+            isRead: true,
+          },
+        ],
+        getInboxMessagesForUser: () => [
           {
             isInternal: true,
             isRead: false,
@@ -32,10 +38,16 @@ describe('getWorkItemsForUser', () => {
         userId: 'abc',
       }),
       getPersistenceGateway: () => ({
-        getWorkItemsForUser: () => [
+        getDocumentQCInboxForUser: () => [
+          {
+            isInternal: true,
+            isRead: false,
+          },
+        ],
+        getInboxMessagesForUser: () => [
           {
             isInternal: false,
-            isRead: false,
+            isRead: true,
           },
         ],
       }),
@@ -54,7 +66,13 @@ describe('getWorkItemsForUser', () => {
         userId: 'abc',
       }),
       getPersistenceGateway: () => ({
-        getWorkItemsForUser: () => [
+        getDocumentQCInboxForUser: () => [
+          {
+            isInternal: true,
+            isRead: true,
+          },
+        ],
+        getInboxMessagesForUser: () => [
           {
             isInternal: true,
             isRead: true,

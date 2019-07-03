@@ -1,17 +1,14 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
+import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
+import FormData from 'form-data';
 const {
-  PARTY_TYPES,
-  COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 const DOCKET_CLERK_1_ID = '2805d1ab-18d0-43ec-bafb-654e83405416';
 const MESSAGE = 'new test message';
@@ -133,11 +130,11 @@ function createWorkItem(test) {
 }
 
 async function findWorkItemInWorkQueue({
-  test,
+  box,
   docketNumber,
   message,
-  box,
   queue,
+  test,
   workQueueIsInternal = true,
 }) {
   await test.runSequence('chooseWorkQueueSequence', {
@@ -146,9 +143,9 @@ async function findWorkItemInWorkQueue({
     workQueueIsInternal,
   });
 
-  const myOutbox = test.getState('workQueue');
+  const workQueue = test.getState('workQueue');
 
-  const workItem = myOutbox.find(
+  const workItem = workQueue.find(
     i => i.docketNumber === docketNumber && i.messages[0].message === message,
   );
 
@@ -157,7 +154,7 @@ async function findWorkItemInWorkQueue({
 
 describe('Create a work item', () => {
   beforeAll(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
 
     global.window = {
       localStorage: {
@@ -167,10 +164,10 @@ describe('Create a work item', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
-      COUNTRY_TYPES,
-      PARTY_TYPES,
-      TRIAL_CITIES,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 

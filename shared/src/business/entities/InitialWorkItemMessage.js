@@ -3,21 +3,15 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 /**
  *
  * @param rawMessage
  * @constructor
  */
 function InitialWorkItemMessage(rawMessage) {
-  Object.assign(this, {
-    assigneeId: rawMessage.assigneeId,
-    message: rawMessage.message,
-    section: rawMessage.section,
-  });
+  this.assigneeId = rawMessage.assigneeId;
+  this.message = rawMessage.message;
+  this.section = rawMessage.section;
 }
 
 joiValidationDecorator(
@@ -25,7 +19,9 @@ joiValidationDecorator(
   joi.object().keys({
     assigneeId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     message: joi.string().required(),
     section: joi.string().required(),

@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/Case');
+const { Case } = require('../../entities/cases/Case');
 const { Message } = require('../../entities/Message');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -10,7 +10,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * completeWorkItem
+ * createWorkItem
  *
  * @param workItemId
  * @param message
@@ -19,11 +19,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {*}
  */
 exports.createWorkItem = async ({
-  message,
+  applicationContext,
   assigneeId,
   caseId,
   documentId,
-  applicationContext,
+  message,
 }) => {
   const user = applicationContext.getCurrentUser();
 

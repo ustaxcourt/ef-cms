@@ -7,7 +7,7 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.virusScanPdf = ({ documentId, applicationContext }) => {
+exports.virusScanPdf = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${documentId}/virus-scan`,

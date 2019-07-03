@@ -1,20 +1,16 @@
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { Document } from '../../../../shared/src/business/entities/Document';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-
-import {
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../../../shared/src/business/entities/Document';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
-import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 
 const state = {
   caseDetail: MOCK_CASE,
   constants: {
-    CATEGORY_MAP,
-    INTERNAL_CATEGORY_MAP,
-    PARTY_TYPES,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
+    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES: ContactFactory.PARTY_TYPES,
   },
   form: {},
   validationErrors: {},
@@ -51,9 +47,9 @@ describe('addDocketEntryHelper', () => {
     let testState = {
       caseDetail: {},
       constants: {
-        CATEGORY_MAP,
-        INTERNAL_CATEGORY_MAP,
-        PARTY_TYPES,
+        CATEGORY_MAP: Document.CATEGORY_MAP,
+        INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
+        PARTY_TYPES: ContactFactory.PARTY_TYPES,
       },
     };
 
@@ -85,7 +81,7 @@ describe('addDocketEntryHelper', () => {
   });
 
   it('shows secondary party for petionerSpouse or petitionerDeceasedSpouse', async () => {
-    state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
+    state.caseDetail.partyType = ContactFactory.PARTY_TYPES.petitionerSpouse;
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();
   });
@@ -112,13 +108,13 @@ describe('addDocketEntryHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('does not show respondent option under Parties Filing if respondent is not associated with case', async () => {
+  it('does not show respondent option under Parties Filing if no respondent is associated with case', async () => {
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showRespondentParty).toBeFalsy();
   });
 
-  it('shows respondent option under Parties Filing if respondent is associated with case', async () => {
-    state.caseDetail.respondent = { name: 'Test Respondent' };
+  it('shows respondent option under Parties Filing if a respondent is associated with case', async () => {
+    state.caseDetail.respondents = [{ name: 'Test Respondent' }];
     const result = await runCompute(addDocketEntryHelper, { state });
     expect(result.showRespondentParty).toBeTruthy();
   });

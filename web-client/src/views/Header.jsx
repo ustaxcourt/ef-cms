@@ -31,11 +31,11 @@ const NavigationItems = (helper, sequences) => {
             Messages{' '}
             {helper.showMessagesIcon && (
               <FontAwesomeIcon
-                icon={['fas', 'envelope']}
-                className="iconStatusUnread"
-                aria-label="unread message"
-                size="sm"
                 aria-hidden="false"
+                aria-label="unread message"
+                className="iconStatusUnread"
+                icon={['fas', 'envelope']}
+                size="sm"
               />
             )}
           </a>
@@ -130,7 +130,7 @@ export const Header = connect(
                     className="button-icon float-right usa-button usa-button--unstyled"
                     onClick={() => toggleBetaBarSequence()}
                   >
-                    <img src={close} alt="close" />
+                    <img alt="close" src={close} />
                   </button>
                 </div>
               </div>
@@ -145,12 +145,12 @@ export const Header = connect(
           <div className="grid-col-1">
             <div className="usa-logo" id="extended-logo">
               <a href="/">
-                <img src={seal} alt="USTC Seal" />
+                <img alt="USTC Seal" src={seal} />
               </a>
             </div>
           </div>
           <div className="grid-col-6">
-            <nav role="navigation" className="main-navigation">
+            <nav className="main-navigation" role="navigation">
               {user &&
                 NavigationItems(helper, {
                   navigateToPathSequence,
@@ -165,12 +165,12 @@ export const Header = connect(
               Menu
             </button>
             <nav
-              role="navigation"
               className={
                 mobileMenu.isVisible
                   ? 'usa-nav mobile-menu is-visible'
                   : 'usa-nav'
               }
+              role="navigation"
             >
               <div className="usa-nav-inner">
                 <button
@@ -179,14 +179,14 @@ export const Header = connect(
                 >
                   Close{' '}
                   <FontAwesomeIcon
-                    icon={['fa', 'times-circle']}
                     className="account-menu-icon"
+                    icon={['fa', 'times-circle']}
                   />
                 </button>
                 <div className="header-search-container">
                   <ul className="usa-unstyled-list padding-left-0">
                     {helper.showSearchInHeader && (
-                      <li role="search" className="usa-search">
+                      <li className="usa-search" role="search">
                         <SearchBox />
                         {user && user.userId && (
                           <div className="mobile-account-menu-container">
@@ -214,15 +214,15 @@ export const Header = connect(
                     <ul className="usa-unstyled-list">
                       <li>
                         <button
+                          aria-label="login"
+                          className="button-account-login"
                           title="Login"
                           type="button"
-                          className="button-account-login"
-                          aria-label="login"
                           onClick={() => loginSequence()}
                         >
                           <FontAwesomeIcon
-                            icon={['far', 'user']}
                             className="account-menu-icon user-icon"
+                            icon={['far', 'user']}
                           />{' '}
                           Log In
                         </button>

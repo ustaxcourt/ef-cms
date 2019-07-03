@@ -43,14 +43,14 @@ export const PrimaryDocumentForm = connect(
             }`}
           >
             <label
-              htmlFor="primary-document"
-              id="primary-document-label"
               className={
                 'usa-label ustc-upload ' +
                 (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
               }
+              htmlFor="primary-document"
+              id="primary-document-label"
             >
               Add Document{' '}
               <span className="success-message">
@@ -58,15 +58,15 @@ export const PrimaryDocumentForm = connect(
               </span>
             </label>
             <StateDrivenFileInput
+              aria-describedby="primary-document-label"
               id="primary-document"
               name="primaryDocumentFile"
-              aria-describedby="primary-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.primaryDocumentFile"
+              className="usa-error-message"
             />
           </div>
 
@@ -80,12 +80,12 @@ export const PrimaryDocumentForm = connect(
               {['File', 'Lodge'].map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>
                   <input
-                    id={`filing-status-${option}`}
-                    type="radio"
-                    name="lodged"
-                    value={option}
-                    className="usa-radio__input"
                     checked={form.lodged === (option === 'Lodge')}
+                    className="usa-radio__input"
+                    id={`filing-status-${option}`}
+                    name="lodged"
+                    type="radio"
+                    value={option}
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -95,8 +95,8 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                   <label
-                    htmlFor={`filing-status-${option}`}
                     className="usa-radio__label"
+                    htmlFor={`filing-status-${option}`}
                   >
                     {option}
                   </label>
@@ -104,8 +104,8 @@ export const PrimaryDocumentForm = connect(
               ))}
             </fieldset>
             <Text
-              className="usa-error-message"
               bind="validationErrors.lodged"
+              className="usa-error-message"
             />
           </div>
 
@@ -121,78 +121,78 @@ export const PrimaryDocumentForm = connect(
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
                   <input
+                    aria-describedby="date-received-legend"
+                    aria-label="month, two digits"
                     className="usa-input usa-input--inline"
                     id="date-received-month"
-                    aria-label="month, two digits"
-                    aria-describedby="date-received-legend"
-                    name="dateReceivedMonth"
-                    value={form.dateReceivedMonth || ''}
-                    type="number"
-                    min="1"
                     max="12"
+                    min="1"
+                    name="dateReceivedMonth"
                     placeholder="MM"
+                    type="number"
+                    value={form.dateReceivedMonth || ''}
+                    onBlur={() => {
+                      validateDocketEntrySequence();
+                    }}
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
-                      validateDocketEntrySequence();
                     }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day">
                   <input
+                    aria-describedby="date-received-legend"
+                    aria-label="day, two digits"
                     className="usa-input usa-input--inline"
                     id="date-received-day"
-                    name="dateReceivedDay"
-                    value={form.dateReceivedDay || ''}
-                    aria-label="day, two digits"
-                    aria-describedby="date-received-legend"
-                    type="number"
-                    min="1"
                     max="31"
+                    min="1"
+                    name="dateReceivedDay"
                     placeholder="DD"
+                    type="number"
+                    value={form.dateReceivedDay || ''}
+                    onBlur={() => {
+                      validateDocketEntrySequence();
+                    }}
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
-                      validateDocketEntrySequence();
                     }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year">
                   <input
+                    aria-describedby="date-received-legend"
+                    aria-label="year, four digits"
                     className="usa-input usa-input--inline"
                     id="date-received-year"
-                    aria-label="year, four digits"
-                    aria-describedby="date-received-legend"
-                    name="dateReceivedYear"
-                    value={form.dateReceivedYear || ''}
-                    type="number"
-                    min="1900"
                     max="2100"
+                    min="1900"
+                    name="dateReceivedYear"
                     placeholder="YYYY"
+                    type="number"
+                    value={form.dateReceivedYear || ''}
+                    onBlur={() => {
+                      validateDocketEntrySequence();
+                    }}
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
-                      validateDocketEntrySequence();
                     }}
                   />
                 </div>
               </div>
             </fieldset>
             <Text
-              className="usa-error-message"
               bind="validationErrors.dateReceived"
+              className="usa-error-message"
             />
           </div>
 
@@ -202,29 +202,21 @@ export const PrimaryDocumentForm = connect(
             }`}
           >
             <label
+              className="usa-label"
               htmlFor="react-select-2-input"
               id="document-type-label"
-              className="usa-label"
             >
               Document Type
             </label>
             <Select
+              aria-describedby="document-type-label"
               className="select-react-element"
               classNamePrefix="select-react-element"
-              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-              name="eventCode"
               id="document-type"
               isClearable={true}
-              aria-describedby="document-type-label"
+              name="eventCode"
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               placeholder="- Select -"
-              onInputChange={(inputText, { action }) => {
-                if (action == 'input-change') {
-                  updateScreenMetadataSequence({
-                    key: 'searchText',
-                    value: inputText,
-                  });
-                }
-              }}
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
@@ -244,10 +236,18 @@ export const PrimaryDocumentForm = connect(
                 }
                 return true;
               }}
+              onInputChange={(inputText, { action }) => {
+                if (action == 'input-change') {
+                  updateScreenMetadataSequence({
+                    key: 'searchText',
+                    value: inputText,
+                  });
+                }
+              }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.eventCode"
+              className="usa-error-message"
             />
           </div>
 
@@ -260,31 +260,23 @@ export const PrimaryDocumentForm = connect(
               }`}
             >
               <label
+                className="usa-label"
                 htmlFor="react-select-3-input"
                 id="secondary-document-type-label"
-                className="usa-label"
               >
                 Which Document Is This Motion for Leave For?
               </label>
               <Select
+                aria-describedby="secondary-document-type-label"
                 className="select-react-element"
                 classNamePrefix="select-react-element"
+                id="secondary-document-type"
+                isClearable={true}
+                name="secondaryDocument.eventCode"
                 options={
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
-                name="secondaryDocument.eventCode"
-                id="secondary-document-type"
-                isClearable={true}
-                aria-describedby="secondary-document-type-label"
                 placeholder="- Select -"
-                onInputChange={(inputText, { action }) => {
-                  if (action == 'input-change') {
-                    updateScreenMetadataSequence({
-                      key: 'searchText',
-                      value: inputText,
-                    });
-                  }
-                }}
                 onChange={(inputValue, { action, name }) => {
                   switch (action) {
                     case 'select-option':
@@ -304,11 +296,19 @@ export const PrimaryDocumentForm = connect(
                   }
                   return true;
                 }}
+                onInputChange={(inputText, { action }) => {
+                  if (action == 'input-change') {
+                    updateScreenMetadataSequence({
+                      key: 'searchText',
+                      value: inputText,
+                    });
+                  }
+                }}
               />
               {!form.secondaryDocument && (
                 <Text
-                  className="usa-error-message"
                   bind="validationErrors.secondaryDocument"
+                  className="usa-error-message"
                 />
               )}
             </div>
@@ -326,39 +326,39 @@ export const PrimaryDocumentForm = connect(
 
           <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="additional-info"
               id="additional-info-label"
-              className="usa-label"
             >
               Additional Info 1
             </label>
             <input
-              id="additional-info"
-              type="text"
               aria-describedby="additional-info-label"
-              name="additionalInfo"
               autoCapitalize="none"
               className="usa-input"
+              id="additional-info"
+              name="additionalInfo"
+              type="text"
               value={form.additionalInfo || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateDocketEntrySequence();
-              }}
             />
           </div>
           <div className="usa-form-group">
             <div className="usa-checkbox">
               <input
-                id="add-to-coversheet"
-                type="checkbox"
-                name="addToCoversheet"
-                className="usa-checkbox__input"
                 checked={form.addToCoversheet || false}
+                className="usa-checkbox__input"
+                id="add-to-coversheet"
+                name="addToCoversheet"
+                type="checkbox"
                 onChange={e => {
                   updateDocketEntryFormValueSequence({
                     key: e.target.name,
@@ -368,8 +368,8 @@ export const PrimaryDocumentForm = connect(
                 }}
               />
               <label
-                htmlFor="add-to-coversheet"
                 className="usa-checkbox__label"
+                htmlFor="add-to-coversheet"
               >
                 Add to Cover Sheet
               </label>
@@ -378,28 +378,28 @@ export const PrimaryDocumentForm = connect(
 
           <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="additional-info2"
               id="additional-info2-label"
-              className="usa-label"
             >
               Additional Info 2
             </label>
             <input
-              id="additional-info2"
-              type="text"
               aria-describedby="additional-info2-label"
-              name="additionalInfo2"
               autoCapitalize="none"
               className="usa-input"
+              id="additional-info2"
+              name="additionalInfo2"
+              type="text"
               value={form.additionalInfo2 || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-              }}
-              onBlur={() => {
-                validateDocketEntrySequence();
               }}
             />
           </div>
@@ -427,15 +427,15 @@ export const PrimaryDocumentForm = connect(
                     return (
                       <div className="usa-checkbox" key={idx}>
                         <input
-                          id={`party-practitioner-${idx}`}
-                          type="checkbox"
-                          name={`practitioner.${idx}`}
-                          className="usa-checkbox__input"
                           checked={
                             (form.practitioner[idx] &&
                               form.practitioner[idx].partyPractitioner) ||
                             false
                           }
+                          className="usa-checkbox__input"
+                          id={`party-practitioner-${idx}`}
+                          name={`practitioner.${idx}`}
+                          type="checkbox"
                           onChange={e => {
                             updateDocketEntryFormValueSequence({
                               key: e.target.name,
@@ -448,8 +448,8 @@ export const PrimaryDocumentForm = connect(
                           }}
                         />
                         <label
-                          htmlFor={`party-practitioner-${idx}`}
                           className="usa-checkbox__label"
+                          htmlFor={`party-practitioner-${idx}`}
                         >
                           Counsel {practitionerName}
                         </label>
@@ -459,11 +459,11 @@ export const PrimaryDocumentForm = connect(
                 )}
               <div className="usa-checkbox">
                 <input
-                  id="party-primary"
-                  type="checkbox"
-                  name="partyPrimary"
-                  className="usa-checkbox__input"
                   checked={form.partyPrimary || false}
+                  className="usa-checkbox__input"
+                  id="party-primary"
+                  name="partyPrimary"
+                  type="checkbox"
                   onChange={e => {
                     updateDocketEntryFormValueSequence({
                       key: e.target.name,
@@ -472,18 +472,18 @@ export const PrimaryDocumentForm = connect(
                     validateDocketEntrySequence();
                   }}
                 />
-                <label htmlFor="party-primary" className="usa-checkbox__label">
+                <label className="usa-checkbox__label" htmlFor="party-primary">
                   {caseDetail.contactPrimary.name}
                 </label>
               </div>
               {addDocketEntryHelper.showSecondaryParty && (
                 <div className="usa-checkbox">
                   <input
-                    id="party-secondary"
-                    type="checkbox"
-                    name="partySecondary"
-                    className="usa-checkbox__input"
                     checked={form.partySecondary || false}
+                    className="usa-checkbox__input"
+                    id="party-secondary"
+                    name="partySecondary"
+                    type="checkbox"
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -493,8 +493,8 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                   <label
-                    htmlFor="party-secondary"
                     className="usa-checkbox__label"
+                    htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}
                   </label>
@@ -503,11 +503,11 @@ export const PrimaryDocumentForm = connect(
               {addDocketEntryHelper.showRespondentParty && (
                 <div className="usa-checkbox">
                   <input
-                    id="party-respondent"
-                    type="checkbox"
-                    name="partyRespondent"
-                    className="usa-checkbox__input"
                     checked={form.partyRespondent || false}
+                    className="usa-checkbox__input"
+                    id="party-respondent"
+                    name="partyRespondent"
+                    type="checkbox"
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -517,16 +517,16 @@ export const PrimaryDocumentForm = connect(
                     }}
                   />
                   <label
-                    htmlFor="party-respondent"
                     className="usa-checkbox__label"
+                    htmlFor="party-respondent"
                   >
                     Respondent
                   </label>
                 </div>
               )}
               <Text
-                className="usa-error-message"
                 bind="addDocketEntryHelper.partyValidationError"
+                className="usa-error-message"
               />
             </fieldset>
           </div>
@@ -537,19 +537,19 @@ export const PrimaryDocumentForm = connect(
               }`}
             >
               <fieldset className="usa-fieldset margin-bottom-0">
-                <legend id="objections-legend" className="usa-legend">
+                <legend className="usa-legend" id="objections-legend">
                   Are There Any Objections to This Document?
                 </legend>
                 {['Yes', 'No', 'Unknown'].map(option => (
                   <div className="usa-radio" key={option}>
                     <input
-                      id={`objections-${option}`}
-                      type="radio"
                       aria-describedby="objections-legend"
-                      name="objections"
-                      className="usa-radio__input"
-                      value={option}
                       checked={form.objections === option}
+                      className="usa-radio__input"
+                      id={`objections-${option}`}
+                      name="objections"
+                      type="radio"
+                      value={option}
                       onChange={e => {
                         updateDocketEntryFormValueSequence({
                           key: e.target.name,
@@ -559,8 +559,8 @@ export const PrimaryDocumentForm = connect(
                       }}
                     />
                     <label
-                      htmlFor={`objections-${option}`}
                       className="usa-radio__label"
+                      htmlFor={`objections-${option}`}
                     >
                       {option}
                     </label>
@@ -568,8 +568,8 @@ export const PrimaryDocumentForm = connect(
                 ))}
               </fieldset>
               <Text
-                className="usa-error-message"
                 bind="validationErrors.objections"
+                className="usa-error-message"
               />
             </div>
           )}

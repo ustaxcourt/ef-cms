@@ -1,7 +1,7 @@
 #!/bin/bash -e 
 
 # This script runs lint, tests, cypress, and pa11y over an already running 
-# application.  This can only be run with a clean start of the efcms-service.
+# application.  This can only be run with a clean start of the web-api.
 
 # For more thorough validations, run the ./build-all.sh script since that
 # runs basically all the same things Jenkins runs.
@@ -12,8 +12,8 @@ npm run lint
 npm test
 popd
 
-# efcms-service
-pushd efcms-service
+# web-api
+pushd web-api
 npm run lint
 npm test
 popd

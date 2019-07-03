@@ -1,16 +1,15 @@
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { Document } from '../../../../shared/src/business/entities/Document';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-
-import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
-import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 
 const state = {
   caseDetail: MOCK_CASE,
   constants: {
-    CATEGORY_MAP,
-    PARTY_TYPES,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
+    PARTY_TYPES: ContactFactory.PARTY_TYPES,
   },
   form: {},
   validationErrors: {},
@@ -75,7 +74,7 @@ describe('fileDocumentHelper', () => {
   });
 
   it('shows secondary party for petionerSpouse or petitionerDeceasedSpouse', async () => {
-    state.caseDetail.partyType = PARTY_TYPES.petitionerSpouse;
+    state.caseDetail.partyType = ContactFactory.PARTY_TYPES.petitionerSpouse;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();
   });
@@ -144,17 +143,6 @@ describe('fileDocumentHelper', () => {
     expect(result.showPractitionerParty).toBeFalsy();
   });
 
-  it('does not show respondent option under Parties Filing if respondent is not associated with case', async () => {
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showRespondentParty).toBeFalsy();
-  });
-
-  it('shows respondent option under Parties Filing if respondent is associated with case', async () => {
-    state.caseDetail.respondent = { name: 'Test Respondent' };
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showRespondentParty).toBeTruthy();
-  });
-
   it('shows Myself as party primary label for user role petitioner', async () => {
     state.user = { role: 'petitioner' };
     const result = await runCompute(fileDocumentHelper, { state });
@@ -163,6 +151,12 @@ describe('fileDocumentHelper', () => {
 
   it('shows primary contact name as party primary label for user role practitioner', async () => {
     state.user = { role: 'practitioner' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
+  });
+
+  it('shows primary contact name as party primary label for user role respondent', async () => {
+    state.user = { role: 'respondent' };
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
   });

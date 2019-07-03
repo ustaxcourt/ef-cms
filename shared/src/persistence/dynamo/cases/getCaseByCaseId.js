@@ -8,7 +8,7 @@ const client = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.getCaseByCaseId = ({ caseId, applicationContext }) => {
+exports.getCaseByCaseId = ({ applicationContext, caseId }) => {
   return client
     .get({
       Key: {

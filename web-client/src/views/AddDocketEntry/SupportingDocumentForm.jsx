@@ -35,14 +35,14 @@ export const SupportingDocumentForm = connect(
             }`}
           >
             <label
-              htmlFor="primary-document"
-              id="primary-document-label"
               className={
                 'usa-label ustc-upload ' +
                 (addDocketEntryHelper.showPrimaryDocumentValid
                   ? 'validated'
                   : '')
               }
+              htmlFor="primary-document"
+              id="primary-document-label"
             >
               Add Document{' '}
               <span className="success-message">
@@ -50,15 +50,15 @@ export const SupportingDocumentForm = connect(
               </span>
             </label>
             <StateDrivenFileInput
+              aria-describedby="supporting-document-label"
               id="supporting-document"
               name="primaryDocumentFile"
-              aria-describedby="supporting-document-label"
               updateFormValueSequence="updateDocketEntryFormValueSequence"
               validationSequence="validateDocketEntrySequence"
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.primaryDocumentFile"
+              className="usa-error-message"
             />
           </div>
 
@@ -68,17 +68,18 @@ export const SupportingDocumentForm = connect(
             }`}
           >
             <label
+              className="usa-label"
               htmlFor="event-code"
               id="event-code-label"
-              className="usa-label"
             >
               Document Type
             </label>
             <select
-              className="usa-select"
-              name="eventCode"
-              id="event-code"
               aria-describedby="event-code-label"
+              className="usa-select"
+              id="event-code"
+              name="eventCode"
+              value={form.eventCode || ''}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -86,7 +87,6 @@ export const SupportingDocumentForm = connect(
                 });
                 validateDocketEntrySequence();
               }}
-              value={form.eventCode || ''}
             >
               <option value="">- Select -</option>
               {addDocketEntryHelper.supportingDocumentTypeList.map(entry => {
@@ -98,8 +98,8 @@ export const SupportingDocumentForm = connect(
               })}
             </select>
             <Text
-              className="usa-error-message"
               bind="validationErrors.documentType"
+              className="usa-error-message"
             />
           </div>
 
@@ -110,33 +110,33 @@ export const SupportingDocumentForm = connect(
               }`}
             >
               <label
+                className="usa-label"
                 htmlFor="free-text"
                 id="free-text-label"
-                className="usa-label"
               >
                 Supporting Document Signed By
               </label>
               <input
+                aria-describedby="free-text-label"
+                autoCapitalize="none"
                 className="usa-input"
                 id="free-text"
-                type="text"
-                aria-describedby="free-text-label"
                 name="freeText"
-                autoCapitalize="none"
+                type="text"
                 value={form.freeText || ''}
+                onBlur={() => {
+                  validateDocketEntrySequence();
+                }}
                 onChange={e => {
                   updateDocketEntryFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
-                onBlur={() => {
-                  validateDocketEntrySequence();
-                }}
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.freeText"
+                className="usa-error-message"
               />
             </div>
           )}
@@ -145,39 +145,39 @@ export const SupportingDocumentForm = connect(
           )}
           <div className="usa-form-group">
             <label
+              className="usa-label"
               htmlFor="additional-info"
               id="additional-info-label"
-              className="usa-label"
             >
               Additional Info 1
             </label>
             <input
+              aria-describedby="additional-info-label"
+              autoCapitalize="none"
               className="usa-input"
               id="additional-info"
-              type="text"
-              aria-describedby="additional-info-label"
               name="additionalInfo"
-              autoCapitalize="none"
+              type="text"
               value={form.additionalInfo || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateDocketEntrySequence();
-              }}
             />
           </div>
           <div className="usa-form-group">
             <div className="usa-checkbox">
               <input
-                id="add-to-coversheet"
-                className="usa-checkbox__input"
-                type="checkbox"
-                name="addToCoversheet"
                 checked={form.addToCoversheet}
+                className="usa-checkbox__input"
+                id="add-to-coversheet"
+                name="addToCoversheet"
+                type="checkbox"
                 onChange={e => {
                   updateDocketEntryFormValueSequence({
                     key: e.target.name,
@@ -187,8 +187,8 @@ export const SupportingDocumentForm = connect(
                 }}
               />
               <label
-                htmlFor="add-to-coversheet"
                 className="usa-checkbox__label"
+                htmlFor="add-to-coversheet"
               >
                 Add to Cover Sheet
               </label>
@@ -203,28 +203,28 @@ export const SupportingDocumentForm = connect(
             }`}
           >
             <label
+              className="usa-label"
               htmlFor="additional-info2"
               id="additional-info-label2"
-              className="usa-label"
             >
               Additional Info 2
             </label>
             <input
+              aria-describedby="additional-info2-label2"
+              autoCapitalize="none"
               className="usa-input"
               id="additional-info2"
-              type="text"
-              aria-describedby="additional-info2-label2"
               name="additionalInfo2"
-              autoCapitalize="none"
+              type="text"
               value={form.additionalInfo2 || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
               onChange={e => {
                 updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
-              }}
-              onBlur={() => {
-                validateDocketEntrySequence();
               }}
             />
           </div>

@@ -1,19 +1,12 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { isFunction, mapValues } from 'lodash';
-import FormData from 'form-data';
-
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
-
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
+import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
+import FormData from 'form-data';
 import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
@@ -24,11 +17,9 @@ import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
-
 const {
-  PARTY_TYPES,
-  COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 let test;
 global.FormData = FormData;
@@ -65,7 +56,7 @@ test = CerebralTest(presenter);
 
 describe('Taxpayer files document', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,
@@ -74,13 +65,13 @@ describe('Taxpayer files document', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
-      CATEGORIES,
-      CATEGORY_MAP,
-      COUNTRY_TYPES,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
-      PARTY_TYPES,
-      TRIAL_CITIES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 

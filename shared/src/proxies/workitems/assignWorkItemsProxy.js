@@ -7,11 +7,11 @@ const { put } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = ({
-  workItemId,
+exports.assignWorkItemsInteractor = ({
+  applicationContext,
   assigneeId,
   assigneeName,
-  applicationContext,
+  workItemId,
 }) => {
   return put({
     applicationContext,
@@ -20,6 +20,6 @@ exports.assignWorkItems = ({
       assigneeName,
       workItemId,
     },
-    endpoint: '/workitems',
+    endpoint: '/work-items',
   });
 };

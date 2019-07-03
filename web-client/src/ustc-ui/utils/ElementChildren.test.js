@@ -59,11 +59,11 @@ describe('getDefaultAttribute', () => {
       <div key="what" kid="someIds">
         sds
       </div>,
-      <div key="what" id="someId">
+      <div id="someId" key="what">
         sds
       </div>,
       22,
-      <div key="fetch" id="sdsdf">
+      <div id="sdsdf" key="fetch">
         something
       </div>,
     ];

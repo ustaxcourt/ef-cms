@@ -9,10 +9,10 @@ export const Loading = connect(
     return (
       submitting && (
         <div
-          className="loading-overlay progress-indicator"
           aria-live="assertive"
+          className="loading-overlay progress-indicator"
         >
-          <FontAwesomeIcon icon="sync" className="fa-spin spinner" size="6x" />
+          <FontAwesomeIcon className="fa-spin spinner" icon="sync" size="6x" />
         </div>
       )
     );

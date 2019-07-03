@@ -1,15 +1,15 @@
 const {
   validatePetitionFromPaper,
 } = require('./validatePetitionFromPaperInteractor');
+const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { omit } = require('lodash');
-const { PetitionFromPaper } = require('../entities/PetitionFromPaper');
 
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {
     const errors = validatePetitionFromPaper({
       applicationContext: {
         getEntityConstructors: () => ({
-          PetitionFromPaper,
+          CaseInternal,
         }),
       },
       petition: {},
@@ -17,7 +17,7 @@ describe('validatePetition', () => {
 
     expect(Object.keys(errors)).toEqual(
       Object.keys(
-        omit(PetitionFromPaper.errorToMessageMap, [
+        omit(CaseInternal.errorToMessageMap, [
           'caseType',
           'irsNoticeDate',
           'ownershipDisclosureFile',

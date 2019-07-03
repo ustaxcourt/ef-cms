@@ -2,8 +2,8 @@ const {
   isAuthorized,
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
-const { Case, STATUS_TYPES } = require('../entities/Case');
-const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
+const { Case } = require('../entities/cases/Case');
+const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
  *
@@ -12,8 +12,8 @@ const { UnauthorizedError, NotFoundError } = require('../../errors/errors');
  * @returns {Promise<*>}
  */
 exports.sendPetitionToIRSHoldingQueue = async ({
-  caseId,
   applicationContext,
+  caseId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -60,7 +60,7 @@ exports.sendPetitionToIRSHoldingQueue = async ({
           workItem: workItem.validate().toRawObject(),
         });
     }
-    workItem.setStatus(STATUS_TYPES.batchedForIRS);
+    workItem.setStatus(Case.STATUS_TYPES.batchedForIRS);
 
     await applicationContext.getPersistenceGateway().updateWorkItem({
       applicationContext,

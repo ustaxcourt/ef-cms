@@ -73,6 +73,10 @@ iframe {
   width: 100%;
   height: 945px;
   border: 1px solid color($theme-color-base-lightest);
+
+  &#pdf-preview-iframe {
+    height: 683px;
+  }
 }
 
 .link.case-link-bold {
@@ -878,6 +882,10 @@ nav.usa-nav {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
+
+    &.ustc-tag--yellow {
+      background: color($theme-color-warning);
+    }
   }
   .unread {
     position: relative;
@@ -971,4 +979,107 @@ nav.usa-nav {
   position: absolute;
   top: -10px;
   right: -7px;
+}
+
+.quill {
+  background: $color-white;
+}
+
+.sign-pdf-control {
+  .icon-button {
+    color: color($theme-color-primary);
+    cursor: pointer;
+
+    &.disabled {
+      color: color($theme-color-base-light);
+      cursor: arrow;
+    }
+  }
+
+  .pages {
+    position: relative;
+    top: -6px;
+    font-size: 18px;
+    font-weight: $font-semibold;
+  }
+}
+
+.sign-pdf-interface {
+  position: relative;
+  padding: 30px 0;
+  background-color: color($theme-color-base);
+  #signature {
+    position: absolute;
+    padding: 20px;
+    border: 1px solid #eee;
+    background-color: rgba(255, 255, 255, 0.8);
+    font-weight: $font-bold;
+    text-align: center;
+  }
+  #sign-pdf-canvas {
+    display: block;
+    margin: auto;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
+
+.ql-editor {
+  min-height: 640px;
+  max-height: 640px;
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+
+  p {
+    max-width: 100%;
+  }
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='10px']::before {
+  content: '10px';
+  font-size: 10px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='12px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='12px']::before {
+  content: '12px';
+  font-size: 12px !important;
+}
+
+/* default */
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='14px']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
+  content: '14px';
+  font-size: 14px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='16px']::before {
+  content: '16px';
+  font-size: 16px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='18px']::before {
+  content: '18px';
+  font-size: 18px !important;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='20px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='20px']::before {
+  content: '20px';
+  font-size: 20px !important;
 }

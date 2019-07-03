@@ -40,10 +40,10 @@ export const FilingsAndProceedings = connect(
             <React.Fragment>
               <NonMobile>
                 <a
-                  href={`${baseUrl}/documents/${documentId}/documentDownloadUrl?token=${token}`}
-                  target="_blank"
-                  rel="noreferrer noopener"
                   aria-label={`View PDF: ${description}`}
+                  href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
+                  rel="noreferrer noopener"
+                  target="_blank"
                 >
                   {isPaper && (
                     <span className="filing-type-icon-mobile">
@@ -55,8 +55,8 @@ export const FilingsAndProceedings = connect(
               </NonMobile>
               <Mobile>
                 <button
-                  className="usa-button usa-button--unstyled border-0"
                   aria-roledescription="button to view document details"
+                  className="usa-button usa-button--unstyled border-0"
                   onClick={() => {
                     showDocketRecordDetailModalSequence({
                       docketRecordIndex,
@@ -90,7 +90,7 @@ export const FilingsAndProceedings = connect(
           caseDetailHelper.showDirectDownloadLink &&
           document.processingStatus !== 'complete' && (
             <React.Fragment>
-              <span className="usa-tag" aria-label="document uploading marker">
+              <span aria-label="document uploading marker" className="usa-tag">
                 <span aria-hidden="true">Uploading</span>
               </span>
               {record.description}
@@ -99,11 +99,11 @@ export const FilingsAndProceedings = connect(
 
         {document && caseDetailHelper.showDocumentDetailLink && (
           <a
+            aria-label="View PDF"
             href={documentHelper({
               docketNumber: caseDetail.docketNumber,
               documentId: document.documentId,
             })}
-            aria-label="View PDF"
           >
             {document && document.isPaper && (
               <span className="filing-type-icon-mobile">

@@ -2,8 +2,8 @@ const client = require('../../dynamodbClientService');
 
 exports.deleteUserOutboxRecord = ({
   applicationContext,
-  userId,
   createdAt,
+  userId,
 }) => {
   return client.delete({
     applicationContext,

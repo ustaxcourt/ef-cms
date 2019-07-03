@@ -5,6 +5,8 @@ const {
 const { TrialSession } = require('../../entities/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const ELIGIBLE_CASES_BUFFER = 50;
+
 /**
  * get eligible cases for trial session
  *
@@ -37,7 +39,7 @@ exports.getEligibleCasesForTrialSession = async ({
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
       applicationContext,
-      limit: trialSessionEntity.maxCases,
+      limit: trialSessionEntity.maxCases + ELIGIBLE_CASES_BUFFER,
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 };

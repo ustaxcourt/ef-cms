@@ -9,8 +9,8 @@ export const AccountMenuItems = ({ signOut }) => {
     <ul className="usa-unstyled-list">
       <li>
         <button
-          id="log-out"
           className="account-menu-item usa-button--unstyled"
+          id="log-out"
           onClick={() => {
             signOut();
           }}
@@ -34,19 +34,19 @@ export const AccountMenu = connect(
       <div className={isMenuOpen ? 'account-menu open' : 'account-menu closed'}>
         <div className="account-button-container">
           <button
+            aria-label="account menu"
+            className="button-account-menu"
             title={`Hello, ${user.name}`}
             type="button"
-            className="button-account-menu"
-            aria-label="account menu"
             onClick={() => toggleAccountMenu()}
           >
             <FontAwesomeIcon
-              icon={['far', 'user']}
               className="account-menu-icon user-icon"
+              icon={['far', 'user']}
             />
             <FontAwesomeIcon
-              icon={['fa', 'caret-down']}
               className="account-menu-icon caret"
+              icon={['fa', 'caret-down']}
             />
           </button>
         </div>
@@ -65,7 +65,7 @@ class AccountMenuContentComponent extends React.Component {
 
   handleClick(e) {
     const targetClasses = Array.from(e.target.classList);
-    if (targetClasses.indexOf('account-menu-item') > -1) {
+    if (targetClasses.includes('account-menu-item')) {
       return true;
     } else {
       // set a small delay to account for state updates in parent

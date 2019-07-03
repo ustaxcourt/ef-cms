@@ -16,7 +16,7 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.createWorkItem = async ({ workItem, applicationContext }) => {
+exports.createWorkItem = async ({ applicationContext, workItem }) => {
   const user = applicationContext.getCurrentUser();
 
   await put({

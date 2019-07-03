@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/contacts/PetitionContact';
+import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { caseDetailEditHelper } from './caseDetailEditHelper';
 
 describe('case detail edit computed', () => {
@@ -8,7 +8,7 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -19,10 +19,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.conservator,
+          partyType: ContactFactory.PARTY_TYPES.conservator,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -34,10 +34,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.corporation,
+          partyType: ContactFactory.PARTY_TYPES.corporation,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -49,10 +49,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.custodian,
+          partyType: ContactFactory.PARTY_TYPES.custodian,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -64,10 +64,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.donor,
+          partyType: ContactFactory.PARTY_TYPES.donor,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -79,10 +79,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.estate,
+          partyType: ContactFactory.PARTY_TYPES.estate,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -94,10 +94,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.estateWithoutExecutor,
+          partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -109,10 +109,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.guardian,
+          partyType: ContactFactory.PARTY_TYPES.guardian,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -124,10 +124,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
+          partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -139,10 +139,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.nextFriendForMinor,
+          partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -154,10 +154,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
+          partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -169,10 +169,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.partnershipBBA,
+          partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -184,10 +184,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
+          partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -199,10 +199,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -214,10 +214,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -229,10 +229,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitionerSpouse,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -244,10 +244,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.survivingSpouse,
+          partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -259,10 +259,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.transferee,
+          partyType: ContactFactory.PARTY_TYPES.transferee,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -274,10 +274,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.trust,
+          partyType: ContactFactory.PARTY_TYPES.trust,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -295,10 +295,10 @@ describe('case detail edit computed', () => {
               documentType: 'Ownership Disclosure Statement',
             },
           ],
-          partyType: PARTY_TYPES.corporation,
+          partyType: ContactFactory.PARTY_TYPES.corporation,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -318,10 +318,10 @@ describe('case detail edit computed', () => {
               documentType: 'Petition',
             },
           ],
-          partyType: PARTY_TYPES.corporation,
+          partyType: ContactFactory.PARTY_TYPES.corporation,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -332,10 +332,10 @@ describe('case detail edit computed', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
-          partyType: PARTY_TYPES.petitioner,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         constants: {
-          PARTY_TYPES,
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });

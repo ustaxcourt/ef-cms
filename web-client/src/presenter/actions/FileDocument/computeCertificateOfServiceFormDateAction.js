@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
  */
-export const computeCertificateOfServiceFormDateAction = ({ store, get }) => {
+export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
   let formDate = null;
   const formMonth = get(state.form.certificateOfServiceMonth);
   const formDay = get(state.form.certificateOfServiceDay);

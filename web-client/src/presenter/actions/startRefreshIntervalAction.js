@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  */
 export const startRefreshIntervalAction = ({
   applicationContext,
-  store,
   get,
+  store,
 }) => {
   const oldInterval = get(state.refreshTokenInterval);
   clearInterval(oldInterval);

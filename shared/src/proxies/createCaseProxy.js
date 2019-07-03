@@ -1,17 +1,17 @@
 const { post } = require('./requests');
 
 /**
- * createCaseProxy
+ * createCaseInteractor
  *
  * @param documents
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCase = ({
-  petitionMetadata,
-  petitionFileId,
-  ownershipDisclosureFileId,
+exports.createCaseInteractor = ({
   applicationContext,
+  ownershipDisclosureFileId,
+  petitionFileId,
+  petitionMetadata,
   stinFileId,
 }) => {
   return post({

@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const submitCaseAssociationRequestAction = async ({
+  applicationContext,
   get,
   props,
-  applicationContext,
 }) => {
-  const { docketNumber, caseId } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId, supportingDocumentFileId } = props;
   const user = get(state.user);
 
@@ -36,6 +36,27 @@ export const submitCaseAssociationRequestAction = async ({
       },
     ],
   };
+
+  const documentIds = [primaryDocumentFileId, supportingDocumentFileId].filter(
+    documentId => documentId,
+  );
+
+  for (let documentId of documentIds) {
+    await applicationContext.getUseCases().virusScanPdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().validatePdf({
+      applicationContext,
+      documentId,
+    });
+
+    await applicationContext.getUseCases().sanitizePdf({
+      applicationContext,
+      documentId,
+    });
+  }
 
   const caseDetail = await applicationContext
     .getUseCases()
@@ -72,20 +93,6 @@ export const submitCaseAssociationRequestAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().virusScanPdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
-      await applicationContext.getUseCases().validatePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
-      await applicationContext.getUseCases().sanitizePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
         caseId: caseDetail.caseId,

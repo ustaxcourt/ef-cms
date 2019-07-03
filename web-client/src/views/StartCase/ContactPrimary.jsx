@@ -22,17 +22,17 @@ export const ContactPrimary = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    parentView,
     bind,
-    emailBind,
-    data,
     constants,
-    onChange,
-    onChangeSequence,
-    validationErrors,
+    contactsHelper,
+    data,
+    emailBind,
     onBlur,
     onBlurSequence,
-    contactsHelper,
+    onChange,
+    onChangeSequence,
+    parentView,
+    validationErrors,
   }) => {
     return (
       <>
@@ -45,10 +45,10 @@ export const ContactPrimary = connect(
         )}
         <div className="blue-container contact-group">
           <Country
-            type="contactPrimary"
             bind={bind}
-            onChange={onChange}
+            type="contactPrimary"
             onBlur={onBlur}
+            onChange={onChange}
           />
           <div
             className={
@@ -59,43 +59,43 @@ export const ContactPrimary = connect(
                 : '')
             }
           >
-            <label htmlFor="name" className="usa-label">
+            <label className="usa-label" htmlFor="name">
               {contactsHelper.contactPrimary.nameLabel}
             </label>
             <input
-              id="name"
-              type="text"
-              name="contactPrimary.name"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="name"
+              name="contactPrimary.name"
+              type="text"
               value={data.contactPrimary.name || ''}
+              onBlur={() => {
+                onBlurSequence();
+              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                onBlurSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.contactPrimary.name"
+              className="usa-error-message"
             />
           </div>
           {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
-              <label htmlFor="title" className="usa-label with-hint">
+              <label className="usa-label with-hint" htmlFor="title">
                 Title
               </label>
               <span className="usa-hint">For example, Executor, PR, etc.</span>
               <input
-                id="title"
-                type="text"
-                name="contactPrimary.title"
-                className="usa-input"
                 autoCapitalize="none"
+                className="usa-input"
+                id="title"
+                name="contactPrimary.title"
+                type="text"
                 value={data.contactPrimary.title || ''}
                 onChange={e => {
                   onChangeSequence({
@@ -116,7 +116,7 @@ export const ContactPrimary = connect(
                   : '')
               }
             >
-              <label htmlFor="inCareOf" className="usa-label">
+              <label className="usa-label" htmlFor="inCareOf">
                 {contactsHelper.contactPrimary.inCareOfLabel ? (
                   <span>
                     {contactsHelper.contactPrimary.inCareOfLabel}{' '}
@@ -133,44 +133,44 @@ export const ContactPrimary = connect(
                 )}
               </label>
               <input
-                id="inCareOf"
-                type="text"
-                name="contactPrimary.inCareOf"
-                className="usa-input"
                 autoCapitalize="none"
+                className="usa-input"
+                id="inCareOf"
+                name="contactPrimary.inCareOf"
+                type="text"
                 value={data.contactPrimary.inCareOf || ''}
+                onBlur={() => {
+                  onBlurSequence();
+                }}
                 onChange={e => {
                   onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
-                onBlur={() => {
-                  onBlurSequence();
-                }}
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.contactPrimary.inCareOf"
+                className="usa-error-message"
               />
             </div>
           )}
           {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (
             <Address
-              type="contactPrimary"
               bind={bind}
-              onChange={onChange}
+              type="contactPrimary"
               onBlur={onBlur}
+              onChange={onChange}
             />
           )}
           {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress
-              type="contactPrimary"
               bind={bind}
-              onChange={onChange}
+              type="contactPrimary"
               onBlur={onBlur}
+              onChange={onChange}
             />
           )}
           {contactsHelper.showEmail && <Email bind={emailBind} />}
@@ -183,29 +183,29 @@ export const ContactPrimary = connect(
                 : '')
             }
           >
-            <label htmlFor="phone" className="usa-label">
+            <label className="usa-label" htmlFor="phone">
               Phone Number
             </label>
             <input
-              id="phone"
-              type="tel"
-              name="contactPrimary.phone"
-              className="usa-input"
               autoCapitalize="none"
+              className="usa-input"
+              id="phone"
+              name="contactPrimary.phone"
+              type="tel"
               value={data.contactPrimary.phone || ''}
+              onBlur={() => {
+                onBlurSequence();
+              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                onBlurSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.contactPrimary.phone"
+              className="usa-error-message"
             />
           </div>
         </div>

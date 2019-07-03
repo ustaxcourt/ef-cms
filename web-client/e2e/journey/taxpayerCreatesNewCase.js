@@ -1,11 +1,11 @@
 import { runCompute } from 'cerebral/test';
 const {
-  PARTY_TYPES,
-} = require('../../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../../shared/src/business/entities/contacts/ContactFactory');
 
 import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
-export default (test, fakeFile) => {
+export default (test, fakeFile, overrides = {}) => {
   return it('Taxpayer creates a new case', async () => {
     await test.runSequence('updatePetitionValueSequence', {
       key: 'petitionFile',
@@ -271,7 +271,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: PARTY_TYPES.partnershipOtherThanTaxMatters,
+      value: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
     });
 
     result = runCompute(startCaseHelper, {
@@ -293,7 +293,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: PARTY_TYPES.partnershipBBA,
+      value: ContactFactory.PARTY_TYPES.partnershipBBA,
     });
 
     result = runCompute(startCaseHelper, {
@@ -750,7 +750,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Whistleblower',
+      value: overrides.caseType || 'Whistleblower',
     });
 
     await test.runSequence('updateFormValueSequence', {

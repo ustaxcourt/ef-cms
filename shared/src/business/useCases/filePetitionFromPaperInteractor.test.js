@@ -3,6 +3,9 @@ const { filePetitionFromPaper } = require('./filePetitionFromPaperInteractor');
 
 let uploadDocumentStub;
 let createCaseStub;
+let virusScanPdfStub;
+let validatePdfStub;
+let sanitizePdfStub;
 
 describe('filePetitionFromPaper', () => {
   function createApplicationContext(options) {
@@ -11,6 +14,9 @@ describe('filePetitionFromPaper', () => {
       .resolves('c54ba5a9-b37b-479d-9201-067ec6e335bb');
 
     createCaseStub = sinon.stub().resolves(null);
+    virusScanPdfStub = sinon.stub().resolves(null);
+    validatePdfStub = sinon.stub().resolves(null);
+    sanitizePdfStub = sinon.stub().resolves(null);
 
     return {
       getCurrentUser: () => ({
@@ -21,7 +27,10 @@ describe('filePetitionFromPaper', () => {
         uploadDocument: uploadDocumentStub,
       }),
       getUseCases: () => ({
-        createCaseFromPaper: createCaseStub,
+        createCaseFromPaperInteractor: createCaseStub,
+        sanitizePdf: sanitizePdfStub,
+        validatePdf: validatePdfStub,
+        virusScanPdf: virusScanPdfStub,
       }),
       environment: { stage: 'local' },
       ...options,

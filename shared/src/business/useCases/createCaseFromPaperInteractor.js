@@ -1,13 +1,12 @@
-const { Case } = require('../entities/Case');
-const { Document } = require('../entities/Document');
-const { Message } = require('../entities/Message');
-const { WorkItem } = require('../entities/WorkItem');
-
 const {
   isAuthorized,
   START_PAPER_CASE,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
+const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentWithWorkItemToCase = (
   user,
@@ -60,7 +59,7 @@ const addPetitionDocumentWithWorkItemToCase = (
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCaseFromPaper = async ({
+exports.createCaseFromPaperInteractor = async ({
   applicationContext,
   ownershipDisclosureFileId,
   petitionFileId,
@@ -72,8 +71,8 @@ exports.createCaseFromPaper = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const Petition = applicationContext.getEntityConstructors().PetitionFromPaper;
-  const petitionEntity = new Petition({
+  const { CaseInternal } = applicationContext.getEntityConstructors();
+  const petitionEntity = new CaseInternal({
     ...petitionMetadata,
     ownershipDisclosureFileId,
     petitionFileId,
@@ -98,16 +97,18 @@ exports.createCaseFromPaper = async ({
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
-    createdAt: caseToAdd.receivedAt,
+    createdAt: caseToAdd.createdAt,
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
     filedBy: caseCaptionNames,
     isPaper: true,
+    receivedAt: caseToAdd.receivedAt,
     userId: user.userId,
   });
+
   const {
-    workItem: newWorkItem,
     message: newMessage,
+    workItem: newWorkItem,
   } = addPetitionDocumentWithWorkItemToCase(
     user,
     caseToAdd,
@@ -116,11 +117,12 @@ exports.createCaseFromPaper = async ({
 
   if (stinFileId) {
     const stinDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
+      createdAt: caseToAdd.createdAt,
       documentId: stinFileId,
       documentType: Document.initialDocumentTypes.stin,
       filedBy: caseCaptionNames,
       isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     });
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
@@ -128,11 +130,12 @@ exports.createCaseFromPaper = async ({
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
+      createdAt: caseToAdd.createdAt,
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,
       isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     });
     caseToAdd.addDocument(odsDocumentEntity);

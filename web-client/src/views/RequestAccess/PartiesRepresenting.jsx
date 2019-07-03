@@ -14,8 +14,8 @@ export const PartiesRepresenting = connect(
   },
   ({
     caseDetail,
-    requestAccessHelper,
     form,
+    requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
   }) => {
@@ -26,25 +26,25 @@ export const PartiesRepresenting = connect(
         </h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
+            className={`usa-form-group margin-bottom-0 ${
               requestAccessHelper.partyValidationError
                 ? 'usa-form-group--error'
                 : ''
             }`}
           >
-            <fieldset className="usa-fieldset">
+            <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
                 Who Are You Representing?
               </legend>
               <span className="usa-hint">Check all that apply</span>
               <div className="usa-checkbox">
                 <input
-                  id="party-primary"
-                  type="checkbox"
-                  name="representingPrimary"
                   aria-describedby="who-legend"
-                  className="usa-checkbox__input"
                   checked={form.representingPrimary || false}
+                  className="usa-checkbox__input"
+                  id="party-primary"
+                  name="representingPrimary"
+                  type="checkbox"
                   onChange={e => {
                     updateCaseAssociationFormValueSequence({
                       key: e.target.name,
@@ -53,19 +53,19 @@ export const PartiesRepresenting = connect(
                     validateCaseAssociationRequestSequence();
                   }}
                 />
-                <label htmlFor="party-primary" className="usa-checkbox__label">
+                <label className="usa-checkbox__label" htmlFor="party-primary">
                   {caseDetail.contactPrimary.name}
                 </label>
               </div>
               {requestAccessHelper.showSecondaryParty && (
                 <div className="usa-checkbox">
                   <input
-                    id="party-secondary"
-                    type="checkbox"
                     aria-describedby="who-legend"
-                    name="representingSecondary"
-                    className="usa-checkbox__input"
                     checked={form.representingSecondary || false}
+                    className="usa-checkbox__input"
+                    id="party-secondary"
+                    name="representingSecondary"
+                    type="checkbox"
                     onChange={e => {
                       updateCaseAssociationFormValueSequence({
                         key: e.target.name,
@@ -75,8 +75,8 @@ export const PartiesRepresenting = connect(
                     }}
                   />
                   <label
-                    htmlFor="party-secondary"
                     className="usa-checkbox__label"
+                    htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}
                   </label>

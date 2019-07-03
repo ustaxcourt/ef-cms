@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for getting the props.workItems
  * @returns {undefined}
  */
-export const setSectionInboxCountAction = ({ store, props, get }) => {
+export const setSectionInboxCountAction = ({ get, props, store }) => {
   const internal = get(state.workQueueIsInternal);
   store.set(
     state.sectionInboxCount,

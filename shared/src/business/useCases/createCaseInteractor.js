@@ -3,7 +3,7 @@ const {
   PETITION,
 } = require('../../authorization/authorizationClientService');
 const { capitalize } = require('lodash');
-const { Case } = require('../entities/Case');
+const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
@@ -62,7 +62,7 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCase = async ({
+exports.createCaseInteractor = async ({
   applicationContext,
   ownershipDisclosureFileId,
   petitionFileId,
@@ -74,8 +74,8 @@ exports.createCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const Petition = applicationContext.getEntityConstructors().Petition;
-  const petitionEntity = new Petition(petitionMetadata).validate();
+  const { CaseExternal } = applicationContext.getEntityConstructors();
+  const petitionEntity = new CaseExternal(petitionMetadata).validate();
 
   // invoke the createCase interactor
   const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
@@ -104,11 +104,12 @@ exports.createCase = async ({
   });
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     practitioner: practitioners[0],
     userId: user.userId,
   });
@@ -129,7 +130,7 @@ exports.createCase = async ({
   const stinDocumentEntity = new Document({
     documentId: stinFileId,
     documentType: Document.initialDocumentTypes.stin,
-    filedBy: user.name,
+    filedBy: caseCaptionNames,
     practitioner: practitioners[0],
     userId: user.userId,
   });
@@ -140,7 +141,7 @@ exports.createCase = async ({
     const odsDocumentEntity = new Document({
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
-      filedBy: user.name,
+      filedBy: caseCaptionNames,
       practitioner: practitioners[0],
       userId: user.userId,
     });

@@ -4,7 +4,10 @@ import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapA
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getInternalUsersAction } from '../actions/getInternalUsersAction';
+import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
+import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
+import { parallel } from 'cerebral/factories';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -14,7 +17,11 @@ import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocument
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
+import { setMessageIdAndCurrentTabFromUrlAction } from '../actions/setMessageIdAndCurrentTabFromUrlAction';
+import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
+import { setWorkItemAction } from '../actions/setWorkItemAction';
+import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { state } from 'cerebral';
 
 export const gotoDocumentDetailSequence = [
@@ -27,13 +34,26 @@ export const gotoDocumentDetailSequence = [
   getCaseAction,
   setCaseAction,
   setFormForCaseAction,
+  setDefaultDocumentDetailTabAction,
   setBaseUrlAction,
+  setMessageIdAndCurrentTabFromUrlAction,
   getInternalUsersAction,
   setInternalUsersAction,
-  setDefaultDocumentDetailTabAction,
   getProcedureTypesAction,
   setProcedureTypesAction,
   getCaseTypesAction,
   setCaseTypesAction,
   setCurrentPageAction('DocumentDetail'),
+  parallel([
+    getShouldMarkReadAction,
+    {
+      markRead: [
+        setWorkItemAction,
+        setWorkItemAsReadAction,
+        getNotificationsAction,
+        setNotificationsAction,
+      ],
+      noAction: [],
+    },
+  ]),
 ];

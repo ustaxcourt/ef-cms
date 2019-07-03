@@ -4,6 +4,8 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 
 export const documentDetailHelper = (get, applicationContext) => {
+  let showSignDocumentButton = false;
+  const currentUser = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
 
   const documentId = get(state.documentId);
@@ -26,10 +28,19 @@ export const documentDetailHelper = (get, applicationContext) => {
       .map(items => {
         const formatted = formatWorkItem(applicationContext, items);
         formatted.messages = formatted.messages.filter(
-          message => message.message.indexOf('Served on IRS') === -1,
+          message => !message.message.includes('Served on IRS'),
         );
         return formatted;
       });
+
+    const stipulatedWorkItem = formattedDocument.workItems.find(
+      workItem =>
+        workItem.document.documentType === 'Proposed Stipulated Decision' &&
+        workItem.assigneeId === currentUser.userId &&
+        !workItem.completedAt,
+    );
+
+    showSignDocumentButton = !!stipulatedWorkItem;
   }
 
   const formattedDocumentIsPetition =
@@ -48,5 +59,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCaseDetailsEdit,
     showCaseDetailsView,
     showDocumentInfoTab,
+    showSignDocumentButton,
   };
 };

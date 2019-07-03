@@ -1,6 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
-import { CASE_CAPTION_POSTFIX } from '../../../../shared/src/business/entities/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import {
   formattedCaseDetail as formattedCaseDetailComputed,
   formattedCases as formattedCasesComputed,
@@ -30,7 +30,7 @@ describe('formatted case details computed', () => {
           petitioners: [{ name: 'bob' }],
         },
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
         form: {},
       },
@@ -58,7 +58,7 @@ describe('formatted case details computed', () => {
           },
         ],
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
       },
     });
@@ -72,14 +72,14 @@ describe('formatted case details computed', () => {
           {
             caseCaption: 'Brett Osborne, Petitioner',
             petitioners: [{ name: 'bob' }],
-            respondent: { barNumber: '123', name: 'test' },
+            respondents: [{ barNumber: '123', name: 'test' }],
           },
         ],
         constants: {
-          CASE_CAPTION_POSTFIX,
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
       },
     });
-    expect(result[0].respondent.formattedName).toContain('test 123');
+    expect(result[0].respondents[0].formattedName).toContain('test 123');
   });
 });
