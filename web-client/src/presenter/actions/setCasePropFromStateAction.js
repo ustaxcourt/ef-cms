@@ -1,7 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.caseDetail which is used for displaying the red alerts at the top of the page.
+ * sets the props.caseId and props.docketNumber from the case in the state,
+ * to be passed to subsequent actions
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function

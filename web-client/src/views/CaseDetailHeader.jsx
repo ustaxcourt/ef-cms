@@ -66,7 +66,7 @@ export const CaseDetailHeader = connect(
             <div className="grid-col-4 text-">
               {caseHelper.showCreateOrderButton && (
                 <button
-                  className="usa-button usa-button--inverse  float-right"
+                  className="usa-button usa-button--inverse float-right"
                   href={`/case-detail/${caseDetail.docketNumber}/create-order`}
                   id="button-create-order"
                   onClick={() => openCreateOrderChooseTypeModalSequence()}
