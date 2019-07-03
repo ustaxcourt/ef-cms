@@ -1,9 +1,9 @@
 const { User } = require('../entities/User');
 /**
- * getUser
+ * getUserInteractor
  * @param userId
  * @returns {User}
  */
-exports.getUser = async user => {
+exports.getUserInteractor = async user => {
   return new User(user).toRawObject();
 };

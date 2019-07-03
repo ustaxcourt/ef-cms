@@ -16,7 +16,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .getDocumentQCBatchedForSection({
+        .getDocumentQCBatchedForSectionInteractor({
           applicationContext,
           section,
         });

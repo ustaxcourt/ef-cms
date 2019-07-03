@@ -12,7 +12,10 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  * @param caseId
  * @returns {Promise<*>}
  */
-exports.updateCaseTrialSortTags = async ({ applicationContext, caseId }) => {
+exports.updateCaseTrialSortTagsInteractor = async ({
+  applicationContext,
+  caseId,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   const caseToUpdate = await applicationContext

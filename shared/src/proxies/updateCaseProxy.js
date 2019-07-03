@@ -1,14 +1,14 @@
 const { put } = require('./requests');
 
 /**
- * updateCase
+ * updateCaseInteractor
  *
  * @param applicationContext
  * @param caseToUpdate
  * @param userId
  * @returns {Promise<*>}
  */
-exports.updateCase = ({ applicationContext, caseToUpdate }) => {
+exports.updateCaseInteractor = ({ applicationContext, caseToUpdate }) => {
   return put({
     applicationContext,
     body: caseToUpdate,

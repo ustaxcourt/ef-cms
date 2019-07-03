@@ -1,4 +1,6 @@
-const { getUsersInSection } = require('./getUsersInSectionInteractor');
+const {
+  getUsersInSectionInteractor,
+} = require('./getUsersInSectionInteractor');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 const MOCK_SECTION = [
@@ -30,7 +32,7 @@ describe('Get users in section', () => {
       },
     };
     const sectionToGet = { section: 'petitions' };
-    const section = await getUsersInSection({
+    const section = await getUsersInSectionInteractor({
       applicationContext,
       sectionToGet,
     });
@@ -56,7 +58,7 @@ describe('Get users in section', () => {
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
-      await getUsersInSection({
+      await getUsersInSectionInteractor({
         applicationContext,
         sectionToGet,
       });
@@ -86,7 +88,7 @@ describe('Get users in section', () => {
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
-      await getUsersInSection({
+      await getUsersInSectionInteractor({
         applicationContext,
         sectionToGet,
       });

@@ -15,7 +15,7 @@ describe('setTrialSessionCalendarAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        setTrialSessionCalendar: setTrialSessionCalendarStub,
+        setTrialSessionCalendarInteractor: setTrialSessionCalendarStub,
       }),
     };
   });

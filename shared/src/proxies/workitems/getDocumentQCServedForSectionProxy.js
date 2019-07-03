@@ -1,11 +1,14 @@
 const { get } = require('../requests');
 
 /**
- * getDocumentQCServedForSection
+ * getDocumentQCServedForSectionInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
+exports.getDocumentQCServedForSectionInteractor = ({
+  applicationContext,
+  section,
+}) => {
   return get({
     applicationContext,
     endpoint: `/sections/${section}/document-qc/served`,

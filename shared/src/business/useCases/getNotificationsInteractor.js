@@ -1,11 +1,11 @@
 /**
- * getNotifications
+ * getNotificationsInteractor
  *
  * @param userId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getNotifications = async ({ applicationContext }) => {
+exports.getNotificationsInteractor = async ({ applicationContext }) => {
   const messagesInbox = await applicationContext
     .getPersistenceGateway()
     .getInboxMessagesForUser({

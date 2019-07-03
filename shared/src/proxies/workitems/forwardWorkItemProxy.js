@@ -1,14 +1,14 @@
 const { put } = require('../requests');
 
 /**
- * forwardWorkItem
+ * forwardWorkItemInteractor
  *
  * @param userId
  * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.forwardWorkItem = ({
+exports.forwardWorkItemInteractor = ({
   applicationContext,
   assigneeId,
   message,

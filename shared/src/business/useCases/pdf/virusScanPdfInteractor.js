@@ -7,7 +7,7 @@ const tmp = require('tmp');
  * @param documentId
  * @returns {object} errors (null if no errors)
  */
-exports.virusScanPdf = async ({ applicationContext, documentId }) => {
+exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {
   applicationContext.logger.time('Fetching S3 File');
   let { Body: pdfData } = await applicationContext
     .getStorageClient()

@@ -1,13 +1,13 @@
 const { put } = require('../requests');
 
 /**
- * submitPendingCaseAssociationRequest
+ * submitPendingCaseAssociationRequestInteractor
  *
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.submitPendingCaseAssociationRequest = ({
+exports.submitPendingCaseAssociationRequestInteractor = ({
   applicationContext,
   caseId,
 }) => {

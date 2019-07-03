@@ -8,7 +8,7 @@ export const getDocumentQCInboxForUserAction = async ({
   applicationContext,
 }) => {
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getDocumentQCInboxForUser({
+  const workItems = await useCases.getDocumentQCInboxForUserInteractor({
     applicationContext,
     userId: applicationContext.getCurrentUser().userId,
   });

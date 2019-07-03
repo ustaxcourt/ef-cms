@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  setTrialSessionAsSwingSession,
+  setTrialSessionAsSwingSessionInteractor,
 } = require('./setTrialSessionAsSwingSessionInteractor');
 
 const MOCK_TRIAL_SESSION = {
@@ -47,7 +47,7 @@ describe('Set trial session as swing session', () => {
       },
     };
     await expect(
-      setTrialSessionAsSwingSession({
+      setTrialSessionAsSwingSessionInteractor({
         applicationContext,
         swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
         trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
@@ -72,7 +72,7 @@ describe('Set trial session as swing session', () => {
       },
     };
 
-    await setTrialSessionAsSwingSession({
+    await setTrialSessionAsSwingSessionInteractor({
       applicationContext,
       swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,

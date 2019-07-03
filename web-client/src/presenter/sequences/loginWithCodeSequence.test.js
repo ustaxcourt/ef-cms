@@ -28,7 +28,7 @@ presenter.providers.applicationContext = {
       refreshToken: TOKEN,
       token: TOKEN,
     }),
-    getUser: async () => USER,
+    getUserInteractor: async () => USER,
     refreshToken: refreshTokenStub,
     setItem: () => null,
   }),

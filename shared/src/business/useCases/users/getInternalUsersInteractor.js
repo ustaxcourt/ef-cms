@@ -6,11 +6,11 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getInternalUsers
+ * getInternalUsersInteractor
  * @param sectionType
  * @returns {Promise<User[]>}
  */
-exports.getInternalUsers = async ({ applicationContext }) => {
+exports.getInternalUsersInteractor = async ({ applicationContext }) => {
   if (!isAuthorized(applicationContext.getCurrentUser(), WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }

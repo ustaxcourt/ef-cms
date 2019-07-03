@@ -15,7 +15,7 @@ describe('getCalendaredCasesForTrialSessionAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionStub,
+        getCalendaredCasesForTrialSessionInteractor: getCalendaredCasesForTrialSessionStub,
       }),
     };
   });

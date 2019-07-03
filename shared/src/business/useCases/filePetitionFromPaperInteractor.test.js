@@ -28,9 +28,9 @@ describe('filePetitionFromPaper', () => {
       }),
       getUseCases: () => ({
         createCaseFromPaperInteractor: createCaseStub,
-        sanitizePdf: sanitizePdfStub,
-        validatePdf: validatePdfStub,
-        virusScanPdf: virusScanPdfStub,
+        sanitizePdfInteractor: sanitizePdfStub,
+        validatePdfInteractor: validatePdfStub,
+        virusScanPdfInteractor: virusScanPdfStub,
       }),
       environment: { stage: 'local' },
       ...options,
