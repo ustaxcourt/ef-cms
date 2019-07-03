@@ -2,10 +2,10 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/presenter/**/*.js',
-    '!e2e/**/*.js',
+    '!integration/**/*.js',
     '!src/**/*.test.js',
   ],
-  coverageDirectory: './coverage-e2e',
+  coverageDirectory: './coverage-integration',
   coverageThreshold: {
     global: {
       branches: 50,
