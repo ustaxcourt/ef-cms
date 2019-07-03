@@ -11,11 +11,9 @@ const {
  * @constructor
  */
 function CaseInternalIncomplete(rawCase) {
-  Object.assign(this, {
-    caseCaption: rawCase.caseCaption,
-    petitionFileId: rawCase.petitionFileId,
-    receivedAt: rawCase.receivedAt,
-  });
+  this.caseCaption = rawCase.caseCaption;
+  this.petitionFileId = rawCase.petitionFileId;
+  this.receivedAt = rawCase.receivedAt;
 }
 
 CaseInternalIncomplete.errorToMessageMap = {
@@ -30,15 +28,13 @@ CaseInternalIncomplete.errorToMessageMap = {
   ],
 };
 
-const uuidVersions = {
-  version: ['uuidv4'],
-};
-
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
   petitionFileId: joi
     .string()
-    .uuid(uuidVersions)
+    .uuid({
+      version: ['uuidv4'],
+    })
     .required(),
   receivedAt: joi
     .date()

@@ -5,7 +5,8 @@ const {
 const { TrialSession } = require('../../entities/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const ELIGIBLE_CASES_BUFFER = 2; // Should become 50;
+const ELIGIBLE_CASES_BUFFER = 50;
+
 /**
  * get eligible cases for trial session
  *

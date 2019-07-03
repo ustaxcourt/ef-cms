@@ -27,7 +27,7 @@ describe('filePetition', () => {
         uploadDocument: uploadDocumentStub,
       }),
       getUseCases: () => ({
-        createCase: createCaseStub,
+        createCaseInteractor: createCaseStub,
         sanitizePdf: sanitizePdfStub,
         validatePdf: validatePdfStub,
         virusScanPdf: virusScanPdfStub,

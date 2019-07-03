@@ -8,22 +8,23 @@ const {
  * @constructor
  */
 function OrderWithoutBody(rawOrder) {
-  Object.assign(this, {
-    orderTitle: rawOrder.orderTitle,
-    orderType: rawOrder.orderType,
-  });
+  this.documentTitle = rawOrder.documentTitle;
+  this.documentType = rawOrder.documentType;
+  this.eventCode = rawOrder.eventCode;
 }
 
 OrderWithoutBody.errorToMessageMap = {
-  orderTitle: 'Order title is required.',
-  orderType: 'Order type is required.',
+  documentTitle: 'Order title is required.',
+  documentType: 'Order type is required.',
+  eventCode: 'Order type is required.',
 };
 
 joiValidationDecorator(
   OrderWithoutBody,
   joi.object().keys({
-    orderTitle: joi.string().required(),
-    orderType: joi.string().required(),
+    documentTitle: joi.string().required(),
+    documentType: joi.string().required(),
+    eventCode: joi.string().required(),
   }),
   function() {
     return !this.getFormattedValidationErrors();

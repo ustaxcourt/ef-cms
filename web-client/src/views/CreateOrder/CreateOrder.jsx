@@ -16,7 +16,9 @@ export const CreateOrder = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
     showModal: state.showModal,
+    submitCourtIssuedOrderSequence: sequences.submitCourtIssuedOrderSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   ({
     convertHtml2PdfSequence,
@@ -24,7 +26,9 @@ export const CreateOrder = connect(
     formCancelToggleCancelSequence,
     pdfPreviewUrl,
     showModal,
+    submitCourtIssuedOrderSequence,
     updateFormValueSequence,
+    updateScreenMetadataSequence,
   }) => {
     return (
       <>
@@ -62,6 +66,7 @@ export const CreateOrder = connect(
                 <TextEditor
                   form={form}
                   updateFormValueSequence={updateFormValueSequence}
+                  updateScreenMetadataSequence={updateScreenMetadataSequence}
                 />
               </div>
 
@@ -72,7 +77,14 @@ export const CreateOrder = connect(
 
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
-                <button className="usa-button">Complete Order</button>
+                <button
+                  className="usa-button"
+                  onClick={() => {
+                    submitCourtIssuedOrderSequence();
+                  }}
+                >
+                  Complete Order
+                </button>
                 <button
                   className="usa-button usa-button--unstyled margin-left-2"
                   onClick={() => {

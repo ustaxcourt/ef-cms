@@ -50,10 +50,13 @@ describe('generateSignedDocument', () => {
     const args = {
       pageIndex: 0,
       pdfData: testDoc,
-      posX: 100,
-      posY: 100,
+      posX: 200,
+      posY: 200,
       scale: 1,
-      sigTextData: 'Yee Haw',
+      sigTextData: {
+        signatureName: '(Signed) Dr. Guy Fieri',
+        signatureTitle: 'Chief Judge',
+      },
     };
 
     const newPdfData = await generateSignedDocument(args);

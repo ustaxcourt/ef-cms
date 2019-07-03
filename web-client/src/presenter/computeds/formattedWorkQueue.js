@@ -1,10 +1,10 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import {
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
   SENIOR_ATTORNEY_SECTION,
   getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
-import { STATUS_TYPES } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
@@ -162,7 +162,7 @@ export const filterWorkItems = ({
             !item.isInternal &&
             item.sentByUserId === user.userId &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === STATUS_TYPES.batchedForIRS
+            item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
         },
         inbox: item => {
@@ -191,7 +191,7 @@ export const filterWorkItems = ({
             !item.completedAt &&
             !item.isInternal &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === STATUS_TYPES.batchedForIRS
+            item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
         },
         inbox: item => {

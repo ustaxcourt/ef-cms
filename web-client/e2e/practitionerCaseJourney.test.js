@@ -1,11 +1,7 @@
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/cases/Case';
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
@@ -32,9 +28,8 @@ import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 const {
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 let test;
 global.FormData = FormData;
@@ -80,13 +75,13 @@ describe('Practitioner requests access to case', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
-      CATEGORIES,
-      CATEGORY_MAP,
-      COUNTRY_TYPES,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
-      PARTY_TYPES,
-      TRIAL_CITIES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 

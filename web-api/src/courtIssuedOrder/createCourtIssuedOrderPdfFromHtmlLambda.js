@@ -53,7 +53,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .createCourtIssuedOrderPdfFromHtml({
+        .createCourtIssuedOrderPdfFromHtmlInteractor({
           ...JSON.parse(event.body),
           applicationContext,
         });

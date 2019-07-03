@@ -30,7 +30,7 @@ describe('createTrialSessionAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        createTrialSession: createTrialSessionStub,
+        createTrialSessionInteractor: createTrialSessionStub,
         setTrialSessionAsSwingSession: setTrialSessionAsSwingSessionStub,
       }),
     };

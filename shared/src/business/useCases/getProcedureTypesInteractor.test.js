@@ -3,7 +3,7 @@ const { getProcedureTypes } = require('./getProcedureTypesInteractor');
 
 const validateProcedureTypes = procedureTypes => {
   procedureTypes.forEach(procedureType => {
-    if (!Case.getProcedureTypes().includes(procedureType)) {
+    if (!Case.PROCEDURE_TYPES.includes(procedureType)) {
       throw new Error('invalid procedure type');
     }
   });

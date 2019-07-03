@@ -1,23 +1,18 @@
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const uuidVersions = {
-  version: ['uuidv4'],
-};
 const { flatten } = require('lodash');
+const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
 
-const petitionDocumentTypes = ['Petition'];
-
-module.exports.CATEGORIES = Object.keys(documentMapExternal);
-module.exports.CATEGORY_MAP = documentMapExternal;
-
-module.exports.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
-module.exports.INTERNAL_CATEGORY_MAP = documentMapInternal;
+Document.PETITION_DOCUMENT_TYPES = ['Petition'];
+Document.CATEGORIES = Object.keys(documentMapExternal);
+Document.CATEGORY_MAP = documentMapExternal;
+Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
+Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
 /**
  * constructor
@@ -90,10 +85,12 @@ Document.getDocumentTypes = () => {
     ...Object.values(documentMapInternal),
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
+  const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
   const documentTypes = [
     ...Object.values(Document.initialDocumentTypes),
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
+    ...orderDocTypes,
   ];
 
   return documentTypes;
@@ -104,7 +101,7 @@ Document.getDocumentTypes = () => {
  * @returns {boolean}
  */
 Document.prototype.isPetitionDocument = function() {
-  return petitionDocumentTypes.includes(this.documentType);
+  return Document.PETITION_DOCUMENT_TYPES.includes(this.documentType);
 };
 
 joiValidationDecorator(
@@ -116,7 +113,9 @@ joiValidationDecorator(
       .optional(),
     documentId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .required(),
     documentType: joi
       .string()

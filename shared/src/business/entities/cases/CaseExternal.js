@@ -6,7 +6,7 @@ const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
-const { instantiateContacts } = require('../contacts/PetitionContact');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
  * CaseExternal Entity
@@ -15,33 +15,31 @@ const { instantiateContacts } = require('../contacts/PetitionContact');
  * @constructor
  */
 function CaseExternal(rawCase) {
-  Object.assign(this, {
-    businessType: rawCase.businessType,
-    caseType: rawCase.caseType,
-    contactPrimary: rawCase.contactPrimary,
-    contactSecondary: rawCase.contactSecondary,
-    countryType: rawCase.countryType,
-    filingType: rawCase.filingType,
-    hasIrsNotice: rawCase.hasIrsNotice,
-    irsNoticeDate: rawCase.irsNoticeDate,
-    ownershipDisclosureFile: rawCase.ownershipDisclosureFile,
-    ownershipDisclosureFileSize: rawCase.ownershipDisclosureFileSize,
-    partyType: rawCase.partyType,
-    petitionFile: rawCase.petitionFile,
-    petitionFileSize: rawCase.petitionFileSize,
-    preferredTrialCity: rawCase.preferredTrialCity,
-    procedureType: rawCase.procedureType,
-    signature: rawCase.signature,
-    stinFile: rawCase.stinFile,
-    stinFileSize: rawCase.stinFileSize,
-  });
+  this.businessType = rawCase.businessType;
+  this.caseType = rawCase.caseType;
+  this.contactPrimary = rawCase.contactPrimary;
+  this.contactSecondary = rawCase.contactSecondary;
+  this.countryType = rawCase.countryType;
+  this.filingType = rawCase.filingType;
+  this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.irsNoticeDate = rawCase.irsNoticeDate;
+  this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
+  this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
+  this.partyType = rawCase.partyType;
+  this.petitionFile = rawCase.petitionFile;
+  this.petitionFileSize = rawCase.petitionFileSize;
+  this.preferredTrialCity = rawCase.preferredTrialCity;
+  this.procedureType = rawCase.procedureType;
+  this.signature = rawCase.signature;
+  this.stinFile = rawCase.stinFile;
+  this.stinFileSize = rawCase.stinFileSize;
 
-  const contacts = instantiateContacts({
+  const contacts = ContactFactory.createContacts({
     contactInfo: {
-      primary: this.contactPrimary,
-      secondary: this.contactSecondary,
+      primary: rawCase.contactPrimary,
+      secondary: rawCase.contactSecondary,
     },
-    partyType: this.partyType,
+    partyType: rawCase.partyType,
   });
   this.contactPrimary = contacts.primary;
   this.contactSecondary = contacts.secondary;

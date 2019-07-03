@@ -1,12 +1,14 @@
 const joi = require('joi-browser');
-const { createContactFactory } = require('./PetitionContact');
+const { ContactFactory } = require('./ContactFactory');
 
 /**
  * returns the constructor used for creating the PetitionerEstateExecutorContact entity
  */
-exports.getPetitionerEstateExecutorContact = createContactFactory({
-  additionalErrorMappings: {},
-  additionalValidation: {
-    phone: joi.optional().allow(null),
+exports.getPetitionerEstateExecutorContact = ContactFactory.createContactFactory(
+  {
+    additionalErrorMappings: {},
+    additionalValidation: {
+      phone: joi.optional().allow(null),
+    },
   },
-});
+);

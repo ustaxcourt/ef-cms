@@ -4,15 +4,17 @@ import sinon from 'sinon';
 
 let test;
 const setCurrentUserStub = sinon.stub().returns({ section: 'petitions' });
-const getWorkItemsBySectionStub = sinon.stub().returns([{ isInternal: true }]);
+const getInboxMessagesForSectionStub = sinon
+  .stub()
+  .returns([{ isInternal: true }]);
 presenter.providers.applicationContext = {
   getCurrentUser: setCurrentUserStub,
   getUniqueId: () => new Date().getTime(),
   getUseCases: () => ({
+    getInboxMessagesForSection: getInboxMessagesForSectionStub,
     getNotifications: () => {
       return {};
     },
-    getWorkItemsBySection: getWorkItemsBySectionStub,
   }),
   setCurrentUser: setCurrentUserStub,
 };
@@ -29,6 +31,6 @@ describe('chooseWorkQueueSequence', () => {
       box: 'inbox',
       queue: 'section',
     });
-    expect(getWorkItemsBySectionStub.called).toBeTruthy();
+    expect(getInboxMessagesForSectionStub.called).toBeTruthy();
   });
 });

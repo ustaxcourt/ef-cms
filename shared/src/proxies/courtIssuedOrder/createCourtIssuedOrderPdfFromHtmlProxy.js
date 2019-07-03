@@ -1,11 +1,11 @@
 /**
- * createCourtIssuedOrderPdfFromHtml
+ * createCourtIssuedOrderPdfFromHtmlInteractor
  *
  * @param applicationContext
  * @param htmlString
  * @returns {Promise<*>}
  */
-exports.createCourtIssuedOrderPdfFromHtml = ({
+exports.createCourtIssuedOrderPdfFromHtmlInteractor = ({
   applicationContext,
   docketNumberWithSuffix,
   htmlString,
@@ -26,9 +26,5 @@ exports.createCourtIssuedOrderPdfFromHtml = ({
         responseType: 'blob',
       },
     )
-    .then(response =>
-      window.URL.createObjectURL(
-        new Blob([response.data], { type: 'application/pdf' }),
-      ),
-    );
+    .then(response => new Blob([response.data], { type: 'application/pdf' }));
 };

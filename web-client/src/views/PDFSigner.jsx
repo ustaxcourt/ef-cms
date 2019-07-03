@@ -61,9 +61,12 @@ class PDFSignerComponent extends React.Component {
     this.props.setSignatureData({ signatureData: null });
   }
 
-  stop(canvasEl, x, y, scale = 1) {
+  stop(canvasEl, sigEl, x, y, scale = 1) {
     this.props.setSignatureData({ signatureData: { scale, x, y } });
     canvasEl.onmousemove = null;
+    canvasEl.onmousedown = null;
+    sigEl.onmousemove = null;
+    sigEl.onmousedown = null;
   }
 
   start() {
@@ -74,28 +77,35 @@ class PDFSignerComponent extends React.Component {
 
     this.setState({ signatureApplied: true });
 
-    // clear current signature data
     this.props.setSignatureData({ signatureData: null });
 
     canvasEl.onmousemove = e => {
       const { pageX, pageY } = e;
       const canvasBounds = canvasEl.getBoundingClientRect();
-      const offsetLeft = canvasBounds.x;
-      const offsetTop = canvasBounds.y;
+      const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+      const scrollYOffset = window.scrollY;
 
-      x = pageX - offsetLeft;
-      y = pageY - offsetTop;
+      x = pageX - canvasBounds.x;
+      y = pageY - canvasBounds.y - scrollYOffset;
 
-      this.moveSig(sigEl, pageX, pageY);
+      const uiPosX = pageX - sigParentBounds.x;
+      const uiPosY =
+        pageY -
+        canvasBounds.y -
+        scrollYOffset +
+        (canvasBounds.y - sigParentBounds.y);
+
+      this.moveSig(sigEl, uiPosX, uiPosY);
     };
 
     canvasEl.onmousedown = () => {
-      this.stop(canvasEl, x, y);
+      this.stop(canvasEl, sigEl, x, y);
     };
 
-    sigEl.onmousedown = () => {
-      this.stop(canvasEl, x, y);
-    };
+    // sometimes the cursor falls on top of the signature
+    // and catches these events
+    sigEl.onmousemove = canvasEl.onmousemove;
+    sigEl.onmousedown = canvasEl.onmousedown;
   }
 
   render() {
@@ -105,9 +115,41 @@ class PDFSignerComponent extends React.Component {
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <div className="grid-row">
-                <div className="grid-col-9">
-                  <h2>Proposed Stipulated Decision</h2>
+              <h1>Proposed Stipulated Decision</h1>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-4">
+                  <div className="blue-container">
+                    <PDFSignerToolbar
+                      applySignature={this.start}
+                      clearSignature={this.clear}
+                      signatureApplied={this.state.signatureApplied}
+                    />
+                    <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
+                    <PDFSignerMessage />
+                  </div>
+                  <div className="margin-top-2">
+                    <button
+                      className="usa-button"
+                      disabled={!this.props.signatureData}
+                      onClick={() => this.props.completeSigning()}
+                    >
+                      Save & Send
+                    </button>
+                    <button
+                      className="usa-button usa-button--unstyled margin-left-2"
+                      onClick={() =>
+                        this.props.cancel({
+                          docketNumber: this.props.docketNumber,
+                          documentId: this.props.documentId,
+                        })
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid-col-8">
                   <div className="sign-pdf-interface">
                     <span
                       id="signature"
@@ -116,42 +158,13 @@ class PDFSignerComponent extends React.Component {
                         display: this.state.signatureApplied ? 'block' : 'none',
                       }}
                     >
-                      (Signed) Joseph Dredd
+                      (Signed) Your Name <br />
+                      Chief Judge
                     </span>
                     <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
                   </div>
                 </div>
-                <div className="grid-col-3">
-                  <PDFSignerToolbar
-                    applySignature={this.start}
-                    clearSignature={this.clear}
-                  />
-                  <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
-                  <PDFSignerMessage />
-                </div>
               </div>
-            </div>
-          </div>
-          <div className="grid-row">
-            <div className="grid-col-12">
-              <button
-                className="usa-button"
-                disabled={!this.props.signatureData}
-                onClick={() => this.props.completeSigning()}
-              >
-                Save
-              </button>
-              <button
-                className="usa-button usa-button--unstyled margin-left-2"
-                onClick={() =>
-                  this.props.cancel({
-                    docketNumber: this.props.docketNumber,
-                    documentId: this.props.documentId,
-                  })
-                }
-              >
-                Cancel
-              </button>
             </div>
           </div>
         </section>
