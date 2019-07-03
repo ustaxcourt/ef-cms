@@ -12,7 +12,7 @@ const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
 } = require('../useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
   sendPetitionToIRSHoldingQueue,
@@ -127,7 +127,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       },
     ]);
 
-    await recallPetitionFromIRSHoldingQueue({
+    await recallPetitionFromIRSHoldingQueueInteractor({
       applicationContext,
       caseId,
     });

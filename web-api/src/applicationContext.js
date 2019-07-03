@@ -177,62 +177,62 @@ const {
   getInboxMessagesForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForUser');
 const {
-  getInboxMessagesForUser: getInboxMessagesForUserUC
+  getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForUserInteractor');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
-  getInternalUsers: getInternalUsersUC,
+  getInternalUsersInteractor,
 } = require('../../shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
-  getNotifications,
+  getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
   getSentMessagesForSection
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
 const {
-  getSentMessagesForSection: getSentMessagesForSectionUC,
+  getSentMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForSectionInteractor');
 const {
   getSentMessagesForUser
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForUser');
 const {
-  getSentMessagesForUser: getSentMessagesForUserUC
+  getSentMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForUserInteractor');
 const {
   getTrialSessionById,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById');
 const {
-  getTrialSessionDetails,
+  getTrialSessionDetailsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
 const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
 const {
-  getTrialSessions: getTrialSessionsUC,
+  getTrialSessionsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
 const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
-  getUser,
-} = require('../../shared/src/business/useCases/getUserInteractor');
-const {
   getUserById,
 } = require('../../shared/src/persistence/dynamo/users/getUserById');
+const {
+  getUserInteractor,
+} = require('../../shared/src/business/useCases/getUserInteractor');
 const {
   getUsersInSection,
 } = require('../../shared/src/persistence/dynamo/users/getUsersInSection');
 const {
-  getUsersInSection: getUsersInSectionUC,
+  getUsersInSectionInteractor,
 } = require('../../shared/src/business/useCases/users/getUsersInSectionInteractor');
-const {
-  getWorkItem,
-} = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
   getWorkItemById,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
+const {
+  getWorkItemInteractor,
+} = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
@@ -247,13 +247,13 @@ const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
 const {
-  recallPetitionFromIRSHoldingQueue,
+  recallPetitionFromIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
-  runBatchProcess,
+  runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
-  sanitizePdf,
+  sanitizePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
 const {
   saveDocument,
@@ -513,20 +513,20 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForUserInteractor,
         getEligibleCasesForTrialSessionInteractor,
         getInboxMessagesForSectionInteractor,
-        getInboxMessagesForUser: getInboxMessagesForUserUC,
-        getInternalUsers: getInternalUsersUC,
-        getNotifications,
-        getSentMessagesForSection: getSentMessagesForSectionUC,
-        getSentMessagesForUser: getSentMessagesForUserUC,
-        getTrialSessionDetails,
-        getTrialSessions: getTrialSessionsUC,
-        getUser,
-        getUsersInSection: getUsersInSectionUC,
-        getWorkItem,
-        recallPetitionFromIRSHoldingQueue,
-        runBatchProcess,
-        sanitizePdf: args =>
-          process.env.SKIP_SANITIZE ? null : sanitizePdf(args),
+        getInboxMessagesForUserInteractor,
+        getInternalUsersInteractor,
+        getNotificationsInteractor,
+        getSentMessagesForSectionInteractor,
+        getSentMessagesForUserInteractor,
+        getTrialSessionDetailsInteractor,
+        getTrialSessionsInteractor,
+        getUserInteractor,
+        getUsersInSectionInteractor,
+        getWorkItemInteractor,
+        recallPetitionFromIRSHoldingQueueInteractor,
+        runBatchProcessInteractor,
+        sanitizePdfInteractor: args =>
+          process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
         saveSignedDocument,
         sendPetitionToIRSHoldingQueue,
         setCaseToReadyForTrial,

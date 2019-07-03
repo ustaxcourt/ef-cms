@@ -24,7 +24,7 @@ const {
   getInboxMessagesForSectionInteractor,
 } = require('../useCases/workitems/getInboxMessagesForSectionInteractor');
 const {
-  getInboxMessagesForUser,
+  getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
   sendPetitionToIRSHoldingQueue,
@@ -174,7 +174,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
-    const docketclerkUserInbox = await getInboxMessagesForUser({
+    const docketclerkUserInbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -369,10 +369,12 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
-    const docketClerkInboxAfterIRSQueue = await getInboxMessagesForUser({
-      applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
-    });
+    const docketClerkInboxAfterIRSQueue = await getInboxMessagesForUserInteractor(
+      {
+        applicationContext,
+        userId: applicationContext.getCurrentUser().userId,
+      },
+    );
 
     expect(docketClerkInboxAfterIRSQueue).toMatchObject([
       {

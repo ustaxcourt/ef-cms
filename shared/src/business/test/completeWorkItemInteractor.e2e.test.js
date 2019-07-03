@@ -9,10 +9,10 @@ const {
   createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
-  getInboxMessagesForUser,
+  getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  getSentMessagesForUser,
+  getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
@@ -92,7 +92,7 @@ describe('completeWorkItemInteractor integration test', () => {
       message: 'this is a test',
     });
 
-    let inbox = await getInboxMessagesForUser({
+    let inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -111,7 +111,7 @@ describe('completeWorkItemInteractor integration test', () => {
       completedMessage: 'game over man',
       workItemId: workItem.workItemId,
     });
-    const outbox = await getSentMessagesForUser({
+    const outbox = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });

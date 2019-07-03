@@ -65,7 +65,7 @@ export const submitDocketEntryAction = async ({
         documentId,
       });
 
-      await applicationContext.getUseCases().sanitizePdf({
+      await applicationContext.getUseCases().sanitizePdfInteractor({
         applicationContext,
         documentId,
       });

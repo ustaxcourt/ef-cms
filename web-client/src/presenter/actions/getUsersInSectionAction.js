@@ -17,7 +17,7 @@ export const getUsersInSectionAction = ({ section }) =>
   async ({ applicationContext }) => {
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSection({ applicationContext, section });
+      .getUsersInSectionInteractor({ applicationContext, section });
 
     return {
       users: sortBy(users, 'name'),

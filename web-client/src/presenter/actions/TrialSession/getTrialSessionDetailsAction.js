@@ -13,7 +13,7 @@ export const getTrialSessionDetailsAction = async ({
   const { trialSessionId } = props;
   const trialSession = await applicationContext
     .getUseCases()
-    .getTrialSessionDetails({
+    .getTrialSessionDetailsInteractor({
       applicationContext,
       trialSessionId,
     });
@@ -21,7 +21,7 @@ export const getTrialSessionDetailsAction = async ({
   if (trialSession.swingSession && trialSession.swingSessionId) {
     const swingSession = await applicationContext
       .getUseCases()
-      .getTrialSessionDetails({
+      .getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: trialSession.swingSessionId,
       });

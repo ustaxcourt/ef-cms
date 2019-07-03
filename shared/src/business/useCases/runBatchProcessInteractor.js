@@ -12,7 +12,7 @@ const { Document } = require('../entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * runBatchProcess
+ * runBatchProcessInteractor
  *
  * @param caseId
  * @param caseToUpdate
@@ -20,7 +20,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param applicationContext
  * @returns {*}
  */
-exports.runBatchProcess = async ({ applicationContext }) => {
+exports.runBatchProcessInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, UPDATE_CASE)) {

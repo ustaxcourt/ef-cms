@@ -9,7 +9,7 @@ import _ from 'lodash';
 export const getSentMessagesForUserAction = async ({ applicationContext }) => {
   let workItems = await applicationContext
     .getUseCases()
-    .getSentMessagesForUser({
+    .getSentMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
