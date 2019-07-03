@@ -11,11 +11,9 @@ const {
  * @constructor
  */
 function CaseInternalIncomplete(rawCase) {
-  Object.assign(this, {
-    caseCaption: rawCase.caseCaption,
-    petitionFileId: rawCase.petitionFileId,
-    receivedAt: rawCase.receivedAt,
-  });
+  this.caseCaption = rawCase.caseCaption;
+  this.petitionFileId = rawCase.petitionFileId;
+  this.receivedAt = rawCase.receivedAt;
 }
 
 CaseInternalIncomplete.errorToMessageMap = {
