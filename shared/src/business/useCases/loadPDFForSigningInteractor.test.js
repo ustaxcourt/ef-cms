@@ -1,8 +1,10 @@
 const pdfjsLib = require('pdfjs-dist');
 const sinon = require('sinon');
-const { loadPDFForSigning } = require('./loadPDFForSigningInteractor');
+const {
+  loadPDFForSigningInteractor,
+} = require('./loadPDFForSigningInteractor');
 
-describe('loadPDFForSigning', () => {
+describe('loadPDFForSigningInteractor', () => {
   beforeEach(() => {
     window.Response = sinon.stub().returns(() => {});
     window.Response.prototype.arrayBuffer = sinon
@@ -18,7 +20,7 @@ describe('loadPDFForSigning', () => {
   });
 
   it('loadPDFForSigning', async () => {
-    const result = await loadPDFForSigning({
+    const result = await loadPDFForSigningInteractor({
       applicationContext: {
         getPersistenceGateway: () => ({
           getDocument: () => null,

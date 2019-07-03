@@ -2,7 +2,7 @@ const {
   CaseAssociationRequestFactory,
 } = require('../../entities/CaseAssociationRequestFactory');
 const {
-  generateCaseAssociationDocumentTitle,
+  generateCaseAssociationDocumentTitleInteractor,
 } = require('./generateCaseAssociationDocumentTitleInteractor');
 
 describe('generateCaseAssociationDocumentTitle', () => {
@@ -15,7 +15,7 @@ describe('generateCaseAssociationDocumentTitle', () => {
         CaseAssociationRequestFactory,
       }),
     };
-    const title = await generateCaseAssociationDocumentTitle({
+    const title = await generateCaseAssociationDocumentTitleInteractor({
       applicationContext,
       caseAssociationRequest: {
         documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',

@@ -4,7 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-exports.filePetition = async ({
+exports.filePetitionInteractor = async ({
   applicationContext,
   ownershipDisclosureFile,
   ownershipDisclosureUploadProgress,

@@ -20,7 +20,7 @@ export const validateCaseAssociationRequestAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateCaseAssociationRequest({
+    .validateCaseAssociationRequestInteractor({
       applicationContext,
       caseAssociationRequest,
     });

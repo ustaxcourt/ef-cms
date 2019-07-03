@@ -1,4 +1,4 @@
-const { createDocument } = require('./createDocumentInteractor');
+const { createDocumentInteractor } = require('./createDocumentInteractor');
 const { User } = require('../entities/User');
 
 describe('createDocumentInteractor', () => {
@@ -43,7 +43,7 @@ describe('createDocumentInteractor', () => {
     let error;
 
     try {
-      await createDocument({
+      await createDocumentInteractor({
         applicationContext,
         caseId: testingCaseData.caseId,
         document: testingCaseData.documents[0],
@@ -74,7 +74,7 @@ describe('createDocumentInteractor', () => {
     let error;
 
     try {
-      await createDocument({
+      await createDocumentInteractor({
         applicationContext,
         caseId: testingCaseData.caseId,
         document: testingCaseData.documents[0],

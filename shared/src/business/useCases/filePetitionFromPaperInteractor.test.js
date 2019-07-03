@@ -1,5 +1,7 @@
 const sinon = require('sinon');
-const { filePetitionFromPaper } = require('./filePetitionFromPaperInteractor');
+const {
+  filePetitionFromPaperInteractor,
+} = require('./filePetitionFromPaperInteractor');
 
 let uploadDocumentStub;
 let createCaseStub;
@@ -7,7 +9,7 @@ let virusScanPdfStub;
 let validatePdfStub;
 let sanitizePdfStub;
 
-describe('filePetitionFromPaper', () => {
+describe('filePetitionFromPaperInteractor', () => {
   function createApplicationContext(options) {
     uploadDocumentStub = sinon
       .stub()
@@ -40,7 +42,7 @@ describe('filePetitionFromPaper', () => {
   it('throws an error when a null user tries to access the case', async () => {
     let error;
     try {
-      await filePetitionFromPaper({
+      await filePetitionFromPaperInteractor({
         applicationContext: createApplicationContext({
           getCurrentUser: () => ({
             userId: '',
@@ -58,7 +60,7 @@ describe('filePetitionFromPaper', () => {
   it('throws an error when an unauthorized user tries to access the case', async () => {
     let error;
     try {
-      await filePetitionFromPaper({
+      await filePetitionFromPaperInteractor({
         applicationContext: createApplicationContext({
           getCurrentUser: () => ({
             role: 'respondent',
@@ -75,7 +77,7 @@ describe('filePetitionFromPaper', () => {
   });
 
   it('calls upload on a Petition file', async () => {
-    await filePetitionFromPaper({
+    await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
       petitionFile: 'this petition file',
       petitionMetadata: null,
@@ -86,7 +88,7 @@ describe('filePetitionFromPaper', () => {
   });
 
   it('calls upload on an ODS file', async () => {
-    await filePetitionFromPaper({
+    await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
       ownershipDisclosureFile: 'this ods file',
     });
@@ -96,7 +98,7 @@ describe('filePetitionFromPaper', () => {
   });
 
   it('calls upload on a STIN file', async () => {
-    await filePetitionFromPaper({
+    await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
       stinFile: 'this stin file',
     });
@@ -106,7 +108,7 @@ describe('filePetitionFromPaper', () => {
   });
 
   it('uploads a Petition file and a STIN file', async () => {
-    await filePetitionFromPaper({
+    await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
       petitionFile: 'something1',
       petitionMetadata: 'something2',
@@ -120,7 +122,7 @@ describe('filePetitionFromPaper', () => {
   });
 
   it('uploads an Ownership Disclosure Statement file', async () => {
-    await filePetitionFromPaper({
+    await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
       ownershipDisclosureFile: 'something',
       petitionFile: 'something1',

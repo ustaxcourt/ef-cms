@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const {
-  generateSignedDocument,
+  generateSignedDocumentInteractor,
 } = require('./generateSignedDocumentInteractor.js');
 const { PDFDocumentFactory } = require('pdf-lib');
 
@@ -34,7 +34,7 @@ describe('generateSignedDocument', () => {
       sigImgData: testSig,
     };
 
-    const newPdfData = await generateSignedDocument(args);
+    const newPdfData = await generateSignedDocumentInteractor(args);
 
     fs.writeFileSync(
       testOutputPath + 'generateSignedDocument_Image.pdf',
@@ -59,7 +59,7 @@ describe('generateSignedDocument', () => {
       },
     };
 
-    const newPdfData = await generateSignedDocument(args);
+    const newPdfData = await generateSignedDocumentInteractor(args);
 
     fs.writeFileSync(
       testOutputPath + 'generateSignedDocument_Text.pdf',

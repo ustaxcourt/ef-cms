@@ -16,10 +16,12 @@ export const validateDocketEntryAction = ({
 }) => {
   const entryMetadata = get(state.form);
 
-  const errors = applicationContext.getUseCases().validateDocketEntry({
-    applicationContext,
-    entryMetadata,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateDocketEntryInteractor({
+      applicationContext,
+      entryMetadata,
+    });
 
   if (!errors) {
     return path.success();

@@ -1,6 +1,8 @@
-const { downloadDocumentFile } = require('./downloadDocumentFileInteractor');
+const {
+  downloadDocumentFileInteractor,
+} = require('./downloadDocumentFileInteractor');
 
-describe('downloadDocumentFile', () => {
+describe('downloadDocumentFileInteractor', () => {
   let applicationContext;
   it('returns the blob returned from persistence', async () => {
     applicationContext = {
@@ -11,7 +13,7 @@ describe('downloadDocumentFile', () => {
         };
       },
     };
-    const result = await downloadDocumentFile({
+    const result = await downloadDocumentFileInteractor({
       applicationContext,
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

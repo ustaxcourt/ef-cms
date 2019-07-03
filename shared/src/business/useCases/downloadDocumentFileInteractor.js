@@ -1,4 +1,7 @@
-exports.downloadDocumentFile = async ({ applicationContext, documentId }) => {
+exports.downloadDocumentFileInteractor = async ({
+  applicationContext,
+  documentId,
+}) => {
   const documentBlob = await applicationContext
     .getPersistenceGateway()
     .getDocument({

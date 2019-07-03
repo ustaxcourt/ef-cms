@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const { refreshToken } = require('./refreshTokenInteractor');
+const { refreshTokenInteractor } = require('./refreshTokenInteractor');
 
 describe('refreshToken', () => {
   let applicationContext;
@@ -18,7 +18,7 @@ describe('refreshToken', () => {
       }),
     };
 
-    let result = await refreshToken({
+    let result = await refreshTokenInteractor({
       applicationContext,
       refreshToken: 'asdf',
     });

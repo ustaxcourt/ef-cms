@@ -8,7 +8,7 @@
 export const getProcedureTypesAction = async ({ applicationContext }) => {
   const procedureTypes = await applicationContext
     .getUseCases()
-    .getProcedureTypes({
+    .getProcedureTypesInteractor({
       applicationContext,
     });
   return { procedureTypes };
