@@ -16,6 +16,10 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
   try {
     const chromium = applicationContext.getChromium();
 
+    await chromium.font(
+      'https://rawcdn.githack.com/googlefonts/noto-fonts/7cc126f6c0ebfe750dc911dae951f9167d36213e/unhinted/NotoSerif-Regular.ttf',
+    );
+
     applicationContext.logger.info('gotChromium');
 
     browser = await chromium.puppeteer.launch({
@@ -37,7 +41,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 10px; font-family: 'Times New Roman', Times, serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: 'Noto Serif', serif; width: 100%; margin: 20px 62px 20px 62px;">
             <div style="float: right">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
@@ -54,7 +58,7 @@ exports.createCourtIssuedOrderPdfFromHtml = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 10px; font-family: 'Times New Roman', Times, serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: 'Noto Serif', serif; width: 100%; margin: 20px 62px 20px 62px;">
           </div>
         </body>
       </html>
