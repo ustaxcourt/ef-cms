@@ -15,7 +15,7 @@ exports.handler = event =>
     const { caseId, documentId } = event.pathParameters;
     applicationContext.logger.info('Event', event);
     try {
-      await applicationContext.getUseCases().addCoverToPDFDocument({
+      await applicationContext.getUseCases().addCoverToPDFDocumentInteractor({
         applicationContext,
         caseId,
         documentId,

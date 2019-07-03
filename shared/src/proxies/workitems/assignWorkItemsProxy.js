@@ -7,7 +7,7 @@ const { put } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.assignWorkItems = ({
+exports.assignWorkItemsInteractor = ({
   applicationContext,
   assigneeId,
   assigneeName,

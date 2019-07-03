@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { assignWorkItems } = require('./assignWorkItemsInteractor');
+const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
 
 const MOCK_WORK_ITEM = {
   assigneeId: null,
@@ -31,7 +31,7 @@ const MOCK_WORK_ITEM = {
   workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
 };
 
-describe('assignWorkItems', () => {
+describe('assignWorkItemsInteractor', () => {
   it('unauthorized user tries to assign a work item', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
@@ -41,7 +41,7 @@ describe('assignWorkItems', () => {
     };
     let error;
     try {
-      await assignWorkItems({
+      await assignWorkItemsInteractor({
         applicationContext,
       });
     } catch (err) {
@@ -65,7 +65,7 @@ describe('assignWorkItems', () => {
     };
     let error;
     try {
-      await assignWorkItems({
+      await assignWorkItemsInteractor({
         applicationContext,
         userId: 'docketclerk',
       });

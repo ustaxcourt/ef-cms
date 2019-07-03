@@ -17,7 +17,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .createTrialSession({
+        .createTrialSessionInteractor({
           applicationContext,
           trialSession: JSON.parse(event.body),
         });

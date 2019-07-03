@@ -10,7 +10,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * completeWorkItem
+ * createWorkItem
  *
  * @param workItemId
  * @param message

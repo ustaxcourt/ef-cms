@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  createCaseFromPaper,
+  createCaseFromPaperInteractor,
 } = require('../useCases/createCaseFromPaperInteractor');
 const {
   createTestApplicationContext,
@@ -35,7 +35,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
   });
 
   it('should persist the paper case into the database', async () => {
-    const { caseId } = await createCaseFromPaper({
+    const { caseId } = await createCaseFromPaperInteractor({
       applicationContext,
       petitionFileId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
       petitionMetadata: {
