@@ -16,10 +16,12 @@ export const validateOrderWithoutBodyAction = ({
 }) => {
   const orderMetadata = get(state.form);
 
-  const errors = applicationContext.getUseCases().validateOrderWithoutBody({
-    applicationContext,
-    orderMetadata,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateOrderWithoutBodyInteractor({
+      applicationContext,
+      orderMetadata,
+    });
 
   if (!errors) {
     return path.success();

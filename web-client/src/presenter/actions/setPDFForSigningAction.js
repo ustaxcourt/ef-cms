@@ -17,7 +17,7 @@ export const setPDFForSigningAction = async ({
   const { documentId } = props;
   const pdfObj = await applicationContext
     .getUseCases()
-    .loadPDFForSigning({ applicationContext, documentId });
+    .loadPDFForSigningInteractor({ applicationContext, documentId });
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
   store.set(state.pdfForSigning.documentId, documentId);
 };

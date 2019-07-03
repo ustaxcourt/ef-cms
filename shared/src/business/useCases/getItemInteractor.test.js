@@ -1,4 +1,4 @@
-const { getItem } = require('./getItemInteractor');
+const { getItemInteractor } = require('./getItemInteractor');
 
 describe('getItemInteractor', () => {
   let applicationContext;
@@ -9,7 +9,7 @@ describe('getItemInteractor', () => {
         getItem: require('../../persistence/localStorage/getItem').getItem,
       }),
     };
-    const result = await getItem({
+    const result = await getItemInteractor({
       applicationContext,
       key: 'abc',
     });

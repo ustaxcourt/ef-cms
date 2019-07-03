@@ -9,7 +9,7 @@ const errorStub = sinon.stub();
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    validateCaseDetail: validateCaseDetailStub,
+    validateCaseDetailInteractor: validateCaseDetailStub,
   }),
 };
 

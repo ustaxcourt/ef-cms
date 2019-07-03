@@ -7,8 +7,10 @@
  * @returns {object} contains the caseTypes array returned from the getCaseTypes use case
  */
 export const getCaseTypesAction = async ({ applicationContext }) => {
-  const caseTypes = await applicationContext.getUseCases().getCaseTypes({
-    applicationContext,
-  });
+  const caseTypes = await applicationContext
+    .getUseCases()
+    .getCaseTypesInteractor({
+      applicationContext,
+    });
   return { caseTypes };
 };

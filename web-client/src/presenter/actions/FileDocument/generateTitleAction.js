@@ -11,25 +11,31 @@ import { state } from 'cerebral';
 export const generateTitleAction = ({ applicationContext, get, store }) => {
   const documentMetadata = get(state.form);
 
-  let documentTitle = applicationContext.getUseCases().generateDocumentTitle({
-    applicationContext,
-    documentMetadata,
-  });
+  let documentTitle = applicationContext
+    .getUseCases()
+    .generateDocumentTitleInteractor({
+      applicationContext,
+      documentMetadata,
+    });
   store.set(state.form.documentTitle, documentTitle);
 
   if (!isEmpty(documentMetadata.secondaryDocument)) {
-    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
-      applicationContext,
-      documentMetadata: documentMetadata.secondaryDocument,
-    });
+    documentTitle = applicationContext
+      .getUseCases()
+      .generateDocumentTitleInteractor({
+        applicationContext,
+        documentMetadata: documentMetadata.secondaryDocument,
+      });
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
   }
 
   if (!isEmpty(documentMetadata.supportingDocumentMetadata)) {
-    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
-      applicationContext,
-      documentMetadata: documentMetadata.supportingDocumentMetadata,
-    });
+    documentTitle = applicationContext
+      .getUseCases()
+      .generateDocumentTitleInteractor({
+        applicationContext,
+        documentMetadata: documentMetadata.supportingDocumentMetadata,
+      });
     store.set(
       state.form.supportingDocumentMetadata.documentTitle,
       documentTitle,
@@ -37,10 +43,12 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
   }
 
   if (!isEmpty(documentMetadata.secondarySupportingDocumentMetadata)) {
-    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
-      applicationContext,
-      documentMetadata: documentMetadata.secondarySupportingDocumentMetadata,
-    });
+    documentTitle = applicationContext
+      .getUseCases()
+      .generateDocumentTitleInteractor({
+        applicationContext,
+        documentMetadata: documentMetadata.secondarySupportingDocumentMetadata,
+      });
     store.set(
       state.form.secondarySupportingDocumentMetadata.documentTitle,
       documentTitle,

@@ -42,18 +42,20 @@ export const fileExternalDocumentAction = async ({
   let caseDetail;
 
   try {
-    caseDetail = await applicationContext.getUseCases().uploadExternalDocument({
-      applicationContext,
-      documentMetadata,
-      onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
-      onPrimaryUploadProgress: progressFunctions.primary,
-      onSecondarySupportUploadProgress: progressFunctions.secondarySupporting,
-      onSecondaryUploadProgress: progressFunctions.secondary,
-      primaryDocumentFile,
-      secondaryDocumentFile,
-      secondarySupportingDocumentFile,
-      supportingDocumentFile,
-    });
+    caseDetail = await applicationContext
+      .getUseCases()
+      .uploadExternalDocumentInteractor({
+        applicationContext,
+        documentMetadata,
+        onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
+        onPrimaryUploadProgress: progressFunctions.primary,
+        onSecondarySupportUploadProgress: progressFunctions.secondarySupporting,
+        onSecondaryUploadProgress: progressFunctions.secondary,
+        primaryDocumentFile,
+        secondaryDocumentFile,
+        secondarySupportingDocumentFile,
+        supportingDocumentFile,
+      });
 
     if (isRespondent) {
       await applicationContext
@@ -69,7 +71,7 @@ export const fileExternalDocumentAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheet({
+      await applicationContext.getUseCases().createCoverSheetInteractor({
         applicationContext,
         caseId: caseDetail.caseId,
         documentId: document.documentId,

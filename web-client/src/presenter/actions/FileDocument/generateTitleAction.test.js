@@ -11,7 +11,7 @@ describe('generateTitleAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        generateDocumentTitle: generateDocumentTitleStub,
+        generateDocumentTitleInteractor: generateDocumentTitleStub,
       }),
     };
   });

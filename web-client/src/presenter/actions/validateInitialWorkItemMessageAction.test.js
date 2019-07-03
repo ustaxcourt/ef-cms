@@ -23,7 +23,7 @@ describe('validateInitialWorkItemMessage', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateInitialWorkItemMessage: validateInitialWorkItemMessageStub,
+        validateInitialWorkItemMessageInteractor: validateInitialWorkItemMessageStub,
       }),
     };
 

@@ -1,10 +1,10 @@
 /**
- * validateExternalDocumentInformation
+ * validateExternalDocumentInformationInteractor
  * @param applicationContext
  * @param documentMetadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateExternalDocumentInformation = ({
+exports.validateExternalDocumentInformationInteractor = ({
   applicationContext,
   documentMetadata,
 }) => {

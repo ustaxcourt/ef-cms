@@ -1,9 +1,9 @@
 const sinon = require('sinon');
 const {
-  validateExternalDocumentInformation,
+  validateExternalDocumentInformationInteractor,
 } = require('./validateExternalDocumentInformationInteractor');
 
-describe('validateExternalDocumentInformation', () => {
+describe('validateExternalDocumentInformationInteractor', () => {
   let ExternalDocumentInformationFactory;
   let spy;
 
@@ -17,7 +17,7 @@ describe('validateExternalDocumentInformation', () => {
   });
 
   it('calls external document information factory to get validation errors', () => {
-    const errors = validateExternalDocumentInformation({
+    const errors = validateExternalDocumentInformationInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ExternalDocumentInformationFactory,

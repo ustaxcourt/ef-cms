@@ -24,13 +24,13 @@ const refreshTokenStub = sinon.stub().resolves({
 presenter.providers.applicationContext = {
   ...applicationContext,
   getUseCases: () => ({
-    authorizeCode: async () => ({
+    authorizeCodeInteractor: async () => ({
       refreshToken: TOKEN,
       token: TOKEN,
     }),
     getUserInteractor: async () => USER,
-    refreshToken: refreshTokenStub,
-    setItem: () => null,
+    refreshTokenInteractor: refreshTokenStub,
+    setItemInteractor: () => null,
   }),
 };
 
@@ -51,7 +51,7 @@ describe('loginWithCodeSequence', () => {
     expect(
       presenter.providers.applicationContext
         .getUseCases()
-        .refreshToken.getCall(0).args[0].refreshToken,
+        .refreshTokenInteractor.getCall(0).args[0].refreshToken,
     ).toEqual(TOKEN);
     expect(test.getState('token')).toEqual(NEW_TOKEN);
     expect(test.getState('refreshToken')).toEqual(NEW_TOKEN);

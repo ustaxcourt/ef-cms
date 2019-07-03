@@ -1,5 +1,7 @@
 const { Case } = require('../entities/cases/Case');
-const { getProcedureTypes } = require('./getProcedureTypesInteractor');
+const {
+  getProcedureTypesInteractor,
+} = require('./getProcedureTypesInteractor');
 
 const validateProcedureTypes = procedureTypes => {
   procedureTypes.forEach(procedureType => {
@@ -20,7 +22,7 @@ describe('Get case procedure types', () => {
         };
       },
     };
-    const procedureTypes = await getProcedureTypes({
+    const procedureTypes = await getProcedureTypesInteractor({
       applicationContext,
     });
     expect(procedureTypes.length).toEqual(2);

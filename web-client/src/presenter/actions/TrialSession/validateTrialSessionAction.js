@@ -31,10 +31,12 @@ export const validateTrialSessionAction = ({
     ['year', 'month', 'day'],
   );
 
-  const errors = applicationContext.getUseCases().validateTrialSession({
-    applicationContext,
-    trialSession: { ...trialSession, startDate },
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateTrialSessionInteractor({
+      applicationContext,
+      trialSession: { ...trialSession, startDate },
+    });
 
   if (!errors) {
     return path.success();
