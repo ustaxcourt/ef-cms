@@ -1,14 +1,16 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
     constants: state.constants,
+    editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
   },
-  ({ caseDetail, constants }) => {
+  ({ caseDetail, constants, editSecondaryContact }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
@@ -27,6 +29,11 @@ export const PartyInformation = connect(
                   <address aria-labelledby={'primary-label'}>
                     {addressDisplay(caseDetail.contactPrimary)}
                   </address>
+
+                  <button className="usa-button usa-button--unstyled">
+                    <FontAwesomeIcon icon={['far', 'edit']} />
+                    Edit
+                  </button>
                 </div>
               </React.Fragment>
             )}{' '}
@@ -44,6 +51,13 @@ export const PartyInformation = connect(
                       {caseDetail.contactSecondary.name &&
                         addressDisplay(caseDetail.contactSecondary)}
                     </address>
+                    <button
+                      className="usa-button usa-button--unstyled"
+                      onClick={() => editSecondaryContact()}
+                    >
+                      <FontAwesomeIcon icon={['fas', 'question-circle']} />
+                      Why can&apos;t I edit this?
+                    </button>
                   </div>
                 </React.Fragment>
               )}{' '}
