@@ -41,8 +41,9 @@ export const DocumentDetail = connect(
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
           <span className="filed-by">
-            Filed {helper.formattedDocument.createdAtFormatted} by{' '}
-            {helper.formattedDocument.filedBy}
+            Filed {helper.formattedDocument.createdAtFormatted}
+            {helper.formattedDocument.filedBy &&
+              ` by ${helper.formattedDocument.filedBy}`}
           </span>
           <SuccessNotification />
           <ErrorNotification />
