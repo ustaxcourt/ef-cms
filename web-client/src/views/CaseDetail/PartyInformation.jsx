@@ -4,6 +4,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { EditPrimaryContactModal } from '../EditPrimaryContactModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 
 export const PartyInformation = connect(
@@ -11,9 +12,16 @@ export const PartyInformation = connect(
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
     constants: state.constants,
+    editPrimaryContact: sequences.openEditPrimaryContactModalSequence,
     editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
   },
-  ({ caseDetail, caseHelper, constants, editSecondaryContact }) => {
+  ({
+    caseDetail,
+    caseHelper,
+    constants,
+    editPrimaryContact,
+    editSecondaryContact,
+  }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
@@ -33,7 +41,10 @@ export const PartyInformation = connect(
                     {addressDisplay(caseDetail.contactPrimary)}
                   </address>
 
-                  <button className="usa-button usa-button--unstyled">
+                  <button
+                    className="usa-button usa-button--unstyled"
+                    onClick={() => editPrimaryContact()}
+                  >
                     <FontAwesomeIcon icon={['far', 'edit']} />
                     Edit
                   </button>
@@ -152,6 +163,8 @@ export const PartyInformation = connect(
           <h3>Party Information</h3>
           {mainPartyInformation()}
         </Mobile>
+
+        {caseHelper.showEditPrimaryContactModal && <EditPrimaryContactModal />}
 
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />

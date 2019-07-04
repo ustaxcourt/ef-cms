@@ -1,4 +1,4 @@
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
