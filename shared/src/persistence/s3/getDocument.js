@@ -30,6 +30,7 @@ exports.getDocument = async ({ applicationContext, documentId, protocol }) => {
       responseType: 'blob',
       url,
     });
+
     return new Blob([fileBlob], { type: 'application/pdf' });
   }
 };
