@@ -2,10 +2,12 @@ import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAct
 import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
 import { createWorkItemSequence } from './createWorkItemSequence';
 import { gotoDashboardSequence } from './gotoDashboardSequence';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 
 export const completeDocumentSigningSequence = [
-  ...createWorkItemSequence,
   completeDocumentSigningAction,
+  setDocumentIdAction,
+  ...createWorkItemSequence,
   clearPDFSignatureDataAction,
   ...gotoDashboardSequence,
 ];
