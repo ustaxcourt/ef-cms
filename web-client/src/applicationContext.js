@@ -22,6 +22,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
@@ -279,6 +280,7 @@ const applicationContext = {
   getEntityConstructors: () => ({
     Case,
     CaseAssociationRequestFactory,
+    CaseDeadline,
     CaseExternal,
     CaseInternal,
     DocketEntryFactory,

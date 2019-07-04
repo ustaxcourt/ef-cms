@@ -1,5 +1,12 @@
 const client = require('../../dynamodbClientService');
 
+/**
+ * updateCaseDeadline
+ *
+ * @param caseDeadlineToUpdate
+ * @param applicationContext
+ * @returns {*}
+ */
 exports.updateCaseDeadline = async ({
   applicationContext,
   caseDeadlineToUpdate,
