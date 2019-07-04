@@ -97,7 +97,7 @@ export const submitCaseAssociationRequestAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheet({
+      await applicationContext.getUseCases().createCoverSheetInteractor({
         applicationContext,
         caseId: caseDetail.caseId,
         documentId: document.documentId,

@@ -7,7 +7,7 @@ const setCurrentUserStub = sinon.stub().returns(null);
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    setItem: ({ key, value }) => {
+    setItemInteractor: ({ key, value }) => {
       return window.localStorage.setItem(key, JSON.stringify(value));
     },
   }),

@@ -19,7 +19,7 @@ export const generateCaseAssociationTitleAction = ({
 
   let documentTitle = applicationContext
     .getUseCases()
-    .generateCaseAssociationDocumentTitle({
+    .generateCaseAssociationDocumentTitleInteractor({
       applicationContext,
       caseAssociationRequest,
       contactPrimaryName,
@@ -29,10 +29,12 @@ export const generateCaseAssociationTitleAction = ({
 
   if (!isEmpty(caseAssociationRequest.supportingDocumentMetadata)) {
     caseAssociationRequest.supportingDocumentMetadata.previousDocument = documentTitle;
-    documentTitle = applicationContext.getUseCases().generateDocumentTitle({
-      applicationContext,
-      documentMetadata: caseAssociationRequest.supportingDocumentMetadata,
-    });
+    documentTitle = applicationContext
+      .getUseCases()
+      .generateDocumentTitleInteractor({
+        applicationContext,
+        documentMetadata: caseAssociationRequest.supportingDocumentMetadata,
+      });
     store.set(
       state.form.supportingDocumentMetadata.documentTitle,
       documentTitle,

@@ -11,7 +11,7 @@ presenter.providers.applicationContext = {
     startScanSession: mockStartScanSession,
   }),
   getUseCases: () => ({
-    removeItem: async () => null,
+    removeItemInteractor: async () => null,
   }),
 };
 global.alert = () => null;

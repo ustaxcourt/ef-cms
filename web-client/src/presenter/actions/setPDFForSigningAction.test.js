@@ -8,7 +8,7 @@ const mockPDFObj = {
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    loadPDFForSigning: () => mockPDFObj,
+    loadPDFForSigningInteractor: () => mockPDFObj,
   }),
 };
 

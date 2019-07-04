@@ -1,12 +1,12 @@
 const {
-  validatePetitionFromPaper,
+  validatePetitionFromPaperInteractor,
 } = require('./validatePetitionFromPaperInteractor');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
 const { omit } = require('lodash');
 
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {
-    const errors = validatePetitionFromPaper({
+    const errors = validatePetitionFromPaperInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseInternal,

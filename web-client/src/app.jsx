@@ -69,7 +69,8 @@ const app = {
     const user =
       (await applicationContext
         .getUseCases()
-        .getItem({ applicationContext, key: 'user' })) || presenter.state.user;
+        .getItemInteractor({ applicationContext, key: 'user' })) ||
+      presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
@@ -84,7 +85,7 @@ const app = {
     const token =
       (await applicationContext
         .getUseCases()
-        .getItem({ applicationContext, key: 'token' })) ||
+        .getItemInteractor({ applicationContext, key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);

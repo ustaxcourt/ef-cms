@@ -28,7 +28,7 @@ describe('validateCaseAssociationRequest', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateCaseAssociationRequest: validateCaseAssociationRequestStub,
+        validateCaseAssociationRequestInteractor: validateCaseAssociationRequestStub,
       }),
     };
 

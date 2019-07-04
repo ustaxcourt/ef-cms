@@ -28,10 +28,12 @@ export const validatePetitionFromPaperAction = ({
     ['year', 'month', 'day'],
   );
 
-  const errors = applicationContext.getUseCases().validatePetitionFromPaper({
-    applicationContext,
-    petition: { ...petition, ...form, receivedAt },
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validatePetitionFromPaperInteractor({
+      applicationContext,
+      petition: { ...petition, ...form, receivedAt },
+    });
 
   if (!errors) {
     return path.success();

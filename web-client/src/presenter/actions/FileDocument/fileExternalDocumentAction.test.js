@@ -17,7 +17,7 @@ describe('fileExternalDocumentAction', () => {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
         submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
-        uploadExternalDocument: uploadExternalDocumentStub,
+        uploadExternalDocumentInteractor: uploadExternalDocumentStub,
       }),
     };
 

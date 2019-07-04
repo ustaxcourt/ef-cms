@@ -18,7 +18,7 @@ export const validateCaseDetailAction = ({
 }) => {
   const { combinedCaseDetailWithForm } = props;
 
-  const errors = applicationContext.getUseCases().validateCaseDetail({
+  const errors = applicationContext.getUseCases().validateCaseDetailInteractor({
     applicationContext,
     caseDetail: combinedCaseDetailWithForm,
   });
