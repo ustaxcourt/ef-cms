@@ -4,13 +4,16 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
+
 export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    caseHelper: state.caseDetailHelper,
     constants: state.constants,
     editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
   },
-  ({ caseDetail, constants, editSecondaryContact }) => {
+  ({ caseDetail, caseHelper, constants, editSecondaryContact }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
@@ -149,6 +152,10 @@ export const PartyInformation = connect(
           <h3>Party Information</h3>
           {mainPartyInformation()}
         </Mobile>
+
+        {caseHelper.showEditSecondaryContactModal && (
+          <EditSecondaryContactModal />
+        )}
       </div>
     );
   },
