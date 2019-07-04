@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * updates primary contact information
  *
@@ -7,6 +5,4 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral store used for getting state.form
  * @returns {void}
  */
-export const updatePrimaryContactAction = async ({ get }) => {
-  console.log(get(state.form));
-};
+export const updatePrimaryContactAction = async () => {};
