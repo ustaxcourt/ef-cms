@@ -193,7 +193,9 @@ Document.prototype.generateFiledBy = function(caseDetail) {
       );
     }
 
-    this.filedBy = filedByArray.join(' & ');
+    if (filedByArray.length) {
+      this.filedBy = filedByArray.join(' & ');
+    }
   }
 };
 
