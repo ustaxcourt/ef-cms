@@ -1,11 +1,11 @@
 const {
-  validateForwardMessage,
+  validateForwardMessageInteractor,
 } = require('./validateForwardMessageInteractor');
 const { ForwardMessage } = require('../../entities/ForwardMessage');
 
-describe('validateForwardMessage', () => {
+describe('validateForwardMessageInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateForwardMessage({
+    const errors = validateForwardMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ForwardMessage,
@@ -22,7 +22,7 @@ describe('validateForwardMessage', () => {
   });
 
   it('returns the expected errors object when only forwardMessage is defined', () => {
-    const errors = validateForwardMessage({
+    const errors = validateForwardMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ForwardMessage,
@@ -38,7 +38,7 @@ describe('validateForwardMessage', () => {
   });
 
   it('returns the expected errors object when only section is defined', () => {
-    const errors = validateForwardMessage({
+    const errors = validateForwardMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ForwardMessage,
@@ -54,7 +54,7 @@ describe('validateForwardMessage', () => {
   });
 
   it('returns the expected errors object when only assigneeId is defined', () => {
-    const errors = validateForwardMessage({
+    const errors = validateForwardMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ForwardMessage,
@@ -72,7 +72,7 @@ describe('validateForwardMessage', () => {
   });
 
   it('returns no errors when all fields are defined', () => {
-    const errors = validateForwardMessage({
+    const errors = validateForwardMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ForwardMessage,

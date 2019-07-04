@@ -2,12 +2,12 @@ const {
   InitialWorkItemMessage,
 } = require('../../entities/InitialWorkItemMessage');
 const {
-  validateInitialWorkItemMessage,
+  validateInitialWorkItemMessageInteractor,
 } = require('./validateInitialWorkItemMessageInteractor');
 
-describe('validateInitialWorkItemMessage', () => {
+describe('validateInitialWorkItemMessageInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateInitialWorkItemMessage({
+    const errors = validateInitialWorkItemMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           InitialWorkItemMessage,
@@ -24,7 +24,7 @@ describe('validateInitialWorkItemMessage', () => {
   });
 
   it('returns no errors when all properties are defined', () => {
-    const errors = validateInitialWorkItemMessage({
+    const errors = validateInitialWorkItemMessageInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           InitialWorkItemMessage,

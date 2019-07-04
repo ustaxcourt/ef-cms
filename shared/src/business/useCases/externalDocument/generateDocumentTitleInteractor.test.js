@@ -1,9 +1,11 @@
 const {
   ExternalDocumentFactory,
 } = require('../../entities/externalDocument/ExternalDocumentFactory');
-const { generateDocumentTitle } = require('./generateDocumentTitleInteractor');
+const {
+  generateDocumentTitleInteractor,
+} = require('./generateDocumentTitleInteractor');
 
-describe('generateDocumentTitle', () => {
+describe('generateDocumentTitleInteractor', () => {
   let applicationContext;
 
   it('generates a document title from passed metadata', async () => {
@@ -13,7 +15,7 @@ describe('generateDocumentTitle', () => {
         ExternalDocumentFactory,
       }),
     };
-    const title = await generateDocumentTitle({
+    const title = await generateDocumentTitleInteractor({
       applicationContext,
       documentMetadata: {
         documentTitle: 'abc',

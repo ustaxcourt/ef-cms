@@ -1,5 +1,5 @@
 /**
- * generateDocumentTitle
+ * generateCaseAssociationDocumentTitleInteractor
  *
  * @param applicationContext
  * @param caseAssociationRequest
@@ -7,7 +7,7 @@
  * @param contactSecondaryName
  * @returns {string} document title
  */
-exports.generateCaseAssociationDocumentTitle = ({
+exports.generateCaseAssociationDocumentTitleInteractor = ({
   applicationContext,
   caseAssociationRequest,
   contactPrimaryName,

@@ -34,19 +34,21 @@ export const uploadExternalDocumentsAction = async ({
       primaryDocumentFileId,
       secondaryDocumentFileId,
       supportingDocumentFileId,
-    ] = await applicationContext.getUseCases().uploadExternalDocuments({
-      applicationContext,
-      documentFiles: [
-        primaryDocumentFile,
-        secondaryDocumentFile,
-        supportingDocumentFile,
-      ],
-      onUploadProgresses: [
-        progressFunctions.primary,
-        progressFunctions.secondary,
-        progressFunctions.supporting,
-      ],
-    });
+    ] = await applicationContext
+      .getUseCases()
+      .uploadExternalDocumentsInteractor({
+        applicationContext,
+        documentFiles: [
+          primaryDocumentFile,
+          secondaryDocumentFile,
+          supportingDocumentFile,
+        ],
+        onUploadProgresses: [
+          progressFunctions.primary,
+          progressFunctions.secondary,
+          progressFunctions.supporting,
+        ],
+      });
 
     return path.success({
       primaryDocumentFileId,

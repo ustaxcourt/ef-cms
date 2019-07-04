@@ -5,7 +5,11 @@ const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { WorkItem } = require('../entities/WorkItem');
 
-exports.createDocument = async ({ applicationContext, caseId, document }) => {
+exports.createDocumentInteractor = async ({
+  applicationContext,
+  caseId,
+  document,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   const documentEntity = new Document({
