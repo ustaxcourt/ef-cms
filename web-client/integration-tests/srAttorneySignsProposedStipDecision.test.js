@@ -59,7 +59,7 @@ presenter.providers.applicationContext = {
   getUseCases: () => {
     return {
       ...applicationContext.getUseCases(),
-      loadPDFForSigning: () => {
+      loadPDFForSigningInteractor: () => {
         return new Promise(resolve => {
           resolve(null);
         });
