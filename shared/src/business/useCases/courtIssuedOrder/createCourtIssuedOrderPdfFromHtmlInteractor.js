@@ -16,6 +16,19 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   try {
     const chromium = applicationContext.getChromium();
 
+    await chromium.font(
+      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman.ttf?raw=true',
+    );
+    await chromium.font(
+      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman_Bold.ttf?raw=true',
+    );
+    await chromium.font(
+      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman_Bold_Italic.ttf?raw=true',
+    );
+    await chromium.font(
+      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman_Italic.ttf?raw=true',
+    );
+
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
