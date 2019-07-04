@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {object} applicationContext the applicationContext object
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get helper function
- * @returns {void}
+ * @returns {object}
  */
 export const completeDocumentSigningAction = async ({
   applicationContext,
@@ -42,11 +42,20 @@ export const completeDocumentSigningAction = async ({
       },
     });
 
+  let documentFile;
+
+  if (typeof File === 'function') {
+    documentFile = new File([signedPdfBytes], 'myfile.pdf');
+  } else {
+    documentFile = Buffer.from(signedPdfBytes, 'base64');
+    documentFile.name = 'myfile.pdf';
+  }
+
   const signedDocumentId = await applicationContext
     .getPersistenceGateway()
     .uploadDocument({
       applicationContext,
-      document: new File([signedPdfBytes], 'myfile.pdf'),
+      document: documentFile,
       onUploadProgress: () => {},
     });
 
@@ -57,10 +66,12 @@ export const completeDocumentSigningAction = async ({
     signedDocumentId,
   });
 
-  const workItems = await applicationContext.getUseCases().getWorkItemsForUser({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-  });
+  const workItems = await applicationContext
+    .getUseCases()
+    .getInboxMessagesForUserInteractor({
+      applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
+    });
 
   const stipulatedWorkItems = workItems.filter(
     workItem =>
@@ -75,4 +86,6 @@ export const completeDocumentSigningAction = async ({
     userId: applicationContext.getCurrentUser().userId,
     workItemId,
   });
+
+  return { documentId: signedDocumentId };
 };

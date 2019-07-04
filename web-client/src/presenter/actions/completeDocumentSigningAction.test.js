@@ -5,9 +5,9 @@ import sinon from 'sinon';
 
 describe('completeDocumentSigningAction', () => {
   let uploadDocumentStub;
-  let generateSignedDocumentStub;
-  let signDocumentStub;
-  let getWorkItemsForUserStub;
+  let generateSignedDocumentInteractorStub;
+  let signDocumentInteractorStub;
+  let getInboxMessagesForUserInteractorStub;
   let completeWorkItemInteractorStub;
 
   beforeEach(() => {
@@ -20,9 +20,9 @@ describe('completeDocumentSigningAction', () => {
     global.File = sinon.stub();
 
     uploadDocumentStub = sinon.stub();
-    generateSignedDocumentStub = sinon.stub();
-    signDocumentStub = sinon.stub();
-    getWorkItemsForUserStub = sinon.stub().returns([
+    generateSignedDocumentInteractorStub = sinon.stub();
+    signDocumentInteractorStub = sinon.stub();
+    getInboxMessagesForUserInteractorStub = sinon.stub().returns([
       {
         document: {
           documentType: 'Proposed Stipulated Decision',
@@ -39,9 +39,9 @@ describe('completeDocumentSigningAction', () => {
       }),
       getUseCases: () => ({
         completeWorkItemInteractor: completeWorkItemInteractorStub,
-        generateSignedDocumentInteractor: generateSignedDocumentStub,
-        getWorkItemsForUser: getWorkItemsForUserStub,
-        signDocumentInteractor: signDocumentStub,
+        generateSignedDocumentInteractor: generateSignedDocumentInteractorStub,
+        getInboxMessagesForUserInteractor: getInboxMessagesForUserInteractorStub,
+        signDocumentInteractor: signDocumentInteractorStub,
       }),
     };
   });
@@ -73,9 +73,9 @@ describe('completeDocumentSigningAction', () => {
     });
 
     expect(uploadDocumentStub.calledOnce).toEqual(true);
-    expect(generateSignedDocumentStub.calledOnce).toEqual(true);
-    expect(signDocumentStub.calledOnce).toEqual(true);
-    expect(getWorkItemsForUserStub.calledOnce).toEqual(true);
+    expect(generateSignedDocumentInteractorStub.calledOnce).toEqual(true);
+    expect(signDocumentInteractorStub.calledOnce).toEqual(true);
+    expect(getInboxMessagesForUserInteractorStub.calledOnce).toEqual(true);
     expect(completeWorkItemInteractorStub.calledOnce).toEqual(true);
   });
 });
