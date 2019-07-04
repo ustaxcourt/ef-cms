@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @param {object} applicationContext the applicationContext object
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get helper function
- * @returns {void}
+ * @returns {object}
  */
 export const completeDocumentSigningAction = async ({
   applicationContext,
@@ -86,4 +86,6 @@ export const completeDocumentSigningAction = async ({
     userId: applicationContext.getCurrentUser().userId,
     workItemId,
   });
+
+  return { documentId: signedDocumentId };
 };
