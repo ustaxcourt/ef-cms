@@ -164,7 +164,13 @@ export const PartyInformation = connect(
           {mainPartyInformation()}
         </Mobile>
 
-        {caseHelper.showEditPrimaryContactModal && <EditPrimaryContactModal />}
+        {caseHelper.showEditPrimaryContactModal && (
+          <EditPrimaryContactModal
+            bind="caseDetail"
+            onBlur="updateCaseValueSequence"
+            onChange="updateCaseValueSequence"
+          />
+        )}
 
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
