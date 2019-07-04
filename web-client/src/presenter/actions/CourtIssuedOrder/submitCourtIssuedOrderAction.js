@@ -31,7 +31,6 @@ export const submitCourtIssuedOrderAction = async ({
     ...documentMetadata,
     docketNumber,
     caseId,
-    filedBy: userName,
   };
 
   if (primaryDocumentFileId) {
