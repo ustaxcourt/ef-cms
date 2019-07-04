@@ -7,7 +7,7 @@ describe('completeDocumentSigningAction', () => {
   let uploadDocumentStub;
   let generateSignedDocumentStub;
   let signDocumentStub;
-  let getWorkItemsForUserStub;
+  let getInboxMessagesForUserInteractorStub;
   let completeWorkItemInteractorStub;
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('completeDocumentSigningAction', () => {
     uploadDocumentStub = sinon.stub();
     generateSignedDocumentStub = sinon.stub();
     signDocumentStub = sinon.stub();
-    getWorkItemsForUserStub = sinon.stub().returns([
+    getInboxMessagesForUserInteractorStub = sinon.stub().returns([
       {
         document: {
           documentType: 'Proposed Stipulated Decision',
@@ -40,7 +40,7 @@ describe('completeDocumentSigningAction', () => {
       getUseCases: () => ({
         completeWorkItemInteractor: completeWorkItemInteractorStub,
         generateSignedDocument: generateSignedDocumentStub,
-        getWorkItemsForUser: getWorkItemsForUserStub,
+        getInboxMessagesForUserInteractor: getInboxMessagesForUserInteractorStub,
         signDocument: signDocumentStub,
       }),
     };
@@ -75,7 +75,7 @@ describe('completeDocumentSigningAction', () => {
     expect(uploadDocumentStub.calledOnce).toEqual(true);
     expect(generateSignedDocumentStub.calledOnce).toEqual(true);
     expect(signDocumentStub.calledOnce).toEqual(true);
-    expect(getWorkItemsForUserStub.calledOnce).toEqual(true);
+    expect(getInboxMessagesForUserInteractorStub.calledOnce).toEqual(true);
     expect(completeWorkItemInteractorStub.calledOnce).toEqual(true);
   });
 });
