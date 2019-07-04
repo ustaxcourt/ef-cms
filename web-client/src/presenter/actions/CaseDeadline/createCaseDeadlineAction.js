@@ -1,0 +1,48 @@
+import { omit } from 'lodash';
+import { state } from 'cerebral';
+
+/**
+ * creates a case deadline
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get helper function
+ * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
+ * @param {object} providers.props the cerebral props object
+ * @returns {Promise{*}}
+ */
+export const createCaseDeadlineAction = async ({
+  applicationContext,
+  get,
+  path,
+  props,
+}) => {
+  const deadlineDate = applicationContext
+    .getUtilities()
+    .prepareDateFromString(props.computedDate);
+  const caseId = get(state.caseDetail.caseId);
+
+  const caseDeadline = omit(
+    {
+      ...get(state.form),
+      deadlineDate,
+      caseId,
+    },
+    ['day', 'month', 'year'],
+  );
+
+  let createCaseDeadlineResult = await applicationContext
+    .getUseCases()
+    .createCaseDeadlineInteractor({
+      applicationContext,
+      caseDeadline,
+    });
+
+  return path.success({
+    alertSuccess: {
+      message: 'You can view it in the Sent tab on your Message Queue.',
+      title: 'Your message was created successfully.',
+    },
+    caseDeadline: createCaseDeadlineResult,
+  });
+};
