@@ -154,73 +154,30 @@ describe('Sr. Attroney Signs Proposed Stipulated Decision', () => {
   taxpayerViewsDashboard(test);
   taxpayerSignsOut(test);
 
-  // Practitioner1 logs into the system
   practitionerLogin(test);
-  // Practitioner1 navigates to case
   practitionerViewsCaseDetail(test);
-  // Practitioner1 selects File a Document
-  // Practitioner1 selects “Decisions” from Document Category dropdown
-  // Practitioner1 selects “Proposed Stipulated Decision” from Document Type dropdown
-  // Practitioner1 selects “Select” button
-  // Practitioner1 selects “Continue” button
-  // Practitioner1 selects “Choose File” button and uploads proposed stipulated decision
-  // Practitioner1 selects “No” to question “Does your file include a certificate of service?”
-  // Practitioner1 selects “No” to question “Does your filing include exhibits?”
-  // Practitioner1 selects “No” to question “Does your filing include attachments?”
-  // Practitioner1 selects “No” to question “Do you have any supporting documents for this filing?”
-  // Practitioner1 selects “Myself as Petitioner’s Counsel” to question “Who is filing this document.”
-  // Practitioner1 selects “Review FIling” button
-  // Practitioner1 selects “Submit Your Filing” button
   practitionerFilesDocumentForStipulatedDecision(test, fakeFile);
-  // Practitioner1 logs out
   practitionerSignsOut(test);
-  // Docketclerk1 logs in
+
   docketClerkLogIn(test);
-  // Docketclerk1 navigates to Document QC>Section Documents
-  // Docketclerk1 selects Proposed Stipulated Decision
   docketClerkViewsStipulatedDecision(test);
-  // Docketclerk1 selects Create Message
-  // Docketclerk1 selects Senior Attorney from Select Section dropdown
-  // Docketclerk1 selects Test seniorattorney1 from the Select Recipient dropdown
-  // Docketclerk1 types “Jeff, this is ready for review and signature” into the Add Message field
-  // Docketclerk1 selects Send
   docketClerkSendsStipDecisionToSrAttorney(test);
-  // Docketclerk1 logs out
   docketClerkSignsOut(test);
-  // Seniorattorney1 logs in
+
   seniorAttorneyLogIn(test);
-  // Seniorattorney1 selects Proposed Stipulated Decision message sent by docketclerk1
-  // Seniorattorney1 selects Add Signature Button
-  // Seniorattorney1 selects Apply Signature Button
-  // Seniorattorney1 hovers over document and clicks to place signature on the document
-  // Seniorattorney1 selects Docket from Select Section dropdown
-  // Seniorattorney1 selects docketclerk1 from Select Recipient dropdown
-  // Seniorattorney1 types “Donna, this is not ready to serve. I need to follow up on something first” in the Add Messages field
-  // Seniorattorney1 selects Save
   seniorAttorneyViewsStipulatedDecisionForSigning(test);
-  // Seniorattorney1 is auto-directed to the Case Detail Page after finishing the signature process
-  // Seniorattorney1 navigates to My Messages>Inbox
-  // Seniorattorney1 does not see the Proposed Stipulated Decision message from the docket clerk in the inbox
   seniorAttorneyVerifiesStipulatedDecisionDoesNotExistInInbox(test);
-  // Seniorattorney1 navigates to sent box and sees Signed Stipulated Decision
-  // Seniorattorney1 selects Signed Stipulated Decision and sees the message they generated to docketclerk1 during the signature process “Donna, this is not ready to serve. I need to follow up on something first”
   seniorAttorneyVerifiesStipulatedDecisionExistsInOutbox(test);
-  // SeniorAttorney1 logs out
   seniorAttorneySignsOut(test);
-  // Docketclerk1 logs in
+
   docketClerkLogIn(test);
-  // Docketclerk1 navigates to My Messages>Sent and sees the Proposed Stipulated Decision
-  // Docketclerk1 selects Proposed Stipulated Decision, then selects Complete Tab and sees that the message to senior has been completed (automatically when sr attorney applies signature) “Jeff, this is ready for review and signature”
   docketClerkVerifiesStipulatedDecisionExistsInOutbox(
     test,
     'Jeff, this is ready for review and signature',
   );
-  // Docketclerk1 navigates to My Messages>Inbox and sees Signed Stipulated Decision message from Sr. Attorney “Donna, this is not ready to serve. I need to follow up on something first”
   docketClerkVerifiesStipulatedDecisionExistsInInbox(
     test,
     'Donna, this is not ready to serve. I need to follow up on something first',
   );
-  // Docketclerk1 select Signed Stipulated Decision and sees the document in draft form
-  // Docketclerk1 logs out
   docketClerkSignsOut(test);
 });
