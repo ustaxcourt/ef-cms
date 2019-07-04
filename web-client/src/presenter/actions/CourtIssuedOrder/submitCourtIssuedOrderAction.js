@@ -16,7 +16,6 @@ export const submitCourtIssuedOrderAction = async ({
 }) => {
   let caseDetail;
   const { caseId, docketNumber } = get(state.caseDetail);
-  const userName = get(state.user.name);
   const { primaryDocumentFileId } = props;
   const documentId = primaryDocumentFileId;
 
@@ -31,7 +30,6 @@ export const submitCourtIssuedOrderAction = async ({
     ...documentMetadata,
     docketNumber,
     caseId,
-    filedBy: userName,
   };
 
   if (primaryDocumentFileId) {
