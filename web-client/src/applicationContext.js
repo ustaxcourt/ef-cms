@@ -102,6 +102,7 @@ import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/upda
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
+import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -205,6 +206,7 @@ const allUseCases = {
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
   validateCaseAssociationRequestInteractor,
+  validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
   validateDocketEntryInteractor,
   validateExternalDocumentInformationInteractor,
