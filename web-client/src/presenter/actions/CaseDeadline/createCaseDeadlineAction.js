@@ -8,7 +8,7 @@ import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
  * @param {Function} providers.get the cerebral get helper function
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {object} providers.props the cerebral props object
- * @returns {Promise{*}}
+ * @returns {Promise<*>} the success path
  */
 export const createCaseDeadlineAction = async ({
   applicationContext,

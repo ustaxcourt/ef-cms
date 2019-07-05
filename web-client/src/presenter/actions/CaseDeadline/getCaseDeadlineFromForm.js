@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
  * @param {object} providers.props the cerebral props object
- * @returns {object}
+ * @returns {object} the case deadline object
  */
 export const getCaseDeadlineFromForm = ({ applicationContext, get, props }) => {
   let deadlineDate;
