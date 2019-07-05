@@ -166,3 +166,13 @@
     display: none;
   }
 }
+
+.edit-secondary-contact-modal {
+  > .modal-header,
+  .usa-button--outline {
+    display: none;
+  }
+  min-width: 720px;
+  padding: 25px;
+  font-size: 17px;
+}

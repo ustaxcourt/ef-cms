@@ -88,6 +88,8 @@ module.exports = {
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
+  updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
+    .handler,
   validatePdfLambda: require('./documents/validatePdfLambda').handler,
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
