@@ -23,6 +23,8 @@ module.exports = {
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
     .handler,
+  getCaseDeadlinesForCaseLambda: require('./caseDeadline/getCaseDeadlinesForCaseLambda')
+    .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')

@@ -123,6 +123,9 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getCaseDeadlinesForCaseInteractor,
+} = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
+const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
@@ -509,6 +512,7 @@ module.exports = (appContextUser = {}) => {
         forwardWorkItemInteractor,
         generatePDFFromPNGDataInteractor,
         getCalendaredCasesForTrialSessionInteractor,
+        getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
         getCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
