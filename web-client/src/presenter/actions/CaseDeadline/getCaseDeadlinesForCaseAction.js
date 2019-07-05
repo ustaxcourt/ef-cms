@@ -22,5 +22,5 @@ export const getCaseDeadlinesForCaseAction = async ({
       caseId,
     });
 
-  store.set(state.caseDetails.caseDeadlines, caseDeadlines);
+  store.set(state.caseDetail.caseDeadlines, caseDeadlines);
 };

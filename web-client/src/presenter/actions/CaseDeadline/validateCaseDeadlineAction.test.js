@@ -26,7 +26,7 @@ describe('validateCaseDeadlineAction', () => {
         validateCaseDeadlineInteractor: validateCaseDeadlineStub,
       }),
       getUtilities: () => ({
-        prepareDateFromString: () => '2019-03-01T21:42:29.073Z',
+        createISODateString: () => '2019-03-01T21:42:29.073Z',
       }),
     };
 

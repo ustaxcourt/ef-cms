@@ -14,7 +14,7 @@ export const caseDetailHelper = get => {
   const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
     userRole,
   );
-  const caseDeadlines = caseDetail.caseDeadline || [];
+  const caseDeadlines = caseDetail.caseDeadlines || [];
 
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);

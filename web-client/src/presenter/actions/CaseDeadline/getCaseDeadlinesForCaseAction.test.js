@@ -1,10 +1,13 @@
 import { getCaseDeadlinesForCaseAction } from './getCaseDeadlinesForCaseAction';
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     getCaseDeadlinesForCaseInteractor: () => ['hello', 'world'],
+  }),
+  getUtilities: () => ({
+    createISODateString: () => '2019-03-01T21:42:29.073Z',
   }),
 };
 

@@ -15,7 +15,7 @@ exports.createCaseDeadlineCatalogRecord = async ({
     Item: {
       caseDeadlineId,
       pk: `case-deadline-catalog`,
-      sk: `case-deadline-${caseDeadlineId}`,
+      sk: caseDeadlineId,
     },
     applicationContext,
   });
