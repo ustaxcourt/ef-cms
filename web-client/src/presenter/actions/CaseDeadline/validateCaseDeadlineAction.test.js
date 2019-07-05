@@ -25,6 +25,9 @@ describe('validateCaseDeadlineAction', () => {
       getUseCases: () => ({
         validateCaseDeadlineInteractor: validateCaseDeadlineStub,
       }),
+      getUtilities: () => ({
+        prepareDateFromString: () => '2019-03-01T21:42:29.073Z',
+      }),
     };
 
     presenter.providers.path = {

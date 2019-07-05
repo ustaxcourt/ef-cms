@@ -14,10 +14,11 @@ const {
  * @returns {*}
  */
 exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
+  const caseDeadlineId = `case-deadline-${caseDeadline.caseDeadlineId}`;
   await client.put({
     Item: {
-      pk: `case-deadline-${caseDeadline.caseDeadlineId}`,
-      sk: `case-deadline-${caseDeadline.caseDeadlineId}`,
+      pk: caseDeadlineId,
+      sk: caseDeadlineId,
       ...caseDeadline,
     },
     applicationContext,
@@ -26,14 +27,12 @@ exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
   await createMappingRecord({
     applicationContext,
     pkId: caseDeadline.caseId,
-    skId: caseDeadline.caseDeadlineId,
+    skId: caseDeadlineId,
     type: 'case-deadline',
   });
 
   await createCaseDeadlineCatalogRecord({
     applicationContext,
-    pkId: caseDeadline.caseId,
-    skId: caseDeadline.caseDeadlineId,
-    type: 'case-deadline',
+    caseDeadlineId,
   });
 };
