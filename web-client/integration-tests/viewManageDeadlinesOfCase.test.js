@@ -113,11 +113,11 @@ describe('View and manage the deadlines of a case', () => {
     userSignsOut(test);
   });
 
-  // describe('Edit a case deadline on case', () => {
-  //   petitionsClerkLogIn(test);
-  //   petitionsClerkEditsCaseDeadline(test);
-  //   userSignsOut(test);
-  // });
+  describe('Edit a case deadline on case', () => {
+    petitionsClerkLogIn(test);
+    petitionsClerkEditsCaseDeadline(test);
+    userSignsOut(test);
+  });
 
   // describe('Delete a case deadline on case', () => {
   //   petitionsClerkLogIn(test);
