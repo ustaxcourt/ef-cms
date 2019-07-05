@@ -339,6 +339,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updatePrimaryContact:
+    handler: src/handlers.updatePrimaryContactLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/contact-primary
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   setCaseToReadyForTrial:
     handler: src/handlers.setCaseToReadyForTrialLambda
     events:

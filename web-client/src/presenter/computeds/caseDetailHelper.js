@@ -65,6 +65,9 @@ export const caseDetailHelper = get => {
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
+    showEditPrimaryContactModal: get(state.showModal) === 'EditPrimaryContact',
+    showEditSecondaryContactModal:
+      get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
