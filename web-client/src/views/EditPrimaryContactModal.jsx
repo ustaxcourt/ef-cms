@@ -18,21 +18,18 @@ class EditPrimaryContactModalComponent extends ModalDialog {
   }
 
   renderBody() {
+    const bind = 'caseDetail';
+    const onBlur = 'updateCaseValueSequence';
+    const onChange = 'updateCaseValueSequence';
+    const type = 'contactPrimary';
+
+    const { caseDetail, updateCaseValueSequence } = this.props;
+
     return (
       <div>
         <h3 className="margin-bottom-3">Edit Your Contact Information</h3>
-        <Country
-          bind="caseDetail"
-          type="contactPrimary"
-          onBlur="updateCaseValueSequence"
-          onChange="updateCaseValueSequence"
-        />
-        <Address
-          bind="caseDetail"
-          type="contactPrimary"
-          onBlur="updateCaseValueSequence"
-          onChange="updateCaseValueSequence"
-        />
+        <Country bind={bind} type={type} onBlur={onBlur} onChange={onChange} />
+        <Address bind={bind} type={type} onBlur={onBlur} onChange={onChange} />
         <label className="usa-label" htmlFor="phone">
           Phone Number
         </label>
@@ -42,12 +39,12 @@ class EditPrimaryContactModalComponent extends ModalDialog {
           id="phone"
           name="contactPrimary.phone"
           type="tel"
-          value={this.props.caseDetail.contactPrimary.phone || ''}
+          value={caseDetail.contactPrimary.phone || ''}
           onBlur={() => {
-            this.props.updateCaseValueSequence();
+            updateCaseValueSequence();
           }}
           onChange={e => {
-            this.props.updateCaseValueSequence({
+            updateCaseValueSequence({
               key: e.target.name,
               value: e.target.value,
             });
