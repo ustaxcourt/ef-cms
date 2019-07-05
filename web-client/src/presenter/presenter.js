@@ -121,6 +121,7 @@ import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserError
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
+import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
@@ -285,6 +286,7 @@ export const presenter = {
     unsetFormSaveSuccessSequence,
     unsetWorkQueueIsInternalSequence,
     updateCaseAssociationFormValueSequence,
+    updateCaseDeadlineSequence,
     updateCaseDetailSequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,

@@ -1,16 +1,17 @@
 import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
 
 /**
- * creates a case deadline
+ * resets the state.form which is used throughout the app for storing html form values
+ * state.form is used throughout the app for storing html form values
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
+ * @param {object} providers.path the next object in the path
  * @param {object} providers.props the cerebral props object
- * @returns {Promise{*}}
+ * @returns {object} the success path
  */
-export const createCaseDeadlineAction = async ({
+export const updateCaseDeadlineAction = ({
   applicationContext,
   get,
   path,
@@ -22,9 +23,9 @@ export const createCaseDeadlineAction = async ({
     props,
   });
 
-  let createCaseDeadlineResult = await applicationContext
+  let updateCaseDeadlineResult = applicationContext
     .getUseCases()
-    .createCaseDeadlineInteractor({
+    .updateCaseDeadlineInteractor({
       applicationContext,
       caseDeadline,
     });
@@ -34,6 +35,6 @@ export const createCaseDeadlineAction = async ({
       message: 'You can view it in the Sent tab on your Message Queue.',
       title: 'Your message was created successfully.',
     },
-    caseDeadline: createCaseDeadlineResult,
+    caseDeadline: updateCaseDeadlineResult,
   });
 };
