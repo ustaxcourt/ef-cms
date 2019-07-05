@@ -1,4 +1,4 @@
-import { props, sequences } from 'cerebral';
+import { sequences } from 'cerebral';
 
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
@@ -21,10 +21,10 @@ class EditPrimaryContactModalComponent extends ModalDialog {
       <div>
         <h3 className="margin-bottom-3">Edit Your Contact Information</h3>
         <Address
-          bind={this.props.bind}
+          bind="caseDetail"
           type="contactPrimary"
-          onBlur={this.props.onBlur}
-          onChange={this.props.onChange}
+          onBlur="updateCaseValueSequence"
+          onChange="updateCaseValueSequence"
         />
       </div>
     );
@@ -33,11 +33,8 @@ class EditPrimaryContactModalComponent extends ModalDialog {
 
 export const EditPrimaryContactModal = connect(
   {
-    bind: props.bind,
     cancelSequence: sequences.cancelEditPrimaryContactSequence,
     confirmSequence: sequences.submitEditPrimaryContactSequence,
-    onBlur: props.onBlur,
-    onChange: props.onChange,
   },
   EditPrimaryContactModalComponent,
 );
