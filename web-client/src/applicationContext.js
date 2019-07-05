@@ -44,6 +44,7 @@ import { createCoverSheetInteractor } from '../../shared/src/proxies/documents/c
 import { createDocumentInteractor } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
+import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { downloadDocumentFileInteractor } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
@@ -156,6 +157,7 @@ const allUseCases = {
   createDocumentInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
+  deleteCaseDeadlineInteractor,
   downloadDocumentFileInteractor,
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,

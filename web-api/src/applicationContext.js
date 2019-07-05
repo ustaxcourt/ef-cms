@@ -87,6 +87,9 @@ const {
   createWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
+  deleteCaseDeadlineInteractor,
+} = require('../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor');
+const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
 const {
@@ -511,6 +514,7 @@ module.exports = (appContextUser = {}) => {
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
+        deleteCaseDeadlineInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generatePDFFromPNGDataInteractor,

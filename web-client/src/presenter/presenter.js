@@ -26,6 +26,7 @@ import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequ
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
+import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
@@ -193,6 +194,7 @@ export const presenter = {
     convertHtml2PdfSequence,
     createCaseDeadlineSequence,
     createWorkItemSequence,
+    deleteCaseDeadlineSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
