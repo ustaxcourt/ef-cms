@@ -25,7 +25,9 @@ import { completeDocumentSigningSequence } from './sequences/completeDocumentSig
 import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
+import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
+import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
@@ -57,8 +59,11 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
+import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
+import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
+import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditPrimaryContactModalSequence } from './sequences/openEditPrimaryContactModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
@@ -124,6 +129,7 @@ import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserError
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
+import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
@@ -145,6 +151,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
+import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -193,7 +200,9 @@ export const presenter = {
     completeScanSequence,
     confirmStayLoggedInSequence,
     convertHtml2PdfSequence,
+    createCaseDeadlineSequence,
     createWorkItemSequence,
+    deleteCaseDeadlineSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
@@ -225,8 +234,11 @@ export const presenter = {
     navigateToPathSequence,
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
+    openCreateCaseDeadlineModalSequence,
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
+    openDeleteCaseDeadlineModalSequence,
+    openEditCaseDeadlineModalSequence,
     openEditPrimaryContactModalSequence,
     openEditSecondaryContactModalSequence,
     openSetCalendarModalSequence,
@@ -290,6 +302,7 @@ export const presenter = {
     unsetFormSaveSuccessSequence,
     unsetWorkQueueIsInternalSequence,
     updateCaseAssociationFormValueSequence,
+    updateCaseDeadlineSequence,
     updateCaseDetailSequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
@@ -311,6 +324,7 @@ export const presenter = {
     updateStartCaseFormValueSequence,
     updateTrialSessionFormDataSequence,
     validateCaseAssociationRequestSequence,
+    validateCaseDeadlineSequence,
     validateCaseDetailSequence,
     validateDocketEntrySequence,
     validateExternalDocumentInformationSequence,

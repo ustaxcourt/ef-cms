@@ -3,7 +3,7 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * lambda which is used for creating a new case
+ * update case deadline
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .createCaseInteractor({
+        .updateCaseDeadlineInteractor({
           ...JSON.parse(event.body),
           applicationContext,
         });

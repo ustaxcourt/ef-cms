@@ -884,3 +884,51 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  createCaseDeadline:
+    handler: src/handlers.createCaseDeadlineLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/case-deadline
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCaseDeadlinesForCase:
+    handler: src/handlers.getCaseDeadlinesForCaseLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/case-deadline
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseDeadline:
+    handler: src/handlers.updateCaseDeadlineLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/case-deadline/{caseDeadlineId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteCaseDeadline:
+    handler: src/handlers.deleteCaseDeadlineLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/case-deadline/{caseDeadlineId}
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

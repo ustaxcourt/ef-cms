@@ -14,6 +14,7 @@ export const caseDetailHelper = get => {
   const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
     userRole,
   );
+  const caseDeadlines = caseDetail.caseDeadlines || [];
 
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
@@ -52,6 +53,7 @@ export const caseDetailHelper = get => {
   }
 
   return {
+    caseDeadlines,
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,
     showActionRequired,
