@@ -54,6 +54,7 @@ import { generateDocumentTitleInteractor } from '../../shared/src/business/useCa
 import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
+import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
@@ -164,6 +165,7 @@ const allUseCases = {
   generatePDFFromPNGDataInteractor,
   generateSignedDocumentInteractor,
   getCalendaredCasesForTrialSessionInteractor,
+  getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseTypesInteractor,
   getCasesByUserInteractor,

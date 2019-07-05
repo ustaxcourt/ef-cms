@@ -884,3 +884,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getCaseDeadlinesForCase:
+    handler: src/handlers.getCaseDeadlinesForCaseLambda
+    events:
+      - http:
+          path: v1/cases/{caseId}/case-deadline
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
