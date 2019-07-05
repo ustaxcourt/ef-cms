@@ -1,19 +1,32 @@
 import { createCaseDeadlineAction } from './createCaseDeadlineAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-
-presenter.providers.applicationContext = {
-  getUseCases: () => ({
-    createCaseDeadlineInteractor: () => 'something',
-  }),
-  getUtilities: () => ({
-    createISODateString: () => '2019-03-01T21:42:29.073Z',
-  }),
-};
+import sinon from 'sinon';
 
 describe('createCaseDeadlineAction', () => {
+  let successStub;
+  let errorStub;
+
+  beforeEach(() => {
+    successStub = sinon.stub();
+    errorStub = sinon.stub();
+
+    presenter.providers.applicationContext = {
+      getUseCases: () => ({
+        createCaseDeadlineInteractor: () => 'something',
+      }),
+      getUtilities: () => ({
+        createISODateString: () => '2019-03-01T21:42:29.073Z',
+      }),
+    };
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
+  });
+
   it('calls createCaseDeadlineInteractor', async () => {
-    const result = await runAction(createCaseDeadlineAction, {
+    await runAction(createCaseDeadlineAction, {
       modules: {
         presenter,
       },
@@ -30,6 +43,6 @@ describe('createCaseDeadlineAction', () => {
         },
       },
     });
-    expect(result.state.createCaseDeadline).toEqual('something');
+    expect(successStub.calledOnce).toEqual(true);
   });
 });
