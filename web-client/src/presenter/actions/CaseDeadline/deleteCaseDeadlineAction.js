@@ -1,4 +1,3 @@
-import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
 import { state } from 'cerebral';
 
 /**
@@ -18,13 +17,8 @@ export const deleteCaseDeadlineAction = async ({
   path,
   props,
 }) => {
-  const caseDeadline = getCaseDeadlineFromForm({
-    applicationContext,
-    get,
-    props,
-  });
-
-  const { caseDeadlineId, caseId } = caseDeadline;
+  const caseId = get(state.caseDetail.caseId);
+  const { caseDeadlineId } = props;
 
   await applicationContext.getUseCases().deleteCaseDeadlineInteractor({
     applicationContext,
@@ -37,6 +31,5 @@ export const deleteCaseDeadlineAction = async ({
       message: 'You can view it in the Sent tab on your Message Queue.',
       title: 'Your message was created successfully.',
     },
-    caseDeadline,
   });
 };

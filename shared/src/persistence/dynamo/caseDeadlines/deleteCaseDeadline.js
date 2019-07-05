@@ -7,15 +7,21 @@ const client = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.deleteCaseDeadline = async ({ applicationContext, caseDeadline }) => {
+exports.deleteCaseDeadline = async ({
+  applicationContext,
+  caseDeadlineId,
+  caseId,
+}) => {
   const results = [];
+
+  const fullCaseDeadlineId = `case-deadline-${caseDeadlineId}`;
 
   results.push(
     await client.delete({
       applicationContext,
       key: {
-        pk: `case-deadline-${caseDeadline.caseDeadlineId}`,
-        sk: `case-deadline-${caseDeadline.caseDeadlineId}`,
+        pk: fullCaseDeadlineId,
+        sk: fullCaseDeadlineId,
       },
     }),
   );
@@ -24,8 +30,8 @@ exports.deleteCaseDeadline = async ({ applicationContext, caseDeadline }) => {
     await client.delete({
       applicationContext,
       key: {
-        pk: `${caseDeadline.caseId}|case-deadline`,
-        sk: `case-deadline-${caseDeadline.caseDeadlineId}`,
+        pk: `${caseId}|case-deadline`,
+        sk: fullCaseDeadlineId,
       },
     }),
   );
@@ -35,7 +41,7 @@ exports.deleteCaseDeadline = async ({ applicationContext, caseDeadline }) => {
       applicationContext,
       key: {
         pk: `case-deadline-catalog`,
-        sk: `case-deadline-${caseDeadline.caseDeadlineId}`,
+        sk: fullCaseDeadlineId,
       },
     }),
   );

@@ -5,6 +5,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseDeadlineAction } from '../actions/CaseDeadline//createCaseDeadlineAction';
+import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
@@ -32,6 +33,7 @@ export const createCaseDeadlineSequence = [
       clearModalAction,
       clearModalStateAction,
       refreshCaseAction,
+      getCaseDeadlinesForCaseAction,
       unsetFormSubmittingAction,
     ],
   },

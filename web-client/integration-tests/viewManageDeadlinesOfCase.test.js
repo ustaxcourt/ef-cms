@@ -119,15 +119,15 @@ describe('View and manage the deadlines of a case', () => {
     userSignsOut(test);
   });
 
-  // describe('Delete a case deadline on case', () => {
-  //   petitionsClerkLogIn(test);
-  //   petitionsClerkDeletesCaseDeadline(test);
-  //   userSignsOut(test);
-  // });
+  describe('Delete a case deadline on case', () => {
+    petitionsClerkLogIn(test);
+    petitionsClerkDeletesCaseDeadline(test);
+    userSignsOut(test);
+  });
 
-  // describe('View a case with no deadlines', () => {
-  //   petitionsClerkLogIn(test);
-  //   petitionsClerkViewsCaseWithNoDeadlines(test);
-  //   userSignsOut(test);
-  // });
+  describe('View a case with no deadlines', () => {
+    petitionsClerkLogIn(test);
+    petitionsClerkViewsCaseWithNoDeadlines(test);
+    userSignsOut(test);
+  });
 });

@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .deleteCaseDeadline({
+        .deleteCaseDeadlineInteractor({
           applicationContext,
           caseDeadlineId: event.pathParameters.caseDeadlineId,
           caseId: event.pathParameters.caseId,
