@@ -1,5 +1,4 @@
-import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
 
 /**
  * validates the petition.
@@ -17,19 +16,11 @@ export const validateCaseDeadlineAction = ({
   path,
   props,
 }) => {
-  const deadlineDate = applicationContext
-    .getUtilities()
-    .prepareDateFromString(props.computedDate);
-  const caseId = get(state.caseDetail.caseId);
-
-  const caseDeadline = omit(
-    {
-      ...get(state.form),
-      deadlineDate,
-      caseId,
-    },
-    ['day', 'month', 'year'],
-  );
+  const caseDeadline = getCaseDeadlineFromForm({
+    applicationContext,
+    get,
+    props,
+  });
 
   const errors = applicationContext
     .getUseCases()

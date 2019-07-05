@@ -81,6 +81,8 @@ module.exports = {
   signDocumentLambda: require('./documents/signDocumentLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
+  updateCaseDeadlineLambda: require('./caseDeadline/updateCaseDeadlineLambda')
+    .handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,

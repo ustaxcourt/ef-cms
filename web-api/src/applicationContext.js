@@ -310,6 +310,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseDeadlineInteractor,
+} = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
+const {
   updateCaseInteractor,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
@@ -545,6 +548,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsReadInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
+        updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseTrialSortTagsInteractor,
         validatePdfInteractor,
