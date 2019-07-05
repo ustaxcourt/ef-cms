@@ -1,9 +1,8 @@
+import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { runCompute } from 'cerebral/test';
 
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
-
 export default test => {
-  return it('Petitions clerk views case detail', async () => {
+  return it('Petitions clerk views case deadlines', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

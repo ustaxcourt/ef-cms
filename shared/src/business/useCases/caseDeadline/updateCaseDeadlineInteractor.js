@@ -23,7 +23,7 @@ exports.updateCaseDeadlineInteractor = async ({
   }
 
   let caseDeadlineToUpdate = new CaseDeadline(caseDeadline);
-  caseDeadlineToUpdate = caseDeadline.validate().toRawObject();
+  caseDeadlineToUpdate = caseDeadlineToUpdate.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateCaseDeadline({
     applicationContext,

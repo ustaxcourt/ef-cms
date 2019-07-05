@@ -58,9 +58,10 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
-import { openCreateCaseDeadlineSequence } from './sequences/openCreateCaseDeadlineSequence';
+import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
+import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
@@ -227,9 +228,10 @@ export const presenter = {
     navigateToPathSequence,
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
-    openCreateCaseDeadlineSequence,
+    openCreateCaseDeadlineModalSequence,
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
+    openEditCaseDeadlineModalSequence,
     openSetCalendarModalSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
