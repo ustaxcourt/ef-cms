@@ -11,9 +11,13 @@ import { state } from 'cerebral';
  * @returns {object}
  */
 export const getCaseDeadlineFromForm = ({ applicationContext, get, props }) => {
-  const deadlineDate = applicationContext
-    .getUtilities()
-    .prepareDateFromString(props.computedDate);
+  let deadlineDate;
+
+  if (props.computedDate) {
+    deadlineDate = applicationContext
+      .getUtilities()
+      .createISODateString(props.computedDate);
+  }
 
   const caseId = get(state.caseDetail.caseId);
 
@@ -23,7 +27,7 @@ export const getCaseDeadlineFromForm = ({ applicationContext, get, props }) => {
       deadlineDate,
       caseId,
     },
-    ['day', 'month', 'year'],
+    ['day', 'month', 'year', 'searchError'],
   );
 
   return caseDeadline;

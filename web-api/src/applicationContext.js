@@ -46,6 +46,9 @@ const {
   createCaseCatalogRecord,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseCatalogRecord');
 const {
+  createCaseDeadline,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline');
+const {
   createCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/createCaseDeadlineInteractor');
 const {
@@ -87,6 +90,9 @@ const {
   createWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/createWorkItemInteractor');
 const {
+  deleteCaseDeadline,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
+const {
   deleteCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor');
 const {
@@ -125,6 +131,9 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
+const {
+  getCaseDeadlinesByCaseId,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByCaseId');
 const {
   getCaseDeadlinesForCaseInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor');
@@ -313,6 +322,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseDeadline,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
+const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
 const {
@@ -434,10 +446,12 @@ module.exports = (appContextUser = {}) => {
         associateUserWithCasePending,
         createCase,
         createCaseCatalogRecord,
+        createCaseDeadline,
         createCaseTrialSortMappingRecords,
         createTrialSession,
         createUser,
         createWorkItem,
+        deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
@@ -446,6 +460,7 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
+        getCaseDeadlinesByCaseId,
         getCasesByUser,
         getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
@@ -475,6 +490,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForPaper,
         setWorkItemAsRead,
         updateCase,
+        updateCaseDeadline,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateTrialSession,
