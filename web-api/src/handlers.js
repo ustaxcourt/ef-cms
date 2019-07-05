@@ -16,6 +16,8 @@ module.exports = {
     .handler,
   createUserLambda: require('./users/createUserLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
+  deleteCaseDeadlineLambda: require('./caseDeadline/deleteCaseDeadlineLambda')
+    .handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .handler,
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
