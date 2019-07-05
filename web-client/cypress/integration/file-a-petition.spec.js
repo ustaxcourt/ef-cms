@@ -102,7 +102,7 @@ describe('creation form', () => {
   it('selects state', () => {
     cy.get('select[name="contactPrimary.state"]')
       .scrollIntoView()
-      .select('Alabama');
+      .select('AL');
   });
 
   it('fills in zipcode', () => {
