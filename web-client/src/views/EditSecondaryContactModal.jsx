@@ -8,6 +8,7 @@ class EditSecondaryContactModalComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
+      cancelLabel: 'Close',
       classNames: 'edit-secondary-contact-modal',
       confirmLabel: 'OK',
     };
@@ -30,7 +31,7 @@ class EditSecondaryContactModalComponent extends ModalDialog {
           >
             Notice of Change of Address
           </a>{' '}
-          form to the US Tax Court to update this information.
+          form to the U.S. Tax Court to update this information.
         </p>
       </div>
     );
@@ -39,6 +40,7 @@ class EditSecondaryContactModalComponent extends ModalDialog {
 
 export const EditSecondaryContactModal = connect(
   {
+    cancelSequence: sequences.cancelEditPrimaryContactSequence,
     confirmSequence: sequences.dismissModalSequence,
   },
   EditSecondaryContactModalComponent,
