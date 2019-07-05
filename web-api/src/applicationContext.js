@@ -129,31 +129,37 @@ const {
   getCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
 const {
-  getDocumentQCBatchedForSection
+  getDocumentQCBatchedForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
 const {
   getDocumentQCBatchedForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForSectionInteractor');
 const {
+  getDocumentQCBatchedForUser,
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
+const {
   getDocumentQCBatchedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCBatchedForUserInteractor');
+const {
+  getDocumentQCInboxForSection,
+} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const {
-  getDocumentQCInboxForUser
+  getDocumentQCInboxForUser,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForUser');
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
-  getDocumentQCServedForSection, 
+  getDocumentQCServedForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection');
 const {
   getDocumentQCServedForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForSectionInteractor');
 const {
-  getDocumentQCServedForUser
+  getDocumentQCServedForUser,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForUser');
 const {
   getDocumentQCServedForUserInteractor,
@@ -168,13 +174,13 @@ const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
-  getInboxMessagesForSection
+  getInboxMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
   getInboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getInboxMessagesForSectionInteractor');
 const {
-  getInboxMessagesForUser
+  getInboxMessagesForUser,
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForUser');
 const {
   getInboxMessagesForUserInteractor,
@@ -189,13 +195,13 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
-  getSentMessagesForSection
+  getSentMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
 const {
   getSentMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/workitems/getSentMessagesForSectionInteractor');
 const {
-  getSentMessagesForUser
+  getSentMessagesForUser,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForUser');
 const {
   getSentMessagesForUserInteractor,
@@ -310,6 +316,9 @@ const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
+  updatePrimaryContactInteractor,
+} = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
+const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
@@ -342,11 +351,7 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-const { 
-  getDocumentQCBatchedForUser
-} = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForUser');
 const { exec } = require('child_process');
-const { getDocumentQCInboxForSection } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCInboxForSection');
 const { User } = require('../../shared/src/business/entities/User');
 
 const { DynamoDB, S3 } = AWS;
@@ -537,6 +542,7 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         updateCaseInteractor,
         updateCaseTrialSortTagsInteractor,
+        updatePrimaryContactInteractor,
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
