@@ -1,6 +1,10 @@
+import { CaseDeadlines } from './CaseDetail/CaseDeadlines';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
+import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
+import { DeleteCaseDeadlineModalDialog } from './CaseDetail/DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from './DocketRecord/DocketRecord';
+import { EditCaseDeadlineModalDialog } from './CaseDetail/EditCaseDeadlineModalDialog';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
@@ -16,16 +20,21 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    openCreateCaseDeadlineModalSequence:
+      sequences.openCreateCaseDeadlineModalSequence,
     setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
+    showModal: state.showModal,
     token: state.token,
   },
   ({
     baseUrl,
     caseDetail,
     caseHelper,
+    openCreateCaseDeadlineModalSequence,
     setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
+    showModal,
     token,
   }) => {
     return (
@@ -34,6 +43,20 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <div>
+            <div className="title">
+              <h1>Deadlines</h1>
+              <button
+                className="usa-button push-right"
+                onClick={() => {
+                  openCreateCaseDeadlineModalSequence();
+                }}
+              >
+                <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
+              </button>
+            </div>
+            <CaseDeadlines />
+          </div>
           <div>
             <div className="title">
               <h1>Messages in Progress</h1>
@@ -111,6 +134,16 @@ export const CaseDetailInternal = connect(
             </>
           )}
         </section>
+
+        {showModal === 'CreateCaseDeadlineModalDialog' && (
+          <CreateCaseDeadlineModalDialog />
+        )}
+        {showModal === 'EditCaseDeadlineModalDialog' && (
+          <EditCaseDeadlineModalDialog />
+        )}
+        {showModal === 'DeleteCaseDeadlineModalDialog' && (
+          <DeleteCaseDeadlineModalDialog />
+        )}
       </>
     );
   },
