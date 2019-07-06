@@ -16,6 +16,7 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
+      getCaseByCaseId: () => MOCK_CASE,
       updateCase: updateCaseStub,
     };
   },

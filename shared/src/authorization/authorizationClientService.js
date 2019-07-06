@@ -11,7 +11,7 @@ exports.GET_READ_MESSAGES = 'getReadMessages';
 exports.TRIAL_SESSIONS = 'trialSessions';
 exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
-exports.UPDATE_CONTACT_PRIMARY;
+exports.UPDATE_CONTACT_PRIMARY = 'updateContactPrimary';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
