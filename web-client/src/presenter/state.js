@@ -52,6 +52,7 @@ export const state = {
   cases: [],
   cognitoLoginUrl: null,
   completeForm: {},
+  contactToEdit: {},
   contactsHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',
