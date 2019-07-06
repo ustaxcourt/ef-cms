@@ -10,11 +10,12 @@ const { put } = require('./requests');
  */
 exports.updatePrimaryContactInteractor = ({
   applicationContext,
-  caseToUpdate,
+  caseId,
+  contactInfo,
 }) => {
   return put({
     applicationContext,
-    body: caseToUpdate,
-    endpoint: `/cases/${caseToUpdate.caseId}/contact-primary`,
+    body: { caseId, contactInfo },
+    endpoint: `/cases/${caseId}/contact-primary`,
   });
 };
