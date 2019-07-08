@@ -16,7 +16,7 @@ class FileUploadErrorModalComponent extends ModalDialog {
   renderBody() {
     return (
       <div>
-        <div className="uhoh">Uh oh!</div>
+        <div className="uhoh">Uh-oh!</div>
         <div className="message">
           An error occured while uploading your document and it wasn’t
           completed.
