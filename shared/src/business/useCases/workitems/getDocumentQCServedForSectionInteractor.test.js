@@ -1,6 +1,8 @@
+const sinon = require('sinon');
 const {
   getDocumentQCServedForSection,
 } = require('./getDocumentQCServedForSectionInteractor');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   let applicationContext;
@@ -18,29 +20,26 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     sentBy: 'docketclerk',
   };
 
-  it('throws an error if the work item was not found', async () => {
+  it('returns an empty array if the work item was not found in persistence', async () => {
+    const getDocumentQCServedForSectionStub = sinon.stub().returns([]);
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
-          userId: 'taxpayer',
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk1',
         };
       },
       getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: async () => null,
+        getDocumentQCServedForSection: getDocumentQCServedForSectionStub,
       }),
     };
-    let error;
-    try {
-      await getDocumentQCServedForSection({
-        applicationContext,
-        section: 'docket',
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
+    const result = await getDocumentQCServedForSection({
+      applicationContext,
+      section: 'docket',
+    });
+    expect(getDocumentQCServedForSectionStub.called).toBe(true);
+    expect(result.length).toEqual(0);
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
@@ -48,24 +47,21 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
-          userId: 'taxpayer',
+          role: 'unauthorizedRole',
+          userId: 'unauthorizedUser',
         };
       },
       getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: async () => mockWorkItem,
+        getDocumentQCServedForSection: async () => [mockWorkItem],
       }),
     };
-    let error;
-    try {
-      await getDocumentQCServedForSection({
+
+    await expect(
+      getDocumentQCServedForSection({
         applicationContext,
         section: 'docket',
-      });
-    } catch (e) {
-      error = e;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrowError(UnauthorizedError);
   });
 
   it('successfully returns the work item for a docketclerk', async () => {

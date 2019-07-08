@@ -1,3 +1,4 @@
+const sinon = require('sinon');
 const {
   setTrialSessionCalendar,
 } = require('./setTrialSessionCalendarInteractor');
@@ -50,6 +51,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should set a trial session to "calendared"', async () => {
+    let updateTrialSession = sinon.spy();
     applicationContext = {
       getCurrentUser: () => {
         return new User({
@@ -63,7 +65,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
         updateCase: () => {},
-        updateTrialSession: () => {},
+        updateTrialSession,
       }),
     };
 
@@ -77,7 +79,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     } catch (e) {
       error = e;
     }
-
+    expect(updateTrialSession.called).toEqual(true);
     expect(error).toBeUndefined();
   });
 });
