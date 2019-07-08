@@ -26,8 +26,8 @@ export const deleteCaseDeadlineAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'You can view it in the Sent tab on your Message Queue.',
-      title: 'Your message was created successfully.',
+      message: 'You can see the remaining deadlines below.',
+      title: 'Your deadline was removed successfully.',
     },
   });
 };
