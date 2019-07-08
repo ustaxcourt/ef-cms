@@ -18,12 +18,16 @@ class EditPrimaryContactModalComponent extends ModalDialog {
   }
 
   renderBody() {
-    const bind = 'caseDetail';
-    const onBlur = 'updateCaseValueSequence';
-    const onChange = 'updateCaseValueSequence';
+    const bind = 'contactToEdit';
+    const onBlur = 'validateCaseDetailSequence';
+    const onChange = 'updateContactPrimaryValueSequence';
     const type = 'contactPrimary';
 
-    const { caseDetail, updateCaseValueSequence } = this.props;
+    const {
+      contactToEdit,
+      updateContactPrimaryValueSequence,
+      validateCaseDetailSequence,
+    } = this.props;
 
     return (
       <div>
@@ -39,12 +43,12 @@ class EditPrimaryContactModalComponent extends ModalDialog {
           id="phone"
           name="contactPrimary.phone"
           type="tel"
-          value={caseDetail.contactPrimary.phone || ''}
+          value={contactToEdit.contactPrimary.phone || ''}
           onBlur={() => {
-            updateCaseValueSequence();
+            validateCaseDetailSequence();
           }}
           onChange={e => {
-            updateCaseValueSequence({
+            updateContactPrimaryValueSequence({
               key: e.target.name,
               value: e.target.value,
             });
@@ -58,9 +62,11 @@ class EditPrimaryContactModalComponent extends ModalDialog {
 export const EditPrimaryContactModal = connect(
   {
     cancelSequence: sequences.cancelEditPrimaryContactSequence,
-    caseDetail: state.caseDetail,
     confirmSequence: sequences.submitEditPrimaryContactSequence,
-    updateCaseValueSequence: sequences.updateCaseValueSequence,
+    contactToEdit: state.contactToEdit,
+    updateContactPrimaryValueSequence:
+      sequences.updateContactPrimaryValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   EditPrimaryContactModalComponent,
 );
