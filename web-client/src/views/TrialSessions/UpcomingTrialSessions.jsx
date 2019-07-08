@@ -11,7 +11,7 @@ export const UpcomingTrialSessions = connect(
     return (
       <React.Fragment>
         <table
-          aria-describedby="tab-my-queue-TODO"
+          aria-describedby="tab-my-queue-todo"
           className="usa-table ustc-table trial-sessions subsection"
           id="upcoming-sessions"
         >
