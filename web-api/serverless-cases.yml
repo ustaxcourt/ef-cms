@@ -1,5 +1,4 @@
-service: ef-cms
-
+service: ef-cms-cases
 plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
@@ -78,7 +77,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'api'
+    basePath: 'cases'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -220,55 +219,25 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getUploadPolicy:
-    handler: src/handlers.getUploadPolicyLambda
+  createDocument:
+    handler: src/handlers.createDocumentLambda
     events:
       - http:
-          path: v1/documents/upload-policy
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentDownloadUrl:
-    handler: src/handlers.getDocumentDownloadUrlLambda
-    events:
-      - http:
-          path: v1/documents/{documentId}/document-download-url
-          method: get
-          cors: true
-
-  setWorkItemAsRead:
-    handler: src/handlers.setWorkItemAsReadLambda
-    events:
-      - http:
-          path: v1/work-items/{workItemId}/read
+          path: /{caseId}/documents
           method: post
           cors: true
-
-  getDownloadPolicyUrl:
-    handler: src/handlers.downloadPolicyUrlLambda
-    events:
-      - http:
-          path: v1/documents/{documentId}/download-policy-url
-          method: get
-          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  sanitizePdf:
-    handler: src/handlers.sanitizePdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
+  addCoversheet:
+    handler: src/handlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
       - http:
-          path: v1/documents/{documentId}/sanitize
+          path: /{caseId}/documents/{documentId}/coversheet
           method: post
           cors: true
           # async: true
@@ -277,11 +246,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  runBatchProcess:
-    handler: src/handlers.runBatchProcessLambda
+  signDocument:
+    handler: src/handlers.signDocumentLambda
     events:
       - http:
-          path: v1/runBatchProcess
+          path: /{caseId}/documents/{documentId}/sign
           method: post
           cors: true
           authorizer:
@@ -289,47 +258,12 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getCasesByUser:
-    handler: src/handlers.getCasesByUserLambda
-    events:
-      - http:
-          path: v1/users/{userId}/cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
 
-  verifyCaseForUser:
-    handler: src/handlers.verifyCaseForUserLambda
+  updateCase:
+    handler: src/handlers.updateCaseLambda
     events:
       - http:
-          path: v1/users/{userId}/case/{caseId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  verifyPendingCaseForUser:
-    handler: src/handlers.verifyPendingCaseForUserLambda
-    events:
-      - http:
-          path: v1/users/{userId}/case/{caseId}/pending
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerCaseAssociation:
-    handler: src/handlers.practitionerCaseAssociationLambda
-    events:
-      - http:
-          path: v1/users/{userId}/case/{caseId}
+          path: /{caseId}
           method: put
           cors: true
           authorizer:
@@ -337,11 +271,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  practitionerPendingCaseAssociation:
-    handler: src/handlers.practitionerPendingCaseAssociationLambda
+  updateCaseTrialSortTags:
+    handler: src/handlers.updateCaseTrialSortTagsLambda
     events:
       - http:
-          path: v1/users/{userId}/case/{caseId}/pending
+          path: /{caseId}/update-case-trial-sort-tags
           method: put
           cors: true
           authorizer:
@@ -349,11 +283,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  assignWorkItems:
-    handler: src/handlers.assignWorkItemsLambda
+  updatePrimaryContact:
+    handler: src/handlers.updatePrimaryContactLambda
     events:
       - http:
-          path: v1/work-items
+          path: /{caseId}/contact-primary
           method: put
           cors: true
           authorizer:
@@ -361,23 +295,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getWorkItem:
-    handler: src/handlers.getWorkItemLambda
+  setCaseToReadyForTrial:
+    handler: src/handlers.setCaseToReadyForTrialLambda
     events:
       - http:
-          path: v1/work-items/{workItemId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  forwardWorkItem:
-    handler: src/handlers.forwardWorkItemLambda
-    events:
-      - http:
-          path: v1/work-items/{workItemId}/assignee
+          path: /{caseId}/set-to-ready-for-trial
           method: put
           cors: true
           authorizer:
@@ -385,11 +307,124 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  completeWorkItem:
-    handler: src/handlers.completeWorkItemLambda
+
+  createCase:
+    handler: src/handlers.createCaseLambda
     events:
       - http:
-          path: v1/work-items/{workItemId}/complete
+          path: /
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCaseFromPaper:
+    handler: src/handlers.createCaseFromPaperLambda
+    events:
+      - http:
+          path: /paper
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileExternalDocument:
+    handler: src/handlers.fileExternalDocumentToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/external-document
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCase:
+    handler: src/handlers.getCaseLambda
+    events:
+      - http:
+          path: /{caseId}
+          method: get
+          request:
+            parameters:
+              paths:
+                caseId: true
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  sendToIRS:
+    handler: src/handlers.sendPetitionToIRSHoldingQueueLambda
+    events:
+      - http:
+          path: /{caseId}/send-to-irs-holding-queue
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  recallFromIRS:
+    handler: src/handlers.recallPetitionFromIRSHoldingQueueLambda
+    events:
+      - http:
+          path: /{caseId}/recall-from-irs-holding-queue
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createWorkItem:
+    handler: src/handlers.createWorkItemLambda
+    events:
+      - http:
+          path: /{caseId}/documents/{documentId}/work-items
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCaseDeadline:
+    handler: src/handlers.createCaseDeadlineLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCaseDeadlinesForCase:
+    handler: src/handlers.getCaseDeadlinesForCaseLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseDeadline:
+    handler: src/handlers.updateCaseDeadlineLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline/{caseDeadlineId}
           method: put
           cors: true
           authorizer:
@@ -397,317 +432,14 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getInboxMessagesForUser:
-    handler: src/handlers.getInboxMessagesForUserLambda
+  deleteCaseDeadline:
+    handler: src/handlers.deleteCaseDeadlineLambda
     events:
       - http:
-          path: v1/users/{userId}/messages/inbox
-          method: get
+          path: /{caseId}/case-deadline/{caseDeadlineId}
+          method: delete
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
-  getSentMessagesForUser:
-    handler: src/handlers.getSentMessagesForUserLambda
-    events:
-      - http:
-          path: v1/users/{userId}/messages/sent
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getInboxMessagesForSection:
-    handler: src/handlers.getInboxMessagesForSectionLambda
-    events:
-      - http:
-          path: v1/sections/{section}/messages/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getSentMessagesForSection:
-    handler: src/handlers.getSentMessagesForSectionLambda
-    events:
-      - http:
-          path: v1/sections/{section}/messages/sent
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCInboxForUser:
-    handler: src/handlers.getDocumentQCInboxForUserLambda
-    events:
-      - http:
-          path: v1/users/{userId}/document-qc/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForUser:
-    handler: src/handlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: v1/users/{userId}/document-qc/batched
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCServedForUser:
-    handler: src/handlers.getDocumentQCServedForUserLambda
-    events:
-      - http:
-          path: v1/users/{userId}/document-qc/served
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCInboxForSection:
-    handler: src/handlers.getDocumentQCInboxForSectionLambda
-    events:
-      - http:
-          path: v1/sections/{section}/document-qc/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForSection:
-    handler: src/handlers.getDocumentQCBatchedForSectionLambda
-    events:
-      - http:
-          path: v1/sections/{section}/document-qc/batched
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCServedForSection:
-    handler: src/handlers.getDocumentQCServedForSectionLambda
-    events:
-      - http:
-          path: v1/sections/{section}/document-qc/served
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getInternalUsers:
-    handler: src/handlers.getInternalUsersLambda
-    events:
-      - http:
-          path: v1/users/internal
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getUsersInSection:
-    handler: src/handlers.getUsersInSectionLambda
-    events:
-      - http:
-          path: v1/sections/{section}/users
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getNotifications:
-    handler: src/handlers.getNotificationsLambda
-    events:
-      - http:
-          path: v1/notifications
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createUser:
-    handler: src/handlers.createUserLambda
-    events:
-      - http:
-          path: v1/users
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  checkForReadyForTrialCases:
-    handler: src/handlers.checkForReadyForTrialCases
-    events:
-      - schedule: cron(0 7 * * ? *)
-
-  swagger:
-    handler: src/handlers.swaggerLambda
-    events:
-      - http:
-          path: v1/swagger
-          method: get
-          cors: true
-
-  swaggerJson:
-    handler: src/handlers.swaggerJsonLambda
-    events:
-      - http:
-          path: v1/swagger.json
-          method: get
-          cors: true
-
-  virusScan:
-    handler: src/handlers.virusScanPdfLambda
-    memorySize: 3008
-    timeout: 900
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
-    events:
-      - http:
-          path: v1/documents/{documentId}/virus-scan
-          method: post
-          cors: true
-          async: true
-
-  validate:
-    handler: src/handlers.validatePdfLambda
-    events:
-      - http:
-          path: v1/documents/{documentId}/validate
-          method: post
-          cors: true
-    alarms:
-      - errorExceptions
-
-  getTrialSessions:
-    handler: src/handlers.getTrialSessionsLambda
-    events:
-      - http:
-          path: v1/trial-sessions
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createTrialSession:
-    handler: src/handlers.createTrialSessionLambda
-    events:
-      - http:
-          path: v1/trial-sessions
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getTrialSessionDetails:
-    handler: src/handlers.getTrialSessionDetailsLambda
-    events:
-      - http:
-          path: v1/trial-sessions/{trialSessionId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  setTrialSessionAsSwingSession:
-    handler: src/handlers.setTrialSessionAsSwingSessionLambda
-    events:
-      - http:
-          path: v1/trial-sessions/{trialSessionId}/set-swing-session
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getEligibleCasesForTrialSession:
-    handler: src/handlers.getEligibleCasesForTrialSessionLambda
-    events:
-      - http:
-          path: v1/trial-sessions/{trialSessionId}/eligible-cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  setTrialSessionCalendar:
-    handler: src/handlers.setTrialSessionCalendarLambda
-    events:
-      - http:
-          path: v1/trial-sessions/{trialSessionId}/set-calendar
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCalendaredCasesForTrialSession:
-    handler: src/handlers.getCalendaredCasesForTrialSessionLambda
-    events:
-      - http:
-          path: v1/trial-sessions/{trialSessionId}/get-calendared-cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createCourtIssuedOrderPdfFromHtml:
-    runtime: nodejs8.10
-    handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: v1/court-issued-order
-          method: post
-          cors: true
-          contentHandling: CONVERT_TO_BINARY
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
