@@ -84,7 +84,7 @@ describe('TrialSession entity', () => {
   });
 
   describe('setAsCalendared', () => {
-    it('should set trial session as calendared', () => {
+    it('should set a valid trial session entity as calendared upon request', () => {
       const trialSession = new TrialSession({
         ...VALID_TRIAL_SESSION,
         sessionType: 'Hybrid',
@@ -95,7 +95,7 @@ describe('TrialSession entity', () => {
   });
 
   describe('addCaseToCalendar', () => {
-    it('should add case to calendar', () => {
+    it('should add case to calendar of valid trial session when provided a raw case entity with a caseId', () => {
       const trialSession = new TrialSession({
         ...VALID_TRIAL_SESSION,
         sessionType: 'Hybrid',
