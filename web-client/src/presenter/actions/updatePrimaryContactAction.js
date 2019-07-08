@@ -13,8 +13,14 @@ export const updatePrimaryContactAction = async ({
   get,
 }) => {
   const caseToUpdate = get(state.caseDetail);
-  await applicationContext.getUseCases().updatePrimaryContactInteractor({
-    applicationContext,
-    caseToUpdate,
-  });
+  const contactInfo = get(state.contactToEdit.contactPrimary);
+  const updatedCase = await applicationContext
+    .getUseCases()
+    .updatePrimaryContactInteractor({
+      applicationContext,
+      caseId: caseToUpdate.caseId,
+      contactInfo,
+    });
+
+  return { caseDetail: updatedCase };
 };
