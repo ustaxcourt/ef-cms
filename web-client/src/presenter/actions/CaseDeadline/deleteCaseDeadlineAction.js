@@ -8,17 +8,15 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
  * @param {object} providers.path the next object in the path
- * @param {object} providers.props the cerebral props object
  * @returns {object} the success path
  */
 export const deleteCaseDeadlineAction = async ({
   applicationContext,
   get,
   path,
-  props,
 }) => {
   const caseId = get(state.caseDetail.caseId);
-  const { caseDeadlineId } = props;
+  const caseDeadlineId = get(state.form.caseDeadlineId);
 
   await applicationContext.getUseCases().deleteCaseDeadlineInteractor({
     applicationContext,

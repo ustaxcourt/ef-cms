@@ -16,6 +16,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
+  faCalendarAlt,
   faCalendarCheck,
   faCaretDown,
   faCaretLeft,
@@ -52,6 +53,7 @@ import {
   faSpinner,
   faSync,
   faTimesCircle,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -97,6 +99,7 @@ const app = {
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
+      faCalendarAlt,
       faCalendarCheck,
       faCaretDown,
       faCaretLeft,
@@ -141,6 +144,7 @@ const app = {
       faSpinner,
       faSync,
       faTimesCircle,
+      faTrash,
       faUser,
     );
     presenter.providers.applicationContext = applicationContext;
