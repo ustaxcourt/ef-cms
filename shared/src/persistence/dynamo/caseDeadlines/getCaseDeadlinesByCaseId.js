@@ -10,8 +10,8 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
  * @param applicationContext
  * @returns {*}
  */
-exports.getCaseDeadlinesByCaseId = ({ applicationContext, caseId }) => {
-  return getRecordsViaMapping({
+exports.getCaseDeadlinesByCaseId = async ({ applicationContext, caseId }) => {
+  return await getRecordsViaMapping({
     applicationContext,
     key: caseId,
     type: 'case-deadline',

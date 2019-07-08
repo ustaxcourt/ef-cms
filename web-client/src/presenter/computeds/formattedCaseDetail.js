@@ -21,6 +21,19 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
+const formatCaseDeadline = (applicationContext, caseDeadline) => {
+  const result = _.cloneDeep(caseDeadline);
+  result.deadlineDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.deadlineDate, 'MMDDYY');
+
+  if (new Date(result.deadlineDate) < new Date()) {
+    result.overdue = true;
+  }
+
+  return result;
+};
+
 const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
   const yearAmountError = caseDetailErrors.yearAmounts.find(error => {
     return error.index === idx;
@@ -176,6 +189,12 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
   result.docketRecordWithDocument.sort((a, b) => {
     return a.index - b.index;
   });
+
+  if (result.caseDeadlines) {
+    result.caseDeadlines = result.caseDeadlines.map(d =>
+      formatCaseDeadline(applicationContext, d),
+    );
+  }
 
   const formatRespondent = respondent => {
     respondent.formattedName = `${respondent.name} ${
