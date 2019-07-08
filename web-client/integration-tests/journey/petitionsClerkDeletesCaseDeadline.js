@@ -22,8 +22,6 @@ export default (test, overrides = {}) => {
     expect(test.getState('form.year')).toBeTruthy();
     expect(test.getState('form.description')).toBeTruthy();
 
-    await test.runSequence('deleteCaseDeadlineSequence', {
-      caseDeadlineId: helper.caseDeadlines[0].caseDeadlineId,
-    });
+    await test.runSequence('deleteCaseDeadlineSequence');
   });
 };
