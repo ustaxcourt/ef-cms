@@ -194,6 +194,10 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
     result.caseDeadlines = result.caseDeadlines.map(d =>
       formatCaseDeadline(applicationContext, d),
     );
+
+    result.caseDeadlines.sort((a, b) => {
+      return new Date(a.deadlineDate) - new Date(b.deadlineDate);
+    });
   }
 
   const formatRespondent = respondent => {
