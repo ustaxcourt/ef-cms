@@ -86,7 +86,7 @@ custom:
     enabled: true
   splitStacks:
     perFunction: true
-    perType: false
+    perType: true
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   vars: ${file(./config/${self:custom.stage}.yml)}
