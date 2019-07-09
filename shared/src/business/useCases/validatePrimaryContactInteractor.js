@@ -1,10 +1,13 @@
-const { ContactFactory } = require('../entities/cases/ContactFactory');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 /**
  * validatePrimaryContactInteractor
  * @param caseDetail
  * @returns {*}
  */
-exports.validatePrimaryContactInteractor = ({ contactInfo }) => {
-  return new ContactFactory(contactInfo).getFormattedValidationErrors();
+exports.validatePrimaryContactInteractor = ({ contactInfo, partyType }) => {
+  return ContactFactory.createContacts({
+    contactInfo: { primary: contactInfo },
+    partyType,
+  }).primary.getFormattedValidationErrors();
 };
