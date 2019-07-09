@@ -18,8 +18,8 @@ export const setCaseDeadlineFormAction = async ({
   props,
   store,
 }) => {
-  const caseDetail = get(state.caseDetail);
-  const caseDeadline = find(caseDetail.caseDeadlines, {
+  const caseDeadlines = get(state.caseDeadlines);
+  const caseDeadline = find(caseDeadlines, {
     caseDeadlineId: props.caseDeadlineId,
   });
 
