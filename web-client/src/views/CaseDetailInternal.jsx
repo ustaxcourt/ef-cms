@@ -48,6 +48,7 @@ export const CaseDetailInternal = connect(
               <h1>Deadlines</h1>
               <button
                 className="usa-button push-right"
+                id="button-add-deadline"
                 onClick={() => {
                   openCreateCaseDeadlineModalSequence();
                 }}
