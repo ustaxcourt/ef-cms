@@ -67,7 +67,7 @@
     "start:dynamodb": "sls dynamodb start -p 8000 --migrate true --stage local",
     "start:local": "./run-local.sh",
     "dynamo:export": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop node dynamo-export.js > ./storage/fixtures/efcms.json",
-    "start": "(../wait-until.sh http://localhost:3000/swagger && npm run create-tables && npm run seed:db && npm run seed:s3) & npm run start:local",
+    "start": "./run-local.sh",
     "watch": "nodemon -e yml --exec sls offline start",
     "lint": "eslint ./src && swagger-cli validate swagger.json",
     "lint:fix": "eslint ./src --fix",

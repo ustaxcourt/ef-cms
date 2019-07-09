@@ -11,5 +11,5 @@ fi
 
 # start dyanmo
 pushd .dynamodb
-  java -Djava.library.path=.dynmaodb/DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory -sharedDb 
+  java -Djava.library.path=.dynmaodb/DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory -sharedDb
 popd
