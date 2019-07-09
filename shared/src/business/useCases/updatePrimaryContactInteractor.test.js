@@ -20,6 +20,11 @@ const applicationContext = {
       updateCase: updateCaseStub,
     };
   },
+  getUtilities: () => {
+    return {
+      createISODateString: () => '2018-06-01T00:00:00.000Z',
+    };
+  },
 };
 
 describe('Updates contactPrimary on the given case', () => {

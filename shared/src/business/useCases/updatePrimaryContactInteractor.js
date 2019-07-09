@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -32,12 +33,21 @@ exports.updatePrimaryContactInteractor = async ({
 
   caseToUpdate.contactPrimary = contactInfo;
 
-  const updatedCase = new Case(caseToUpdate).validate().toRawObject();
+  const caseEntity = new Case(caseToUpdate);
+
+  caseEntity.addDocketRecord(
+    new DocketRecord({
+      description: `Notice of Change of Address by ${user.name}`,
+      filingDate: applicationContext.getUtilities().createISODateString(),
+    }),
+  );
+
+  const rawCase = caseEntity.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: updatedCase,
+    caseToUpdate: rawCase,
   });
 
-  return updatedCase;
+  return rawCase;
 };
