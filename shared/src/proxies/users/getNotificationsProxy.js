@@ -11,6 +11,6 @@ const { get } = require('../requests');
 exports.getNotificationsInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/notifications',
+    endpoint: '/api/notifications',
   });
 };

@@ -26,7 +26,7 @@
   ],
   "schemes": ["https"],
   "paths": {
-    "/v1/cases": {
+    "/cases": {
       "post": {
         "tags": ["cases"],
         "summary": "create a case",
@@ -70,7 +70,7 @@
         }
       }
     },
-    "/v1/cases/paper": {
+    "/cases/paper": {
       "post": {
         "tags": ["cases"],
         "summary": "create a case from a paper submission",
@@ -114,7 +114,7 @@
         }
       }
     },
-    "/v1/cases/{caseId}": {
+    "/cases/{caseId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -191,7 +191,7 @@
         }
       }
     },
-    "/v1/cases/{caseId}/documents": {
+    "/cases/{caseId}/documents": {
       "parameters": [
         {
           "name": "caseId",
@@ -243,7 +243,7 @@
         }
       }
     },
-    "/v1/cases/{caseId}/irsPetitionPackage": {
+    "/cases/{caseId}/irsPetitionPackage": {
       "parameters": [
         {
           "name": "caseId",
@@ -334,7 +334,7 @@
         }
       }
     },
-    "/v1/documents/upload-policy": {
+    "/documents/upload-policy": {
       "get": {
         "tags": ["documents"],
         "summary": "create a pre-signed url for uploads",
@@ -378,7 +378,7 @@
         }
       }
     },
-    "/v1/documents/{documentId}/document-download-url": {
+    "/documents/{documentId}/document-download-url": {
       "parameters": [
         {
           "name": "documentId",
@@ -425,7 +425,7 @@
         }
       }
     },
-    "/v1/documents/{documentId}/download-policy-url": {
+    "/documents/{documentId}/download-policy-url": {
       "parameters": [
         {
           "name": "documentId",
@@ -477,7 +477,7 @@
         }
       }
     },
-    "/v1/documents/{documentId}/sanitize": {
+    "/documents/{documentId}/sanitize": {
       "parameters": [
         {
           "name": "documentId",
@@ -526,7 +526,7 @@
         }
       }
     },
-    "/v1/documents/{documentId}/virus-scan": {
+    "/documents/{documentId}/virus-scan": {
       "parameters": [
         {
           "name": "documentId",
@@ -575,7 +575,7 @@
         }
       }
     },
-    "/v1/documents/{documentId}/validate": {
+    "/documents/{documentId}/validate": {
       "parameters": [
         {
           "name": "documentId",
@@ -624,7 +624,7 @@
         }
       }
     },
-    "/v1/respondents/{respondentId}/cases": {
+    "/respondents/{respondentId}/cases": {
       "parameters": [
         {
           "name": "respondentId",
@@ -676,7 +676,7 @@
         }
       }
     },
-    "/v1/runBatchProcess": {
+    "/runBatchProcess": {
       "post": {
         "summary": "run IRS batch process",
         "description": "Run the (temporary) send to IRS batch process, which creates a ZIP file of petition documents and uploads it to S3.\n",
@@ -695,7 +695,7 @@
         ]
       }
     },
-    "/v1/sections/{section}/messages/inbox": {
+    "/sections/{section}/messages/inbox": {
       "parameters": [
         {
           "name": "section",
@@ -748,7 +748,7 @@
       }
     },
 
-    "/v1/sections/{section}/document-qc/inbox": {
+    "/sections/{section}/document-qc/inbox": {
       "parameters": [
         {
           "name": "section",
@@ -801,7 +801,7 @@
       }
     },
 
-    "/v1/sections/{section}/document-qc/batched": {
+    "/sections/{section}/document-qc/batched": {
       "parameters": [
         {
           "name": "section",
@@ -854,7 +854,7 @@
       }
     },
 
-    "/v1/sections/{section}/document-qc/served": {
+    "/sections/{section}/document-qc/served": {
       "parameters": [
         {
           "name": "section",
@@ -907,7 +907,7 @@
       }
     },
 
-    "/v1/cases/{caseId}/documents/{documentId}/work-items": {
+    "/cases/{caseId}/documents/{documentId}/work-items": {
       "parameters": [
         {
           "name": "caseId",
@@ -965,7 +965,7 @@
         }
       }
     },
-    "/v1/sections/{section}/messages/sent": {
+    "/sections/{section}/messages/sent": {
       "parameters": [
         {
           "name": "section",
@@ -1017,7 +1017,7 @@
         }
       }
     },
-    "/v1/sections/{section}/users": {
+    "/sections/{section}/users": {
       "parameters": [
         {
           "name": "section",
@@ -1069,7 +1069,7 @@
         }
       }
     },
-    "/v1/swagger": {
+    "/swagger": {
       "get": {
         "produces": ["application/json"],
         "responses": {
@@ -1102,7 +1102,7 @@
         }
       }
     },
-    "/v1/swagger.json": {
+    "/swagger.json": {
       "get": {
         "produces": ["application/json"],
         "responses": {
@@ -1135,7 +1135,7 @@
         }
       }
     },
-    "/v1/notifications": {
+    "/notifications": {
       "get": {
         "tags": ["workitems"],
         "summary": "gets notifications such as unread item counts",
@@ -1179,7 +1179,7 @@
         }
       }
     },
-    "/v1/users": {
+    "/users": {
       "post": {
         "tags": ["user"],
         "summary": "creates a user",
@@ -1229,7 +1229,7 @@
         }
       }
     },
-    "/v1/users/internal": {
+    "/users/internal": {
       "get": {
         "tags": ["workitems"],
         "summary": "get all internal users",
@@ -1273,7 +1273,7 @@
         }
       }
     },
-    "/v1/users/{userId}/cases": {
+    "/users/{userId}/cases": {
       "parameters": [
         {
           "name": "userId",
@@ -1325,7 +1325,7 @@
         }
       }
     },
-    "/v1/users/{userId}/case/{caseId}": {
+    "/users/{userId}/case/{caseId}": {
       "parameters": [
         {
           "name": "userId",
@@ -1399,7 +1399,7 @@
         }
       }
     },
-    "/v1/users/{userId}/case/{caseId}/pending": {
+    "/users/{userId}/case/{caseId}/pending": {
       "parameters": [
         {
           "name": "userId",
@@ -1470,7 +1470,7 @@
         }
       }
     },
-    "/v1/users/{userId}/document-qc/inbox": {
+    "/users/{userId}/document-qc/inbox": {
       "parameters": [
         {
           "name": "userId",
@@ -1522,7 +1522,7 @@
         }
       }
     },
-    "/v1/users/{userId}/document-qc/batched": {
+    "/users/{userId}/document-qc/batched": {
       "parameters": [
         {
           "name": "userId",
@@ -1575,7 +1575,7 @@
       }
     },
 
-    "/v1/users/{userId}/document-qc/served": {
+    "/users/{userId}/document-qc/served": {
       "parameters": [
         {
           "name": "userId",
@@ -1628,7 +1628,7 @@
       }
     },
 
-    "/v1/users/{userId}/messages/inbox": {
+    "/users/{userId}/messages/inbox": {
       "parameters": [
         {
           "name": "userId",
@@ -1680,7 +1680,7 @@
         }
       }
     },
-    "/v1/users/{userId}/messages/sent": {
+    "/users/{userId}/messages/sent": {
       "parameters": [
         {
           "name": "userId",
@@ -1732,7 +1732,7 @@
         }
       }
     },
-    "/v1/work-items": {
+    "/work-items": {
       "put": {
         "tags": ["workitems"],
         "summary": "assigns an assigneId to a list of work item ids",
@@ -1776,7 +1776,7 @@
         }
       }
     },
-    "/v1/work-items/{workItemId}": {
+    "/work-items/{workItemId}": {
       "parameters": [
         {
           "name": "workItemId",
@@ -1847,7 +1847,7 @@
         }
       }
     },
-    "/v1/work-items/{workItemId}/assignee": {
+    "/work-items/{workItemId}/assignee": {
       "parameters": [
         {
           "name": "workItemId",
@@ -1899,7 +1899,7 @@
         }
       }
     },
-    "/v1/cases/{caseId}/documents/{documentId}/coversheet": {
+    "/cases/{caseId}/documents/{documentId}/coversheet": {
       "parameters": [
         {
           "name": "caseId",
@@ -1954,7 +1954,7 @@
         }
       }
     },
-    "/v1/cases/{caseId}/documents/{documentId}/sign": {
+    "/cases/{caseId}/documents/{documentId}/sign": {
       "parameters": [
         {
           "name": "caseId",
@@ -2009,7 +2009,7 @@
         }
       }
     },
-    "/v1/work-items/{workItemId}/complete": {
+    "/work-items/{workItemId}/complete": {
       "parameters": [
         {
           "name": "workItemId",
@@ -2061,7 +2061,7 @@
         }
       }
     },
-    "/v1/trial-sessions": {
+    "/trial-sessions": {
       "get": {
         "tags": ["trialsessions"],
         "summary": "gets all trial sessions",
@@ -2124,7 +2124,7 @@
         }
       }
     },
-    "/v1/trial-sessions/{trialSessionId}": {
+    "/trial-sessions/{trialSessionId}": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -2176,7 +2176,7 @@
         }
       }
     },
-    "/v1/trial-sessions/{trialSessionId}/set-swing-session": {
+    "/trial-sessions/{trialSessionId}/set-swing-session": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -2228,7 +2228,7 @@
         }
       }
     },
-    "/v1/trial-sessions/{trialSessionId}/eligible-cases": {
+    "/trial-sessions/{trialSessionId}/eligible-cases": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -2280,7 +2280,7 @@
         }
       }
     },
-    "/v1/trial-sessions/{trialSessionId}/set-calendar": {
+    "/trial-sessions/{trialSessionId}/set-calendar": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -2332,7 +2332,7 @@
         }
       }
     },
-    "/v1/trial-sessions/{trialSessionId}/getAssociatedCases": {
+    "/trial-sessions/{trialSessionId}/getAssociatedCases": {
       "parameters": [
         {
           "name": "trialSessionId",
@@ -2384,7 +2384,7 @@
         }
       }
     },
-    "/v1/court-issued-order": {
+    "/court-issued-order": {
       "post": {
         "summary": "create a court issued order pdf preview",
         "description": "create a court issued order pdf preview.\n",

@@ -7,6 +7,6 @@ const { get } = require('./requests');
 exports.getDownloadPolicyUrl = ({ applicationContext, documentId }) => {
   return get({
     applicationContext,
-    endpoint: `/documents/${documentId}/download-policy-url`,
+    endpoint: `/api/documents/${documentId}/download-policy-url`,
   });
 };

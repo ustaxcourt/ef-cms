@@ -10,6 +10,6 @@ const { post } = require('../requests');
 exports.virusScanPdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
-    endpoint: `/documents/${documentId}/virus-scan`,
+    endpoint: `/api/documents/${documentId}/virus-scan`,
   });
 };

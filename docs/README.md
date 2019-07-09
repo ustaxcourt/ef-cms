@@ -10,7 +10,7 @@ All JavaScript is marked up with [JSDoc](https://github.com/jsdoc3/jsdoc) commen
 
 ## API documentation
 
-The API is documented via Swagger, but right now it’s only available when the site is running in Docker. That can be reviewed at [`http://localhost:3000/v1/swagger`](http://localhost:3000/v1/swagger).
+The API is documented via Swagger, but right now it’s only available when the site is running in Docker. That can be reviewed at [`http://localhost:3000/api/swagger`](http://localhost:3000/api/swagger).
 
 ## HTML style guide
 
