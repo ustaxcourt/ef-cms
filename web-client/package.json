@@ -48,9 +48,9 @@
   "homepage": "https://github.com/ustaxcourt/ef-cms#readme",
   "dependencies": {
     "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.0",
+    "@babel/core": "^7.5.4",
     "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.5.3",
+    "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "@cerebral/react": "^4.1.1",
@@ -61,11 +61,12 @@
     "acorn": "^6.2.0",
     "ajv": "^6.10.1",
     "autoprefixer": "^9.6.1",
-    "aws-sdk": "^2.488.0",
+    "aws-sdk": "^2.490.0",
     "axios": "^0.19.0",
     "axios-mock-adapter": "^1.17.0",
     "babel-jest": "^24.8.0",
     "babel-plugin-cerebral": "^1.0.1",
+    "babel-plugin-transform-html-import-require-to-string": "0.0.3",
     "cerebral": "^5.1.1",
     "classnames": "^2.2.6",
     "core-js": "^2.6.8",
@@ -111,7 +112,7 @@
     "react-responsive": "^7.0.0",
     "react-select": "^3.0.4",
     "react-test-renderer": "^16.8.6",
-    "riot": "^4.3.2",
+    "riot": "^4.3.3",
     "riot-route": "^3.1.4",
     "sinon": "^7.3.2",
     "stylelint": "^10.1.0",
@@ -123,8 +124,5 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
-  },
-  "devDependencies": {
-    "babel-plugin-transform-html-import-require-to-string": "0.0.3"
   }
 }
