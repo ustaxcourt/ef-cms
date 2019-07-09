@@ -36,4 +36,3 @@ export const CaseDeadlinesExternal = connect(
     );
   },
 );
-//        {caseDeadlines && caseDeadlines.length > 0 && (
