@@ -71,6 +71,20 @@ describe('Petitions Clerk Create Order Journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      DOMParser: () => {
+        return {
+          parseFromString: () => {
+            return {
+              children: [
+                {
+                  innerHTML: 'something',
+                },
+              ],
+              querySelector: () => {},
+            };
+          },
+        };
+      },
       URL: {
         createObjectURL: () => {
           return fakeData;
