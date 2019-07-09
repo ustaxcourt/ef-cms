@@ -20,5 +20,8 @@ export default test => {
     await test.runSequence('submitEditPrimaryContactSequence');
 
     expect(test.getState('caseDetail.contactPrimary')).toEqual(contactPrimary);
+    expect(test.getState('caseDetail.docketRecord')[2].description).toEqual(
+      'Notice of Change of Address by Test Petitioner',
+    );
   });
 };
