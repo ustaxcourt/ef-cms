@@ -2,7 +2,7 @@ import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { PdfPreview } from '../../ustc-ui/PdfPreview';
+import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { SuccessNotification } from '../SuccessNotification';
 import { TextEditor } from './TextEditor';
 import { connect } from '@cerebral/react';

@@ -16,6 +16,7 @@ module.exports = {
     'jsdoc/check-param-names': 1,
     'jsdoc/check-types': 1,
     'jsdoc/newline-after-description': 1,
+    'jsdoc/require-jsdoc': 1,
     'jsdoc/require-param-description': 1,
     'jsdoc/require-param-name': 1,
     'jsdoc/require-param-type': 1,
