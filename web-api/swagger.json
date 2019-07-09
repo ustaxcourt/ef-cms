@@ -2423,6 +2423,151 @@
           }
         }
       }
+    },
+    "/v1/cases/{caseId}/case-deadline": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["caseDeadlines"],
+        "summary": "gets deadlines for a case",
+        "description": "gets deadlines for a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseDeadline"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["caseDeadlines"],
+        "summary": "create and associate a deadline to a case",
+        "description": "create and associate a deadline to a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseDeadline"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cases/{caseId}/case-deadline/{caseDeadlineId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "caseDeadlineId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["caseDeadlines"],
+        "summary": "updates a case deadline",
+        "description": "updates a case deadline.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["caseDeadlines"],
+        "summary": "delete a case deadline",
+        "description": "delete a case deadline.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -2732,6 +2877,32 @@
         }
       },
       "description": "a trial session"
+    },
+    "caseDeadline": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "description": "case deadline created time"
+        },
+        "caseId": {
+          "type": "string",
+          "description": "id of the case"
+        },
+        "caseDeadlineId": {
+          "type": "string",
+          "description": "id of the case deadline"
+        },
+        "deadlineDate": {
+          "type": "string",
+          "description": "date of the deadline"
+        },
+        "description": {
+          "type": "string",
+          "description": "description of the deadline"
+        }
+      },
+      "description": "a case deadline"
     }
   }
 }

@@ -15,6 +15,7 @@ module.exports = {
   rules: {
     'arrow-parens': ['error', 'as-needed'],
     'jsdoc/check-types': 1,
+    'jsdoc/require-jsdoc': 1,
     'jsdoc/require-param-name': 1,
     'jsdoc/require-param': 1,
     'no-console': ['error', { allow: ['warn', 'error'] }],
