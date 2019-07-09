@@ -22,6 +22,7 @@ import {
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
@@ -35,6 +36,7 @@ import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
@@ -42,6 +44,7 @@ import { createCoverSheetInteractor } from '../../shared/src/proxies/documents/c
 import { createDocumentInteractor } from '../../shared/src/proxies/documents/createDocumentProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
+import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { downloadDocumentFileInteractor } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
@@ -52,6 +55,7 @@ import { generateDocumentTitleInteractor } from '../../shared/src/business/useCa
 import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
+import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
@@ -96,11 +100,14 @@ import { signDocumentInteractor } from '../../shared/src/proxies/documents/signD
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
+import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
+import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -143,6 +150,7 @@ const allUseCases = {
   assignWorkItemsInteractor,
   authorizeCodeInteractor,
   completeWorkItemInteractor,
+  createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
@@ -150,6 +158,7 @@ const allUseCases = {
   createDocumentInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
+  deleteCaseDeadlineInteractor,
   downloadDocumentFileInteractor,
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,
@@ -160,6 +169,7 @@ const allUseCases = {
   generatePDFFromPNGDataInteractor,
   generateSignedDocumentInteractor,
   getCalendaredCasesForTrialSessionInteractor,
+  getCaseDeadlinesForCaseInteractor,
   getCaseInteractor,
   getCaseTypesInteractor,
   getCasesByUserInteractor,
@@ -199,11 +209,14 @@ const allUseCases = {
   signDocumentInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
+  updateCaseDeadlineInteractor,
   updateCaseInteractor,
   updateCaseTrialSortTagsInteractor,
+  updatePrimaryContactInteractor,
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
   validateCaseAssociationRequestInteractor,
+  validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
   validateDocketEntryInteractor,
   validateExternalDocumentInformationInteractor,
@@ -279,6 +292,7 @@ const applicationContext = {
   getEntityConstructors: () => ({
     Case,
     CaseAssociationRequestFactory,
+    CaseDeadline,
     CaseExternal,
     CaseInternal,
     DocketEntryFactory,
