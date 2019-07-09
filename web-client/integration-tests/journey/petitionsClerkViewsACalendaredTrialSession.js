@@ -5,6 +5,6 @@ export default test => {
     });
 
     expect(test.getState('trialSession.isCalendared')).toEqual(true);
-    expect(test.getState('trialSession.caseOrder').length).toBeGreaterThan(4);
+    expect(test.getState('trialSession.caseOrder').length).toEqual(2);
   });
 };
