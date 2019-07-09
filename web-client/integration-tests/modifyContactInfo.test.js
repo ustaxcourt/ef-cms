@@ -8,13 +8,14 @@ import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
-import taxPayerSignsOut from './journey/taxPayerSignsOut';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerEditsCaseContactInformation from './journey/taxpayerEditsCaseContactInformation';
+import taxpayerEditsCasePrimaryContactInformation from './journey/taxpayerEditsCasePrimaryContactInformation';
+import taxpayerEditsCaseSecondaryContactInformation from './journey/taxpayerEditsCaseSecondaryContactInformation';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
+import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
@@ -75,6 +76,7 @@ describe('Modify Petitioner Contact Information', () => {
     });
   });
 
+  // valid primary contact modification
   taxpayerLogin(test);
   taxpayerNavigatesToCreateCase(test);
   taxpayerChoosesProcedureType(test, { procedureType: 'Regular' });
@@ -82,6 +84,13 @@ describe('Modify Petitioner Contact Information', () => {
   taxpayerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
   taxpayerViewsDashboard(test, { caseIndex: 2 });
   taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
-  taxpayerEditsCaseContactInformation(test);
-  taxPayerSignsOut(test);
+  taxpayerEditsCasePrimaryContactInformation(test);
+  taxpayerSignsOut(test);
+
+  // attempt to modify secondary contact information
+  taxpayerLogin(test);
+  taxpayerViewsDashboard(test, { caseIndex: 2 });
+  taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
+  taxpayerEditsCaseSecondaryContactInformation(test);
+  taxpayerSignsOut(test);
 });
