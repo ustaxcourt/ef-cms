@@ -3,11 +3,13 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default test => {
+export default (test, overrides) => {
   return it('Taxpayer views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
+
+    const docketNumberSuffix = overrides.docketNumberSuffix || 'W';
 
     const caseDetail = test.getState('caseDetail');
     const caseDetailFormatted = runCompute(
@@ -18,9 +20,9 @@ export default test => {
     );
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
-    expect(caseDetail.docketNumberSuffix).toEqual('W');
+    expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${test.docketNumber}W`,
+      `${test.docketNumber}${docketNumberSuffix}`,
     );
     expect(caseDetail.documents.length).toEqual(2);
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
