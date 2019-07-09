@@ -21,6 +21,6 @@ exports.createWorkItemInteractor = ({
       assigneeId,
       message,
     },
-    endpoint: `/api/cases/${caseId}/documents/${documentId}/work-items`,
+    endpoint: `/cases/${caseId}/documents/${documentId}/work-items`,
   });
 };
