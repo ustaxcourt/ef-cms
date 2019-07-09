@@ -4,28 +4,44 @@ import { sequences, state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-export const CaseDeadlines = connect(
+export const CaseDeadlinesInternal = connect(
   {
     caseDeadlines: state.formattedCaseDetail.caseDeadlines,
+    caseDetailHelper: state.caseDetailHelper,
+    openCreateCaseDeadlineModalSequence:
+      sequences.openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence:
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
       sequences.openEditCaseDeadlineModalSequence,
   },
-  function CaseDeadlines({
+  function CaseDeadlinesInternal({
     caseDeadlines,
+    caseDetailHelper,
+    openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
   }) {
     return (
       <>
-        {!caseDeadlines ||
-          (caseDeadlines.length === 0 && (
-            <p className="heading-2 margin-bottom-10">
-              There are no deadlines for this case.
-            </p>
-          ))}
-        {caseDeadlines && caseDeadlines.length > 0 && (
+        <div className="title">
+          <h1>Deadlines</h1>
+          <button
+            className="usa-button push-right"
+            id="button-add-deadline"
+            onClick={() => {
+              openCreateCaseDeadlineModalSequence();
+            }}
+          >
+            <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
+          </button>
+        </div>
+        {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
+          <p className="heading-2 margin-bottom-10">
+            There are no deadlines for this case.
+          </p>
+        )}
+        {caseDetailHelper.showCaseDeadlinesInternal && (
           <table className="usa-table row-border-only subsection deadlines">
             <tbody>
               {caseDeadlines.map((item, idx) => (

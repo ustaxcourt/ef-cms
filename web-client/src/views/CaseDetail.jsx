@@ -1,4 +1,5 @@
 import { ActionRequired } from './CaseDetail/ActionRequired';
+import { CaseDeadlinesExternal } from './CaseDetail/CaseDeadlinesExternal';
 import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
@@ -78,6 +79,7 @@ export const CaseDetail = connect(
               <ActionRequired />
             </div>
           )}
+          <CaseDeadlinesExternal />
           <div className="only-small-screens">
             <div className="margin-bottom-3">
               <select
