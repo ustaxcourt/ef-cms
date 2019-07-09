@@ -11,6 +11,6 @@ exports.getDocumentQCServedForUserInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/document-qc/served`,
+    endpoint: `/api/users/${userId}/document-qc/served`,
   });
 };

@@ -11,6 +11,6 @@ exports.getDocumentQCBatchedForUserInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/document-qc/batched`,
+    endpoint: `/api/users/${userId}/document-qc/batched`,
   });
 };

@@ -1,4 +1,4 @@
-import { CaseDeadlines } from './CaseDetail/CaseDeadlines';
+import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
@@ -20,8 +20,6 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
-    openCreateCaseDeadlineModalSequence:
-      sequences.openCreateCaseDeadlineModalSequence,
     setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     showModal: state.showModal,
@@ -31,7 +29,6 @@ export const CaseDetailInternal = connect(
     baseUrl,
     caseDetail,
     caseHelper,
-    openCreateCaseDeadlineModalSequence,
     setCaseToReadyForTrialSequence,
     setDocumentDetailTabSequence,
     showModal,
@@ -43,21 +40,8 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <div>
-            <div className="title">
-              <h1>Deadlines</h1>
-              <button
-                className="usa-button push-right"
-                id="button-add-deadline"
-                onClick={() => {
-                  openCreateCaseDeadlineModalSequence();
-                }}
-              >
-                <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
-              </button>
-            </div>
-            <CaseDeadlines />
-          </div>
+          <CaseDeadlinesInternal />
+
           <div>
             <div className="title">
               <h1>Messages in Progress</h1>
@@ -115,7 +99,7 @@ export const CaseDetailInternal = connect(
               {caseDetail.contactPrimary && (
                 <a
                   aria-label="View PDF"
-                  href={`${baseUrl}/documents/${
+                  href={`${baseUrl}/api/documents/${
                     caseDetail.docketNumber
                   }_${caseDetail.contactPrimary.name.replace(
                     /\s/g,
