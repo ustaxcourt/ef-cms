@@ -5,11 +5,12 @@ import React from 'react';
 export const CaseDeadlinesExternal = connect(
   {
     caseDeadlines: state.formattedCaseDetail.caseDeadlines,
+    caseDetailHelper: state.caseDetailHelper,
   },
-  function CaseDeadlinesExternal({ caseDeadlines }) {
+  function CaseDeadlinesExternal({ caseDeadlines, caseDetailHelper }) {
     return (
       <>
-        {caseDeadlines && caseDeadlines.length > 0 && (
+        {caseDetailHelper.showCaseDeadlinesExternal && (
           <>
             <div className="title">
               <h1>Deadlines</h1>
@@ -35,3 +36,4 @@ export const CaseDeadlinesExternal = connect(
     );
   },
 );
+//        {caseDeadlines && caseDeadlines.length > 0 && (

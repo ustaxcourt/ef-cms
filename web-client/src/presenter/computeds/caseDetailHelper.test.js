@@ -309,4 +309,77 @@ describe('case detail computed', () => {
     expect(result.showPaymentRecord).toBeUndefined();
     expect(result.showPaymentOptions).toEqual(true);
   });
+
+  it('should show case deadlines external view for external user who is associated with the case if there are deadlines on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          caseDeadlines: ['something'],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(true);
+  });
+
+  it('should not show case deadlines external view for external user who is associated with the case if there are not deadlines on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          caseDeadlines: [],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+  });
+
+  it('should not show case deadlines external view for external user who is not associated with the case and there are deadlines on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          caseDeadlines: ['something'],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+        user: {
+          role: 'respondent',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+  });
+
+  it('should not show case deadlines external view for internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          caseDeadlines: ['something'],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+  });
 });
