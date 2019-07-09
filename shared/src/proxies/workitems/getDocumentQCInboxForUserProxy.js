@@ -11,6 +11,6 @@ exports.getDocumentQCInboxForUserInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/document-qc/inbox`,
+    endpoint: `/api/users/${userId}/document-qc/inbox`,
   });
 };

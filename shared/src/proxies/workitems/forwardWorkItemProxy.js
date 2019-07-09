@@ -20,6 +20,6 @@ exports.forwardWorkItemInteractor = ({
       assigneeId,
       message,
     },
-    endpoint: `/work-items/${workItemId}/assignee`,
+    endpoint: `/api/work-items/${workItemId}/assignee`,
   });
 };

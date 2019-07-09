@@ -1,8 +1,6 @@
 service: ef-cms
 
 plugins:
-  - serverless-dynamodb-local
-  - serverless-s3-local
   - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
@@ -20,31 +18,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-
-  s3:
-    host: 0.0.0.0
-    port: 9000
-    directory: ./storage/s3
-    cors: cors-policy.xml
-
-  dynamodb:
-    start:
-      inMemory: true
-      migrate: true
-      port: 8000
-    seed:
-      test:
-        sources:
-          - table: ${opt:efcmsTableName}
-            sources:
-              - ./storage/fixtures/seed/misc.json
-              - ./storage/fixtures/seed/users.json
-              - ./storage/fixtures/seed/101-19.json
-              - ./storage/fixtures/seed/102-19.json
-              - ./storage/fixtures/seed/103-19.json
-              - ./storage/fixtures/seed/104-19.json
-              - ./storage/fixtures/seed/105-19.json
-              - ./storage/fixtures/seed/trial-sessions.json
+    port: 3001
 
   alerts:
     stages:
@@ -224,7 +198,7 @@ functions:
     handler: src/handlers.getUploadPolicyLambda
     events:
       - http:
-          path: v1/documents/upload-policy
+          path: documents/upload-policy
           method: get
           cors: true
           authorizer:
@@ -236,7 +210,7 @@ functions:
     handler: src/handlers.getDocumentDownloadUrlLambda
     events:
       - http:
-          path: v1/documents/{documentId}/document-download-url
+          path: documents/{documentId}/document-download-url
           method: get
           cors: true
 
@@ -244,7 +218,7 @@ functions:
     handler: src/handlers.setWorkItemAsReadLambda
     events:
       - http:
-          path: v1/work-items/{workItemId}/read
+          path: work-items/{workItemId}/read
           method: post
           cors: true
 
@@ -252,7 +226,7 @@ functions:
     handler: src/handlers.downloadPolicyUrlLambda
     events:
       - http:
-          path: v1/documents/{documentId}/download-policy-url
+          path: documents/{documentId}/download-policy-url
           method: get
           cors: true
           authorizer:
@@ -268,7 +242,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: v1/documents/{documentId}/sanitize
+          path: documents/{documentId}/sanitize
           method: post
           cors: true
           # async: true
@@ -281,7 +255,7 @@ functions:
     handler: src/handlers.runBatchProcessLambda
     events:
       - http:
-          path: v1/runBatchProcess
+          path: runBatchProcess
           method: post
           cors: true
           authorizer:
@@ -293,7 +267,7 @@ functions:
     handler: src/handlers.getCasesByUserLambda
     events:
       - http:
-          path: v1/users/{userId}/cases
+          path: users/{userId}/cases
           method: get
           cors: true
           authorizer:
@@ -305,7 +279,7 @@ functions:
     handler: src/handlers.verifyCaseForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/case/{caseId}
+          path: users/{userId}/case/{caseId}
           method: get
           cors: true
           authorizer:
@@ -317,7 +291,7 @@ functions:
     handler: src/handlers.verifyPendingCaseForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/case/{caseId}/pending
+          path: users/{userId}/case/{caseId}/pending
           method: get
           cors: true
           authorizer:
@@ -329,7 +303,7 @@ functions:
     handler: src/handlers.practitionerCaseAssociationLambda
     events:
       - http:
-          path: v1/users/{userId}/case/{caseId}
+          path: users/{userId}/case/{caseId}
           method: put
           cors: true
           authorizer:
@@ -341,7 +315,7 @@ functions:
     handler: src/handlers.practitionerPendingCaseAssociationLambda
     events:
       - http:
-          path: v1/users/{userId}/case/{caseId}/pending
+          path: users/{userId}/case/{caseId}/pending
           method: put
           cors: true
           authorizer:
@@ -353,7 +327,7 @@ functions:
     handler: src/handlers.assignWorkItemsLambda
     events:
       - http:
-          path: v1/work-items
+          path: work-items
           method: put
           cors: true
           authorizer:
@@ -365,7 +339,7 @@ functions:
     handler: src/handlers.getWorkItemLambda
     events:
       - http:
-          path: v1/work-items/{workItemId}
+          path: work-items/{workItemId}
           method: get
           cors: true
           authorizer:
@@ -377,7 +351,7 @@ functions:
     handler: src/handlers.forwardWorkItemLambda
     events:
       - http:
-          path: v1/work-items/{workItemId}/assignee
+          path: work-items/{workItemId}/assignee
           method: put
           cors: true
           authorizer:
@@ -389,7 +363,7 @@ functions:
     handler: src/handlers.completeWorkItemLambda
     events:
       - http:
-          path: v1/work-items/{workItemId}/complete
+          path: work-items/{workItemId}/complete
           method: put
           cors: true
           authorizer:
@@ -401,7 +375,7 @@ functions:
     handler: src/handlers.getInboxMessagesForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/messages/inbox
+          path: users/{userId}/messages/inbox
           method: get
           cors: true
           authorizer:
@@ -413,7 +387,7 @@ functions:
     handler: src/handlers.getSentMessagesForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/messages/sent
+          path: users/{userId}/messages/sent
           method: get
           cors: true
           authorizer:
@@ -425,7 +399,7 @@ functions:
     handler: src/handlers.getInboxMessagesForSectionLambda
     events:
       - http:
-          path: v1/sections/{section}/messages/inbox
+          path: sections/{section}/messages/inbox
           method: get
           cors: true
           authorizer:
@@ -437,7 +411,7 @@ functions:
     handler: src/handlers.getSentMessagesForSectionLambda
     events:
       - http:
-          path: v1/sections/{section}/messages/sent
+          path: sections/{section}/messages/sent
           method: get
           cors: true
           authorizer:
@@ -449,7 +423,7 @@ functions:
     handler: src/handlers.getDocumentQCInboxForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/document-qc/inbox
+          path: users/{userId}/document-qc/inbox
           method: get
           cors: true
           authorizer:
@@ -461,7 +435,7 @@ functions:
     handler: src/handlers.getDocumentQCBatchedForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/document-qc/batched
+          path: users/{userId}/document-qc/batched
           method: get
           cors: true
           authorizer:
@@ -473,7 +447,7 @@ functions:
     handler: src/handlers.getDocumentQCServedForUserLambda
     events:
       - http:
-          path: v1/users/{userId}/document-qc/served
+          path: users/{userId}/document-qc/served
           method: get
           cors: true
           authorizer:
@@ -485,7 +459,7 @@ functions:
     handler: src/handlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
-          path: v1/sections/{section}/document-qc/inbox
+          path: sections/{section}/document-qc/inbox
           method: get
           cors: true
           authorizer:
@@ -497,7 +471,7 @@ functions:
     handler: src/handlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
-          path: v1/sections/{section}/document-qc/batched
+          path: sections/{section}/document-qc/batched
           method: get
           cors: true
           authorizer:
@@ -509,7 +483,7 @@ functions:
     handler: src/handlers.getDocumentQCServedForSectionLambda
     events:
       - http:
-          path: v1/sections/{section}/document-qc/served
+          path: sections/{section}/document-qc/served
           method: get
           cors: true
           authorizer:
@@ -521,7 +495,7 @@ functions:
     handler: src/handlers.getInternalUsersLambda
     events:
       - http:
-          path: v1/users/internal
+          path: users/internal
           method: get
           cors: true
           authorizer:
@@ -533,7 +507,7 @@ functions:
     handler: src/handlers.getUsersInSectionLambda
     events:
       - http:
-          path: v1/sections/{section}/users
+          path: sections/{section}/users
           method: get
           cors: true
           authorizer:
@@ -545,7 +519,7 @@ functions:
     handler: src/handlers.getNotificationsLambda
     events:
       - http:
-          path: v1/notifications
+          path: notifications
           method: get
           cors: true
           authorizer:
@@ -557,7 +531,7 @@ functions:
     handler: src/handlers.createUserLambda
     events:
       - http:
-          path: v1/users
+          path: users
           method: post
           cors: true
           authorizer:
@@ -574,7 +548,7 @@ functions:
     handler: src/handlers.swaggerLambda
     events:
       - http:
-          path: v1/swagger
+          path: swagger
           method: get
           cors: true
 
@@ -582,7 +556,7 @@ functions:
     handler: src/handlers.swaggerJsonLambda
     events:
       - http:
-          path: v1/swagger.json
+          path: swagger.json
           method: get
           cors: true
 
@@ -594,7 +568,7 @@ functions:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
     events:
       - http:
-          path: v1/documents/{documentId}/virus-scan
+          path: documents/{documentId}/virus-scan
           method: post
           cors: true
           async: true
@@ -603,7 +577,7 @@ functions:
     handler: src/handlers.validatePdfLambda
     events:
       - http:
-          path: v1/documents/{documentId}/validate
+          path: documents/{documentId}/validate
           method: post
           cors: true
     alarms:
@@ -613,7 +587,7 @@ functions:
     handler: src/handlers.getTrialSessionsLambda
     events:
       - http:
-          path: v1/trial-sessions
+          path: trial-sessions
           method: get
           cors: true
           authorizer:
@@ -625,7 +599,7 @@ functions:
     handler: src/handlers.createTrialSessionLambda
     events:
       - http:
-          path: v1/trial-sessions
+          path: trial-sessions
           method: post
           cors: true
           authorizer:
@@ -637,7 +611,7 @@ functions:
     handler: src/handlers.getTrialSessionDetailsLambda
     events:
       - http:
-          path: v1/trial-sessions/{trialSessionId}
+          path: trial-sessions/{trialSessionId}
           method: get
           cors: true
           authorizer:
@@ -649,7 +623,7 @@ functions:
     handler: src/handlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
-          path: v1/trial-sessions/{trialSessionId}/set-swing-session
+          path: trial-sessions/{trialSessionId}/set-swing-session
           method: post
           cors: true
           authorizer:
@@ -661,7 +635,7 @@ functions:
     handler: src/handlers.getEligibleCasesForTrialSessionLambda
     events:
       - http:
-          path: v1/trial-sessions/{trialSessionId}/eligible-cases
+          path: trial-sessions/{trialSessionId}/eligible-cases
           method: get
           cors: true
           authorizer:
@@ -673,7 +647,7 @@ functions:
     handler: src/handlers.setTrialSessionCalendarLambda
     events:
       - http:
-          path: v1/trial-sessions/{trialSessionId}/set-calendar
+          path: trial-sessions/{trialSessionId}/set-calendar
           method: post
           cors: true
           authorizer:
@@ -685,7 +659,7 @@ functions:
     handler: src/handlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
-          path: v1/trial-sessions/{trialSessionId}/get-calendared-cases
+          path: trial-sessions/{trialSessionId}/get-calendared-cases
           method: get
           cors: true
           authorizer:
@@ -702,7 +676,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: v1/court-issued-order
+          path: court-issued-order
           method: post
           cors: true
           contentHandling: CONVERT_TO_BINARY

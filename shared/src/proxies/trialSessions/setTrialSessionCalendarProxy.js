@@ -13,6 +13,6 @@ exports.setTrialSessionCalendarInteractor = ({
 }) => {
   return post({
     applicationContext,
-    endpoint: `/trial-sessions/${trialSessionId}/set-calendar`,
+    endpoint: `/api/trial-sessions/${trialSessionId}/set-calendar`,
   });
 };

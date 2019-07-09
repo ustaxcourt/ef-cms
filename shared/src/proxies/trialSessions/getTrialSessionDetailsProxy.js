@@ -13,6 +13,6 @@ exports.getTrialSessionDetailsInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/trial-sessions/${trialSessionId}`,
+    endpoint: `/api/trial-sessions/${trialSessionId}`,
   });
 };

@@ -10,6 +10,6 @@ const { post } = require('../requests');
 exports.sanitizePdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
-    endpoint: `/documents/${documentId}/sanitize`,
+    endpoint: `/api/documents/${documentId}/sanitize`,
   });
 };
