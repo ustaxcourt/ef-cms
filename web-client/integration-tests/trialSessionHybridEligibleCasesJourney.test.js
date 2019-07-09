@@ -63,7 +63,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Trial Session Eligible Cases - Scenario 4 - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
+describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
