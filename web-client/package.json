@@ -66,6 +66,7 @@
     "axios-mock-adapter": "^1.17.0",
     "babel-jest": "^24.8.0",
     "babel-plugin-cerebral": "^1.0.1",
+    "babel-plugin-transform-html-import-require-to-string": "0.0.3",
     "cerebral": "^5.1.1",
     "classnames": "^2.2.6",
     "core-js": "^2.6.8",
