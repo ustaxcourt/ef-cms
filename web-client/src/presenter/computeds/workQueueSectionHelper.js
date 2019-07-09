@@ -1,5 +1,5 @@
 export const workQueueSectionHelper = () => {
-  function sectionDisplay(key) {
+  const sectionDisplay = key => {
     return {
       adc: 'ADC',
       admissions: 'Admissions',
@@ -11,9 +11,9 @@ export const workQueueSectionHelper = () => {
       seniorattorney: 'Senior Attorney',
       trialClerks: 'Trial Clerks',
     }[key];
-  }
+  };
 
-  function chambersDisplay(key) {
+  const chambersDisplay = key => {
     return {
       armensChambers: "Armen's Chambers",
       ashfordsChambers: "Ashford's Chambers",
@@ -46,7 +46,7 @@ export const workQueueSectionHelper = () => {
       vasquezsChambers: "Vasquez's Chambers",
       wellsChambers: "Wells' Chambers",
     }[key];
-  }
+  };
 
   return {
     chambersDisplay,
