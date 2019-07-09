@@ -774,21 +774,23 @@ describe('formattedCaseDetail', () => {
   describe('formats case deadlines', () => {
     it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', async () => {
       const caseDetail = {
-        caseDeadlines: [
-          {
-            deadlineDate: '2019-06-30T04:00:00.000Z',
-          },
-          {
-            deadlineDate: '2019-01-30T05:00:00.000Z',
-          },
-          {
-            deadlineDate: '2025-07-30T04:00:00.000Z',
-          },
-        ],
         petitioners: [{ name: 'bob' }],
       };
+      const caseDeadlines = [
+        {
+          deadlineDate: '2019-06-30T04:00:00.000Z',
+        },
+        {
+          deadlineDate: '2019-01-30T05:00:00.000Z',
+        },
+        {
+          deadlineDate: '2025-07-30T04:00:00.000Z',
+        },
+      ];
+
       const result = await runCompute(formattedCaseDetail, {
         state: {
+          caseDeadlines,
           caseDetail,
           caseDetailErrors: {},
           constants,
