@@ -97,7 +97,7 @@
     "pa11y-ci": "^2.3.0",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-static-files-copy": "^2.1.2",
-    "pdfjs-dist": "^2.0.943",
+    "pdfjs-dist": "^2.1.266",
     "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "pug": "^2.0.3",
