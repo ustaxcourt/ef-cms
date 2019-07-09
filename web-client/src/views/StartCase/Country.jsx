@@ -20,6 +20,7 @@ export const Country = connect(
     validateStartCaseSequence,
     validationErrors,
   }) => {
+    console.log('validationErrors', validationErrors);
     return (
       <React.Fragment>
         <div
