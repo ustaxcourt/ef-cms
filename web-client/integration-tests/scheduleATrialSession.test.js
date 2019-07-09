@@ -98,7 +98,7 @@ describe('Schedule A Trial Session', () => {
   docketClerkViewsAnUpcomingTrialSession(test);
   userSignsOut(test);
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 2; i++) {
     taxpayerLogin(test);
     taxpayerNavigatesToCreateCase(test);
     taxpayerChoosesProcedureType(test, overrides);
