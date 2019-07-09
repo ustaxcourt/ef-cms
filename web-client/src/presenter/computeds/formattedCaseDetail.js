@@ -163,6 +163,16 @@ const formatDocketRecordWithDocument = (
   });
 };
 
+const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
+  caseDeadlines = caseDeadlines.map(d =>
+    formatCaseDeadline(applicationContext, d),
+  );
+
+  return caseDeadlines.sort((a, b) =>
+    String.prototype.localeCompare.call(a.deadlineDate, b.deadlineDate),
+  );
+};
+
 const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
   if (_.isEmpty(caseDetail)) {
     return {};
@@ -189,12 +199,6 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
   result.docketRecordWithDocument.sort((a, b) => {
     return a.index - b.index;
   });
-
-  if (result.caseDeadlines) {
-    result.caseDeadlines = result.caseDeadlines.map(d =>
-      formatCaseDeadline(applicationContext, d),
-    );
-  }
 
   const formatRespondent = respondent => {
     respondent.formattedName = `${respondent.name} ${
@@ -340,6 +344,7 @@ export const formattedCases = (get, applicationContext) => {
 export const formattedCaseDetail = (get, applicationContext) => {
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
+  const caseDeadlines = get(state.caseDeadlines);
   const caseId = get(state.caseDetail.caseId);
   if (caseId) {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
@@ -351,5 +356,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
+  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
 };
