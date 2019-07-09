@@ -4,9 +4,7 @@ export default test => {
       trialSessionId: test.trialSessionId,
     });
 
-    expect(test.getState('trialSession.eligibleCases').length).toBeGreaterThan(
-      4,
-    );
+    expect(test.getState('trialSession.eligibleCases').length).toEqual(2);
     expect(test.getState('trialSession.status')).toEqual('Upcoming');
     expect(test.getState('trialSession.isCalendared')).toEqual(false);
   });
