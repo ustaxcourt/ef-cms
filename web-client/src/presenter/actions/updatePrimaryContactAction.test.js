@@ -12,7 +12,7 @@ presenter.providers.applicationContext = {
 
 describe('updatePrimaryContactAction', () => {
   it('updates primary contact for the current case', async () => {
-    await runAction(updatePrimaryContactAction, {
+    const result = await runAction(updatePrimaryContactAction, {
       modules: {
         presenter,
       },
@@ -20,6 +20,8 @@ describe('updatePrimaryContactAction', () => {
         caseDetail: {},
       },
     });
+
     expect(updatePrimaryContactInteractorStub).toHaveBeenCalled();
+    expect(result.state.alertSuccess).toBeTruthy();
   });
 });
