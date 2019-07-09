@@ -1,7 +1,7 @@
 const { get } = require('../requests');
 
 /**
- * getCaseDeadlinesForCaseInteractorProxy
+ * getCaseDeadlinesForCaseInteractor
  *
  * @param applicationContext
  * @param getCaseDeadlinesForCase

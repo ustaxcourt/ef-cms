@@ -14,6 +14,6 @@ exports.submitCaseAssociationRequestInteractor = ({
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
-    endpoint: `/users/${user.userId}/case/${caseId}`,
+    endpoint: `/api/users/${user.userId}/case/${caseId}`,
   });
 };

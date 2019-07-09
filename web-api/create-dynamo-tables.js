@@ -14,6 +14,7 @@ const deleteTable = async tableName => {
       .promise();
   } catch (error) {
     // ResourceNotFoundException
+    console.log('no table to delete')
     return Promise.resolve();
   }
 };
@@ -79,5 +80,10 @@ const createEFCMSTable = async () => {
 };
 
 (async () => {
-  await createEFCMSTable();
+  try {
+    const table = await createEFCMSTable();
+    console.log(table);
+  } catch (err) {
+    console.error(err);
+  }
 })();

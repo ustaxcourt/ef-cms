@@ -11,6 +11,6 @@ exports.getSentMessagesForSectionInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/sections/${section}/messages/sent`,
+    endpoint: `/api/sections/${section}/messages/sent`,
   });
 };

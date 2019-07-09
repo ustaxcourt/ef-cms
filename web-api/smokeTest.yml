@@ -8,11 +8,11 @@ config:
 scenarios:
   - flow:
       - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/documents/upload-policy'
+          url: '/{{$processEnvironment.API_STAGE}}/documents/upload-policy'
           headers:
             Authorization: 'Bearer {{ token }}'
       - post:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/cases'
+          url: '/{{$processEnvironment.API_STAGE}}/cases'
           headers:
             Authorization: 'Bearer {{ token }}'
           json:
@@ -41,11 +41,11 @@ scenarios:
             json: '$.caseId'
             as: 'caseId'
       - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/users/26b07814-378a-4ebe-9152-b1d6a53bef32/cases'
+          url: '/{{$processEnvironment.API_STAGE}}/users/26b07814-378a-4ebe-9152-b1d6a53bef32/cases'
           headers:
             Authorization: 'Bearer {{ token }}'
       - get:
-          url: '/{{$processEnvironment.API_STAGE}}/v1/cases/{{ caseId }}'
+          url: '/{{$processEnvironment.API_STAGE}}/cases/{{ caseId }}'
           headers:
             Authorization: 'Bearer {{ token }}'
       - function: 'deleteCase'
