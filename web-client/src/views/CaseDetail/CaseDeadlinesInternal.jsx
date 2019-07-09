@@ -7,6 +7,7 @@ import React from 'react';
 export const CaseDeadlinesInternal = connect(
   {
     caseDeadlines: state.formattedCaseDetail.caseDeadlines,
+    caseDetailHelper: state.caseDetailHelper,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence:
@@ -16,6 +17,7 @@ export const CaseDeadlinesInternal = connect(
   },
   function CaseDeadlinesInternal({
     caseDeadlines,
+    caseDetailHelper,
     openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
@@ -33,13 +35,12 @@ export const CaseDeadlinesInternal = connect(
             <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
           </button>
         </div>
-        {!caseDeadlines ||
-          (caseDeadlines.length === 0 && (
-            <p className="heading-2 margin-bottom-10">
-              There are no deadlines for this case.
-            </p>
-          ))}
-        {caseDeadlines && caseDeadlines.length > 0 && (
+        {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
+          <p className="heading-2 margin-bottom-10">
+            There are no deadlines for this case.
+          </p>
+        )}
+        {caseDetailHelper.showCaseDeadlinesInternal && (
           <table className="usa-table row-border-only subsection deadlines">
             <tbody>
               {caseDeadlines.map((item, idx) => (
