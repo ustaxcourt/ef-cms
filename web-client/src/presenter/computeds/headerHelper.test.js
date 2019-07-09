@@ -1,7 +1,7 @@
 import { headerHelper } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 
-function getState(role) {
+const getState = role => {
   return {
     notifications: {
       unreadCount: 0,
@@ -10,7 +10,7 @@ function getState(role) {
       role,
     },
   };
-}
+};
 
 const interal = ['petitionsclerk', 'seniorattorney', 'docketclerk'];
 const external = ['petitioner', 'practitioner', 'respondent'];
