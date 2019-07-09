@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const updatePrimaryContactAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
   const caseToUpdate = get(state.caseDetail);
   const contactInfo = get(state.contactToEdit.contactPrimary);
@@ -22,5 +23,12 @@ export const updatePrimaryContactAction = async ({
       contactInfo,
     });
 
-  return { caseDetail: updatedCase };
+  store.set(state.alertSuccess, {
+    message: 'Your changes have been saved.',
+    title: 'Please confirm the information below is correct.',
+  });
+
+  return {
+    caseDetail: updatedCase,
+  };
 };

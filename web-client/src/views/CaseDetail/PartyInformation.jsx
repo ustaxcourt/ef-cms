@@ -73,7 +73,7 @@ export const PartyInformation = connect(
                         icon={['fas', 'question-circle']}
                         size="sm"
                       />
-                      Why can&apos;t I edit this?
+                      Why can’t I edit this?
                     </button>
                   </div>
                 </React.Fragment>
