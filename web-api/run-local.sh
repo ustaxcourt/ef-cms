@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "killing dynamo if already running"
-ps aux |grep [D]ynamoDBLocal.jar | awk '{print $2}' | xargs kill
+pgrep -f DynamoDBLocal | xargs kill
 
 echo "starting dynamo"
 ./start-dynamo.sh &
