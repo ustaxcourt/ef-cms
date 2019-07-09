@@ -6,10 +6,10 @@ import _ from 'lodash';
  * the signature to a new PDF and upload to S3, then calls a use case to attach the
  * new document to the associated case.
  *
- * @param {object} applicationContext the applicationContext object
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the applicationContext object
  * @param {Function} providers.get the cerebral get helper function
- * @returns {object}
+ * @returns {object} object with new document id
  */
 export const completeDocumentSigningAction = async ({
   applicationContext,

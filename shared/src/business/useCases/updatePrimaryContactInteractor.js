@@ -1,8 +1,5 @@
-const {
-  isAuthorized,
-  UPDATE_CONTACT_PRIMARY,
-} = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -19,10 +16,6 @@ exports.updatePrimaryContactInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CONTACT_PRIMARY)) {
-    throw new UnauthorizedError('Unauthorized for update case');
-  }
-
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -34,16 +27,27 @@ exports.updatePrimaryContactInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
+  if (user.userId !== caseToUpdate.userId) {
+    throw new UnauthorizedError('Unauthorized for update case contact');
+  }
+
   caseToUpdate.contactPrimary = contactInfo;
 
   const caseEntity = new Case(caseToUpdate);
 
-  // validation?
+  caseEntity.addDocketRecord(
+    new DocketRecord({
+      description: `Notice of Change of Address by ${user.name}`,
+      filingDate: applicationContext.getUtilities().createISODateString(),
+    }),
+  );
+
+  const rawCase = caseEntity.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseEntity.toRawObject(),
+    caseToUpdate: rawCase,
   });
 
-  return caseToUpdate;
+  return rawCase;
 };
