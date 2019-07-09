@@ -22,7 +22,6 @@ import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 const {
@@ -63,7 +62,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get scheduled to the trial session that has a regular case session type', () => {
+describe('Trial Session Eligible Cases Journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
@@ -86,16 +85,17 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
     });
   });
 
-  const trialLocation = `Las Vegas, Nevada, ${Date.now()}`;
+  const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
   const overrides = {
-    maxCases: 1,
+    maxCases: 3,
     preferredTrialCity: trialLocation,
-    sessionType: 'Regular',
+    sessionType: 'Small',
     trialLocation,
   };
   const createdCases = [];
+  const createdDocketNumbers = [];
 
-  describe(`Create trial session with Regular session type for '${trialLocation}' with max case count = 1`, () => {
+  describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
     docketClerkLogIn(test);
     docketClerkCreatesATrialSession(test, overrides);
     docketClerkViewsTrialSessionList(test, overrides);
@@ -104,7 +104,7 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
   });
 
   describe('Create cases', () => {
-    describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
+    describe(`Case #1 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Small',
@@ -113,12 +113,11 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
         receivedAtDay: '01',
       };
       taxpayerLogin(test);
-      taxpayerNavigatesToCreateCase(test);
       taxpayerChoosesProcedureType(test, caseOverrides);
       taxpayerChoosesCaseType(test);
       taxpayerCreatesNewCase(test, fakeFile);
       taxpayerViewsDashboard(test);
-      captureCreatedCase(test, createdCases);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -128,7 +127,30 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
       userSignsOut(test);
     });
 
-    describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/1/2019`, () => {
+    describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/2/2019`, () => {
+      const caseOverrides = {
+        ...overrides,
+        procedureType: 'Small',
+        receivedAtYear: '2019',
+        receivedAtMonth: '01',
+        receivedAtDay: '02',
+      };
+      taxpayerLogin(test);
+      taxpayerChoosesProcedureType(test, caseOverrides);
+      taxpayerChoosesCaseType(test);
+      taxpayerCreatesNewCase(test, fakeFile);
+      taxpayerViewsDashboard(test);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
+      userSignsOut(test);
+      petitionsClerkLogIn(test);
+      petitionsClerkUpdatesFiledBy(test, caseOverrides);
+      petitionsClerkSendsCaseToIRSHoldingQueue(test);
+      petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSetsCaseReadyForTrial(test);
+      userSignsOut(test);
+    });
+
+    describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Regular',
@@ -137,12 +159,11 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
         receivedAtDay: '01',
       };
       taxpayerLogin(test);
-      taxpayerNavigatesToCreateCase(test);
       taxpayerChoosesProcedureType(test, caseOverrides);
       taxpayerChoosesCaseType(test);
       taxpayerCreatesNewCase(test, fakeFile);
       taxpayerViewsDashboard(test);
-      captureCreatedCase(test, createdCases);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -152,21 +173,45 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
       userSignsOut(test);
     });
 
-    describe(`Case with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/2/2019`, () => {
+    describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 5/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Regular',
+        procedureType: 'Small',
         receivedAtYear: '2019',
-        receivedAtMonth: '01',
-        receivedAtDay: '02',
+        receivedAtMonth: '02',
+        receivedAtDay: '01',
+        caseType: 'CDP (Lien/Levy)',
       };
       taxpayerLogin(test);
-      taxpayerNavigatesToCreateCase(test);
       taxpayerChoosesProcedureType(test, caseOverrides);
       taxpayerChoosesCaseType(test);
-      taxpayerCreatesNewCase(test, fakeFile);
+      taxpayerCreatesNewCase(test, fakeFile, caseOverrides);
       taxpayerViewsDashboard(test);
-      captureCreatedCase(test, createdCases);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
+      userSignsOut(test);
+      petitionsClerkLogIn(test);
+      petitionsClerkUpdatesFiledBy(test, caseOverrides);
+      petitionsClerkSendsCaseToIRSHoldingQueue(test);
+      petitionsClerkRunsBatchProcess(test);
+      petitionsClerkSetsCaseReadyForTrial(test);
+      userSignsOut(test);
+    });
+
+    describe(`Case #5 'P' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 3/1/2019`, () => {
+      const caseOverrides = {
+        ...overrides,
+        procedureType: 'Small',
+        receivedAtYear: '2019',
+        receivedAtMonth: '03',
+        receivedAtDay: '01',
+        caseType: 'Passport',
+      };
+      taxpayerLogin(test);
+      taxpayerChoosesProcedureType(test, caseOverrides);
+      taxpayerChoosesCaseType(test);
+      taxpayerCreatesNewCase(test, fakeFile, caseOverrides);
+      taxpayerViewsDashboard(test);
+      captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
       petitionsClerkUpdatesFiledBy(test, caseOverrides);
@@ -177,20 +222,26 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
     });
   });
 
-  describe(`Result: Case #2 and #3 should show as eligible for '${trialLocation}' session`, () => {
+  describe(`Result: Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, () => {
     petitionsClerkLogIn(test);
 
-    it(`Case #2 and #3 should show as eligible for '${trialLocation}' session`, async () => {
+    it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('trialSession.eligibleCases').length).toEqual(2);
+      expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
       expect(test.getState('trialSession.eligibleCases.0.caseId')).toEqual(
-        createdCases[1],
+        createdCases[3],
       );
       expect(test.getState('trialSession.eligibleCases.1.caseId')).toEqual(
-        createdCases[2],
+        createdCases[4],
+      );
+      expect(test.getState('trialSession.eligibleCases.2.caseId')).toEqual(
+        createdCases[0],
+      );
+      expect(test.getState('trialSession.eligibleCases.3.caseId')).toEqual(
+        createdCases[1],
       );
       expect(test.getState('trialSession.status')).toEqual('Upcoming');
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
@@ -205,19 +256,65 @@ describe('Trial Session Eligible Cases - Scenario 3 - Only regular cases get sch
     userSignsOut(test);
   });
 
-  describe(`Result: Case #2 is assigned to '${trialLocation}' session`, () => {
+  describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
     petitionsClerkLogIn(test);
 
-    it(`Case #1 is assigned to '${trialLocation}' session`, async () => {
+    it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
       await test.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: test.trialSessionId,
       });
 
-      expect(test.getState('trialSession.calendaredCases').length).toEqual(1);
+      expect(test.getState('trialSession.calendaredCases').length).toEqual(3);
       expect(test.getState('trialSession.isCalendared')).toEqual(true);
       expect(test.getState('trialSession.calendaredCases.0.caseId')).toEqual(
-        createdCases[1],
+        createdCases[3],
       );
+      expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
+        createdCases[4],
+      );
+      expect(test.getState('trialSession.calendaredCases.2.caseId')).toEqual(
+        createdCases[0],
+      );
+    });
+
+    it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
+      //Case #1 - assigned
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+      expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
+      expect(test.getState('caseDetail.trialDate')).toEqual(
+        '2025-12-12T05:00:00.000Z',
+      );
+      expect(test.getState('caseDetail.trialJudge')).toEqual('Judge Cohen');
+
+      //Case #2 - not assigned
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[1],
+      });
+      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+      expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
+      expect(test.getState('caseDetail.trialDate')).toBeUndefined();
+      expect(test.getState('caseDetail.trialJudge')).toBeUndefined();
+
+      //Case #3 - not assigned
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[2],
+      });
+      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+
+      //Case #4 - assigned
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[3],
+      });
+      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+
+      //Case #5 - assigned
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[4],
+      });
+      expect(test.getState('caseDetail.status')).toEqual('Calendared');
     });
 
     userSignsOut(test);
