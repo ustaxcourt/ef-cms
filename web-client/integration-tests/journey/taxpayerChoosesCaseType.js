@@ -8,9 +8,9 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
-      value: 'Whistleblower',
+      value: 'CDP (Lien/Levy)',
     });
-    expect(test.getState('form.caseType')).toEqual('Whistleblower');
+    expect(test.getState('form.caseType')).toEqual('CDP (Lien/Levy)');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'filingType',
