@@ -3,7 +3,6 @@
 ENVIRONMENT=$1
 DOMAIN="${EFCMS_DOMAIN}"
 SUBDOMAIN="efcms-${ENVIRONMENT}.${DOMAIN}"
-STACKNAME="ef-cms-${ENVIRONMENT}"
 HOSTEDZONE=$(aws route53 list-hosted-zones --query "HostedZones[?Name=='${DOMAIN}.'].Id" --output text)
 REGION1=$(aws apigateway get-domain-name --domain-name "${SUBDOMAIN}" --region us-east-1 --query "regionalDomainName" --output text)
 REGION2=$(aws apigateway get-domain-name --domain-name "${SUBDOMAIN}" --region us-west-1 --query "regionalDomainName" --output text)
