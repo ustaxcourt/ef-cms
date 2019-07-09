@@ -62,7 +62,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Trial Session Eligible Cases - Scenario 2 - Only small cases get scheduled to small trial sessions', () => {
+describe('Trial Session Eligible Cases Journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
