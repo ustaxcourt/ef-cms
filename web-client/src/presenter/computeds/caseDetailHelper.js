@@ -28,6 +28,7 @@ export const caseDetailHelper = get => {
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
+  let showCaseDeadlinesExternal = false;
   let userHasAccessToCase = false;
 
   if (isExternalUser) {
@@ -37,6 +38,11 @@ export const caseDetailHelper = get => {
       showRequestAccessToCaseButton = false;
       showPendingAccessToCaseButton = false;
       showFileFirstDocumentButton = false;
+
+      const caseDeadlines = get(state.caseDetail.caseDeadlines);
+      if (caseDeadlines && caseDeadlines.length > 0) {
+        showCaseDeadlinesExternal = true;
+      }
     } else {
       showFileDocumentButton = false;
       if (userRole === 'practitioner') {
@@ -60,6 +66,7 @@ export const caseDetailHelper = get => {
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
+    showCaseDeadlinesExternal,
     showCaseInformationPublic: isExternalUser,
     showCreateOrderButton,
     showDirectDownloadLink: directDocumentLinkDesired,
