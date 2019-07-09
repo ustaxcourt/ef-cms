@@ -4,21 +4,35 @@ import { sequences, state } from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-export const CaseDeadlines = connect(
+export const CaseDeadlinesInternal = connect(
   {
     caseDeadlines: state.formattedCaseDetail.caseDeadlines,
+    openCreateCaseDeadlineModalSequence:
+      sequences.openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence:
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
       sequences.openEditCaseDeadlineModalSequence,
   },
-  function CaseDeadlines({
+  function CaseDeadlinesInternal({
     caseDeadlines,
+    openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
   }) {
     return (
       <>
+        <div className="title">
+          <h1>Deadlines</h1>
+          <button
+            className="usa-button push-right"
+            onClick={() => {
+              openCreateCaseDeadlineModalSequence();
+            }}
+          >
+            <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
+          </button>
+        </div>
         {!caseDeadlines ||
           (caseDeadlines.length === 0 && (
             <p className="heading-2 margin-bottom-10">
