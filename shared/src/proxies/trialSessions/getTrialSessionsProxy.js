@@ -9,6 +9,6 @@ const { get } = require('../requests');
 exports.getTrialSessionsInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: `/trial-sessions`,
+    endpoint: `/api/trial-sessions`,
   });
 };

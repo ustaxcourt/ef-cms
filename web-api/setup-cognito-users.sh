@@ -63,7 +63,7 @@ createAccount() {
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
     --data "$(generate_post_data "${email}" "${role}" "${i}")" \
-      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/v1/users"
+      "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/users"
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \

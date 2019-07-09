@@ -11,6 +11,6 @@ exports.getDocumentQCServedForSectionInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/sections/${section}/document-qc/served`,
+    endpoint: `/api/sections/${section}/document-qc/served`,
   });
 };

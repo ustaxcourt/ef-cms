@@ -236,7 +236,7 @@ tryCatchDecorator(allUseCases);
 
 const applicationContext = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:3000/v1';
+    return process.env.API_URL || 'http://localhost:3000';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
   getCognitoClientId: () => {
