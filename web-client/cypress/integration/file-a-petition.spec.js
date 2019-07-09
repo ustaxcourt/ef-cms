@@ -178,7 +178,7 @@ describe('creation form', () => {
 
   it('submits forms and shows a success message', () => {
     cy.server();
-    cy.route('POST', '*/cases').as('postCase');
+    cy.route('POST', '**/cases').as('postCase');
     cy.get('form button#submit-case')
       .scrollIntoView()
       .click();
