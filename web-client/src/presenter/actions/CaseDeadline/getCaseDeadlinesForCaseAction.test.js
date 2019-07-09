@@ -23,6 +23,6 @@ describe('getCaseDeadlinesForCaseAction', () => {
         },
       },
     });
-    expect(result.state.caseDetail.caseDeadlines).toEqual(['hello', 'world']);
+    expect(result.state.caseDeadlines).toEqual(['hello', 'world']);
   });
 });
