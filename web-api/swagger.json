@@ -2424,7 +2424,7 @@
         }
       }
     },
-    "v1/cases/{caseId}/case-deadline": {
+    "/v1/cases/{caseId}/case-deadline": {
       "parameters": [
         {
           "name": "caseId",
@@ -2495,7 +2495,7 @@
         }
       }
     },
-    "v1/cases/{caseId}/case-deadline/{caseDeadlineId}": {
+    "/v1/cases/{caseId}/case-deadline/{caseDeadlineId}": {
       "parameters": [
         {
           "name": "caseId",
