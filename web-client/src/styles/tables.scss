@@ -515,8 +515,11 @@ table.case-list tbody tr:nth-child(even) td {
     text-align: center;
   }
 
+  .semi-bold {
+    font-weight: $font-semibold;
+  }
+
   .overdue {
     color: color($theme-color-secondary);
-    font-weight: $font-semibold;
   }
 }
