@@ -9,6 +9,4 @@ new S3rver({
   hostname: '0.0.0.0',
   port: 9000,
   silent: false,
-  // errorDocument,
-  // indexDocument,
-}).run();
+}).run(() => null);
