@@ -118,6 +118,7 @@ import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/us
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
+import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
@@ -227,6 +228,7 @@ const allUseCases = {
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
+  validatePrimaryContactInteractor,
   validateTrialSessionInteractor,
   verifyCaseForUserInteractor,
   verifyPendingCaseForUserInteractor,

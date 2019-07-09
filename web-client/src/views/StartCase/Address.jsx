@@ -24,8 +24,10 @@ export const Address = connect(
       <React.Fragment>
         <div
           className={
-            'usa-form-group' +
-            (validationErrors && validationErrors.address1
+            'usa-form-group ' +
+            (validationErrors &&
+            validationErrors[type] &&
+            validationErrors[type].address1
               ? 'usa-form-group--error'
               : '')
           }
