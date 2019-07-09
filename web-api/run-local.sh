@@ -10,6 +10,7 @@ node start-s3rver &
 S3RVER_PID=$!
 
 echo "seeding s3"
+mkdir -p storage/s3/noop-documents-local-us-east-1
 rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1
 
 echo "creating dynamo tables"
