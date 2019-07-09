@@ -392,12 +392,6 @@ const environment = {
   stage: process.env.STAGE || 'local',
 };
 
-console.log(environment);
-console.log(environment);
-console.log(environment);
-console.log(environment);
-console.log(environment);
-
 let user;
 const getCurrentUser = () => {
   return user;
