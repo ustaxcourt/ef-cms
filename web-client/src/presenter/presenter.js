@@ -154,6 +154,7 @@ import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessi
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateContactPrimarySequence } from './sequences/validateContactPrimarySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
@@ -328,6 +329,7 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
+    validateContactPrimarySequence,
     validateDocketEntrySequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
