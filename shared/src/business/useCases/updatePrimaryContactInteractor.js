@@ -1,7 +1,3 @@
-const {
-  isAuthorized,
-  UPDATE_CONTACT_PRIMARY,
-} = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
@@ -19,10 +15,6 @@ exports.updatePrimaryContactInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CONTACT_PRIMARY)) {
-    throw new UnauthorizedError('Unauthorized for update case');
-  }
-
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -34,16 +26,18 @@ exports.updatePrimaryContactInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
+  if (user.userId !== caseToUpdate.userId) {
+    throw new UnauthorizedError('Unauthorized for update case contact');
+  }
+
   caseToUpdate.contactPrimary = contactInfo;
 
-  const caseEntity = new Case(caseToUpdate);
-
-  // validation?
+  const updatedCase = new Case(caseToUpdate).validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseEntity.toRawObject(),
+    caseToUpdate: updatedCase,
   });
 
-  return caseToUpdate;
+  return updatedCase;
 };
