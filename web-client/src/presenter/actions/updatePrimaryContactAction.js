@@ -24,8 +24,8 @@ export const updatePrimaryContactAction = async ({
     });
 
   store.set(state.alertSuccess, {
-    message: 'You can view your updated primary contact information below.',
-    title: 'Your contact information was updated.',
+    message: 'Your changes have been saved.',
+    title: 'Please confirm the information below is correct.',
   });
 
   return {
