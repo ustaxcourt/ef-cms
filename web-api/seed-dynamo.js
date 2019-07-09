@@ -7,12 +7,11 @@ const client = new AWS.DynamoDB.DocumentClient({
 })
 
 const main = async () => {
-  for (const item of seedEntries) {
-    await client.put({
+  await Promise.all(seedEntries.map(item => 
+    client.put({
       Item: item,
       TableName: 'efcms-local'
-    }).promise();
-  }
+    }).promise()))
 }
 
 main();
