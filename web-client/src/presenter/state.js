@@ -26,6 +26,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -105,6 +106,7 @@ export const state = {
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
+  selectDocumentSelectHelper,
   selectDocumentTypeHelper,
   selectedWorkItems: [],
   sessionMetadata: {},
