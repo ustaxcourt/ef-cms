@@ -1,25 +1,20 @@
-import { sequences } from 'cerebral';
-
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 class EditSecondaryContactModalComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
-      cancelLabel: 'Close',
-      classNames: 'edit-secondary-contact-modal',
       confirmLabel: 'OK',
+      title: 'Edit Contact Information for Other Petitioners',
     };
   }
 
   renderBody() {
     return (
       <div>
-        <h3 className="margin-bottom-3">
-          Edit Contact Information for Other Petitioners
-        </h3>
         <p>
           Contact information for other petitioners, such as spouses and
           business partners, cannot be updated online at this time. Please have
@@ -40,7 +35,6 @@ class EditSecondaryContactModalComponent extends ModalDialog {
 
 export const EditSecondaryContactModal = connect(
   {
-    cancelSequence: sequences.cancelEditPrimaryContactSequence,
     confirmSequence: sequences.dismissModalSequence,
   },
   EditSecondaryContactModalComponent,
