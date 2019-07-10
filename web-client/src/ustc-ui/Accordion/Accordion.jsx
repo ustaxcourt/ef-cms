@@ -1,12 +1,14 @@
-import { camelCase } from 'lodash';
 import { connect } from '@cerebral/react';
 import { decorateWithPostCallback } from '../utils/useCerebralState';
-import { getDefaultAttribute, map } from '../utils/ElementChildren';
+import { map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
 import { useCerebralStateFactory } from '../utils/useCerebralState';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+/**
+ * AccordionItem
+ */
 export function AccordionItem() {}
 
 export const Accordion = connect(
@@ -20,6 +22,7 @@ export const Accordion = connect(
     bordered,
     children,
     className,
+    headingLevel,
     id,
     onSelect,
     simpleSetter,
@@ -34,18 +37,28 @@ export const Accordion = connect(
       [activeKey, setTab] = useState();
     }
 
+    const toggleAlreadySelectedValueDecorator = delegate => {
+      return value => {
+        if (activeKey === value) {
+          value = '-1';
+        }
+        delegate(value);
+      };
+    };
+
+    setTab = toggleAlreadySelectedValueDecorator(setTab);
     setTab = decorateWithPostCallback(setTab, onSelect);
 
-    const renderTab = child => {
-      const { id, tabName, title } = child.props;
+    const renderTab = (child, index) => {
+      const { children, id, title } = child.props;
+      let { itemName } = child.props;
 
-      const isActiveTab = tabName === activeKey;
-      const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
+      itemName = itemName || `item-${index}`;
+      const itemId = id || `ustc-ui-accordion-item-${index}`;
+      const HeadingElement = `h${headingLevel || 2}`;
 
-      var liClass = classNames({
-        active: isActiveTab,
-        'grid-col': boxed,
-      });
+      const isActiveTab = itemName === activeKey;
+      const expandedText = (isActiveTab && 'true') || 'false';
 
       if (!title) {
         return null;
@@ -53,51 +66,37 @@ export const Accordion = connect(
 
       return (
         <>
-          <li className={liClass}>
+          <HeadingElement className="usa-accordion__heading">
             <button
-              aria-controls={tabContentId}
-              aria-selected={isActiveTab}
-              id={id}
-              role="tab"
+              aria-controls={itemId}
+              aria-expanded={expandedText}
+              className="usa-accordion__button"
               type="button"
-              onClick={() => setTab(tabName)}
+              onClick={() => setTab(itemName)}
             >
-              <span>{title}</span>
+              {title}
             </button>
-          </li>
+          </HeadingElement>
+          {isActiveTab && (
+            <div className="usa-accordion__content" id={itemId}>
+              {children}
+            </div>
+          )}
         </>
       );
     };
 
-    const renderTabContent = child => {
-      const { children, tabName } = child.props;
-      const isActiveTab = tabName === activeKey;
-      const tabContentId = `tabContent-${camelCase(tabName)}`;
-
-      let contentProps = {
-        className: 'tabcontent',
-        id: tabContentId,
-        role: 'tabpanel',
-      };
-
-      if (tabName && isActiveTab && children) {
-        return <div {...contentProps}>{children}</div>;
-      }
-
-      return null;
-    };
-
-    const accordionClass = classNames(
-      className,
-      'usa-accordion',
-      bordered && 'usa-accordion--bordered',
+    return (
+      <div
+        className={classNames(
+          className,
+          'usa-accordion',
+          bordered && 'usa-accordion--bordered',
+        )}
+        id={id}
+      >
+        {map(children, renderTab)}
+      </div>
     );
-
-    let baseProps = {
-      className: accordionClass,
-      id,
-    };
-
-    return <div {...baseProps}>{map(children, renderTabContent)}</div>;
   },
 );
