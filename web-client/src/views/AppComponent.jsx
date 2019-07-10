@@ -20,6 +20,7 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { PDFSigner } from './PDFSigner';
+import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
@@ -54,6 +55,7 @@ const pages = {
   Loading,
   LogIn,
   PDFSigner,
+  PrimaryContactEdit,
   RequestAccessWizard,
   SelectDocumentType,
   StartCase,
