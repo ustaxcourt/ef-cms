@@ -87,6 +87,12 @@ iframe {
   display: block;
 }
 
+address {
+  p {
+    word-wrap: break-word;
+  }
+}
+
 .subsection {
   margin-bottom: 30px;
 }
