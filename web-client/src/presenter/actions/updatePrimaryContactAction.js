@@ -30,5 +30,6 @@ export const updatePrimaryContactAction = async ({
 
   return {
     caseId: updatedCase.docketNumber,
+    tab: 'caseInfo',
   };
 };
