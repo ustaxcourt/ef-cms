@@ -1,15 +1,18 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const BeforeYouFileADocument = connect(
   {
     caseDetail: state.caseDetail,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    showModal: state.showModal,
   },
-  ({ caseDetail }) => {
+  ({ caseDetail, formCancelToggleCancelSequence, showModal }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -128,12 +131,20 @@ export const BeforeYouFileADocument = connect(
             >
               OK, Iʼm Ready to File
             </a>
-            <a
-              href={`/case-detail/${caseDetail.docketNumber}`}
+            <button
+              className="usa-button usa-button--unstyled"
               id="cancel-button"
+              onClick={() => {
+                formCancelToggleCancelSequence({
+                  path: `/case-detail/${caseDetail.docketNumber}`,
+                });
+              }}
             >
               Cancel
-            </a>
+            </button>
+            {showModal === 'FormCancelModalDialogComponent' && (
+              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+            )}
           </div>
         </section>
       </>
