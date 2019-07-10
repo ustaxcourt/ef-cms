@@ -197,9 +197,9 @@ exports.forwardWorkItem = async (test, to, workItemId, message) => {
   });
 };
 
-exports.uploadPetition = async test => {
+exports.uploadPetition = async (test, overrides = {}) => {
   test.setState('form', {
-    caseType: 'CDP (Lien/Levy)',
+    caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',
@@ -215,8 +215,8 @@ exports.uploadPetition = async test => {
     filingType: 'Myself',
     hasIrsNotice: false,
     partyType: 'Petitioner',
-    preferredTrialCity: 'Lubbock, Texas',
-    procedureType: 'Regular',
+    preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
+    procedureType: overrides.procedureType || 'Regular',
     signature: true,
   });
 
