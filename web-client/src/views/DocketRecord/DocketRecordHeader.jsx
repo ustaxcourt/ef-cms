@@ -34,7 +34,7 @@ export const DocketRecordHeader = connect(
               {helper.showFileDocumentButton && (
                 <a
                   className="usa-button hide-on-mobile"
-                  href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+                  href={`/case-detail/${caseDetail.docketNumber}/before-you-file-a-document`}
                   id="button-file-document"
                 >
                   <FontAwesomeIcon icon="plus-circle" size="1x" /> File a

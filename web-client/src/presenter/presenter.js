@@ -40,6 +40,7 @@ import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
+import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
@@ -217,6 +218,7 @@ export const presenter = {
     gotoAddDocketEntrySequence,
     gotoAddTrialSessionSequence,
     gotoBeforeStartCaseSequence,
+    gotoBeforeYouFileDocumentSequence,
     gotoCaseDetailSequence,
     gotoCreateOrderSequence,
     gotoDashboardSequence,
