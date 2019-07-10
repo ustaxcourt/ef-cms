@@ -44,31 +44,23 @@ export const DashboardPetitioner = connect(
                   </p>
                   <p>
                     <a
+                      className="usa-link--external"
                       href="https://www.ustaxcourt.gov/dpt_cities.htm"
                       rel="noopener noreferrer"
                       target="_blank"
                     >
                       Find a court location
                     </a>
-                    <FontAwesomeIcon
-                      className="fa-icon-blue margin-left-05"
-                      icon="external-link-alt"
-                      size="sm"
-                    />
                   </p>
                   <p>
                     <a
+                      className="usa-link--external"
                       href="https://www.ustaxcourt.gov/forms.htm"
                       rel="noopener noreferrer"
                       target="_blank"
                     >
                       View forms
                     </a>
-                    <FontAwesomeIcon
-                      className="fa-icon-blue margin-left-05"
-                      icon="external-link-alt"
-                      size="sm"
-                    />
                   </p>
                 </div>
               </div>
@@ -77,14 +69,14 @@ export const DashboardPetitioner = connect(
                   <h3>Other Filing Options</h3>
                   <hr />
                   <p>
-                    <a href="/" rel="noopener noreferrer" target="_blank">
+                    <a
+                      className="usa-link--external"
+                      href="/"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
                       How to file a case by mail or in person
                     </a>
-                    <FontAwesomeIcon
-                      className="fa-icon-blue margin-left-05"
-                      icon="external-link-alt"
-                      size="sm"
-                    />
                   </p>
                 </div>
               </div>
