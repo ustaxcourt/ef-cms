@@ -87,8 +87,10 @@ iframe {
   display: block;
 }
 
-.email-line {
-  word-wrap: break-word;
+address {
+  p {
+    word-wrap: break-word;
+  }
 }
 
 .subsection {
