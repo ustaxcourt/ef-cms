@@ -1,3 +1,4 @@
+import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
 import { DocumentType } from './DocumentType';
 import { DocumentTypeReadOnly } from './DocumentTypeReadOnly';
@@ -8,21 +9,21 @@ import React from 'react';
 
 export const SelectDocumentType = connect(
   {
+    caseDetail: state.caseDetail,
     form: state.form,
+    goToViewAllDocumentsSequence: sequences.goToViewAllDocumentsSequence,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
   },
   ({
+    caseDetail,
     form,
     screenMetadata,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
-    updateFileDocumentWizardFormValueSequence,
   }) => {
     return (
       <React.Fragment>
@@ -75,106 +76,51 @@ export const SelectDocumentType = connect(
                 )}
               </div>
               {!form.documentType && (
-                <div className="tablet:grid-col-4 tablet:grid-offset-2 frequently-used-docs">
+                <div className="tablet:grid-col-4 tablet:grid-offset-2 bg-white need-help-selecting">
                   <div className="card">
+                    <div className="content-header bg-accent-cool-dark text-white heading-2">
+                      Need help selecting a document type?
+                    </div>
                     <div className="content-wrapper">
-                      <h3>Frequently Used Documents</h3>
-                      <hr />
-                      <ul className="ustc-unstyled-list margin-bottom-0">
-                        {[
-                          {
-                            category: 'Motion',
-                            documentType:
-                              'Motion for Judgment on the Pleadings',
-                          },
-                          {
-                            category: 'Application',
-                            documentType:
-                              'Application for Waiver of Filing Fee',
-                          },
-                          {
-                            category: 'Motion',
-                            documentType: 'Motion for a New Trial',
-                          },
-                          {
-                            category: 'Motion',
-                            documentType:
-                              'Motion for Protective Order Pursuant to Rule 103',
-                          },
-                          {
-                            category: 'Motion',
-                            documentType: 'Motion for Continuance',
-                          },
-                          {
-                            category: 'Notice',
-                            documentType: 'Notice of No Objection',
-                            scenario: 'Nonstandard A',
-                          },
-                          {
-                            category: 'Statement',
-                            documentType: 'Statement',
-                            scenario: 'Nonstandard B',
-                          },
-                          {
-                            category: 'Supporting Document',
-                            documentType: 'Affidavit in Support',
-                            scenario: 'Nonstandard C',
-                          },
-                          {
-                            category: 'Miscellaneous',
-                            documentType: 'Certificate of Service',
-                            scenario: 'Nonstandard D',
-                          },
-                          {
-                            category: 'Motion',
-                            documentType:
-                              'Motion to Change Place of Submission of Declaratory Judgment Case',
-                            scenario: 'Nonstandard E',
-                          },
-                          {
-                            category: 'Miscellaneous',
-                            documentType: 'Amended',
-                            scenario: 'Nonstandard F',
-                          },
-                          {
-                            category: 'Request',
-                            documentType: 'Request for Admissions',
-                            scenario: 'Nonstandard G',
-                          },
-                          {
-                            category: 'Motion',
-                            documentType: 'Motion for Leave to File',
-                            scenario: 'Nonstandard H',
-                          },
-                        ].map((document, idx) => {
-                          return (
-                            <li key={document.documentType}>
-                              <button
-                                className={`usa-button usa-button--unstyled margin-bottom-2 ${
-                                  idx == 0 ? 'margin-top-0' : ''
-                                }`}
-                                type="button"
-                                onClick={() => {
-                                  updateFileDocumentWizardFormValueSequence({
-                                    key: 'category',
-                                    value: document.category,
-                                  });
-                                  updateFileDocumentWizardFormValueSequence({
-                                    key: 'documentType',
-                                    value: document.documentType,
-                                  });
-                                  selectDocumentSequence();
-                                }}
-                              >
-                                {document.documentType}{' '}
-                                {document.scenario
-                                  ? `(${document.scenario})`
-                                  : ''}
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
+                      <p>
+                        Here are common reasons you might be filing a document.
+                        Underneath each is a list of document types that are
+                        usually associated with that reason.
+                      </p>
+                    </div>
+                    <Accordion headingLevel="3">
+                      <AccordionItem title="Request Something From the Court">
+                        <p>Application</p>
+                        <p>Motion</p>
+                        <p>Petition</p>
+                      </AccordionItem>
+                      <AccordionItem title="Notify the Court of a Change">
+                        <p>Brief</p>
+                        <p>Memorandum</p>
+                        <p>Notice</p>
+                        <p>Statement</p>
+                        <p>Stipulation</p>
+                      </AccordionItem>
+                      <AccordionItem title="Update or Add to a Document">
+                        <p>Miscellaneous</p>
+                        <p>Supporting Documents</p>
+                      </AccordionItem>
+                      <AccordionItem title="Respond to a Previous Document">
+                        <p>Motion</p>
+                        <p>Reply</p>
+                        <p>Response</p>
+                      </AccordionItem>
+                    </Accordion>
+                    <div className="content-wrapper">
+                      <div>
+                        <a
+                          className="usa-button usa-button--outline"
+                          href={`/case-detail/${caseDetail.docketNumber}/file-a-document/view-all-documents`}
+                          id="view-all-documents"
+                        >
+                          View All Document Categories
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
