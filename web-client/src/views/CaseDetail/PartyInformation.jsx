@@ -148,7 +148,7 @@ export const PartyInformation = connect(
             </span>
           </p>
           {contact.phone && <p>{contact.phone}</p>}
-          {contact.email && <p>{contact.email}</p>}
+          {contact.email && <p className="email-line">{contact.email}</p>}
         </React.Fragment>
       );
     };
