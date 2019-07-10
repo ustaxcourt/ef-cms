@@ -1,7 +1,8 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const BeforeYouFileADocument = connect(
@@ -12,7 +13,7 @@ export const BeforeYouFileADocument = connect(
     return (
       <>
         <CaseDetailHeader />
-        <section className="usa-section before-starting-case grid-container">
+        <section className="usa-section before-filing-document grid-container">
           <h1 className="captioned" tabIndex="-1">
             Before you file a document…
           </h1>
@@ -21,9 +22,11 @@ export const BeforeYouFileADocument = connect(
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">
-                  <div className="caseItem__icon" role="display">
-                    <FontAwesomeIcon icon={['far', 'copy']} />
-                  </div>
+                  <NonMobile>
+                    <div className="caseItem__icon" role="display">
+                      <FontAwesomeIcon icon={['far', 'copy']} />
+                    </div>
+                  </NonMobile>
                   <h3 className="caseItem__heading">
                     1. Gather All Documents You Want to Include in Your Filing
                   </h3>
@@ -95,9 +98,11 @@ export const BeforeYouFileADocument = connect(
               </div>
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">
-                  <div className="caseItem__icon" role="display">
-                    <FontAwesomeIcon icon={['fa', 'shield-alt']} />
-                  </div>
+                  <NonMobile>
+                    <div className="caseItem__icon" role="display">
+                      <FontAwesomeIcon icon={['fa', 'shield-alt']} />
+                    </div>
+                  </NonMobile>
                   <h3 className="caseItem__heading">
                     2. Remove Personal Information From Your Document(s)
                   </h3>
