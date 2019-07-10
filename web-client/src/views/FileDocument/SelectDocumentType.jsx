@@ -17,8 +17,6 @@ export const SelectDocumentType = connect(
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
   },
   ({
     caseDetail,
@@ -26,7 +24,6 @@ export const SelectDocumentType = connect(
     screenMetadata,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
-    updateFileDocumentWizardFormValueSequence,
   }) => {
     return (
       <React.Fragment>

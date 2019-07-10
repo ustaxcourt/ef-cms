@@ -28,12 +28,12 @@ export const FilingsAndProceedings = connect(
     showDocketRecordDetailModalSequence,
     token,
   }) => {
-    function renderDocumentLink(
+    const renderDocumentLink = (
       documentId,
       description,
       isPaper,
       docketRecordIndex = 0,
-    ) {
+    ) => {
       return (
         <React.Fragment>
           {caseDetailHelper.userHasAccessToCase && (
@@ -72,7 +72,7 @@ export const FilingsAndProceedings = connect(
           {!caseDetailHelper.userHasAccessToCase && description}
         </React.Fragment>
       );
-    }
+    };
 
     return (
       <React.Fragment>
