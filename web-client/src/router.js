@@ -103,6 +103,13 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/file-a-document/view-all-documents',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document - View All ${pageTitleSuffix}`;
+        app.getSequence('gotoViewAllDocumentsSequence')({ docketNumber });
+      }),
+    );
+    route(
       '/case-detail/*/create-order',
       checkLoggedIn(docketNumber => {
         document.title = `Create an order ${pageTitleSuffix}`;
