@@ -5,6 +5,7 @@ import React from 'react';
 
 export const Country = connect(
   {
+    clearTypeOnCountryChange: props.clearTypeOnCountryChange,
     constants: state.constants,
     data: state[props.bind],
     type: props.type,
@@ -13,6 +14,7 @@ export const Country = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    clearTypeOnCountryChange,
     constants,
     data,
     type,
@@ -41,11 +43,24 @@ export const Country = connect(
             name={`${type}.countryType`}
             value={data[type].countryType}
             onChange={e => {
+              let validate = true;
+
+              if (
+                clearTypeOnCountryChange &&
+                e.target.value !== data[type].countryType
+              ) {
+                updateFormValueSequence({ key: type, value: {} });
+                validate = false;
+              }
+
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateStartCaseSequence();
+
+              if (validate) {
+                validateStartCaseSequence();
+              }
             }}
           >
             <option value={constants.COUNTRY_TYPES.DOMESTIC}>

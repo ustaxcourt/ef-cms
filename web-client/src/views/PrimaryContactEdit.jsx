@@ -32,16 +32,17 @@ export const PrimaryContactEdit = connect(
           <h2>Edit Your Contact Information for This Case</h2>
           <div className="blue-container">
             <Country
-              bind={'caseDetail'}
-              type={'contactPrimary'}
-              onBlur={'validateContactPrimarySequence'}
-              onChange={'updateCaseValueSequence'}
+              bind="caseDetail"
+              clearTypeOnCountryChange={true}
+              type="contactPrimary"
+              onBlur="validateContactPrimarySequence"
+              onChange="updateCaseValueSequence"
             />
             <Address
-              bind={'caseDetail'}
-              type={'contactPrimary'}
-              onBlur={'validateContactPrimarySequence'}
-              onChange={'updateCaseValueSequence'}
+              bind="caseDetail"
+              type="contactPrimary"
+              onBlur="validateContactPrimarySequence"
+              onChange="updateCaseValueSequence"
             />
             <div
               className={
