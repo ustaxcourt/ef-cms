@@ -5,6 +5,7 @@ import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { uploadPetition } from './helpers';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import captureCreatedCase from './journey/captureCreatedCase';
@@ -18,9 +19,6 @@ import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSe
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
@@ -53,12 +51,6 @@ presenter.state = mapValues(presenter.state, value => {
   }
   return value;
 });
-
-const fakeData =
-  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-
-const fakeFile = Buffer.from(fakeData, 'base64');
-fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
@@ -104,18 +96,19 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe('Create cases', () => {
-    describe(`Case #1 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/1/2019`, () => {
+    describe(`Case #1 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Small',
         receivedAtYear: '2019',
         receivedAtMonth: '01',
         receivedAtDay: '01',
+        caseType: 'Deficiency',
       };
       taxpayerLogin(test);
-      taxpayerChoosesProcedureType(test, caseOverrides);
-      taxpayerChoosesCaseType(test);
-      taxpayerCreatesNewCase(test, fakeFile);
+      it('Create case #1', async () => {
+        await uploadPetition(test, caseOverrides);
+      });
       taxpayerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
@@ -127,18 +120,19 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
     });
 
-    describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 1/2/2019`, () => {
+    describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Small',
         receivedAtYear: '2019',
         receivedAtMonth: '01',
         receivedAtDay: '02',
+        caseType: 'Deficiency',
       };
       taxpayerLogin(test);
-      taxpayerChoosesProcedureType(test, caseOverrides);
-      taxpayerChoosesCaseType(test);
-      taxpayerCreatesNewCase(test, fakeFile);
+      it('Create case #2', async () => {
+        await uploadPetition(test, caseOverrides);
+      });
       taxpayerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
@@ -150,18 +144,19 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
     });
 
-    describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular case type with filed date 1/1/2019`, () => {
+    describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Regular',
         receivedAtYear: '2019',
         receivedAtMonth: '01',
         receivedAtDay: '01',
+        caseType: 'Deficiency',
       };
       taxpayerLogin(test);
-      taxpayerChoosesProcedureType(test, caseOverrides);
-      taxpayerChoosesCaseType(test);
-      taxpayerCreatesNewCase(test, fakeFile);
+      it('Create case #3', async () => {
+        await uploadPetition(test, caseOverrides);
+      });
       taxpayerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
@@ -173,7 +168,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
     });
 
-    describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 5/1/2019`, () => {
+    describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 5/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Small',
@@ -183,9 +178,9 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: 'CDP (Lien/Levy)',
       };
       taxpayerLogin(test);
-      taxpayerChoosesProcedureType(test, caseOverrides);
-      taxpayerChoosesCaseType(test);
-      taxpayerCreatesNewCase(test, fakeFile, caseOverrides);
+      it('Create case #4', async () => {
+        await uploadPetition(test, caseOverrides);
+      });
       taxpayerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
@@ -197,7 +192,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       userSignsOut(test);
     });
 
-    describe(`Case #5 'P' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small case type with filed date 3/1/2019`, () => {
+    describe(`Case #5 'P' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 3/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
         procedureType: 'Small',
@@ -207,9 +202,9 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: 'Passport',
       };
       taxpayerLogin(test);
-      taxpayerChoosesProcedureType(test, caseOverrides);
-      taxpayerChoosesCaseType(test);
-      taxpayerCreatesNewCase(test, fakeFile, caseOverrides);
+      it('Create case #5', async () => {
+        await uploadPetition(test, caseOverrides);
+      });
       taxpayerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);

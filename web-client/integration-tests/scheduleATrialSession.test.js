@@ -5,6 +5,7 @@ import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { uploadPetition } from './helpers';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
@@ -18,11 +19,7 @@ import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSe
 import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
 import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
 const {
@@ -100,10 +97,9 @@ describe('Schedule A Trial Session', () => {
 
   for (let i = 0; i < 2; i++) {
     taxpayerLogin(test);
-    taxpayerNavigatesToCreateCase(test);
-    taxpayerChoosesProcedureType(test, overrides);
-    taxpayerChoosesCaseType(test);
-    taxpayerCreatesNewCase(test, fakeFile);
+    it(`Create case ${i + 1}`, async () => {
+      await uploadPetition(test, overrides);
+    });
     taxpayerViewsDashboard(test);
     userSignsOut(test);
     petitionsClerkLogIn(test);
