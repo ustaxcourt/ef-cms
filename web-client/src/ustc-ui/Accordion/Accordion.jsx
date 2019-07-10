@@ -40,7 +40,7 @@ export const Accordion = connect(
     const toggleAlreadySelectedValueDecorator = delegate => {
       return value => {
         if (activeKey === value) {
-          value = '-1';
+          value = '~no item selected~';
         }
         delegate(value);
       };
@@ -54,11 +54,13 @@ export const Accordion = connect(
       let { itemName } = child.props;
 
       itemName = itemName || `item-${index}`;
-      const itemId = id || `ustc-ui-accordion-item-${index}`;
+      const itemButtonId = id || `ustc-ui-accordion-item-button-${index}`;
+      const itemContentId =
+        (id && `${id}-item-content`) ||
+        `ustc-ui-accordion-item-content-${index}`;
       const HeadingElement = `h${headingLevel || 2}`;
-
-      const isActiveTab = itemName === activeKey;
-      const expandedText = (isActiveTab && 'true') || 'false';
+      const isActiveItem = itemName === activeKey;
+      const expandedText = (isActiveItem && 'true') || 'false';
 
       if (!title) {
         return null;
@@ -68,17 +70,18 @@ export const Accordion = connect(
         <>
           <HeadingElement className="usa-accordion__heading">
             <button
-              aria-controls={itemId}
+              aria-controls={itemContentId}
               aria-expanded={expandedText}
               className="usa-accordion__button"
+              id={itemButtonId}
               type="button"
               onClick={() => setTab(itemName)}
             >
               {title}
             </button>
           </HeadingElement>
-          {isActiveTab && (
-            <div className="usa-accordion__content" id={itemId}>
+          {isActiveItem && (
+            <div className="usa-accordion__content" id={itemContentId}>
               {children}
             </div>
           )}
