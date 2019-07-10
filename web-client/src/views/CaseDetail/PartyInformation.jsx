@@ -69,10 +69,7 @@ export const PartyInformation = connect(
                       className="usa-button usa-button--unstyled"
                       onClick={() => editSecondaryContact()}
                     >
-                      <FontAwesomeIcon
-                        icon={['fas', 'question-circle']}
-                        size="sm"
-                      />
+                      <FontAwesomeIcon icon="edit" size="sm" />
                       Why can’t I edit this?
                     </button>
                   </div>
