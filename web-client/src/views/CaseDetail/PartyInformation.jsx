@@ -41,13 +41,15 @@ export const PartyInformation = connect(
                     {addressDisplay(caseDetail.contactPrimary)}
                   </address>
 
-                  <button
-                    className="usa-button usa-button--unstyled"
-                    onClick={() => editPrimaryContact()}
-                  >
-                    <FontAwesomeIcon icon="edit" size="sm" />
-                    Edit
-                  </button>
+                  {caseHelper.showEditContactButton && (
+                    <button
+                      className="usa-button usa-button--unstyled"
+                      onClick={() => editPrimaryContact()}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </button>
+                  )}
                 </div>
               </React.Fragment>
             )}{' '}
@@ -65,16 +67,18 @@ export const PartyInformation = connect(
                       {caseDetail.contactSecondary.name &&
                         addressDisplay(caseDetail.contactSecondary)}
                     </address>
-                    <button
-                      className="usa-button usa-button--unstyled"
-                      onClick={() => editSecondaryContact()}
-                    >
-                      <FontAwesomeIcon
-                        icon={['fas', 'question-circle']}
-                        size="sm"
-                      />
-                      Why can’t I edit this?
-                    </button>
+                    {caseHelper.showEditContactButton && (
+                      <button
+                        className="usa-button usa-button--unstyled"
+                        onClick={() => editSecondaryContact()}
+                      >
+                        <FontAwesomeIcon
+                          icon={['fas', 'question-circle']}
+                          size="sm"
+                        />
+                        Why can’t I edit this?
+                      </button>
+                    )}
                   </div>
                 </React.Fragment>
               )}{' '}
