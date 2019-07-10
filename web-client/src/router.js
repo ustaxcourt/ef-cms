@@ -89,6 +89,13 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/contacts/primary/edit',
+      checkLoggedIn(docketNumber => {
+        document.title = `Primary contact ${pageTitleSuffix}`;
+        app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
+      }),
+    );
+    route(
       '/case-detail/*/create-order',
       checkLoggedIn(docketNumber => {
         document.title = `Create an order ${pageTitleSuffix}`;
