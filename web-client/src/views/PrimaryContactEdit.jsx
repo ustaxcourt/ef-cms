@@ -81,7 +81,7 @@ export const PrimaryContactEdit = connect(
           </div>
           <button
             className="usa-button margin-top-3 margin-right-3"
-            onBlur={() => {
+            onClick={() => {
               submitEditPrimaryContactSequence();
             }}
           >

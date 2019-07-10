@@ -29,6 +29,6 @@ export const updatePrimaryContactAction = async ({
   });
 
   return {
-    caseDetail: updatedCase,
+    caseId: updatedCase.docketNumber,
   };
 };
