@@ -1,13 +1,11 @@
-import { isEmpty } from 'lodash';
-import { sequences, state } from 'cerebral';
-
+import { Address } from './StartCase/Address';
+import { Country } from './StartCase/Country';
 import { ModalDialog } from './ModalDialog';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import { isEmpty } from 'lodash';
+import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { Address } from './StartCase/Address';
-import { Country } from './StartCase/Country';
 
 class EditPrimaryContactModalComponent extends ModalDialog {
   constructor(props) {
@@ -16,6 +14,7 @@ class EditPrimaryContactModalComponent extends ModalDialog {
       cancelLabel: 'Cancel',
       classNames: 'edit-primary-contact-modal',
       confirmLabel: 'Save',
+      title: 'Edit Your Contact Information',
     };
 
     this.type = 'contactPrimary';
@@ -44,7 +43,6 @@ class EditPrimaryContactModalComponent extends ModalDialog {
 
     return (
       <div>
-        <h3 className="margin-bottom-3">Edit Your Contact Information</h3>
         <Country bind={bind} type={type} onBlur={onBlur} onChange={onChange} />
         <Address bind={bind} type={type} onBlur={onBlur} onChange={onChange} />
         <div
