@@ -11,11 +11,14 @@ export const SelectDocumentType = connect(
   {
     caseDetail: state.caseDetail,
     form: state.form,
+    goToViewAllDocumentsSequence: sequences.goToViewAllDocumentsSequence,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
     submitting: state.submitting,
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
   },
   ({
     caseDetail,
@@ -23,6 +26,7 @@ export const SelectDocumentType = connect(
     screenMetadata,
     selectDocumentSequence,
     toggleDocumentCategoryAccordionSequence,
+    updateFileDocumentWizardFormValueSequence,
   }) => {
     return (
       <React.Fragment>
@@ -75,9 +79,9 @@ export const SelectDocumentType = connect(
                 )}
               </div>
               {!form.documentType && (
-                <div className="tablet:grid-col-4 tablet:grid-offset-2 need-help-selecting">
+                <div className="tablet:grid-col-4 tablet:grid-offset-2 bg-white need-help-selecting">
                   <div className="card">
-                    <div className="content-header">
+                    <div className="content-header bg-accent-cool-dark text-white heading-2">
                       Need help selecting a document type?
                     </div>
                     <div className="content-wrapper">
@@ -86,29 +90,31 @@ export const SelectDocumentType = connect(
                         Underneath each is a list of document types that are
                         usually associated with that reason.
                       </p>
-                      <Accordion>
-                        <AccordionItem title="Request Something From the Court">
-                          <p>Application</p>
-                          <p>Motion</p>
-                          <p>Petition</p>
-                        </AccordionItem>
-                        <AccordionItem title="Notify the Court of a Change">
-                          <p>Brief</p>
-                          <p>Memorandum</p>
-                          <p>Notice</p>
-                          <p>Statement</p>
-                          <p>Stipulation</p>
-                        </AccordionItem>
-                        <AccordionItem title="Update or Add to a Document">
-                          <p>Miscellaneous</p>
-                          <p>Supporting Documents</p>
-                        </AccordionItem>
-                        <AccordionItem title="Respond to a Previous Document">
-                          <p>Motion</p>
-                          <p>Reply</p>
-                          <p>Response</p>
-                        </AccordionItem>
-                      </Accordion>
+                    </div>
+                    <Accordion headingLevel="3">
+                      <AccordionItem title="Request Something From the Court">
+                        <p>Application</p>
+                        <p>Motion</p>
+                        <p>Petition</p>
+                      </AccordionItem>
+                      <AccordionItem title="Notify the Court of a Change">
+                        <p>Brief</p>
+                        <p>Memorandum</p>
+                        <p>Notice</p>
+                        <p>Statement</p>
+                        <p>Stipulation</p>
+                      </AccordionItem>
+                      <AccordionItem title="Update or Add to a Document">
+                        <p>Miscellaneous</p>
+                        <p>Supporting Documents</p>
+                      </AccordionItem>
+                      <AccordionItem title="Respond to a Previous Document">
+                        <p>Motion</p>
+                        <p>Reply</p>
+                        <p>Response</p>
+                      </AccordionItem>
+                    </Accordion>
+                    <div className="content-wrapper">
                       <div>
                         <a
                           className="usa-button usa-button--outline"
