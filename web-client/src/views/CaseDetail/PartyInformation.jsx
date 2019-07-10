@@ -34,7 +34,6 @@ export const PartyInformation = connect(
 
                   {caseHelper.showEditContactButton && (
                     <a
-                      className="usa-button usa-button--unstyled"
                       href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
@@ -161,8 +160,6 @@ export const PartyInformation = connect(
           <h3>Party Information</h3>
           {mainPartyInformation()}
         </Mobile>
-
-        {caseHelper.showEditPrimaryContactModal && <EditPrimaryContactModal />}
 
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
