@@ -54,6 +54,7 @@ import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
+import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
@@ -230,6 +231,7 @@ export const presenter = {
     gotoStyleGuideSequence,
     gotoTrialSessionDetailSequence,
     gotoTrialSessionsSequence,
+    gotoViewAllDocumentsSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
     navigateToPathSequence,
