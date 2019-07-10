@@ -45,7 +45,7 @@ export const PartyInformation = connect(
                     className="usa-button usa-button--unstyled"
                     onClick={() => editPrimaryContact()}
                   >
-                    <FontAwesomeIcon icon={['far', 'edit']} size="sm" />
+                    <FontAwesomeIcon icon="edit" size="sm" />
                     Edit
                   </button>
                 </div>
