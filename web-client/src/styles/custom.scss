@@ -1150,3 +1150,13 @@ nav.usa-nav {
   content: '20px';
   font-size: 20px !important;
 }
+
+.need-help-selecting {
+  .usa-accordion__heading:not(:first-child) {
+    margin-top: 1rem;
+  }
+  .content-header {
+    padding: 11px 20px;
+    margin: 0;
+  }
+}
