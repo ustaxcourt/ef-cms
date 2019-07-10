@@ -24,8 +24,8 @@ export const updatePrimaryContactAction = async ({
     });
 
   store.set(state.alertSuccess, {
-    message: 'Your changes have been saved.',
-    title: 'Please confirm the information below is correct.',
+    message: 'Please confirm the information below is correct.',
+    title: 'Your changes have been saved.',
   });
 
   return {
