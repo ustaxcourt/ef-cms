@@ -82,6 +82,13 @@ const router = {
       ),
     );
     route(
+      '/case-detail/*/before-you-file-a-document',
+      checkLoggedIn(docketNumber => {
+        document.title = `Before you file a document ${pageTitleSuffix}`;
+        app.getSequence('gotoBeforeYouFileDocumentSequence')({ docketNumber });
+      }),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
