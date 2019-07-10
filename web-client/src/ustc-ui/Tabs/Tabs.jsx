@@ -8,8 +8,17 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+/**
+ * Tab
+ */
 export function Tab() {}
 
+/**
+ * TabsComponent
+ *
+ * @param {*} properties the props
+ * @returns {*} the rendered component
+ */
 export function TabsComponent({
   asSwitch,
   bind,
