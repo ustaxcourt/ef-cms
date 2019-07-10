@@ -1,6 +1,10 @@
 const AWS = require('aws-sdk');
 
 const dynamo = new AWS.DynamoDB({
+  credentials: {
+    accessKeyId: 'noop',
+    secretAccessKey: 'noop',
+  },
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 });
@@ -14,7 +18,7 @@ const deleteTable = async tableName => {
       .promise();
   } catch (error) {
     // ResourceNotFoundException
-    console.log('no table to delete')
+    console.log('no table to delete');
     return Promise.resolve();
   }
 };
@@ -44,21 +48,21 @@ const createEFCMSTable = async () => {
           KeySchema: [
             {
               AttributeName: 'gsi1pk',
-              KeyType: 'HASH'
+              KeyType: 'HASH',
             },
             {
               AttributeName: 'pk',
-              KeyType: 'RANGE'
-            }
+              KeyType: 'RANGE',
+            },
           ],
           Projection: {
-            ProjectionType: 'ALL'
+            ProjectionType: 'ALL',
           },
           ProvisionedThroughput: {
             ReadCapacityUnits: 1,
-            WriteCapacityUnits: 1
+            WriteCapacityUnits: 1,
           },
-        }
+        },
       ],
       KeySchema: [
         {
