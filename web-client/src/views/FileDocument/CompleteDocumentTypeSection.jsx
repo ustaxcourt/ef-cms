@@ -9,6 +9,7 @@ import Select from 'react-select';
 export const CompleteDocumentTypeSection = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
+    form: state.form,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -18,6 +19,7 @@ export const CompleteDocumentTypeSection = connect(
   },
   ({
     completeDocumentTypeSectionHelper,
+    form,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
@@ -44,6 +46,9 @@ export const CompleteDocumentTypeSection = connect(
               completeDocumentTypeSectionHelper.documentTypesForSelectSorted
             }
             placeholder="- Select -"
+            value={completeDocumentTypeSectionHelper.documentTypesForSelectSorted.filter(
+              option => option.eventCode === form.eventCode,
+            )}
             onChange={(inputValue, { action }) => {
               switch (action) {
                 case 'select-option':
@@ -136,6 +141,10 @@ export const CompleteDocumentTypeSection = connect(
                   completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted
                 }
                 placeholder="- Select -"
+                value={completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted.filter(
+                  option =>
+                    option.eventCode === form.secondaryDocument.eventCode,
+                )}
                 onChange={(inputValue, { action }) => {
                   switch (action) {
                     case 'select-option':
