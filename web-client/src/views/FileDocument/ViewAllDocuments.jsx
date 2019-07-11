@@ -27,7 +27,7 @@ export const ViewAllDocuments = connect(
                 {viewAllDocumentsHelper.sections.map((title, index) => {
                   return (
                     <AccordionItem key={`item-${index}`} title={title}>
-                      <div className="grid-container">
+                      <div className="grid-container padding-0">
                         <div className="grid-row grid-gap">
                           {viewAllDocumentsHelper.categoryMap[title].map(
                             (document, index) => {
