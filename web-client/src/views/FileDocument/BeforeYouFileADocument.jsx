@@ -135,9 +135,7 @@ export const BeforeYouFileADocument = connect(
               className="usa-button usa-button--unstyled"
               id="cancel-button"
               onClick={() => {
-                formCancelToggleCancelSequence({
-                  path: `/case-detail/${caseDetail.docketNumber}`,
-                });
+                formCancelToggleCancelSequence();
               }}
             >
               Cancel
