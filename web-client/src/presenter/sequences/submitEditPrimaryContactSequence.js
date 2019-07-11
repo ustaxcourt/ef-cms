@@ -10,7 +10,7 @@ import { updatePrimaryContactAction } from '../actions/updatePrimaryContactActio
 export const submitEditPrimaryContactSequence = [
   setFormSubmittingAction,
   updatePrimaryContactAction,
-  parallel([[setDocumentDetailTabAction, setAlertSuccessAction]]),
+  parallel([setDocumentDetailTabAction, setAlertSuccessAction]),
   unsetFormSubmittingAction,
   setCurrentPageAction('Interstitial'),
   navigateToCaseDetailAction,
