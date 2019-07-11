@@ -4,7 +4,7 @@ export default test => {
 
     expect(test.getState('showModal')).toEqual('EditSecondaryContact');
 
-    await test.runSequence('cancelEditPrimaryContactSequence');
+    await test.runSequence('dismissModalSequence');
 
     expect(test.getState('showModal')).toEqual('');
   });
