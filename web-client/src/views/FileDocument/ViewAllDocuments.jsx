@@ -27,23 +27,17 @@ export const ViewAllDocuments = connect(
                 {viewAllDocumentsHelper.sections.map((title, index) => {
                   return (
                     <AccordionItem key={`item-${index}`} title={title}>
-                      <div className="grid-container padding-0">
-                        <div className="grid-row grid-gap">
-                          {viewAllDocumentsHelper.categoryMap[title].map(
-                            (document, index) => {
-                              return (
-                                <div
-                                  className="tablet:grid-col-3"
-                                  key={`${title}-document-${index}`}
-                                >
-                                  <button className="usa-button usa-button--unstyled">
-                                    {document.documentType}
-                                  </button>
-                                </div>
-                              );
-                            },
-                          )}
-                        </div>
+                      <div className="all-columns-view">
+                        {viewAllDocumentsHelper.categoryMap[title].map(
+                          (document, index) => (
+                            <button
+                              className="usa-button usa-button--unstyled margin-bottom-1"
+                              key={`${title}-document-${index}`}
+                            >
+                              {document.documentType}
+                            </button>
+                          ),
+                        )}
                       </div>
                     </AccordionItem>
                   );
