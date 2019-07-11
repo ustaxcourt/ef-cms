@@ -1160,3 +1160,10 @@ nav.usa-nav {
     margin: 0;
   }
 }
+
+.all-columns-view {
+  column-count: 4;
+  > button {
+    line-height: 22px;
+  }
+}
