@@ -9,7 +9,7 @@ describe('getWorkItemInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxyaper',
+      sentBy: 'taxpayer',
     },
     messages: [],
     section: 'docket',
@@ -88,7 +88,7 @@ describe('getWorkItemInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
-      document: { sentBy: 'taxyaper' },
+      document: { sentBy: 'taxpayer' },
       messages: [],
       section: 'docket',
       sentBy: 'docketclerk',

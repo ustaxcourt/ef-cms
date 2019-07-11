@@ -18,7 +18,7 @@ exports.getDocumentQCBatchedForSectionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM, user.userId)) {
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
