@@ -22,5 +22,4 @@ layers:
     package:
       exclude:
         - puppeteer_lambda_layer.tar.gz
-    allowedAccounts: # optional, a list of AWS account IDs allowed to access this layer.
-      - '*'
+    retain: true
