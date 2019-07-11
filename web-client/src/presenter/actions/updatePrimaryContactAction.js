@@ -6,15 +6,15 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {object} providers.get the cerebral store used for getting state.form
- * @returns {void}
+ * @returns {object} alertSuccess, caseId, tab
  */
 export const updatePrimaryContactAction = async ({
   applicationContext,
   get,
-  store,
 }) => {
   const caseToUpdate = get(state.caseDetail);
-  const contactInfo = get(state.contactToEdit.contactPrimary);
+  const contactInfo = get(state.caseDetail.contactPrimary);
+
   const updatedCase = await applicationContext
     .getUseCases()
     .updatePrimaryContactInteractor({
@@ -23,12 +23,12 @@ export const updatePrimaryContactAction = async ({
       contactInfo,
     });
 
-  store.set(state.alertSuccess, {
-    message: 'Please confirm the information below is correct.',
-    title: 'Your changes have been saved.',
-  });
-
   return {
-    caseDetail: updatedCase,
+    alertSuccess: {
+      message: 'Please confirm the information below is correct.',
+      title: 'Your changes have been saved.',
+    },
+    caseId: updatedCase.docketNumber,
+    tab: 'caseInfo',
   };
 };

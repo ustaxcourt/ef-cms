@@ -96,6 +96,13 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/contacts/primary/edit',
+      checkLoggedIn(docketNumber => {
+        document.title = `Primary contact ${pageTitleSuffix}`;
+        app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
+      }),
+    );
+    route(
       '/case-detail/*/file-a-document/view-all-documents',
       checkLoggedIn(docketNumber => {
         document.title = `File a document - View All ${pageTitleSuffix}`;

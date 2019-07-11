@@ -1,23 +1,19 @@
 export default test => {
-  return it('Petitioner updates primary contact information', async () => {
-    await test.runSequence('updateContactPrimaryValueSequence', {
+  return it('Taxpayer updates primary contact information', async () => {
+    await test.runSequence('updateCaseValueSequence', {
       key: 'contactPrimary.address1',
       value: '100 Main St.',
     });
 
-    await test.runSequence('updateContactPrimaryValueSequence', {
+    await test.runSequence('updateCaseValueSequence', {
       key: 'contactPrimary.address2',
       value: 'Grand View Apartments',
     });
 
-    await test.runSequence('updateContactPrimaryValueSequence', {
+    await test.runSequence('updateCaseValueSequence', {
       key: 'contactPrimary.address3',
       value: 'Apt. 104',
     });
-
-    expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
-      '123 Abc Ln',
-    );
 
     await test.runSequence('submitEditPrimaryContactSequence');
 

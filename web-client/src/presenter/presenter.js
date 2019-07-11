@@ -7,7 +7,6 @@ import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
-import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
@@ -48,6 +47,7 @@ import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequen
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
+import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
@@ -66,7 +66,6 @@ import { openCreateMessageModalSequence } from './sequences/openCreateMessageMod
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
-import { openEditPrimaryContactModalSequence } from './sequences/openEditPrimaryContactModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -137,7 +136,6 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
-import { updateContactPrimaryValueSequence } from './sequences/updateContactPrimaryValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
@@ -187,7 +185,6 @@ export const presenter = {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
-    cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
     chooseWizardStepSequence,
@@ -228,6 +225,7 @@ export const presenter = {
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
     gotoLoginSequence,
+    gotoPrimaryContactEditSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
     gotoSignPDFDocumentSequence,
@@ -246,7 +244,6 @@ export const presenter = {
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
-    openEditPrimaryContactModalSequence,
     openEditSecondaryContactModalSequence,
     openSetCalendarModalSequence,
     redirectToLoginSequence,
@@ -315,7 +312,6 @@ export const presenter = {
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
-    updateContactPrimaryValueSequence,
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
