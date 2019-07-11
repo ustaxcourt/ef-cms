@@ -21,6 +21,14 @@ export const workQueueHelper = get => {
   const isDisplayingQC = !workQueueIsInternal;
   const userIsPetitionsClerk = userRole === 'petitionsclerk';
   const userIsDocketClerk = userRole === 'docketclerk';
+  const userIsOther = !['docketclerk', 'petitionsclerk'].includes(userRole);
+  const workQueueTitle = `${
+    showIndividualWorkQueue
+      ? 'My'
+      : userIsOther && !workQueueIsInternal
+      ? 'Docket'
+      : 'Section'
+  } ${workQueueType}`;
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
@@ -33,6 +41,7 @@ export const workQueueHelper = get => {
     hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
     hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
     hideFromColumn: isDisplayingQC,
+    hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     linkToDocumentMessages: !isDisplayingQC,
@@ -42,14 +51,18 @@ export const workQueueHelper = get => {
       ? 'Processed'
       : 'Served',
     showAssignedToColumn:
-      (isDisplayingQC && !showIndividualWorkQueue && showInbox) ||
+      (isDisplayingQC &&
+        !showIndividualWorkQueue &&
+        showInbox &&
+        !userIsOther) ||
       !isDisplayingQC,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showInbox,
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,
     showMessagesSentFromColumn: !isDisplayingQC,
-    showMyQueueToggle: userIsDocketClerk || userIsPetitionsClerk,
+    showMyQueueToggle:
+      workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showReceivedColumn: isDisplayingQC,
@@ -66,9 +79,7 @@ export const workQueueHelper = get => {
     showStartCaseButton:
       !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
     workQueueIsInternal,
-    workQueueTitle: `${
-      showIndividualWorkQueue ? 'My' : 'Section'
-    } ${workQueueType}`,
+    workQueueTitle,
     workQueueType,
   };
 };

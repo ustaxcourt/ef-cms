@@ -82,4 +82,26 @@ describe('TrialSession entity', () => {
       expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-H');
     });
   });
+
+  describe('setAsCalendared', () => {
+    it('should set a valid trial session entity as calendared upon request', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      trialSession.setAsCalendared();
+      expect(trialSession.isCalendared).toEqual(true);
+    });
+  });
+
+  describe('addCaseToCalendar', () => {
+    it('should add case to calendar of valid trial session when provided a raw case entity with a caseId', () => {
+      const trialSession = new TrialSession({
+        ...VALID_TRIAL_SESSION,
+        sessionType: 'Hybrid',
+      });
+      trialSession.addCaseToCalendar({ caseId: '123' });
+      expect(trialSession.caseOrder[0]).toEqual({ caseId: '123' });
+    });
+  });
 });

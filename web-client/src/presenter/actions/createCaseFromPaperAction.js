@@ -1,4 +1,3 @@
-import { checkDate } from './getFormCombinedWithCaseDetailAction';
 import { omit } from 'lodash';
 import { state } from 'cerebral';
 
@@ -26,7 +25,7 @@ export const setupPercentDone = (files, store) => {
   const createOnUploadProgress = key => {
     loadedAmounts[key] = 0;
     return progressEvent => {
-      const { loaded, total, isDone } = progressEvent;
+      const { isDone, loaded, total } = progressEvent;
       if (total) {
         totalSizes[key] = total;
       }
@@ -69,15 +68,21 @@ export const setupPercentDone = (files, store) => {
 export const createCaseFromPaperAction = async ({
   applicationContext,
   get,
-  store,
-  props,
   path,
+  props,
+  store,
 }) => {
-  const { petitionFile, ownershipDisclosureFile, stinFile } = get(
+  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
     state.petition,
   );
 
-  const receivedAt = checkDate(props.computedDate);
+  const receivedAt = // AAAA-BB-CC
+    (props.computedDate &&
+      applicationContext
+        .getUtilities()
+        .prepareDateFromString(props.computedDate)
+        .toISOString()) ||
+    null;
 
   const form = omit(
     {
@@ -114,21 +119,6 @@ export const createCaseFromPaperAction = async ({
   }
 
   for (let document of caseDetail.documents) {
-    await applicationContext.getUseCases().virusScanPdf({
-      applicationContext,
-      documentId: document.documentId,
-    });
-
-    await applicationContext.getUseCases().validatePdf({
-      applicationContext,
-      documentId: document.documentId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdf({
-      applicationContext,
-      documentId: document.documentId,
-    });
-
     await applicationContext.getUseCases().createCoverSheet({
       applicationContext,
       caseId: caseDetail.caseId,

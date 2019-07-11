@@ -7,7 +7,7 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCoverSheet = ({ caseId, documentId, applicationContext }) => {
+exports.createCoverSheet = ({ applicationContext, caseId, documentId }) => {
   return post({
     applicationContext,
     endpoint: `/cases/${caseId}/documents/${documentId}/coversheet`,

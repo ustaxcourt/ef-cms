@@ -11,7 +11,7 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  *
  */
-export const setUserAction = async ({ store, props, applicationContext }) => {
+export const setUserAction = async ({ applicationContext, props, store }) => {
   store.set(state.user, props.user);
   applicationContext.setCurrentUser(props.user);
   await applicationContext.getUseCases().setItem({

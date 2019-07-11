@@ -13,5 +13,11 @@ module.exports = {
   globals: {
     window: true,
   },
+  //this is to ignore imported html files
   testEnvironment: 'node',
+  transform: {
+    '^.+\\.html$': './htmlLoader.js',
+    '^.+\\.js$': 'babel-jest',
+    '^.+\\.jsx$': 'babel-jest',
+  },
 };

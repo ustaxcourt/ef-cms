@@ -22,17 +22,17 @@ export const RequestAccess = connect(
   },
   ({
     form,
-    requestAccessHelper,
     formCancelToggleCancelSequence,
+    requestAccessHelper,
     reviewRequestAccessInformationSequence,
-    validationErrors,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
+    validationErrors,
   }) => {
     return (
       <React.Fragment>
         <Focus>
-          <h1 tabIndex="-1" id="file-a-document-header">
+          <h1 id="file-a-document-header" tabIndex="-1">
             Request Access to This Case
           </h1>
         </Focus>
@@ -51,19 +51,20 @@ export const RequestAccess = connect(
             }`}
           >
             <label
+              className="usa-label"
               htmlFor="document-type"
               id="document-type-label"
-              className="usa-label"
             >
               Document Type
             </label>
             <select
-              name="documentType"
-              id="document-type"
               aria-describedby="document-type-label"
               className={`usa-select ${
                 validationErrors.documentType ? 'usa-select--error' : ''
               }`}
+              id="document-type"
+              name="documentType"
+              value={form.documentType || ''}
               onChange={e => {
                 const documentType = e.target.value;
                 const entry = find(requestAccessHelper.documents, {
@@ -87,7 +88,6 @@ export const RequestAccess = connect(
                 });
                 validateCaseAssociationRequestSequence();
               }}
-              value={form.documentType || ''}
             >
               <option value="">- Select -</option>
               {requestAccessHelper.documents.map(entry => {
@@ -99,18 +99,18 @@ export const RequestAccess = connect(
               })}
             </select>
             <Text
-              className="usa-error-message"
               bind="validationErrors.documentType"
+              className="usa-error-message"
             />
           </div>
         </div>
         <RequestAccessDocumentForm />
-        <PartiesRepresenting />
+        {requestAccessHelper.showPartiesRepresenting && <PartiesRepresenting />}
         <div className="button-box-container">
           <button
+            className="usa-button"
             id="submit-document"
             type="submit"
-            className="usa-button"
             onClick={() => {
               reviewRequestAccessInformationSequence();
             }}
@@ -118,8 +118,8 @@ export const RequestAccess = connect(
             Review Filing
           </button>
           <button
-            type="button"
             className="usa-button usa-button--outline"
+            type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

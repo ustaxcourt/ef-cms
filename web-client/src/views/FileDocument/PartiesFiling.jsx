@@ -40,12 +40,12 @@ export const PartiesFiling = connect(
               {fileDocumentHelper.showPractitionerParty && (
                 <div className="usa-checkbox">
                   <input
-                    id="party-practitioner"
-                    type="checkbox"
-                    name="partyPractitioner"
                     aria-describedby="who-legend"
-                    className="usa-checkbox__input"
                     checked={form.partyPractitioner || false}
+                    className="usa-checkbox__input"
+                    id="party-practitioner"
+                    name="partyPractitioner"
+                    type="checkbox"
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
@@ -55,8 +55,8 @@ export const PartiesFiling = connect(
                     }}
                   />
                   <label
-                    htmlFor="party-practitioner"
                     className="usa-checkbox__label"
+                    htmlFor="party-practitioner"
                   >
                     Myself as Petitioner’s Counsel
                   </label>
@@ -64,12 +64,12 @@ export const PartiesFiling = connect(
               )}
               <div className="usa-checkbox">
                 <input
-                  id="party-primary"
-                  type="checkbox"
-                  name="partyPrimary"
                   aria-describedby="who-legend"
-                  className="usa-checkbox__input"
                   checked={form.partyPrimary || false}
+                  className="usa-checkbox__input"
+                  id="party-primary"
+                  name="partyPrimary"
+                  type="checkbox"
                   onChange={e => {
                     updateFileDocumentWizardFormValueSequence({
                       key: e.target.name,
@@ -78,19 +78,19 @@ export const PartiesFiling = connect(
                     validateExternalDocumentInformationSequence();
                   }}
                 />
-                <label htmlFor="party-primary" className="usa-checkbox__label">
+                <label className="usa-checkbox__label" htmlFor="party-primary">
                   {fileDocumentHelper.partyPrimaryLabel}
                 </label>
               </div>
               {fileDocumentHelper.showSecondaryParty && (
                 <div className="usa-checkbox">
                   <input
-                    id="party-secondary"
-                    type="checkbox"
                     aria-describedby="who-legend"
-                    name="partySecondary"
-                    className="usa-checkbox__input"
                     checked={form.partySecondary || false}
+                    className="usa-checkbox__input"
+                    id="party-secondary"
+                    name="partySecondary"
+                    type="checkbox"
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
                         key: e.target.name,
@@ -100,38 +100,36 @@ export const PartiesFiling = connect(
                     }}
                   />
                   <label
-                    htmlFor="party-secondary"
                     className="usa-checkbox__label"
+                    htmlFor="party-secondary"
                   >
                     {caseDetail.contactSecondary.name}
                   </label>
                 </div>
               )}
-              {fileDocumentHelper.showRespondentParty && (
-                <div className="usa-checkbox">
-                  <input
-                    id="party-respondent"
-                    type="checkbox"
-                    aria-describedby="who-legend"
-                    name="partyRespondent"
-                    className="usa-checkbox__input"
-                    checked={form.partyRespondent || false}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <label
-                    htmlFor="party-respondent"
-                    className="usa-checkbox__label"
-                  >
-                    Respondent
-                  </label>
-                </div>
-              )}
+              <div className="usa-checkbox">
+                <input
+                  aria-describedby="who-legend"
+                  checked={form.partyRespondent || false}
+                  className="usa-checkbox__input"
+                  id="party-respondent"
+                  name="partyRespondent"
+                  type="checkbox"
+                  onChange={e => {
+                    updateFileDocumentWizardFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="party-respondent"
+                >
+                  Respondent
+                </label>
+              </div>
             </fieldset>
             {fileDocumentHelper.partyValidationError && (
               <span className="usa-error-message">

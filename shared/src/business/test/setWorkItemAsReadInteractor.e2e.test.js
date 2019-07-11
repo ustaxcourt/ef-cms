@@ -1,17 +1,17 @@
 const sinon = require('sinon');
 const {
-  assignWorkItems,
+  assignWorkItemsInteractor,
 } = require('../useCases/workitems/assignWorkItemsInteractor');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  getWorkItemsForUser,
-} = require('../useCases/workitems/getWorkItemsForUserInteractor');
+  getDocumentQCInboxForUser,
+} = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
   setWorkItemAsRead,
 } = require('../useCases/workitems/setWorkItemAsReadInteractor');
-const { createCase } = require('../useCases/createCaseInteractor');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCase } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
@@ -37,7 +37,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
   });
 
   it('should create the expected case into the database', async () => {
-    const { caseId } = await createCase({
+    const { caseId } = await createCaseInteractor({
       applicationContext,
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
@@ -83,19 +83,21 @@ describe('setWorkItemAsReadInteractor integration test', () => {
 
     const workItemEntity = new WorkItem(workItem);
 
-    let inbox = await getWorkItemsForUser({
+    let inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toEqual([]);
 
-    await assignWorkItems({
+    await assignWorkItemsInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'richard',
       workItemId: workItem.workItemId,
     });
-    inbox = await getWorkItemsForUser({
+    inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox.isRead).toBeFalsy();
 
@@ -104,8 +106,9 @@ describe('setWorkItemAsReadInteractor integration test', () => {
       workItemId: workItemEntity.workItemId,
     });
 
-    inbox = await getWorkItemsForUser({
+    inbox = await getDocumentQCInboxForUser({
       applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toMatchObject([
       {

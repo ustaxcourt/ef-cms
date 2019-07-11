@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.procedureTypes
  * @param {Function} providers.props the cerebral props object used for getting the props.procedureTypes
  */
-export const setProcedureTypesAction = ({ store, props }) => {
+export const setProcedureTypesAction = ({ props, store }) => {
   store.set(state.procedureTypes, props.procedureTypes);
 };

@@ -1,0 +1,19 @@
+{
+  "name": "Chrome-AWS-Lambda-Layer",
+  "version": "0.0.1",
+  "description": "Layer Only Packaging",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Lambda",
+    "Layers"
+  ],
+  "author": "William Bagayoko, Rachael Parris, Kris Koskelin",
+  "license": "ISC",
+  "dependencies": {
+    "chrome-aws-lambda": "~1.18",
+    "puppeteer-core": "~1.18"
+  }
+}

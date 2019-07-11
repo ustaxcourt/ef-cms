@@ -1,6 +1,6 @@
 const moment = require('moment');
+const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { omit } = require('lodash');
-const { Petition } = require('../entities/Petition');
 const { validatePetition } = require('./validatePetitionInteractor');
 
 describe('validatePetition', () => {
@@ -8,14 +8,14 @@ describe('validatePetition', () => {
     const errors = validatePetition({
       applicationContext: {
         getEntityConstructors: () => ({
-          Petition,
+          CaseExternal,
         }),
       },
       petition: {},
     });
 
     expect(errors).toEqual({
-      ...omit(Petition.errorToMessageMap, [
+      ...omit(CaseExternal.errorToMessageMap, [
         'ownershipDisclosureFile',
         'ownershipDisclosureFileSize',
         'irsNoticeDate',
@@ -30,7 +30,7 @@ describe('validatePetition', () => {
     const errors = validatePetition({
       applicationContext: {
         getEntityConstructors: () => ({
-          Petition,
+          CaseExternal,
         }),
       },
       petition: {
@@ -43,7 +43,7 @@ describe('validatePetition', () => {
       },
     });
     expect(errors).toEqual({
-      ...omit(Petition.errorToMessageMap, [
+      ...omit(CaseExternal.errorToMessageMap, [
         'caseType',
         'hasIrsNotice',
         'ownershipDisclosureFile',
@@ -61,7 +61,7 @@ describe('validatePetition', () => {
     const errors = validatePetition({
       applicationContext: {
         getEntityConstructors: () => ({
-          Petition,
+          CaseExternal,
         }),
       },
       petition: {
@@ -88,7 +88,7 @@ describe('validatePetition', () => {
     const errors = validatePetition({
       applicationContext: {
         getEntityConstructors: () => ({
-          Petition,
+          CaseExternal,
         }),
       },
       petition: {

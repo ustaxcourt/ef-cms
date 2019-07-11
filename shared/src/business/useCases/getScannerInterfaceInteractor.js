@@ -1,5 +1,5 @@
 exports.getScannerInterface = () => {
-  const Dynamsoft = window.Dynamsoft;
+  const { Dynamsoft } = window;
   if (typeof Dynamsoft !== 'undefined') {
     Dynamsoft.WebTwainEnv.ScanDirectly = true;
     const DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');

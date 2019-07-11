@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.sectionWorkQueue
  * @param {Function} providers.props the cerebral props object used for getting the props.sectionWorkQueue
  */
-export const setSectionWorkQueueAction = ({ store, props }) => {
+export const setSectionWorkQueueAction = ({ props, store }) => {
   store.set(state.sectionWorkQueue, props.sectionWorkItems);
 };

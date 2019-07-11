@@ -11,11 +11,11 @@ import { state } from 'cerebral';
  */
 export const createCaseAction = async ({
   applicationContext,
-  store,
   get,
   path,
+  store,
 }) => {
-  const { petitionFile, ownershipDisclosureFile, stinFile } = get(
+  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
     state.petition,
   );
 
@@ -55,21 +55,6 @@ export const createCaseAction = async ({
   }
 
   for (let document of caseDetail.documents) {
-    await applicationContext.getUseCases().virusScanPdf({
-      applicationContext,
-      documentId: document.documentId,
-    });
-
-    await applicationContext.getUseCases().validatePdf({
-      applicationContext,
-      documentId: document.documentId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdf({
-      applicationContext,
-      documentId: document.documentId,
-    });
-
     await applicationContext.getUseCases().createCoverSheet({
       applicationContext,
       caseId: caseDetail.caseId,

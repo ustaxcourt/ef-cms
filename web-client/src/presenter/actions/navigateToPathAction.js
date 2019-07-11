@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the path to navigate to in state.path
  * @returns {Promise} async action
  */
-export const navigateToPathAction = async ({ get, router, props }) => {
+export const navigateToPathAction = async ({ get, props, router }) => {
   const path = props.path || get(state.path);
   await router.route(path);
 };

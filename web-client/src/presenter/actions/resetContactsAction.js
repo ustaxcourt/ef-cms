@@ -1,6 +1,5 @@
-import { state } from 'cerebral';
-
 import { showContactsHelper } from '../computeds/showContactsHelper';
+import { state } from 'cerebral';
 
 /**
  * clears primary and secondary contact in caseDetail depending on
@@ -12,7 +11,7 @@ import { showContactsHelper } from '../computeds/showContactsHelper';
  */
 export const resetContactsAction = ({ get, store }) => {
   const partyType = get(state.caseDetail.partyType);
-  const { PARTY_TYPES, COUNTRY_TYPES } = get(state.constants);
+  const { COUNTRY_TYPES, PARTY_TYPES } = get(state.constants);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
   store.set(state.caseDetail.contactPrimary, {

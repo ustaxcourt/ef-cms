@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const fileDocumentAction = async ({ get, applicationContext }) => {
+export const fileDocumentAction = async ({ applicationContext, get }) => {
   const form = get(state.form);
   await applicationContext.getUseCases().fileDocument({
     applicationContext,

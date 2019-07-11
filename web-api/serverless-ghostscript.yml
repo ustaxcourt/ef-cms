@@ -1,0 +1,23 @@
+service: ef-cms-ghostscript
+custom:
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+
+provider:
+  name: aws
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  runtime: nodejs10.x
+  deploymentBucket:
+    name: ${env:SLS_DEPLOYMENT_BUCKET}
+    serverSideEncryption: AES256
+
+layers:
+  ghostscript:
+    name: ${self:provider.stage}-ghostscript
+    compatibleRuntimes:
+      - nodejs10.x
+    path: runtimes/ghostscript
+    package:
+      exclude:
+        - ghostscript_lambda_layer.tar.gz

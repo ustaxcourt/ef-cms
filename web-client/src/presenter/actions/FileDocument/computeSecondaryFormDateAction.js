@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
  */
-export const computeSecondaryFormDateAction = ({ store, get }) => {
+export const computeSecondaryFormDateAction = ({ get, store }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (secondaryDocument && secondaryDocument.documentType) {

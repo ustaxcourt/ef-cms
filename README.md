@@ -12,7 +12,7 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 
 API | Front-End | Shared Code
 --- | --------- | -----------
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=efcms-service%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=efcms-service%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=web-client%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=web-client%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=shared%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=shared%2Fpackage.json)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=web-api%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=web-api%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=web-client%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=web-client%2Fpackage.json) | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Known Vulnerabilities](https://snyk.io/test/github/ustaxcourt/ef-cms/badge.svg?targetFile=shared%2Fpackage.json)](https://snyk.io/test/github/ustaxcourt/ef-cms?targetFile=shared%2Fpackage.json)
 
 <a href="docs/images/screenshot-new-petition.png"><img src="docs/images/screenshot-new-petition.png" width="49%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
 <a href="docs/images/screenshot-cases.png"><img src="docs/images/screenshot-cases.png" width="49%" style="float: left;" /></a>
@@ -26,7 +26,7 @@ Artifacts for ongoing development such as designs, research data, user workflows
 
 ## Technical overview
 
-This is a React-based JavaScript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`efcms-service/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via CircleCI.
+This is a React-based JavaScript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`web-api/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via CircleCI.
 
 ## Documentation
 
@@ -95,11 +95,11 @@ For ClamAV, macOS users can do the following:
 - `source ~/.bash_profile`
 - `freshclam` (installs virus definitions)
 
-Both the front-end (`/web-client`) and API (`/efcms-service`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the `shared` directory.
+Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the `shared` directory.
 
 - `cd shared && npm i`
 - `cd ../web-client && npm i`
-- `cd ../efcms-service && npm i`
+- `cd ../web-api && npm i`
 
 #### Terminal A
 
@@ -107,7 +107,7 @@ Both the front-end (`/web-client`) and API (`/efcms-service`) share code that ex
 
 #### Terminal B
 
-- `cd efcms-service && npm start`
+- `cd web-api && npm start`
 
 ## Login and test users
 

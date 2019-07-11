@@ -4,11 +4,96 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
-const uuidVersions = {
-  version: ['uuidv4'],
+const COMMON_CITIES = [
+  { city: 'Birmingham', state: 'Alabama' },
+  { city: 'Mobile', state: 'Alabama' },
+  { city: 'Anchorage', state: 'Alaska' },
+  { city: 'Phoenix', state: 'Arizona' },
+  { city: 'Little Rock', state: 'Arkansas' },
+  { city: 'Los Angeles', state: 'California' },
+  { city: 'San Diego', state: 'California' },
+  { city: 'San Francisco', state: 'California' },
+  { city: 'Denver', state: 'Colorado' },
+  { city: 'Hartford', state: 'Connecticut' },
+  { city: 'Washington', state: 'District of Columbia' },
+  { city: 'Jacksonville', state: 'Florida' },
+  { city: 'Miami', state: 'Florida' },
+  { city: 'Tampa', state: 'Florida' },
+  { city: 'Atlanta', state: 'Georgia' },
+  { city: 'Honolulu', state: 'Hawaii' },
+  { city: 'Boise', state: 'Idaho' },
+  { city: 'Chicago', state: 'Illinois' },
+  { city: 'Indianapolis', state: 'Indiana' },
+  { city: 'Des Moines', state: 'Iowa' },
+  { city: 'Louisville', state: 'Kentucky' },
+  { city: 'New Orleans', state: 'Louisiana' },
+  { city: 'Baltimore', state: 'Maryland' },
+  { city: 'Boston', state: 'Massachusetts' },
+  { city: 'Detroit', state: 'Michigan' },
+  { city: 'St. Paul', state: 'Minnesota' },
+  { city: 'Jackson', state: 'Mississippi' },
+  { city: 'Kansas City', state: 'Missouri' },
+  { city: 'St. Louis', state: 'Missouri' },
+  { city: 'Helena', state: 'Montana' },
+  { city: 'Omaha', state: 'Nebraska' },
+  { city: 'Las Vegas', state: 'Nevada' },
+  { city: 'Reno', state: 'Nevada' },
+  { city: 'Albuquerque', state: 'New Mexico' },
+  { city: 'Buffalo', state: 'New York' },
+  { city: 'New York City', state: 'New York' },
+  { city: 'Winston-Salem', state: 'North Carolina' },
+  { city: 'Cincinnati', state: 'Ohio' },
+  { city: 'Cleveland', state: 'Ohio' },
+  { city: 'Columbus', state: 'Ohio' },
+  { city: 'Oklahoma City', state: 'Oklahoma' },
+  { city: 'Portland', state: 'Oregon' },
+  { city: 'Philadelphia', state: 'Pennsylvania' },
+  { city: 'Pittsburgh', state: 'Pennsylvania' },
+  { city: 'Columbia', state: 'South Carolina' },
+  { city: 'Knoxville', state: 'Tennessee' },
+  { city: 'Memphis', state: 'Tennessee' },
+  { city: 'Nashville', state: 'Tennessee' },
+  { city: 'Dallas', state: 'Texas' },
+  { city: 'El Paso', state: 'Texas' },
+  { city: 'Houston', state: 'Texas' },
+  { city: 'Lubbock', state: 'Texas' },
+  { city: 'San Antonio', state: 'Texas' },
+  { city: 'Salt Lake City', state: 'Utah' },
+  { city: 'Richmond', state: 'Virginia' },
+  { city: 'Seattle', state: 'Washington' },
+  { city: 'Spokane', state: 'Washington' },
+  { city: 'Charleston', state: 'West Virginia' },
+  { city: 'Milwaukee', state: 'Wisconsin' },
+];
+
+const SMALL_CITIES = [
+  { city: 'Fresno', state: 'California' },
+  { city: 'Tallahassee', state: 'Florida' },
+  { city: 'Pocatello', state: 'Idaho' },
+  { city: 'Peoria', state: 'Illinois' },
+  { city: 'Wichita', state: 'Kansas' },
+  { city: 'Shreveport', state: 'Louisiana' },
+  { city: 'Portland', state: 'Maine' },
+  { city: 'Billings', state: 'Montana' },
+  { city: 'Albany', state: 'New York' },
+  { city: 'Syracuse', state: 'New York' },
+  { city: 'Bismarck', state: 'North Dakota' },
+  { city: 'Aberdeen', state: 'South Dakota' },
+  { city: 'Burlington', state: 'Vermont' },
+  { city: 'Roanoke', state: 'Virginia' },
+  { city: 'Cheyenne', state: 'Wyoming' },
+  ...COMMON_CITIES,
+];
+
+TrialSession.TRIAL_CITIES = {
+  ALL: SMALL_CITIES,
+  REGULAR: COMMON_CITIES,
+  SMALL: SMALL_CITIES,
 };
 
-const SESSION_TYPES = [
+TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+
+TrialSession.SESSION_TYPES = [
   'Regular',
   'Small',
   'Hybrid',
@@ -16,7 +101,10 @@ const SESSION_TYPES = [
   'Motion/Hearing',
 ];
 
-const SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
+TrialSession.STATUS_TYPES = {
+  closed: 'Closed',
+  upcoming: 'Upcoming',
+};
 
 /**
  * constructor
@@ -24,30 +112,31 @@ const SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
  * @constructor
  */
 function TrialSession(rawSession) {
-  Object.assign(this, {
-    address1: rawSession.address1,
-    address2: rawSession.address2,
-    city: rawSession.city,
-    courtReporter: rawSession.courtReporter,
-    courthouseName: rawSession.courthouseName,
-    createdAt: rawSession.createdAt || new Date().toISOString(),
-    irsCalendarAdministrator: rawSession.irsCalendarAdministrator,
-    judge: rawSession.judge,
-    maxCases: rawSession.maxCases,
-    notes: rawSession.notes,
-    postalCode: rawSession.postalCode,
-    sessionType: rawSession.sessionType,
-    startDate: rawSession.startDate,
-    startTime: rawSession.startTime || '10:00',
-    state: rawSession.state,
-    swingSession: rawSession.swingSession,
-    swingSessionId: rawSession.swingSessionId,
-    term: rawSession.term,
-    termYear: rawSession.termYear,
-    trialClerk: rawSession.trialClerk,
-    trialLocation: rawSession.trialLocation,
-    trialSessionId: rawSession.trialSessionId || uuid.v4(),
-  });
+  this.address1 = rawSession.address1;
+  this.address2 = rawSession.address2;
+  this.caseOrder = rawSession.caseOrder || [];
+  this.city = rawSession.city;
+  this.courtReporter = rawSession.courtReporter;
+  this.courthouseName = rawSession.courthouseName;
+  this.createdAt = rawSession.createdAt || new Date().toISOString();
+  this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
+  this.isCalendared = rawSession.isCalendared || false;
+  this.judge = rawSession.judge;
+  this.maxCases = rawSession.maxCases;
+  this.notes = rawSession.notes;
+  this.postalCode = rawSession.postalCode;
+  this.sessionType = rawSession.sessionType;
+  this.startDate = rawSession.startDate;
+  this.startTime = rawSession.startTime || '10:00';
+  this.state = rawSession.state;
+  this.status = rawSession.status || TrialSession.STATUS_TYPES.upcoming;
+  this.swingSession = rawSession.swingSession;
+  this.swingSessionId = rawSession.swingSessionId;
+  this.term = rawSession.term;
+  this.termYear = rawSession.termYear;
+  this.trialClerk = rawSession.trialClerk;
+  this.trialLocation = rawSession.trialLocation;
+  this.trialSessionId = rawSession.trialSessionId || uuid.v4();
 }
 
 TrialSession.errorToMessageMap = {
@@ -78,6 +167,13 @@ joiValidationDecorator(
   joi.object().keys({
     address1: joi.string().optional(),
     address2: joi.string().optional(),
+    caseOrder: joi.array().items(
+      joi.object().keys({
+        caseId: joi.string().uuid({
+          version: ['uuidv4'],
+        }),
+      }),
+    ),
     city: joi.string().optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().optional(),
@@ -86,20 +182,24 @@ joiValidationDecorator(
       .iso()
       .optional(),
     irsCalendarAdministrator: joi.string().optional(),
+    isCalendared: joi.boolean().required(),
     judge: joi.string().optional(),
     maxCases: joi
       .number()
       .greater(0)
       .integer()
       .required(),
-    notes: joi.string().optional(),
+    notes: joi
+      .string()
+      .max(400)
+      .optional(),
     postalCode: joi
       .string()
       .regex(/^\d{5}(-\d{4})?$/)
       .optional(),
     sessionType: joi
       .string()
-      .valid(SESSION_TYPES)
+      .valid(TrialSession.SESSION_TYPES)
       .required(),
     startDate: joi
       .date()
@@ -108,25 +208,36 @@ joiValidationDecorator(
       .required(),
     startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
     state: joi.string().optional(),
+    status: joi
+      .string()
+      .valid(
+        Object.keys(TrialSession.STATUS_TYPES).map(
+          key => TrialSession.STATUS_TYPES[key],
+        ),
+      ),
     swingSession: joi.boolean().optional(),
     swingSessionId: joi.when('swingSession', {
       is: true,
       otherwise: joi.string().optional(),
       then: joi
         .string()
-        .uuid(uuidVersions)
+        .uuid({
+          version: ['uuidv4'],
+        })
         .required(),
     }),
     term: joi
       .string()
-      .valid(SESSION_TERMS)
+      .valid(TrialSession.SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
     trialClerk: joi.string().optional(),
     trialLocation: joi.string().required(),
     trialSessionId: joi
       .string()
-      .uuid(uuidVersions)
+      .uuid({
+        version: ['uuidv4'],
+      })
       .optional(),
   }),
   function() {
@@ -143,7 +254,6 @@ joiValidationDecorator(
 TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
   this.swingSessionId = swingSessionId;
   this.swingSession = true;
-
   return this;
 };
 
@@ -153,7 +263,7 @@ TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
  * @returns {string} the sort key prefix
  */
 TrialSession.prototype.generateSortKeyPrefix = function() {
-  const { trialLocation, sessionType } = this;
+  const { sessionType, trialLocation } = this;
 
   const caseProcedureSymbol =
     {
@@ -167,4 +277,26 @@ TrialSession.prototype.generateSortKeyPrefix = function() {
   return skPrefix;
 };
 
-exports.TrialSession = TrialSession;
+/**
+ * set as calendared
+ *
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.setAsCalendared = function() {
+  this.isCalendared = true;
+  return this;
+};
+
+/**
+ * add case to calendar
+ *
+ * @param {object} caseEntity
+ * @returns {TrialSession}
+ */
+TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
+  const { caseId } = caseEntity;
+  this.caseOrder.push({ caseId });
+  return this;
+};
+
+module.exports = { TrialSession };

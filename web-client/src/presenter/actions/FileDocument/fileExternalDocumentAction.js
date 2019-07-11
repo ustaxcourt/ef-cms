@@ -10,18 +10,20 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if creation was successful or error
  */
 export const fileExternalDocumentAction = async ({
-  get,
-  store,
   applicationContext,
+  get,
   path,
+  store,
 }) => {
-  const { docketNumber, caseId } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
+  const userRole = get(state.user.role);
+  const isRespondent = userRole === 'respondent';
 
   let {
     primaryDocumentFile,
     secondaryDocumentFile,
-    supportingDocumentFile,
     secondarySupportingDocumentFile,
+    supportingDocumentFile,
     ...documentMetadata
   } = get(state.form);
 
@@ -52,26 +54,19 @@ export const fileExternalDocumentAction = async ({
       secondarySupportingDocumentFile,
       supportingDocumentFile,
     });
+
+    if (isRespondent) {
+      await applicationContext.getUseCases().submitCaseAssociationRequest({
+        applicationContext,
+        caseId,
+      });
+    }
   } catch (err) {
     return path.error();
   }
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().virusScanPdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
-      await applicationContext.getUseCases().validatePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
-
-      await applicationContext.getUseCases().sanitizePdf({
-        applicationContext,
-        documentId: document.documentId,
-      });
       await applicationContext.getUseCases().createCoverSheet({
         applicationContext,
         caseId: caseDetail.caseId,

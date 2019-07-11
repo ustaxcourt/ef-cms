@@ -37,13 +37,18 @@ export const headerHelper = get => {
       currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
     pageIsTrialSessions:
       currentPage &&
-      currentPage.includes('TrialSessions') &&
+      (currentPage.includes('TrialSessions') ||
+        currentPage.includes('TrialSessionDetail')) &&
       isUserInternal(user),
     showDocumentQC: isUserInternal(user),
     showMessages: isUserInternal(user),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases: isUserExternal(user),
-    showSearchInHeader: user && user.role && user.role !== 'practitioner',
+    showSearchInHeader:
+      user &&
+      user.role &&
+      user.role !== 'practitioner' &&
+      user.role !== 'respondent',
     showTrialSessions: isUserInternal(user),
   };
 };

@@ -1,10 +1,10 @@
-import { CATEGORY_MAP } from '../../../../shared/src/business/entities/Document';
+import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { runCompute } from 'cerebral/test';
 import { selectDocumentTypeHelper } from './selectDocumentTypeHelper';
 
 // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
-CATEGORY_MAP['Miscellaneous'].push({
+Document.CATEGORY_MAP['Miscellaneous'].push({
   category: 'Miscellaneous',
   documentTitle: '[First, Second, etc.] Amendment to [anything]',
   documentType: 'Amendment [anything]',
@@ -16,7 +16,7 @@ CATEGORY_MAP['Miscellaneous'].push({
   scenario: 'Nonstandard I',
 });
 
-CATEGORY_MAP['Decision'].push({
+Document.CATEGORY_MAP['Decision'].push({
   category: 'Decision',
   documentTitle: 'Stipulated Decision Entered [judge] [anything]',
   documentType: 'Stipulated Decision Entered',
@@ -31,7 +31,7 @@ CATEGORY_MAP['Decision'].push({
 const state = {
   caseDetail: MOCK_CASE,
   constants: {
-    CATEGORY_MAP,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
   },
 };
 

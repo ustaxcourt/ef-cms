@@ -7,7 +7,7 @@ const { put } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.submitCaseAssociationRequest = ({ caseId, applicationContext }) => {
+exports.submitCaseAssociationRequest = ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,

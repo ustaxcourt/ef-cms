@@ -1,7 +1,7 @@
 const {
+  DOCKET_SECTION,
   getSectionForRole,
   SENIOR_ATTORNEY_SECTION,
-  DOCKET_SECTION,
 } = require('./WorkQueue');
 
 describe('WorkQueue', () => {

@@ -31,8 +31,8 @@ export const SectionWorkQueueInbox = connect(
         {workQueueHelper.showSendToBar && (
           <div className="action-section">
             <span
-              className="assign-work-item-count"
               aria-label="selected work items count"
+              className="assign-work-item-count"
             >
               <FontAwesomeIcon icon="check" />
               {selectedWorkItems.length}
@@ -40,6 +40,8 @@ export const SectionWorkQueueInbox = connect(
             <select
               aria-label="select a assignee"
               className="usa-select"
+              id="options"
+              name="options"
               onChange={event => {
                 selectAssigneeSequence({
                   assigneeId: event.target.value,
@@ -48,8 +50,6 @@ export const SectionWorkQueueInbox = connect(
                 });
                 assignSelectedWorkItemsSequence();
               }}
-              name="options"
-              id="options"
             >
               <option value>Assign to...</option>
               {users.map(user => (
@@ -61,16 +61,18 @@ export const SectionWorkQueueInbox = connect(
           </div>
         )}
         <table
+          aria-describedby="tab-work-queue"
           className="usa-table work-queue subsection"
           id="section-work-queue"
-          aria-describedby="tab-work-queue"
         >
           <thead>
             <tr>
-              {workQueueHelper.showSelectColumn && <th colSpan="2">Select</th>}
+              {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Received</th>
-              <th aria-label="Status Icon" className="padding-right-0" />
+              {!workQueueHelper.hideIconColumn && (
+                <th aria-label="Status Icon" className="padding-right-0" />
+              )}
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
@@ -96,38 +98,38 @@ export const SectionWorkQueueInbox = connect(
                   <>
                     <td className="focus-toggle">
                       <button
-                        className="focus-button usa-button usa-button--unstyled"
-                        aria-label="Expand message detail"
-                        aria-expanded={item.isFocused}
                         aria-controls={`detail-${item.workItemId}`}
+                        aria-expanded={item.isFocused}
+                        aria-label="Expand message detail"
+                        className="focus-button usa-button usa-button--unstyled"
                       />{' '}
                     </td>
                     <td
+                      className="message-select-control"
                       onClick={e => {
                         selectWorkItemSequence({
                           workItem: item,
                         });
                         e.stopPropagation();
                       }}
-                      className="message-select-control"
                     >
                       <input
+                        aria-label="Select work item"
+                        checked={item.selected}
+                        className="usa-checkbox__input"
                         id={item.workItemId}
                         type="checkbox"
-                        className="usa-checkbox__input"
                         onChange={e => {
                           selectWorkItemSequence({
                             workItem: item,
                           });
                           e.stopPropagation();
                         }}
-                        checked={item.selected}
-                        aria-label="Select work item"
                       />
                       <label
+                        className="usa-checkbox__label padding-top-05"
                         htmlFor={item.workItemId}
                         id={`label-${item.workItemId}`}
-                        className="usa-checkbox__label padding-top-05"
                       />
                     </td>
                   </>
@@ -138,43 +140,55 @@ export const SectionWorkQueueInbox = connect(
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
                 </td>
-                <td className="message-queue-row has-icon padding-right-0">
-                  {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      icon={['far', 'clock']}
-                      className="iconStatusBatched"
-                      aria-hidden="true"
-                      size="lg"
-                    />
-                  )}
-                  {item.showUnassignedIcon && (
-                    <FontAwesomeIcon
-                      icon={['fas', 'question-circle']}
-                      className="iconStatusUnassigned"
-                      aria-hidden="true"
-                      size="lg"
-                    />
-                  )}
-                </td>
+                {!workQueueHelper.hideIconColumn && (
+                  <td className="message-queue-row has-icon padding-right-0">
+                    {item.showBatchedStatusIcon && (
+                      <FontAwesomeIcon
+                        aria-hidden="true"
+                        className="iconStatusBatched"
+                        icon={['far', 'clock']}
+                        size="lg"
+                      />
+                    )}
+                    {item.showRecalledStatusIcon && (
+                      <FontAwesomeIcon
+                        aria-hidden="false"
+                        aria-label="recalled from IRS"
+                        className="iconStatusRecalled"
+                        icon={['far', 'clock']}
+                        size="lg"
+                      />
+                    )}
+                    {item.showUnassignedIcon && (
+                      <FontAwesomeIcon
+                        aria-hidden="true"
+                        className="iconStatusUnassigned"
+                        icon={['fas', 'question-circle']}
+                        size="lg"
+                      />
+                    )}
+                  </td>
+                )}
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
                     <a
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
+                      className="case-link"
                       href={documentHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
+                        messageId: item.currentMessage.messageId,
                       })}
-                      className="case-link"
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
                     >
                       {item.document.documentType}
                     </a>
                   </div>
                   {workQueueHelper.showMessageContent && (
                     <div
-                      id={`detail-${item.workItemId}`}
                       className="message-document-detail"
+                      id={`detail-${item.workItemId}`}
                     >
                       {item.currentMessage.message}
                     </div>

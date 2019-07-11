@@ -10,7 +10,7 @@ export const IdleActivityMonitor = connect(
     onIdle: sequences.setIdleStatusIdleSequence,
     showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
   },
-  ({ onIdle, constants, showAppTimeoutModalHelper }) => {
+  ({ constants, onIdle, showAppTimeoutModalHelper }) => {
     return (
       <>
         {showAppTimeoutModalHelper.beginIdleMonitor && (

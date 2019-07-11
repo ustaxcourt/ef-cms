@@ -11,15 +11,15 @@ export const UpcomingTrialSessions = connect(
     return (
       <React.Fragment>
         <table
+          aria-label="upcoming trial sessions"
           className="usa-table ustc-table trial-sessions subsection"
           id="upcoming-sessions"
-          aria-describedby="tab-my-queue-TODO"
         >
           <thead>
             <tr>
               <th>Date</th>
               <th>Type</th>
-              <th className="icon-column" aria-hidden="true" />
+              <th aria-hidden="true" className="icon-column" />
               <th>Location</th>
               <th>Judge</th>
               <th aria-label="Number of cases">No. of Cases</th>
@@ -44,16 +44,16 @@ export const UpcomingTrialSessions = connect(
                     <td aria-hidden="true">
                       {item.swingSession && (
                         <FontAwesomeIcon
+                          className="fa-icon-blue"
                           icon="link"
                           size="sm"
-                          className="fa-icon-blue"
                         />
                       )}
                     </td>
                     <td>
-                      <button className="usa-button--unstyled link">
+                      <a href={`/trial-session-detail/${item.trialSessionId}`}>
                         {item.trialLocation}
-                      </button>
+                      </a>
                     </td>
                     <td>{item.judge}</td>
                     <td>{item.maxCases}</td>
