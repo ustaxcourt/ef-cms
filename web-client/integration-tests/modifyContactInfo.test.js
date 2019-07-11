@@ -15,6 +15,7 @@ import taxpayerEditsCasePrimaryContactInformation from './journey/taxpayerEditsC
 import taxpayerEditsCaseSecondaryContactInformation from './journey/taxpayerEditsCaseSecondaryContactInformation';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
+import taxpayerNavigatesToEditPrimaryContact from './journey/taxpayerNavigatesToEditPrimaryContact';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
@@ -31,6 +32,8 @@ presenter.providers.router = {
         docketNumber: test.docketNumber,
       });
     }
+
+    console.log('url', url);
 
     if (url === '/') {
       await test.runSequence('gotoDashboardSequence');
@@ -84,6 +87,7 @@ describe('Modify Petitioner Contact Information', () => {
   taxpayerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
   taxpayerViewsDashboard(test, { caseIndex: 2 });
   taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
+  taxpayerNavigatesToEditPrimaryContact(test);
   taxpayerEditsCasePrimaryContactInformation(test);
   taxpayerSignsOut(test);
 

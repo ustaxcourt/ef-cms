@@ -98,6 +98,7 @@ const router = {
     route(
       '/case-detail/*/contacts/primary/edit',
       checkLoggedIn(docketNumber => {
+        console.log('ayyyy');
         document.title = `Primary contact ${pageTitleSuffix}`;
         app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
       }),
