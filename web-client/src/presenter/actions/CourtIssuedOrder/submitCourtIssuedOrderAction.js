@@ -50,7 +50,7 @@ export const submitCourtIssuedOrderAction = async ({
 
     caseDetail = await applicationContext
       .getUseCases()
-      .fileExternalDocumentInteractor({
+      .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
         primaryDocumentFileId,

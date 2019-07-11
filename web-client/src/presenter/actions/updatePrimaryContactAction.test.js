@@ -24,6 +24,13 @@ describe('updatePrimaryContactAction', () => {
     });
 
     expect(updatePrimaryContactInteractorStub).toHaveBeenCalled();
-    expect(result.state.alertSuccess).toBeTruthy();
+    expect(result.output).toEqual({
+      alertSuccess: {
+        message: 'Please confirm the information below is correct.',
+        title: 'Your changes have been saved.',
+      },
+      caseId: 'ayy',
+      tab: 'caseInfo',
+    });
   });
 });
