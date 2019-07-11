@@ -232,7 +232,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-
   updateCase:
     handler: src/handlers.updateCaseLambda
     events:
@@ -281,7 +280,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-
   createCase:
     handler: src/handlers.createCaseLambda
     events:
@@ -311,6 +309,18 @@ functions:
     events:
       - http:
           path: /{caseId}/external-document
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileCourtIssuedOrder:
+    handler: src/handlers.fileCourtIssuedOrderToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-order
           method: post
           cors: true
           authorizer:
