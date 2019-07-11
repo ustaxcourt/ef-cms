@@ -29,84 +29,84 @@ export const SessionInformationForm = connect(
             }`}
           >
             <fieldset className="start-date usa-fieldset margin-bottom-0">
-              <legend id="start-date-legend" className="usa-legend">
+              <legend className="usa-legend" id="start-date-legend">
                 Start Date
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
                   <input
+                    aria-describedby="start-date-legend"
+                    aria-label="month, two digits"
                     className="usa-input usa-input-inline"
                     id="start-date-month"
-                    aria-label="month, two digits"
-                    aria-describedby="start-date-legend"
-                    name="month"
-                    value={form.month || ''}
-                    type="number"
-                    min="1"
                     max="12"
+                    min="1"
+                    name="month"
                     placeholder="MM"
+                    type="number"
+                    value={form.month || ''}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
+                    }}
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
                     }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day margin-bottom-0">
                   <input
+                    aria-describedby="start-date-legend"
+                    aria-label="day, two digits"
                     className="usa-input usa-input-inline"
                     id="start-date-day"
-                    name="day"
-                    value={form.day || ''}
-                    aria-label="day, two digits"
-                    aria-describedby="start-date-legend"
-                    type="number"
-                    min="1"
                     max="31"
+                    min="1"
+                    name="day"
                     placeholder="DD"
+                    type="number"
+                    value={form.day || ''}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
+                    }}
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
                     }}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year margin-bottom-0">
                   <input
+                    aria-describedby="start-date-legend"
+                    aria-label="year, four digits"
                     className="usa-input usa-input-inline"
                     id="start-date-year"
-                    aria-label="year, four digits"
-                    aria-describedby="start-date-legend"
-                    name="year"
-                    value={form.year || ''}
-                    type="number"
-                    min="2019"
                     max="2200"
+                    min="2019"
+                    name="year"
                     placeholder="YYYY"
+                    type="number"
+                    value={form.year || ''}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
+                    }}
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
-                    }}
-                    onBlur={() => {
-                      validateTrialSessionSequence();
                     }}
                   />
                 </div>
               </div>
             </fieldset>
             <Text
-              className="usa-error-message"
               bind="validationErrors.startDate"
+              className="usa-error-message"
             />
           </div>
           <div
@@ -115,23 +115,23 @@ export const SessionInformationForm = connect(
             }`}
           >
             <fieldset className="start-time usa-fieldset margin-bottom-0">
-              <legend id="start-time-legend" className="usa-legend">
+              <legend className="usa-legend" id="start-time-legend">
                 Time <span className="usa-hint">(optional)</span>
               </legend>
               <div className="grid-row grid-gap-6">
                 <div className="grid-col-3 ustc-time-of-day">
                   <div className="usa-form-group ustc-time-of-day--hour">
                     <input
+                      aria-describedby="start-time-legend"
+                      aria-label="hour"
                       className="usa-input usa-input-inline"
                       id="start-time-hours"
-                      aria-label="hour"
-                      aria-describedby="start-time-legend"
-                      name="startTimeHours"
-                      value={form.startTimeHours || ''}
-                      type="number"
-                      min="1"
                       max="12"
+                      min="1"
+                      name="startTimeHours"
                       placeholder="10"
+                      type="number"
+                      value={form.startTimeHours || ''}
                       onChange={e => {
                         updateTrialSessionFormDataSequence({
                           key: e.target.name,
@@ -142,16 +142,16 @@ export const SessionInformationForm = connect(
                   </div>
                   <div className="usa-form-group ustc-time-of-day--minute">
                     <input
+                      aria-describedby="start-time-legend"
+                      aria-label="minutes"
                       className="usa-input usa-input-inline"
                       id="start-time-minutes"
-                      aria-label="minutes"
-                      aria-describedby="start-time-legend"
-                      name="startTimeMinutes"
-                      value={form.startTimeMinutes || ''}
-                      type="number"
-                      min="0"
                       max="59"
+                      min="0"
+                      name="startTimeMinutes"
                       placeholder="00"
+                      type="number"
+                      value={form.startTimeMinutes || ''}
                       onChange={e => {
                         updateTrialSessionFormDataSequence({
                           key: e.target.name,
@@ -166,27 +166,27 @@ export const SessionInformationForm = connect(
                     {['am', 'pm'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
                         <input
-                          id={`startTimeExtension-${option}`}
-                          type="radio"
-                          name="startTimeExtension"
                           aria-describedby="start-time-legend"
-                          className="usa-radio__input"
-                          value={option}
                           checked={form.startTimeExtension === option}
+                          className="usa-radio__input"
+                          id={`startTimeExtension-${option}`}
+                          name="startTimeExtension"
+                          type="radio"
+                          value={option}
+                          onBlur={() => {
+                            validateTrialSessionSequence();
+                          }}
                           onChange={e => {
                             updateTrialSessionFormDataSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
                           }}
-                          onBlur={() => {
-                            validateTrialSessionSequence();
-                          }}
                         />
                         <label
-                          htmlFor={`startTimeExtension-${option}`}
-                          className="usa-radio__label smaller-padding-right"
                           aria-label={option.toUpperCase()}
+                          className="usa-radio__label smaller-padding-right"
+                          htmlFor={`startTimeExtension-${option}`}
                         >
                           {option}
                         </label>
@@ -197,8 +197,8 @@ export const SessionInformationForm = connect(
               </div>
             </fieldset>
             <Text
-              className="usa-error-message"
               bind="validationErrors.startTime"
+              className="usa-error-message"
             />
           </div>
           {trialSessionHelper.showSwingSessionOption && (
@@ -206,11 +206,11 @@ export const SessionInformationForm = connect(
               <div className="usa-form-group">
                 <div className="usa-checkbox">
                   <input
-                    id="swing-session"
-                    type="checkbox"
-                    name="swingSession"
-                    className="usa-checkbox__input"
                     checked={form.swingSession || false}
+                    className="usa-checkbox__input"
+                    id="swing-session"
+                    name="swingSession"
+                    type="checkbox"
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
@@ -219,8 +219,8 @@ export const SessionInformationForm = connect(
                     }}
                   />
                   <label
-                    htmlFor="swing-session"
                     className="usa-checkbox__label"
+                    htmlFor="swing-session"
                   >
                     This is part of a Swing Session
                   </label>
@@ -235,19 +235,20 @@ export const SessionInformationForm = connect(
                   }`}
                 >
                   <label
+                    className="usa-label"
                     htmlFor="swing-session-id"
                     id="swing-session-id-label"
-                    className="usa-label"
                   >
                     Which Trial Session is This Associated With?
                   </label>
                   <select
-                    name="swingSessionId"
-                    id="swing-session-id"
                     aria-describedby="swing-session-id-label"
                     className={`usa-select ${
                       validationErrors.swingSessionId ? 'usa-select--error' : ''
                     }`}
+                    id="swing-session-id"
+                    name="swingSessionId"
+                    value={form.swingSessionId || ''}
                     onChange={e => {
                       updateTrialSessionFormDataSequence({
                         key: e.target.name,
@@ -255,18 +256,17 @@ export const SessionInformationForm = connect(
                       });
                       validateTrialSessionSequence();
                     }}
-                    value={form.swingSessionId || ''}
                   >
                     <option value="">- Select -</option>
                     {trialSessionHelper.sessionsByTerm.map((session, idx) => (
-                      <option value={session.trialSessionId} key={idx}>
+                      <option key={idx} value={session.trialSessionId}>
                         {session.trialLocation}
                       </option>
                     ))}
                   </select>
                   <Text
-                    className="usa-error-message"
                     bind="validationErrors.swingSessionId"
+                    className="usa-error-message"
                   />
                 </div>
               )}
@@ -278,20 +278,20 @@ export const SessionInformationForm = connect(
             }`}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
-              <legend id="session-type-legend" className="usa-legend">
+              <legend className="usa-legend" id="session-type-legend">
                 Session Type
               </legend>
               {['Regular', 'Small', 'Hybrid', 'Special', 'Motion/Hearing'].map(
                 option => (
                   <div className="usa-radio" key={option}>
                     <input
-                      id={`session-type-${option}`}
-                      type="radio"
                       aria-describedby="session-type-legend"
-                      name="sessionType"
-                      className="usa-radio__input"
-                      value={option}
                       checked={form.sessionType === option}
+                      className="usa-radio__input"
+                      id={`session-type-${option}`}
+                      name="sessionType"
+                      type="radio"
+                      value={option}
                       onChange={e => {
                         updateTrialSessionFormDataSequence({
                           key: e.target.name,
@@ -301,8 +301,8 @@ export const SessionInformationForm = connect(
                       }}
                     />
                     <label
-                      htmlFor={`session-type-${option}`}
                       className="usa-radio__label"
+                      htmlFor={`session-type-${option}`}
                     >
                       {option}
                     </label>
@@ -311,8 +311,8 @@ export const SessionInformationForm = connect(
               )}
             </fieldset>
             <Text
-              className="usa-error-message"
               bind="validationErrors.sessionType"
+              className="usa-error-message"
             />
           </div>
           <div
@@ -320,29 +320,29 @@ export const SessionInformationForm = connect(
               validationErrors.maxCases ? 'usa-form-group--error' : ''
             }`}
           >
-            <label htmlFor="max-cases" className="usa-label">
+            <label className="usa-label" htmlFor="max-cases">
               Number of Cases Allowed
             </label>
             <input
-              id="max-cases"
-              type="text"
-              name="maxCases"
-              className="usa-input usa-input--small"
               autoCapitalize="none"
+              className="usa-input usa-input--small"
+              id="max-cases"
+              name="maxCases"
+              type="text"
               value={form.maxCases || ''}
+              onBlur={() => {
+                validateTrialSessionSequence();
+              }}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                validateTrialSessionSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.maxCases"
+              className="usa-error-message"
             />
           </div>
         </div>

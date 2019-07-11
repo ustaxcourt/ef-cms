@@ -1,10 +1,10 @@
 const {
-  GET_CASES_BY_STATUS,
   GET_CASE,
+  GET_CASES_BY_STATUS,
+  isAuthorized,
+  PETITION,
   UPDATE_CASE,
   WORKITEM,
-  PETITION,
-  isAuthorized,
 } = require('./authorizationClientService');
 
 describe('Authorization client service', () => {

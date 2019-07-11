@@ -42,7 +42,8 @@
         "cognito-idp:ListUserPoolClients",
         "cognito-idp:CreateUserPoolClient",
         "cognito-idp:DescribeUserPoolDomain",
-        "cognito-idp:SetUICustomization"
+        "cognito-idp:SetUICustomization",
+        "cognito-idp:DeleteUserPoolDomain"
       ],
       "Resource": "*"
     },
@@ -78,7 +79,11 @@
         "cloudfront:GetDistribution",
         "cloudfront:TagResource",
         "cloudfront:CreateDistribution",
-        "cloudfront:ListTagsForResource"
+        "cloudfront:ListTagsForResource",
+        "cloudfront:UpdateDistribution",
+        "cloudfront:CreateCloudFrontOriginAccessIdentity",
+        "cloudfront:GetCloudFrontOriginAccessIdentity",
+        "cloudfront:DeleteCloudFrontOriginAccessIdentity"
       ],
       "Resource": "*"
     },

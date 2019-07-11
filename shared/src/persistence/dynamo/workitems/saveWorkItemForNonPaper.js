@@ -10,7 +10,7 @@ const { put } = require('../../dynamodbClientService');
  * @param applicationContext
  * @returns {*}
  */
-exports.saveWorkItemForNonPaper = async ({ workItem, applicationContext }) => {
+exports.saveWorkItemForNonPaper = async ({ applicationContext, workItem }) => {
   await put({
     Item: {
       pk: `workitem-${workItem.workItemId}`,

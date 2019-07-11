@@ -26,7 +26,7 @@ export const SelectDocumentType = connect(
   }) => {
     return (
       <React.Fragment>
-        <h2 className="heading-1" tabIndex="-1" id="file-a-document-header">
+        <h2 className="heading-1" id="file-a-document-header" tabIndex="-1">
           File a Document
         </h2>
         <h2>What Type of Document Are You Filing?</h2>
@@ -36,16 +36,16 @@ export const SelectDocumentType = connect(
         </p>
         <div className="usa-accordion document-category">
           <button
-            type="button"
-            className="usa-accordion__button document-category-accordion"
-            aria-expanded={!!screenMetadata.showDocumentCategoryAccordion}
             aria-controls="document-category-accordion-container"
+            aria-expanded={!!screenMetadata.showDocumentCategoryAccordion}
+            className="usa-accordion__button document-category-accordion"
+            type="button"
             onClick={() => toggleDocumentCategoryAccordionSequence()}
           >
             <span className="usa-accordion__heading usa-banner__button-text">
               <FontAwesomeIcon
-                icon="question-circle"
                 className="first-icon"
+                icon="question-circle"
                 size="sm"
               />
               Need help determining what document category to select?
@@ -57,9 +57,9 @@ export const SelectDocumentType = connect(
             </span>
           </button>
           <div
-            id="document-category-accordion-container"
-            className="usa-accordion__content"
             aria-hidden={!screenMetadata.showDocumentCategoryAccordion}
+            className="usa-accordion__content"
+            id="document-category-accordion-container"
           >
             <DocumentCategoryAccordion />
           </div>
@@ -185,9 +185,9 @@ export const SelectDocumentType = connect(
         {screenMetadata.isDocumentTypeSelected && (
           <div className="button-box-container">
             <button
-              type="button"
               className="usa-button"
               id="continue-button"
+              type="button"
               onClick={() => {
                 selectDocumentSequence();
               }}

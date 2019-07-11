@@ -46,10 +46,21 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/mark/*',
+      checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
+        document.title = `Document details ${pageTitleSuffix}`;
+        app.getSequence('gotoDocumentDetailSequence')({
+          docketNumber,
+          documentId,
+          workItemIdToMarkAsRead,
+        });
+      }),
+    );
+    route(
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
         document.title = `Document details ${pageTitleSuffix}`;
-        app.getSequence('gotoDocumentDetailMessageSequence')({
+        app.getSequence('gotoDocumentDetailSequence')({
           docketNumber,
           documentId,
           messageId,
@@ -57,10 +68,31 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/documents/*/messages/*/mark/*',
+      checkLoggedIn(
+        (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
+          document.title = `Document details ${pageTitleSuffix}`;
+          app.getSequence('gotoDocumentDetailSequence')({
+            docketNumber,
+            documentId,
+            messageId,
+            workItemIdToMarkAsRead,
+          });
+        },
+      ),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+      }),
+    );
+    route(
+      '/case-detail/*/create-order',
+      checkLoggedIn(docketNumber => {
+        document.title = `Create an order ${pageTitleSuffix}`;
+        app.getSequence('gotoCreateOrderSequence')({ docketNumber });
       }),
     );
     route(
@@ -94,7 +126,7 @@ const router = {
           'document-qc/section/batched',
         ];
 
-        if (path && validPaths.indexOf(path) === -1) {
+        if (path && !validPaths.includes(path)) {
           app.getSequence('notFoundErrorSequence')({
             error: {},
           });
@@ -115,6 +147,13 @@ const router = {
       }),
     );
     route(
+      '/trial-session-detail/*',
+      checkLoggedIn(trialSessionId => {
+        document.title = `Trial Session Information ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
+      }),
+    );
+    route(
       '/trial-sessions',
       checkLoggedIn(() => {
         document.title = `Trial sessions ${pageTitleSuffix}`;
@@ -125,7 +164,7 @@ const router = {
       app.getSequence('gotoIdleLogoutSequence')();
     });
     route('/log-in...', () => {
-      const { token, code, path } = queryStringDecoder();
+      const { code, path, token } = queryStringDecoder();
       if (code) {
         app.getSequence('loginWithCodeSequence')({ code, path });
       } else {
@@ -175,7 +214,7 @@ const router = {
           'messages/section/batched',
         ];
 
-        if (path && validPaths.indexOf(path) === -1) {
+        if (path && !validPaths.includes(path)) {
           app.getSequence('notFoundErrorSequence')({
             error: {},
           });
@@ -197,7 +236,7 @@ const router = {
     );
 
     route('/mock-login...', () => {
-      const { token, path } = queryStringDecoder();
+      const { path, token } = queryStringDecoder();
       if (token) {
         document.title = `Mock Login ${pageTitleSuffix}`;
         app.getSequence('submitLoginSequence')({ path, token });

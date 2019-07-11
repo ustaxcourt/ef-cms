@@ -8,10 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
  * @returns {object} the list of section work items
  */
-export const canRequestAccessAction = ({ get, props, path }) => {
-  const notAssociated = props.notAssociated;
+export const canRequestAccessAction = ({ get, path, props }) => {
+  const { isAssociated } = props;
   const caseId = get(state.caseDetail.caseId);
-  if (notAssociated) {
+  if (!isAssociated) {
     return path['proceed']();
   } else {
     return path['unauthorized']({ caseId });

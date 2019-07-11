@@ -8,7 +8,7 @@
  * @returns {Promise} async action
  */
 export const authenticateCodeAction = async ({ applicationContext, props }) => {
-  const code = props.code;
+  const { code } = props;
 
   const response = await applicationContext.getUseCases().authorizeCode({
     applicationContext,

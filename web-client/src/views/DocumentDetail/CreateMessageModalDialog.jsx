@@ -26,7 +26,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               : '')
           }
         >
-          <label htmlFor="section" className="usa-label">
+          <label className="usa-label" htmlFor="section">
             Select Section
           </label>
 
@@ -67,7 +67,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 : '')
             }
           >
-            <label htmlFor={'chambers'} className="usa-label">
+            <label className="usa-label" htmlFor={'chambers'}>
               Select Chambers
             </label>
             <select
@@ -106,15 +106,15 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               : '')
           }
         >
-          <label htmlFor="assigneeId" className="usa-label">
+          <label className="usa-label" htmlFor="assigneeId">
             Select Recipient
           </label>
           <select
+            aria-disabled={!this.props.form.section ? 'true' : 'false'}
             className="usa-select"
+            disabled={!this.props.form.section}
             id="assigneeId"
             name="assigneeId"
-            disabled={!this.props.form.section}
-            aria-disabled={!this.props.form.section ? 'true' : 'false'}
             onChange={e => {
               this.props.updateMessageValueSequence({
                 key: e.target.name,
@@ -143,13 +143,13 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             (this.props.validationErrors.message ? 'usa-form-group--error' : '')
           }
         >
-          <label htmlFor="message" className="usa-label">
+          <label className="usa-label" htmlFor="message">
             Add Message
           </label>
           <textarea
-            name="message"
-            id="message"
             className="usa-textarea"
+            id="message"
+            name="message"
             onChange={e => {
               this.props.updateMessageValueSequence({
                 key: e.target.name,

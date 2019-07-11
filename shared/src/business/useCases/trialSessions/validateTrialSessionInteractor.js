@@ -2,9 +2,9 @@
  * validateTrialSession
  * @param applicationContext
  * @param trialSession
- * @returns {Object}
+ * @returns {object}
  */
-exports.validateTrialSession = ({ trialSession, applicationContext }) => {
+exports.validateTrialSession = ({ applicationContext, trialSession }) => {
   const errors = new (applicationContext.getEntityConstructors()).TrialSession(
     trialSession,
   ).getFormattedValidationErrors();

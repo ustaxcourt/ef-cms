@@ -43,9 +43,9 @@ COPY shared/package.json /home/app/shared/package.json
 COPY shared/package-lock.json /home/app/shared/package-lock.json
 RUN cd /home/app/shared && npm i
 
-COPY efcms-service/package.json /home/app/efcms-service/package.json
-COPY efcms-service/package-lock.json /home/app/efcms-service/package-lock.json
-RUN cd /home/app/efcms-service && npm i
+COPY web-api/package.json /home/app/web-api/package.json
+COPY web-api/package-lock.json /home/app/web-api/package-lock.json
+RUN cd /home/app/web-api && npm i
 
 COPY web-client/package.json /home/app/web-client/package.json
 COPY web-client/package-lock.json /home/app/web-client/package-lock.json

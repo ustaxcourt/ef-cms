@@ -154,7 +154,7 @@ export default test => {
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T00:00:00.000Z',
+      '2018-12-24T05:00:00.000Z',
     );
 
     // irsNoticeDate - valid
@@ -235,10 +235,10 @@ export default test => {
     });
     expect(test.getState('caseDetail.payGovId')).toEqual('123');
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T00:00:00.000Z',
+      '2018-12-24T05:00:00.000Z',
     );
     expect(test.getState('caseDetail.payGovDate')).toEqual(
-      '2018-12-24T00:00:00.000Z',
+      '2018-12-24T05:00:00.000Z',
     );
 
     //

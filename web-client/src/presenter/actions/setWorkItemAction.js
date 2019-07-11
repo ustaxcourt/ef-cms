@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.workItem
  * @param {object} providers.props the cerebral props object used for getting the props.workItem
  */
-export const setWorkItemAction = ({ store, props }) => {
+export const setWorkItemAction = ({ props, store }) => {
   store.set(state.workItem, props.workItem);
 };

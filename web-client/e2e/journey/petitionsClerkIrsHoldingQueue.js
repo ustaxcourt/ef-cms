@@ -3,23 +3,12 @@ import { runCompute } from 'cerebral/test';
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { documentDetailHelper as documentDetailHelperComputed } from '../../src/presenter/computeds/documentDetailHelper';
 
+import { waitForRouter } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
 );
-/**
- * This is needed because some sequences run router.route which runs another test.runSequence which
- * adds an new entry on the node event loop and causes the tests to continue running even though the sequence is
- * not yet done.
- *
- * @returns {Promise} resolves when the sertImmediate is done
- */
-const waitForRouter = () => {
-  return new Promise(resolve => {
-    setImmediate(() => resolve(true));
-  });
-};
 
 export default test => {
   return it('Petitions clerk views IRS Holding Queue', async () => {
@@ -38,8 +27,9 @@ export default test => {
     });
 
     await test.runSequence('chooseWorkQueueSequence', {
-      box: 'outbox',
+      box: 'batched',
       queue: 'section',
+      workQueueIsInternal: false,
     });
 
     // verify item in general status older than 7 days does not show
@@ -62,8 +52,8 @@ export default test => {
     // the first item in the outbox should be the Petition batched for IRS from the previous test
     expect(workItem).toBeDefined();
     // goto the first work item in the section queue outbox, the one we just batched for IRS
-    const docketNumber = workItem.docketNumber;
-    const documentId = workItem.document.documentId;
+    const { docketNumber } = workItem;
+    const { documentId } = workItem.document;
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber,
       documentId,
@@ -85,13 +75,14 @@ export default test => {
 
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueueToDisplay')).toEqual({
-      box: 'outbox',
+      box: 'batched',
       queue: 'section',
     });
 
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
+      workQueueIsInternal: false,
     });
 
     expect(test.getState('workQueueToDisplay')).toEqual({
@@ -158,6 +149,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
+      workQueueIsInternal: false,
     });
 
     // no longer in our inbox!
@@ -180,8 +172,9 @@ export default test => {
     expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
 
     await test.runSequence('chooseWorkQueueSequence', {
-      box: 'outbox',
+      box: 'batched',
       queue: 'section',
+      workQueueIsInternal: false,
     });
 
     workItem = test

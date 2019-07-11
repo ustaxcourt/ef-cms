@@ -55,7 +55,7 @@ const createMockDocumentClient = () => {
         promise: async () => null,
       };
     },
-    query: ({ IndexName, ExpressionAttributeValues }) => {
+    query: ({ ExpressionAttributeValues, IndexName }) => {
       const arr = [];
       for (let key in data) {
         if (IndexName === 'gsi1') {
@@ -72,7 +72,7 @@ const createMockDocumentClient = () => {
             if (pk === value && sk.indexOf(prefix) === 0) {
               arr.push(data[key]);
             }
-          } else if (pk.indexOf(value) !== -1) {
+          } else if (pk.includes(value)) {
             arr.push(data[key]);
           }
         }
@@ -84,9 +84,9 @@ const createMockDocumentClient = () => {
       };
     },
     update: ({
-      Key,
       ExpressionAttributeNames,
       ExpressionAttributeValues,
+      Key,
       UpdateExpression,
     }) => {
       for (let name in ExpressionAttributeNames) {
@@ -95,31 +95,33 @@ const createMockDocumentClient = () => {
           ExpressionAttributeNames[name],
         );
       }
-      for (let name in ExpressionAttributeValues) {
-        UpdateExpression = UpdateExpression.replace(
-          name,
-          ExpressionAttributeValues[name],
-        );
-      }
-      const hasSet = UpdateExpression.indexOf('SET') !== -1;
+
+      const hasSet = UpdateExpression.includes('SET');
       UpdateExpression = UpdateExpression.replace('SET', '').trim();
       const expressions = UpdateExpression.split(',').map(t => t.trim());
       const gg = expressions.map(v => v.split('=').map(x => x.trim()));
       let obj = {};
       for (let [k, v] of gg) {
+        v = ExpressionAttributeValues[v];
         if (v === 'true' || v === 'false') {
           obj[k] = v === 'true';
         } else {
-          obj[k] = v;
+          if (k.includes('documents[')) {
+            obj = data[`${Key.pk} ${Key.sk}`];
+            eval(`obj.${k} = ${JSON.stringify(v)};`);
+          } else {
+            obj[k] = v;
+          }
         }
       }
+
       if (hasSet) {
         data[`${Key.pk} ${Key.sk}`] = {
           ...data[`${Key.pk} ${Key.sk}`],
           ...obj,
         };
       } else {
-        let id = (data[`${Key.pk} ${Key.sk}`] || {}).id;
+        let { id } = data[`${Key.pk} ${Key.sk}`] || {};
         data[`${Key.pk} ${Key.sk}`] = {
           id: (id || 0) + 1,
         };

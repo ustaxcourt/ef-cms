@@ -41,6 +41,7 @@ describe('ExternalDocumentNonStandardH', () => {
           scenario: 'Nonstandard A',
         },
       });
+      expect(() => extDoc.validate()).toThrow();
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
           category: 'You must select a category.',
@@ -65,6 +66,7 @@ describe('ExternalDocumentNonStandardH', () => {
         scenario: 'Nonstandard A',
       },
     });
+    expect(() => extDoc.validate()).not.toThrow();
     expect(extDoc.getFormattedValidationErrors()).toEqual(null);
   });
 

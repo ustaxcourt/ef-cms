@@ -20,16 +20,16 @@ export const ContactSecondary = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    parentView,
     bind,
-    data,
     constants,
-    onChange,
-    onChangeSequence,
-    validationErrors,
+    contactsHelper,
+    data,
     onBlur,
     onBlurSequence,
-    contactsHelper,
+    onChange,
+    onChangeSequence,
+    parentView,
+    validationErrors,
   }) => {
     return (
       <>
@@ -42,10 +42,10 @@ export const ContactSecondary = connect(
         )}
         <div className="blue-container contact-group">
           <Country
-            type="contactSecondary"
             bind={bind}
-            onChange={onChange}
+            type="contactSecondary"
             onBlur={onBlur}
+            onChange={onChange}
           />
           <div
             className={
@@ -56,29 +56,29 @@ export const ContactSecondary = connect(
                 : '')
             }
           >
-            <label htmlFor="secondaryName" className="usa-label">
+            <label className="usa-label" htmlFor="secondaryName">
               {contactsHelper.contactSecondary.nameLabel}
             </label>
             <input
-              id="secondaryName"
-              type="text"
-              name="contactSecondary.name"
               autoCapitalize="none"
               className="usa-input"
+              id="secondaryName"
+              name="contactSecondary.name"
+              type="text"
               value={data.contactSecondary.name || ''}
+              onBlur={() => {
+                onBlurSequence();
+              }}
               onChange={e => {
                 onChangeSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
               }}
-              onBlur={() => {
-                onBlurSequence();
-              }}
             />
             <Text
-              className="usa-error-message"
               bind="validationErrors.contactSecondary.name"
+              className="usa-error-message"
             />
           </div>
           {contactsHelper.contactSecondary.displayInCareOf && (
@@ -91,7 +91,7 @@ export const ContactSecondary = connect(
                   : '')
               }
             >
-              <label htmlFor="secondaryInCareOf" className="usa-label">
+              <label className="usa-label" htmlFor="secondaryInCareOf">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
                   <span>
                     {contactsHelper.contactSecondary.inCareOfLabel}{' '}
@@ -108,44 +108,44 @@ export const ContactSecondary = connect(
                 )}
               </label>
               <input
-                id="secondaryInCareOf"
-                type="text"
-                name="contactSecondary.inCareOf"
                 autoCapitalize="none"
                 className="usa-input"
+                id="secondaryInCareOf"
+                name="contactSecondary.inCareOf"
+                type="text"
                 value={data.contactSecondary.inCareOf || ''}
+                onBlur={() => {
+                  onBlurSequence();
+                }}
                 onChange={e => {
                   onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
-                onBlur={() => {
-                  onBlurSequence();
-                }}
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.contactSecondary.inCareOf"
+                className="usa-error-message"
               />
             </div>
           )}
           {data.contactSecondary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (
             <Address
-              type="contactSecondary"
               bind={bind}
-              onChange={onChange}
+              type="contactSecondary"
               onBlur={onBlur}
+              onChange={onChange}
             />
           )}
           {data.contactSecondary.countryType ===
             constants.COUNTRY_TYPES.INTERNATIONAL && (
             <InternationalAddress
-              type="contactSecondary"
               bind={bind}
-              onChange={onChange}
+              type="contactSecondary"
               onBlur={onBlur}
+              onChange={onChange}
             />
           )}
           {contactsHelper.contactSecondary.displayPhone && (
@@ -158,29 +158,29 @@ export const ContactSecondary = connect(
                   : '')
               }
             >
-              <label htmlFor="secondaryPhone" className="usa-label">
+              <label className="usa-label" htmlFor="secondaryPhone">
                 Phone Number
               </label>
               <input
-                id="secondaryPhone"
-                type="tel"
-                name="contactSecondary.phone"
-                className="usa-input"
                 autoCapitalize="none"
+                className="usa-input"
+                id="secondaryPhone"
+                name="contactSecondary.phone"
+                type="tel"
                 value={data.contactSecondary.phone || ''}
+                onBlur={() => {
+                  onBlurSequence();
+                }}
                 onChange={e => {
                   onChangeSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
                 }}
-                onBlur={() => {
-                  onBlurSequence();
-                }}
               />
               <Text
-                className="usa-error-message"
                 bind="validationErrors.contactSecondary.phone"
+                className="usa-error-message"
               />
             </div>
           )}

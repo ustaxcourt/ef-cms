@@ -9,10 +9,10 @@ const { put } = require('../requests');
  * @returns {Promise<*>}
  */
 exports.forwardWorkItem = ({
-  workItemId,
+  applicationContext,
   assigneeId,
   message,
-  applicationContext,
+  workItemId,
 }) => {
   return put({
     applicationContext,
@@ -20,6 +20,6 @@ exports.forwardWorkItem = ({
       assigneeId,
       message,
     },
-    endpoint: `/workitems/${workItemId}/assignee`,
+    endpoint: `/work-items/${workItemId}/assignee`,
   });
 };

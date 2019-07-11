@@ -1,21 +1,21 @@
 const { put } = require('../requests');
 
 /**
- * completeWorkItem
+ * completeWorkItemInteractor
  *
  * @param completedMessage
  * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.completeWorkItem = ({
+exports.completeWorkItemInteractor = ({
+  applicationContext,
   completedMessage,
   workItemId,
-  applicationContext,
 }) => {
   return put({
     applicationContext,
     body: { completedMessage },
-    endpoint: `/workitems/${workItemId}/complete`,
+    endpoint: `/work-items/${workItemId}/complete`,
   });
 };

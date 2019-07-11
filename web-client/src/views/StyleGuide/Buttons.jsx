@@ -9,7 +9,7 @@ export const Buttons = () => (
     <button className="usa-button usa-button-hover">Primary Hover</button>
     <button className="usa-button usa-button-active">Primary Active</button>
     <button className="usa-button usa-focus">Primary Focus</button>
-    <button className="usa-button" disabled>
+    <button disabled className="usa-button">
       Primary Disabled
     </button>
     <button className="usa-button">
@@ -28,7 +28,7 @@ export const Buttons = () => (
     <button className="usa-button usa-button--outline usa-focus">
       Secondary Focus
     </button>
-    <button className="usa-button usa-button--outline" disabled>
+    <button disabled className="usa-button usa-button--outline">
       Secondary Disabled
     </button>
   </section>

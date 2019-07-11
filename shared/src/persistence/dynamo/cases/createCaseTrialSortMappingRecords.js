@@ -1,22 +1,24 @@
 const { put } = require('../../dynamodbClientService');
 
 /**
- * createCaseTrailSortMappingRecords
+ * createCaseTrialSortMappingRecords
  *
- * @param case
+ * @param caseId
+ * @param caseSortTags
  * @param applicationContext
  * @returns {*}
  */
 exports.createCaseTrialSortMappingRecords = async ({
+  applicationContext,
   caseId,
   caseSortTags,
-  applicationContext,
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
 
   await put({
     Item: {
       caseId,
+      gsi1pk: `eligible-for-trial-case-catalog-${caseId}`,
       pk: 'eligible-for-trial-case-catalog',
       sk: nonHybrid,
     },
@@ -26,6 +28,7 @@ exports.createCaseTrialSortMappingRecords = async ({
   await put({
     Item: {
       caseId,
+      gsi1pk: `eligible-for-trial-case-catalog-${caseId}`,
       pk: 'eligible-for-trial-case-catalog',
       sk: hybrid,
     },

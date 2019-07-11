@@ -17,8 +17,8 @@ class ErrorNotificationComponent extends React.Component {
   }
 
   render() {
-    const alertHelper = this.props.alertHelper;
-    const alertError = this.props.alertError;
+    const { alertHelper } = this.props;
+    const { alertError } = this.props;
 
     this.notificationRef = React.createRef();
 
@@ -26,10 +26,10 @@ class ErrorNotificationComponent extends React.Component {
       <React.Fragment>
         {alertHelper.showErrorAlert && (
           <div
-            className="usa-alert usa-alert--error"
             aria-live="assertive"
-            role="alert"
+            className="usa-alert usa-alert--error"
             ref={this.notificationRef}
+            role="alert"
           >
             <div className="usa-alert__body">
               <Focus>

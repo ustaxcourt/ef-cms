@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for setting showModal
  */
-export const defaultCaseCaptionAction = ({ store, get }) => {
+export const defaultCaseCaptionAction = ({ get, store }) => {
   const caseDetail = { ...get(state.caseDetail) };
   let { caseCaption } = caseDetail;
   store.set(state.caseCaption, caseCaption);

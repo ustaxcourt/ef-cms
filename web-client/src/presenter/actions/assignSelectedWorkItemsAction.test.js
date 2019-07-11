@@ -4,7 +4,7 @@ import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    assignWorkItems: () => null,
+    assignWorkItemsInteractor: () => null,
   }),
 };
 

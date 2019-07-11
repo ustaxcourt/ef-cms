@@ -1,20 +1,15 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
+import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
-
-import { CASE_CAPTION_POSTFIX } from '../../shared/src/business/entities/Case';
-import {
-  CATEGORIES,
-  CATEGORY_MAP,
-  INTERNAL_CATEGORY_MAP,
-} from '../../shared/src/business/entities/Document';
+const {
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 import { Document } from '../../shared/src/business/entities/Document';
-import { TRIAL_CITIES } from '../../shared/src/business/entities/TrialCities';
-
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
@@ -46,7 +41,7 @@ import respondentAddsAnswer from './journey/respondentAddsAnswer';
 import respondentAddsMotion from './journey/respondentAddsMotion';
 import respondentAddsStipulatedDecision from './journey/respondentAddsStipulatedDecision';
 import respondentLogIn from './journey/respondentLogIn';
-import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
+import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
 import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
 import seniorAttorneyMarksStipulatedWorkItemAsCompleted from './journey/seniorAttorneyMarksStipulatedWorkItemAsCompleted';
@@ -64,11 +59,6 @@ import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
-
-const {
-  PARTY_TYPES,
-  COUNTRY_TYPES,
-} = require('../../shared/src/business/entities/contacts/PetitionContact');
 
 let test;
 global.FormData = FormData;
@@ -106,7 +96,7 @@ test = CerebralTest(presenter);
 
 describe('Case journey', () => {
   beforeEach(() => {
-    jest.setTimeout(300000);
+    jest.setTimeout(30000);
     global.window = {
       localStorage: {
         removeItem: () => null,
@@ -115,14 +105,15 @@ describe('Case journey', () => {
     };
 
     test.setState('constants', {
-      CASE_CAPTION_POSTFIX,
-      CATEGORIES,
-      CATEGORY_MAP,
-      COUNTRY_TYPES,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
-      INTERNAL_CATEGORY_MAP,
-      PARTY_TYPES,
-      TRIAL_CITIES,
+      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      STATUS_TYPES: Case.STATUS_TYPES,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 
@@ -151,7 +142,7 @@ describe('Case journey', () => {
 
   respondentLogIn(test);
   respondentViewsDashboard(test);
-  respondentViewsCaseDetail(test);
+  respondentViewsCaseDetailOfBatchedCase(test);
   respondentAddsAnswer(test, fakeFile);
   respondentAddsStipulatedDecision(test, fakeFile);
   respondentAddsMotion(test, fakeFile);

@@ -1,7 +1,6 @@
-import { runCompute } from 'cerebral/test';
-
 import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default test => {
@@ -24,7 +23,7 @@ export default test => {
       `${test.docketNumber}W`,
     );
     expect(caseDetail.documents.length).toEqual(2);
-    expect(caseDetail.preferredTrialCity).toEqual('Chattanooga, TN');
+    expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
 
     const helper = runCompute(caseDetailHelper, {
       state: test.getState(),
