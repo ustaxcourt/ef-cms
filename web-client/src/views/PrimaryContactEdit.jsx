@@ -101,8 +101,6 @@ export const PrimaryContactEdit = connect(
             onClick={() => {
               if (_.isEmpty(validationErrors[type])) {
                 submitEditPrimaryContactSequence();
-              } else {
-                console.log('what', validationErrors[type]);
               }
             }}
           >
