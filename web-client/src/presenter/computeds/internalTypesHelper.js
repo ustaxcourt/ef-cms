@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 
 export const getDocumentTypesForSelect = typeMap => {
   let filteredTypeList = flatten(values(typeMap)).map(t => {
-    return { label: t.documentType, value: t.eventCode };
+    return { ...t, label: t.documentType, value: t.eventCode };
   });
   return orderBy(filteredTypeList, ['label'], ['asc']);
 };
