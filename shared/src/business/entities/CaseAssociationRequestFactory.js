@@ -13,27 +13,27 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
  * @constructor
  */
 function CaseAssociationRequestFactory(rawProps) {
-  let entityConstructor = function(rawProps) {
+  let entityConstructor = function(rawPropsParam) {
     Object.assign(this, {
-      attachments: rawProps.attachments,
-      certificateOfService: rawProps.certificateOfService,
-      certificateOfServiceDate: rawProps.certificateOfServiceDate,
-      documentTitle: rawProps.documentTitle,
-      documentTitleTemplate: rawProps.documentTitleTemplate,
-      documentType: rawProps.documentType,
-      eventCode: rawProps.eventCode,
-      exhibits: rawProps.exhibits,
-      hasSupportingDocuments: rawProps.hasSupportingDocuments,
-      objections: rawProps.objections,
-      partyPractitioner: rawProps.partyPractitioner,
-      partyRespondent: rawProps.partyRespondent,
-      primaryDocumentFile: rawProps.primaryDocumentFile,
-      representingPrimary: rawProps.representingPrimary,
-      representingSecondary: rawProps.representingSecondary,
-      scenario: rawProps.scenario,
-      supportingDocument: rawProps.supportingDocument,
-      supportingDocumentFile: rawProps.supportingDocumentFile,
-      supportingDocumentFreeText: rawProps.supportingDocumentFreeText,
+      attachments: rawPropsParam.attachments,
+      certificateOfService: rawPropsParam.certificateOfService,
+      certificateOfServiceDate: rawPropsParam.certificateOfServiceDate,
+      documentTitle: rawPropsParam.documentTitle,
+      documentTitleTemplate: rawPropsParam.documentTitleTemplate,
+      documentType: rawPropsParam.documentType,
+      eventCode: rawPropsParam.eventCode,
+      exhibits: rawPropsParam.exhibits,
+      hasSupportingDocuments: rawPropsParam.hasSupportingDocuments,
+      objections: rawPropsParam.objections,
+      partyPractitioner: rawPropsParam.partyPractitioner,
+      partyRespondent: rawPropsParam.partyRespondent,
+      primaryDocumentFile: rawPropsParam.primaryDocumentFile,
+      representingPrimary: rawPropsParam.representingPrimary,
+      representingSecondary: rawPropsParam.representingSecondary,
+      scenario: rawPropsParam.scenario,
+      supportingDocument: rawPropsParam.supportingDocument,
+      supportingDocumentFile: rawPropsParam.supportingDocumentFile,
+      supportingDocumentFreeText: rawPropsParam.supportingDocumentFreeText,
     });
   };
 
