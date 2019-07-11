@@ -56,7 +56,7 @@ exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
       '-dNOCACHE',
       '-sDEVICE=pdfwrite',
       '-dPDFSETTINGS=/prepress',
-      '-sColorConversionStrategy=/LeaveColorUnchanged',
+      '-dColorConversionStrategy=/LeaveColorUnchanged',
       '-dAutoFilterColorImages=true',
       '-dAutoFilterGrayImages=true',
       '-dDownsampleMonoImages=true',
