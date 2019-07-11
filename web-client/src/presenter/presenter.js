@@ -141,7 +141,6 @@ import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreat
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
-import { updateFileDocumentSelectFormValueSequence } from './sequences/updateFileDocumentSelectFormValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
@@ -318,7 +317,6 @@ export const presenter = {
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
     updateDocumentValueSequence,
-    updateFileDocumentSelectFormValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
