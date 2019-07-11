@@ -1,5 +1,4 @@
 const {
-  CREATE_COURT_ISSUED_ORDER,
   FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
@@ -33,12 +32,7 @@ exports.fileExternalDocumentInteractor = async ({
   const user = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (
-    !(
-      isAuthorized(user, FILE_EXTERNAL_DOCUMENT) ||
-      isAuthorized(user, CREATE_COURT_ISSUED_ORDER)
-    )
-  ) {
+  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
