@@ -12,31 +12,31 @@ const { includes, omit } = require('lodash');
  * @constructor
  */
 function DocketEntryFactory(rawProps) {
-  let entityConstructor = function(rawProps) {
+  let entityConstructor = function(rawPropsParam) {
     Object.assign(this, {
-      addToCoversheet: rawProps.addToCoversheet,
-      additionalInfo: rawProps.additionalInfo,
-      additionalInfo2: rawProps.additionalInfo2,
-      attachments: rawProps.attachments,
-      certificateOfService: rawProps.certificateOfService,
-      certificateOfServiceDate: rawProps.certificateOfServiceDate,
-      dateReceived: rawProps.dateReceived,
-      documentType: rawProps.documentType,
-      eventCode: rawProps.eventCode,
-      exhibits: rawProps.exhibits,
-      freeText: rawProps.freeText,
-      hasSupportingDocuments: rawProps.hasSupportingDocuments,
-      lodged: rawProps.lodged,
-      objections: rawProps.objections,
-      ordinalValue: rawProps.ordinalValue,
-      partyPrimary: rawProps.partyPrimary,
-      partyRespondent: rawProps.partyRespondent,
-      partySecondary: rawProps.partySecondary,
-      previousDocument: rawProps.previousDocument,
-      primaryDocumentFile: rawProps.primaryDocumentFile,
-      secondaryDocumentFile: rawProps.secondaryDocumentFile,
+      addToCoversheet: rawPropsParam.addToCoversheet,
+      additionalInfo: rawPropsParam.additionalInfo,
+      additionalInfo2: rawPropsParam.additionalInfo2,
+      attachments: rawPropsParam.attachments,
+      certificateOfService: rawPropsParam.certificateOfService,
+      certificateOfServiceDate: rawPropsParam.certificateOfServiceDate,
+      dateReceived: rawPropsParam.dateReceived,
+      documentType: rawPropsParam.documentType,
+      eventCode: rawPropsParam.eventCode,
+      exhibits: rawPropsParam.exhibits,
+      freeText: rawPropsParam.freeText,
+      hasSupportingDocuments: rawPropsParam.hasSupportingDocuments,
+      lodged: rawPropsParam.lodged,
+      objections: rawPropsParam.objections,
+      ordinalValue: rawPropsParam.ordinalValue,
+      partyPrimary: rawPropsParam.partyPrimary,
+      partyRespondent: rawPropsParam.partyRespondent,
+      partySecondary: rawPropsParam.partySecondary,
+      previousDocument: rawPropsParam.previousDocument,
+      primaryDocumentFile: rawPropsParam.primaryDocumentFile,
+      secondaryDocumentFile: rawPropsParam.secondaryDocumentFile,
     });
-    const { secondaryDocument } = rawProps;
+    const { secondaryDocument } = rawPropsParam;
     if (secondaryDocument) {
       this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument);
     }
