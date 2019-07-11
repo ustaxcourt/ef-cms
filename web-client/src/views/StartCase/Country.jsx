@@ -5,7 +5,6 @@ import React from 'react';
 
 export const Country = connect(
   {
-    clearTypeOnCountryChange: props.clearTypeOnCountryChange,
     constants: state.constants,
     data: state[props.bind],
     type: props.type,
@@ -14,7 +13,6 @@ export const Country = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    clearTypeOnCountryChange,
     constants,
     data,
     type,
@@ -43,37 +41,12 @@ export const Country = connect(
             name={`${type}.countryType`}
             value={data[type].countryType}
             onChange={e => {
-              let validate = true;
-
-              if (
-                clearTypeOnCountryChange &&
-                e.target.value !== data[type].countryType
-              ) {
-                [
-                  `${type}.address1`,
-                  `${type}.address2`,
-                  `${type}.address3`,
-                  `${type}.country`,
-                  `${type}.postalCode`,
-                  `${type}.phone`,
-                  `${type}.state`,
-                  `${type}.city`,
-                ].forEach(field => {
-                  updateFormValueSequence({
-                    key: field,
-                    value: undefined,
-                  });
-                });
-
-                validate = false;
-              }
-
               updateFormValueSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
 
-              if (validate) {
+              if (validateStartCaseSequence) {
                 validateStartCaseSequence();
               }
             }}
@@ -112,7 +85,9 @@ export const Country = connect(
               type="text"
               value={data[type].country || ''}
               onBlur={() => {
-                validateStartCaseSequence();
+                if (validateStartCaseSequence) {
+                  validateStartCaseSequence();
+                }
               }}
               onChange={e => {
                 updateFormValueSequence({
