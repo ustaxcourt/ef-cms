@@ -15,6 +15,7 @@ export const getPdfFileAction = async ({ applicationContext, get, props }) => {
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
+
   let docketNumberWithSuffix = get(
     state.formattedCaseDetail.docketNumberWithSuffix,
   );
@@ -27,7 +28,10 @@ export const getPdfFileAction = async ({ applicationContext, get, props }) => {
       htmlString,
     });
 
-  const pdfFile = new File([pdfBlob], documentTitle);
+  const pdfFile = new File([pdfBlob], documentTitle, {
+    type: 'application/pdf',
+  });
+  const pdfUrl = window.URL.createObjectURL(pdfFile);
 
-  return { pdfFile };
+  return { pdfFile, pdfUrl };
 };
