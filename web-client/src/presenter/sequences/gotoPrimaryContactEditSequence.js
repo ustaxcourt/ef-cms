@@ -4,14 +4,13 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { state } from 'cerebral';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 
 const gotoPrimaryContactEdit = [
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  startShowValidationAction,
   clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,

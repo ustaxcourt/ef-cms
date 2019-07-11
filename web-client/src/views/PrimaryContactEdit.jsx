@@ -1,14 +1,16 @@
 import { Address } from './StartCase/Address';
 import { Country } from './StartCase/Country';
+import { ErrorNotification } from './ErrorNotification';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import _ from 'lodash';
 
 export const PrimaryContactEdit = connect(
   {
+    cancelEditPrimaryContactSequence:
+      sequences.cancelEditPrimaryContactSequence,
     caseDetail: state.caseDetail,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
@@ -17,6 +19,7 @@ export const PrimaryContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    cancelEditPrimaryContactSequence,
     caseDetail,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
@@ -26,7 +29,6 @@ export const PrimaryContactEdit = connect(
     const type = 'contactPrimary';
     const bind = 'caseDetail';
     const onBlur = 'validateContactPrimarySequence';
-    const onChange = 'updateCaseValueSequence';
 
     return (
       <>
@@ -35,29 +37,32 @@ export const PrimaryContactEdit = connect(
             <h1>My Contact Information</h1>
           </div>
         </div>
+
         <section className="usa-section grid-container">
+          <ErrorNotification />
+
           <h2>Edit Your Contact Information for This Case</h2>
+
           <div className="blue-container">
             <Country
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onBlur={onBlur}
-              onChange={onChange}
+              onChange="countryTypeChangeSequence"
             />
             {caseDetail.contactPrimary.countryType === 'domestic' ? (
               <Address
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange={onChange}
+                onChange="updateCaseValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange={onChange}
+                onChange="updateCaseValueSequence"
               />
             )}
             <div
@@ -99,19 +104,21 @@ export const PrimaryContactEdit = connect(
           <button
             className="usa-button margin-top-3 margin-right-3"
             onClick={() => {
-              if (_.isEmpty(validationErrors[type])) {
-                submitEditPrimaryContactSequence();
-              }
+              submitEditPrimaryContactSequence();
             }}
           >
             Save
           </button>
-          <a
-            className="usa-button usa-button--outline"
-            href={`/case-detail/${caseDetail.docketNumber}`}
+          <button
+            className="usa-button usa-button--outline margin-top-3 margin-right-3"
+            onClick={() => {
+              cancelEditPrimaryContactSequence({
+                caseId: caseDetail.docketNumber,
+              });
+            }}
           >
             Cancel
-          </a>
+          </button>
         </section>
       </>
     );
