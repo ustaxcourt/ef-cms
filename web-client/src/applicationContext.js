@@ -202,7 +202,8 @@ const allUseCases = {
   refreshTokenInteractor,
   removeItemInteractor,
   runBatchProcessInteractor,
-  sanitizePdfInteractor,
+  sanitizePdfInteractor: args =>
+    process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
   sendPetitionToIRSHoldingQueueInteractor,
   setCaseToReadyForTrialInteractor,
   setItemInteractor,
@@ -234,7 +235,8 @@ const allUseCases = {
   validateTrialSessionInteractor,
   verifyCaseForUserInteractor,
   verifyPendingCaseForUserInteractor,
-  virusScanPdfInteractor,
+  virusScanPdfInteractor: args =>
+    process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
 };
 tryCatchDecorator(allUseCases);
 

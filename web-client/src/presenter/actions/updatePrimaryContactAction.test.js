@@ -2,7 +2,9 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { updatePrimaryContactAction } from './updatePrimaryContactAction';
 
-const updatePrimaryContactInteractorStub = jest.fn();
+const updatePrimaryContactInteractorStub = jest
+  .fn()
+  .mockReturnValue({ docketNumber: 'ayy' });
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
