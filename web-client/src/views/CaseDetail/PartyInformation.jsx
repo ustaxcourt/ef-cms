@@ -1,27 +1,18 @@
+import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import { EditPrimaryContactModal } from '../EditPrimaryContactModal';
-import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
-
 export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
     constants: state.constants,
-    editPrimaryContact: sequences.openEditPrimaryContactModalSequence,
     editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
   },
-  ({
-    caseDetail,
-    caseHelper,
-    constants,
-    editPrimaryContact,
-    editSecondaryContact,
-  }) => {
+  ({ caseDetail, caseHelper, constants, editSecondaryContact }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
@@ -42,13 +33,12 @@ export const PartyInformation = connect(
                   </address>
 
                   {caseHelper.showEditContactButton && (
-                    <button
-                      className="usa-button usa-button--unstyled"
-                      onClick={() => editPrimaryContact()}
+                    <a
+                      href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
-                    </button>
+                    </a>
                   )}
                 </div>
               </React.Fragment>
@@ -170,8 +160,6 @@ export const PartyInformation = connect(
           <h3>Party Information</h3>
           {mainPartyInformation()}
         </Mobile>
-
-        {caseHelper.showEditPrimaryContactModal && <EditPrimaryContactModal />}
 
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
