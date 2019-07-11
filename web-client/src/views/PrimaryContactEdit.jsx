@@ -1,5 +1,6 @@
 import { Address } from './StartCase/Address';
 import { Country } from './StartCase/Country';
+import { InternationalAddress } from './StartCase/InternationalAddress';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -38,12 +39,21 @@ export const PrimaryContactEdit = connect(
               onBlur="validateContactPrimarySequence"
               onChange="updateCaseValueSequence"
             />
-            <Address
-              bind="caseDetail"
-              type="contactPrimary"
-              onBlur="validateContactPrimarySequence"
-              onChange="updateCaseValueSequence"
-            />
+            {caseDetail.contactPrimary.countryType === 'domestic' ? (
+              <Address
+                bind="caseDetail"
+                type="contactPrimary"
+                onBlur="validateContactPrimarySequence"
+                onChange="updateCaseValueSequence"
+              />
+            ) : (
+              <InternationalAddress
+                bind="caseDetail"
+                type="contactPrimary"
+                onBlur="validateContactPrimarySequence"
+                onChange="updateCaseValueSequence"
+              />
+            )}
             <div
               className={
                 'usa-form-group ' +
