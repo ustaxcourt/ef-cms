@@ -1,10 +1,8 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { set } from 'cerebral/factories';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultPartySelectionAction } from '../actions/FileDocument/setDefaultPartySelectionAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { state } from 'cerebral';
@@ -17,9 +15,6 @@ export const openCompleteSelectDocumentTypeModalSequence = [
   {
     error: [set(state.showModal, 'CompleteSelectDocumentModalDialog')],
     success: [
-      setCurrentPageAction('Interstitial'),
-      clearAlertsAction,
-      set(state.showValidation, false),
       generateTitleAction,
       setDocketNumberPropAction,
       setDefaultPartySelectionAction,

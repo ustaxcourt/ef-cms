@@ -24,6 +24,7 @@ export const CompleteSelectDocumentModalDialog = connect(
   {
     cancelSequence: sequences.dismissCreateMessageModalSequence,
     confirmSequence: sequences.completeDocumentSelectSequence,
+    form: state.form,
     modal: state.modal,
   },
   CompleteSelectDocumentModalDialogComponent,
