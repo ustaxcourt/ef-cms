@@ -26,10 +26,12 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
@@ -104,6 +106,7 @@ export const state = {
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
+  selectDocumentSelectHelper,
   selectDocumentTypeHelper,
   selectedWorkItems: [],
   sessionMetadata: {},
@@ -120,6 +123,7 @@ export const state = {
   user: null,
   users: [],
   validationErrors: {},
+  viewAllDocumentsHelper,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},

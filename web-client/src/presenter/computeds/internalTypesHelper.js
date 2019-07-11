@@ -1,7 +1,7 @@
 import { flatten, orderBy, values } from 'lodash';
 import { state } from 'cerebral';
 
-const getInternalDocumentTypesForSelect = typeMap => {
+export const getDocumentTypesForSelect = typeMap => {
   let filteredTypeList = flatten(values(typeMap)).map(t => {
     return { label: t.documentType, value: t.eventCode };
   });
@@ -39,7 +39,7 @@ export const internalTypesHelper = get => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
   const searchText = get(state.screenMetadata.searchText) || '';
 
-  const internalDocumentTypesForSelect = getInternalDocumentTypesForSelect(
+  const internalDocumentTypesForSelect = getDocumentTypesForSelect(
     INTERNAL_CATEGORY_MAP,
   );
 
