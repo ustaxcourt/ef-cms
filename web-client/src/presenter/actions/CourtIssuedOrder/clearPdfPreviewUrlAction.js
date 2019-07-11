@@ -7,6 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.pdfUrl
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
-export const setPdfPreviewUrlAction = ({ props, store }) => {
-  store.set(state.pdfPreviewUrl, props.pdfUrl);
+export const clearPdfPreviewUrlAction = ({ get }) => {
+  const oldUrl = get(state.pdfPreviewUrl);
+  window.URL.revokeObjectURL(oldUrl);
 };

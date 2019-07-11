@@ -6,13 +6,6 @@ import React from 'react';
 class PdfPreviewComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.createURL();
-  }
-
-  componentWillUpdate() {
-    console.log('in componentWillUpdate');
-    this.releaseURL();
-    this.createURL();
   }
 
   componentWillUnmount() {
@@ -20,44 +13,32 @@ class PdfPreviewComponent extends React.Component {
   }
 
   releaseURL() {
-    window.URL.revokeObjectURL(this.blobUrl);
-  }
-
-  createURL() {
-    console.log('creating url');
-    this.blobUrl = window.URL.createObjectURL(this.props.pdfFile);
-    this.props.setPdfPreviewUrlSequence({ pdfUrl: this.blobUrl });
+    this.props.clearPdfPreviewUrlSequence();
   }
 
   render() {
-    console.log('in render', this.props.pdfPreviewUrl);
+    if (!this.props.pdfPreviewUrl) return '';
     return (
-      this.props.pdfFile && (
-        <>
-          {this.props.pdfPreviewUrl && (
-            <iframe
-              id="pdf-preview-iframe"
-              src={this.props.pdfPreviewUrl}
-              title="PDF Preview"
-            />
-          )}
-        </>
-      )
+      <>
+        <iframe
+          id="pdf-preview-iframe"
+          src={this.props.pdfPreviewUrl}
+          title="PDF Preview"
+        />
+      </>
     );
   }
 }
 
 PdfPreviewComponent.propTypes = {
-  pdfFile: PropTypes.object,
+  clearPdfPreviewUrlSequence: PropTypes.func,
   pdfPreviewUrl: PropTypes.string,
-  setPdfPreviewUrlSequence: PropTypes.function,
 };
 
 export const PdfPreview = connect(
   {
-    pdfFile: state.form.primaryDocumentFile,
+    clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
-    setPdfPreviewUrlSequence: sequences.setPdfPreviewUrlSequence,
   },
   PdfPreviewComponent,
 );
