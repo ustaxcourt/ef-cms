@@ -21,3 +21,4 @@ layers:
     package:
       exclude:
         - clamav_lambda_layer.tar.gz
+    retain: true

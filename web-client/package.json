@@ -21,7 +21,7 @@
     "test:pa11y": "pa11y-ci --config pa11y-ci.config.js",
     "test:unit": "jest --runInBand --config jest-unit.config.js ./src/.*test\\.js$",
     "test:watch": "jest --runInBand --watch .*test\\.js$",
-    "test": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$"
+    "test": "SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$"
   },
   "repository": {
     "type": "git",
