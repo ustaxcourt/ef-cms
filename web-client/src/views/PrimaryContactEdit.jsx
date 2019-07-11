@@ -1,9 +1,11 @@
 import { Address } from './StartCase/Address';
 import { Country } from './StartCase/Country';
+import { InternationalAddress } from './StartCase/InternationalAddress';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import _ from 'lodash';
 
 export const PrimaryContactEdit = connect(
   {
@@ -21,6 +23,11 @@ export const PrimaryContactEdit = connect(
     validateContactPrimarySequence,
     validationErrors,
   }) => {
+    const type = 'contactPrimary';
+    const bind = 'caseDetail';
+    const onBlur = 'validateContactPrimarySequence';
+    const onChange = 'updateCaseValueSequence';
+
     return (
       <>
         <div className="big-blue-header">
@@ -32,17 +39,27 @@ export const PrimaryContactEdit = connect(
           <h2>Edit Your Contact Information for This Case</h2>
           <div className="blue-container">
             <Country
-              bind={'caseDetail'}
-              type={'contactPrimary'}
-              onBlur={'validateContactPrimarySequence'}
-              onChange={'updateCaseValueSequence'}
+              bind={bind}
+              clearTypeOnCountryChange={true}
+              type={type}
+              onBlur={onBlur}
+              onChange={onChange}
             />
-            <Address
-              bind={'caseDetail'}
-              type={'contactPrimary'}
-              onBlur={'validateContactPrimarySequence'}
-              onChange={'updateCaseValueSequence'}
-            />
+            {caseDetail.contactPrimary.countryType === 'domestic' ? (
+              <Address
+                bind={bind}
+                type={type}
+                onBlur={onBlur}
+                onChange={onChange}
+              />
+            ) : (
+              <InternationalAddress
+                bind={bind}
+                type={type}
+                onBlur={onBlur}
+                onChange={onChange}
+              />
+            )}
             <div
               className={
                 'usa-form-group ' +
@@ -82,7 +99,9 @@ export const PrimaryContactEdit = connect(
           <button
             className="usa-button margin-top-3 margin-right-3"
             onClick={() => {
-              submitEditPrimaryContactSequence();
+              if (_.isEmpty(validationErrors[type])) {
+                submitEditPrimaryContactSequence();
+              }
             }}
           >
             Save
