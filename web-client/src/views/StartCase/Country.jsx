@@ -49,7 +49,22 @@ export const Country = connect(
                 clearTypeOnCountryChange &&
                 e.target.value !== data[type].countryType
               ) {
-                updateFormValueSequence({ key: type, value: {} });
+                [
+                  `${type}.address1`,
+                  `${type}.address2`,
+                  `${type}.address3`,
+                  `${type}.country`,
+                  `${type}.postalCode`,
+                  `${type}.phone`,
+                  `${type}.state`,
+                  `${type}.city`,
+                ].forEach(field => {
+                  updateFormValueSequence({
+                    key: field,
+                    value: undefined,
+                  });
+                });
+
                 validate = false;
               }
 
