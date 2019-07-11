@@ -7,7 +7,6 @@ import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
-import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
@@ -137,7 +136,6 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
-import { updateContactPrimaryValueSequence } from './sequences/updateContactPrimaryValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
@@ -186,7 +184,6 @@ export const presenter = {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
-    cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
     chooseWizardStepSequence,
@@ -314,7 +311,6 @@ export const presenter = {
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
     updateCompleteFormValueSequence,
-    updateContactPrimaryValueSequence,
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
