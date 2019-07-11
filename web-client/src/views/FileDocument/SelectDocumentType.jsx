@@ -1,6 +1,8 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
+import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
 import { DocumentType } from './DocumentType';
 import { DocumentTypeReadOnly } from './DocumentTypeReadOnly';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -8,17 +10,15 @@ import React from 'react';
 export const SelectDocumentType = connect(
   {
     caseDetail: state.caseDetail,
-    form: state.form,
+    completeDocumentSelectSequence: sequences.completeDocumentSelectSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     goToViewAllDocumentsSequence: sequences.goToViewAllDocumentsSequence,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
-    submitting: state.submitting,
-    toggleDocumentCategoryAccordionSequence:
-      sequences.toggleDocumentCategoryAccordionSequence,
   },
   ({
     caseDetail,
+    completeDocumentSelectSequence,
     formCancelToggleCancelSequence,
     screenMetadata,
     selectDocumentSequence,
@@ -36,23 +36,42 @@ export const SelectDocumentType = connect(
                 What document are you filing?
               </h2>
               <div className="blue-container">
-                {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
-                {screenMetadata.isDocumentTypeSelected && (
-                  <DocumentTypeReadOnly />
-                )}
+                <NonMobile>
+                  <CompleteDocumentTypeSection />
+                </NonMobile>
+                <Mobile>
+                  {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
+                  {screenMetadata.isDocumentTypeSelected && (
+                    <DocumentTypeReadOnly />
+                  )}
+                </Mobile>
               </div>
 
               <div className="button-box-container margin-top-4">
-                <button
-                  className="usa-button margin-right-205"
-                  id="submit-document"
-                  type="submit"
-                  onClick={() => {
-                    selectDocumentSequence();
-                  }}
-                >
-                  Continue
-                </button>
+                <NonMobile>
+                  <button
+                    className="usa-button margin-right-205"
+                    id="submit-document"
+                    type="submit"
+                    onClick={() => {
+                      completeDocumentSelectSequence();
+                    }}
+                  >
+                    Continue
+                  </button>
+                </NonMobile>
+                <Mobile>
+                  <button
+                    className="usa-button margin-right-205"
+                    id="submit-document"
+                    type="submit"
+                    onClick={() => {
+                      selectDocumentSequence();
+                    }}
+                  >
+                    Continue
+                  </button>
+                </Mobile>
                 <button
                   className="usa-button usa-button--unstyled"
                   type="button"

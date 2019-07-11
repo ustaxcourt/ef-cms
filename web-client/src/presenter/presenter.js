@@ -20,6 +20,7 @@ import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumen
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
+import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completeScanSequence } from './sequences/completeScanSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
@@ -198,6 +199,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
+    completeDocumentSelectSequence,
     completeDocumentSigningSequence,
     completeScanSequence,
     confirmStayLoggedInSequence,
