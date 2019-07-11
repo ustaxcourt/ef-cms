@@ -13,7 +13,7 @@ export const validateContactPrimaryAction = ({
   get,
   store,
 }) => {
-  const contactInfo = get(state.contactToEdit.contactPrimary);
+  const contactInfo = get(state.caseDetail.contactPrimary);
   const partyType = get(state.caseDetail.partyType);
 
   const errors = applicationContext
