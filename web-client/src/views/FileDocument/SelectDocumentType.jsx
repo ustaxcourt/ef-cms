@@ -1,5 +1,6 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
-import { DocumentTypeSelect } from './DocumentTypeSelect';
+import { DocumentType } from './DocumentType';
+import { DocumentTypeReadOnly } from './DocumentTypeReadOnly';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -16,7 +17,12 @@ export const SelectDocumentType = connect(
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
   },
-  ({ caseDetail, formCancelToggleCancelSequence, selectDocumentSequence }) => {
+  ({
+    caseDetail,
+    formCancelToggleCancelSequence,
+    screenMetadata,
+    selectDocumentSequence,
+  }) => {
     return (
       <React.Fragment>
         <div className="grid-container">
@@ -30,7 +36,11 @@ export const SelectDocumentType = connect(
                 What document are you filing?
               </h2>
               <div className="blue-container">
-                <DocumentTypeSelect />
+                {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
+
+                {screenMetadata.isDocumentTypeSelected && (
+                  <DocumentTypeReadOnly />
+                )}
               </div>
 
               <div className="button-box-container margin-top-4">
