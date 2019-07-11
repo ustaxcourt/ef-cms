@@ -33,8 +33,6 @@ presenter.providers.router = {
       });
     }
 
-    console.log('url', url);
-
     if (url === '/') {
       await test.runSequence('gotoDashboardSequence');
     }
