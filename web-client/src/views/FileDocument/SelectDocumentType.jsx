@@ -1,11 +1,7 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
-import { DocumentCategoryAccordion } from './DocumentCategoryAccordion';
-import { DocumentType } from './DocumentType';
-import { DocumentTypeReadOnly } from './DocumentTypeReadOnly';
 import { DocumentTypeSelect } from './DocumentTypeSelect';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequence, sequences, state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const SelectDocumentType = connect(
@@ -20,14 +16,7 @@ export const SelectDocumentType = connect(
     toggleDocumentCategoryAccordionSequence:
       sequences.toggleDocumentCategoryAccordionSequence,
   },
-  ({
-    caseDetail,
-    form,
-    formCancelToggleCancelSequence,
-    screenMetadata,
-    selectDocumentSequence,
-    toggleDocumentCategoryAccordionSequence,
-  }) => {
+  ({ caseDetail, formCancelToggleCancelSequence, selectDocumentSequence }) => {
     return (
       <React.Fragment>
         <div className="grid-container">
