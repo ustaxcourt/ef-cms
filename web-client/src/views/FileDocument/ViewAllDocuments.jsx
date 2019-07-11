@@ -1,4 +1,5 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
+import { CompleteSelectDocumentModalDialog } from './CompleteSelectDocumentModalDialog';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -8,13 +9,19 @@ export const ViewAllDocuments = connect(
   {
     caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openCompleteSelectDocumentTypeModalSequence:
+      sequences.openCompleteSelectDocumentTypeModalSequence,
     showModal: state.showModal,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   ({
     caseDetail,
     formCancelToggleCancelSequence,
+    openCompleteSelectDocumentTypeModalSequence,
     showModal,
+    updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper,
   }) => {
     return (
@@ -42,6 +49,29 @@ export const ViewAllDocuments = connect(
                             <button
                               className="usa-button usa-button--unstyled margin-bottom-1"
                               key={`${title}-document-${index}`}
+                              onClick={() => {
+                                updateFileDocumentWizardFormValueSequence({
+                                  key: 'category',
+                                  value: document.category,
+                                });
+                                updateFileDocumentWizardFormValueSequence({
+                                  key: 'documentType',
+                                  value: document.documentType,
+                                });
+                                updateFileDocumentWizardFormValueSequence({
+                                  key: 'documentTitle',
+                                  value: document.documentTitle,
+                                });
+                                updateFileDocumentWizardFormValueSequence({
+                                  key: 'eventCode',
+                                  value: document.eventCode,
+                                });
+                                updateFileDocumentWizardFormValueSequence({
+                                  key: 'scenario',
+                                  value: document.scenario,
+                                });
+                                openCompleteSelectDocumentTypeModalSequence();
+                              }}
                             >
                               {document.documentType}
                             </button>
@@ -72,6 +102,9 @@ export const ViewAllDocuments = connect(
             </button>
             {showModal === 'FormCancelModalDialogComponent' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+            )}
+            {showModal === 'CompleteSelectDocumentModalDialog' && (
+              <CompleteSelectDocumentModalDialog />
             )}
           </div>
         </div>
