@@ -64,7 +64,7 @@ jobs:
           command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd web-api && (npm start &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && (npm run dev &) && ../wait-until.sh http://localhost:1234 && npm run test:pa11y'
       - run:
           name: Cerebral
-          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd web-api && (npm start &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && npm run test"
+          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd web-api && (npm start &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && npm run test:integration"
       - run:
           name: Cypress
           command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c 'cd web-api && (npm start &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && (npm run dev:cypress &) && ../wait-until.sh http://localhost:1234 && npm run cypress'
