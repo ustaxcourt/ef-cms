@@ -8,12 +8,21 @@ import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
 
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { validateContactPrimaryAction } from '../actions/validateContactPrimaryAction';
+
 export const submitEditPrimaryContactSequence = [
   clearAlertsAction,
-  setFormSubmittingAction,
-  updatePrimaryContactAction,
-  parallel([setDocumentDetailTabAction, setAlertSuccessAction]),
-  unsetFormSubmittingAction,
-  setCurrentPageAction('Interstitial'),
-  navigateToCaseDetailAction,
+  validateContactPrimaryAction,
+  {
+    error: [setValidationAlertErrorsAction],
+    success: [
+      setFormSubmittingAction,
+      updatePrimaryContactAction,
+      parallel([setDocumentDetailTabAction, setAlertSuccessAction]),
+      unsetFormSubmittingAction,
+      setCurrentPageAction('Interstitial'),
+      navigateToCaseDetailAction,
+    ],
+  },
 ];
