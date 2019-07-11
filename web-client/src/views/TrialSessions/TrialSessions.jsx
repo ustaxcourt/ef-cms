@@ -23,9 +23,7 @@ export const TrialSessions = () => (
           tabName="Upcoming"
           title="Upcoming"
         >
-          <div id="upcoming-trialsessions-tab-content">
-            <UpcomingTrialSessions />
-          </div>
+          <UpcomingTrialSessions />
         </Tab>
       </Tabs>
     </section>
