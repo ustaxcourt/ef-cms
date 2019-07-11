@@ -21,7 +21,9 @@
     "test:pa11y": "pa11y-ci --config pa11y-ci.config.js",
     "test:unit": "jest --runInBand --config jest-unit.config.js ./src/.*test\\.js$",
     "test:watch": "jest --runInBand --watch .*test\\.js$",
-    "test": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$"
+    "test": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand .*test\\.js$",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -88,7 +90,7 @@
     "jest": "^24.8.0",
     "jsdoc": "^3.6.2",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.12",
     "moment": "^2.24.0",
     "nock": "^10.0.6",
     "node-sass": "^4.12.0",
@@ -117,10 +119,12 @@
     "stylelint-config-idiomatic-order": "^7.0.1",
     "stylelint-config-standard": "^18.3.0",
     "uswds": "^2.0.2",
-    "wicg-inert": "^2.1.0"
+    "wicg-inert": "^2.1.0",
+    "snyk": "^1.192.6"
   },
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
-  }
+  },
+  "snyk": true
 }
