@@ -20,6 +20,8 @@ module.exports = {
     .handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .handler,
+  fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
+    .handler,
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
