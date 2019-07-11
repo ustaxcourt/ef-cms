@@ -15,6 +15,7 @@ export const updatePrimaryContactAction = async ({
 }) => {
   const caseToUpdate = get(state.caseDetail);
   const contactInfo = get(state.caseDetail.contactPrimary);
+
   const updatedCase = await applicationContext
     .getUseCases()
     .updatePrimaryContactInteractor({
@@ -30,5 +31,6 @@ export const updatePrimaryContactAction = async ({
 
   return {
     caseId: updatedCase.docketNumber,
+    tab: 'caseInfo',
   };
 };
