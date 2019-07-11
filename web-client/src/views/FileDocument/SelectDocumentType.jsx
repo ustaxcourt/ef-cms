@@ -37,7 +37,6 @@ export const SelectDocumentType = connect(
               </h2>
               <div className="blue-container">
                 {!screenMetadata.isDocumentTypeSelected && <DocumentType />}
-
                 {screenMetadata.isDocumentTypeSelected && (
                   <DocumentTypeReadOnly />
                 )}

@@ -16,7 +16,6 @@ export const viewAllDocumentsHelper = get => {
 
   const sections = [...CATEGORIES];
   sections.push(sections.shift());
-  console.log(CATEGORY_MAP);
 
   return {
     categoryMap: CATEGORY_MAP,
