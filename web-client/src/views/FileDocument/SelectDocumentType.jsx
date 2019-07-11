@@ -12,7 +12,7 @@ export const SelectDocumentType = connect(
     caseDetail: state.caseDetail,
     completeDocumentSelectSequence: sequences.completeDocumentSelectSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    goToViewAllDocumentsSequence: sequences.goToViewAllDocumentsSequence,
+    gotoViewAllDocumentsSequence: sequences.gotoViewAllDocumentsSequence,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
   },
@@ -20,6 +20,7 @@ export const SelectDocumentType = connect(
     caseDetail,
     completeDocumentSelectSequence,
     formCancelToggleCancelSequence,
+    gotoViewAllDocumentsSequence,
     screenMetadata,
     selectDocumentSequence,
   }) => {
@@ -121,13 +122,13 @@ export const SelectDocumentType = connect(
                 </Accordion>
                 <div className="content-wrapper">
                   <div>
-                    <a
+                    <button
                       className="usa-button usa-button--outline"
-                      href={`/case-detail/${caseDetail.docketNumber}/file-a-document/view-all-documents`}
                       id="view-all-documents"
+                      onClick={() => gotoViewAllDocumentsSequence()}
                     >
                       View All Document Categories
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
