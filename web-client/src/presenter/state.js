@@ -31,6 +31,7 @@ import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
@@ -123,6 +124,7 @@ export const state = {
   user: null,
   users: [],
   validationErrors: {},
+  viewAllDocumentsHelper,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
