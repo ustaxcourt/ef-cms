@@ -2,7 +2,9 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { updatePrimaryContactAction } from './updatePrimaryContactAction';
 
-const updatePrimaryContactInteractorStub = jest.fn();
+const updatePrimaryContactInteractorStub = jest
+  .fn()
+  .mockReturnValue({ docketNumber: 'ayy' });
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
@@ -22,6 +24,13 @@ describe('updatePrimaryContactAction', () => {
     });
 
     expect(updatePrimaryContactInteractorStub).toHaveBeenCalled();
-    expect(result.state.alertSuccess).toBeTruthy();
+    expect(result.output).toEqual({
+      alertSuccess: {
+        message: 'Please confirm the information below is correct.',
+        title: 'Your changes have been saved.',
+      },
+      caseId: 'ayy',
+      tab: 'caseInfo',
+    });
   });
 });

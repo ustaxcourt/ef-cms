@@ -339,4 +339,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
+  'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/contacts/primary/edit',
 ];
