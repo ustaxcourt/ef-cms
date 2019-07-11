@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { parallel } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -8,6 +9,7 @@ import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction'
 import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
 
 export const submitEditPrimaryContactSequence = [
+  clearAlertsAction,
   setFormSubmittingAction,
   updatePrimaryContactAction,
   parallel([setDocumentDetailTabAction, setAlertSuccessAction]),
