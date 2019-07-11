@@ -9,6 +9,8 @@ import React from 'react';
 
 export const PrimaryContactEdit = connect(
   {
+    cancelEditPrimaryContactSequence:
+      sequences.cancelEditPrimaryContactSequence,
     caseDetail: state.caseDetail,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
@@ -17,6 +19,7 @@ export const PrimaryContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    cancelEditPrimaryContactSequence,
     caseDetail,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
@@ -26,7 +29,6 @@ export const PrimaryContactEdit = connect(
     const type = 'contactPrimary';
     const bind = 'caseDetail';
     const onBlur = 'validateContactPrimarySequence';
-    const onChange = 'updateCaseValueSequence';
 
     return (
       <>
@@ -46,22 +48,21 @@ export const PrimaryContactEdit = connect(
               bind={bind}
               clearTypeOnCountryChange={true}
               type={type}
-              onBlur={onBlur}
-              onChange={onChange}
+              onChange="countryTypeChangeSequence"
             />
             {caseDetail.contactPrimary.countryType === 'domestic' ? (
               <Address
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange={onChange}
+                onChange="updateCaseValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange={onChange}
+                onChange="updateCaseValueSequence"
               />
             )}
             <div
@@ -108,12 +109,16 @@ export const PrimaryContactEdit = connect(
           >
             Save
           </button>
-          <a
-            className="usa-button usa-button--outline"
-            href={`/case-detail/${caseDetail.docketNumber}`}
+          <button
+            className="usa-button usa-button--outline margin-top-3 margin-right-3"
+            onClick={() => {
+              cancelEditPrimaryContactSequence({
+                caseId: caseDetail.docketNumber,
+              });
+            }}
           >
             Cancel
-          </a>
+          </button>
         </section>
       </>
     );

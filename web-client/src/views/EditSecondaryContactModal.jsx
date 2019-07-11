@@ -35,6 +35,7 @@ class EditSecondaryContactModalComponent extends ModalDialog {
 
 export const EditSecondaryContactModal = connect(
   {
+    cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.dismissModalSequence,
   },
   EditSecondaryContactModalComponent,
