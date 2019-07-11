@@ -44,7 +44,7 @@ jobs:
           command: docker run --rm efcms /bin/sh -c 'cd web-client && npm run lint'
       - run:
           name: UI - Test
-          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd web-api && (npm start &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && npm run test"
+          command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd web-api && (npm start &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && npm run test"
       - run:
           name: UI - SonarQube
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
