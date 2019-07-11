@@ -1,5 +1,6 @@
 import { Address } from './StartCase/Address';
 import { Country } from './StartCase/Country';
+import { ErrorNotification } from './ErrorNotification';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -35,8 +36,12 @@ export const PrimaryContactEdit = connect(
             <h1>My Contact Information</h1>
           </div>
         </div>
+
         <section className="usa-section grid-container">
+          <ErrorNotification />
+
           <h2>Edit Your Contact Information for This Case</h2>
+
           <div className="blue-container">
             <Country
               bind={bind}
@@ -99,9 +104,7 @@ export const PrimaryContactEdit = connect(
           <button
             className="usa-button margin-top-3 margin-right-3"
             onClick={() => {
-              if (_.isEmpty(validationErrors[type])) {
-                submitEditPrimaryContactSequence();
-              }
+              submitEditPrimaryContactSequence();
             }}
           >
             Save
