@@ -93,6 +93,7 @@ export const state = {
   },
   pdfForSigning: {
     documentId: null,
+    nameForSigning: '',
     pageNumber: 1,
     pdfjsObj: null,
     signatureData: null,
