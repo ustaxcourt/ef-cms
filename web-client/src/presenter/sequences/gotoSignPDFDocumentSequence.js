@@ -5,8 +5,15 @@ import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 
+import { getCaseAction } from '../actions/getCaseAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+
 export const gotoSignPDFDocumentSequence = [
   setCurrentPageAction('Interstitial'),
+  setDocumentIdAction,
+  getCaseAction,
+  setCaseAction,
   clearPDFSignatureDataAction,
   clearFormAction,
   setSignatureNameForPdfSigningAction,
