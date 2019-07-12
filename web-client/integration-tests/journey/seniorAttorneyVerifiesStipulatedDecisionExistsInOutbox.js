@@ -10,7 +10,7 @@ export default test => {
     it('verifies the stipulated decision exists', async () => {
       const myInbox = await getFormattedMyOutbox(test);
       const stipDecision = myInbox.find(
-        item => item.document.documentType === 'Proposed Stipulated Decision',
+        item => item.document.documentType === 'Signed Stipulated Decision',
       );
 
       expect(stipDecision).not.toBeNull();
