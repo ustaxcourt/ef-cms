@@ -89,6 +89,7 @@ describe('Petitions Clerk Create Order Journey', () => {
         createObjectURL: () => {
           return fakeData;
         },
+        revokeObjectURL: () => {},
       },
       localStorage: {
         removeItem: () => null,
