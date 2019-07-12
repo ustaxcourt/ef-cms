@@ -105,8 +105,9 @@ export const DocumentDetail = connect(
               </div>
               <div
                 className={`grid-col-7 ${
-                  !caseHelper.showServeToIrsButton ||
-                  !helper.formattedDocument.isPetition
+                  !helper.showSignDocumentButton &&
+                  (!caseHelper.showServeToIrsButton ||
+                    !helper.formattedDocument.isPetition)
                     ? 'document-viewer-top-margin'
                     : ''
                 }`}
