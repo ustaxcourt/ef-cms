@@ -79,7 +79,7 @@ describe('selectDocumentTypeHelper', () => {
     });
     expect(result).toEqual({
       primary: {
-        previousDocumentSelectLabel: 'Which Document Are You Objecting To?',
+        previousDocumentSelectLabel: 'Which document are you objecting to?',
         previouslyFiledDocuments: [
           'Petition',
           'Answer',
@@ -102,7 +102,7 @@ describe('selectDocumentTypeHelper', () => {
       primary: {
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'What Is This Statement For?',
+        textInputLabel: 'What is this Statement for?',
       },
     });
   });
@@ -118,7 +118,7 @@ describe('selectDocumentTypeHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel:
-          'Which Document Is This Affidavit in Support Of?',
+          'Which document is this affidavit in support of?',
         previouslyFiledDocuments: [
           'Petition',
           'Answer',
@@ -126,7 +126,7 @@ describe('selectDocumentTypeHelper', () => {
         ],
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'Who Signed This?',
+        textInputLabel: 'Who signed this?',
       },
     });
   });
@@ -142,7 +142,7 @@ describe('selectDocumentTypeHelper', () => {
     expect(result).toEqual({
       primary: {
         previousDocumentSelectLabel:
-          'Which Document Is This Certificate of Service For?',
+          'Which document is this Certificate of Service for?',
         previouslyFiledDocuments: [
           'Petition',
           'Answer',
@@ -183,8 +183,8 @@ describe('selectDocumentTypeHelper', () => {
     });
     expect(result).toEqual({
       primary: {
-        ordinalField: 'What Iteration Is This Filing?',
-        previousDocumentSelectLabel: 'Which Document Is This a Supplement To?',
+        ordinalField: 'What iteration is this filing?',
+        previousDocumentSelectLabel: 'Which document is this a supplement to?',
         previouslyFiledDocuments: [
           'Petition',
           'Answer',
@@ -205,7 +205,7 @@ describe('selectDocumentTypeHelper', () => {
     });
     expect(result).toEqual({
       primary: {
-        ordinalField: 'What Iteration Is This Filing?',
+        ordinalField: 'What iteration is this filing?',
         showNonstandardForm: true,
       },
     });
