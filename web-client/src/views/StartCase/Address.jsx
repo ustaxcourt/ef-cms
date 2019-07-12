@@ -74,7 +74,7 @@ export const Address = connect(
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
-                value: e.target.value,
+                value: e.target.value ? e.target.value : undefined,
               });
             }}
           />
@@ -96,7 +96,7 @@ export const Address = connect(
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
-                value: e.target.value,
+                value: e.target.value ? e.target.value : undefined,
               });
             }}
           />
