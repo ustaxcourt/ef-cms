@@ -1,3 +1,5 @@
+const { pdfStyles } = require('../../../tools/pdfStyles');
+
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
@@ -16,19 +18,6 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   try {
     const chromium = applicationContext.getChromium();
 
-    await chromium.font(
-      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman.ttf?raw=true',
-    );
-    await chromium.font(
-      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman_Bold.ttf?raw=true',
-    );
-    await chromium.font(
-      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman_Bold_Italic.ttf?raw=true',
-    );
-    await chromium.font(
-      'https://rawcdn.githack.com/byrongibson/fonts/fde1dda023ab36b97aaff858b31f96c8f262d142/backup/truetype.original/msttcorefonts/Times_New_Roman_Italic.ttf?raw=true',
-    );
-
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
@@ -43,8 +32,13 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
     const headerTemplate = `
       <!doctype html>
       <html>
+        <head>
+          <style>
+            ${pdfStyles}
+          </style>
+        </head>
         <body>
-          <div style="font-size: 10px; font-family: 'Times New Roman', Times, serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: 'nimbus_roman', serif; width: 100%; margin: 20px 62px 20px 62px;">
             <div style="float: right">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
@@ -61,7 +55,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 10px; font-family: 'Times New Roman', Times, serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: serif; width: 100%; margin: 20px 62px 20px 62px;">
           </div>
         </body>
       </html>
