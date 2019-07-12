@@ -131,34 +131,21 @@ describe('fileDocumentHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('shows practitioner option under Parties Filing for user role practitioner', async () => {
-    state.user = { role: 'practitioner' };
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showPractitionerParty).toBeTruthy();
-  });
+  it('does not show practitioner option under Parties Filing if caseDetail contains undefined or empty practitioners array', async () => {
+    let result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showPractitionerParty).toBeFalsy();
 
-  it('does not show practitioner option under Parties Filing for user role petitioner', async () => {
-    state.user = { role: 'petitioner' };
-    const result = await runCompute(fileDocumentHelper, { state });
+    state.caseDetail.practitioners = [];
+    result = await runCompute(fileDocumentHelper, { state });
     expect(result.showPractitionerParty).toBeFalsy();
   });
 
-  it('shows Myself as party primary label for user role petitioner', async () => {
-    state.user = { role: 'petitioner' };
+  it('shows practitioner option under Parties Filing if caseDetail contains practitioners', async () => {
+    state.caseDetail.practitioners = [
+      { name: 'Test Practitioner', role: 'practitioner' },
+    ];
     const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.partyPrimaryLabel).toEqual('Myself');
-  });
-
-  it('shows primary contact name as party primary label for user role practitioner', async () => {
-    state.user = { role: 'practitioner' };
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
-  });
-
-  it('shows primary contact name as party primary label for user role respondent', async () => {
-    state.user = { role: 'respondent' };
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.partyPrimaryLabel).toEqual('Test Taxpayer');
+    expect(result.showPractitionerParty).toBeTruthy();
   });
 
   describe('supporting document', () => {
