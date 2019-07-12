@@ -30,7 +30,6 @@ import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
-import { ViewAllDocuments } from './FileDocument/ViewAllDocuments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -66,7 +65,6 @@ const pages = {
   StyleGuide,
   TrialSessionDetail,
   TrialSessions,
-  ViewAllDocuments,
 };
 
 /**
