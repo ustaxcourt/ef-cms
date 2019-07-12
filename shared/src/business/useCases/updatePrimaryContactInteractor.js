@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
@@ -31,7 +32,10 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
-  caseToUpdate.contactPrimary = contactInfo;
+  caseToUpdate.contactPrimary = ContactFactory.createContacts({
+    contactInfo: { primary: contactInfo },
+    partyType: caseToUpdate.partyType,
+  }).primary.toRawObject();
 
   const caseEntity = new Case(caseToUpdate);
 
