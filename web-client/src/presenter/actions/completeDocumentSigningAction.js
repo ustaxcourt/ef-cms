@@ -21,7 +21,8 @@ export const completeDocumentSigningAction = async ({
     pageNumber,
     signatureData: { scale, x, y },
   } = get(state.pdfForSigning);
-  const { caseId } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
+  const { caseId } = caseDetail;
 
   const { pdfjsObj } =
     window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
@@ -86,5 +87,5 @@ export const completeDocumentSigningAction = async ({
     workItemId,
   });
 
-  return { documentId: signedDocumentId };
+  return { caseId, documentId: signedDocumentId, tab: 'docketRecord' };
 };
