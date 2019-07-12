@@ -1,24 +1,25 @@
+import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
 
-export const DocumentTypeSelect = connect(
+export const CompleteDocumentTypeSection = connect(
   {
+    completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
-    selectDocumentSelectHelper: state.selectDocumentSelectHelper,
-    selectDocumentSequence: sequences.selectDocumentSequence,
-    updateFileDocumentSelectFormValueSequence:
-      sequences.updateFileDocumentSelectFormValueSequence,
+    updateFileDocumentWizardFormValueSequence:
+      sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence:
       sequences.validateSelectDocumentTypeSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    selectDocumentSelectHelper,
-    updateFileDocumentSelectFormValueSequence,
+    completeDocumentTypeSectionHelper,
+    form,
+    updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
     validationErrors,
@@ -32,32 +33,54 @@ export const DocumentTypeSelect = connect(
         >
           <label
             className="usa-label"
-            htmlFor="react-select-2-input"
+            htmlFor="document-type"
             id="document-type-label"
           >
             Document Type
           </label>
           <Select
             aria-describedby="document-type-label"
+            aria-labelledby="document-type-label"
             className="select-react-element"
             classNamePrefix="select-react-element"
             id="document-type"
             isClearable={true}
             name="eventCode"
-            options={selectDocumentSelectHelper.documentTypesForSelectSorted}
+            options={
+              completeDocumentTypeSectionHelper.documentTypesForSelectSorted
+            }
             placeholder="- Select -"
-            onChange={(inputValue, { action, name }) => {
+            value={completeDocumentTypeSectionHelper.documentTypesForSelectSorted.filter(
+              option => option.eventCode === form.eventCode,
+            )}
+            onChange={(inputValue, { action }) => {
               switch (action) {
                 case 'select-option':
-                  updateFileDocumentSelectFormValueSequence({
-                    key: name,
-                    value: inputValue.value,
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'category',
+                    value: inputValue.category,
+                  });
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'documentType',
+                    value: inputValue.documentType,
+                  });
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'documentTitle',
+                    value: inputValue.documentTitle,
+                  });
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'eventCode',
+                    value: inputValue.eventCode,
+                  });
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'scenario',
+                    value: inputValue.scenario,
                   });
                   validateSelectDocumentTypeSequence();
                   break;
                 case 'clear':
-                  updateFileDocumentSelectFormValueSequence({
-                    key: name,
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'category',
                     value: '',
                   });
                   validateSelectDocumentTypeSequence();
@@ -79,6 +102,8 @@ export const DocumentTypeSelect = connect(
             className="usa-error-message"
           />
         </div>
+
+        <CompleteDocumentTypeSectionRemainder />
       </React.Fragment>
     );
   },
