@@ -30,27 +30,40 @@ export const PDFSignerMessage = connect(
             Select Section
           </label>
 
-          <select
-            className="usa-select"
-            id="section"
-            name="section"
-            onChange={e => {
-              updateMessageValueSequence({
-                form: 'form',
-                key: e.target.name,
-                section: e.target.value,
-                value: e.target.value,
-              });
-              validateInitialWorkItemMessageSequence();
-            }}
+          <div
+            className={
+              'usa-form-group ' +
+              (validationErrors.section ? 'usa-form-group--error' : '')
+            }
           >
-            <option value="">- Select -</option>
-            {constants.SECTIONS.map(section => (
-              <option key={section} value={section}>
-                {workQueueSectionHelper.sectionDisplay(section)}
-              </option>
-            ))}
-          </select>
+            <select
+              className="usa-select"
+              id="section"
+              name="section"
+              onChange={e => {
+                updateMessageValueSequence({
+                  form: 'form',
+                  key: e.target.name,
+                  section: e.target.value,
+                  value: e.target.value,
+                });
+                validateInitialWorkItemMessageSequence();
+              }}
+            >
+              <option value="">- Select -</option>
+              {constants.SECTIONS.map(section => (
+                <option key={section} value={section}>
+                  {workQueueSectionHelper.sectionDisplay(section)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {validationErrors.section && (
+            <div className="usa-error-message beneath">
+              {validationErrors.section}
+            </div>
+          )}
         </div>
 
         <div
