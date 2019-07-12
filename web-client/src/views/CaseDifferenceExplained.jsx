@@ -3,9 +3,7 @@ import React from 'react';
 
 export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
-    <h3 id="small-case-qualifications">
-      Do I qualify for a small tax case procedure?
-    </h3>
+    <h2>Which case procedure should I choose?</h2>
     <p>
       Small cases must adhere to the following dollar limits depending on the
       notice you received:
@@ -16,13 +14,16 @@ export const CaseDifferenceExplained = () => (
     >
       <thead>
         <tr>
+          <th colSpan="4">Do I qualify for a small tax case procedure?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
           <th>Deficiency</th>
           <th>Collection</th>
           <th>Spousal Relief</th>
           <th>Worker Classification</th>
         </tr>
-      </thead>
-      <tbody>
         <tr>
           <td>
             <span className="responsive-label">Deficiency</span>

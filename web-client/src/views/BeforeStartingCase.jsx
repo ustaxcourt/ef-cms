@@ -33,10 +33,28 @@ export const BeforeStartingCase = () => (
           <div className="tablet:grid-col-6">
             <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
+                <FontAwesomeIcon icon={['far', 'check-circle']} />
+              </div>
+              <h3 className="caseItem__heading">
+                1. Are you authorized to file on behalf of this taxpayer?
+              </h3>
+              <div className="caseItem__content">
+                <p>
+                  To file a case on behalf of another taxpayer, you must be
+                  authorized to litigate in this Court as provided by the Tax
+                  Court Rules of Practice and Procedure (Rule 60). Enrolled
+                  agents, certified public accountants, and powers of attorney
+                  who are not admitted to practice before the Court are not
+                  eligible to represent taxpayers.
+                </p>
+              </div>
+            </div>
+            <div className="caseItem" role="listitem">
+              <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </div>
               <h3 className="caseItem__heading">
-                1. Have the IRS Notice(s) Youʼve Received Available to Submit
+                2. Have the IRS Notice(s) Youʼve Received Available to Submit
               </h3>
               <div className="caseItem__content">
                 <p>
@@ -58,7 +76,7 @@ export const BeforeStartingCase = () => (
                 <FontAwesomeIcon icon={['far', 'edit']} />
               </div>
               <h3 className="caseItem__heading">
-                2. Fill Out The Required Forms
+                3. Fill Out The Required Forms
               </h3>
               <div className="caseItem__content">
                 <p className="label">Petition Form</p>
@@ -123,7 +141,7 @@ export const BeforeStartingCase = () => (
                 <FontAwesomeIcon icon={['fa', 'shield-alt']} />
               </div>
               <h3 className="caseItem__heading">
-                3. Remove Personal Information From Your Petition and IRS
+                4. Remove Personal Information From Your Petition and IRS
                 Notice(s)
               </h3>
               <div className="caseItem__content">
@@ -144,7 +162,7 @@ export const BeforeStartingCase = () => (
                 <FontAwesomeIcon icon={['far', 'file-pdf']} />
               </div>
               <h3 className="caseItem__heading">
-                4. Combine Your Petition and IRS Notice(s) Into a Single PDF
+                5. Combine Your Petition and IRS Notice(s) Into a Single PDF
               </h3>
               <div className="caseItem__content">
                 <p>
@@ -173,7 +191,7 @@ export const BeforeStartingCase = () => (
                 </div>
               </div>
               <h3 className="caseItem__heading">
-                5. Donʼt Submit Extra Documents With Your Petition
+                6. Donʼt Submit Extra Documents With Your Petition
               </h3>
               <div className="caseItem__content">
                 <p>
