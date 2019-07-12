@@ -19,8 +19,6 @@ export const SelectDocumentType = connect(
     completeDocumentSelectSequence,
     formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence,
-    screenMetadata,
-    selectDocumentSequence,
   }) => {
     return (
       <React.Fragment>

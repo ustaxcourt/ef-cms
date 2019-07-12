@@ -1,4 +1,7 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile } from '../../ustc-ui/Responsive/Responsive';
+import { SelectDocumentWizardModalDialog } from './SelectDocumentWizardModalDialog';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -9,6 +12,9 @@ export const CompleteDocumentTypeSection = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
+    openSelectDocumentWizardModalSequence:
+      sequences.openSelectDocumentWizardModalSequence,
+    showModal: state.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -19,6 +25,8 @@ export const CompleteDocumentTypeSection = connect(
   ({
     completeDocumentTypeSectionHelper,
     form,
+    openSelectDocumentWizardModalSequence,
+    showModal,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
@@ -97,6 +105,15 @@ export const CompleteDocumentTypeSection = connect(
               }
             }}
           />
+          <Mobile>
+            <button
+              className="usa-button usa-button--unstyled"
+              onClick={() => openSelectDocumentWizardModalSequence()}
+            >
+              <FontAwesomeIcon icon="question-circle" size="sm" />
+              Need help selecting a document?
+            </button>
+          </Mobile>
           <Text
             bind="validationErrors.documentType"
             className="usa-error-message"
@@ -104,6 +121,10 @@ export const CompleteDocumentTypeSection = connect(
         </div>
 
         <CompleteDocumentTypeSectionRemainder />
+
+        {showModal === 'SelectDocumentWizardModalDialog' && (
+          <SelectDocumentWizardModalDialog />
+        )}
       </React.Fragment>
     );
   },
