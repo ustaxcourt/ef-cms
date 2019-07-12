@@ -72,7 +72,7 @@ export const InternationalAddress = connect(
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
-                value: e.target.value ? e.target.value : undefined,
+                value: e.target.value,
               });
             }}
           />
@@ -94,7 +94,7 @@ export const InternationalAddress = connect(
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
-                value: e.target.value ? e.target.value : undefined,
+                value: e.target.value,
               });
             }}
           />
