@@ -13,6 +13,7 @@ import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimp
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
@@ -95,6 +96,7 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
+import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
@@ -194,6 +196,7 @@ export const presenter = {
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
+    clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
     clickServeToIrsSequence,
@@ -275,6 +278,7 @@ export const presenter = {
     setModalDialogNameSequence,
     setPDFPageForSigningSequence,
     setPDFSignatureDataSequence,
+    setPdfPreviewUrlSequence,
     setScannerSourceSequence,
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
