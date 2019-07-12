@@ -237,9 +237,9 @@ option:first-child {
   }
 }
 
-.usa-form-group--error input,
-.usa-form-group--error textarea,
-.usa-form-group--error select {
+.usa-input-error input,
+.usa-input-error textarea,
+.usa-input-error select {
   width: calc(100% + 1.9rem);
 }
 

@@ -108,11 +108,7 @@ export const CompleteDocumentTypeSection = connect(
           <Mobile>
             <button
               className="usa-button usa-button--unstyled"
-              onClick={() =>
-                openSelectDocumentWizardOverlaySequence({
-                  for: 'primary',
-                })
-              }
+              onClick={() => openSelectDocumentWizardOverlaySequence()}
             >
               <FontAwesomeIcon icon="question-circle" size="sm" />
               Need help selecting a document?

@@ -5,29 +5,38 @@ import React from 'react';
 
 export const ViewDocumentCategory = connect(
   {
-    gotoViewDocumentCategorySequence:
-      sequences.gotoViewDocumentCategorySequence,
+    chooseModalWizardStepSequence: sequences.chooseModalWizardStepSequence,
+    clearModalSequence: sequences.clearModalSequence,
+    modal: state.modal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   ({
-    gotoViewDocumentCategorySequence,
+    chooseModalWizardStepSequence,
+    clearModalSequence,
+    modal,
     updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence,
     viewAllDocumentsHelper,
   }) => {
     return (
       <React.Fragment>
-        <button
-          aria-roledescription="button to return to docket record"
-          className="heading-2 usa-button usa-button--unstyled"
-          onClick={() => closeFunc()}
-        >
-          <FontAwesomeIcon icon="caret-left" />
-          Document Details
-        </button>
+        <div className="overlay-blue-header">
+          <div className="grid-container">
+            <button
+              aria-roledescription={`button to return to ${modal.fromLabel}`}
+              className="heading-3 usa-button usa-button--unstyled"
+              onClick={() =>
+                chooseModalWizardStepSequence({
+                  value: modal.from,
+                })
+              }
+            >
+              <FontAwesomeIcon icon="caret-left" />
+              {modal.fromLabel}
+            </button>
+          </div>
+        </div>
         <div className="grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
@@ -36,44 +45,61 @@ export const ViewDocumentCategory = connect(
                 id="view-all-document-header"
                 tabIndex="-1"
               >
-                All Document Categories
+                {modal.category}
               </h1>
               <h2
                 className="margin-bottom-205"
                 id="view-all-document-header"
                 tabIndex="-1"
               >
-                Select Document Category
+                Select Document Type
               </h2>
             </div>
           </div>
         </div>
         <div>
-          {viewAllDocumentsHelper.sections.map((title, index) => {
-            return (
+          {viewAllDocumentsHelper.categoryMap[modal.category].map(
+            (document, index) => (
               <div
                 className="category-view grid-container padding-bottom-1 padding-top-1"
-                key={`${title}-document-${index}`}
+                key={`document-${index}`}
               >
                 <button
-                  className="usa-button usa-button--unstyled "
+                  className="usa-button usa-button--unstyled"
                   onClick={() => {
                     updateFileDocumentWizardFormValueSequence({
-                      key: 'category',
-                      value: title,
+                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
+                        ''}category`,
+                      value: document.category,
                     });
-                    updateScreenMetadataSequence({
-                      key: 'from',
-                      value: 'ViewAllDocuments',
+                    updateFileDocumentWizardFormValueSequence({
+                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
+                        ''}documentType`,
+                      value: document.documentType,
                     });
-                    gotoViewDocumentCategorySequence();
+                    updateFileDocumentWizardFormValueSequence({
+                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
+                        ''}documentTitle`,
+                      value: document.documentTitle,
+                    });
+                    updateFileDocumentWizardFormValueSequence({
+                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
+                        ''}eventCode`,
+                      value: document.eventCode,
+                    });
+                    updateFileDocumentWizardFormValueSequence({
+                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
+                        ''}scenario`,
+                      value: document.scenario,
+                    });
+                    clearModalSequence();
                   }}
                 >
-                  {title}
+                  {document.documentType}
                 </button>
               </div>
-            );
-          })}
+            ),
+          )}
         </div>
       </React.Fragment>
     );
