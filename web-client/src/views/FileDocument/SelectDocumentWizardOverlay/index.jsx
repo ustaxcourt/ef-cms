@@ -65,10 +65,7 @@ class SelectDocumentWizardOverlayComponent extends React.Component {
   renderModalContent() {
     return (
       <FocusLock>
-        <dialog
-          open
-          className="modal-screen overlay mobile-document-details-overlay"
-        >
+        <dialog open className="modal-screen overlay-full">
           <div
             aria-modal="true"
             className={'modal-overlay'}
