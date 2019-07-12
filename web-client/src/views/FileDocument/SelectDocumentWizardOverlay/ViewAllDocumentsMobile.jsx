@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -19,6 +20,14 @@ export const ViewAllDocumentsMobile = connect(
   }) => {
     return (
       <React.Fragment>
+        <button
+          aria-roledescription="button to return to docket record"
+          className="heading-2 usa-button usa-button--unstyled"
+          onClick={() => closeFunc()}
+        >
+          <FontAwesomeIcon icon="caret-left" />
+          Document Details
+        </button>
         <div className="grid-container">
           <div className="grid-row">
             <div className="grid-col-12">

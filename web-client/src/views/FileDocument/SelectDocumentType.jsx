@@ -1,8 +1,6 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
-import { DocumentType } from './DocumentType';
-import { DocumentTypeReadOnly } from './DocumentTypeReadOnly';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
