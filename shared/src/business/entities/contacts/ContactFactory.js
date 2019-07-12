@@ -314,8 +314,8 @@ ContactFactory.createContactFactory = ({
     function GenericContactConstructor(rawContact) {
       Object.assign(this, {
         address1: rawContact.address1,
-        address2: rawContact.address2,
-        address3: rawContact.address3,
+        address2: rawContact.address2 ? rawContact.address2 : undefined,
+        address3: rawContact.address3 ? rawContact.address2 : undefined,
         city: rawContact.city,
         country: rawContact.country,
         countryType: rawContact.countryType,
