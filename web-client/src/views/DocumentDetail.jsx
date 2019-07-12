@@ -149,7 +149,7 @@ export const DocumentDetail = connect(
                         })
                       }
                     >
-                      <FontAwesomeIcon icon={['far', 'edit']} />
+                      <FontAwesomeIcon icon={['fas', 'edit']} />
                       Sign This Document
                     </button>
                   )}
