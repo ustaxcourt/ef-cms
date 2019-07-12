@@ -72,6 +72,7 @@ import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOr
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
+import { openSelectDocumentWizardModalSequence } from './sequences/openSelectDocumentWizardModalSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
@@ -209,6 +210,7 @@ export const presenter = {
     completeDocumentSigningSequence,
     completeScanSequence,
     confirmStayLoggedInSequence,
+    openSelectDocumentWizardModalSequence,
     convertHtml2PdfSequence,
     countryTypeChangeSequence,
     createCaseDeadlineSequence,
