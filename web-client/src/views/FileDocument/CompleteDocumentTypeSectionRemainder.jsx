@@ -129,7 +129,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                   className="usa-button usa-button--unstyled"
                   onClick={() =>
                     openSelectDocumentWizardOverlaySequence({
-                      for: 'secondary',
+                      forSecondary: true,
                     })
                   }
                 >
