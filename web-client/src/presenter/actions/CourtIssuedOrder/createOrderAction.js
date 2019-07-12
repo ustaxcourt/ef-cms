@@ -17,7 +17,10 @@ const replaceWithID = (replacements, domString) => {
 export const createOrderAction = ({ applicationContext, get }) => {
   let richText = get(state.form.richText) || '';
   let documentTitle = (get(state.form.documentTitle) || '').toUpperCase();
-  richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+  richText = richText.replace(
+    /\t/g,
+    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+  );
   const caseCaption = get(state.caseDetail.caseCaption) || '';
   const caseCaptionNames =
     applicationContext.getCaseCaptionNames(caseCaption) + ', ';
