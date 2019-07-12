@@ -1,22 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const WhatDocumentIsThis = connect(
   {
-    gotoViewDocumentCategorySequence:
-      sequences.gotoViewDocumentCategorySequence,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
-    viewAllDocumentsHelper: state.viewAllDocumentsHelper,
+    chooseModalWizardStepSequence: sequences.chooseModalWizardStepSequence,
+    clearModalSequence: sequences.clearModalSequence,
+    updateModalValueSequence: sequences.updateModalValueSequence,
   },
   ({
-    gotoViewDocumentCategorySequence,
-    updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence,
-    viewAllDocumentsHelper,
+    chooseModalWizardStepSequence,
+    clearModalSequence,
+    updateModalValueSequence,
   }) => {
     const reasons = [
       {
@@ -86,7 +82,7 @@ export const WhatDocumentIsThis = connect(
             <button
               aria-roledescription="button to return to document selection"
               className="heading-3 usa-button usa-button--unstyled"
-              onClick={() => updateFileDocumentWizardFormValueSequence()}
+              onClick={() => clearModalSequence()}
             >
               <FontAwesomeIcon icon="caret-left" />
               What document are you filing?
@@ -134,15 +130,21 @@ export const WhatDocumentIsThis = connect(
                       <button
                         className="usa-button usa-button--unstyled "
                         onClick={() => {
-                          updateFileDocumentWizardFormValueSequence({
+                          updateModalValueSequence({
                             key: 'category',
                             value: category,
                           });
-                          updateScreenMetadataSequence({
+                          updateModalValueSequence({
                             key: 'from',
                             value: 'WhatDocumentIsThis',
                           });
-                          gotoViewDocumentCategoryStepSequence();
+                          updateModalValueSequence({
+                            key: 'fromLabel',
+                            value: 'What is this document for?',
+                          });
+                          chooseModalWizardStepSequence({
+                            value: 'ViewDocumentCategory',
+                          });
                         }}
                       >
                         {category}
@@ -160,7 +162,11 @@ export const WhatDocumentIsThis = connect(
             <button
               className="usa-button"
               id="view-all-documents"
-              onClick={() => gotoViewAllDocumentsStepSequence()}
+              onClick={() =>
+                chooseModalWizardStepSequence({
+                  value: 'ViewAllDocuments',
+                })
+              }
             >
               View All Document Categories
             </button>

@@ -5,50 +5,46 @@ import React from 'react';
 
 export const ViewAllDocumentsMobile = connect(
   {
-    gotoViewDocumentCategorySequence:
-      sequences.gotoViewDocumentCategorySequence,
-    updateFileDocumentWizardFormValueSequence:
-      sequences.updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+    chooseModalWizardStepSequence: sequences.chooseModalWizardStepSequence,
+    updateModalValueSequence: sequences.updateModalValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   ({
-    gotoViewDocumentCategorySequence,
-    updateFileDocumentWizardFormValueSequence,
-    updateScreenMetadataSequence,
+    chooseModalWizardStepSequence,
+    updateModalValueSequence,
     viewAllDocumentsHelper,
   }) => {
     return (
       <React.Fragment>
-        <button
-          aria-roledescription="button to return to docket record"
-          className="heading-2 usa-button usa-button--unstyled"
-          onClick={() => closeFunc()}
-        >
-          <FontAwesomeIcon icon="caret-left" />
-          Document Details
-        </button>
+        <div className="overlay-blue-header">
+          <div className="grid-container">
+            <button
+              aria-roledescription="button to return to What is this document for?"
+              className="heading-3 usa-button usa-button--unstyled"
+              onClick={() =>
+                chooseModalWizardStepSequence({
+                  value: 'WhatDocumentIsThis',
+                })
+              }
+            >
+              <FontAwesomeIcon icon="caret-left" />
+              What is this document for?
+            </button>
+          </div>
+        </div>
         <div className="grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <h1
-                className="margin-bottom-105"
-                id="view-all-document-header"
-                tabIndex="-1"
-              >
+              <h1 className="margin-bottom-105" tabIndex="-1">
                 All Document Categories
               </h1>
-              <h2
-                className="margin-bottom-205"
-                id="view-all-document-header"
-                tabIndex="-1"
-              >
+              <h2 className="margin-bottom-3" tabIndex="-1">
                 Select Document Category
               </h2>
             </div>
           </div>
         </div>
-        <div>
+        <div className="margin-bottom-2">
           {viewAllDocumentsHelper.sections.map((title, index) => {
             return (
               <div
@@ -58,15 +54,21 @@ export const ViewAllDocumentsMobile = connect(
                 <button
                   className="usa-button usa-button--unstyled "
                   onClick={() => {
-                    updateFileDocumentWizardFormValueSequence({
+                    updateModalValueSequence({
                       key: 'category',
                       value: title,
                     });
-                    updateScreenMetadataSequence({
+                    updateModalValueSequence({
                       key: 'from',
                       value: 'ViewAllDocuments',
                     });
-                    gotoViewDocumentCategorySequence();
+                    updateModalValueSequence({
+                      key: 'fromLabel',
+                      value: 'All Document Categories',
+                    });
+                    chooseModalWizardStepSequence({
+                      value: 'ViewDocumentCategory',
+                    });
                   }}
                 >
                   {title}
