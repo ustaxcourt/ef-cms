@@ -10,9 +10,11 @@ import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
+import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
@@ -152,6 +154,7 @@ import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateHasIrsNoticeFormValueSequence } from './sequences/updateHasIrsNoticeFormValueSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
+import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
@@ -194,9 +197,11 @@ export const presenter = {
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
+    chooseModalWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
+    clearModalSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
@@ -234,6 +239,7 @@ export const presenter = {
     gotoDocumentDetailSequence,
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
+    updateModalValueSequence,
     gotoLoginSequence,
     gotoPrimaryContactEditSequence,
     gotoRequestAccessSequence,
