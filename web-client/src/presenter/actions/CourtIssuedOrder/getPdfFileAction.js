@@ -8,17 +8,14 @@ import { state } from 'cerebral';
  * @param {object} providers.props the passed in props
  * @returns {object} pdfFile, pdfUrl
  */
-export const getPdfPreviewUrlAction = async ({
-  applicationContext,
-  get,
-  props,
-}) => {
+export const getPdfFileAction = async ({ applicationContext, get, props }) => {
   const { htmlString } = props;
   const documentTitle = get(state.form.documentTitle);
 
   if (!htmlString) {
     throw new Error('No markup found in documentHtml');
   }
+
   let docketNumberWithSuffix = get(
     state.formattedCaseDetail.docketNumberWithSuffix,
   );
@@ -31,8 +28,10 @@ export const getPdfPreviewUrlAction = async ({
       htmlString,
     });
 
-  const pdfUrl = window.URL.createObjectURL(pdfBlob);
-  const pdfFile = new File([pdfBlob], documentTitle);
+  const pdfFile = new File([pdfBlob], documentTitle, {
+    type: 'application/pdf',
+  });
+  const pdfUrl = window.URL.createObjectURL(pdfFile);
 
   return { pdfFile, pdfUrl };
 };
