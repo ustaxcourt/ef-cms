@@ -17,20 +17,22 @@ import React from 'react';
 export const DocumentDetail = connect(
   {
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
-    gotoSignPDFDocumentSequence: sequences.gotoSignPDFDocumentSequence,
     helper: state.documentDetailHelper,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
   },
   ({
     baseUrl,
+    caseDetail,
     caseHelper,
     clickServeToIrsSequence,
-    gotoSignPDFDocumentSequence,
     helper,
+    navigateToPathSequence,
     setModalDialogNameSequence,
     showModal,
     token,
@@ -105,8 +107,7 @@ export const DocumentDetail = connect(
               </div>
               <div
                 className={`grid-col-7 ${
-                  !caseHelper.showServeToIrsButton ||
-                  !helper.formattedDocument.isPetition
+                  helper.showDocumentViewerTopMargin
                     ? 'document-viewer-top-margin'
                     : ''
                 }`}
@@ -143,9 +144,8 @@ export const DocumentDetail = connect(
                     <button
                       className="usa-button serve-to-irs margin-right-0"
                       onClick={() =>
-                        gotoSignPDFDocumentSequence({
-                          documentId: helper.formattedDocument.documentId,
-                          pageNumber: 1,
+                        navigateToPathSequence({
+                          path: `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/sign`,
                         })
                       }
                     >

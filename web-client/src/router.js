@@ -45,6 +45,18 @@ const router = {
         });
       }),
     );
+
+    route(
+      '/case-detail/*/documents/*/sign',
+      checkLoggedIn((docketNumber, documentId) => {
+        app.getSequence('gotoSignPDFDocumentSequence')({
+          docketNumber,
+          documentId,
+          pageNumber: 1,
+        });
+      }),
+    );
+
     route(
       '/case-detail/*/documents/*/mark/*',
       checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {

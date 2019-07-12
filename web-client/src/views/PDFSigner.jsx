@@ -138,9 +138,8 @@ class PDFSignerComponent extends React.Component {
                     <button
                       className="usa-button usa-button--unstyled margin-left-2"
                       onClick={() =>
-                        this.props.cancel({
-                          docketNumber: this.props.docketNumber,
-                          documentId: this.props.documentId,
+                        this.props.navigateToPathSequence({
+                          path: `/case-detail/${this.props.docketNumber}/documents/${this.props.documentId}`,
                         })
                       }
                     >
@@ -192,6 +191,7 @@ PDFSignerComponent.propTypes = {
   currentPageNumber: PropTypes.number,
   docketNumber: PropTypes.string,
   documentId: PropTypes.string,
+  navigateToPathSequence: PropTypes.func,
   pdfForSigning: PropTypes.object,
   pdfObj: PropTypes.object,
   setCanvas: PropTypes.func,
@@ -207,6 +207,7 @@ export const PDFSigner = connect(
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     documentId: state.documentId,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     setCanvas: sequences.setCanvasForPDFSigningSequence,
