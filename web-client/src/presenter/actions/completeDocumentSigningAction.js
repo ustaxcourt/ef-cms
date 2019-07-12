@@ -21,8 +21,7 @@ export const completeDocumentSigningAction = async ({
     pageNumber,
     signatureData: { scale, x, y },
   } = get(state.pdfForSigning);
-  const caseDetail = get(state.caseDetail);
-  const { caseId } = caseDetail;
+  const caseId = get(state.caseDetail.caseId);
 
   const { pdfjsObj } =
     window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
