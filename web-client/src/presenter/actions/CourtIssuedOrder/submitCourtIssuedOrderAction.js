@@ -17,7 +17,7 @@ export const submitCourtIssuedOrderAction = async ({
   let caseDetail;
   const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId } = props;
-  const documentId = primaryDocumentFileId;
+  //const documentId = primaryDocumentFileId;
 
   let documentMetadata = omit(
     {
@@ -33,6 +33,7 @@ export const submitCourtIssuedOrderAction = async ({
   };
 
   if (primaryDocumentFileId) {
+    /*
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
@@ -46,7 +47,7 @@ export const submitCourtIssuedOrderAction = async ({
     await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
-    });
+    });*/
 
     caseDetail = await applicationContext
       .getUseCases()
