@@ -22,6 +22,7 @@ export default test => {
       });
 
       await test.runSequence('gotoSignPDFDocumentSequence', {
+        docketNumber: stipDecision.docketNumber,
         documentId: stipDecision.document.documentId,
         pageNumber: 1,
       });
