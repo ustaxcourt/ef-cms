@@ -246,6 +246,7 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
+  getChiefJudgeNameForSigning: () => 'Maurice B. Foley',
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
