@@ -17,8 +17,16 @@ export const viewAllDocumentsHelper = get => {
   const sections = [...CATEGORIES];
   sections.push(sections.shift());
 
+  const forSecondary = get(state.modal.forSecondary);
+  let categoryMap = { ...CATEGORY_MAP };
+  sections.forEach(section => {
+    categoryMap[section] = categoryMap[section].filter(
+      entry => !forSecondary || entry.scenario !== 'Nonstandard H',
+    );
+  });
+
   return {
-    categoryMap: CATEGORY_MAP,
+    categoryMap,
     documentTypesForSelect,
     documentTypesForSelectSorted,
     sections,
