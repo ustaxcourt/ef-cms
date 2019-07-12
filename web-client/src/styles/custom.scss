@@ -1168,3 +1168,13 @@ nav.usa-nav {
     line-height: 22px;
   }
 }
+
+.category-view {
+  border-top: 1px solid color($theme-color-base-lighter);
+  &:last-child {
+    border-bottom: 1px solid color($theme-color-base-lighter);
+  }
+  button {
+    text-decoration: none;
+  }
+}
