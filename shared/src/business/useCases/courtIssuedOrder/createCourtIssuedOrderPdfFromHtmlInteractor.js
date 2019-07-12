@@ -61,6 +61,9 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       </html>
     `;
 
+    await page.evaluateHandle('document.fonts.ready');
+    await page.screenshot();
+
     result = await page.pdf({
       displayHeaderFooter: true,
       footerTemplate,
