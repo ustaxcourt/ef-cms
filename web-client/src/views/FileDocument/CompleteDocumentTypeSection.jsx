@@ -1,7 +1,7 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
-import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
+import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay/';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -108,7 +108,11 @@ export const CompleteDocumentTypeSection = connect(
           <Mobile>
             <button
               className="usa-button usa-button--unstyled"
-              onClick={() => openSelectDocumentWizardOverlaySequence()}
+              onClick={() =>
+                openSelectDocumentWizardOverlaySequence({
+                  for: 'primary',
+                })
+              }
             >
               <FontAwesomeIcon icon="question-circle" size="sm" />
               Need help selecting a document?

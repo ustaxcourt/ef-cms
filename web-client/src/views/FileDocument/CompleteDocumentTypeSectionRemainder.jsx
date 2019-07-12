@@ -1,4 +1,6 @@
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { NonstandardForm } from './NonstandardForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -10,6 +12,8 @@ export const CompleteDocumentTypeSectionRemainder = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
+    openSelectDocumentWizardOverlaySequence:
+      sequences.openSelectDocumentWizardOverlaySequence,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -20,6 +24,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
   ({
     completeDocumentTypeSectionHelper,
     form,
+    openSelectDocumentWizardOverlaySequence,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
     validateSelectDocumentTypeSequence,
@@ -119,6 +124,19 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                   }
                 }}
               />
+              <Mobile>
+                <button
+                  className="usa-button usa-button--unstyled"
+                  onClick={() =>
+                    openSelectDocumentWizardOverlaySequence({
+                      for: 'secondary',
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon="question-circle" size="sm" />
+                  Need help selecting a document?
+                </button>
+              </Mobile>
               <Text
                 bind="validationErrors.secondaryDocument.documentType"
                 className="usa-error-message"
