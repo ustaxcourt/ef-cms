@@ -37,7 +37,12 @@ export const createOrderAction = ({ applicationContext, get }) => {
     orderTemplate,
   );
 
-  const result = doc.children[0].innerHTML;
+  let result = doc.children[0].innerHTML;
+
+  result = result.replace(
+    '/* STYLES_PLACEHOLDER */',
+    applicationContext.getPdfStyles(),
+  );
 
   return { htmlString: result };
 };
