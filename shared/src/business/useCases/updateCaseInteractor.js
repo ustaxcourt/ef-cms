@@ -7,6 +7,7 @@ const {
   UnprocessableEntityError,
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {
@@ -51,6 +52,20 @@ exports.updateCaseInteractor = async ({
       user.userId,
       caseToUpdate.documents,
     );
+  }
+
+  if (caseToUpdate.contactPrimary) {
+    caseToUpdate.contactPrimary = ContactFactory.createContacts({
+      contactInfo: { primary: caseToUpdate.contactPrimary },
+      partyType: caseToUpdate.partyType,
+    }).primary.toRawObject();
+  }
+
+  if (caseToUpdate.contactSecondary) {
+    caseToUpdate.contactSecondary = ContactFactory.createContacts({
+      contactInfo: { secondary: caseToUpdate.contactSecondary },
+      partyType: caseToUpdate.partyType,
+    }).secondary.toRawObject();
   }
 
   const paidCase = new Case(caseToUpdate)
