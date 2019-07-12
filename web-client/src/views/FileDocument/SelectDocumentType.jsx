@@ -9,7 +9,6 @@ import React from 'react';
 
 export const SelectDocumentType = connect(
   {
-    caseDetail: state.caseDetail,
     completeDocumentSelectSequence: sequences.completeDocumentSelectSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence: sequences.gotoViewAllDocumentsSequence,
@@ -17,7 +16,6 @@ export const SelectDocumentType = connect(
     selectDocumentSequence: sequences.selectDocumentSequence,
   },
   ({
-    caseDetail,
     completeDocumentSelectSequence,
     formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence,

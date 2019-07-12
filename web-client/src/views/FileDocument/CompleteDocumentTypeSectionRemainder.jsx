@@ -55,11 +55,13 @@ export const CompleteDocumentTypeSectionRemainder = connect(
               <label
                 className="usa-label"
                 htmlFor="secondary-doc-secondary-document-type"
+                id="secondary-document-type-label"
               >
                 Document Type
               </label>
               <Select
-                aria-describedby="document-type-label"
+                aria-describedby="secondary-document-type-label"
+                aria-labelledby="secondary-document-type-label"
                 className="select-react-element"
                 classNamePrefix="select-react-element"
                 id="secondary-doc-secondary-document-type"

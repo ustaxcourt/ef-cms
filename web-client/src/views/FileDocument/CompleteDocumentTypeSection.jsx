@@ -31,11 +31,16 @@ export const CompleteDocumentTypeSection = connect(
             validationErrors.documentType ? 'usa-form-group--error' : ''
           }`}
         >
-          <label className="usa-label" htmlFor="document-type">
+          <label
+            className="usa-label"
+            htmlFor="document-type"
+            id="document-type-label"
+          >
             Document Type
           </label>
           <Select
             aria-describedby="document-type-label"
+            aria-labelledby="document-type-label"
             className="select-react-element"
             classNamePrefix="select-react-element"
             id="document-type"
