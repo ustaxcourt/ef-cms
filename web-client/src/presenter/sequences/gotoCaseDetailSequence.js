@@ -7,11 +7,13 @@ import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  setDefaultCaseDetailTabAction,
   getCaseAction,
   setCaseAction,
   getCaseDeadlinesForCaseAction,
