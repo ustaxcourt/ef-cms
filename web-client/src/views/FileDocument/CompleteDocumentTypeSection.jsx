@@ -1,7 +1,7 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
-import { SelectDocumentWizardModalDialog } from './SelectDocumentWizardModalDialog';
+import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -12,8 +12,8 @@ export const CompleteDocumentTypeSection = connect(
   {
     completeDocumentTypeSectionHelper: state.completeDocumentTypeSectionHelper,
     form: state.form,
-    openSelectDocumentWizardModalSequence:
-      sequences.openSelectDocumentWizardModalSequence,
+    openSelectDocumentWizardOverlaySequence:
+      sequences.openSelectDocumentWizardOverlaySequence,
     showModal: state.showModal,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -25,7 +25,7 @@ export const CompleteDocumentTypeSection = connect(
   ({
     completeDocumentTypeSectionHelper,
     form,
-    openSelectDocumentWizardModalSequence,
+    openSelectDocumentWizardOverlaySequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
     updateScreenMetadataSequence,
@@ -108,7 +108,7 @@ export const CompleteDocumentTypeSection = connect(
           <Mobile>
             <button
               className="usa-button usa-button--unstyled"
-              onClick={() => openSelectDocumentWizardModalSequence()}
+              onClick={() => openSelectDocumentWizardOverlaySequence()}
             >
               <FontAwesomeIcon icon="question-circle" size="sm" />
               Need help selecting a document?
@@ -122,8 +122,8 @@ export const CompleteDocumentTypeSection = connect(
 
         <CompleteDocumentTypeSectionRemainder />
 
-        {showModal === 'SelectDocumentWizardModalDialog' && (
-          <SelectDocumentWizardModalDialog />
+        {showModal === 'SelectDocumentWizardOverlay' && (
+          <SelectDocumentWizardOverlay />
         )}
       </React.Fragment>
     );

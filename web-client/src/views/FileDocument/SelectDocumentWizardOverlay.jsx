@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
 
-class SelectDocumentWizardModalDialogComponent extends React.Component {
+class SelectDocumentWizardOverlayComponent extends React.Component {
   constructor(props) {
     super(props);
     this.el = document.createElement('div');
@@ -125,7 +125,7 @@ class SelectDocumentWizardModalDialogComponent extends React.Component {
   }
 }
 
-SelectDocumentWizardModalDialogComponent.propTypes = {
+SelectDocumentWizardOverlayComponent.propTypes = {
   baseUrl: PropTypes.string,
   caseDetail: PropTypes.object,
   dismissModalSequence: PropTypes.func,
@@ -134,7 +134,7 @@ SelectDocumentWizardModalDialogComponent.propTypes = {
   token: PropTypes.string,
 };
 
-export const SelectDocumentWizardModalDialog = connect(
+export const SelectDocumentWizardOverlay = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
@@ -144,5 +144,5 @@ export const SelectDocumentWizardModalDialog = connect(
     helper: state.caseDetailHelper,
     token: state.token,
   },
-  SelectDocumentWizardModalDialog,
+  SelectDocumentWizardOverlay,
 );
