@@ -64,7 +64,7 @@ export const PDFSignerToolbar = connect(
               disabled={!!signatureData || signatureApplied}
               onClick={() => applySignature()}
             >
-              <FontAwesomeIcon icon={['far', 'edit']} />
+              <FontAwesomeIcon icon={['fas', 'edit']} />
               Apply Signature
             </button>
             {!!signatureData && (
