@@ -1,3 +1,5 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
 import { createWorkItemSequence } from './createWorkItemSequence';
@@ -5,11 +7,21 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { parallel } from 'cerebral';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const completeDocumentSigningSequence = [
-  completeDocumentSigningAction,
-  parallel([setDocumentIdAction, setDocumentDetailTabAction]),
-  ...createWorkItemSequence,
-  clearPDFSignatureDataAction,
-  navigateToCaseDetailAction,
+  clearAlertsAction,
+  validateInitialWorkItemMessageAction,
+  {
+    error: [setValidationErrorsAction],
+    success: [
+      completeDocumentSigningAction,
+      parallel([setDocumentIdAction, setDocumentDetailTabAction]),
+      ...createWorkItemSequence,
+      clearPDFSignatureDataAction,
+      clearFormAction,
+      navigateToCaseDetailAction,
+    ],
+  },
 ];
