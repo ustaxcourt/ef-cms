@@ -19,10 +19,10 @@ export const CaseDifferenceExplained = () => (
       </thead>
       <tbody>
         <tr>
-          <th>Deficiency</th>
-          <th>Collection</th>
-          <th>Spousal Relief</th>
-          <th>Worker Classification</th>
+          <td>Deficiency</td>
+          <td>Collection</td>
+          <td>Spousal Relief</td>
+          <td>Worker Classification</td>
         </tr>
         <tr>
           <td>
