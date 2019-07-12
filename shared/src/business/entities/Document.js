@@ -79,6 +79,10 @@ Document.initialDocumentTypes = {
   stin: 'Statement of Taxpayer Identification',
 };
 
+Document.signedDocumentTypes = {
+  signedStipulatedDecision: 'Signed Stipulated Decision',
+};
+
 Document.getDocumentTypes = () => {
   const allFilingEvents = flatten([
     ...Object.values(documentMapExternal),
@@ -86,11 +90,13 @@ Document.getDocumentTypes = () => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
+  const signedTypes = Object.values(Document.signedDocumentTypes);
   const documentTypes = [
     ...Object.values(Document.initialDocumentTypes),
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
     ...orderDocTypes,
+    ...signedTypes,
   ];
 
   return documentTypes;
