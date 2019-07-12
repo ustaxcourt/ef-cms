@@ -10,6 +10,7 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
@@ -53,6 +54,7 @@ export const state = {
   caseTypes: [],
   cases: [],
   cognitoLoginUrl: null,
+  completeDocumentTypeSectionHelper,
   completeForm: {},
   contactsHelper,
   currentPage: 'Interstitial',

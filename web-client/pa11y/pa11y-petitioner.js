@@ -305,10 +305,9 @@ module.exports = [
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document',
   {
     actions: [
-      'wait for element #document-category to be visible',
-      'set field #document-category to Motion',
-      'check field #document-category',
       'wait for element #document-type to be visible',
+      'set field #document-type to Motion for Continuance',
+      'check field #document-type',
     ],
     notes: [
       'Check accessibility of elements after choosing a document category',
@@ -317,27 +316,22 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-1',
   },
-  {
-    actions: [
-      'wait for element #document-category to be visible',
-      'set field #document-category to Motion',
-      'check field #document-category',
-      'wait for element #document-type to be visible',
-      'set field #document-type to Motion for Continuance',
-      'check field #document-type',
-      'wait for element #select-document to be visible',
-      'click element #select-document',
-      'wait for element #submit-document to be visible',
-      'click #submit-document',
-      'wait for element #primary-document to be visible',
-      'click element #certificate-Yes+label',
-      'click element #supporting-documents-Yes+label',
-      'wait for element fieldset.service-date to be visible',
-      'wait for element #supporting-document to be visible',
-    ],
-    notes: ['File a document, step 2'],
-    url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
-  },
+  // {
+  //   actions: [
+  //     'wait for element #document-type to be visible',
+  //     'set field #document-type to Motion for Continuance',
+  //     'check field #document-type',
+  //     'wait for element #submit-document to be visible',
+  //     'click #submit-document',
+  //     'wait for element #primary-document to be visible',
+  //     'click element #certificate-Yes+label',
+  //     'click element #supporting-documents-Yes+label',
+  //     'wait for element fieldset.service-date to be visible',
+  //     'wait for element #supporting-document to be visible',
+  //   ],
+  //   notes: ['File a document, step 2'],
+  //   url:
+  //     'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
+  // },
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/contacts/primary/edit',
 ];
