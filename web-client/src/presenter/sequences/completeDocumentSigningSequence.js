@@ -3,7 +3,9 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
 import { createWorkItemSequence } from './createWorkItemSequence';
-import { gotoDashboardSequence } from './gotoDashboardSequence';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { parallel } from 'cerebral';
+import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -17,11 +19,11 @@ export const completeDocumentSigningSequence = [
     error: [setValidationErrorsAction],
     success: [
       completeDocumentSigningAction,
-      setDocumentIdAction,
+      parallel([setDocumentIdAction, setDocumentDetailTabAction]),
       ...createWorkItemSequence,
       clearPDFSignatureDataAction,
-      ...gotoDashboardSequence,
       clearFormAction,
+      navigateToCaseDetailAction,
     ],
   },
 ];
