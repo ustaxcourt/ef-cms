@@ -6,10 +6,12 @@ import { createWorkItemSequence } from './createWorkItemSequence';
 import { gotoDashboardSequence } from './gotoDashboardSequence';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const completeDocumentSigningSequence = [
   clearAlertsAction,
+  startShowValidationAction,
   validateInitialWorkItemMessageAction,
   {
     error: [setValidationErrorsAction],
