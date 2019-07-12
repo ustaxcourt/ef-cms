@@ -50,6 +50,11 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showDocumentInfoTab =
     formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
 
+  const showDocumentViewerTopMargin =
+    !showSignDocumentButton &&
+    (!['New', 'Recalled'].includes(caseDetail.status) ||
+      !formattedDocument.isPetition);
+
   return {
     formattedDocument,
     showAction: (action, workItemId) => {
@@ -59,6 +64,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCaseDetailsEdit,
     showCaseDetailsView,
     showDocumentInfoTab,
+    showDocumentViewerTopMargin,
     showSignDocumentButton,
   };
 };
