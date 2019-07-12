@@ -4,6 +4,6 @@ import { set } from 'cerebral/factories';
 
 export const openSelectDocumentWizardOverlaySequence = [
   clearModalStateAction,
-  set(state.modal.forSecondary, !!props.forSecondary),
+  set(state.modal.forSecondary, props.forSecondary),
   set(state.showModal, 'SelectDocumentWizardOverlay'),
 ];
