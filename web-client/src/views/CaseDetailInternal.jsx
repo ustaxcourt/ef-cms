@@ -20,8 +20,8 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
-    setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     showModal: state.showModal,
     token: state.token,
   },
@@ -29,8 +29,8 @@ export const CaseDetailInternal = connect(
     baseUrl,
     caseDetail,
     caseHelper,
+    setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence,
-    setDocumentDetailTabSequence,
     showModal,
     token,
   }) => {
@@ -57,7 +57,7 @@ export const CaseDetailInternal = connect(
                 name="partyType"
                 value={caseHelper.documentDetailTab}
                 onChange={e => {
-                  setDocumentDetailTabSequence({
+                  setCaseDetailPageTabSequence({
                     tab: e.target.value,
                   });
                 }}
@@ -69,7 +69,7 @@ export const CaseDetailInternal = connect(
           </div>
           <div className="mobile-document-detail-tabs">
             <Tabs
-              bind="documentDetail.tab"
+              bind="caseDetailPage.informationTab"
               className="classic-horizontal-header3 tab-border"
             >
               <Tab
