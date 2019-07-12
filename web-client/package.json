@@ -116,7 +116,7 @@
     "riot-route": "^3.1.4",
     "sinon": "^7.3.2",
     "stylelint": "^10.1.0",
-    "stylelint-config-idiomatic-order": "^7.0.2",
+    "stylelint-config-idiomatic-order": "^7.0.3",
     "stylelint-config-standard": "^18.3.0",
     "uswds": "^2.0.2",
     "wicg-inert": "^2.1.0"

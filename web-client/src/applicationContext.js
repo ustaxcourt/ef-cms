@@ -84,6 +84,7 @@ import { getUserInteractor } from '../../shared/src/business/useCases/getUserInt
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { pdfStyles } from '../../shared/src/tools/pdfStyles.js';
 import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
@@ -245,6 +246,7 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
+  getChiefJudgeNameForSigning: () => 'Maurice B. Foley',
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
@@ -313,6 +315,9 @@ const applicationContext = {
     return ErrorFactory.getError(e);
   },
   getHttpClient: () => axios,
+  getPdfStyles: () => {
+    return pdfStyles;
+  },
   getPersistenceGateway: () => {
     return {
       getDocument,

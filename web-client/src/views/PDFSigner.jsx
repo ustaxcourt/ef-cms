@@ -148,7 +148,6 @@ class PDFSignerComponent extends React.Component {
                     </button>
                   </div>
                 </div>
-
                 <div className="grid-col-8">
                   <div className="sign-pdf-interface">
                     <span
@@ -158,10 +157,19 @@ class PDFSignerComponent extends React.Component {
                         display: this.state.signatureApplied ? 'block' : 'none',
                       }}
                     >
-                      (Signed) Your Name <br />
+                      {this.props.pdfForSigning.nameForSigning}
+                      <br />
                       Chief Judge
                     </span>
-                    <canvas id="sign-pdf-canvas" ref={this.canvasRef}></canvas>
+                    <canvas
+                      className={
+                        !this.props.signatureData && this.state.signatureApplied
+                          ? 'cursor-grab'
+                          : ''
+                      }
+                      id="sign-pdf-canvas"
+                      ref={this.canvasRef}
+                    ></canvas>
                   </div>
                 </div>
               </div>

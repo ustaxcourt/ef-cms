@@ -36,13 +36,13 @@ exports.saveSignedDocumentInteractor = async ({
   const signedDocumentEntity = new Document({
     createdAt: applicationContext.getUtilities().createISODateString(),
     documentId: signedDocumentId,
-    documentType: originalDocumentEntity.documentType,
+    documentType: Document.signedDocumentTypes.signedStipulatedDecision,
     filedBy: originalDocumentEntity.filedBy,
     isPaper: originalDocumentEntity.isPaper,
     userId: user.userId,
   });
 
-  caseEntity.addDocument(signedDocumentEntity);
+  caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
