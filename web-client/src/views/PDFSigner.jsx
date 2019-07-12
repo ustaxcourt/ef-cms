@@ -152,8 +152,8 @@ class PDFSignerComponent extends React.Component {
                     <span
                       className={
                         !this.props.signatureData && this.state.signatureApplied
-                          ? 'cursor-grab'
-                          : ''
+                          ? 'cursor-grabbing'
+                          : 'cursor-grab'
                       }
                       id="signature"
                       ref={this.signatureRef}
@@ -168,8 +168,8 @@ class PDFSignerComponent extends React.Component {
                     <canvas
                       className={
                         !this.props.signatureData && this.state.signatureApplied
-                          ? 'cursor-grab'
-                          : ''
+                          ? 'cursor-grabbing'
+                          : 'cursor-grab'
                       }
                       id="sign-pdf-canvas"
                       ref={this.canvasRef}
