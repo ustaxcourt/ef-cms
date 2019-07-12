@@ -32,15 +32,20 @@ export const PDFSignerToolbar = connect(
       setPage({ pageNumber: nextPageNumber });
     };
 
+    const disablePrevious =
+      currentPageNumber === 1 || (!!signatureData || signatureApplied);
+
+    const disableNext =
+      currentPageNumber === pdfObj.numPages ||
+      (!!signatureData || signatureApplied);
+
     return (
       <div className="sign-pdf-control">
         <h3>Sign Document</h3>
         <>
           <div className="margin-bottom-3">
             <FontAwesomeIcon
-              className={
-                'icon-button' + (currentPageNumber === 1 ? ' disabled' : '')
-              }
+              className={'icon-button' + (disablePrevious ? ' disabled' : '')}
               icon={['fas', 'caret-left']}
               size="2x"
               onClick={getPreviousPage}
@@ -49,10 +54,7 @@ export const PDFSignerToolbar = connect(
               Page {currentPageNumber} of {pdfObj.numPages}
             </span>
             <FontAwesomeIcon
-              className={
-                'icon-button' +
-                (currentPageNumber === pdfObj.numPages ? ' disabled' : '')
-              }
+              className={'icon-button' + (disableNext ? ' disabled' : '')}
               icon={['fas', 'caret-right']}
               size="2x"
               onClick={getNextPage}
