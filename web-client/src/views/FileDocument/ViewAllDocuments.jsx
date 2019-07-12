@@ -9,6 +9,7 @@ export const ViewAllDocuments = connect(
   {
     caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    gotoFileDocumentSequence: sequences.gotoFileDocumentSequence,
     openCompleteSelectDocumentTypeModalSequence:
       sequences.openCompleteSelectDocumentTypeModalSequence,
     showModal: state.showModal,
@@ -19,6 +20,7 @@ export const ViewAllDocuments = connect(
   ({
     caseDetail,
     formCancelToggleCancelSequence,
+    gotoFileDocumentSequence,
     openCompleteSelectDocumentTypeModalSequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
@@ -85,12 +87,16 @@ export const ViewAllDocuments = connect(
             </div>
           </div>
           <div className="button-box-container margin-bottom-4">
-            <a
+            <button
               className="usa-button margin-right-205"
-              href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+              id="back-button"
+              onClick={() => {
+                const { docketNumber } = caseDetail;
+                gotoFileDocumentSequence({ docketNumber });
+              }}
             >
               Back to File a Document
-            </a>
+            </button>
             <button
               className="usa-button usa-button--unstyled"
               id="cancel-button"
