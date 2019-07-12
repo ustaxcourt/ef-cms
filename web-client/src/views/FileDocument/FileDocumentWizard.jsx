@@ -34,9 +34,7 @@ export const FileDocumentWizard = connect(
             defaultActiveTab="SelectDocumentType"
           >
             <Tab tabName="SelectDocumentType">
-              <div className="grid-container">
-                <SelectDocumentType />
-              </div>
+              <SelectDocumentType />
             </Tab>
             <Tab tabName="ViewAllDocuments">
               <ViewAllDocuments />
