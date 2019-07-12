@@ -25,7 +25,7 @@ export const completeDocumentSigningAction = async ({
   const { pdfjsObj } =
     window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
 
-  const { name } = applicationContext.getCurrentUser();
+  const name = applicationContext.getChiefJudgeNameForSigning();
 
   // generate signed document to bytes
   const signedPdfBytes = await applicationContext
