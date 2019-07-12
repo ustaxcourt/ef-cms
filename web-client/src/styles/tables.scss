@@ -120,9 +120,9 @@ table.small-case-qualifications-table {
   }
 
   thead th {
-    background-color: #28a0cb;
-    color: #ffffff;
-    font-family: 'Noto Serif', serif;
+    background-color: color($theme-color-accent-cool-light);
+    color: $color-white;
+    font-family: $font-serif;
     font-size: 20px;
     font-weight: $font-semibold;
   }
