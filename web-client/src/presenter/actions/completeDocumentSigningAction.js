@@ -17,6 +17,7 @@ export const completeDocumentSigningAction = async ({
 }) => {
   const {
     documentId: originalDocumentId,
+    nameForSigning,
     pageNumber,
     signatureData: { scale, x, y },
   } = get(state.pdfForSigning);
@@ -24,8 +25,6 @@ export const completeDocumentSigningAction = async ({
 
   const { pdfjsObj } =
     window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
-
-  const name = applicationContext.getChiefJudgeNameForSigning();
 
   // generate signed document to bytes
   const signedPdfBytes = await applicationContext
@@ -37,7 +36,7 @@ export const completeDocumentSigningAction = async ({
       posY: y,
       scale,
       sigTextData: {
-        signatureName: `(Signed) ${name}`,
+        signatureName: `(Signed) ${nameForSigning}`,
         signatureTitle: 'Chief Judge',
       },
     });
