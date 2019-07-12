@@ -115,14 +115,6 @@ exports.generateSignedDocumentInteractor = async ({
           (boxHeight - textHeight * 2 - lineHeight) / 2 -
           boxHeight,
       }),
-      drawRectangle({
-        borderColorRgb: [0, 0, 0],
-        borderWidth: 0.5,
-        height: boxHeight,
-        width: boxWidth,
-        x: posX,
-        y: pageHeight - posY - boxHeight,
-      }),
     );
   }
 
