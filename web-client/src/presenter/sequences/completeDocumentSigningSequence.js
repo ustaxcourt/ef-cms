@@ -3,7 +3,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { completeDocumentSigningAction } from '../actions/completeDocumentSigningAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
-import { createWorkItemSequence } from './createWorkItemSequence';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
