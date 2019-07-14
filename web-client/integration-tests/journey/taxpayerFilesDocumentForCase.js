@@ -113,10 +113,6 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      attachments: 'Enter selection for Attachments.',
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      exhibits: 'Enter selection for Exhibits.',
-      hasSupportingDocuments: 'Enter selection for Supporting Documents.',
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
@@ -134,23 +130,13 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      attachments: 'Enter selection for Attachments.',
       certificateOfServiceDate: 'Enter a Certificate of Service Date.',
-      exhibits: 'Enter selection for Exhibits.',
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'A file was not selected.',
       secondaryDocumentFile: 'A file was not selected.',
       supportingDocument: 'Enter selection for Supporting Document.',
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'exhibits',
-      value: false,
-    });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
       value: 'no',
@@ -237,10 +223,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      hasSecondarySupportingDocuments:
-        'Enter selection for Secondary Supporting Documents.',
-    });
+    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'hasSecondarySupportingDocuments',
