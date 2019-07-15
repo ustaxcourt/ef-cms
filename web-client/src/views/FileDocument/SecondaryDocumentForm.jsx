@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { InclusionsForm } from './InclusionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -59,6 +60,12 @@ export const SecondaryDocumentForm = connect(
               className="usa-error-message"
             />
           </div>
+
+          <InclusionsForm
+            bind="form.secondaryDocument"
+            type="secondaryDocument"
+            validationBind="validationErrors.secondaryDocument"
+          />
         </div>
       </React.Fragment>
     );

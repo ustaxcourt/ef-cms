@@ -55,7 +55,11 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <InclusionsForm />
+          <InclusionsForm
+            bind="form"
+            type="primaryDocument"
+            validationBind="validationErrors"
+          />
         </div>
       </React.Fragment>
     );
