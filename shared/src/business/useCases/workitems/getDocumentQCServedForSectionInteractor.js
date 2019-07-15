@@ -10,13 +10,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*|*>}
  */
-exports.getDocumentQCServedForSection = async ({
+exports.getDocumentQCServedForSectionInteractor = async ({
   applicationContext,
   section,
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM, user.userId)) {
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );

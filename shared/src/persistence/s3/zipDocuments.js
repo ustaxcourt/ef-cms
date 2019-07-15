@@ -17,7 +17,7 @@ exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
 
     const s3Client = applicationContext.getStorageClient();
 
-    function uploadFromStream(s3Client) {
+    const uploadFromStream = s3Client => {
       const pass = new stream.PassThrough();
 
       const params = {
@@ -34,7 +34,7 @@ exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
       pass.on('error', reject);
 
       return pass;
-    }
+    };
 
     s3Zip
       .setArchiverOptions({ gzip: false })

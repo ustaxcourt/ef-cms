@@ -41,11 +41,13 @@ export const createTrialSessionAction = async ({
       });
 
     if (trialSession.swingSession && trialSession.swingSessionId) {
-      await applicationContext.getUseCases().setTrialSessionAsSwingSession({
-        applicationContext,
-        swingSessionId: result.trialSessionId,
-        trialSessionId: trialSession.swingSessionId,
-      });
+      await applicationContext
+        .getUseCases()
+        .setTrialSessionAsSwingSessionInteractor({
+          applicationContext,
+          swingSessionId: result.trialSessionId,
+          trialSessionId: trialSession.swingSessionId,
+        });
     }
   } catch (err) {
     return path.error();

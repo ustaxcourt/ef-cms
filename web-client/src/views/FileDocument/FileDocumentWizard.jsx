@@ -6,6 +6,7 @@ import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { ViewAllDocuments } from './ViewAllDocuments';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -18,12 +19,14 @@ export const FileDocumentWizard = connect(
     return (
       <>
         <CaseDetailHeader />
-        <section className="usa-section grid-container">
-          {showModal == 'FormCancelModalDialogComponent' && (
-            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
-          )}
-          <SuccessNotification />
-          <ErrorNotification />
+        <section className="usa-section">
+          <div className="grid-container">
+            {showModal == 'FormCancelModalDialog' && (
+              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+            )}
+            <SuccessNotification />
+            <ErrorNotification />
+          </div>
           <Tabs
             asSwitch
             bind="wizardStep"
@@ -32,11 +35,18 @@ export const FileDocumentWizard = connect(
             <Tab tabName="SelectDocumentType">
               <SelectDocumentType />
             </Tab>
+            <Tab tabName="ViewAllDocuments">
+              <ViewAllDocuments />
+            </Tab>
             <Tab tabName="FileDocument">
-              <FileDocument />
+              <div className="grid-container">
+                <FileDocument />
+              </div>
             </Tab>
             <Tab tabName="FileDocumentReview">
-              <FileDocumentReview />
+              <div className="grid-container">
+                <FileDocumentReview />
+              </div>
             </Tab>
           </Tabs>
         </section>

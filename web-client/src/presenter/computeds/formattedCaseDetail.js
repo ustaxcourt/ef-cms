@@ -21,6 +21,19 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
   return result;
 };
 
+const formatCaseDeadline = (applicationContext, caseDeadline) => {
+  const result = _.cloneDeep(caseDeadline);
+  result.deadlineDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.deadlineDate, 'MMDDYY');
+
+  if (new Date(result.deadlineDate) < new Date()) {
+    result.overdue = true;
+  }
+
+  return result;
+};
+
 const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
   const yearAmountError = caseDetailErrors.yearAmounts.find(error => {
     return error.index === idx;
@@ -148,6 +161,16 @@ const formatDocketRecordWithDocument = (
 
     return { document, index, record };
   });
+};
+
+const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
+  caseDeadlines = caseDeadlines.map(d =>
+    formatCaseDeadline(applicationContext, d),
+  );
+
+  return caseDeadlines.sort((a, b) =>
+    String.prototype.localeCompare.call(a.deadlineDate, b.deadlineDate),
+  );
 };
 
 const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
@@ -321,6 +344,7 @@ export const formattedCases = (get, applicationContext) => {
 export const formattedCaseDetail = (get, applicationContext) => {
   let docketRecordSort;
   const caseDetail = get(state.caseDetail);
+  const caseDeadlines = get(state.caseDeadlines);
   const caseId = get(state.caseDetail.caseId);
   if (caseId) {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
@@ -332,5 +356,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
+  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
 };

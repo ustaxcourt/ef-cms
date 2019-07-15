@@ -16,7 +16,7 @@ exports.handler = event =>
 
     applicationContext.logger.info('Event', event);
     try {
-      const result = await applicationContext.getUseCases().validatePdf({
+      const result = await applicationContext.getUseCases().validatePdfInteractor({
         applicationContext,
         documentId,
       });

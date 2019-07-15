@@ -1,8 +1,8 @@
-const { getUser } = require('./getUserInteractor');
+const { getUserInteractor } = require('./getUserInteractor');
 
 describe('Get user', () => {
   it('returns the same user passed in with section defined', async () => {
-    const user = await getUser({
+    const user = await getUserInteractor({
       role: 'docketclerk',
       userId: 'docketclerk',
     });

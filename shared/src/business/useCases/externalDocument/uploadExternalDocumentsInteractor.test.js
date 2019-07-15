@@ -1,9 +1,9 @@
 const {
-  uploadExternalDocuments,
+  uploadExternalDocumentsInteractor,
 } = require('./uploadExternalDocumentsInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-describe('uploadExternalDocuments', () => {
+describe('uploadExternalDocumentsInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
@@ -44,12 +44,12 @@ describe('uploadExternalDocuments', () => {
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
-        fileExternalDocument: () => {},
+        fileExternalDocumentInteractor: () => {},
       }),
     };
     let error;
     try {
-      await uploadExternalDocuments({
+      await uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: ['something'],
         documentMetadata: {},
@@ -77,10 +77,10 @@ describe('uploadExternalDocuments', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
         }),
       };
-      await uploadExternalDocuments({
+      await uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: ['something'],
         documentMetadata: {},
@@ -107,10 +107,10 @@ describe('uploadExternalDocuments', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
+          fileExternalDocumentInteractor: () => {},
         }),
       };
-      const docIds = await uploadExternalDocuments({
+      const docIds = await uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles: ['something', 'something2', undefined, 'something4'],
         documentMetadata: {},

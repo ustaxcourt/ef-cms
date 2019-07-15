@@ -1,13 +1,13 @@
 const { put } = require('./requests');
 
 /**
- * setCaseToReadyForTrial
+ * setCaseToReadyForTrialInteractor
  *
  * @param applicationContext
  * @param caseToUpdate
  * @returns {Promise<*>}
  */
-exports.setCaseToReadyForTrial = ({ applicationContext, caseId }) => {
+exports.setCaseToReadyForTrialInteractor = ({ applicationContext, caseId }) => {
   return put({
     applicationContext,
     endpoint: `/cases/${caseId}/set-to-ready-for-trial`,

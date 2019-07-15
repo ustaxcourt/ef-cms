@@ -1,6 +1,7 @@
 const {
-  getCalendaredCasesForTrialSession,
+  getCalendaredCasesForTrialSessionInteractor,
 } = require('./getCalendaredCasesForTrialSessionInteractor');
+const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -23,11 +24,11 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     };
 
     await expect(
-      getCalendaredCasesForTrialSession({
+      getCalendaredCasesForTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrowError(UnauthorizedError);
   });
 
   it('should find the cases for a trial session successfully', async () => {
@@ -45,7 +46,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     };
 
     await expect(
-      getCalendaredCasesForTrialSession({
+      getCalendaredCasesForTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),

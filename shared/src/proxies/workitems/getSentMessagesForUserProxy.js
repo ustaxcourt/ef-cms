@@ -5,9 +5,9 @@ const { get } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getSentMessagesForUser = ({ applicationContext, userId }) => {
+exports.getSentMessagesForUserInteractor = ({ applicationContext, userId }) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/messages/sent`,
+    endpoint: `/api/users/${userId}/messages/sent`,
   });
 };

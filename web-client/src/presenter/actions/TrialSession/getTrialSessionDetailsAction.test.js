@@ -9,7 +9,7 @@ describe('getTrialSessionDetailsAction', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        getTrialSessionDetails: getTrialSessionDetailsStub,
+        getTrialSessionDetailsInteractor: getTrialSessionDetailsStub,
       }),
     };
   });

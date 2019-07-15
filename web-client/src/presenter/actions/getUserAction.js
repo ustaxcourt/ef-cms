@@ -7,6 +7,8 @@
  * @returns {object} the user
  */
 export const getUserAction = async ({ applicationContext, props }) => {
-  const user = await applicationContext.getUseCases().getUser(props.user);
+  const user = await applicationContext
+    .getUseCases()
+    .getUserInteractor(props.user);
   return { user };
 };

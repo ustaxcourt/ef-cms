@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  updateCaseTrialSortTags,
+  updateCaseTrialSortTagsInteractor,
 } = require('./updateCaseTrialSortTagsInteractor');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -33,7 +33,7 @@ describe('Update case trial sort tags', () => {
   });
 
   it('does not call persistence if case status is not ready for trial', async () => {
-    await updateCaseTrialSortTags({
+    await updateCaseTrialSortTagsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
     });
@@ -43,7 +43,7 @@ describe('Update case trial sort tags', () => {
 
   it('calls persistence if case status is ready for trial', async () => {
     mockCase.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
-    await updateCaseTrialSortTags({
+    await updateCaseTrialSortTagsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
     });
@@ -57,7 +57,7 @@ describe('Update case trial sort tags', () => {
     };
     let error;
     try {
-      await updateCaseTrialSortTags({
+      await updateCaseTrialSortTagsInteractor({
         applicationContext,
         caseId: mockCase.caseId,
       });
@@ -86,7 +86,7 @@ describe('Update case trial sort tags', () => {
     };
     let error;
     try {
-      await updateCaseTrialSortTags({
+      await updateCaseTrialSortTagsInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
       });
@@ -120,7 +120,7 @@ describe('Update case trial sort tags', () => {
     };
     let error;
     try {
-      await updateCaseTrialSortTags({
+      await updateCaseTrialSortTagsInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         userId: 'petitionsclerk',

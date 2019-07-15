@@ -1,14 +1,14 @@
 const { put } = require('../requests');
 
 /**
- * forwardWorkItem
+ * forwardWorkItemInteractor
  *
  * @param userId
  * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.forwardWorkItem = ({
+exports.forwardWorkItemInteractor = ({
   applicationContext,
   assigneeId,
   message,
@@ -20,6 +20,6 @@ exports.forwardWorkItem = ({
       assigneeId,
       message,
     },
-    endpoint: `/work-items/${workItemId}/assignee`,
+    endpoint: `/api/work-items/${workItemId}/assignee`,
   });
 };

@@ -1,5 +1,6 @@
+const sinon = require('sinon');
 const {
-  setTrialSessionCalendar,
+  setTrialSessionCalendarInteractor,
 } = require('./setTrialSessionCalendarInteractor');
 const { User } = require('../../entities/User');
 
@@ -38,7 +39,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     let error;
 
     try {
-      await setTrialSessionCalendar({
+      await setTrialSessionCalendarInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -50,6 +51,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should set a trial session to "calendared"', async () => {
+    let updateTrialSession = sinon.spy();
     applicationContext = {
       getCurrentUser: () => {
         return new User({
@@ -63,21 +65,21 @@ describe('setTrialSessionCalendarInteractor', () => {
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
         updateCase: () => {},
-        updateTrialSession: () => {},
+        updateTrialSession,
       }),
     };
 
     let error;
 
     try {
-      await setTrialSessionCalendar({
+      await setTrialSessionCalendarInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     } catch (e) {
       error = e;
     }
-
+    expect(updateTrialSession.called).toEqual(true);
     expect(error).toBeUndefined();
   });
 });

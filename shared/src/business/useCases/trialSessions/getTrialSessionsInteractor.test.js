@@ -1,4 +1,4 @@
-const { getTrialSessions } = require('./getTrialSessionsInteractor');
+const { getTrialSessionsInteractor } = require('./getTrialSessionsInteractor');
 const { omit } = require('lodash');
 
 const MOCK_TRIAL_SESSION = {
@@ -28,7 +28,7 @@ describe('Get trial sessions', () => {
       },
     };
     await expect(
-      getTrialSessions({
+      getTrialSessionsInteractor({
         applicationContext,
       }),
     ).rejects.toThrow();
@@ -52,7 +52,7 @@ describe('Get trial sessions', () => {
     };
     let error;
     try {
-      await getTrialSessions({
+      await getTrialSessionsInteractor({
         applicationContext,
       });
     } catch (err) {

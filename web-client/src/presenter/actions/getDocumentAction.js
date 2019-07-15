@@ -9,7 +9,7 @@
 export const getDocumentAction = async ({ applicationContext, props }) => {
   const documentBlob = await applicationContext
     .getUseCases()
-    .downloadDocumentFile({
+    .downloadDocumentFileInteractor({
       applicationContext,
       documentId: props.documentId,
     });

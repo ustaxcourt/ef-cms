@@ -16,7 +16,7 @@ exports.handler = event =>
       const {trialSessionId} = event.pathParameters || {};
       const results = await applicationContext
         .getUseCases()
-        .getCalendaredCasesForTrialSession({
+        .getCalendaredCasesForTrialSessionInteractor({
           applicationContext,
           trialSessionId,
         });

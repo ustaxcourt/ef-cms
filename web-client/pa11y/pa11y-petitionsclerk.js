@@ -77,4 +77,26 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },
+  {
+    actions: [
+      'wait for #button-create-order to be visible',
+      'click element #button-create-order',
+      'wait for #eventCode to be visible',
+      'set field #eventCode to ODD',
+      'check field #eventCode',
+    ],
+    notes: 'checks a11y of create order modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=create-order',
+  },
+  {
+    actions: [
+      'wait for #button-add-deadline to be visible',
+      'click element #button-add-deadline',
+      'wait for #deadline-date-legend to be visible',
+    ],
+    notes: 'checks a11y of add deadline modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=add-deadline',
+  },
 ];

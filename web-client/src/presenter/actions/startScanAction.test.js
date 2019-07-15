@@ -3,6 +3,7 @@ import { runAction } from 'cerebral/test';
 import { startScanAction } from './startScanAction';
 
 const mockStartScanSession = jest.fn();
+const mockRemoveItemInteractor = jest.fn();
 
 presenter.providers.applicationContext = {
   getScanner: () => ({
@@ -11,7 +12,7 @@ presenter.providers.applicationContext = {
     startScanSession: mockStartScanSession,
   }),
   getUseCases: () => ({
-    removeItem: async () => null,
+    removeItemInteractor: mockRemoveItemInteractor,
   }),
 };
 global.alert = () => null;
@@ -33,5 +34,18 @@ describe('startScanAction', () => {
 
     expect(result.state.isScanning).toBeTruthy();
     expect(mockStartScanSession).toHaveBeenCalled();
+  });
+
+  it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {
+    await runAction(startScanAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        isScanning: false,
+      },
+    });
+
+    expect(mockRemoveItemInteractor).toHaveBeenCalled();
   });
 });

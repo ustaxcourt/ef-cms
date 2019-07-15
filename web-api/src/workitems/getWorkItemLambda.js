@@ -13,7 +13,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().getWorkItem({
+      const results = await applicationContext.getUseCases().getWorkItemInteractor({
         applicationContext,
         workItemId: event.pathParameters.workItemId,
       });

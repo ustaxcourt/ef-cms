@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.setTrialSessionCalendar = async ({
+exports.setTrialSessionCalendarInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {

@@ -16,7 +16,7 @@ exports.handler = async () => {
       <script>
         SwaggerUIBundle({
           dom_id: '#swagger',
-          url: '/v1/swagger.json'
+          url: '/api/swagger.json'
         });
       </script>
     </body>

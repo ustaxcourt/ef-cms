@@ -18,14 +18,14 @@ export const setScannerSourceAction = async ({
     const scanner = applicationContext.getScanner();
     scanner.setSourceByName(props.scannerSourceName);
 
-    await applicationContext.getUseCases().setItem({
+    await applicationContext.getUseCases().setItemInteractor({
       applicationContext,
       key: 'scannerSourceName',
       value: props.scannerSourceName,
     });
 
     // also need to keep track of the index due to some scanners showing up twice as a source with duplicate name
-    await applicationContext.getUseCases().setItem({
+    await applicationContext.getUseCases().setItemInteractor({
       applicationContext,
       key: 'scannerSourceIndex',
       value: props.scannerSourceIndex,
