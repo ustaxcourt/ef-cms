@@ -16,7 +16,7 @@ export const CaseListRespondent = connect(
           <thead>
             <tr>
               <th>Docket Number</th>
-              <th>Petitioner Name</th>
+              <th>Case Name</th>
               <th>Date Filed</th>
             </tr>
           </thead>
