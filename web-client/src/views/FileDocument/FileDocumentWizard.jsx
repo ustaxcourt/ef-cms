@@ -21,7 +21,7 @@ export const FileDocumentWizard = connect(
         <CaseDetailHeader />
         <section className="usa-section">
           <div className="grid-container">
-            {showModal == 'FormCancelModalDialogComponent' && (
+            {showModal == 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
             <SuccessNotification />

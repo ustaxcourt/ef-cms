@@ -140,7 +140,7 @@ export const BeforeYouFileADocument = connect(
             >
               Cancel
             </button>
-            {showModal === 'FormCancelModalDialogComponent' && (
+            {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
             )}
           </div>

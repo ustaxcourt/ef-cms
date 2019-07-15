@@ -49,7 +49,7 @@ export const ViewDocumentCategory = connect(
               </h1>
               <h2
                 className="margin-bottom-205"
-                id="view-all-document-header"
+                id="view-all-document-subheader"
                 tabIndex="-1"
               >
                 Select Document Type
@@ -67,29 +67,26 @@ export const ViewDocumentCategory = connect(
                 <button
                   className="usa-button usa-button--unstyled"
                   onClick={() => {
+                    const prefix =
+                      (modal.forSecondary && 'secondaryDocument.') || '';
                     updateFileDocumentWizardFormValueSequence({
-                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
-                        ''}category`,
+                      key: `${prefix}category`,
                       value: document.category,
                     });
                     updateFileDocumentWizardFormValueSequence({
-                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
-                        ''}documentType`,
+                      key: `${prefix}documentType`,
                       value: document.documentType,
                     });
                     updateFileDocumentWizardFormValueSequence({
-                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
-                        ''}documentTitle`,
+                      key: `${prefix}documentTitle`,
                       value: document.documentTitle,
                     });
                     updateFileDocumentWizardFormValueSequence({
-                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
-                        ''}eventCode`,
+                      key: `${prefix}eventCode`,
                       value: document.eventCode,
                     });
                     updateFileDocumentWizardFormValueSequence({
-                      key: `${(modal.forSecondary && 'secondaryDocument.') ||
-                        ''}scenario`,
+                      key: `${prefix}scenario`,
                       value: document.scenario,
                     });
                     clearModalSequence();
