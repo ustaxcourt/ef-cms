@@ -311,7 +311,12 @@ ContactFactory.createContactFactory = ({
   additionalValidation,
 }) => {
   return ({ countryType }) => {
-    const GenericContactConstructor = rawContact => {
+    /**
+     * creates a contact entities
+     * @param {object} rawContact the options object
+     * @returns {object} the entity constructor function
+     */
+    function GenericContactConstructor(rawContact) {
       Object.assign(this, {
         address1: rawContact.address1,
         address2: rawContact.address2 ? rawContact.address2 : undefined,

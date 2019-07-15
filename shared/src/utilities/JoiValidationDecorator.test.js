@@ -1,9 +1,13 @@
 const joi = require('joi-browser');
 const { joiValidationDecorator } = require('./JoiValidationDecorator');
 
-const MockEntity1 = raw => {
+/**
+ * fake entity constructor
+ * @param raw {object}
+ */
+function MockEntity1(raw) {
   Object.assign(this, raw);
-};
+}
 
 MockEntity1.name = 'MockEntity1';
 
