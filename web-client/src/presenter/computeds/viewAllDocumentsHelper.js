@@ -90,7 +90,7 @@ export const viewAllDocumentsHelper = get => {
     categoryMap,
     documentTypesForSelect,
     documentTypesForSelectSorted,
-    sections,
     reasons,
+    sections,
   };
 };
