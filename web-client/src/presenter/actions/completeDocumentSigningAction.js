@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 /**
  * Uses state-side signature data (coordinates, page number, PDFJS Object) to apply
@@ -22,6 +21,11 @@ export const completeDocumentSigningAction = async ({
     signatureData: { scale, x, y },
   } = get(state.pdfForSigning);
   const caseId = get(state.caseDetail.caseId);
+  const caseDetail = get(state.caseDetail);
+  const document = caseDetail.documents.find(
+    document => document.documentId === originalDocumentId,
+  );
+  const messageId = get(state.messageId);
 
   const { pdfjsObj } =
     window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
@@ -65,26 +69,17 @@ export const completeDocumentSigningAction = async ({
     signedDocumentId,
   });
 
-  const workItems = await applicationContext
-    .getUseCases()
-    .getInboxMessagesForUserInteractor({
+  if (messageId) {
+    const workItemIdToClose = document.workItems.find(workItem =>
+      workItem.messages.find(message => message.messageId === messageId),
+    ).workItemId;
+
+    await applicationContext.getUseCases().completeWorkItemInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
+      workItemId: workItemIdToClose,
     });
-
-  const stipulatedWorkItems = workItems.filter(
-    workItem =>
-      workItem.document.documentType === 'Proposed Stipulated Decision' &&
-      !workItem.completedAt,
-  );
-
-  const { workItemId } = _.head(stipulatedWorkItems);
-
-  await applicationContext.getUseCases().completeWorkItemInteractor({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-    workItemId,
-  });
+  }
 
   return { caseId, documentId: signedDocumentId, tab: 'docketRecord' };
 };
