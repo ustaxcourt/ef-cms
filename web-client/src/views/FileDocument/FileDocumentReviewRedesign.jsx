@@ -3,15 +3,13 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { PartiesFilingReadOnly } from './PartiesFilingReadOnly';
-import { PrimaryDocumentReadOnly } from './PrimaryDocumentReadOnly';
-import { SecondaryDocumentReadOnly } from './SecondaryDocumentReadOnly';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const FileDocumentReviewRedesign = connect(
   {
+    caseDetail: state.formattedCaseDetail,
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
@@ -20,6 +18,7 @@ export const FileDocumentReviewRedesign = connect(
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
   ({
+    caseDetail,
     chooseWizardStepSequence,
     fileDocumentHelper,
     form,
@@ -48,12 +47,12 @@ export const FileDocumentReviewRedesign = connect(
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-7 margin-bottom-4">
-              <div className="card height-full">
+              <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
                   <h3 className="underlined">Your Document(s)</h3>
-                  <div className="grid-row">
-                    <div className="tablet:grid-col-6">
-                      <div className="usa-form-group">
+                  <div className="grid-row grid-gap">
+                    <div className="tablet:grid-col-6 margin-bottom-1">
+                      <div className="margin-bottom-1">
                         <label className="usa-label" htmlFor="primary-filing">
                           {form.documentTitle}
                         </label>
@@ -61,10 +60,10 @@ export const FileDocumentReviewRedesign = connect(
                         {form.primaryDocumentFile.name}
                       </div>
                     </div>
-                    <div className="tablet:grid-col-6">
+                    <div className="tablet:grid-col-6 margin-bottom-1">
                       {fileDocumentHelper.showFilingIncludes && (
                         <div
-                          className={`usa-form-group ${
+                          className={` ${
                             !fileDocumentHelper.showObjection
                               ? 'margin-bottom-0'
                               : ''
@@ -93,7 +92,7 @@ export const FileDocumentReviewRedesign = connect(
 
                       {fileDocumentHelper.showFilingNotIncludes && (
                         <div
-                          className={`usa-form-group ${
+                          className={`${
                             !fileDocumentHelper.showObjection
                               ? 'margin-bottom-0'
                               : ''
@@ -119,7 +118,7 @@ export const FileDocumentReviewRedesign = connect(
                       )}
 
                       {fileDocumentHelper.showObjection && (
-                        <div className="usa-form-group margin-bottom-0">
+                        <div className="margin-bottom-0">
                           <label className="usa-label" htmlFor="objections">
                             Are There Any Objections to This Document?
                           </label>
@@ -130,18 +129,70 @@ export const FileDocumentReviewRedesign = connect(
                   </div>
 
                   {form.supportingDocumentFile && (
-                    <div className="grid-row overline">
-                      <div className="tablet:grid-col-6">
-                        <div className="usa-form-group">
-                          <label
-                            className="usa-label"
-                            htmlFor="supporting-documents"
-                          >
-                            {form.supportingDocumentMetadata.documentTitle}
-                          </label>
-                          <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                          {form.supportingDocumentFile.name}
-                        </div>
+                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        <label
+                          className="usa-label"
+                          htmlFor="supporting-documents"
+                        >
+                          {form.supportingDocumentMetadata.documentTitle}
+                        </label>
+                        <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                        {form.supportingDocumentFile.name}
+                      </div>
+                    </div>
+                  )}
+
+                  {form.secondaryDocument.documentTitle && (
+                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        {form.secondaryDocumentFile && (
+                          <div className="">
+                            <label
+                              className="usa-label"
+                              htmlFor="secondary-filing"
+                            >
+                              {form.secondaryDocument.documentTitle}
+                            </label>
+                            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                            {form.secondaryDocumentFile.name}
+                          </div>
+                        )}
+                      </div>
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        {fileDocumentHelper.showSecondaryFilingNotIncludes && (
+                          <div className=" margin-bottom-0">
+                            <label
+                              className="usa-label"
+                              htmlFor="filing-not-includes"
+                            >
+                              Filing Does Not Include
+                            </label>
+                            <ul className="ustc-unstyled-list without-margins">
+                              {!form.hasSecondarySupportingDocuments && (
+                                <li>Supporting Documents</li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {form.secondarySupportingDocumentFile && (
+                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        <label
+                          className="usa-label"
+                          htmlFor="secondary-supporting-documents"
+                        >
+                          {
+                            form.secondarySupportingDocumentMetadata
+                              .documentTitle
+                          }
+                        </label>
+                        <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                        {form.secondarySupportingDocumentFile.name}
                       </div>
                     </div>
                   )}
@@ -150,9 +201,28 @@ export const FileDocumentReviewRedesign = connect(
             </div>
 
             <div className="tablet:grid-col-5 margin-bottom-4">
-              <div className="card height-full">
+              <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
                   <h3 className="underlined">Parties Filing The Document(s)</h3>
+                  <div className="grid-row grid-gap">
+                    <div className="tablet:grid-col-6 margin-bottom-1">
+                      <label className="usa-label" htmlFor="filing-parties">
+                        Filing Parties
+                      </label>
+                      <ul className="ustc-unstyled-list without-margins">
+                        {form.partyPractitioner && (
+                          <li>Myself as Petitioner’s Counsel</li>
+                        )}
+                        {form.partyPrimary && (
+                          <li>{caseDetail.contactPrimary.name}</li>
+                        )}
+                        {form.partySecondary && (
+                          <li>{caseDetail.contactSecondary.name}</li>
+                        )}
+                        {form.partyRespondent && <li>Respondent</li>}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -183,7 +253,7 @@ export const FileDocumentReviewRedesign = connect(
 
         <div className="button-box-container">
           <button
-            className="usa-button"
+            className="usa-button margin-bottom-1"
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -193,7 +263,7 @@ export const FileDocumentReviewRedesign = connect(
             Submit Your Filing
           </button>
           <button
-            className="usa-button usa-button--outline"
+            className="usa-button usa-button--outline margin-bottom-1"
             type="button"
             onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
           >
