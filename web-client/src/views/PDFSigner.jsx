@@ -162,7 +162,7 @@ class PDFSignerComponent extends React.Component {
                         display: this.props.signatureApplied ? 'block' : 'none',
                       }}
                     >
-                      {this.props.pdfForSigning.nameForSigning}
+                      (signed) {this.props.pdfForSigning.nameForSigning}
                       <br />
                       Chief Judge
                     </span>
