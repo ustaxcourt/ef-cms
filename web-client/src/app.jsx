@@ -53,6 +53,7 @@ import {
   faSync,
   faTimesCircle,
   faTrash,
+  faUserCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -144,6 +145,7 @@ const app = {
       faTimesCircle,
       faTrash,
       faUser,
+      faUserCheck,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
