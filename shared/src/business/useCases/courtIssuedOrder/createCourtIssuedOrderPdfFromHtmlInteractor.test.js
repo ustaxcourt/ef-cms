@@ -5,11 +5,9 @@ const {
 const PDF_MOCK_BUFFER = 'Hello World';
 const pageMock = {
   addStyleTag: () => {},
-  evaluateHandle: () => {},
   pdf: () => {
     return PDF_MOCK_BUFFER;
   },
-  screenshot: () => {},
   setContent: () => {},
 };
 
