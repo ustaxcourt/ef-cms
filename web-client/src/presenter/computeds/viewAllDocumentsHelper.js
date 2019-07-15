@@ -43,13 +43,16 @@ export const viewAllDocumentsHelper = get => {
     {
       categories: [
         {
-          category: 'Brief',
-        },
-        {
-          category: 'Memorandum',
-        },
-        {
           category: 'Notice',
+        },
+        {
+          category: 'Pretrial Memorandum',
+        },
+        {
+          category: 'Seriatim Brief',
+        },
+        {
+          category: 'Simultaneous Brief',
         },
         {
           category: 'Statement',
@@ -66,7 +69,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Miscellaneous',
         },
         {
-          category: 'Supporting Documents',
+          category: 'Supporting Document',
         },
       ],
       reason: 'Update or Add to a Document',
@@ -80,7 +83,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Reply',
         },
         {
-          category: 'Response',
+          category: 'Response, Opposition or Objection',
         },
       ],
       reason: 'Respond to a Previous Document',

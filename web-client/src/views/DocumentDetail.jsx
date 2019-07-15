@@ -21,6 +21,7 @@ export const DocumentDetail = connect(
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     helper: state.documentDetailHelper,
+    messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
@@ -32,6 +33,7 @@ export const DocumentDetail = connect(
     caseHelper,
     clickServeToIrsSequence,
     helper,
+    messageId,
     navigateToPathSequence,
     setModalDialogNameSequence,
     showModal,
@@ -145,7 +147,9 @@ export const DocumentDetail = connect(
                       className="usa-button serve-to-irs margin-right-0"
                       onClick={() =>
                         navigateToPathSequence({
-                          path: `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/sign`,
+                          path: messageId
+                            ? `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/messages/${messageId}/sign`
+                            : `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/sign`,
                         })
                       }
                     >
