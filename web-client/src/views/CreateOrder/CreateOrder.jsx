@@ -33,7 +33,7 @@ export const CreateOrder = connect(
     return (
       <>
         <CaseDetailHeader />
-        {showModal === 'FormCancelModalDialogComponent' && (
+        {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
         )}
         <SuccessNotification />

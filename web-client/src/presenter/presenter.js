@@ -4,15 +4,18 @@ import { NotFoundError } from './errors/NotFoundError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
+import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
+import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
@@ -72,6 +75,7 @@ import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOr
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
+import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
@@ -152,6 +156,7 @@ import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateHasIrsNoticeFormValueSequence } from './sequences/updateHasIrsNoticeFormValueSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
+import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
@@ -188,15 +193,18 @@ export const presenter = {
   ],
   providers: {},
   sequences: {
+    addSupportingDocumentToFormSequence,
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     autoSaveCaseSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
+    chooseModalWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
+    clearModalSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
@@ -256,6 +264,7 @@ export const presenter = {
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditSecondaryContactModalSequence,
+    openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
@@ -334,6 +343,7 @@ export const presenter = {
     updateForwardFormValueSequence,
     updateHasIrsNoticeFormValueSequence,
     updateMessageValueSequence,
+    updateModalValueSequence,
     updatePetitionValueSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,

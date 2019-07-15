@@ -86,7 +86,7 @@ export const StartCase = connect(
               submitFilePetitionSequence();
             }}
           >
-            {showModal === 'FormCancelModalDialogComponent' && (
+            {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
             <ErrorNotification />
