@@ -26,22 +26,7 @@ export const completeDocumentSigningAction = async ({
   const document = caseDetail.documents.find(
     document => document.documentId === originalDocumentId,
   );
-  debugger;
-  let workItemIdToClose;
   const messageId = get(state.messageId);
-  if (messageId) {
-    workItemIdToClose = document.workItems.find(workItem =>
-      workItem.messages.find(message => message.messageId === messageId),
-    ).workItemId;
-  } else {
-    workItemIdToClose = _.head(
-      document.workItems.filter(
-        workItem =>
-          workItem.document.documentType === 'Proposed Stipulated Decision' &&
-          !workItem.completedAt,
-      ),
-    ).workItemId;
-  }
 
   const { pdfjsObj } =
     window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
@@ -82,30 +67,20 @@ export const completeDocumentSigningAction = async ({
     applicationContext,
     caseId,
     originalDocumentId,
-    // workItemId,
     signedDocumentId,
   });
 
-  // const workItems = await applicationContext
-  //   .getUseCases()
-  //   .getInboxMessagesForUserInteractor({
-  //     applicationContext,
-  //     userId: applicationContext.getCurrentUser().userId,
-  //   });
+  if (messageId) {
+    const workItemIdToClose = document.workItems.find(workItem =>
+      workItem.messages.find(message => message.messageId === messageId),
+    ).workItemId;
 
-  // const stipulatedWorkItems = workItems.filter(
-  //   workItem =>
-  //     workItem.document.documentType === 'Proposed Stipulated Decision' &&
-  //     !workItem.completedAt,
-  // );
-
-  // const { workItemId } = _.head(stipulatedWorkItems);
-
-  await applicationContext.getUseCases().completeWorkItemInteractor({
-    applicationContext,
-    userId: applicationContext.getCurrentUser().userId,
-    workItemId: workItemIdToClose,
-  });
+    await applicationContext.getUseCases().completeWorkItemInteractor({
+      applicationContext,
+      userId: applicationContext.getCurrentUser().userId,
+      workItemId: workItemIdToClose,
+    });
+  }
 
   return { caseId, documentId: signedDocumentId, tab: 'docketRecord' };
 };
