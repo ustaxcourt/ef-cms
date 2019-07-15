@@ -129,6 +129,37 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // allow GC to clear original loaded pdf data
   pdfData = null;
 
+  const getPageDimensions = page => {
+    let mediaBox;
+
+    // Check for MediaBox on the page itself
+    const hasMediaBox = !!page.getMaybe('MediaBox');
+    if (hasMediaBox) {
+      mediaBox = page.index.lookup(page.get('MediaBox'));
+    }
+
+    // Check for MediaBox on each parent node
+    page.Parent.ascend(parent => {
+      const parentHasMediaBox = !!parent.getMaybe('MediaBox');
+      if (!mediaBox && parentHasMediaBox) {
+        mediaBox = parent.index.lookup(parent.get('MediaBox'));
+      }
+    }, true);
+
+    // This should never happen in valid PDF files
+    if (!mediaBox) throw new Error('Page Tree is missing MediaBox');
+
+    // Extract and return the width and height
+    return {
+      height: mediaBox.array[3].number,
+      width: mediaBox.array[2].number,
+    };
+  };
+
+  const pageScaler = value => {
+    return Math.round(value * (scaleToPageWidth / dimensionsX));
+  };
+
   const pages = pdfDoc.getPages();
   const originalPageDimensions = getPageDimensions(pages[0]);
   const originalPageWidth = originalPageDimensions.width;
@@ -161,36 +192,9 @@ exports.addCoverToPDFDocumentInteractor = async ({
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
   applicationContext.logger.timeEnd('Generate Cover Page');
 
-  const getPageDimensions = page => {
-    let mediaBox;
 
-    // Check for MediaBox on the page itself
-    const hasMediaBox = !!page.getMaybe('MediaBox');
-    if (hasMediaBox) {
-      mediaBox = page.index.lookup(page.get('MediaBox'));
-    }
 
-    // Check for MediaBox on each parent node
-    page.Parent.ascend(parent => {
-      const parentHasMediaBox = !!parent.getMaybe('MediaBox');
-      if (!mediaBox && parentHasMediaBox) {
-        mediaBox = parent.index.lookup(parent.get('MediaBox'));
-      }
-    }, true);
 
-    // This should never happen in valid PDF files
-    if (!mediaBox) throw new Error('Page Tree is missing MediaBox');
-
-    // Extract and return the width and height
-    return {
-      height: mediaBox.array[3].number,
-      width: mediaBox.array[2].number,
-    };
-  };
-
-  const pageScaler = value => {
-    return Math.round(value * (scaleToPageWidth / dimensionsX));
-  };
 
   const paddedLineHeight = (fontSize = defaultFontSize) => {
     return fontSize * 0.25 + fontSize;
