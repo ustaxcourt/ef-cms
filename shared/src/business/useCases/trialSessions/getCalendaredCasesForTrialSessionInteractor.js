@@ -5,12 +5,12 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getCalendaredCasesForTrialSession
+ * getCalendaredCasesForTrialSessionInteractor
  * @param applicationContext
  * @param trialSessionId
  * @returns {*|Promise<*>}
  */
-exports.getCalendaredCasesForTrialSession = async ({
+exports.getCalendaredCasesForTrialSessionInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {

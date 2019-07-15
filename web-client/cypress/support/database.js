@@ -31,20 +31,20 @@ async function clearDatabase() {
     })
     .promise();
 
-  for (let item of items) {
-    await deleteItem(item);
-  }
+  await Promise.all(items.map(item => deleteItem(item)));
 }
 
 async function seedDatabase() {
-  for (let item of data) {
-    await documentClient
-      .put({
-        Item: item,
-        TableName: 'efcms-local',
-      })
-      .promise();
-  }
+  await Promise.all(
+    data.map(item =>
+      documentClient
+        .put({
+          Item: item,
+          TableName: 'efcms-local',
+        })
+        .promise(),
+    ),
+  );
 }
 
 export const reseedDatabase = async () => {

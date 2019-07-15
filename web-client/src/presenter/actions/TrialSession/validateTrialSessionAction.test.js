@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    validateTrialSession: () => 'hello from validate trial session',
+    validateTrialSessionInteractor: () => 'hello from validate trial session',
   }),
 };
 
@@ -29,7 +29,7 @@ describe('validateTrialSessionAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateTrialSession: validateTrialSessionStub,
+        validateTrialSessionInteractor: validateTrialSessionStub,
       }),
     };
 

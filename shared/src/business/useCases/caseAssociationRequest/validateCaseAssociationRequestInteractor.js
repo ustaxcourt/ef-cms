@@ -1,10 +1,10 @@
 /**
- * validateCaseAssociationRequest
+ * validateCaseAssociationRequestInteractor
  * @param applicationContext
  * @param caseAssociationRequest
  * @returns {object}
  */
-exports.validateCaseAssociationRequest = ({
+exports.validateCaseAssociationRequestInteractor = ({
   applicationContext,
   caseAssociationRequest,
 }) => {

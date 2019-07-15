@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const { getCase } = require('./getCaseInteractor');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 
 const { documents } = MOCK_CASE;
@@ -24,7 +24,7 @@ describe('Get case', () => {
         };
       },
     };
-    const caseRecord = await getCase({
+    const caseRecord = await getCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -47,7 +47,7 @@ describe('Get case', () => {
       },
     };
     try {
-      await getCase({
+      await getCaseInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         petitioners: [{ name: 'Test Taxpayer' }],
@@ -74,7 +74,7 @@ describe('Get case', () => {
       }),
     };
 
-    const caseRecord = await getCase({
+    const caseRecord = await getCaseInteractor({
       applicationContext,
       caseId: '00101-00',
     });
@@ -109,7 +109,7 @@ describe('Get case', () => {
     };
     let error;
     try {
-      await getCase({
+      await getCaseInteractor({
         applicationContext,
         caseId: '00-11111',
       });
@@ -146,7 +146,7 @@ describe('Get case', () => {
     };
     let error;
     try {
-      await getCase({
+      await getCaseInteractor({
         applicationContext,
         caseId: '00101-00',
       });
@@ -184,7 +184,7 @@ describe('Get case', () => {
     };
     let error;
     try {
-      await getCase({
+      await getCaseInteractor({
         applicationContext,
         caseId: '00101-08',
       });

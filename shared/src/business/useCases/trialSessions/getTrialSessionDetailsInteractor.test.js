@@ -1,7 +1,8 @@
 const {
-  getTrialSessionDetails,
+  getTrialSessionDetailsInteractor,
 } = require('./getTrialSessionDetailsInteractor');
 const { omit } = require('lodash');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -21,8 +22,8 @@ describe('Get trial session details', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
-          userId: 'petitioner',
+          role: 'unauthorizedRole',
+          userId: 'unauthorizedUser',
         };
       },
       getPersistenceGateway: () => {
@@ -32,11 +33,11 @@ describe('Get trial session details', () => {
       },
     };
     await expect(
-      getTrialSessionDetails({
+      getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
@@ -57,7 +58,7 @@ describe('Get trial session details', () => {
     };
     let error;
     try {
-      await getTrialSessionDetails({
+      await getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       });
@@ -86,7 +87,7 @@ describe('Get trial session details', () => {
     };
     let error;
     try {
-      await getTrialSessionDetails({
+      await getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       });
@@ -113,7 +114,7 @@ describe('Get trial session details', () => {
         };
       },
     };
-    const result = await getTrialSessionDetails({
+    const result = await getTrialSessionDetailsInteractor({
       applicationContext,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
     });

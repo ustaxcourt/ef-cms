@@ -45,7 +45,7 @@ exports.getPageDimensions = page => {
  * @param sigImgData // Array of Uint8Array containing signature img data
  * @returns {ByteArray}
  */
-exports.generateSignedDocument = async ({
+exports.generateSignedDocumentInteractor = async ({
   pageIndex,
   pdfData,
   posX,
@@ -99,6 +99,13 @@ exports.generateSignedDocument = async ({
     const boxHeight = textHeight * 2 + padding * 2;
 
     pageContentStream = pdfDoc.createContentStream(
+      drawRectangle({
+        colorRgb: [1, 1, 1],
+        height: boxHeight,
+        width: boxWidth,
+        x: posX,
+        y: pageHeight - posY - boxHeight,
+      }),
       drawText(helveticaFont.encodeText(signatureName), {
         font: 'Helvetica-Bold',
         size: textSize,
@@ -114,14 +121,6 @@ exports.generateSignedDocument = async ({
           posY +
           (boxHeight - textHeight * 2 - lineHeight) / 2 -
           boxHeight,
-      }),
-      drawRectangle({
-        borderColorRgb: [0, 0, 0],
-        borderWidth: 0.5,
-        height: boxHeight,
-        width: boxWidth,
-        x: posX,
-        y: pageHeight - posY - boxHeight,
       }),
     );
   }

@@ -1,4 +1,4 @@
-const { getInternalUsers } = require('./getInternalUsersInteractor');
+const { getInternalUsersInteractor } = require('./getInternalUsersInteractor');
 
 describe('Get internal users', () => {
   const applicationContext = {
@@ -21,7 +21,7 @@ describe('Get internal users', () => {
   };
 
   it('returns the same users that were returned from mocked persistence', async () => {
-    const users = await getInternalUsers({ applicationContext });
+    const users = await getInternalUsersInteractor({ applicationContext });
     expect(users).toEqual([
       {
         userId: 'abc',
@@ -38,7 +38,7 @@ describe('Get internal users', () => {
   it('throws unauthorized error for unauthorized users', async () => {
     let error;
     try {
-      await getInternalUsers({
+      await getInternalUsersInteractor({
         applicationContext: {
           getCurrentUser: () => ({
             role: 'petitioner',

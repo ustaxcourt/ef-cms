@@ -13,7 +13,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = ({
   return applicationContext
     .getHttpClient()
     .post(
-      `${applicationContext.getBaseUrl()}/court-issued-order`,
+      `${applicationContext.getBaseUrl()}/api/court-issued-order`,
       {
         docketNumberWithSuffix,
         htmlString,

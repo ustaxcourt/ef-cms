@@ -40,7 +40,8 @@ export const documentDetailHelper = (get, applicationContext) => {
         !workItem.completedAt,
     );
 
-    showSignDocumentButton = !!stipulatedWorkItem;
+    showSignDocumentButton =
+      !!stipulatedWorkItem && currentUser.role === 'seniorattorney';
   }
 
   const formattedDocumentIsPetition =
@@ -49,6 +50,11 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showCaseDetailsView = ['Batched for IRS'].includes(caseDetail.status);
   const showDocumentInfoTab =
     formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
+
+  const showDocumentViewerTopMargin =
+    !showSignDocumentButton &&
+    (!['New', 'Recalled'].includes(caseDetail.status) ||
+      !formattedDocument.isPetition);
 
   return {
     formattedDocument,
@@ -59,6 +65,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCaseDetailsEdit,
     showCaseDetailsView,
     showDocumentInfoTab,
+    showDocumentViewerTopMargin,
     showSignDocumentButton,
   };
 };

@@ -22,11 +22,11 @@ export const startScanAction = async ({ applicationContext, props, store }) => {
     scanner.startScanSession();
     store.set(state.submitting, false);
   } else {
-    await applicationContext.getUseCases().removeItem({
+    await applicationContext.getUseCases().removeItemInteractor({
       applicationContext,
       key: 'scannerSourceIndex',
     });
-    await applicationContext.getUseCases().removeItem({
+    await applicationContext.getUseCases().removeItemInteractor({
       applicationContext,
       key: 'scannerSourceName',
     });

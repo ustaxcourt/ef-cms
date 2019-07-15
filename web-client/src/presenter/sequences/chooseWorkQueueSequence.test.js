@@ -11,8 +11,8 @@ presenter.providers.applicationContext = {
   getCurrentUser: setCurrentUserStub,
   getUniqueId: () => new Date().getTime(),
   getUseCases: () => ({
-    getInboxMessagesForSection: getInboxMessagesForSectionStub,
-    getNotifications: () => {
+    getInboxMessagesForSectionInteractor: getInboxMessagesForSectionStub,
+    getNotificationsInteractor: () => {
       return {};
     },
   }),

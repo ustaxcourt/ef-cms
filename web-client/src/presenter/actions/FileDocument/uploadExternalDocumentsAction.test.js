@@ -11,7 +11,7 @@ describe('uploadExternalDocumentsAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        uploadExternalDocuments: uploadExternalDocumentStub,
+        uploadExternalDocumentsInteractor: uploadExternalDocumentStub,
       }),
     };
 

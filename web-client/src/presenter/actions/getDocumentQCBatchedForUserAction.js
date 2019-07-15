@@ -8,7 +8,7 @@ export const getDocumentQCBatchedForUserAction = async ({
   applicationContext,
 }) => {
   const useCases = applicationContext.getUseCases();
-  const workItems = await useCases.getDocumentQCBatchedForUser({
+  const workItems = await useCases.getDocumentQCBatchedForUserInteractor({
     applicationContext,
     userId: applicationContext.getCurrentUser().userId,
   });

@@ -8,7 +8,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 
@@ -37,7 +37,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(true);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 
@@ -66,7 +66,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 
@@ -95,7 +95,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 
@@ -124,7 +124,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(true);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 
@@ -153,7 +153,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 
@@ -182,7 +182,7 @@ describe('getCaseAssociation', () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(true);
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        verifyPendingCaseForUser: verifyPendingCaseForUserStub,
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
       }),
     };
 

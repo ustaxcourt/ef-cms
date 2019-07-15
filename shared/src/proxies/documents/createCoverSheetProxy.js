@@ -1,13 +1,17 @@
 const { post } = require('../requests');
 
 /**
- * createCoverSheet
+ * createCoverSheetInteractor
  *
  * @param documentId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createCoverSheet = ({ applicationContext, caseId, documentId }) => {
+exports.createCoverSheetInteractor = ({
+  applicationContext,
+  caseId,
+  documentId,
+}) => {
   return post({
     applicationContext,
     endpoint: `/cases/${caseId}/documents/${documentId}/coversheet`,

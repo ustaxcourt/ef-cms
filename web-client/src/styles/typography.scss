@@ -118,6 +118,10 @@ p.semi-bold {
   }
 }
 
+.semi-bold {
+  font-weight: $font-semibold;
+}
+
 a {
   color: color($theme-color-primary);
 }

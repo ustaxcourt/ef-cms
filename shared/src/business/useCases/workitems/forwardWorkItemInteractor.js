@@ -16,7 +16,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param applicationContext
  * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
  */
-exports.forwardWorkItem = async ({
+exports.forwardWorkItemInteractor = async ({
   applicationContext,
   assigneeId,
   message,

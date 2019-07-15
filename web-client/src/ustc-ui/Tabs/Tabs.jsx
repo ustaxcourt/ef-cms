@@ -8,8 +8,17 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+/**
+ * Tab
+ */
 export function Tab() {}
 
+/**
+ * TabsComponent
+ *
+ * @param {*} properties the props
+ * @returns {*} the rendered component
+ */
 export function TabsComponent({
   asSwitch,
   bind,
@@ -36,7 +45,7 @@ export function TabsComponent({
 
   setTab = decorateWithPostCallback(setTab, onSelect);
 
-  function renderTab(child) {
+  const renderTab = child => {
     const { id, tabName, title } = child.props;
 
     const isActiveTab = tabName === activeKey;
@@ -65,9 +74,9 @@ export function TabsComponent({
         </button>
       </li>
     );
-  }
+  };
 
-  function renderTabContent(child) {
+  const renderTabContent = child => {
     const { children, tabName } = child.props;
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
@@ -87,9 +96,9 @@ export function TabsComponent({
     }
 
     return null;
-  }
+  };
 
-  function renderNonTab(child) {
+  const renderNonTab = child => {
     const { tabName } = child.props;
 
     if (!tabName) {
@@ -97,7 +106,7 @@ export function TabsComponent({
     }
 
     return null;
-  }
+  };
 
   const navItems = map(children, child => child.props.title && child);
   const hasNav = !!(navItems && navItems.length);

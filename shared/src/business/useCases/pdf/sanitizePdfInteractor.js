@@ -11,7 +11,7 @@ const execPromise = util.promisify(exec);
  * @param documentId
  * @returns {Uint8Array} modified PDF data
  */
-exports.sanitizePdf = async ({ applicationContext, documentId }) => {
+exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
   let inputPdf, intermediatePostscript, outputPdf, newPdfData;
 
   applicationContext.logger.time('Fetching S3 File');
@@ -56,7 +56,7 @@ exports.sanitizePdf = async ({ applicationContext, documentId }) => {
       '-dNOCACHE',
       '-sDEVICE=pdfwrite',
       '-dPDFSETTINGS=/prepress',
-      '-sColorConversionStrategy=/LeaveColorUnchanged',
+      '-dColorConversionStrategy=/LeaveColorUnchanged',
       '-dAutoFilterColorImages=true',
       '-dAutoFilterGrayImages=true',
       '-dDownsampleMonoImages=true',

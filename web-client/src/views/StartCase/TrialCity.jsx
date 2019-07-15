@@ -43,14 +43,15 @@ export const TrialCity = connect(
             {showSmallTrialCitiesHint && (
               <React.Fragment>
                 Trial locations are unavailable in the following states: DE, NH,
-                NJ, RI. Please select the next closest location.
+                NJ, RI. Keep in mind, your nearest location may not be in your
+                state.
               </React.Fragment>
             )}
             {showRegularTrialCitiesHint && (
               <React.Fragment>
                 Trial locations are unavailable in the following states: DE, KS,
-                ME, NH, NJ, ND, RI, SD, VT, WY. Please select the next closest
-                location.
+                ME, NH, NJ, ND, RI, SD, VT, WY. Keep in mind, your nearest
+                location may not be in your state.
               </React.Fragment>
             )}
           </span>

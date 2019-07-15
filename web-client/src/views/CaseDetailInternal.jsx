@@ -1,6 +1,10 @@
+import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
+import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
+import { DeleteCaseDeadlineModalDialog } from './CaseDetail/DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from './DocketRecord/DocketRecord';
+import { EditCaseDeadlineModalDialog } from './CaseDetail/EditCaseDeadlineModalDialog';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
@@ -16,16 +20,18 @@ export const CaseDetailInternal = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
+    setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
-    setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
+    showModal: state.showModal,
     token: state.token,
   },
   ({
     baseUrl,
     caseDetail,
     caseHelper,
+    setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence,
-    setDocumentDetailTabSequence,
+    showModal,
     token,
   }) => {
     return (
@@ -34,6 +40,8 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          <CaseDeadlinesInternal />
+
           <div>
             <div className="title">
               <h1>Messages in Progress</h1>
@@ -49,7 +57,7 @@ export const CaseDetailInternal = connect(
                 name="partyType"
                 value={caseHelper.documentDetailTab}
                 onChange={e => {
-                  setDocumentDetailTabSequence({
+                  setCaseDetailPageTabSequence({
                     tab: e.target.value,
                   });
                 }}
@@ -61,7 +69,7 @@ export const CaseDetailInternal = connect(
           </div>
           <div className="mobile-document-detail-tabs">
             <Tabs
-              bind="documentDetail.tab"
+              bind="caseDetailPage.informationTab"
               className="classic-horizontal-header3 tab-border"
             >
               <Tab
@@ -91,7 +99,7 @@ export const CaseDetailInternal = connect(
               {caseDetail.contactPrimary && (
                 <a
                   aria-label="View PDF"
-                  href={`${baseUrl}/documents/${
+                  href={`${baseUrl}/api/documents/${
                     caseDetail.docketNumber
                   }_${caseDetail.contactPrimary.name.replace(
                     /\s/g,
@@ -111,6 +119,16 @@ export const CaseDetailInternal = connect(
             </>
           )}
         </section>
+
+        {showModal === 'CreateCaseDeadlineModalDialog' && (
+          <CreateCaseDeadlineModalDialog />
+        )}
+        {showModal === 'EditCaseDeadlineModalDialog' && (
+          <EditCaseDeadlineModalDialog />
+        )}
+        {showModal === 'DeleteCaseDeadlineModalDialog' && (
+          <DeleteCaseDeadlineModalDialog />
+        )}
       </>
     );
   },

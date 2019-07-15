@@ -1,13 +1,16 @@
 const { get } = require('../requests');
 
 /**
- * getDocumentQCInboxForUser
+ * getDocumentQCInboxForUserInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCInboxForUser = ({ applicationContext, userId }) => {
+exports.getDocumentQCInboxForUserInteractor = ({
+  applicationContext,
+  userId,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/document-qc/inbox`,
+    endpoint: `/api/users/${userId}/document-qc/inbox`,
   });
 };

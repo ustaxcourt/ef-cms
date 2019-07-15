@@ -1,11 +1,14 @@
 /**
- * generateDocumentTitle
+ * generateDocumentTitleInteractor
  *
  * @param applicationContext
  * @param documentMetadata
  * @returns {string} document title
  */
-exports.generateDocumentTitle = ({ applicationContext, documentMetadata }) => {
+exports.generateDocumentTitleInteractor = ({
+  applicationContext,
+  documentMetadata,
+}) => {
   const externalDocument = applicationContext
     .getEntityConstructors()
     .ExternalDocumentFactory.get(documentMetadata);

@@ -3,10 +3,10 @@ const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
 const seniorattorney = require('./pa11y/pa11y-seniorattorney');
-const taxpayer = require('./pa11y/pa11y-taxpayer');
+const petitioner = require('./pa11y/pa11y-petitioner');
 
 const userUrls = [
-  ...taxpayer,
+  ...petitioner,
   ...petitionsclerk,
   ...practitioner,
   ...respondent,

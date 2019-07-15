@@ -7,7 +7,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.submitCaseAssociationRequest = async ({
+exports.submitCaseAssociationRequestInteractor = async ({
   applicationContext,
   caseId,
 }) => {

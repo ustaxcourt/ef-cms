@@ -1,11 +1,11 @@
 const { Case } = require('../entities/cases/Case');
 
 /**
- * getCaseTypes
+ * getCaseTypesInteractor
  *
  * @param userId
  * @returns {Promise<*>}
  */
-exports.getCaseTypes = async () => {
+exports.getCaseTypesInteractor = async () => {
   return Case.CASE_TYPES;
 };

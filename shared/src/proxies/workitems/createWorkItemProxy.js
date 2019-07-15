@@ -1,14 +1,14 @@
 const { post } = require('../requests');
 
 /**
- * createWorkItem
+ * createWorkItemInteractor
  *
  * @param completedMessage
  * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.createWorkItem = ({
+exports.createWorkItemInteractor = ({
   applicationContext,
   assigneeId,
   caseId,

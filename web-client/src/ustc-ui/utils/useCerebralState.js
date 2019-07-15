@@ -18,7 +18,7 @@ export const useCerebralStateFactory = (simpleSetter, value) => (
   return [getter, setter];
 };
 
-export function decorateWithPostCallback(delegate, postCallbackFn) {
+export const decorateWithPostCallback = (delegate, postCallbackFn) => {
   if (!postCallbackFn) {
     return delegate;
   }
@@ -27,9 +27,12 @@ export function decorateWithPostCallback(delegate, postCallbackFn) {
     delegate(...args);
     postCallbackFn(...args);
   };
-}
+};
 
-export function decorateWithPreemptiveCallback(delegate, preemptiveCallbackFn) {
+export const decorateWithPreemptiveCallback = (
+  delegate,
+  preemptiveCallbackFn,
+) => {
   if (!preemptiveCallbackFn) {
     return delegate;
   }
@@ -39,4 +42,4 @@ export function decorateWithPreemptiveCallback(delegate, preemptiveCallbackFn) {
       delegate(...args);
     }
   };
-}
+};

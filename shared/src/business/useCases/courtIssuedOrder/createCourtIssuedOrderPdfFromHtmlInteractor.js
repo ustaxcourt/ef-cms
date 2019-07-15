@@ -1,3 +1,5 @@
+const { pdfStyles } = require('../../../tools/pdfStyles');
+
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
@@ -16,12 +18,6 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   try {
     const chromium = applicationContext.getChromium();
 
-    await chromium.font(
-      'https://rawcdn.githack.com/googlefonts/noto-fonts/7cc126f6c0ebfe750dc911dae951f9167d36213e/unhinted/NotoSerif-Regular.ttf',
-    );
-
-    applicationContext.logger.info('gotChromium');
-
     browser = await chromium.puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
@@ -29,19 +25,20 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       headless: true,
     });
 
-    applicationContext.logger.info('have browser');
-
     let page = await browser.newPage();
-
-    applicationContext.logger.info('have page');
 
     await page.setContent(htmlString);
 
     const headerTemplate = `
       <!doctype html>
       <html>
+        <head>
+          <style>
+            ${pdfStyles}
+          </style>
+        </head>
         <body>
-          <div style="font-size: 10px; font-family: 'Noto Serif', serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: 'nimbus_roman', serif; width: 100%; margin: 20px 62px 20px 62px;">
             <div style="float: right">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
@@ -58,11 +55,14 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
       <!doctype html>
       <html>
         <body>
-          <div style="font-size: 10px; font-family: 'Noto Serif', serif; width: 100%; margin: 20px 62px 20px 62px;">
+          <div style="font-size: 10px; font-family: serif; width: 100%; margin: 20px 62px 20px 62px;">
           </div>
         </body>
       </html>
     `;
+
+    await page.evaluateHandle('document.fonts.ready');
+    await page.screenshot();
 
     result = await page.pdf({
       displayHeaderFooter: true,

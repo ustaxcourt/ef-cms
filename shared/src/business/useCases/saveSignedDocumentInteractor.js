@@ -2,7 +2,7 @@ const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 
 /**
- * saveSignedDocument
+ * saveSignedDocumentInteractor
  *
  * @param caseId
  * @param document signed document
@@ -10,7 +10,7 @@ const { Document } = require('../entities/Document');
  * @param applicationContext
  * @returns {*}
  */
-exports.saveSignedDocument = async ({
+exports.saveSignedDocumentInteractor = async ({
   applicationContext,
   caseId,
   originalDocumentId,
@@ -36,18 +36,24 @@ exports.saveSignedDocument = async ({
   const signedDocumentEntity = new Document({
     createdAt: applicationContext.getUtilities().createISODateString(),
     documentId: signedDocumentId,
-    documentType: originalDocumentEntity.documentType,
+    documentType: Document.signedDocumentTypes.signedStipulatedDecision,
     filedBy: originalDocumentEntity.filedBy,
     isPaper: originalDocumentEntity.isPaper,
     userId: user.userId,
   });
 
-  caseEntity.addDocument(signedDocumentEntity);
+  signedDocumentEntity.setSigned(user.userId);
+
+  caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
+
+  applicationContext.logger.time('Updating case with signed document');
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  applicationContext.logger.timeEnd('Updating case with signed document');
 
   return caseEntity;
 };
