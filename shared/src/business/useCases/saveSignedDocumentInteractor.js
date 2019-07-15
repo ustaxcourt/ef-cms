@@ -42,6 +42,8 @@ exports.saveSignedDocumentInteractor = async ({
     userId: user.userId,
   });
 
+  signedDocumentEntity.setSigned(user.userId);
+
   caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
