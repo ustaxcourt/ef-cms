@@ -101,12 +101,12 @@ export const StartCase = connect(
               All fields required unless otherwise noted
             </p>
             <Hint>
-              The Statement of Taxpayer Identification is the
-              <strong> only </strong>
-              document that should include personal information (such as Social
-              Security Numbers, Taxpayer Identification Numbers, or Employer
-              Identification Numbers). This document will not be made available
-              to the public.
+              The Statement of Taxpayer Identification is the only document that
+              should include personal information (such as Social Security
+              Numbers, Taxpayer Identification Numbers, or Employer
+              Identification Numbers). It’s sent to the IRS to help identify
+              you, but is never viewed by the Court or stored as part of the
+              public record.
             </Hint>
             <h2>Upload Your Statement of Taxpayer Identification</h2>
             <div className="blue-container">
