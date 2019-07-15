@@ -17,10 +17,6 @@ class PDFSignerComponent extends React.Component {
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
     this.moveSig = this.moveSig.bind(this);
-
-    this.state = {
-      signatureApplied: false,
-    };
   }
 
   componentDidMount() {
@@ -39,7 +35,7 @@ class PDFSignerComponent extends React.Component {
 
     this.props.pdfObj.getPage(pageNumber).then(page => {
       const scale = 1;
-      const viewport = page.getViewport(scale);
+      const viewport = page.getViewport({ scale });
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
@@ -57,12 +53,17 @@ class PDFSignerComponent extends React.Component {
   }
 
   clear() {
-    this.setState({ signatureApplied: false });
-    this.props.setSignatureData({ signatureData: null });
+    this.props.setSignatureData({
+      signatureApplied: false,
+      signatureData: null,
+    });
   }
 
   stop(canvasEl, sigEl, x, y, scale = 1) {
-    this.props.setSignatureData({ signatureData: { scale, x, y } });
+    this.props.setSignatureData({
+      signatureApplied: true,
+      signatureData: { scale, x, y },
+    });
     canvasEl.onmousemove = null;
     canvasEl.onmousedown = null;
     sigEl.onmousemove = null;
@@ -75,9 +76,10 @@ class PDFSignerComponent extends React.Component {
     let x;
     let y;
 
-    this.setState({ signatureApplied: true });
-
-    this.props.setSignatureData({ signatureData: null });
+    this.props.setSignatureData({
+      signatureApplied: true,
+      signatureData: null,
+    });
 
     canvasEl.onmousemove = e => {
       const { pageX, pageY } = e;
@@ -122,7 +124,6 @@ class PDFSignerComponent extends React.Component {
                     <PDFSignerToolbar
                       applySignature={this.start}
                       clearSignature={this.clear}
-                      signatureApplied={this.state.signatureApplied}
                     />
                     <div className="margin-top-2 margin-bottom-2">&nbsp;</div>
                     <PDFSignerMessage />
@@ -151,14 +152,14 @@ class PDFSignerComponent extends React.Component {
                   <div className="sign-pdf-interface">
                     <span
                       className={
-                        !this.props.signatureData && this.state.signatureApplied
+                        !this.props.signatureData && this.props.signatureApplied
                           ? 'cursor-grabbing'
                           : 'cursor-grab'
                       }
                       id="signature"
                       ref={this.signatureRef}
                       style={{
-                        display: this.state.signatureApplied ? 'block' : 'none',
+                        display: this.props.signatureApplied ? 'block' : 'none',
                       }}
                     >
                       {this.props.pdfForSigning.nameForSigning}
@@ -167,7 +168,7 @@ class PDFSignerComponent extends React.Component {
                     </span>
                     <canvas
                       className={
-                        !this.props.signatureData && this.state.signatureApplied
+                        !this.props.signatureData && this.props.signatureApplied
                           ? 'cursor-grabbing'
                           : 'cursor-grab'
                       }
@@ -197,6 +198,7 @@ PDFSignerComponent.propTypes = {
   setCanvas: PropTypes.func,
   setPage: PropTypes.func,
   setSignatureData: PropTypes.func,
+  signatureApplied: PropTypes.bool,
   signatureData: PropTypes.object,
 };
 
@@ -212,6 +214,7 @@ export const PDFSigner = connect(
     pdfObj: state.pdfForSigning.pdfjsObj,
     setCanvas: sequences.setCanvasForPDFSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
+    signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
   },
   PDFSignerComponent,

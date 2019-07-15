@@ -15,6 +15,7 @@ import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
+import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -69,6 +70,7 @@ export const state = {
   documentDetailHelper,
   documentHelper,
   documentId: null,
+  documentSigningHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
@@ -98,6 +100,7 @@ export const state = {
     nameForSigning: '',
     pageNumber: 1,
     pdfjsObj: null,
+    signatureApplied: false,
     signatureData: null,
   },
   percentComplete: 0,

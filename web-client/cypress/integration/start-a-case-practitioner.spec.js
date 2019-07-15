@@ -1,7 +1,7 @@
 const {
+  getCaseList,
   getStartCaseButton,
   navigateTo: navigateToDashboard,
-  getCaseList,
 } = require('../support/pages/dashboard-practitioner');
 
 const { fillInAndSubmitForm } = require('../support/pages/start-a-case');
