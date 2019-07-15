@@ -10,6 +10,7 @@ export const SelectDocumentType = connect(
     completeDocumentSelectSequence: sequences.completeDocumentSelectSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence: sequences.gotoViewAllDocumentsSequence,
+    reasons: state.viewAllDocumentsHelper.reasons,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
   },
@@ -17,6 +18,7 @@ export const SelectDocumentType = connect(
     completeDocumentSelectSequence,
     formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence,
+    reasons,
   }) => {
     return (
       <React.Fragment>
@@ -80,27 +82,22 @@ export const SelectDocumentType = connect(
                     </p>
                   </div>
                   <Accordion headingLevel="3">
-                    <AccordionItem title="Request Something From the Court">
-                      <p>Application</p>
-                      <p>Motion</p>
-                      <p>Petition</p>
-                    </AccordionItem>
-                    <AccordionItem title="Notify the Court of a Change">
-                      <p>Brief</p>
-                      <p>Memorandum</p>
-                      <p>Notice</p>
-                      <p>Statement</p>
-                      <p>Stipulation</p>
-                    </AccordionItem>
-                    <AccordionItem title="Update or Add to a Document">
-                      <p>Miscellaneous</p>
-                      <p>Supporting Documents</p>
-                    </AccordionItem>
-                    <AccordionItem title="Respond to a Previous Document">
-                      <p>Motion</p>
-                      <p>Reply</p>
-                      <p>Response</p>
-                    </AccordionItem>
+                    {reasons.map(({ categories, reason }, reasonIndex) => {
+                      return (
+                        <AccordionItem
+                          key={`reason-${reasonIndex}`}
+                          title={reason}
+                        >
+                          {categories.map(({ category }, categoryIndex) => {
+                            return (
+                              <p key={`${reasonIndex}-${categoryIndex}`}>
+                                {category}
+                              </p>
+                            );
+                          })}
+                        </AccordionItem>
+                      );
+                    })}
                   </Accordion>
                   <div className="content-wrapper">
                     <div>
