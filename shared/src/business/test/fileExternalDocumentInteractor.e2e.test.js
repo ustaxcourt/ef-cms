@@ -67,6 +67,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         caseId,
         category: 'Motion',
         certificateOfService: false,
+        certificateOfServiceDate: 'undefined-undefined-undefined',
         docketNumber: '201-19',
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
@@ -88,7 +89,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
         },
-        serviceDate: 'undefined-undefined-undefined',
         supportingDocument: 'Brief in Support',
         supportingDocumentMetadata: {
           category: 'Supporting Document',
@@ -231,6 +231,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 caseId,
                 category: 'Motion',
                 certificateOfService: false,
+                certificateOfServiceDate: 'undefined-undefined-undefined',
                 docketNumber: '201-19',
                 documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle:
@@ -240,7 +241,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 hasSupportingDocuments: true,
                 partyPrimary: true,
                 scenario: 'Nonstandard H',
-                serviceDate: 'undefined-undefined-undefined',
                 supportingDocument: 'Brief in Support',
                 userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
