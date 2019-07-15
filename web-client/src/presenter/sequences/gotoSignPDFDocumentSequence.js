@@ -8,10 +8,12 @@ import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureName
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setMessageIdAction } from '../actions/setMessageIdAction';
 
 export const gotoSignPDFDocumentSequence = [
   setCurrentPageAction('Interstitial'),
   setDocumentIdAction,
+  setMessageIdAction,
   getCaseAction,
   setCaseAction,
   clearPDFSignatureDataAction,
