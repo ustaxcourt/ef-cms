@@ -107,7 +107,7 @@ describe('clearSecondaryDocumentScenarioAction', () => {
     });
 
     expect(result.state.form).toEqual({
-      hasSecondarySupportingDocuments: null,
+      hasSecondarySupportingDocuments: false,
       secondarySupportingDocument: null,
       secondarySupportingDocumentFile: null,
       secondarySupportingDocumentFreeText: null,
