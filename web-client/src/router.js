@@ -58,6 +58,18 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/messages/*/sign',
+      checkLoggedIn((docketNumber, documentId, messageId) => {
+        app.getSequence('gotoSignPDFDocumentSequence')({
+          docketNumber,
+          documentId,
+          messageId,
+          pageNumber: 1,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/mark/*',
       checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
         document.title = `Document details ${pageTitleSuffix}`;
