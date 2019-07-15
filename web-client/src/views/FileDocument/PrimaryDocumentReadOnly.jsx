@@ -10,6 +10,51 @@ export const PrimaryDocumentReadOnly = connect(
     form: state.form,
   },
   ({ chooseWizardStepSequence, fileDocumentHelper, form }) => {
+    const renderPdfViewer = pdfData => {
+      console.log('pdfData', pdfData);
+      const base64 = pdfData.replace('data:application/pdf;base64,', '');
+      console.log('base64', base64);
+      return `
+      <html>
+        <head>
+          <canvas id="the-canvas"></canvas>
+          <script src="http://localhost:1234/pdf.min.js"></script>
+        </head>
+
+        <body>
+          <h1>TEST</h1>
+          <script>
+            var pdfData = atob("${base64}");
+            var pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'http://localhost:1234/pdf.worker.min.js';
+            var loadingTask = pdfjsLib.getDocument({data: pdfData});
+            loadingTask.promise.then(function(pdf) {
+              var pageNumber = 1;
+              pdf.getPage(pageNumber).then(function(page) {
+                var scale = 1.5;
+                var viewport = page.getViewport({scale: scale});
+                var canvas = document.getElementById('the-canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                var renderContext = {
+                  canvasContext: context,
+                  viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+                renderTask.promise.then(function () {
+                  console.log('Page rendered');
+                });
+              });
+            }, function (reason) {
+              // PDF loading error
+              console.error(reason);
+            });
+          </script>
+        </body>
+      </html>
+      `;
+    };
     return (
       <React.Fragment>
         <div>
@@ -34,7 +79,28 @@ export const PrimaryDocumentReadOnly = connect(
               {form.documentTitle}
             </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            {form.primaryDocumentFile.name}
+            <button
+              type="button"
+              onClick={() => {
+                const convertFileToBase64AndOpenInTab = file => {
+                  console.log('file', file);
+                  var reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = function() {
+                    const pdfData = reader.result;
+                    const previewWindow = window.open();
+                    previewWindow.document.write(renderPdfViewer(pdfData));
+                  };
+                  reader.onerror = function(error) {
+                    console.log('Error: ', error);
+                  };
+                };
+
+                convertFileToBase64AndOpenInTab(form.primaryDocumentFile);
+              }}
+            >
+              {form.primaryDocumentFile.name}
+            </button>
           </div>
 
           {form.supportingDocumentFile && (
