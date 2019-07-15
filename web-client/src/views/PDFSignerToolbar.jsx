@@ -20,12 +20,18 @@ export const PDFSignerToolbar = connect(
     signatureData,
   }) => {
     const getPreviousPage = () => {
+      if (disablePrevious) {
+        return;
+      }
       const previousPageNumber =
         currentPageNumber === 1 ? 1 : currentPageNumber - 1;
       setPage({ pageNumber: previousPageNumber });
     };
 
     const getNextPage = () => {
+      if (disableNext) {
+        return;
+      }
       const totalPages = pdfObj.numPages;
       const nextPageNumber =
         currentPageNumber === totalPages ? totalPages : currentPageNumber + 1;
