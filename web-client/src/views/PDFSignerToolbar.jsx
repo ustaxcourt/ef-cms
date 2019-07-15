@@ -6,25 +6,33 @@ import React from 'react';
 export const PDFSignerToolbar = connect(
   {
     currentPageNumber: state.pdfForSigning.pageNumber,
+    disableNext: state.documentSigningHelper.disableNext,
+    disablePrevious: state.documentSigningHelper.disablePrevious,
+    nextPageNumber: state.documentSigningHelper.nextPageNumber,
     pdfObj: state.pdfForSigning.pdfjsObj,
+    previousPageNumber: state.documentSigningHelper.previousPageNumber,
     setPage: sequences.setPDFPageForSigningSequence,
+    signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
+    totalPages: state.documentSigningHelper.totalPages,
   },
   ({
     applySignature,
     clearSignature,
     currentPageNumber,
-    pdfObj,
+    disableNext,
+    disablePrevious,
+    nextPageNumber,
+    previousPageNumber,
     setPage,
-    signatureApplied = false,
-    signatureData,
+    signatureApplied,
+    totalPages,
   }) => {
     const getPreviousPage = () => {
       if (disablePrevious) {
         return;
       }
-      const previousPageNumber =
-        currentPageNumber === 1 ? 1 : currentPageNumber - 1;
+
       setPage({ pageNumber: previousPageNumber });
     };
 
@@ -32,18 +40,9 @@ export const PDFSignerToolbar = connect(
       if (disableNext) {
         return;
       }
-      const totalPages = pdfObj.numPages;
-      const nextPageNumber =
-        currentPageNumber === totalPages ? totalPages : currentPageNumber + 1;
+
       setPage({ pageNumber: nextPageNumber });
     };
-
-    const disablePrevious =
-      currentPageNumber === 1 || (!!signatureData || signatureApplied);
-
-    const disableNext =
-      currentPageNumber === pdfObj.numPages ||
-      (!!signatureData || signatureApplied);
 
     return (
       <div className="sign-pdf-control">
@@ -57,7 +56,7 @@ export const PDFSignerToolbar = connect(
               onClick={getPreviousPage}
             />
             <span className="pages">
-              Page {currentPageNumber} of {pdfObj.numPages}
+              Page {currentPageNumber} of {totalPages}
             </span>
             <FontAwesomeIcon
               className={'icon-button' + (disableNext ? ' disabled' : '')}
@@ -69,13 +68,13 @@ export const PDFSignerToolbar = connect(
           <div className="margin-top-3">
             <button
               className="usa-button"
-              disabled={!!signatureData || signatureApplied}
+              disabled={signatureApplied}
               onClick={() => applySignature()}
             >
               <FontAwesomeIcon icon={['fas', 'edit']} />
               Apply Signature
             </button>
-            {!!signatureData && (
+            {signatureApplied && (
               <button
                 className="usa-button usa-button--unstyled"
                 onClick={() => clearSignature()}
