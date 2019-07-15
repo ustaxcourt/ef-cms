@@ -14,13 +14,11 @@ exports.signDocumentInteractor = ({
   caseId,
   originalDocumentId,
   signedDocumentId,
-  // workItemId,
 }) => {
   return post({
     applicationContext,
     body: {
       signedDocumentId,
-      // workItemId,
     },
     endpoint: `/cases/${caseId}/documents/${originalDocumentId}/sign`,
   });
