@@ -5,7 +5,7 @@ import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultS
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { set } from 'cerebral/factories';
-import { setDefaultPartySelectionAction } from '../actions/FileDocument/setDefaultPartySelectionAction';
+import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
@@ -24,7 +24,7 @@ export const completeDocumentSelectSequence = [
       set(state.showValidation, false),
       generateTitleAction,
       setDocketNumberPropAction,
-      setDefaultPartySelectionAction,
+      setDefaultFileDocumentFormValuesAction,
       navigateToFileADocumentAction,
     ],
   },
