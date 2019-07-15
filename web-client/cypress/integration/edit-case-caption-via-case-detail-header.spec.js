@@ -1,9 +1,9 @@
 const {
-  navigateTo: navigateToCaseDetail,
   getCaptionTextArea,
+  getCaseTitleContaining,
   getEditCaseCaptionButton,
   getSaveButton,
-  getCaseTitleContaining,
+  navigateTo: navigateToCaseDetail,
 } = require('../support/pages/case-detail');
 
 describe('Edit a case caption from case detail header', function() {
