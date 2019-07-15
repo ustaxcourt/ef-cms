@@ -9,4 +9,5 @@ import { state } from 'cerebral';
  */
 export const clearPDFSignatureDataAction = async ({ store }) => {
   store.set(state.pdfForSigning.signatureData, null);
+  store.set(state.pdfForSigning.signatureApplied, false);
 };
