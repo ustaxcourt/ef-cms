@@ -41,7 +41,6 @@ export const caseDetailHelper = get => {
       showPendingAccessToCaseButton = false;
       showFileFirstDocumentButton = false;
 
-      const caseDeadlines = get(state.caseDeadlines);
       if (caseDeadlines && caseDeadlines.length > 0) {
         showCaseDeadlinesExternal = true;
       }
@@ -59,7 +58,6 @@ export const caseDetailHelper = get => {
   } else {
     userHasAccessToCase = true;
 
-    const caseDeadlines = get(state.caseDeadlines);
     if (caseDeadlines && caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
     } else {
