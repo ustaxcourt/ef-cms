@@ -18,6 +18,8 @@ module.exports = {
     'sort-keys-fix',
   ],
   rules: {
+    'require-atomic-updates': 0,
+    'no-prototype-builtins': 0,
     'react/jsx-sort-props': [
       'error',
       {
