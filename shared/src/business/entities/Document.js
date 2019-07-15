@@ -220,9 +220,7 @@ Document.prototype.generateFiledBy = function(caseDetail) {
  *
  */
 Document.prototype.setSigned = function(signByUserId) {
-  if (signByUserId) {
-    this.signedByUserId = signByUserId;
-  }
+  this.signedByUserId = signByUserId;
   this.signedAt = new Date().toISOString();
 };
 
