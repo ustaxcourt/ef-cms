@@ -8,13 +8,13 @@ const { PDFDocumentFactory } = require('pdf-lib');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
-function testPdfDocBytes() {
+const testPdfDocBytes = () => {
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
-}
+};
 
-function testSignatureImgBytes() {
+const testSignatureImgBytes = () => {
   return fs.readFileSync(testAssetsPath + 'signature.png');
-}
+};
 
 describe('generateSignedDocument', () => {
   let testDoc;

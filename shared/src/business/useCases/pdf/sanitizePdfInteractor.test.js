@@ -8,10 +8,10 @@ const fs = require('fs');
 
 const testOutputPath = path.join(__dirname, '../../../../test-output/');
 
-function testAsset(name) {
+const testAsset = name => {
   // sample.pdf is a 1 page document
   return fs.readFileSync(testAssetsPath + name);
-}
+};
 
 describe('sanitizePdf', () => {
   describe('writes and reads to filesystem', () => {
