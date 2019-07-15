@@ -15,6 +15,7 @@ exports.saveSignedDocumentInteractor = async ({
   caseId,
   originalDocumentId,
   signedDocumentId,
+  // workItemId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
