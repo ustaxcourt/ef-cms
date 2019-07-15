@@ -192,10 +192,6 @@ exports.addCoverToPDFDocumentInteractor = async ({
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
   applicationContext.logger.timeEnd('Generate Cover Page');
 
-
-
-
-
   const paddedLineHeight = (fontSize = defaultFontSize) => {
     return fontSize * 0.25 + fontSize;
   };
