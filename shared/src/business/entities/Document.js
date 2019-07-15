@@ -50,6 +50,9 @@ function Document(rawDocument) {
     reviewUser: rawDocument.reviewUser,
     scenario: rawDocument.scenario,
     servedDate: rawDocument.servedDate,
+    serviceDate: rawDocument.serviceDate,
+    signedAt: rawDocument.signedAt,
+    signedByUserId: rawDocument.signedByUserId,
     status: rawDocument.status,
     supportingDocument: rawDocument.supportingDocument,
     userId: rawDocument.userId,
@@ -149,6 +152,11 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    signedAt: joi
+      .date()
+      .iso()
+      .optional(),
+    signedByUserId: joi.string().optional(),
     status: joi.string().optional(),
     userId: joi.string().required(),
     validated: joi.boolean().optional(),
@@ -204,6 +212,16 @@ Document.prototype.generateFiledBy = function(caseDetail) {
       this.filedBy = filedByArray.join(' & ');
     }
   }
+};
+/**
+ * attaches a signedAt date to the document
+ *
+ * @param signByUserId
+ *
+ */
+Document.prototype.setSigned = function(signByUserId) {
+  this.signedByUserId = signByUserId;
+  this.signedAt = new Date().toISOString();
 };
 
 exports.Document = Document;
