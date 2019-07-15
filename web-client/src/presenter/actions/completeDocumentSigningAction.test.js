@@ -58,7 +58,22 @@ describe('completeDocumentSigningAction', () => {
       state: {
         caseDetail: {
           caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          documents: [
+            {
+              documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItems: [
+                {
+                  messages: [
+                    {
+                      messageId: '123',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
+        messageId: '123',
         pdfForSigning: {
           documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
@@ -75,7 +90,6 @@ describe('completeDocumentSigningAction', () => {
     expect(uploadDocumentStub.calledOnce).toEqual(true);
     expect(generateSignedDocumentInteractorStub.calledOnce).toEqual(true);
     expect(signDocumentInteractorStub.calledOnce).toEqual(true);
-    expect(getInboxMessagesForUserInteractorStub.calledOnce).toEqual(true);
     expect(completeWorkItemInteractorStub.calledOnce).toEqual(true);
   });
 });
