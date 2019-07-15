@@ -1,37 +1,42 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const InclusionsForm = connect(
   {
+    data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
-    form: state.form,
+    type: props.type,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
-    validationErrors: state.validationErrors,
+    validationBind: props.validationBind,
+    validationData: state[props.validationBind],
   },
   ({
+    data,
     fileDocumentHelper,
-    form,
+    type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
-    validationErrors,
+    validationBind,
+    validationData,
   }) => {
     return (
       <React.Fragment>
         <div
           className={`usa-form-group ${
-            !fileDocumentHelper.showObjection && !form.certificateOfService
+            !fileDocumentHelper[type].showObjection &&
+            !data.certificateOfService
               ? 'margin-bottom-0'
               : ''
           }`}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
-            <legend id="extra-items-legend">
+            <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
               <button className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105">
                 <FontAwesomeIcon
@@ -44,50 +49,12 @@ export const InclusionsForm = connect(
             </legend>
             <div className="usa-checkbox">
               <input
-                checked={form.exhibits || false}
+                checked={data.exhibits || false}
                 className="usa-checkbox__input"
-                id="exhibits"
-                name="exhibits"
-                type="checkbox"
-                onChange={e => {
-                  updateFileDocumentWizardFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateExternalDocumentInformationSequence();
-                }}
-              />
-              <label className="usa-checkbox__label" htmlFor="exhibits">
-                Exhibits
-              </label>
-            </div>
-
-            <div className="usa-checkbox">
-              <input
-                checked={form.attachments || false}
-                className="usa-checkbox__input"
-                id="attachments"
-                name="attachments"
-                type="checkbox"
-                onChange={e => {
-                  updateFileDocumentWizardFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateExternalDocumentInformationSequence();
-                }}
-              />
-              <label className="usa-checkbox__label" htmlFor="attachments">
-                Attachments
-              </label>
-            </div>
-
-            <div className="usa-checkbox">
-              <input
-                checked={form.certificateOfService || false}
-                className="usa-checkbox__input"
-                id="certificateOfService"
-                name="certificateOfService"
+                id={`${type}-exhibits`}
+                name={`${
+                  type === 'primaryDocument' ? 'exhibits' : `${type}.exhibits`
+                }`}
                 type="checkbox"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
@@ -99,23 +66,79 @@ export const InclusionsForm = connect(
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor="certificateOfService"
+                htmlFor={`${type}-exhibits`}
+              >
+                Exhibits
+              </label>
+            </div>
+
+            <div className="usa-checkbox">
+              <input
+                checked={data.attachments || false}
+                className="usa-checkbox__input"
+                id={`${type}-attachments`}
+                name={`${
+                  type === 'primaryDocument'
+                    ? 'attachments'
+                    : `${type}.attachments`
+                }`}
+                type="checkbox"
+                onChange={e => {
+                  updateFileDocumentWizardFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  validateExternalDocumentInformationSequence();
+                }}
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor={`${type}-attachments`}
+              >
+                Attachments
+              </label>
+            </div>
+
+            <div className="usa-checkbox">
+              <input
+                checked={data.certificateOfService || false}
+                className="usa-checkbox__input"
+                id={`${type}-certificateOfService`}
+                name={`${
+                  type === 'primaryDocument'
+                    ? 'certificateOfService'
+                    : `${type}.certificateOfService`
+                }`}
+                type="checkbox"
+                onChange={e => {
+                  updateFileDocumentWizardFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                  validateExternalDocumentInformationSequence();
+                }}
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor={`${type}-certificateOfService`}
               >
                 Certificate Of Service
               </label>
             </div>
           </fieldset>
         </div>
-        {form.certificateOfService && (
+        {data.certificateOfService && (
           <div
             className={`usa-form-group ${
-              validationErrors.certificateOfServiceDate
+              validationData && validationData.certificateOfServiceDate
                 ? 'usa-form-group--error'
                 : ''
-            } ${!fileDocumentHelper.showObjection ? 'margin-bottom-0' : ''}`}
+            } ${
+              !fileDocumentHelper[type].showObjection ? 'margin-bottom-0' : ''
+            }`}
           >
             <fieldset className="service-date usa-fieldset margin-bottom-0">
-              <legend className="usa-legend" id="service-date-legend">
+              <legend className="usa-legend" id={`${type}-service-date-legend`}>
                 Service Date
               </legend>
               <div className="usa-memorable-date">
@@ -123,20 +146,24 @@ export const InclusionsForm = connect(
                   <label
                     aria-hidden="true"
                     className="usa-label"
-                    htmlFor="service-date-month"
+                    htmlFor={`${type}-service-date-month`}
                   >
                     MM
                   </label>
                   <input
-                    aria-describedby="service-date-legend"
+                    aria-describedby={`${type}-service-date-legend`}
                     aria-label="month, two digits"
                     className="usa-input usa-input-inline"
-                    id="service-date-month"
+                    id={`${type}-service-date-month`}
                     max="12"
                     min="1"
-                    name="certificateOfServiceMonth"
+                    name={`${
+                      type === 'primaryDocument'
+                        ? 'certificateOfServiceMonth'
+                        : `${type}.certificateOfServiceMonth`
+                    }`}
                     type="number"
-                    value={form.certificateOfServiceMonth}
+                    value={data.certificateOfServiceMonth || ''}
                     onBlur={() => {
                       validateExternalDocumentInformationSequence();
                     }}
@@ -152,20 +179,24 @@ export const InclusionsForm = connect(
                   <label
                     aria-hidden="true"
                     className="usa-label"
-                    htmlFor="service-date-day"
+                    htmlFor={`${type}-service-date-day`}
                   >
                     DD
                   </label>
                   <input
-                    aria-describedby="service-date-legend"
+                    aria-describedby={`${type}-service-date-legend`}
                     aria-label="day, two digits"
                     className="usa-input usa-input-inline"
-                    id="service-date-day"
+                    id={`${type}-service-date-day`}
                     max="31"
                     min="1"
-                    name="certificateOfServiceDay"
+                    name={`${
+                      type === 'primaryDocument'
+                        ? 'certificateOfServiceDay'
+                        : `${type}.certificateOfServiceDay`
+                    }`}
                     type="number"
-                    value={form.certificateOfServiceDay}
+                    value={data.certificateOfServiceDay || ''}
                     onBlur={() => {
                       validateExternalDocumentInformationSequence();
                     }}
@@ -181,20 +212,24 @@ export const InclusionsForm = connect(
                   <label
                     aria-hidden="true"
                     className="usa-label"
-                    htmlFor="service-date-year"
+                    htmlFor={`${type}-service-date-year`}
                   >
                     YYYY
                   </label>
                   <input
-                    aria-describedby="service-date-legend"
+                    aria-describedby={`${type}-service-date-legend`}
                     aria-label="year, four digits"
                     className="usa-input usa-input-inline"
-                    id="service-date-year"
+                    id={`${type}-service-date-year`}
                     max="2100"
                     min="1900"
-                    name="certificateOfServiceYear"
+                    name={`${
+                      type === 'primaryDocument'
+                        ? 'certificateOfServiceYear'
+                        : `${type}.certificateOfServiceYear`
+                    }`}
                     type="number"
-                    value={form.certificateOfServiceYear}
+                    value={data.certificateOfServiceYear || ''}
                     onBlur={() => {
                       validateExternalDocumentInformationSequence();
                     }}
@@ -209,29 +244,35 @@ export const InclusionsForm = connect(
               </div>
             </fieldset>
             <Text
-              bind="validationErrors.certificateOfServiceDate"
+              bind={`${validationBind}.certificateOfServiceDate`}
               className="usa-error-message"
             />
           </div>
         )}
-        {fileDocumentHelper.showObjection && (
+        {fileDocumentHelper[type].showObjection && (
           <div
             className={`usa-form-group margin-bottom-0 ${
-              validationErrors.objections ? 'usa-form-group--error' : ''
+              validationData && validationData.objections
+                ? 'usa-form-group--error'
+                : ''
             }`}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
-              <legend id="objections-legend">
+              <legend id={`${type}-objections-legend`}>
                 Are There Any Objections to This Document?
               </legend>
               {['Yes', 'No', 'Unknown'].map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>
                   <input
-                    aria-describedby="objections-legend"
-                    checked={form.objections === option}
+                    aria-describedby={`${type}-objections-legend`}
+                    checked={data.objections === option}
                     className="usa-radio__input"
-                    id={`objections-${option}`}
-                    name="objections"
+                    id={`${type}-objections-${option}`}
+                    name={`${
+                      type === 'primaryDocument'
+                        ? 'objections'
+                        : `${type}.objections`
+                    }`}
                     type="radio"
                     value={option}
                     onChange={e => {
@@ -244,7 +285,7 @@ export const InclusionsForm = connect(
                   />
                   <label
                     className="usa-radio__label"
-                    htmlFor={`objections-${option}`}
+                    htmlFor={`${type}-objections-${option}`}
                   >
                     {option}
                   </label>
@@ -252,7 +293,7 @@ export const InclusionsForm = connect(
               ))}
             </fieldset>
             <Text
-              bind="validationErrors.objections"
+              bind={`${validationBind}.objections`}
               className="usa-error-message"
             />
           </div>

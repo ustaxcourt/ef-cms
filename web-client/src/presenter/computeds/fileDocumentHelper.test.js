@@ -27,7 +27,7 @@ describe('fileDocumentHelper', () => {
 
     const expected = {
       isSecondaryDocumentUploadOptional: false,
-      showObjection: false,
+      primaryDocument: { showObjection: false },
       showPrimaryDocumentValid: false,
       showSecondaryDocumentValid: false,
       showSecondaryParty: false,
@@ -55,10 +55,43 @@ describe('fileDocumentHelper', () => {
     expect(result.isSecondaryDocumentUploadOptional).toBeTruthy();
   });
 
-  it('shows objection if document type is a motion', async () => {
+  it('shows primary objection if primary document type is a motion', async () => {
     state.form = { documentType: 'Motion for Leave to File' };
     const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showObjection).toBeTruthy();
+    expect(result.primaryDocument.showObjection).toBeTruthy();
+  });
+
+  it('shows secondary objection if secondary document type is a motion', async () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      secondaryDocument: {
+        documentType: 'Motion for Continuance',
+      },
+    };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.primaryDocument.showObjection).toBeTruthy();
+    expect(result.secondaryDocument.showObjection).toBeTruthy();
+  });
+
+  it('does not show primary objection if primary document type is not a motion', async () => {
+    state.form = {
+      documentType: 'Supplemental Brief',
+    };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.primaryDocument.showObjection).toBeFalsy();
+    expect(result.secondaryDocument.showObjection).toBeFalsy();
+  });
+
+  it('does not show secondary objection if secondary document type is not a motion', async () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      secondaryDocument: {
+        documentType: 'Supplemental Brief',
+      },
+    };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.primaryDocument.showObjection).toBeTruthy();
+    expect(result.secondaryDocument.showObjection).toBeFalsy();
   });
 
   it('indicates file uploads are valid', async () => {
