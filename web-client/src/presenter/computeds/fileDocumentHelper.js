@@ -69,9 +69,16 @@ export const fileDocumentHelper = (get, applicationContext) => {
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
+    primaryDocument: {
+      showObjection: objectionDocumentTypes.includes(form.documentType),
+    },
+    secondaryDocument: {
+      showObjection:
+        form.secondaryDocument &&
+        objectionDocumentTypes.includes(form.secondaryDocument.documentType),
+    },
     showFilingIncludes,
     showFilingNotIncludes,
-    showObjection: objectionDocumentTypes.includes(form.documentType),
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,

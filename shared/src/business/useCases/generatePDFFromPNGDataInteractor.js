@@ -10,7 +10,7 @@ const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = pdflib;
 exports.generatePDFFromPNGDataInteractor = imgData => {
   const pdfDoc = PDFDocumentFactory.create();
 
-  function addImageToPage(img) {
+  const addImageToPage = img => {
     const [imgRef, imgDim] = pdfDoc.embedPNG(img);
     const page = pdfDoc
       .createPage([imgDim.width, imgDim.height])
@@ -26,7 +26,7 @@ exports.generatePDFFromPNGDataInteractor = imgData => {
     );
     page.addContentStreams(pdfDoc.register(pageContentStream));
     pdfDoc.addPage(page);
-  }
+  };
 
   imgData.map(data => {
     addImageToPage(data);

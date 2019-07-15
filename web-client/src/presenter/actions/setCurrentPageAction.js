@@ -11,8 +11,8 @@ export const setCurrentPageAction = (page, options = {}) =>
   /**
    * sets the state.currentPage based on the scoped page
    *
-   * @param {Object} providers the providers object
-   * @param {Object} providers.store the cerebral store used for setting the state.currentPage
+   * @param {object} providers the providers object
+   * @param {object} providers.store the cerebral store used for setting the state.currentPage
    */
   ({ store }) => {
     store.set(state.currentPage, page);
