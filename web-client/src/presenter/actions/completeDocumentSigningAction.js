@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 /**
  * Uses state-side signature data (coordinates, page number, PDFJS Object) to apply
