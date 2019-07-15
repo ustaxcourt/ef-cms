@@ -42,7 +42,7 @@ exports.saveSignedDocumentInteractor = async ({
     userId: user.userId,
   });
 
-  signedDocumentEntity.setSigned();
+  signedDocumentEntity.setSigned(user.userId);
 
   caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
 
