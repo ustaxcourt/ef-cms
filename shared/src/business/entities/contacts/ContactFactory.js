@@ -311,7 +311,7 @@ ContactFactory.createContactFactory = ({
   additionalValidation,
 }) => {
   return ({ countryType }) => {
-    function GenericContactConstructor(rawContact) {
+    const GenericContactConstructor = rawContact => {
       Object.assign(this, {
         address1: rawContact.address1,
         address2: rawContact.address2 ? rawContact.address2 : undefined,
@@ -327,7 +327,7 @@ ContactFactory.createContactFactory = ({
         state: rawContact.state,
         title: rawContact.title,
       });
-    }
+    };
 
     GenericContactConstructor.errorToMessageMap = {
       ...ContactFactory.getErrorToMessageMap({ countryType }),

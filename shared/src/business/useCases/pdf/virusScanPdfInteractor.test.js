@@ -5,9 +5,9 @@ const { virusScanPdfInteractor } = require('./virusScanPdfInteractor');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
-function testAsset(name) {
+const testAsset = name => {
   return fs.readFileSync(testAssetsPath + name);
-}
+};
 
 describe('virusScanPdfInteractor', () => {
   it('detects a clean PDF', async () => {

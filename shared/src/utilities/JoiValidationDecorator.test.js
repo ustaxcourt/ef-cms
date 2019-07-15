@@ -1,9 +1,10 @@
 const joi = require('joi-browser');
 const { joiValidationDecorator } = require('./JoiValidationDecorator');
 
-function MockEntity1(raw) {
+const MockEntity1 = raw => {
   Object.assign(this, raw);
-}
+};
+
 MockEntity1.name = 'MockEntity1';
 
 MockEntity1.errorToMessageMap = {
