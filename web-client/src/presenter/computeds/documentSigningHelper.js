@@ -1,5 +1,11 @@
 import { state } from 'cerebral';
 
+/**
+ * documentSigningHelper
+ *
+ * @param {*} get cerebral get function
+ * @returns {object} object of document signature helper properties
+ */
 export const documentSigningHelper = get => {
   const signatureApplied = get(state.pdfForSigning.signatureApplied);
   const signatureData = get(state.pdfForSigning.signatureData);
