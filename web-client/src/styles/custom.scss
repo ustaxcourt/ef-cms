@@ -1163,6 +1163,10 @@ nav.usa-nav {
   .usa-accordion__heading:not(:first-child) {
     margin-top: 1rem;
   }
+}
+
+.need-help-selecting,
+.submit-reminders {
   .content-header {
     padding: 11px 20px;
     margin: 0;
@@ -1205,4 +1209,8 @@ nav.usa-nav {
   button:hover {
     color: $color-primary-alt;
   }
+}
+
+.overline {
+  border-top: 1px solid color($theme-color-base-lighter);
 }
