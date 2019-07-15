@@ -1,80 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const WhatDocumentIsThis = connect(
   {
     chooseModalWizardStepSequence: sequences.chooseModalWizardStepSequence,
     clearModalSequence: sequences.clearModalSequence,
+    reasons: state.viewAllDocumentsHelper.reasons,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   ({
     chooseModalWizardStepSequence,
     clearModalSequence,
+    reasons,
     updateModalValueSequence,
   }) => {
-    const reasons = [
-      {
-        categories: [
-          {
-            category: 'Application',
-          },
-          {
-            category: 'Motion',
-          },
-          {
-            category: 'Petition',
-          },
-        ],
-        reason: 'Request Something From the Court',
-      },
-      {
-        categories: [
-          {
-            category: 'Brief',
-          },
-          {
-            category: 'Memorandum',
-          },
-          {
-            category: 'Notice',
-          },
-          {
-            category: 'Statement',
-          },
-          {
-            category: 'Stipulation',
-          },
-        ],
-        reason: 'Notify the Court of a Change',
-      },
-      {
-        categories: [
-          {
-            category: 'Miscellaneous',
-          },
-          {
-            category: 'Supporting Documents',
-          },
-        ],
-        reason: 'Update or Add to a Document',
-      },
-      {
-        categories: [
-          {
-            category: 'Motion',
-          },
-          {
-            category: 'Reply',
-          },
-          {
-            category: 'Response',
-          },
-        ],
-        reason: 'Respond to a Previous Document',
-      },
-    ];
     return (
       <React.Fragment>
         <div className="overlay-blue-header">
@@ -110,7 +51,7 @@ export const WhatDocumentIsThis = connect(
 
         {reasons.map(({ categories, reason }, reasonIndex) => {
           return (
-            <>
+            <React.Fragment key={`reason-${reasonIndex}`}>
               <div className="grid-container">
                 <div className="grid-row">
                   <div className="grid-col-12">
@@ -153,7 +94,7 @@ export const WhatDocumentIsThis = connect(
                   );
                 })}
               </div>
-            </>
+            </React.Fragment>
           );
         })}
 

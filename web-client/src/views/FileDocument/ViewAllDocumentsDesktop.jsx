@@ -106,7 +106,7 @@ export const ViewAllDocumentsDesktop = connect(
             >
               Cancel
             </button>
-            {showModal === 'FormCancelModalDialogComponent' && (
+            {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
             )}
             {showModal === 'CompleteSelectDocumentModalDialog' && (
