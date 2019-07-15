@@ -50,7 +50,7 @@ function Document(rawDocument) {
     servedDate: rawDocument.servedDate,
     serviceDate: rawDocument.serviceDate,
     signedAt: rawDocument.signedAt,
-    signedByUserId: rawDocument.signedBy,
+    signedByUserId: rawDocument.signedByUserId,
     status: rawDocument.status,
     supportingDocument: rawDocument.supportingDocument,
     userId: rawDocument.userId,
