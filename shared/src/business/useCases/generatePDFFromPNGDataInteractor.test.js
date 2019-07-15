@@ -8,9 +8,9 @@ const { PDFDocumentFactory } = require('pdf-lib');
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
-function testImgDocBytes() {
+const testImgDocBytes = () => {
   return fs.readFileSync(testAssetsPath + 'sample.png');
-}
+};
 
 describe('generatePDFFromPNGDataInteractor', () => {
   let testImg;

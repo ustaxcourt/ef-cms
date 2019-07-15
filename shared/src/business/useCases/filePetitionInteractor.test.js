@@ -8,7 +8,7 @@ let validatePdfStub;
 let sanitizePdfStub;
 
 describe('filePetitionInteractor', () => {
-  function createApplicationContext(options) {
+  const createApplicationContext = options => {
     uploadDocumentStub = sinon
       .stub()
       .resolves('c54ba5a9-b37b-479d-9201-067ec6e335bb');
@@ -35,7 +35,7 @@ describe('filePetitionInteractor', () => {
       environment: { stage: 'local' },
       ...options,
     };
-  }
+  };
 
   it('throws an error when a null user tries to access the case', async () => {
     let error;

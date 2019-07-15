@@ -13,10 +13,10 @@ const {
   prepareDateFromString,
 } = require('../utilities/DateHandler');
 
-function testPdfDocBytes() {
+const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
-}
+};
 
 describe('addCoverToPDFDocumentInteractor', () => {
   let testPdfDoc;
