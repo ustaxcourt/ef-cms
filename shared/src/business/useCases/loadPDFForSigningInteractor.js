@@ -4,7 +4,7 @@ const pdfjsLib = require('pdfjs-dist');
  * loadPDFForSigningInteractor
  *
  * @param pdf
- * @returns {Object}
+ * @returns {object}
  */
 
 exports.loadPDFForSigningInteractor = async ({

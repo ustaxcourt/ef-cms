@@ -161,7 +161,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
   applicationContext.logger.timeEnd('Generate Cover Page');
 
-  function getPageDimensions(page) {
+  const getPageDimensions = page => {
     let mediaBox;
 
     // Check for MediaBox on the page itself
@@ -186,17 +186,17 @@ exports.addCoverToPDFDocumentInteractor = async ({
       height: mediaBox.array[3].number,
       width: mediaBox.array[2].number,
     };
-  }
+  };
 
-  function pageScaler(value) {
+  const pageScaler = value => {
     return Math.round(value * (scaleToPageWidth / dimensionsX));
-  }
+  };
 
-  function paddedLineHeight(fontSize = defaultFontSize) {
+  const paddedLineHeight = (fontSize = defaultFontSize) => {
     return fontSize * 0.25 + fontSize;
-  }
+  };
 
-  function getContentByKey(key) {
+  const getContentByKey = key => {
     const coverSheetDatumValue = coverSheetData[key];
     switch (key) {
       case 'includesCertificateOfService':
@@ -214,24 +214,25 @@ exports.addCoverToPDFDocumentInteractor = async ({
       default:
         return coverSheetDatumValue.toString();
     }
-  }
+  };
+
   // Point of origin is bottom left, this flips the y-axis
   // coord to a traditional top left value
-  function translateY(yPos, screenToPrintDpi) {
+  const translateY = (yPos, screenToPrintDpi) => {
     const newY = dimensionsY - yPos;
     if (screenToPrintDpi) {
       return (300 / 72) * newY;
     } else {
       return newY;
     }
-  }
+  };
 
-  function getYOffsetFromPreviousContentArea(
+  const getYOffsetFromPreviousContentArea = (
     previousContentArea,
     font,
     fontSize,
     offsetMargin = 0,
-  ) {
+  ) => {
     let totalContentHeight;
     const textHeight = font.heightOfFontAtSize(fontSize);
     if (Array.isArray(previousContentArea.content)) {
@@ -245,11 +246,11 @@ exports.addCoverToPDFDocumentInteractor = async ({
     return Math.round(
       previousContentArea.yPos - totalContentHeight - offsetMargin,
     );
-  }
+  };
 
   // Measures text width against given widthConstraint to
   // break into multiple lines (expressed as an array)
-  function wrapText(text, widthConstraint, font, fontSize) {
+  const wrapText = (text, widthConstraint, font, fontSize) => {
     const textWidth = font.widthOfTextAtSize(text, fontSize);
     if (textWidth <= widthConstraint) {
       return text;
@@ -276,7 +277,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       }, []);
       return textLines;
     }
-  }
+  };
 
   const dateFiledLabel = isLodged ? '' : 'Filed';
   const dateLodgedLabel = isLodged ? 'Lodged' : '';
@@ -461,7 +462,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     yPos: 231,
   };
 
-  function drawContent(contentArea) {
+  const drawContent = contentArea => {
     const {
       centerTextAt,
       content,
@@ -484,7 +485,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       centerTextAt && Object.keys(centerTextAt).length === 3
     );
 
-    function setCenterPos(content, params) {
+    const setCenterPos = (content, params) => {
       if (centeringText === false) {
         return params;
       }
@@ -497,7 +498,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
         ...params,
         x: newXOffset,
       };
-    }
+    };
 
     if (Array.isArray(content)) {
       if (centeringText === true) {
@@ -514,7 +515,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     } else {
       return drawText(content, setCenterPos(content, params));
     }
-  }
+  };
 
   // This is where the magic happens. The content stream and its coords will need to be
   // played with in order to get the desired cover page layout.
