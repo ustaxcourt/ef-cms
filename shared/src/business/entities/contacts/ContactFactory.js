@@ -332,7 +332,7 @@ ContactFactory.createContactFactory = ({
         state: rawContact.state,
         title: rawContact.title,
       });
-    };
+    }
 
     GenericContactConstructor.errorToMessageMap = {
       ...ContactFactory.getErrorToMessageMap({ countryType }),
