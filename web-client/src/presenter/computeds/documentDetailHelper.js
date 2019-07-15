@@ -40,7 +40,8 @@ export const documentDetailHelper = (get, applicationContext) => {
         !workItem.completedAt,
     );
 
-    showSignDocumentButton = !!stipulatedWorkItem;
+    showSignDocumentButton =
+      !!stipulatedWorkItem && currentUser.role === 'seniorattorney';
   }
 
   const formattedDocumentIsPetition =
