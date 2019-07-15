@@ -1176,3 +1176,33 @@ nav.usa-nav {
     line-height: 22px;
   }
 }
+
+.category-view {
+  border-top: 1px solid color($theme-color-base-lighter);
+  &:last-child {
+    border-bottom: 1px solid color($theme-color-base-lighter);
+  }
+  button {
+    text-decoration: none;
+  }
+}
+
+.overlay-blue-header {
+  padding: 15px 0;
+  margin-bottom: 20px;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
+  text-decoration: none;
+
+  a,
+  svg,
+  button {
+    margin: 0;
+    color: $color-white;
+    text-decoration: none;
+  }
+  a:not(.usa-button):hover,
+  button:hover {
+    color: $color-primary-alt;
+  }
+}
