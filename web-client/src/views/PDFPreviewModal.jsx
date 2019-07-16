@@ -11,115 +11,120 @@ class PDFPreviewModalComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.canvasRef = React.createRef();
-    this.pageNextRef = React.createRef();
-    this.pagePrevRef = React.createRef();
-    this.pageNumRef = React.createRef();
-    this.pageCountRef = React.createRef();
     this.initFile = this.initFile.bind(this);
+    this.onPrevPage = this.onPrevPage.bind(this);
+    this.onNextPage = this.onNextPage.bind(this);
+    this.onLastPage = this.onLastPage.bind(this);
+    this.onFirstPage = this.onFirstPage.bind(this);
 
     this.modal = {
       classNames: 'pdf-preview-modal',
       confirmLabel: 'Ok',
     };
+
+    this.state = {
+      currentPage: 0,
+      pageNumPending: null,
+      pageRendering: false,
+      totalPages: 0,
+    };
+  }
+
+  onPrevPage() {
+    if (this.state.currentPage <= 1) {
+      return;
+    }
+    this.setState({
+      currentPage: this.state.currentPage - 1,
+    });
+    this.queueRenderPage(this.state.currentPage);
+  }
+
+  queueRenderPage(num) {
+    if (this.state.pageRendering) {
+      this.setState({ pageNumPending: num });
+    } else {
+      this.renderPage(num);
+    }
+  }
+
+  onNextPage() {
+    if (this.state.currentPage >= this.state.totalPages) {
+      return;
+    }
+    this.setState({
+      currentPage: this.state.currentPage + 1,
+    });
+    this.queueRenderPage(this.state.currentPage);
+  }
+
+  renderPage(num) {
+    this.setState({
+      pageRendering: true,
+    });
+
+    this.state.pdfDoc.getPage(num).then(page => {
+      const viewport = page.getViewport({
+        scale: 0.8,
+      });
+      this.state.canvas.height = viewport.height;
+      this.state.canvas.width = viewport.width;
+
+      const renderContext = {
+        canvasContext: this.state.ctx,
+        viewport: viewport,
+      };
+      const renderTask = page.render(renderContext);
+
+      renderTask.promise.then(() => {
+        this.setState({
+          pageRendering: false,
+        });
+
+        if (this.state.pageNumPending !== null) {
+          this.renderPage(this.state.pageNumPending);
+          this.setState({
+            pageNumPending: null,
+          });
+        }
+      });
+    });
+  }
+
+  onLastPage() {
+    this.setState({
+      currentPage: this.state.totalPages,
+    });
+    this.queueRenderPage(this.state.currentPage);
+  }
+
+  onFirstPage() {
+    this.setState({
+      currentPage: 1,
+    });
+    this.queueRenderPage(this.state.currentPage);
   }
 
   initFile(pdfData) {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const pageNextEl = this.pageNextRef.current;
-    const pagePrevEl = this.pagePrevRef.current;
-    const pageNumEl = this.pageNumRef.current;
-    const pageCountEl = this.pageCountRef.current;
+    this.setState({
+      canvas,
+      ctx,
+    });
 
-    let pdfDoc = null,
-      pageNum = 1,
-      pageRendering = false,
-      pageNumPending = null,
-      scale = 0.8;
+    this.setState({
+      currentPage: 1,
+      pageNumPending: null,
+      pageRendering: false,
+    });
 
-    /**
-     * Get page info from document, resize canvas accordingly, and render page.
-     *
-     * @param num Page number.
-     */
-    function renderPage(num) {
-      pageRendering = true;
-      // Using promise to fetch the page
-      pdfDoc.getPage(num).then(function(page) {
-        var viewport = page.getViewport({
-          scale: scale,
-        });
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        // Render PDF page into canvas context
-        var renderContext = {
-          canvasContext: ctx,
-          viewport: viewport,
-        };
-        var renderTask = page.render(renderContext);
-
-        // Wait for rendering to finish
-        renderTask.promise.then(function() {
-          pageRendering = false;
-          if (pageNumPending !== null) {
-            // New page rendering is pending
-            renderPage(pageNumPending);
-            pageNumPending = null;
-          }
-        });
+    pdfjsLib.getDocument({ data: pdfData }).promise.then(pdfDoc => {
+      this.setState({
+        pdfDoc,
+        totalPages: pdfDoc.numPages,
       });
-
-      // Update page counters
-      pageNumEl.textContent = num;
-    }
-
-    /**
-     * If another page rendering in progress, waits until the rendering is
-     * finised. Otherwise, executes rendering immediately.
-     */
-    function queueRenderPage(num) {
-      if (pageRendering) {
-        pageNumPending = num;
-      } else {
-        renderPage(num);
-      }
-    }
-
-    /**
-     * Displays previous page.
-     */
-    function onPrevPage() {
-      if (pageNum <= 1) {
-        return;
-      }
-      pageNum--;
-      queueRenderPage(pageNum);
-    }
-    pagePrevEl.addEventListener('click', onPrevPage);
-
-    /**
-     * Displays next page.
-     */
-    function onNextPage() {
-      if (pageNum >= pdfDoc.numPages) {
-        return;
-      }
-      pageNum++;
-      queueRenderPage(pageNum);
-    }
-    pageNextEl.addEventListener('click', onNextPage);
-
-    /**
-     * Asynchronously downloads PDF.
-     */
-    pdfjsLib.getDocument({ data: pdfData }).promise.then(function(pdfDoc_) {
-      pdfDoc = pdfDoc_;
-      pageNumEl.textContent = pdfDoc.numPages;
-
-      // Initial/first page rendering
-      renderPage(pageNum);
-      pageCountEl.textContent = pdfDoc.numPages;
+      this.renderPage(this.state.currentPage);
     });
   }
 
@@ -129,7 +134,7 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.props.startLoadSequence();
 
     //const pdfData = this.props.loadData(this.props.pdfFile);
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(this.props.pdfFile);
     reader.onload = () => {
       this.initFile(atob(reader.result.replace(/[^,]+,/, '')));
@@ -146,26 +151,37 @@ class PDFPreviewModalComponent extends ModalDialog {
       <div className="pdf-preview-content">
         <div>
           <div className="margin-bottom-3">
-            <span className="margin-right-1" ref={this.pagePrevRef}>
-              <FontAwesomeIcon
-                className="icon-button"
-                icon={['fas', 'caret-left']}
-                id="prev"
-                size="2x"
-              />
-            </span>
+            <FontAwesomeIcon
+              className="icon-button"
+              icon={['fas', 'step-backward']}
+              id="firstPage"
+              size="2x"
+              onClick={this.onFirstPage}
+            />
+            <FontAwesomeIcon
+              className="icon-button"
+              icon={['fas', 'caret-left']}
+              id="prev"
+              size="2x"
+              onClick={this.onPrevPage}
+            />
             <span className="pages">
-              Page <span id="page_num" ref={this.pageNumRef} /> of{' '}
-              <span id="page_count" ref={this.pageCountRef} />
+              Page {this.state.currentPage} of {this.state.totalPages}
             </span>
-            <span className="margin-left-1" ref={this.pageNextRef}>
-              <FontAwesomeIcon
-                className={'icon-button'}
-                icon={['fas', 'caret-right']}
-                id="next"
-                size="2x"
-              />
-            </span>
+            <FontAwesomeIcon
+              className="icon-button"
+              icon={['fas', 'caret-right']}
+              id="next"
+              size="2x"
+              onClick={this.onNextPage}
+            />
+            <FontAwesomeIcon
+              className="icon-button"
+              icon={['fas', 'step-forward']}
+              id="lastPage"
+              size="2x"
+              onClick={this.onLastPage}
+            />
           </div>
         </div>
         <canvas id="the-canvas" ref={this.canvasRef}></canvas>
