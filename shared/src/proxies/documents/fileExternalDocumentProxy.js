@@ -10,20 +10,14 @@ const { post } = require('../requests');
 exports.fileExternalDocumentInteractor = ({
   applicationContext,
   documentMetadata,
-  primaryDocumentFileId,
-  secondaryDocumentFileId,
-  secondarySupportingDocumentFileId,
-  supportingDocumentFileId,
+  documentIds,
 }) => {
   const { caseId } = documentMetadata;
   return post({
     applicationContext,
     body: {
       documentMetadata,
-      primaryDocumentFileId,
-      secondaryDocumentFileId,
-      secondarySupportingDocumentFileId,
-      supportingDocumentFileId,
+      documentIds,    
     },
     endpoint: `/cases/${caseId}/external-document`,
   });

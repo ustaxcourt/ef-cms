@@ -70,15 +70,15 @@ export const SecondarySupportingDocumentForm = connect(
               }
               onChange={e => {
                 updateFileDocumentWizardFormValueSequence({
-                  key: `supportingDocuments.${index}.secondarySupportingDocumentMetadata.category`,
+                  key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.category`,
                   value: 'Supporting Document',
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `supportingDocuments.${index}.secondarySupportingDocumentMetadata.documentType`,
+                  key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.documentType`,
                   value: e.target.value,
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `supportingDocuments.${index}.secondarySupportingDocumentMetadata.previousDocument`,
+                  key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.previousDocument`,
                   value: form.secondaryDocument.documentTitle,
                 });
                 updateFileDocumentWizardFormValueSequence({

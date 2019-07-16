@@ -15,10 +15,9 @@ export const SecondarySupportingDocuments = connect(
     return (
       <>
         {form.hasSecondarySupportingDocuments &&
-          form.secondarySupportingDocuments.map((item, idx) => {
-            console.log(idx);
-            return <SecondarySupportingDocumentForm index={idx} key={idx} />;
-          })}
+          form.secondarySupportingDocuments.map((item, idx) => (
+            <SecondarySupportingDocumentForm index={idx} key={idx} />
+          ))}
 
         {fileDocumentHelper.showAddSecondarySupportingDocuments && (
           <button

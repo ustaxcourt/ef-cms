@@ -7,14 +7,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.uploadExternalDocumentInteractor = async ({
   applicationContext,
   documentMetadata,
-  onPrimarySupportingUploadProgress,
-  onPrimaryUploadProgress,
-  onSecondarySupportUploadProgress,
-  onSecondaryUploadProgress,
-  primaryDocumentFile,
-  secondaryDocumentFile,
-  secondarySupportingDocumentFile,
-  supportingDocumentFile,
+  progressFunctions,
+  documentFiles,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -26,41 +20,49 @@ exports.uploadExternalDocumentInteractor = async ({
     .getPersistenceGateway()
     .uploadDocument({
       applicationContext,
-      document: primaryDocumentFile,
-      onUploadProgress: onPrimaryUploadProgress,
+      document: documentFiles.primary,
+      onUploadProgress: progressFunctions.primary,
     });
 
   let secondaryDocumentFileId;
-  if (secondaryDocumentFile) {
+  if (documentFiles.secondary) {
     secondaryDocumentFileId = await applicationContext
       .getPersistenceGateway()
       .uploadDocument({
         applicationContext,
-        document: secondaryDocumentFile,
-        onUploadProgress: onSecondaryUploadProgress,
+        document: documentFiles.secondary,
+        onUploadProgress: progressFunctions.secondary,
       });
   }
 
-  let supportingDocumentFileId;
-  if (supportingDocumentFile) {
-    supportingDocumentFileId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocument({
-        applicationContext,
-        document: supportingDocumentFile,
-        onUploadProgress: onPrimarySupportingUploadProgress,
-      });
+  const supportingDocumentFileIds = [];
+  if (documentMetadata.hasSupportingDocuments) {
+    for (let i=0; i < documentMetadata.supportingDocuments.length; i++) {
+      const supportingDocumentFileId = await applicationContext
+        .getPersistenceGateway()
+        .uploadDocument({
+          applicationContext,
+          document: documentFiles[`primarySupporting${i}`],
+          onUploadProgress: progressFunctions[`primarySupporting${i}`],
+        });
+
+        supportingDocumentFileIds.push(supportingDocumentFileId);
+    }
   }
 
-  let secondarySupportingDocumentFileId;
-  if (secondarySupportingDocumentFile) {
-    secondarySupportingDocumentFileId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocument({
-        applicationContext,
-        document: secondarySupportingDocumentFile,
-        onUploadProgress: onSecondarySupportUploadProgress,
-      });
+  const secondarySupportingDocumentFileIds = [];
+  if (documentMetadata.hasSecondarySupportingDocuments) {
+    for (let i=0; i < documentMetadata.secondarySupportingDocuments.length; i++) {
+      const secondarySupportingDocumentFileId = await applicationContext
+        .getPersistenceGateway()
+        .uploadDocument({
+          applicationContext,
+          document: documentFiles[`secondarySupporting${i}`],
+          onUploadProgress: progressFunctions[`secondarySupporting${i}`],
+        });
+
+      secondarySupportingDocumentFileIds.push(secondarySupportingDocumentFileId);
+    }
   }
 
   if (user.role === 'practitioner') {
@@ -70,8 +72,8 @@ exports.uploadExternalDocumentInteractor = async ({
   const documentIds = [
     primaryDocumentFileId,
     secondaryDocumentFileId,
-    supportingDocumentFileId,
-    secondarySupportingDocumentFileId,
+    ...supportingDocumentFileIds,
+    ...secondarySupportingDocumentFileIds,
   ].filter(documentId => documentId);
 
   for (let documentId of documentIds) {
@@ -94,9 +96,6 @@ exports.uploadExternalDocumentInteractor = async ({
   return await applicationContext.getUseCases().fileExternalDocumentInteractor({
     applicationContext,
     documentMetadata,
-    primaryDocumentFileId,
-    secondaryDocumentFileId,
-    secondarySupportingDocumentFileId,
-    supportingDocumentFileId,
+    documentIds,
   });
 };
