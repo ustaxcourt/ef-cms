@@ -4,7 +4,6 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
-import { PDFPreviewModal } from '../PDFPreviewModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -16,7 +15,6 @@ export const FileDocumentReviewRedesign = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
     showModal: state.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
@@ -26,7 +24,6 @@ export const FileDocumentReviewRedesign = connect(
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
-    openPdfPreviewModalSequence,
     showModal,
     submitExternalDocumentSequence,
   }) => {
@@ -142,7 +139,7 @@ export const FileDocumentReviewRedesign = connect(
                           {form.supportingDocumentMetadata.documentTitle}
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        {form.supportingDocumentFile.name}
+                        <PDFPreviewButton file={form.supportingDocumentFile} />
                       </div>
                     </div>
                   )}
@@ -159,7 +156,9 @@ export const FileDocumentReviewRedesign = connect(
                               {form.secondaryDocument.documentTitle}
                             </label>
                             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                            {form.secondaryDocumentFile.name}
+                            <PDFPreviewButton
+                              file={form.secondaryDocumentFile}
+                            />
                           </div>
                         )}
                       </div>
@@ -196,7 +195,9 @@ export const FileDocumentReviewRedesign = connect(
                           }
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        {form.secondarySupportingDocumentFile.name}
+                        <PDFPreviewButton
+                          file={form.secondarySupportingDocumentFile}
+                        />
                       </div>
                     </div>
                   )}

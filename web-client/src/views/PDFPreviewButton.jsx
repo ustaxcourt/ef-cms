@@ -7,9 +7,10 @@ import { PDFPreviewModal } from './PDFPreviewModal';
 export const PDFPreviewButton = connect(
   {
     openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
+    previewFile: state.previewPdfFile,
     showModal: state.showModal,
   },
-  ({ file, openPdfPreviewModalSequence, showModal }) => {
+  ({ file, openPdfPreviewModalSequence, previewFile, showModal }) => {
     return (
       <>
         <button
@@ -19,7 +20,9 @@ export const PDFPreviewButton = connect(
         >
           {file.name}
         </button>
-        {showModal === 'PDFPreviewModal' && <PDFPreviewModal pdfFile={file} />}
+        {showModal === 'PDFPreviewModal' && previewFile === file && (
+          <PDFPreviewModal pdfFile={file} />
+        )}
       </>
     );
   },
