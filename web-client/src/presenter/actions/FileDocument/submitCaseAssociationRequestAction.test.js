@@ -7,18 +7,18 @@ describe('submitCaseAssociationRequestAction', () => {
   let submitCaseAssociationRequestStub;
   let submitPendingCaseAssociationRequestStub;
   let createCoverSheetStub;
-  let fileExternalDocumentStub;
+  let fileDocketEntryStub;
 
   beforeEach(() => {
     submitCaseAssociationRequestStub = sinon.stub();
     submitPendingCaseAssociationRequestStub = sinon.stub();
     createCoverSheetStub = sinon.stub();
-    fileExternalDocumentStub = sinon.stub();
+    fileDocketEntryStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
-        fileExternalDocumentInteractor: fileExternalDocumentStub,
+        fileDocketEntryInteractor: fileDocketEntryStub,
         submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
         submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,
       }),
@@ -26,7 +26,7 @@ describe('submitCaseAssociationRequestAction', () => {
   });
 
   it('should call submitCaseAssociationRequest', async () => {
-    fileExternalDocumentStub.returns({ documents: [] });
+    fileDocketEntryStub.returns({ documents: [] });
     await runAction(submitCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -44,7 +44,7 @@ describe('submitCaseAssociationRequestAction', () => {
   });
 
   it('should call submitPendingCaseAssociationRequest', async () => {
-    fileExternalDocumentStub.returns({ documents: [] });
+    fileDocketEntryStub.returns({ documents: [] });
     await runAction(submitCaseAssociationRequestAction, {
       modules: {
         presenter,
