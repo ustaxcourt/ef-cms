@@ -25,13 +25,9 @@ export const SelectDocumentType = connect(
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-6">
-              <h2
-                className="heading-1"
-                id="file-a-document-header"
-                tabIndex="-1"
-              >
+              <h1 id="file-a-document-header" tabIndex="-1">
                 What document are you filing?
-              </h2>
+              </h1>
               <div className="blue-container">
                 <CompleteDocumentTypeSection />
               </div>
