@@ -75,7 +75,7 @@ import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOr
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
-import { openPdfPreviewTabSequence } from './sequences/openPdfPreviewTabSequence';
+import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -265,7 +265,7 @@ export const presenter = {
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditSecondaryContactModalSequence,
-    openPdfPreviewTabSequence,
+    openPdfPreviewModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openSetCalendarModalSequence,
     redirectToLoginSequence,
