@@ -50,12 +50,12 @@ describe('uploadExternalDocumentInteractor', () => {
     try {
       await uploadExternalDocumentInteractor({
         applicationContext,
-        documentMetadata: {},
         documentFiles: [
           {
             primary: 'something',
-          }
-        ]
+          },
+        ],
+        documentMetadata: {},
       });
     } catch (e) {
       error = e;
@@ -86,13 +86,13 @@ describe('uploadExternalDocumentInteractor', () => {
       };
       await uploadExternalDocumentInteractor({
         applicationContext,
-        documentMetadata: {},
         documentFiles: {
           primary: 'something',
         },
+        documentMetadata: {},
         progressFunctions: {
           primary: 'something',
-        }
+        },
       });
     } catch (err) {
       error = err;
@@ -123,19 +123,19 @@ describe('uploadExternalDocumentInteractor', () => {
       };
       await uploadExternalDocumentInteractor({
         applicationContext,
-        documentMetadata: {},
         documentFiles: {
           primary: 'something',
-          secondary: 'something2',
           primarySupporting0: 'something3',
-          secondarySupporting0: 'something4'
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
         },
+        documentMetadata: {},
         progressFunctions: {
           primary: 'something',
-          secondary: 'something2',
           primarySupporting0: 'something3',
-          secondarySupporting0: 'something4'
-        }
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
+        },
       });
     } catch (err) {
       error = err;
@@ -166,19 +166,19 @@ describe('uploadExternalDocumentInteractor', () => {
       };
       await uploadExternalDocumentInteractor({
         applicationContext,
-        documentMetadata: {},
         documentFiles: {
           primary: 'something',
-          secondary: 'something2',
           primarySupporting0: 'something3',
-          secondarySupporting0: 'something4'
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
         },
+        documentMetadata: {},
         progressFunctions: {
           primary: 'something',
-          secondary: 'something2',
           primarySupporting0: 'something3',
-          secondarySupporting0: 'something4'
-        }
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
+        },
       });
     } catch (err) {
       error = err;

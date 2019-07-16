@@ -62,6 +62,12 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
+      documentIds: [
+        '12de0fac-f63c-464f-ac71-0f54fd248484',
+        '22de0fac-f63c-464f-ac71-0f54fd248484',
+        '32de0fac-f63c-464f-ac71-0f54fd248484',
+        '42de0fac-f63c-464f-ac71-0f54fd248484',
+      ],
       documentMetadata: {
         attachments: false,
         caseId,
@@ -91,7 +97,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               previousDocument: 'Amended Answer',
               scenario: 'Nonstandard A',
             },
-          }
+          },
         ],
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
@@ -103,15 +109,9 @@ describe('fileExternalDocumentInteractor integration test', () => {
               previousDocument: 'Amended Answer',
               scenario: 'Nonstandard A',
             },
-          }
-        ]
+          },
+        ],
       },
-      documentIds: [
-        '12de0fac-f63c-464f-ac71-0f54fd248484',
-        '22de0fac-f63c-464f-ac71-0f54fd248484',
-        '32de0fac-f63c-464f-ac71-0f54fd248484',
-        '42de0fac-f63c-464f-ac71-0f54fd248484'
-      ]
     });
 
     const caseAfterDocument = await getCaseInteractor({

@@ -1,7 +1,5 @@
 const sinon = require('sinon');
-const {
-  fileDocketEntryInteractor,
-} = require('./fileDocketEntryInteractor');
+const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
 const { User } = require('../../entities/User');
 
 describe('fileDocketEntryInteractor', () => {

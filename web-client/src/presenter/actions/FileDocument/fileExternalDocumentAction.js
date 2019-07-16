@@ -23,27 +23,25 @@ export const fileExternalDocumentAction = async ({
 
   const documentFiles = {
     primary: form.primaryDocumentFile,
-    secondary: form.secondaryDocumentFile
+    secondary: form.secondaryDocumentFile,
   };
 
   if (form.hasSupportingDocuments) {
     form.supportingDocuments.forEach((item, idx) => {
       documentFiles[`primarySupporting${idx}`] = item.supportingDocumentFile;
-    })
+    });
   }
 
   if (form.hasSecondarySupportingDocuments) {
     form.secondarySupportingDocuments.forEach((item, idx) => {
-      documentFiles[`secondarySupporting${idx}`] = item.secondarySupportingDocumentFile;
-    })
+      documentFiles[`secondarySupporting${idx}`] =
+        item.secondarySupportingDocumentFile;
+    });
   }
 
   const documentMetadata = { ...form, docketNumber, caseId };
 
-  const progressFunctions = setupPercentDone(
-    documentFiles,
-    store,
-  );
+  const progressFunctions = setupPercentDone(documentFiles, store);
 
   let caseDetail;
 
@@ -52,8 +50,8 @@ export const fileExternalDocumentAction = async ({
       .getUseCases()
       .uploadExternalDocumentInteractor({
         applicationContext,
-        documentMetadata,
         documentFiles,
+        documentMetadata,
         progressFunctions,
       });
 

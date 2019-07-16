@@ -175,7 +175,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   };
 
-  const supportingDocumentFreeTextCategories = [
+  /*const supportingDocumentFreeTextCategories = [
     'Affidavit in Support',
     'Declaration in Support',
     'Unsworn Declaration under Penalty of Perjury in Support',
@@ -186,7 +186,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     'Affidavit in Support',
     'Declaration in Support',
     'Unsworn Declaration under Penalty of Perjury in Support',
-  ];
+  ];*/
 
   if (documentMetadata.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');

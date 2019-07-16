@@ -20,8 +20,8 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileExternalDocumentInteractor = async ({
   applicationContext,
-  documentMetadata,
   documentIds,
+  documentMetadata,
 }) => {
   const user = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
@@ -62,7 +62,7 @@ exports.fileExternalDocumentInteractor = async ({
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
       item.secondarySupportingDocumentMetadata.lodged = true;
-    })
+    });
   }
 
   const documentsToAdd = [
@@ -70,23 +70,27 @@ exports.fileExternalDocumentInteractor = async ({
   ];
 
   if (supportingDocuments) {
-    for (let i=0; i<supportingDocuments.length; i++) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
         documentIds.shift(),
-        supportingDocuments[i].supportingDocumentMetadata, 
-        'primarySupportingDocument'
+        supportingDocuments[i].supportingDocumentMetadata,
+        'primarySupportingDocument',
       ]);
     }
   }
 
-  documentsToAdd.push([documentIds.shift(), secondaryDocument, 'secondaryDocument']);
+  documentsToAdd.push([
+    documentIds.shift(),
+    secondaryDocument,
+    'secondaryDocument',
+  ]);
 
   if (secondarySupportingDocuments) {
-    for (let i=0; i<secondarySupportingDocuments.length; i++) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
         documentIds.shift(),
         secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
-        'secondarySupportingDocument'
+        'secondarySupportingDocument',
       ]);
     }
   }
@@ -154,9 +158,7 @@ exports.fileExternalDocumentInteractor = async ({
         documentId: documentEntity.documentId,
         filingDate: documentEntity.receivedAt,
       });
-      caseEntity.addDocketRecord(
-        docketRecordEntity
-      );
+      caseEntity.addDocketRecord(docketRecordEntity);
     }
   });
 
