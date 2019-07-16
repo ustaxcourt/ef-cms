@@ -14,14 +14,20 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  *
  * @param documentMetadata
- * @param documentIds
+ * @param primaryDocumentFileId
+ * @param secondaryDocumentFileId
+ * @param supportingDocumentFileId
+ * @param secondarySupportingDocumentFileId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.fileExternalDocumentInteractor = async ({
+exports.fileDocketEntryInteractor = async ({
   applicationContext,
-  documentIds,
   documentMetadata,
+  primaryDocumentFileId,
+  secondaryDocumentFileId,
+  secondarySupportingDocumentFileId,
+  supportingDocumentFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
@@ -42,8 +48,8 @@ exports.fileExternalDocumentInteractor = async ({
 
   const {
     secondaryDocument,
-    secondarySupportingDocuments,
-    supportingDocuments,
+    secondarySupportingDocumentMetadata,
+    supportingDocumentMetadata,
     ...primaryDocumentMetadata
   } = documentMetadata;
 
@@ -52,50 +58,29 @@ exports.fileExternalDocumentInteractor = async ({
     'partySecondary',
     'partyRespondent',
     'practitioner',
-    'caseId',
-    'docketNumber',
   ]);
 
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
   }
-  if (secondarySupportingDocuments) {
-    secondarySupportingDocuments.forEach(item => {
-      item.secondarySupportingDocumentMetadata.lodged = true;
-    });
+  if (secondarySupportingDocumentMetadata) {
+    secondarySupportingDocumentMetadata.lodged = true;
   }
 
-  const documentsToAdd = [
-    [documentIds.shift(), primaryDocumentMetadata, 'primaryDocument'],
-  ];
-
-  if (supportingDocuments) {
-    for (let i = 0; i < supportingDocuments.length; i++) {
-      documentsToAdd.push([
-        documentIds.shift(),
-        supportingDocuments[i].supportingDocumentMetadata,
-        'primarySupportingDocument',
-      ]);
-    }
-  }
-
-  documentsToAdd.push([
-    documentIds.shift(),
-    secondaryDocument,
-    'secondaryDocument',
-  ]);
-
-  if (secondarySupportingDocuments) {
-    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
-      documentsToAdd.push([
-        documentIds.shift(),
-        secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
-        'secondarySupportingDocument',
-      ]);
-    }
-  }
-
-  documentsToAdd.forEach(([documentId, metadata, relationship]) => {
+  [
+    [primaryDocumentFileId, primaryDocumentMetadata, 'primaryDocument'],
+    [
+      supportingDocumentFileId,
+      supportingDocumentMetadata,
+      'primarySupportingDocument',
+    ],
+    [secondaryDocumentFileId, secondaryDocument, 'secondaryDocument'],
+    [
+      secondarySupportingDocumentFileId,
+      secondarySupportingDocumentMetadata,
+      'secondarySupportingDocument',
+    ],
+  ].forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
       const documentEntity = new Document({
         ...baseMetadata,
@@ -153,12 +138,13 @@ exports.fileExternalDocumentInteractor = async ({
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-      const docketRecordEntity = new DocketRecord({
-        description: metadata.documentTitle,
-        documentId: documentEntity.documentId,
-        filingDate: documentEntity.receivedAt,
-      });
-      caseEntity.addDocketRecord(docketRecordEntity);
+      caseEntity.addDocketRecord(
+        new DocketRecord({
+          description: metadata.documentTitle,
+          documentId: documentEntity.documentId,
+          filingDate: documentEntity.receivedAt,
+        }),
+      );
     }
   });
 

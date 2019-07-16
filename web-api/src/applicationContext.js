@@ -111,6 +111,9 @@ const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
+  fileDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/fileDocketEntryInteractor');
+const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
@@ -538,6 +541,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         fileCourtIssuedOrderInteractor,
+        fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generatePDFFromPNGDataInteractor,
