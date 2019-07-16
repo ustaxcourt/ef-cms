@@ -111,11 +111,11 @@ const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
-  fileExternalDocumentInteractor,
-} = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
-const {
   fileDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/fileDocketEntryInteractor');
+const {
+  fileExternalDocumentInteractor,
+} = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
@@ -541,8 +541,8 @@ module.exports = (appContextUser = {}) => {
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         fileCourtIssuedOrderInteractor,
-        fileExternalDocumentInteractor,
         fileDocketEntryInteractor,
+        fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generatePDFFromPNGDataInteractor,
         getCalendaredCasesForTrialSessionInteractor,
