@@ -15,7 +15,11 @@ export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
   if (type === 'primary') {
     store.set(state.form.hasSupportingDocuments, true);
     const supportingDocuments = get(state.form.supportingDocuments) || [];
-    supportingDocuments.push({});
+    supportingDocuments.push({
+      attachments: false,
+      certificateOfService: false,
+      exhibits: false,
+    });
     store.set(state.form.supportingDocuments, supportingDocuments);
 
     const currentSupportingDocumentCount =
@@ -27,7 +31,11 @@ export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
     store.set(state.form.hasSecondarySupportingDocuments, true);
     const secondarySupportingDocuments =
       get(state.form.secondarySupportingDocuments) || [];
-    secondarySupportingDocuments.push({});
+    secondarySupportingDocuments.push({
+      attachments: false,
+      certificateOfService: false,
+      exhibits: false,
+    });
     store.set(
       state.form.secondarySupportingDocuments,
       secondarySupportingDocuments,

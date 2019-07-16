@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -155,47 +156,55 @@ export const SecondarySupportingDocumentForm = connect(
 
           {fileDocumentHelper.secondarySupportingDocuments[index]
             .showSecondarySupportingDocumentUpload && (
-            <div
-              className={`usa-form-group margin-bottom-0 ${
-                validationErrors.secondarySupportingDocuments &&
-                validationErrors.secondarySupportingDocuments[index]
-                  .secondarySupportingDocumentFile
-                  ? 'usa-form-group--error'
-                  : ''
-              }`}
-            >
-              <label
-                className={
-                  'usa-label ustc-upload with-hint ' +
-                  (fileDocumentHelper.secondarySupportingDocuments[index]
-                    .showSecondarySupportingDocumentValid
-                    ? 'validated'
-                    : '')
-                }
-                htmlFor={`secondary-supporting-document-file-${index}`}
-                id={`secondary-supporting-document-file-${index}-label`}
+            <>
+              <div
+                className={`usa-form-group ${
+                  validationErrors.secondarySupportingDocuments &&
+                  validationErrors.secondarySupportingDocuments[index]
+                    .secondarySupportingDocumentFile
+                    ? 'usa-form-group--error'
+                    : ''
+                }`}
               >
-                Upload Your Supporting Document{' '}
-                <span className="success-message padding-left-1">
-                  <FontAwesomeIcon icon="check-circle" size="sm" />
+                <label
+                  className={
+                    'usa-label ustc-upload with-hint ' +
+                    (fileDocumentHelper.secondarySupportingDocuments[index]
+                      .showSecondarySupportingDocumentValid
+                      ? 'validated'
+                      : '')
+                  }
+                  htmlFor={`secondary-supporting-document-file-${index}`}
+                  id={`secondary-supporting-document-file-${index}-label`}
+                >
+                  Upload Your Supporting Document{' '}
+                  <span className="success-message padding-left-1">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
+                </label>
+                <span className="usa-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
-              </label>
-              <span className="usa-hint">
-                File must be in PDF format (.pdf). Max file size{' '}
-                {constants.MAX_FILE_SIZE_MB}MB.
-              </span>
-              <StateDrivenFileInput
-                aria-describedby={`secondary-supporting-document-file-${index}-label`}
-                id={`secondary-supporting-document-file-${index}`}
-                name={`secondarySupportingDocuments.${index}.secondarySupportingDocumentFile`}
-                updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
-                validationSequence="validateExternalDocumentInformationSequence"
+                <StateDrivenFileInput
+                  aria-describedby={`secondary-supporting-document-file-${index}-label`}
+                  id={`secondary-supporting-document-file-${index}`}
+                  name={`secondarySupportingDocuments.${index}.secondarySupportingDocumentFile`}
+                  updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
+                  validationSequence="validateExternalDocumentInformationSequence"
+                />
+                <Text
+                  bind={`validationErrors.secondarySupportingDocuments.${index}.secondarySupportingDocumentFile`}
+                  className="usa-error-message"
+                />
+              </div>
+
+              <SupportingDocumentInclusionsForm
+                bind={`form.secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata`}
+                type={`secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata`}
+                validationBind={`validationErrors.supportingDocument${index}`}
               />
-              <Text
-                bind={`validationErrors.secondarySupportingDocuments.${index}.secondarySupportingDocumentFile`}
-                className="usa-error-message"
-              />
-            </div>
+            </>
           )}
         </div>
       </>
