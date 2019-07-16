@@ -12,13 +12,11 @@ export const PrimaryDocumentReadOnly = connect(
   ({ chooseWizardStepSequence, fileDocumentHelper, form }) => {
     const renderPdfViewer = pdfData => {
       console.log('pdfData', pdfData);
-      const base64 = pdfData.replace('data:application/pdf;base64,', '');
+      const base64 = pdfData.replace(/[^,]+,/, '');
       console.log('base64', base64);
       return `
       <html>
         <head>
-          <h1>PDF.js Previous/Next example</h1>
-
           <div>
             <button id="prev">Previous</button>
             <button id="next">Next</button>
@@ -28,10 +26,12 @@ export const PrimaryDocumentReadOnly = connect(
           
           <canvas id="the-canvas"></canvas>
           <script src="http://localhost:1234/pdf.min.js"></script>
+
+          <style>
+          </style>
         </head>
 
         <body>
-          <h1>TEST</h1>
           <script>
             var pdfData = atob("${base64}");
             // Loaded via <script> tag, create shortcut to access PDF.js exports.
@@ -158,6 +158,7 @@ export const PrimaryDocumentReadOnly = connect(
             </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             <button
+              className="usa-button usa-button--unstyled"
               type="button"
               onClick={() => {
                 const convertFileToBase64AndOpenInTab = file => {
