@@ -23,7 +23,6 @@ export const SupportingDocumentInclusionsForm = connect(
     validationBind,
     validationData,
   }) => {
-    console.log(type);
     return (
       <React.Fragment>
         <div className="usa-form-group margin-bottom-0">
