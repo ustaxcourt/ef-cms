@@ -24,8 +24,16 @@ export const WhatCanIIncludeModalOverlay = connect(
               An attachment is any other item you’re submitting with your
               filing. If an attachment can’t be converted into a PDF and
               uploaded with your primary document, you can mail it to the Court.
-              For more information on mailing attachments, see the Petitioner’s
-              Guide to E-filing.
+              For more information on mailing attachments, see the{' '}
+              <a
+                className="usa-link--external"
+                href="https://www.ustaxcourt.gov/eaccess/Petitioners_Guide_to_eAccess_and_eFiling.pdf"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Petitioner’s Guide to E-filing
+              </a>
+              .
             </p>
             <h5>Certificate of Service</h5>
             <p>
