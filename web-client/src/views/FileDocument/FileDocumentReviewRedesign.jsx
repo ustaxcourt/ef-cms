@@ -61,7 +61,10 @@ export const FileDocumentReviewRedesign = connect(
                           {form.documentTitle}
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        <PDFPreviewButton file={form.primaryDocumentFile} />
+                        <PDFPreviewButton
+                          file={form.primaryDocumentFile}
+                          title={form.documentTitle}
+                        />
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">

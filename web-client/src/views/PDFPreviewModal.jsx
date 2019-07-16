@@ -20,6 +20,7 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.modal = {
       classNames: 'pdf-preview-modal',
       confirmLabel: 'OK',
+      title: props.title,
     };
 
     this.state = {
@@ -108,7 +109,6 @@ class PDFPreviewModalComponent extends ModalDialog {
 
     this.props.startLoadSequence();
 
-    //const pdfData = this.props.loadData(this.props.pdfFile);
     const reader = new FileReader();
     reader.readAsDataURL(this.props.pdfFile);
     reader.onload = () => {
@@ -123,44 +123,58 @@ class PDFPreviewModalComponent extends ModalDialog {
 
   renderBody() {
     return (
-      <div className="pdf-preview-content">
-        <div>
-          <div className="margin-bottom-3">
-            <FontAwesomeIcon
-              className="icon-button"
-              icon={['fas', 'step-backward']}
-              id="firstPage"
-              size="2x"
-              onClick={this.onFirstPage}
-            />
-            <FontAwesomeIcon
-              className="icon-button"
-              icon={['fas', 'caret-left']}
-              id="prev"
-              size="2x"
-              onClick={this.onPrevPage}
-            />
-            <span className="pages">
-              Page {this.state.currentPage} of {this.state.totalPages}
-            </span>
-            <FontAwesomeIcon
-              className="icon-button"
-              icon={['fas', 'caret-right']}
-              id="next"
-              size="2x"
-              onClick={this.onNextPage}
-            />
-            <FontAwesomeIcon
-              className="icon-button"
-              icon={['fas', 'step-forward']}
-              id="lastPage"
-              size="2x"
-              onClick={this.onLastPage}
-            />
-          </div>
+      <>
+        <div className="margin-bottom-3">
+          <FontAwesomeIcon
+            className={
+              'icon-button' + (this.state.currentPage === 1 ? ' disabled' : '')
+            }
+            icon={['fas', 'step-backward']}
+            id="firstPage"
+            size="2x"
+            onClick={this.onFirstPage}
+          />
+          <FontAwesomeIcon
+            className={
+              'icon-button' + (this.state.currentPage === 1 ? ' disabled' : '')
+            }
+            icon={['fas', 'caret-left']}
+            id="prev"
+            size="2x"
+            onClick={this.onPrevPage}
+          />
+          <span className="pages">
+            Page {this.state.currentPage} of {this.state.totalPages}
+          </span>
+          <FontAwesomeIcon
+            className={
+              'icon-button' +
+              (this.state.currentPage === this.state.totalPages
+                ? ' disabled'
+                : '')
+            }
+            icon={['fas', 'caret-right']}
+            id="next"
+            size="2x"
+            onClick={this.onNextPage}
+          />
+          <FontAwesomeIcon
+            className={
+              'icon-button' +
+              (this.state.currentPage === this.state.totalPages
+                ? ' disabled'
+                : '')
+            }
+            icon={['fas', 'step-forward']}
+            id="lastPage"
+            size="2x"
+            onClick={this.onLastPage}
+          />
         </div>
-        <canvas id="the-canvas" ref={this.canvasRef}></canvas>
-      </div>
+        <div className="pdf-preview-content">
+          <canvas id="the-canvas" ref={this.canvasRef}></canvas>
+        </div>
+      </>
     );
   }
 }
