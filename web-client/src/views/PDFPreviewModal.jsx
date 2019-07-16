@@ -126,13 +126,17 @@ class PDFPreviewModalComponent extends ModalDialog {
   modalMounted() {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
+    this.props.startLoadSequence();
+
     //const pdfData = this.props.loadData(this.props.pdfFile);
     var reader = new FileReader();
     reader.readAsDataURL(this.props.pdfFile);
     reader.onload = () => {
       this.initFile(atob(reader.result.replace(/[^,]+,/, '')));
+      this.props.stopLoadSequence();
     };
     reader.onerror = function(error) {
+      this.props.stopLoadSequence();
       console.log('error: ', error);
     };
   }
@@ -176,6 +180,8 @@ export const PDFPreviewModal = connect(
     confirmSequence: sequences.dismissModalSequence,
     loadData: sequences.loadPDFDataForPreviewSequence,
     pdfPreviewData: state.pdfPreviewData,
+    startLoadSequence: sequences.setFormSubmittingSequence,
+    stopLoadSequence: sequences.unsetFormSubmittingSequence,
   },
   PDFPreviewModalComponent,
 );
