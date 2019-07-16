@@ -6,9 +6,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadExternalDocumentInteractor = async ({
   applicationContext,
+  documentFiles,
   documentMetadata,
   progressFunctions,
-  documentFiles,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -37,7 +37,7 @@ exports.uploadExternalDocumentInteractor = async ({
 
   const supportingDocumentFileIds = [];
   if (documentMetadata.hasSupportingDocuments) {
-    for (let i=0; i < documentMetadata.supportingDocuments.length; i++) {
+    for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
       const supportingDocumentFileId = await applicationContext
         .getPersistenceGateway()
         .uploadDocument({
@@ -46,13 +46,17 @@ exports.uploadExternalDocumentInteractor = async ({
           onUploadProgress: progressFunctions[`primarySupporting${i}`],
         });
 
-        supportingDocumentFileIds.push(supportingDocumentFileId);
+      supportingDocumentFileIds.push(supportingDocumentFileId);
     }
   }
 
   const secondarySupportingDocumentFileIds = [];
   if (documentMetadata.hasSecondarySupportingDocuments) {
-    for (let i=0; i < documentMetadata.secondarySupportingDocuments.length; i++) {
+    for (
+      let i = 0;
+      i < documentMetadata.secondarySupportingDocuments.length;
+      i++
+    ) {
       const secondarySupportingDocumentFileId = await applicationContext
         .getPersistenceGateway()
         .uploadDocument({
@@ -61,7 +65,9 @@ exports.uploadExternalDocumentInteractor = async ({
           onUploadProgress: progressFunctions[`secondarySupporting${i}`],
         });
 
-      secondarySupportingDocumentFileIds.push(secondarySupportingDocumentFileId);
+      secondarySupportingDocumentFileIds.push(
+        secondarySupportingDocumentFileId,
+      );
     }
   }
 
@@ -95,7 +101,7 @@ exports.uploadExternalDocumentInteractor = async ({
 
   return await applicationContext.getUseCases().fileExternalDocumentInteractor({
     applicationContext,
-    documentMetadata,
     documentIds,
+    documentMetadata,
   });
 };

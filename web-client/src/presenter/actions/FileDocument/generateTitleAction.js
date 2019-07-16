@@ -29,9 +29,9 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
   }
 
-  const supportingDocuments = documentMetadata.supportingDocuments;
+  const { supportingDocuments } = documentMetadata;
   if (supportingDocuments) {
-    for (let i=0; i<supportingDocuments.length; i++) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
       if (!isEmpty(supportingDocuments[i].supportingDocumentMetadata)) {
         documentTitle = applicationContext
           .getUseCases()
@@ -40,28 +40,36 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
             documentMetadata: supportingDocuments[i].supportingDocumentMetadata,
           });
         store.set(
-          state.form.supportingDocuments[i].supportingDocumentMetadata.documentTitle,
+          state.form.supportingDocuments[i].supportingDocumentMetadata
+            .documentTitle,
           documentTitle,
         );
-      }  
+      }
     }
   }
 
-  const secondarySupportingDocuments = documentMetadata.secondarySupportingDocuments;
+  const { secondarySupportingDocuments } = documentMetadata;
   if (secondarySupportingDocuments) {
-    for (let i=0; i<secondarySupportingDocuments.length; i++) {
-      if (!isEmpty(secondarySupportingDocuments[i].secondarySupportingDocumentMetadata)) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      if (
+        !isEmpty(
+          secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
+        )
+      ) {
         documentTitle = applicationContext
           .getUseCases()
           .generateDocumentTitleInteractor({
             applicationContext,
-            documentMetadata: secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
+            documentMetadata:
+              secondarySupportingDocuments[i]
+                .secondarySupportingDocumentMetadata,
           });
         store.set(
-          state.form.secondarySupportingDocuments[i].secondarySupportingDocumentMetadata.documentTitle,
+          state.form.secondarySupportingDocuments[i]
+            .secondarySupportingDocumentMetadata.documentTitle,
           documentTitle,
         );
-      }  
+      }
     }
   }
 };

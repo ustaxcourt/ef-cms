@@ -16,18 +16,20 @@ describe('setSupportingDocumentScenarioAction', () => {
                 category: 'Motion',
                 documentType: 'Motion for Judgment on the Pleadings',
               },
-            }
-          ]
+            },
+          ],
         },
       },
     });
 
-    expect(result.state.form.supportingDocuments[0].supportingDocumentMetadata.scenario).toEqual(
-      'Standard',
-    );
-    expect(result.state.form.supportingDocuments[0].supportingDocumentMetadata.documentTitle).toEqual(
-      'Motion for Judgment on the Pleadings',
-    );
+    expect(
+      result.state.form.supportingDocuments[0].supportingDocumentMetadata
+        .scenario,
+    ).toEqual('Standard');
+    expect(
+      result.state.form.supportingDocuments[0].supportingDocumentMetadata
+        .documentTitle,
+    ).toEqual('Motion for Judgment on the Pleadings');
   });
 
   it('should set scenario and document type for secondary supporting document', async () => {
@@ -43,17 +45,19 @@ describe('setSupportingDocumentScenarioAction', () => {
                 category: 'Motion',
                 documentType: 'Motion for Judgment on the Pleadings',
               },
-            }
-          ]
+            },
+          ],
         },
       },
     });
 
     expect(
-      result.state.form.secondarySupportingDocuments[0].secondarySupportingDocumentMetadata.scenario,
+      result.state.form.secondarySupportingDocuments[0]
+        .secondarySupportingDocumentMetadata.scenario,
     ).toEqual('Standard');
     expect(
-      result.state.form.secondarySupportingDocuments[0].secondarySupportingDocumentMetadata.documentTitle,
+      result.state.form.secondarySupportingDocuments[0]
+        .secondarySupportingDocumentMetadata.documentTitle,
     ).toEqual('Motion for Judgment on the Pleadings');
   });
 });
