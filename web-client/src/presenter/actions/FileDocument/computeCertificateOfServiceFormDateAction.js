@@ -33,9 +33,9 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (secondaryDocument) {
-    month = secondaryDocument.certificateOfServiceMonth;
-    day = secondaryDocument.certificateOfServiceDay;
-    year = secondaryDocument.certificateOfServiceYear;
+    month = get(state.form.secondaryDocument.certificateOfServiceMonth);
+    day = get(state.form.secondaryDocument.certificateOfServiceDay);
+    year = get(state.form.secondaryDocument.certificateOfServiceYear);
     store.set(
       state.form.secondaryDocument.certificateOfServiceDate,
       computeDate({ day, month, year }),
@@ -46,10 +46,18 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
 
   if (supportingDocuments) {
     supportingDocuments.forEach((item, idx) => {
-      const { supportingDocumentMetadata } = item;
-      month = supportingDocumentMetadata.certificateOfServiceMonth;
-      day = supportingDocumentMetadata.certificateOfServiceDay;
-      year = supportingDocumentMetadata.certificateOfServiceYear;
+      month = get(
+        state.form.supportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceMonth,
+      );
+      day = get(
+        state.form.supportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceDay,
+      );
+      year = get(
+        state.form.supportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceYaer,
+      );
       store.set(
         state.form.supportingDocuments[idx].supportingDocumentMetadata
           .certificateOfServiceDate,
@@ -64,10 +72,18 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
 
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach((item, idx) => {
-      const { secondarySupportingDocumentMetadata } = item;
-      month = secondarySupportingDocumentMetadata.certificateOfServiceMonth;
-      day = secondarySupportingDocumentMetadata.certificateOfServiceDay;
-      year = secondarySupportingDocumentMetadata.certificateOfServiceYear;
+      month = get(
+        state.form.secondarySupportingDocuments[idx]
+          .secondarySupportingDocumentMetadata.certificateOfServiceMonth,
+      );
+      day = get(
+        state.form.secondarySupportingDocuments[idx]
+          .secondarySupportingDocumentMetadata.certificateOfServiceDay,
+      );
+      year = get(
+        state.form.secondarySupportingDocuments[idx]
+          .secondarySupportingDocumentMetadata.certificateOfServiceYear,
+      );
       store.set(
         state.form.secondarySupportingDocuments[idx]
           .secondarySupportingDocumentMetadata.certificateOfServiceDate,
