@@ -16,7 +16,11 @@ export const setSupportingDocumentScenarioAction = ({ get, store }) => {
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       const { supportingDocumentMetadata } = supportingDocuments[i];
-      if (supportingDocumentMetadata) {
+      if (
+        supportingDocumentMetadata &&
+        supportingDocumentMetadata.category &&
+        supportingDocumentMetadata.documentType
+      ) {
         const { category, documentType } = supportingDocumentMetadata;
 
         const categoryInformation = CATEGORY_MAP[category].find(
@@ -50,7 +54,11 @@ export const setSupportingDocumentScenarioAction = ({ get, store }) => {
       const {
         secondarySupportingDocumentMetadata,
       } = secondarySupportingDocuments[i];
-      if (secondarySupportingDocumentMetadata) {
+      if (
+        secondarySupportingDocumentMetadata &&
+        secondarySupportingDocumentMetadata.category &&
+        secondarySupportingDocumentMetadata.documentType
+      ) {
         const { category, documentType } = secondarySupportingDocumentMetadata;
 
         const categoryInformation = CATEGORY_MAP[category].find(

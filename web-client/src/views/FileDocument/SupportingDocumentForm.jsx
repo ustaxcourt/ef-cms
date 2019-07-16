@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -147,47 +148,55 @@ export const SupportingDocumentForm = connect(
 
           {fileDocumentHelper.supportingDocuments[index]
             .showSupportingDocumentUpload && (
-            <div
-              className={`usa-form-group margin-bottom-0 ${
-                validationErrors.supportingDocuments &&
-                validationErrors.supportingDocuments[index]
-                  .supportingDocumentFile
-                  ? 'usa-form-group--error'
-                  : ''
-              }`}
-            >
-              <label
-                className={
-                  'usa-label ustc-upload with-hint ' +
-                  (fileDocumentHelper.supportingDocuments[index]
-                    .showSupportingDocumentValid
-                    ? 'validated'
-                    : '')
-                }
-                htmlFor={`supporting-document-file-${index}`}
-                id={`supporting-document-file-${index}-label`}
+            <>
+              <div
+                className={`usa-form-group ${
+                  validationErrors.supportingDocuments &&
+                  validationErrors.supportingDocuments[index]
+                    .supportingDocumentFile
+                    ? 'usa-form-group--error'
+                    : ''
+                }`}
               >
-                Upload Your Supporting Document{' '}
-                <span className="success-message">
-                  <FontAwesomeIcon icon="check-circle" size="sm" />
+                <label
+                  className={
+                    'usa-label ustc-upload with-hint ' +
+                    (fileDocumentHelper.supportingDocuments[index]
+                      .showSupportingDocumentValid
+                      ? 'validated'
+                      : '')
+                  }
+                  htmlFor={`supporting-document-file-${index}`}
+                  id={`supporting-document-file-${index}-label`}
+                >
+                  Upload Your Supporting Document{' '}
+                  <span className="success-message">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
+                </label>
+                <span className="usa-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
-              </label>
-              <span className="usa-hint">
-                File must be in PDF format (.pdf). Max file size{' '}
-                {constants.MAX_FILE_SIZE_MB}MB.
-              </span>
-              <StateDrivenFileInput
-                aria-describedby={`supporting-document-file-${index}-label`}
-                id={`supporting-document-file-${index}`}
-                name={`supportingDocuments.${index}.supportingDocumentFile`}
-                updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
-                validationSequence="validateExternalDocumentInformationSequence"
+                <StateDrivenFileInput
+                  aria-describedby={`supporting-document-file-${index}-label`}
+                  id={`supporting-document-file-${index}`}
+                  name={`supportingDocuments.${index}.supportingDocumentFile`}
+                  updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
+                  validationSequence="validateExternalDocumentInformationSequence"
+                />
+                <Text
+                  bind={`validationErrors.supportingDocuments.${index}.supportingDocumentFile`}
+                  className="usa-error-message"
+                />
+              </div>
+
+              <SupportingDocumentInclusionsForm
+                bind={`form.supportingDocuments.${index}.supportingDocumentMetadata`}
+                type={`supportingDocuments.${index}.supportingDocumentMetadata`}
+                validationBind={`validationErrors.supportingDocument${index}`}
               />
-              <Text
-                bind={`validationErrors.supportingDocuments.${index}.supportingDocumentFile`}
-                className="usa-error-message"
-              />
-            </div>
+            </>
           )}
         </div>
       </>

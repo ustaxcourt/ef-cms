@@ -40,4 +40,52 @@ describe('computeCertificateOfServiceFormDateAction', () => {
       'undefined-12-05',
     );
   });
+
+  it('should set certificateOfServiceDate for secondary and supporting documents', async () => {
+    const result = await runAction(computeCertificateOfServiceFormDateAction, {
+      state: {
+        form: {
+          certificateOfServiceDay: '5',
+          certificateOfServiceMonth: '12',
+          certificateOfServiceYear: '2012',
+          secondaryDocument: {
+            certificateOfServiceDay: '6',
+            certificateOfServiceMonth: '11',
+            certificateOfServiceYear: '2012',
+          },
+          secondarySupportingDocuments: [
+            {
+              secondarySupportingDocumentMetadata: {
+                certificateOfServiceDay: '8',
+                certificateOfServiceMonth: '9',
+                certificateOfServiceYear: '2012',
+              },
+            },
+          ],
+          supportingDocuments: [
+            {
+              supportingDocumentMetadata: {
+                certificateOfServiceDay: '7',
+                certificateOfServiceMonth: '10',
+                certificateOfServiceYear: '2012',
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.form.certificateOfServiceDate).toEqual('2012-12-05');
+    expect(
+      result.state.form.secondaryDocument.certificateOfServiceDate,
+    ).toEqual('2012-11-06');
+    expect(
+      result.state.form.supportingDocuments[0].supportingDocumentMetadata
+        .certificateOfServiceDate,
+    ).toEqual('2012-10-07');
+    expect(
+      result.state.form.secondarySupportingDocuments[0]
+        .secondarySupportingDocumentMetadata.certificateOfServiceDate,
+    ).toEqual('2012-09-08');
+  });
 });
