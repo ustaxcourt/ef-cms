@@ -15,6 +15,8 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.pagePrevRef = React.createRef();
     this.pageNumRef = React.createRef();
     this.pageCountRef = React.createRef();
+    this.pageFirstRef = React.createRef();
+    this.pageLastRef = React.createRef();
     this.initFile = this.initFile.bind(this);
 
     this.modal = {
@@ -27,6 +29,8 @@ class PDFPreviewModalComponent extends ModalDialog {
     const canvas = this.canvasRef.current;
     const ctx = canvas.getContext('2d');
     const pageNextEl = this.pageNextRef.current;
+    const pageLastEl = this.pageLastRef.current;
+    const pageFirstEl = this.pageFirstRef.current;
     const pagePrevEl = this.pagePrevRef.current;
     const pageNumEl = this.pageNumRef.current;
     const pageCountEl = this.pageCountRef.current;
@@ -111,6 +115,24 @@ class PDFPreviewModalComponent extends ModalDialog {
     pageNextEl.addEventListener('click', onNextPage);
 
     /**
+     * Displays last page.
+     */
+    function onLastPage() {
+      pageNum = pdfDoc.numPages;
+      queueRenderPage(pageNum);
+    }
+    pageLastEl.addEventListener('click', onLastPage);
+
+    /**
+     * Displays first page.
+     */
+    function onFirstPage() {
+      pageNum = 1;
+      queueRenderPage(pageNum);
+    }
+    pageFirstEl.addEventListener('click', onFirstPage);
+
+    /**
      * Asynchronously downloads PDF.
      */
     pdfjsLib.getDocument({ data: pdfData }).promise.then(function(pdfDoc_) {
@@ -142,6 +164,15 @@ class PDFPreviewModalComponent extends ModalDialog {
       <div className="pdf-preview-content">
         <div>
           <div className="margin-bottom-3">
+            <span className="margin-right-1" ref={this.pageFirstRef}>
+              <FontAwesomeIcon
+                className="icon-button"
+                icon={['fas', 'step-backward']}
+                id="firstPage"
+                size="2x"
+              />
+            </span>
+
             <span className="margin-right-1" ref={this.pagePrevRef}>
               <FontAwesomeIcon
                 className="icon-button"
@@ -156,9 +187,17 @@ class PDFPreviewModalComponent extends ModalDialog {
             </span>
             <span className="margin-left-1" ref={this.pageNextRef}>
               <FontAwesomeIcon
-                className={'icon-button'}
+                className="icon-button"
                 icon={['fas', 'caret-right']}
                 id="next"
+                size="2x"
+              />
+            </span>
+            <span className="margin-left-1" ref={this.pageLastRef}>
+              <FontAwesomeIcon
+                className="icon-button"
+                icon={['fas', 'step-forward']}
+                id="lastPage"
                 size="2x"
               />
             </span>
