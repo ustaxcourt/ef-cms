@@ -3,7 +3,6 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { If } from '../../ustc-ui/If/If';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -144,40 +143,45 @@ export const FileDocumentReviewRedesign = connect(
                     </div>
                   )}
 
-                  <If bind="form.secondaryDocument.documentTitle">
-                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                      <div className="tablet:grid-col-6 margin-bottom-1">
-                        <label className="usa-label" htmlFor="secondary-filing">
-                          {form.secondaryDocument.documentTitle}
-                        </label>
-                        <If bind="form.secondaryDocumentFile.name">
-                          <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                          {form.secondaryDocumentFile.name}
-                        </If>
-                        <If not bind="form.secondaryDocumentFile.name">
-                          No file attached
-                        </If>
-                      </div>
+                  {form.secondaryDocument &&
+                    form.secondaryDocument.documentTitle && (
+                      <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+                        <div className="tablet:grid-col-6 margin-bottom-1">
+                          <label
+                            className="usa-label"
+                            htmlFor="secondary-filing"
+                          >
+                            {form.secondaryDocument.documentTitle}
+                          </label>
+                          {(form.secondaryDocumentFile &&
+                            form.secondaryDocumentFile.name && (
+                              <React.Fragment>
+                                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                                {form.secondaryDocumentFile.name}
+                              </React.Fragment>
+                            )) ||
+                            'No file attached'}
+                        </div>
 
-                      <div className="tablet:grid-col-6 margin-bottom-1">
-                        {fileDocumentHelper.showSecondaryFilingNotIncludes && (
-                          <div className=" margin-bottom-0">
-                            <label
-                              className="usa-label"
-                              htmlFor="filing-not-includes"
-                            >
-                              Filing Does Not Include
-                            </label>
-                            <ul className="ustc-unstyled-list without-margins">
-                              {!form.hasSecondarySupportingDocuments && (
-                                <li>Supporting Documents</li>
-                              )}
-                            </ul>
-                          </div>
-                        )}
+                        <div className="tablet:grid-col-6 margin-bottom-1">
+                          {fileDocumentHelper.showSecondaryFilingNotIncludes && (
+                            <div className=" margin-bottom-0">
+                              <label
+                                className="usa-label"
+                                htmlFor="filing-not-includes"
+                              >
+                                Filing Does Not Include
+                              </label>
+                              <ul className="ustc-unstyled-list without-margins">
+                                {!form.hasSecondarySupportingDocuments && (
+                                  <li>Supporting Documents</li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </If>
+                    )}
 
                   {form.secondarySupportingDocumentFile && (
                     <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
