@@ -12,7 +12,13 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.pageNextRef = React.createRef();
     this.pagePrevRef = React.createRef();
     this.pageNumRef = React.createRef();
+    this.pageCountRef = React.createRef();
     this.initFile = this.initFile.bind(this);
+
+    this.modal = {
+      classNames: 'pdf-preview-modal',
+      confirmLabel: 'Ok',
+    };
   }
 
   initFile(pdfData) {
@@ -21,6 +27,7 @@ class PDFPreviewModalComponent extends ModalDialog {
     const pageNextEl = this.pageNextRef.current;
     const pagePrevEl = this.pagePrevRef.current;
     const pageNumEl = this.pageNumRef.current;
+    const pageCountEl = this.pageCountRef.current;
 
     let pdfDoc = null,
       pageNum = 1,
@@ -109,6 +116,7 @@ class PDFPreviewModalComponent extends ModalDialog {
 
       // Initial/first page rendering
       renderPage(pageNum);
+      pageCountEl.textContent = pdfDoc.numPages;
     });
   }
 
@@ -140,7 +148,7 @@ class PDFPreviewModalComponent extends ModalDialog {
           <span>
             Page:
             <span id="page_num" ref={this.pageNumRef} />/
-            <span id="page_count" />
+            <span id="page_count" ref={this.pageCountRef} />
           </span>
         </div>
         <canvas id="the-canvas" ref={this.canvasRef}></canvas>
@@ -152,6 +160,7 @@ class PDFPreviewModalComponent extends ModalDialog {
 export const PDFPreviewModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
+    confirmSequence: sequences.dismissModalSequence,
     loadData: sequences.loadPDFDataForPreviewSequence,
     pdfPreviewData: state.pdfPreviewData,
   },
