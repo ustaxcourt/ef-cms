@@ -16,6 +16,6 @@ exports.completeWorkItemInteractor = ({
   return put({
     applicationContext,
     body: { completedMessage },
-    endpoint: `/work-items/${workItemId}/complete`,
+    endpoint: `/api/work-items/${workItemId}/complete`,
   });
 };

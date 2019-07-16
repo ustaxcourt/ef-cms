@@ -19,7 +19,7 @@ exports.fillInAndSubmitForm = () => {
     .type('Orlando');
   cy.get('select[name="contactPrimary.state"]')
     .scrollIntoView()
-    .select('Alabama');
+    .select('AL');
   cy.get('input[name="contactPrimary.postalCode"]')
     .scrollIntoView()
     .type('12345');

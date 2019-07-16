@@ -1,10 +1,13 @@
 /**
- * validateDocketEntry
+ * validateDocketEntryInteractor
  * @param applicationContext
  * @param entryMetadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateDocketEntry = ({ applicationContext, entryMetadata }) => {
+exports.validateDocketEntryInteractor = ({
+  applicationContext,
+  entryMetadata,
+}) => {
   const docketEntry = applicationContext
     .getEntityConstructors()
     .DocketEntryFactory(entryMetadata);

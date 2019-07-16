@@ -2,12 +2,12 @@ const {
   ExternalDocumentFactory,
 } = require('../../entities/externalDocument/ExternalDocumentFactory');
 const {
-  validateExternalDocument,
+  validateExternalDocumentInteractor,
 } = require('./validateExternalDocumentInteractor');
 
-describe('validateExternalDocument', () => {
+describe('validateExternalDocumentInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateExternalDocument({
+    const errors = validateExternalDocumentInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ExternalDocumentFactory,
@@ -23,7 +23,7 @@ describe('validateExternalDocument', () => {
   });
 
   it('returns no errors when all fields are defined', () => {
-    const errors = validateExternalDocument({
+    const errors = validateExternalDocumentInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           ExternalDocumentFactory,

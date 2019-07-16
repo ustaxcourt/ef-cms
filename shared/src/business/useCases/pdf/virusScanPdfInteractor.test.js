@@ -1,15 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
-const { virusScanPdf } = require('./virusScanPdfInteractor');
+const { virusScanPdfInteractor } = require('./virusScanPdfInteractor');
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
-function testAsset(name) {
+const testAsset = name => {
   return fs.readFileSync(testAssetsPath + name);
-}
+};
 
-describe('virusScanPdf', () => {
+describe('virusScanPdfInteractor', () => {
   it('detects a clean PDF', async () => {
     const cleanParams = {
       applicationContext: {
@@ -31,7 +31,7 @@ describe('virusScanPdf', () => {
       },
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
-    const result = await virusScanPdf(cleanParams);
+    const result = await virusScanPdfInteractor(cleanParams);
     expect(result).toBe('clean');
   });
 
@@ -59,6 +59,6 @@ describe('virusScanPdf', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    await expect(virusScanPdf(infectedParams)).rejects.toThrow();
+    await expect(virusScanPdfInteractor(infectedParams)).rejects.toThrow();
   });
 });

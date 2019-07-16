@@ -10,7 +10,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param userId
  * @returns {Promise<*>}
  */
-exports.getFilingTypes = async ({ applicationContext }) => {
+exports.getFilingTypesInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, PETITION)) {

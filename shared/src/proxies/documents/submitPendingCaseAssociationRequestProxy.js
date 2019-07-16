@@ -1,19 +1,19 @@
 const { put } = require('../requests');
 
 /**
- * submitPendingCaseAssociationRequest
+ * submitPendingCaseAssociationRequestInteractor
  *
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.submitPendingCaseAssociationRequest = ({
+exports.submitPendingCaseAssociationRequestInteractor = ({
   applicationContext,
   caseId,
 }) => {
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
-    endpoint: `/users/${user.userId}/case/${caseId}/pending`,
+    endpoint: `/api/users/${user.userId}/case/${caseId}/pending`,
   });
 };

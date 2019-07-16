@@ -104,22 +104,24 @@ export const createCaseFromPaperAction = async ({
   let caseDetail;
 
   try {
-    caseDetail = await applicationContext.getUseCases().filePetitionFromPaper({
-      applicationContext,
-      ownershipDisclosureFile,
-      ownershipDisclosureUploadProgress: progressFunctions.ownership,
-      petitionFile,
-      petitionMetadata: form,
-      petitionUploadProgress: progressFunctions.petition,
-      stinFile,
-      stinUploadProgress: progressFunctions.stin,
-    });
+    caseDetail = await applicationContext
+      .getUseCases()
+      .filePetitionFromPaperInteractor({
+        applicationContext,
+        ownershipDisclosureFile,
+        ownershipDisclosureUploadProgress: progressFunctions.ownership,
+        petitionFile,
+        petitionMetadata: form,
+        petitionUploadProgress: progressFunctions.petition,
+        stinFile,
+        stinUploadProgress: progressFunctions.stin,
+      });
   } catch (err) {
     return path.error();
   }
 
   for (let document of caseDetail.documents) {
-    await applicationContext.getUseCases().createCoverSheet({
+    await applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,

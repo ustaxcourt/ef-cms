@@ -15,7 +15,7 @@ describe('getEligibleCasesForTrialSessionAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        getEligibleCasesForTrialSession: getEligibleCasesForTrialSessionStub,
+        getEligibleCasesForTrialSessionInteractor: getEligibleCasesForTrialSessionStub,
       }),
     };
   });

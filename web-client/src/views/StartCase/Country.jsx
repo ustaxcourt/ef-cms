@@ -45,7 +45,10 @@ export const Country = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateStartCaseSequence();
+
+              if (validateStartCaseSequence) {
+                validateStartCaseSequence();
+              }
             }}
           >
             <option value={constants.COUNTRY_TYPES.DOMESTIC}>
@@ -82,7 +85,9 @@ export const Country = connect(
               type="text"
               value={data[type].country || ''}
               onBlur={() => {
-                validateStartCaseSequence();
+                if (validateStartCaseSequence) {
+                  validateStartCaseSequence();
+                }
               }}
               onChange={e => {
                 updateFormValueSequence({

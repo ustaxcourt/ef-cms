@@ -1,15 +1,15 @@
 const { post } = require('../requests');
 
 /**
- * setWorkItemAsRead
+ * setWorkItemAsReadInteractor
  *
  * @param documents
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.setWorkItemAsRead = ({ applicationContext, workItemId }) => {
+exports.setWorkItemAsReadInteractor = ({ applicationContext, workItemId }) => {
   return post({
     applicationContext,
-    endpoint: `/work-items/${workItemId}/read`,
+    endpoint: `/api/work-items/${workItemId}/read`,
   });
 };

@@ -1,0 +1,429 @@
+service: ef-cms-cases
+plugins:
+  - serverless-plugin-split-stacks
+  - serverless-domain-manager
+  - serverless-plugin-bind-deployment-id
+  # - serverless-plugin-aws-alerts
+  - serverless-offline
+  - serverless-prune-plugin
+  - serverless-plugin-tracing
+  - serverless-latest-layer-version
+  - serverless-apigwy-binary
+
+custom:
+  prune:
+    automatic: true
+    number: 3
+
+  serverless-offline:
+    host: 0.0.0.0
+    port: 3002
+
+  alerts:
+    stages:
+      - dev
+      - stg
+      - prod
+    dashboards: true
+    alarms:
+      - functionThrottles
+      - functionErrors
+      - functionInvocations
+      - functionDuration
+      - errorExceptions
+    definitions:
+      errorExceptions:
+        description: 'Internal Error Exception Alarm'
+        namespace: 'AWS/Lambda'
+        metric: Errors
+        threshold: 1
+        statistic: Sum
+        period: 60
+        evaluationPeriods: 1
+        comparisonOperator: GreaterThanThreshold
+        pattern: 'ERROR'
+    topics:
+      alarm:
+        topic: ${self:provider.stage}-cloudwatch-alerts
+        notifications:
+          - protocol: email
+            endpoint: jsutton@flexion.us
+
+  customDomain:
+    domainName: efcms-${self:provider.stage}.${opt:domain}
+    basePath: 'cases'
+    endpointType: 'regional'
+    certificateName: efcms-${self:provider.stage}.${opt:domain}
+    certificateRegion: ${opt:region}
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+    enabled: true
+  splitStacks:
+    perFunction: true
+    perType: true
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  vars: ${file(./config/${self:custom.stage}.yml)}
+
+provider:
+  name: aws
+  tracing: true
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  runtime: nodejs10.x
+  memorySize: 768
+  timeout: 30
+  logRetentionInDays: 7
+  s3Endpoint: s3.us-east-1.amazonaws.com
+  dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
+  masterRegion: us-east-1
+  userPoolId: us-east-1_7uRkF0Axn
+  masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
+  clamavDefDir: /opt/var/lib/clamav
+  deploymentBucket:
+    name: ${env:SLS_DEPLOYMENT_BUCKET}
+    serverSideEncryption: AES256
+  apiGateway:
+    binaryMediaTypes:
+      - 'application/pdf'
+
+  environment:
+    S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
+    DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+    DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
+    MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
+    STAGE: ${self:custom.stage}
+    USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
+    NODE_ENV: ${self:custom.vars.nodeEnv}
+    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'xray:PutTraceSegments'
+        - 'xray:PutTelemetryRecords'
+      Resource:
+        - '*'
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
+    - Effect: 'Allow'
+      Action:
+        - cognito-idp:AdminCreateUser
+        - cognito-idp:AdminGetUser
+      Resource:
+        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+    - Effect: 'Allow'
+      Action:
+        - 's3:*'
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
+            - '/*'
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:BatchGetItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchWriteItem
+      Resource:
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
+        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
+        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
+
+package:
+  exclude:
+    - storage/**
+    - coverage/**
+    - terraform/**
+    - cognito/**
+    - node_modules/**
+    - .cache/**
+    - .dynamodb/**
+    - .nyc_output/**
+    - dist/**
+    - src/handlers.js.map
+    - runtimes/**
+
+  excludeDevDependencies: true
+
+resources:
+  Resources:
+    #####
+    # This Authorizer is used for validating the JWT token before invoking the lambda
+    #####
+    ApiGatewayAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        Name: CognitoUserPool
+        Type: COGNITO_USER_POOLS
+        IdentitySource: method.request.header.Authorization
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ProviderARNs:
+          - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+
+    #####
+    # Begin Stage for API Gateway Logging
+    #####
+    ApiGatewayStage:
+      Type: AWS::ApiGateway::Stage
+      Properties:
+        DeploymentId:
+          Ref: __deployment__
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StageName: ${opt:stage}
+        MethodSettings:
+          - DataTraceEnabled: true
+            HttpMethod: '*'
+            LoggingLevel: INFO
+            ResourcePath: '/*'
+            MetricsEnabled: true
+
+functions:
+  createDocument:
+    handler: src/handlers.createDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/documents
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  addCoversheet:
+    handler: src/handlers.addCoversheetLambda
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{caseId}/documents/{documentId}/coversheet
+          method: post
+          cors: true
+          # async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  signDocument:
+    handler: src/handlers.signDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/documents/{documentId}/sign
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCase:
+    handler: src/handlers.updateCaseLambda
+    events:
+      - http:
+          path: /{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseTrialSortTags:
+    handler: src/handlers.updateCaseTrialSortTagsLambda
+    events:
+      - http:
+          path: /{caseId}/update-case-trial-sort-tags
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updatePrimaryContact:
+    handler: src/handlers.updatePrimaryContactLambda
+    events:
+      - http:
+          path: /{caseId}/contact-primary
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setCaseToReadyForTrial:
+    handler: src/handlers.setCaseToReadyForTrialLambda
+    events:
+      - http:
+          path: /{caseId}/set-to-ready-for-trial
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCase:
+    handler: src/handlers.createCaseLambda
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCaseFromPaper:
+    handler: src/handlers.createCaseFromPaperLambda
+    events:
+      - http:
+          path: /paper
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileExternalDocument:
+    handler: src/handlers.fileExternalDocumentToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/external-document
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileCourtIssuedOrder:
+    handler: src/handlers.fileCourtIssuedOrderToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-order
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCase:
+    handler: src/handlers.getCaseLambda
+    events:
+      - http:
+          path: /{caseId}
+          method: get
+          request:
+            parameters:
+              paths:
+                caseId: true
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  sendToIRS:
+    handler: src/handlers.sendPetitionToIRSHoldingQueueLambda
+    events:
+      - http:
+          path: /{caseId}/send-to-irs-holding-queue
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  recallFromIRS:
+    handler: src/handlers.recallPetitionFromIRSHoldingQueueLambda
+    events:
+      - http:
+          path: /{caseId}/recall-from-irs-holding-queue
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createWorkItem:
+    handler: src/handlers.createWorkItemLambda
+    events:
+      - http:
+          path: /{caseId}/documents/{documentId}/work-items
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCaseDeadline:
+    handler: src/handlers.createCaseDeadlineLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCaseDeadlinesForCase:
+    handler: src/handlers.getCaseDeadlinesForCaseLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseDeadline:
+    handler: src/handlers.updateCaseDeadlineLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline/{caseDeadlineId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteCaseDeadline:
+    handler: src/handlers.deleteCaseDeadlineLambda
+    events:
+      - http:
+          path: /{caseId}/case-deadline/{caseDeadlineId}
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

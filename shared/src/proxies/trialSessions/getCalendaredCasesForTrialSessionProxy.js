@@ -7,12 +7,12 @@ const { get } = require('../requests');
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.getCalendaredCasesForTrialSession = ({
+exports.getCalendaredCasesForTrialSessionInteractor = ({
   applicationContext,
   trialSessionId,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/trial-sessions/${trialSessionId}/get-calendared-cases`,
+    endpoint: `/api/trial-sessions/${trialSessionId}/get-calendared-cases`,
   });
 };

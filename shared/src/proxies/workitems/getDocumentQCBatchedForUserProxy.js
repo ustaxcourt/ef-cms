@@ -1,13 +1,16 @@
 const { get } = require('../requests');
 
 /**
- * getDocumentQCBatchedForUser
+ * getDocumentQCBatchedForUserInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCBatchedForUser = ({ applicationContext, userId }) => {
+exports.getDocumentQCBatchedForUserInteractor = ({
+  applicationContext,
+  userId,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/document-qc/batched`,
+    endpoint: `/api/users/${userId}/document-qc/batched`,
   });
 };

@@ -1,4 +1,4 @@
-const { setItem } = require('./setItemInteractor');
+const { setItemInteractor } = require('./setItemInteractor');
 
 describe('setItemInteractor', () => {
   let applicationContext;
@@ -10,7 +10,7 @@ describe('setItemInteractor', () => {
         setItem: require('../../persistence/localStorage/setItem').setItem,
       }),
     };
-    await setItem({
+    await setItemInteractor({
       applicationContext,
       key: 'abc',
       value: '123',

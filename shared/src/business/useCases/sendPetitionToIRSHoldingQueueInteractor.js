@@ -11,7 +11,7 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.sendPetitionToIRSHoldingQueue = async ({
+exports.sendPetitionToIRSHoldingQueueInteractor = async ({
   applicationContext,
   caseId,
 }) => {

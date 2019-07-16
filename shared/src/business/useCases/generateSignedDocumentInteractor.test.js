@@ -1,20 +1,20 @@
 const fs = require('fs');
 const path = require('path');
 const {
-  generateSignedDocument,
+  generateSignedDocumentInteractor,
 } = require('./generateSignedDocumentInteractor.js');
 const { PDFDocumentFactory } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 
-function testPdfDocBytes() {
+const testPdfDocBytes = () => {
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
-}
+};
 
-function testSignatureImgBytes() {
+const testSignatureImgBytes = () => {
   return fs.readFileSync(testAssetsPath + 'signature.png');
-}
+};
 
 describe('generateSignedDocument', () => {
   let testDoc;
@@ -34,7 +34,7 @@ describe('generateSignedDocument', () => {
       sigImgData: testSig,
     };
 
-    const newPdfData = await generateSignedDocument(args);
+    const newPdfData = await generateSignedDocumentInteractor(args);
 
     fs.writeFileSync(
       testOutputPath + 'generateSignedDocument_Image.pdf',
@@ -59,7 +59,7 @@ describe('generateSignedDocument', () => {
       },
     };
 
-    const newPdfData = await generateSignedDocument(args);
+    const newPdfData = await generateSignedDocumentInteractor(args);
 
     fs.writeFileSync(
       testOutputPath + 'generateSignedDocument_Text.pdf',

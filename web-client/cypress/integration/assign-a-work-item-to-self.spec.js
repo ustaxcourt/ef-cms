@@ -1,12 +1,12 @@
 const {
-  viewDocumentQCMyInbox,
-  viewDocumentQCSectionInbox,
-  getWorkItemCheckboxLabel,
   getSectionUsersSelect,
+  getWorkItemCheckboxLabel,
+  getWorkItemMessage,
   getWorkItemMessages,
   getWorkItemRow,
-  getWorkItemMessage,
   navigateTo: navigateToDashboard,
+  viewDocumentQCMyInbox,
+  viewDocumentQCSectionInbox,
 } = require('../support/pages/dashboard');
 
 describe('Assign a work item ', () => {

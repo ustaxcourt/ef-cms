@@ -8,7 +8,7 @@
  * @returns {object} contains the caseDetail returned from the use case
  */
 export const getCaseAction = async ({ applicationContext, props }) => {
-  const caseDetail = await applicationContext.getUseCases().getCase({
+  const caseDetail = await applicationContext.getUseCases().getCaseInteractor({
     applicationContext,
     docketNumber: props.docketNumber,
   });

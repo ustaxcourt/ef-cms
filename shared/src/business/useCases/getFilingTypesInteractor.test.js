@@ -1,5 +1,5 @@
 const { Case } = require('../entities/cases/Case');
-const { getFilingTypes } = require('./getFilingTypesInteractor');
+const { getFilingTypesInteractor } = require('./getFilingTypesInteractor');
 
 const validateFilingTypes = filingTypes => {
   filingTypes.forEach(filingType => {
@@ -24,7 +24,7 @@ describe('Get case filing types', () => {
         };
       },
     };
-    const filingTypes = await getFilingTypes({
+    const filingTypes = await getFilingTypesInteractor({
       applicationContext,
     });
     expect(filingTypes.length).toEqual(4);
@@ -47,7 +47,7 @@ describe('Get case filing types', () => {
         };
       },
     };
-    const filingTypes = await getFilingTypes({
+    const filingTypes = await getFilingTypesInteractor({
       applicationContext,
     });
     expect(filingTypes.length).toEqual(4);
@@ -71,7 +71,7 @@ describe('Get case filing types', () => {
     };
     let error;
     try {
-      await getFilingTypes({
+      await getFilingTypesInteractor({
         applicationContext,
       });
     } catch (err) {

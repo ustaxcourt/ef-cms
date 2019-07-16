@@ -8,11 +8,14 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { state } from 'cerebral';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
+import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 export const submitCourtIssuedOrderSequence = [
+  setFormSubmittingAction,
   isFormPristineAction,
   {
     no: [...convertHtml2PdfSequence],
@@ -32,4 +35,5 @@ export const submitCourtIssuedOrderSequence = [
       navigateToCaseDetailAction,
     ],
   },
+  unsetFormSubmittingAction,
 ];

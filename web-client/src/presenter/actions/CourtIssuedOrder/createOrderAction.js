@@ -1,23 +1,26 @@
-import { JSDOM } from 'jsdom';
 import { state } from 'cerebral';
 import orderTemplate from '../../../views/CreateOrder/orderTemplate.html';
 
 const replaceWithID = (replacements, domString) => {
-  const { document } = new JSDOM(domString).window;
+  const parser = new window.DOMParser();
+  const doc = parser.parseFromString(domString, 'text/html');
 
   Object.keys(replacements).forEach(id => {
-    if (document.querySelector(id)) {
-      document.querySelector(id).innerHTML = replacements[id];
+    if (doc.querySelector(id)) {
+      doc.querySelector(id).innerHTML = replacements[id];
     }
   });
 
-  return document;
+  return doc;
 };
 
 export const createOrderAction = ({ applicationContext, get }) => {
   let richText = get(state.form.richText) || '';
   let documentTitle = (get(state.form.documentTitle) || '').toUpperCase();
-  richText = richText.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+  richText = richText.replace(
+    /\t/g,
+    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+  );
   const caseCaption = get(state.caseDetail.caseCaption) || '';
   const caseCaptionNames =
     applicationContext.getCaseCaptionNames(caseCaption) + ', ';
@@ -37,7 +40,12 @@ export const createOrderAction = ({ applicationContext, get }) => {
     orderTemplate,
   );
 
-  const result = doc.children[0].innerHTML;
+  let result = doc.children[0].innerHTML;
+
+  result = result.replace(
+    '/* STYLES_PLACEHOLDER */',
+    applicationContext.getPdfStyles(),
+  );
 
   return { htmlString: result };
 };

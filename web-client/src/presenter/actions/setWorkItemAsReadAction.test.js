@@ -10,7 +10,7 @@ describe('setWorkItemAsReadAction', () => {
     get = sinon.stub();
     applicationContext = {
       getUseCases: () => ({
-        setWorkItemAsRead: setWorkItemAsReadStub,
+        setWorkItemAsReadInteractor: setWorkItemAsReadStub,
       }),
     };
 

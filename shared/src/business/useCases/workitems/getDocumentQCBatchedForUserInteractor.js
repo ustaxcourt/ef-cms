@@ -7,13 +7,13 @@ const { IRS_BATCH_SYSTEM_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getDocumentQCBatchedForUser
+ * getDocumentQCBatchedForUserInteractor
  *
  * @param userId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCBatchedForUser = async ({
+exports.getDocumentQCBatchedForUserInteractor = async ({
   applicationContext,
   userId,
 }) => {

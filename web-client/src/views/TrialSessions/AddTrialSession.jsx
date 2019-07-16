@@ -39,7 +39,7 @@ export const AddTrialSession = connect(
               submitTrialSessionSequence();
             }}
           >
-            {showModal === 'FormCancelModalDialogComponent' && (
+            {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToTrialSessionsSequence" />
             )}
             <ErrorNotification />

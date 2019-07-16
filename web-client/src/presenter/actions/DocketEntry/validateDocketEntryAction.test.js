@@ -21,7 +21,7 @@ describe('validateDocketEntryAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateDocketEntry: validateDocketEntryStub,
+        validateDocketEntryInteractor: validateDocketEntryStub,
       }),
     };
 

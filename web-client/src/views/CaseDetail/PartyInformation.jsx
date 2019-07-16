@@ -1,14 +1,18 @@
+import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
+    caseHelper: state.caseDetailHelper,
     constants: state.constants,
+    editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
   },
-  ({ caseDetail, constants }) => {
+  ({ caseDetail, caseHelper, constants, editSecondaryContact }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
@@ -27,6 +31,15 @@ export const PartyInformation = connect(
                   <address aria-labelledby={'primary-label'}>
                     {addressDisplay(caseDetail.contactPrimary)}
                   </address>
+
+                  {caseHelper.showEditContactButton && (
+                    <a
+                      href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </a>
+                  )}
                 </div>
               </React.Fragment>
             )}{' '}
@@ -44,6 +57,15 @@ export const PartyInformation = connect(
                       {caseDetail.contactSecondary.name &&
                         addressDisplay(caseDetail.contactSecondary)}
                     </address>
+                    {caseHelper.showEditContactButton && (
+                      <button
+                        className="usa-button usa-button--unstyled"
+                        onClick={() => editSecondaryContact()}
+                      >
+                        <FontAwesomeIcon icon="question-circle" size="sm" />
+                        Why can’t I edit this?
+                      </button>
+                    )}
                   </div>
                 </React.Fragment>
               )}{' '}
@@ -99,7 +121,16 @@ export const PartyInformation = connect(
     const addressDisplay = contact => {
       return (
         <React.Fragment>
-          <p className="margin-top-0">{contact.name}</p>
+          <p className="margin-top-0">
+            {contact.name}
+            {contact.inCareOf && (
+              <span>
+                <br />
+                c/o {contact.inCareOf}
+              </span>
+            )}
+          </p>
+
           {contact.title && <p>{contact.title}</p>}
           <p>
             <span className="address-line">{contact.address1}</span>
@@ -135,6 +166,10 @@ export const PartyInformation = connect(
           <h3>Party Information</h3>
           {mainPartyInformation()}
         </Mobile>
+
+        {caseHelper.showEditSecondaryContactModal && (
+          <EditSecondaryContactModal />
+        )}
       </div>
     );
   },

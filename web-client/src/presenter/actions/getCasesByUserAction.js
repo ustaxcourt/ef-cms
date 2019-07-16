@@ -11,10 +11,12 @@ import _ from 'lodash';
  */
 export const getCasesByUserAction = async ({ applicationContext, get }) => {
   const userId = get(state.user.userId);
-  let caseList = await applicationContext.getUseCases().getCasesByUser({
-    applicationContext,
-    userId,
-  });
+  let caseList = await applicationContext
+    .getUseCases()
+    .getCasesByUserInteractor({
+      applicationContext,
+      userId,
+    });
   caseList = _.orderBy(caseList, 'createdAt', 'desc');
   return { caseList };
 };

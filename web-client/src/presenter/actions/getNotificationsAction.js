@@ -9,7 +9,7 @@
 export const getNotificationsAction = async ({ applicationContext }) => {
   const notifications = await applicationContext
     .getUseCases()
-    .getNotifications({
+    .getNotificationsInteractor({
       applicationContext,
     });
 

@@ -1,11 +1,13 @@
 const {
   DocketEntryFactory,
 } = require('../../entities/docketEntry/DocketEntryFactory');
-const { validateDocketEntry } = require('./validateDocketEntryInteractor');
+const {
+  validateDocketEntryInteractor,
+} = require('./validateDocketEntryInteractor');
 
-describe('validateDocketEntry', () => {
+describe('validateDocketEntryInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateDocketEntry({
+    const errors = validateDocketEntryInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           DocketEntryFactory,
@@ -24,7 +26,7 @@ describe('validateDocketEntry', () => {
   });
 
   it('returns no errors when valid docket entry is passed through', () => {
-    const errors = validateDocketEntry({
+    const errors = validateDocketEntryInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           DocketEntryFactory,

@@ -7,6 +7,8 @@ const {
   UnprocessableEntityError,
 } = require('../../errors/errors');
 const { Case } = require('../entities/cases/Case');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { isEmpty } = require('lodash');
 
 const setDocumentDetails = (userId, documents) => {
   if (documents && userId) {
@@ -23,7 +25,7 @@ const setDocumentDetails = (userId, documents) => {
 };
 
 /**
- * updateCase
+ * updateCaseInteractor
  *
  * @param caseId
  * @param caseToUpdate
@@ -31,7 +33,11 @@ const setDocumentDetails = (userId, documents) => {
  * @param applicationContext
  * @returns {*}
  */
-exports.updateCase = async ({ applicationContext, caseId, caseToUpdate }) => {
+exports.updateCaseInteractor = async ({
+  applicationContext,
+  caseId,
+  caseToUpdate,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, UPDATE_CASE)) {
@@ -47,6 +53,23 @@ exports.updateCase = async ({ applicationContext, caseId, caseToUpdate }) => {
       user.userId,
       caseToUpdate.documents,
     );
+  }
+
+  if (caseToUpdate.contactPrimary && !isEmpty(caseToUpdate.contactPrimary)) {
+    caseToUpdate.contactPrimary = ContactFactory.createContacts({
+      contactInfo: { primary: caseToUpdate.contactPrimary },
+      partyType: caseToUpdate.partyType,
+    }).primary.toRawObject();
+  }
+
+  if (
+    caseToUpdate.contactSecondary &&
+    !isEmpty(caseToUpdate.contactSecondary)
+  ) {
+    caseToUpdate.contactSecondary = ContactFactory.createContacts({
+      contactInfo: { secondary: caseToUpdate.contactSecondary },
+      partyType: caseToUpdate.partyType,
+    }).secondary.toRawObject();
   }
 
   const paidCase = new Case(caseToUpdate)

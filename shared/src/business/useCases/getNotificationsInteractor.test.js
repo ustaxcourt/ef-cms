@@ -1,4 +1,4 @@
-const { getNotifications } = require('./getNotificationsInteractor');
+const { getNotificationsInteractor } = require('./getNotificationsInteractor');
 
 describe('getNotificationsInteractor', () => {
   let applicationContext;
@@ -24,7 +24,7 @@ describe('getNotificationsInteractor', () => {
         ],
       }),
     };
-    const result = await getNotifications({
+    const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
     });
@@ -52,7 +52,7 @@ describe('getNotificationsInteractor', () => {
         ],
       }),
     };
-    const result = await getNotifications({
+    const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
     });
@@ -80,7 +80,7 @@ describe('getNotificationsInteractor', () => {
         ],
       }),
     };
-    const result = await getNotifications({
+    const result = await getNotificationsInteractor({
       applicationContext,
       userId: 'docketclerk',
     });

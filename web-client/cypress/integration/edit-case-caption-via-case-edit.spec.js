@@ -1,8 +1,8 @@
 const {
-  navigateTo: navigateToDocumentDetail,
-  getCaseTitleTextArea,
   getCaseTitleContaining,
+  getCaseTitleTextArea,
   getSaveButton,
+  navigateTo: navigateToDocumentDetail,
 } = require('../support/pages/document-detail');
 
 describe('change the case caption via the case edit page ', () => {

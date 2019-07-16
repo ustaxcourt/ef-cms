@@ -1,8 +1,6 @@
-const sinon = require('sinon');
 const {
-  getDocumentQCServedForSection,
+  getDocumentQCServedForSectionInteractor,
 } = require('./getDocumentQCServedForSectionInteractor');
-const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   let applicationContext;
@@ -13,33 +11,36 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxpayer',
+      sentBy: 'taxyaper',
     },
     messages: [],
     section: 'docket',
     sentBy: 'docketclerk',
   };
 
-  it('returns an empty array if the work item was not found in persistence', async () => {
-    const getDocumentQCServedForSectionStub = sinon.stub().returns([]);
+  it('throws an error if the work item was not found', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
-          userId: 'petitionsclerk1',
+          role: 'petitioner',
+          userId: 'taxpayer',
         };
       },
       getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: getDocumentQCServedForSectionStub,
+        getDocumentQCServedForSection: async () => null,
       }),
     };
-    const result = await getDocumentQCServedForSection({
-      applicationContext,
-      section: 'docket',
-    });
-    expect(getDocumentQCServedForSectionStub.called).toBe(true);
-    expect(result.length).toEqual(0);
+    let error;
+    try {
+      await getDocumentQCServedForSectionInteractor({
+        applicationContext,
+        section: 'docket',
+      });
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeDefined();
   });
 
   it('throws an error if the user does not have access to the work item', async () => {
@@ -47,21 +48,24 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'unauthorizedRole',
-          userId: 'unauthorizedUser',
+          role: 'petitioner',
+          userId: 'taxpayer',
         };
       },
       getPersistenceGateway: () => ({
-        getDocumentQCServedForSection: async () => [mockWorkItem],
+        getDocumentQCServedForSection: async () => mockWorkItem,
       }),
     };
-
-    await expect(
-      getDocumentQCServedForSection({
+    let error;
+    try {
+      await getDocumentQCServedForSectionInteractor({
         applicationContext,
         section: 'docket',
-      }),
-    ).rejects.toThrowError(UnauthorizedError);
+      });
+    } catch (e) {
+      error = e;
+    }
+    expect(error).toBeDefined();
   });
 
   it('successfully returns the work item for a docketclerk', async () => {
@@ -79,7 +83,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             docketNumber: '101-18',
             docketNumberSuffix: 'S',
-            document: { sentBy: 'taxpayer' },
+            document: { sentBy: 'taxyaper' },
             messages: [],
             section: 'docket',
             sentBy: 'docketclerk',
@@ -88,7 +92,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
             docketNumber: '101-18',
             docketNumberSuffix: 'S',
-            document: { sentBy: 'taxpayer' },
+            document: { sentBy: 'taxyaper' },
             messages: [],
             section: 'irsBatchSection',
             sentBy: 'docketclerk',
@@ -96,7 +100,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         ],
       }),
     };
-    const result = await getDocumentQCServedForSection({
+    const result = await getDocumentQCServedForSectionInteractor({
       applicationContext,
       section: 'docket',
     });
@@ -105,7 +109,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: '101-18',
         docketNumberSuffix: 'S',
-        document: { sentBy: 'taxpayer' },
+        document: { sentBy: 'taxyaper' },
         messages: [],
         section: 'irsBatchSection',
         sentBy: 'docketclerk',
