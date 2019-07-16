@@ -22,9 +22,9 @@ module.exports = {
     .handler,
   fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
     .handler,
-  fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
-    .handler,
   fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
+    .handler,
+  fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
