@@ -3,11 +3,10 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { PDFPreviewButton } from '../PDFPreviewButton';
 
 export const FileDocumentReviewRedesign = connect(
   {
@@ -45,6 +44,7 @@ export const FileDocumentReviewRedesign = connect(
           Don’t forget to check your PDF(s) to ensure all personal information
           has been removed or redacted.
         </Hint>
+
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-7 margin-bottom-4">
