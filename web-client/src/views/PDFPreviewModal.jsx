@@ -19,13 +19,14 @@ class PDFPreviewModalComponent extends ModalDialog {
 
     this.modal = {
       classNames: 'pdf-preview-modal',
-      confirmLabel: 'Ok',
+      confirmLabel: 'OK',
     };
 
     this.state = {
+      canvas: null,
+      ctx: null,
       currentPage: 0,
-      pageNumPending: null,
-      pageRendering: false,
+      pdfDoc: null,
       totalPages: 0,
     };
   }
@@ -37,15 +38,7 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.setState({
       currentPage: this.state.currentPage - 1,
     });
-    this.queueRenderPage(this.state.currentPage);
-  }
-
-  queueRenderPage(num) {
-    if (this.state.pageRendering) {
-      this.setState({ pageNumPending: num });
-    } else {
-      this.renderPage(num);
-    }
+    this.renderPage(this.state.currentPage - 1);
   }
 
   onNextPage() {
@@ -55,14 +48,10 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.setState({
       currentPage: this.state.currentPage + 1,
     });
-    this.queueRenderPage(this.state.currentPage);
+    this.renderPage(this.state.currentPage + 1);
   }
 
   renderPage(num) {
-    this.setState({
-      pageRendering: true,
-    });
-
     this.state.pdfDoc.getPage(num).then(page => {
       const viewport = page.getViewport({
         scale: 0.8,
@@ -74,20 +63,7 @@ class PDFPreviewModalComponent extends ModalDialog {
         canvasContext: this.state.ctx,
         viewport: viewport,
       };
-      const renderTask = page.render(renderContext);
-
-      renderTask.promise.then(() => {
-        this.setState({
-          pageRendering: false,
-        });
-
-        if (this.state.pageNumPending !== null) {
-          this.renderPage(this.state.pageNumPending);
-          this.setState({
-            pageNumPending: null,
-          });
-        }
-      });
+      page.render(renderContext);
     });
   }
 
@@ -95,14 +71,14 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.setState({
       currentPage: this.state.totalPages,
     });
-    this.queueRenderPage(this.state.currentPage);
+    this.renderPage(this.state.totalPages);
   }
 
   onFirstPage() {
     this.setState({
       currentPage: 1,
     });
-    this.queueRenderPage(this.state.currentPage);
+    this.renderPage(1);
   }
 
   initFile(pdfData) {
@@ -111,20 +87,19 @@ class PDFPreviewModalComponent extends ModalDialog {
     this.setState({
       canvas,
       ctx,
-    });
-
-    this.setState({
       currentPage: 1,
-      pageNumPending: null,
-      pageRendering: false,
     });
 
     pdfjsLib.getDocument({ data: pdfData }).promise.then(pdfDoc => {
-      this.setState({
-        pdfDoc,
-        totalPages: pdfDoc.numPages,
-      });
-      this.renderPage(this.state.currentPage);
+      this.setState(
+        {
+          pdfDoc,
+          totalPages: pdfDoc.numPages,
+        },
+        () => {
+          this.renderPage(1);
+        },
+      );
     });
   }
 
