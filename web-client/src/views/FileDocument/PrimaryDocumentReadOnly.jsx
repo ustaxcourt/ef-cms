@@ -3,23 +3,15 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import { PDFPreviewModal } from '../PDFPreviewModal';
+import { PDFPreviewButton } from '../PDFPreviewButton';
 
 export const PrimaryDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
-    showModal: state.showModal,
   },
-  ({
-    chooseWizardStepSequence,
-    fileDocumentHelper,
-    form,
-    openPdfPreviewModalSequence,
-    showModal,
-  }) => {
+  ({ chooseWizardStepSequence, fileDocumentHelper, form }) => {
     return (
       <React.Fragment>
         <div>
@@ -44,15 +36,7 @@ export const PrimaryDocumentReadOnly = connect(
               {form.documentTitle}
             </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            <button
-              className="usa-button usa-button--unstyled"
-              type="button"
-              onClick={() =>
-                openPdfPreviewModalSequence({ file: form.primaryDocumentFile })
-              }
-            >
-              {form.primaryDocumentFile.name}
-            </button>
+            <PDFPreviewButton file={form.primaryDocumentFile} />
           </div>
 
           {form.supportingDocumentFile && (
@@ -114,9 +98,6 @@ export const PrimaryDocumentReadOnly = connect(
             </div>
           )}
         </div>
-        {showModal === 'PDFPreviewModal' && (
-          <PDFPreviewModal pdfFile={form.primaryDocumentFile} />
-        )}
       </React.Fragment>
     );
   },
