@@ -45,7 +45,7 @@ export const PrimaryDocumentReadOnly = connect(
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-              {form.supportingDocumentFile.name}
+              <PDFPreviewButton file={form.supportingDocumentFile} />
             </div>
           )}
 

@@ -3,6 +3,8 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { PDFPreviewButton } from '../PDFPreviewButton';
+
 export const RequestAccessDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
@@ -30,7 +32,7 @@ export const RequestAccessDocumentReadOnly = connect(
               {form.documentTitle}
             </label>
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            {form.primaryDocumentFile.name}
+            <PDFPreviewButton file={form.primaryDocumentFile} />
           </div>
 
           {form.hasSupportingDocuments && (
@@ -39,7 +41,7 @@ export const RequestAccessDocumentReadOnly = connect(
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-              {form.supportingDocumentFile.name}
+              <PDFPreviewButton file={form.supportingDocumentFile} />
             </div>
           )}
 
