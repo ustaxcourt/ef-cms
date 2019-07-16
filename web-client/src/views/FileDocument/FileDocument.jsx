@@ -4,6 +4,7 @@ import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { SecondarySupportingDocuments } from './SecondarySupportingDocuments';
 import { SupportingDocuments } from './SupportingDocuments';
+import { WhatCanIIncludeModalOverlay } from './WhatCanIIncludeModalOverlay';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,11 +15,13 @@ export const FileDocument = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
+    showModal: state.showModal,
   },
   ({
     form,
     formCancelToggleCancelSequence,
     reviewExternalDocumentInformationSequence,
+    showModal,
   }) => {
     return (
       <React.Fragment>
@@ -69,6 +72,10 @@ export const FileDocument = connect(
             Cancel
           </button>
         </div>
+
+        {showModal === 'WhatCanIIncludeModalOverlay' && (
+          <WhatCanIIncludeModalOverlay />
+        )}
       </React.Fragment>
     );
   },
