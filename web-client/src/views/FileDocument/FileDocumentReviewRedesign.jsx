@@ -3,6 +3,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { PDFPreviewButton } from '../PDFPreviewButton';
 import { PDFPreviewModal } from '../PDFPreviewModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -47,10 +48,6 @@ export const FileDocumentReviewRedesign = connect(
           has been removed or redacted.
         </Hint>
 
-        {showModal === 'PDFPreviewModal' && (
-          <PDFPreviewModal pdfFile={form.primaryDocumentFile} />
-        )}
-
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-7 margin-bottom-4">
@@ -64,17 +61,7 @@ export const FileDocumentReviewRedesign = connect(
                           {form.documentTitle}
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        <button
-                          className="usa-button usa-button--unstyled"
-                          type="button"
-                          onClick={() =>
-                            openPdfPreviewModalSequence({
-                              file: form.primaryDocumentFile,
-                            })
-                          }
-                        >
-                          {form.primaryDocumentFile.name}
-                        </button>
+                        <PDFPreviewButton file={form.primaryDocumentFile} />
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
