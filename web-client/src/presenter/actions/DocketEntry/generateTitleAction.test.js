@@ -51,22 +51,14 @@ describe('generateTitleAction', () => {
             category: 'Motion',
             documentType: 'Motion for Entry of Decision',
           },
-          secondarySupportingDocuments: [
-            {
-              secondarySupportingDocumentMetadata: {
-                category: 'Application',
-                documentType: 'Application for Waiver of Filing Fee',
-              },
-            },
-          ],
-          supportingDocuments: [
-            {
-              supportingDocumentMetadata: {
-                category: 'Motion',
-                documentType: 'Motion for a New Trial',
-              },
-            },
-          ],
+          secondarySupportingDocumentMetadata: {
+            category: 'Application',
+            documentType: 'Application for Waiver of Filing Fee',
+          },
+          supportingDocumentMetadata: {
+            category: 'Motion',
+            documentType: 'Motion for a New Trial',
+          },
         },
       },
     });

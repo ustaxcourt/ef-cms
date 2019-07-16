@@ -181,53 +181,93 @@ describe('fileDocumentHelper', () => {
     expect(result.showPractitionerParty).toBeTruthy();
   });
 
-  describe('supporting document', () => {
+  describe('supporting documents', () => {
     beforeEach(() => {
       state.form.hasSupportingDocuments = true;
       state.form.hasSecondarySupportingDocuments = true;
     });
 
     it('not shown if no type selected', async () => {
-      state.form.supportingDocument = '';
+      state.form.supportingDocuments = [{ supportingDocument: '' }];
       const result = await runCompute(fileDocumentHelper, { state });
-      expect(result.showSupportingDocumentFreeText).toBeFalsy();
-      expect(result.showSupportingDocumentUpload).toBeFalsy();
+      expect(
+        result.supportingDocuments[0].showSupportingDocumentFreeText,
+      ).toBeFalsy();
+      expect(
+        result.supportingDocuments[0].showSupportingDocumentUpload,
+      ).toBeFalsy();
     });
 
     it('upload file is shown when supporting type is not empty', async () => {
-      state.form.supportingDocument = 'Some Document Type';
+      state.form.supportingDocuments = [
+        { supportingDocument: 'Some Document Type' },
+      ];
       const result = await runCompute(fileDocumentHelper, { state });
-      expect(result.showSupportingDocumentFreeText).toBeFalsy();
-      expect(result.showSupportingDocumentUpload).toBeTruthy();
+      expect(
+        result.supportingDocuments[0].showSupportingDocumentFreeText,
+      ).toBeFalsy();
+      expect(
+        result.supportingDocuments[0].showSupportingDocumentUpload,
+      ).toBeTruthy();
     });
 
     it('upload file and signature are shown for type Affidavit in Support', async () => {
-      state.form.supportingDocument = 'Affidavit in Support';
+      state.form.supportingDocuments = [
+        { supportingDocument: 'Affidavit in Support' },
+      ];
       const result = await runCompute(fileDocumentHelper, { state });
-      expect(result.showSupportingDocumentFreeText).toBeTruthy();
-      expect(result.showSupportingDocumentUpload).toBeTruthy();
+      expect(
+        result.supportingDocuments[0].showSupportingDocumentFreeText,
+      ).toBeTruthy();
+      expect(
+        result.supportingDocuments[0].showSupportingDocumentUpload,
+      ).toBeTruthy();
     });
 
     describe('for secondary supporting document', () => {
       it('not shown if no type selected', async () => {
-        state.form.secondarySupportingDocument = '';
+        state.form.secondarySupportingDocuments = [
+          { secondarySupportingDocument: '' },
+        ];
         const result = await runCompute(fileDocumentHelper, { state });
-        expect(result.showSecondarySupportingDocumentFreeText).toBeFalsy();
-        expect(result.showSecondarySupportingDocumentUpload).toBeFalsy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .showSecondarySupportingDocumentFreeText,
+        ).toBeFalsy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .showSecondarySupportingDocumentUpload,
+        ).toBeFalsy();
       });
 
       it('upload file is shown when supporting type is not empty', async () => {
-        state.form.secondarySupportingDocument = 'Declaration of Undying Love';
+        state.form.secondarySupportingDocuments = [
+          { secondarySupportingDocument: 'Declaration of Undying Love' },
+        ];
         const result = await runCompute(fileDocumentHelper, { state });
-        expect(result.showSecondarySupportingDocumentFreeText).toBeFalsy();
-        expect(result.showSecondarySupportingDocumentUpload).toBeTruthy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .showSecondarySupportingDocumentFreeText,
+        ).toBeFalsy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .showSecondarySupportingDocumentUpload,
+        ).toBeTruthy();
       });
 
       it('upload file and signature are shown for type Affidavit in Support', async () => {
-        state.form.secondarySupportingDocument = 'Affidavit in Support';
+        state.form.secondarySupportingDocuments = [
+          { secondarySupportingDocument: 'Affidavit in Support' },
+        ];
         const result = await runCompute(fileDocumentHelper, { state });
-        expect(result.showSecondarySupportingDocumentFreeText).toBeTruthy();
-        expect(result.showSecondarySupportingDocumentUpload).toBeTruthy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .showSecondarySupportingDocumentFreeText,
+        ).toBeTruthy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .showSecondarySupportingDocumentUpload,
+        ).toBeTruthy();
       });
     });
   });

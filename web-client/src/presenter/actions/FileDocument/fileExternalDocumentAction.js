@@ -2,7 +2,7 @@ import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
- * Set document title.
+ * File external documents
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -19,25 +19,29 @@ export const fileExternalDocumentAction = async ({
   const userRole = get(state.user.role);
   const isRespondent = userRole === 'respondent';
 
-  let {
-    primaryDocumentFile,
-    secondaryDocumentFile,
-    secondarySupportingDocumentFile,
-    supportingDocumentFile,
-    ...documentMetadata
-  } = get(state.form);
+  const form = get(state.form);
 
-  documentMetadata = { ...documentMetadata, docketNumber, caseId };
+  const documentFiles = {
+    primary: form.primaryDocumentFile,
+    secondary: form.secondaryDocumentFile,
+  };
 
-  const progressFunctions = setupPercentDone(
-    {
-      primary: primaryDocumentFile,
-      primarySupporting: supportingDocumentFile,
-      secondary: secondaryDocumentFile,
-      secondarySupporting: secondarySupportingDocumentFile,
-    },
-    store,
-  );
+  if (form.hasSupportingDocuments) {
+    form.supportingDocuments.forEach((item, idx) => {
+      documentFiles[`primarySupporting${idx}`] = item.supportingDocumentFile;
+    });
+  }
+
+  if (form.hasSecondarySupportingDocuments) {
+    form.secondarySupportingDocuments.forEach((item, idx) => {
+      documentFiles[`secondarySupporting${idx}`] =
+        item.secondarySupportingDocumentFile;
+    });
+  }
+
+  const documentMetadata = { ...form, docketNumber, caseId };
+
+  const progressFunctions = setupPercentDone(documentFiles, store);
 
   let caseDetail;
 
@@ -46,15 +50,9 @@ export const fileExternalDocumentAction = async ({
       .getUseCases()
       .uploadExternalDocumentInteractor({
         applicationContext,
+        documentFiles,
         documentMetadata,
-        onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
-        onPrimaryUploadProgress: progressFunctions.primary,
-        onSecondarySupportUploadProgress: progressFunctions.secondarySupporting,
-        onSecondaryUploadProgress: progressFunctions.secondary,
-        primaryDocumentFile,
-        secondaryDocumentFile,
-        secondarySupportingDocumentFile,
-        supportingDocumentFile,
+        progressFunctions,
       });
 
     if (isRespondent) {

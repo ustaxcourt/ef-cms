@@ -60,7 +60,7 @@ export const submitCaseAssociationRequestAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .fileExternalDocumentInteractor({
+    .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,

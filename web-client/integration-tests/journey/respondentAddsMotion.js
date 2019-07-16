@@ -59,28 +59,27 @@ export default (test, fakeFile) => {
       value: false,
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: true,
+    await test.runSequence('addSupportingDocumentToFormSequence', {
+      type: 'primary',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocument',
+      key: 'supportingDocuments.0.supportingDocument',
       value: 'Brief in Support',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocumentMetadata.category',
+      key: 'supportingDocuments.0.supportingDocumentMetadata.category',
       value: 'Supporting Document',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocumentMetadata.documentType',
+      key: 'supportingDocuments.0.supportingDocumentMetadata.documentType',
       value: 'Brief in Support',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocumentMetadata.previousDocument',
+      key: 'supportingDocuments.0.supportingDocumentMetadata.previousDocument',
       value: 'Motion for Continuance',
     });
 
@@ -93,7 +92,6 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
-      supportingDocumentFile: 'A file was not selected.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -102,7 +100,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocumentFile',
+      key: 'supportingDocuments.0.supportingDocumentFile',
       value: fakeFile,
     });
 

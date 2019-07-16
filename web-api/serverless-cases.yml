@@ -316,6 +316,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  fileDocketEntry:
+    handler: src/handlers.fileDocketEntryToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   fileCourtIssuedOrder:
     handler: src/handlers.fileCourtIssuedOrderToCaseLambda
     events:
