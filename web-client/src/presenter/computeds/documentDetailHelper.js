@@ -40,8 +40,16 @@ export const documentDetailHelper = (get, applicationContext) => {
         !workItem.completedAt,
     );
 
+    // Check all documents assosicated with the case
+    // to see if there is a signed stip decision
+    const signedDocument = caseDetail.documents.find(
+      document => document.documentType === 'Signed Stipulated Decision',
+    );
+
     showSignDocumentButton =
-      !!stipulatedWorkItem && currentUser.role === 'seniorattorney';
+      !!stipulatedWorkItem &&
+      currentUser.role === 'seniorattorney' &&
+      !signedDocument;
   }
 
   const formattedDocumentIsPetition =

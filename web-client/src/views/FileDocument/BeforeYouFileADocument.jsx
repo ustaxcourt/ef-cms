@@ -30,9 +30,9 @@ export const BeforeYouFileADocument = connect(
                       <FontAwesomeIcon icon={['far', 'copy']} />
                     </div>
                   </NonMobile>
-                  <h3 className="caseItem__heading">
+                  <h2 className="caseItem__heading">
                     1. Gather All Documents You Want to Include in Your Filing
-                  </h3>
+                  </h2>
                   <div className="caseItem__content">
                     <p>
                       You may have documents that are related or supporting the
@@ -106,9 +106,9 @@ export const BeforeYouFileADocument = connect(
                       <FontAwesomeIcon icon={['fa', 'shield-alt']} />
                     </div>
                   </NonMobile>
-                  <h3 className="caseItem__heading">
+                  <h2 className="caseItem__heading">
                     2. Remove Personal Information From Your Document(s)
-                  </h3>
+                  </h2>
                   <div className="caseItem__content">
                     <p>
                       If your document(s) includes personal information (such as
