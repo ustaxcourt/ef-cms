@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * Set document title.
+ * generate document titles for filing external document
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -29,29 +29,47 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);
   }
 
-  if (!isEmpty(documentMetadata.supportingDocumentMetadata)) {
-    documentTitle = applicationContext
-      .getUseCases()
-      .generateDocumentTitleInteractor({
-        applicationContext,
-        documentMetadata: documentMetadata.supportingDocumentMetadata,
-      });
-    store.set(
-      state.form.supportingDocumentMetadata.documentTitle,
-      documentTitle,
-    );
+  const { supportingDocuments } = documentMetadata;
+  if (supportingDocuments) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
+      if (!isEmpty(supportingDocuments[i].supportingDocumentMetadata)) {
+        documentTitle = applicationContext
+          .getUseCases()
+          .generateDocumentTitleInteractor({
+            applicationContext,
+            documentMetadata: supportingDocuments[i].supportingDocumentMetadata,
+          });
+        store.set(
+          state.form.supportingDocuments[i].supportingDocumentMetadata
+            .documentTitle,
+          documentTitle,
+        );
+      }
+    }
   }
 
-  if (!isEmpty(documentMetadata.secondarySupportingDocumentMetadata)) {
-    documentTitle = applicationContext
-      .getUseCases()
-      .generateDocumentTitleInteractor({
-        applicationContext,
-        documentMetadata: documentMetadata.secondarySupportingDocumentMetadata,
-      });
-    store.set(
-      state.form.secondarySupportingDocumentMetadata.documentTitle,
-      documentTitle,
-    );
+  const { secondarySupportingDocuments } = documentMetadata;
+  if (secondarySupportingDocuments) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      if (
+        !isEmpty(
+          secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
+        )
+      ) {
+        documentTitle = applicationContext
+          .getUseCases()
+          .generateDocumentTitleInteractor({
+            applicationContext,
+            documentMetadata:
+              secondarySupportingDocuments[i]
+                .secondarySupportingDocumentMetadata,
+          });
+        store.set(
+          state.form.secondarySupportingDocuments[i]
+            .secondarySupportingDocumentMetadata.documentTitle,
+          documentTitle,
+        );
+      }
+    }
   }
 };

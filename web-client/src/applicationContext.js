@@ -47,6 +47,7 @@ import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/cre
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { downloadDocumentFileInteractor } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
+import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
@@ -164,6 +165,7 @@ const allUseCases = {
   deleteCaseDeadlineInteractor,
   downloadDocumentFileInteractor,
   fileCourtIssuedOrderInteractor,
+  fileDocketEntryInteractor,
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,
   filePetitionInteractor,
