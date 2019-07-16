@@ -188,4 +188,43 @@
   width: 90%;
   max-width: 700px;
   text-align: center;
+
+  .modal-header__title {
+    text-align: left;
+  }
+
+  .svg-inline--fa {
+    margin-right: 10px;
+    cursor: pointer;
+
+    &.disabled {
+      color: gray;
+      cursor: default;
+    }
+  }
+
+  svg:hover {
+    color: color($theme-color-primary-dark);
+  }
+
+  [data-icon="caret-left"] {
+    position: relative;
+    top: 4px;
+  }
+
+  [data-icon="caret-right"] {
+    position: relative;
+    top: 4px;
+  }
+
+  .pages {
+    position: relative;
+    top: -2px;
+    display: inline-block;
+    width: 120px;
+    margin-right: 10px;
+    margin-left: 10px;
+    font-size: 18px;
+    font-weight: $font-semibold;
+  }
 }
