@@ -14,10 +14,7 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  *
  * @param documentMetadata
- * @param primaryDocumentFileId
- * @param secondaryDocumentFileId
- * @param supportingDocumentFileId
- * @param secondarySupportingDocumentFileId
+ * @param documentIds
  * @param applicationContext
  * @returns {Promise<*>}
  */
