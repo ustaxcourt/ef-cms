@@ -5,6 +5,7 @@ import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
@@ -108,7 +109,7 @@ export class ModalComponent extends React.Component {
       <FocusLock>
         <dialog
           open
-          className="modal-screen"
+          className={classNames('modal-screen', this.props.className)}
           role="dialog"
           onClick={this.blurDialog}
         >
@@ -172,6 +173,7 @@ export class ModalComponent extends React.Component {
 ModalComponent.propTypes = {
   cancelLabel: PropTypes.string,
   children: PropTypes.node,
+  className: PropTypes.string,
   confirmLabel: PropTypes.string,
   noCancel: PropTypes.bool,
   noConfirm: PropTypes.bool,

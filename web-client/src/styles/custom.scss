@@ -1214,3 +1214,47 @@ nav.usa-nav {
 .overline {
   border-top: 1px solid color($theme-color-base-lighter);
 }
+
+.what-can-i-include {
+  .modal-dialog {
+    width: 700px;
+  }
+  .includeItem {
+    position: relative;
+    .includeItem__icon {
+      position: absolute;
+      top: 0;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background-color: $color-white;
+
+      @media only screen and (min-width: $medium-screen) {
+        width: 25px;
+        height: 25px;
+      }
+
+      svg,
+      .svg-wrapper {
+        width: 100%;
+        height: 100%;
+      }
+
+      .fa-times-circle {
+        color: color($theme-color-secondary-dark);
+      }
+
+      .fa-check-circle {
+        color: $color-green;
+      }
+    }
+
+    .includeItem__heading {
+      padding-left: 40px;
+    }
+
+    .includeItem__content {
+      padding-left: 40px;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
@@ -75,7 +76,14 @@ class OverlayComponent extends React.Component {
   renderModalContent() {
     return (
       <FocusLock>
-        <dialog open className="modal-screen overlay-full">
+        <dialog
+          open
+          className={classNames(
+            'modal-screen',
+            'overlay-full',
+            this.props.className,
+          )}
+        >
           <div
             aria-modal="true"
             className="modal-overlay"
@@ -92,6 +100,7 @@ class OverlayComponent extends React.Component {
 
 OverlayComponent.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
   onEscSequence: PropTypes.func,
   preventEsc: PropTypes.bool,
 };
