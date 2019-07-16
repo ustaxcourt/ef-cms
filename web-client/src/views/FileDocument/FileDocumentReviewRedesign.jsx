@@ -3,6 +3,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { PDFPreviewModal } from '../PDFPreviewModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,6 +15,7 @@ export const FileDocumentReviewRedesign = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
     showModal: state.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
@@ -23,6 +25,7 @@ export const FileDocumentReviewRedesign = connect(
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
+    openPdfPreviewModalSequence,
     showModal,
     submitExternalDocumentSequence,
   }) => {
@@ -44,6 +47,10 @@ export const FileDocumentReviewRedesign = connect(
           has been removed or redacted.
         </Hint>
 
+        {showModal === 'PDFPreviewModal' && (
+          <PDFPreviewModal pdfFile={form.primaryDocumentFile} />
+        )}
+
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-7 margin-bottom-4">
@@ -57,7 +64,17 @@ export const FileDocumentReviewRedesign = connect(
                           {form.documentTitle}
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        {form.primaryDocumentFile.name}
+                        <button
+                          className="usa-button usa-button--unstyled"
+                          type="button"
+                          onClick={() =>
+                            openPdfPreviewModalSequence({
+                              file: form.primaryDocumentFile,
+                            })
+                          }
+                        >
+                          {form.primaryDocumentFile.name}
+                        </button>
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
