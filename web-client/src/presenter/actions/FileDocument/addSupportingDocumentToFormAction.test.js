@@ -15,7 +15,9 @@ describe('addSupportingDocumentToFormAction', () => {
     });
 
     expect(result.state.form.hasSupportingDocuments).toEqual(true);
-    expect(result.state.form.supportingDocuments).toEqual([{}]);
+    expect(result.state.form.supportingDocuments).toEqual([
+      { attachments: false, certificateOfService: false, exhibits: false },
+    ]);
     expect(result.state.form.supportingDocumentCount).toEqual(1);
   });
 
@@ -48,7 +50,7 @@ describe('addSupportingDocumentToFormAction', () => {
       {
         supportingDocument: 'Something else',
       },
-      {},
+      { attachments: false, certificateOfService: false, exhibits: false },
     ]);
     expect(result.state.form.supportingDocumentCount).toEqual(3);
   });
@@ -66,7 +68,9 @@ describe('addSupportingDocumentToFormAction', () => {
     });
 
     expect(result.state.form.hasSecondarySupportingDocuments).toEqual(true);
-    expect(result.state.form.secondarySupportingDocuments).toEqual([{}]);
+    expect(result.state.form.secondarySupportingDocuments).toEqual([
+      { attachments: false, certificateOfService: false, exhibits: false },
+    ]);
     expect(result.state.form.secondarySupportingDocumentCount).toEqual(1);
   });
 
@@ -99,7 +103,7 @@ describe('addSupportingDocumentToFormAction', () => {
       {
         supportingDocument: 'Something else',
       },
-      {},
+      { attachments: false, certificateOfService: false, exhibits: false },
     ]);
     expect(result.state.form.secondarySupportingDocumentCount).toEqual(3);
   });
