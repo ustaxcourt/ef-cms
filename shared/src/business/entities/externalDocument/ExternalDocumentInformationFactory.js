@@ -207,7 +207,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   }
 
   if (documentMetadata.hasSupportingDocuments === true) {
-    makeRequired('supportingDocument');
+    /*makeRequired('supportingDocument');
 
     if (
       includes(
@@ -262,7 +262,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       ) {
         makeRequired('secondarySupportingDocumentFile');
       }
-    }
+    }*/
   }
 
   if (

@@ -2,8 +2,8 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { SecondarySupportingDocumentForm } from './SecondarySupportingDocumentForm';
-import { SupportingDocumentForm } from './SupportingDocumentForm';
+import { SecondarySupportingDocuments } from './SecondarySupportingDocuments';
+import { SupportingDocuments } from './SupportingDocuments';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -37,11 +37,12 @@ export const FileDocument = connect(
 
         <PrimaryDocumentForm />
 
-        <SupportingDocumentForm />
+        <SupportingDocuments />
 
         {form.secondaryDocument.documentTitle && (
           <>
-            <SecondaryDocumentForm /> <SecondarySupportingDocumentForm />
+            <SecondaryDocumentForm />
+            <SecondarySupportingDocuments />
           </>
         )}
 
