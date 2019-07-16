@@ -3,18 +3,22 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { PDFPreviewModal } from '../PDFPreviewModal';
+
 export const PrimaryDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    openPdfPreviewTabSequence: sequences.openPdfPreviewTabSequence,
+    openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
+    showModal: state.showModal,
   },
   ({
     chooseWizardStepSequence,
     fileDocumentHelper,
     form,
-    openPdfPreviewTabSequence,
+    openPdfPreviewModalSequence,
+    showModal,
   }) => {
     return (
       <React.Fragment>
@@ -44,7 +48,7 @@ export const PrimaryDocumentReadOnly = connect(
               className="usa-button usa-button--unstyled"
               type="button"
               onClick={() =>
-                openPdfPreviewTabSequence({ file: form.primaryDocumentFile })
+                openPdfPreviewModalSequence({ file: form.primaryDocumentFile })
               }
             >
               {form.primaryDocumentFile.name}
@@ -110,6 +114,9 @@ export const PrimaryDocumentReadOnly = connect(
             </div>
           )}
         </div>
+        {showModal === 'PDFPreviewModal' && (
+          <PDFPreviewModal pdfFile={form.primaryDocumentFile} />
+        )}
       </React.Fragment>
     );
   },
