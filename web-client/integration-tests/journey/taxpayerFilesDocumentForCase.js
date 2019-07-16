@@ -115,7 +115,6 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -123,9 +122,8 @@ export default (test, fakeFile) => {
       value: true,
     });
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: true,
+    await test.runSequence('addSupportingDocumentToFormSequence', {
+      type: 'primary'
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
@@ -133,8 +131,6 @@ export default (test, fakeFile) => {
       certificateOfServiceDate: 'Enter a Certificate of Service Date.',
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
-      supportingDocument: 'Enter selection for Supporting Document.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -146,8 +142,6 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate: 'Enter a Certificate of Service Date.',
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
-      supportingDocument: 'Enter selection for Supporting Document.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -168,8 +162,6 @@ export default (test, fakeFile) => {
       certificateOfServiceDate:
         'Certificate of Service date is in the future. Please enter a valid date.',
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
-      supportingDocument: 'Enter selection for Supporting Document.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -180,8 +172,6 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
-      supportingDocument: 'Enter selection for Supporting Document.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -192,9 +182,8 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
-      supportingDocumentFile: 'A file was not selected.',
-      supportingDocumentFreeText: 'Please provide a value.',
+      //supportingDocumentFile: 'A file was not selected.',
+      //supportingDocumentFreeText: 'Please provide a value.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -205,8 +194,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
-      supportingDocumentFile: 'A file was not selected.',
+      //supportingDocumentFile: 'A file was not selected.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -225,15 +213,14 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSecondarySupportingDocuments',
-      value: true,
+    await test.runSequence('addSupportingDocumentToFormSequence', {
+      type: 'secondary'
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      secondarySupportingDocument:
-        'Enter selection for Secondary Supporting Document.',
+      //secondarySupportingDocument:
+      //  'Enter selection for Secondary Supporting Document.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -243,8 +230,8 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      secondarySupportingDocumentFile: 'A file was not selected.',
-      secondarySupportingDocumentFreeText: 'Please provide a value.',
+      //secondarySupportingDocumentFile: 'A file was not selected.',
+      //secondarySupportingDocumentFreeText: 'Please provide a value.',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
