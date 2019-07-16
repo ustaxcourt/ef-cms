@@ -74,7 +74,7 @@ export const submitDocketEntryAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .fileExternalDocumentInteractor({
+    .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,

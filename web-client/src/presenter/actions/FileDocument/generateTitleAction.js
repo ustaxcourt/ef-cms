@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * Set document title.
+ * generate document titles for filing external document
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
