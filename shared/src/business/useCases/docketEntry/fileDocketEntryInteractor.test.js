@@ -1,10 +1,8 @@
 const sinon = require('sinon');
-const {
-  fileExternalDocumentInteractor,
-} = require('./fileExternalDocumentInteractor');
+const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
 const { User } = require('../../entities/User');
 
-describe('fileExternalDocumentInteractor', () => {
+describe('fileDocketEntryInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
@@ -49,13 +47,13 @@ describe('fileExternalDocumentInteractor', () => {
           updateCase: async () => caseRecord,
         }),
       };
-      await fileExternalDocumentInteractor({
+      await fileDocketEntryInteractor({
         applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
         },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
@@ -84,13 +82,13 @@ describe('fileExternalDocumentInteractor', () => {
           updateCase: updateCaseSpy,
         }),
       };
-      await fileExternalDocumentInteractor({
+      await fileDocketEntryInteractor({
         applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
         },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
@@ -124,14 +122,14 @@ describe('fileExternalDocumentInteractor', () => {
           updateCase: updateCaseSpy,
         }),
       };
-      await fileExternalDocumentInteractor({
+      await fileDocketEntryInteractor({
         applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
           isPaper: true,
         },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;

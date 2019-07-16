@@ -22,6 +22,8 @@ module.exports = {
     .handler,
   fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
     .handler,
+  fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
+    .handler,
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
