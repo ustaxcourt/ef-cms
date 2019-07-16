@@ -8,6 +8,7 @@ export const InclusionsForm = connect(
   {
     data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -19,6 +20,7 @@ export const InclusionsForm = connect(
   ({
     data,
     fileDocumentHelper,
+    openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -38,7 +40,14 @@ export const InclusionsForm = connect(
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
-              <button className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105">
+              <button
+                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105"
+                onClick={() =>
+                  openCleanModalSequence({
+                    value: 'WhatCanIIncludeModalOverlay',
+                  })
+                }
+              >
                 <FontAwesomeIcon
                   className="margin-right-05"
                   icon="question-circle"
