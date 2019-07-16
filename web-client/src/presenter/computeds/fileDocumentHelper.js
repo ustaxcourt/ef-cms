@@ -64,6 +64,13 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showSecondaryFilingNotIncludes =
     form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
 
+  const showAddSupportingDocuments =
+    !form.supportingDocumentCount || form.supportingDocumentCount < 5;
+
+  const showAddSecondarySupportingDocuments =
+    !form.secondarySupportingDocumentCount ||
+    form.secondarySupportingDocumentCount < 5;
+
   let exported = {
     certificateOfServiceDateFormatted,
     isSecondaryDocumentUploadOptional:
@@ -77,6 +84,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
         form.secondaryDocument &&
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
     },
+    showAddSecondarySupportingDocuments,
+    showAddSupportingDocuments,
     showFilingIncludes,
     showFilingNotIncludes,
     showPractitionerParty,
@@ -85,40 +94,55 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showSecondaryFilingNotIncludes,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
-    showSupportingDocumentValid: !!form.supportingDocumentFile,
     supportingDocumentTypeList,
   };
 
   if (form.hasSupportingDocuments) {
-    const showSupportingDocumentFreeText =
-      form.hasSupportingDocuments &&
-      supportingDocumentFreeTextTypes.includes(form.supportingDocument);
+    const supportingDocuments = [];
 
-    const supportingDocumentTypeIsSelected =
-      form.supportingDocument && form.supportingDocument !== '';
+    (form.supportingDocuments || []).forEach(item => {
+      const showSupportingDocumentFreeText =
+        item.supportingDocument &&
+        supportingDocumentFreeTextTypes.includes(item.supportingDocument);
 
+      const supportingDocumentTypeIsSelected =
+        item.supportingDocument && item.supportingDocument !== '';
+
+      supportingDocuments.push({
+        showSupportingDocumentFreeText,
+        showSupportingDocumentUpload: supportingDocumentTypeIsSelected,
+        showSupportingDocumentValid: !!item.supportingDocumentFile,
+      });
+    });
     exported = {
       ...exported,
-      showSupportingDocumentFreeText,
-      showSupportingDocumentUpload: supportingDocumentTypeIsSelected,
+      supportingDocuments,
     };
   }
 
   if (form.hasSecondarySupportingDocuments) {
-    const showSecondarySupportingDocumentFreeText =
-      form.hasSecondarySupportingDocuments &&
-      supportingDocumentFreeTextTypes.includes(
-        form.secondarySupportingDocument,
-      );
+    const secondarySupportingDocuments = [];
 
-    const secondarySupportingDocumentTypeIsSelected =
-      form.secondarySupportingDocument &&
-      form.secondarySupportingDocument !== '';
+    (form.secondarySupportingDocuments || []).forEach(item => {
+      const showSecondarySupportingDocumentFreeText =
+        item.secondarySupportingDocument &&
+        supportingDocumentFreeTextTypes.includes(
+          item.secondarySupportingDocument,
+        );
 
+      const secondarySupportingDocumentTypeIsSelected =
+        item.secondarySupportingDocument &&
+        item.secondarySupportingDocument !== '';
+
+      secondarySupportingDocuments.push({
+        showSecondarySupportingDocumentFreeText,
+        showSecondarySupportingDocumentUpload: secondarySupportingDocumentTypeIsSelected,
+        showSecondarySupportingDocumentValid: !!item.secondarySupportingDocumentFile,
+      });
+    });
     exported = {
       ...exported,
-      showSecondarySupportingDocumentFreeText,
-      showSecondarySupportingDocumentUpload: secondarySupportingDocumentTypeIsSelected,
+      secondarySupportingDocuments,
     };
   }
 
