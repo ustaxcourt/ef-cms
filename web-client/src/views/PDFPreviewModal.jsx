@@ -1,8 +1,10 @@
 const pdfjsLib = require('pdfjs-dist');
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 class PDFPreviewModalComponent extends ModalDialog {
@@ -37,6 +39,7 @@ class PDFPreviewModalComponent extends ModalDialog {
 
     /**
      * Get page info from document, resize canvas accordingly, and render page.
+     *
      * @param num Page number.
      */
     function renderPage(num) {
@@ -136,20 +139,30 @@ class PDFPreviewModalComponent extends ModalDialog {
 
   renderBody() {
     return (
-      <div>
+      <div className="pdf-preview-content">
         <div>
-          <button id="prev" ref={this.pagePrevRef}>
-            Previous
-          </button>
-          <button id="next" ref={this.pageNextRef}>
-            Next
-          </button>
-          &nbsp; &nbsp;
-          <span>
-            Page:
-            <span id="page_num" ref={this.pageNumRef} />/
-            <span id="page_count" ref={this.pageCountRef} />
-          </span>
+          <div className="margin-bottom-3">
+            <span className="margin-right-1" ref={this.pagePrevRef}>
+              <FontAwesomeIcon
+                className="icon-button"
+                icon={['fas', 'caret-left']}
+                id="prev"
+                size="2x"
+              />
+            </span>
+            <span className="pages">
+              Page <span id="page_num" ref={this.pageNumRef} /> of{' '}
+              <span id="page_count" ref={this.pageCountRef} />
+            </span>
+            <span className="margin-left-1" ref={this.pageNextRef}>
+              <FontAwesomeIcon
+                className={'icon-button'}
+                icon={['fas', 'caret-right']}
+                id="next"
+                size="2x"
+              />
+            </span>
+          </div>
         </div>
         <canvas id="the-canvas" ref={this.canvasRef}></canvas>
       </div>
