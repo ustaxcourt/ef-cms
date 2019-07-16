@@ -105,6 +105,7 @@ export const state = {
   },
   percentComplete: 0,
   petition: {},
+  previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
   scanHelper,
