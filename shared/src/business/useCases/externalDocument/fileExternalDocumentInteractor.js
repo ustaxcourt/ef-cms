@@ -86,7 +86,6 @@ exports.fileExternalDocumentInteractor = async ({
 
   if (secondarySupportingDocuments) {
     for (let i=0; i<secondarySupportingDocuments.length; i++) {
-      console.log('secondarySupportingDocuments[i]',secondarySupportingDocuments[i]);
       documentsToAdd.push([
         documentIds.shift(),
         secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
@@ -161,7 +160,6 @@ exports.fileExternalDocumentInteractor = async ({
       caseEntity.addDocketRecord(
         docketRecordEntity
       );
-      console.log('docket record entity', docketRecordEntity);
     }
   });
 
