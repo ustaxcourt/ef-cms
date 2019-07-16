@@ -1,13 +1,16 @@
 const { get } = require('../requests');
 
 /**
- * getDocumentQCBatchedForSection
+ * getDocumentQCBatchedForSectionInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCBatchedForSection = ({ applicationContext, section }) => {
+exports.getDocumentQCBatchedForSectionInteractor = ({
+  applicationContext,
+  section,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/sections/${section}/document-qc/batched`,
+    endpoint: `/api/sections/${section}/document-qc/batched`,
   });
 };

@@ -1,14 +1,14 @@
 const { post } = require('../requests');
 
 /**
- * setTrialSessionAsSwingSession
+ * setTrialSessionAsSwingSessionInteractor
  *
  * @param applicationContext
  * @param swingSessionId
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.setTrialSessionAsSwingSession = ({
+exports.setTrialSessionAsSwingSessionInteractor = ({
   applicationContext,
   swingSessionId,
   trialSessionId,
@@ -16,6 +16,6 @@ exports.setTrialSessionAsSwingSession = ({
   return post({
     applicationContext,
     body: { swingSessionId },
-    endpoint: `/trial-sessions/${trialSessionId}/set-swing-session`,
+    endpoint: `/api/trial-sessions/${trialSessionId}/set-swing-session`,
   });
 };

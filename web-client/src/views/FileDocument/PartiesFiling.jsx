@@ -22,7 +22,7 @@ export const PartiesFiling = connect(
     return (
       <React.Fragment>
         <h2 className="margin-top-4">
-          Tell Us About the Parties Filing This Document
+          Tell Us About the Parties Filing The Document(s)
         </h2>
         <div className="blue-container">
           <div
@@ -34,34 +34,9 @@ export const PartiesFiling = connect(
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
-                Who Is Filing This Document?
+                Who are you filing the document(s) for?
               </legend>
-              <span className="usa-hint">Check all that apply</span>
-              {fileDocumentHelper.showPractitionerParty && (
-                <div className="usa-checkbox">
-                  <input
-                    aria-describedby="who-legend"
-                    checked={form.partyPractitioner || false}
-                    className="usa-checkbox__input"
-                    id="party-practitioner"
-                    name="partyPractitioner"
-                    type="checkbox"
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="party-practitioner"
-                  >
-                    Myself as Petitioner’s Counsel
-                  </label>
-                </div>
-              )}
+              <span className="usa-hint">Check all that apply.</span>
               <div className="usa-checkbox">
                 <input
                   aria-describedby="who-legend"
@@ -79,7 +54,7 @@ export const PartiesFiling = connect(
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="party-primary">
-                  {fileDocumentHelper.partyPrimaryLabel}
+                  {caseDetail.contactPrimary.name}, Petitioner
                 </label>
               </div>
               {fileDocumentHelper.showSecondaryParty && (
@@ -103,10 +78,38 @@ export const PartiesFiling = connect(
                     className="usa-checkbox__label"
                     htmlFor="party-secondary"
                   >
-                    {caseDetail.contactSecondary.name}
+                    {caseDetail.contactSecondary.name}, Petitioner
                   </label>
                 </div>
               )}
+              {fileDocumentHelper.showPractitionerParty &&
+                caseDetail.practitioners.map((practitioner, idx) => {
+                  return (
+                    <div className="usa-checkbox" key={idx}>
+                      <input
+                        aria-describedby="who-legend"
+                        checked={form.partyPractitioner || false}
+                        className="usa-checkbox__input"
+                        id={`party-practitioner-${idx}`}
+                        name="partyPractitioner"
+                        type="checkbox"
+                        onChange={e => {
+                          updateFileDocumentWizardFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                          validateExternalDocumentInformationSequence();
+                        }}
+                      />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor={`party-practitioner-${idx}`}
+                      >
+                        {practitioner.name}, Counsel
+                      </label>
+                    </div>
+                  );
+                })}
               <div className="usa-checkbox">
                 <input
                   aria-describedby="who-legend"

@@ -18,7 +18,7 @@ export const RequestAccessWizard = connect(
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
-          {showModal == 'FormCancelModalDialogComponent' && (
+          {showModal == 'FormCancelModalDialog' && (
             <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
           )}
           <SuccessNotification />

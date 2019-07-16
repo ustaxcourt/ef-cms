@@ -3,18 +3,18 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  fileExternalDocument,
+  fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
 const {
-  getDocumentQCInboxForSection,
+  getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
-describe('fileExternalDocument integration test', () => {
+describe('fileExternalDocumentInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
@@ -60,13 +60,14 @@ describe('fileExternalDocument integration test', () => {
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    await fileExternalDocument({
+    await fileExternalDocumentInteractor({
       applicationContext,
       documentMetadata: {
         attachments: false,
         caseId,
         category: 'Motion',
         certificateOfService: false,
+        certificateOfServiceDate: 'undefined-undefined-undefined',
         docketNumber: '201-19',
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
@@ -88,7 +89,6 @@ describe('fileExternalDocument integration test', () => {
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
         },
-        serviceDate: 'undefined-undefined-undefined',
         supportingDocument: 'Brief in Support',
         supportingDocumentMetadata: {
           category: 'Supporting Document',
@@ -104,7 +104,7 @@ describe('fileExternalDocument integration test', () => {
       supportingDocumentFileId: '22de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    const caseAfterDocument = await getCase({
+    const caseAfterDocument = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -231,6 +231,7 @@ describe('fileExternalDocument integration test', () => {
                 caseId,
                 category: 'Motion',
                 certificateOfService: false,
+                certificateOfServiceDate: 'undefined-undefined-undefined',
                 docketNumber: '201-19',
                 documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle:
@@ -240,7 +241,6 @@ describe('fileExternalDocument integration test', () => {
                 hasSupportingDocuments: true,
                 partyPrimary: true,
                 scenario: 'Nonstandard H',
-                serviceDate: 'undefined-undefined-undefined',
                 supportingDocument: 'Brief in Support',
                 userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
@@ -418,7 +418,7 @@ describe('fileExternalDocument integration test', () => {
       });
     };
 
-    const workItems = await getDocumentQCInboxForSection({
+    const workItems = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
       section: 'docket',
     });

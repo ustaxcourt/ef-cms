@@ -28,12 +28,12 @@ export const FilingsAndProceedings = connect(
     showDocketRecordDetailModalSequence,
     token,
   }) => {
-    function renderDocumentLink(
+    const renderDocumentLink = (
       documentId,
       description,
       isPaper,
       docketRecordIndex = 0,
-    ) {
+    ) => {
       return (
         <React.Fragment>
           {caseDetailHelper.userHasAccessToCase && (
@@ -41,7 +41,7 @@ export const FilingsAndProceedings = connect(
               <NonMobile>
                 <a
                   aria-label={`View PDF: ${description}`}
-                  href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/api/documents/${documentId}/document-download-url?token=${token}`}
                   rel="noreferrer noopener"
                   target="_blank"
                 >
@@ -72,7 +72,7 @@ export const FilingsAndProceedings = connect(
           {!caseDetailHelper.userHasAccessToCase && description}
         </React.Fragment>
       );
-    }
+    };
 
     return (
       <React.Fragment>

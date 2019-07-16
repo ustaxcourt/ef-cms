@@ -1,10 +1,10 @@
 const { Case } = require('../entities/cases/Case');
 
 /**
- * validateCaseDetail
+ * validateCaseDetailInteractor
  * @param caseDetail
  * @returns {Promise<{petitionFileId}>}
  */
-exports.validateCaseDetail = ({ caseDetail }) => {
+exports.validateCaseDetailInteractor = ({ caseDetail }) => {
   return new Case(caseDetail).getFormattedValidationErrors();
 };

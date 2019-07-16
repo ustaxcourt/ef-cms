@@ -55,17 +55,17 @@ export const submitDocketEntryAction = async ({
 
   for (let documentId of documentIds) {
     if (documentId) {
-      await applicationContext.getUseCases().virusScanPdf({
+      await applicationContext.getUseCases().virusScanPdfInteractor({
         applicationContext,
         documentId,
       });
 
-      await applicationContext.getUseCases().validatePdf({
+      await applicationContext.getUseCases().validatePdfInteractor({
         applicationContext,
         documentId,
       });
 
-      await applicationContext.getUseCases().sanitizePdf({
+      await applicationContext.getUseCases().sanitizePdfInteractor({
         applicationContext,
         documentId,
       });
@@ -74,7 +74,7 @@ export const submitDocketEntryAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .fileExternalDocument({
+    .fileExternalDocumentInteractor({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
@@ -83,7 +83,7 @@ export const submitDocketEntryAction = async ({
 
   for (let document of caseDetail.documents) {
     if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheet({
+      await applicationContext.getUseCases().createCoverSheetInteractor({
         applicationContext,
         caseId: caseDetail.caseId,
         documentId: document.documentId,

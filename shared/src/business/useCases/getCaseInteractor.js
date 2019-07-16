@@ -6,14 +6,14 @@ const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
- * getCase
+ * getCaseInteractor
  *
  * @param user
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getCase = async ({ applicationContext, caseId }) => {
+exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
   let caseRecord;
 
   if (Case.isValidCaseId(caseId)) {

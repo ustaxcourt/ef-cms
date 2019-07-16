@@ -1,5 +1,5 @@
 const {
-  getEligibleCasesForTrialSession,
+  getEligibleCasesForTrialSessionInteractor,
 } = require('./getEligibleCasesForTrialSessionInteractor');
 const { User } = require('../../entities/User');
 
@@ -35,7 +35,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     let error;
 
     try {
-      await getEligibleCasesForTrialSession({
+      await getEligibleCasesForTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -64,7 +64,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     let error;
 
     try {
-      await getEligibleCasesForTrialSession({
+      await getEligibleCasesForTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });

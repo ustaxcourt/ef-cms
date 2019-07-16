@@ -1,5 +1,5 @@
 const sinon = require('sinon');
-const { authorizeCode } = require('./authorizeCodeInteractor');
+const { authorizeCodeInteractor } = require('./authorizeCodeInteractor');
 
 describe('authorizeCodeInteractor', () => {
   let applicationContext;
@@ -22,7 +22,7 @@ describe('authorizeCodeInteractor', () => {
         post: postStub,
       }),
     };
-    const response = await authorizeCode({ applicationContext });
+    const response = await authorizeCodeInteractor({ applicationContext });
     expect(response).toEqual({
       refreshToken: 'abc',
       token: '123',

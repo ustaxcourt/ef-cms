@@ -2,12 +2,12 @@ const {
   CaseAssociationRequestFactory,
 } = require('../../entities/CaseAssociationRequestFactory');
 const {
-  validateCaseAssociationRequest,
+  validateCaseAssociationRequestInteractor,
 } = require('./validateCaseAssociationRequestInteractor');
 
 describe('validateCaseAssociationRequest', () => {
   it('returns the expected errors object on an empty case association request', () => {
-    const errors = validateCaseAssociationRequest({
+    const errors = validateCaseAssociationRequestInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseAssociationRequestFactory,
@@ -28,7 +28,7 @@ describe('validateCaseAssociationRequest', () => {
   });
 
   it('returns null for a valid case association request', () => {
-    const errors = validateCaseAssociationRequest({
+    const errors = validateCaseAssociationRequestInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           CaseAssociationRequestFactory,

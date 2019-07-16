@@ -2,11 +2,13 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
+  const caseDeadlines = get(state.caseDeadlines) || [];
   const caseHasRespondent =
     !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
   const userRole = get(state.user.role);
   const showActionRequired = !caseDetail.payGovId && userRole === 'petitioner';
-  const documentDetailTab = get(state.documentDetail.tab) || 'docketRecord';
+  const documentDetailTab =
+    get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
@@ -14,7 +16,6 @@ export const caseDetailHelper = get => {
   const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
     userRole,
   );
-
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
 
@@ -27,6 +28,9 @@ export const caseDetailHelper = get => {
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
+  let showCaseDeadlinesExternal = false;
+  let showCaseDeadlinesInternal = false;
+  let showCaseDeadlinesInternalEmpty = false;
   let userHasAccessToCase = false;
 
   if (isExternalUser) {
@@ -36,6 +40,10 @@ export const caseDetailHelper = get => {
       showRequestAccessToCaseButton = false;
       showPendingAccessToCaseButton = false;
       showFileFirstDocumentButton = false;
+
+      if (caseDeadlines && caseDeadlines.length > 0) {
+        showCaseDeadlinesExternal = true;
+      }
     } else {
       showFileDocumentButton = false;
       if (userRole === 'practitioner') {
@@ -49,20 +57,33 @@ export const caseDetailHelper = get => {
     }
   } else {
     userHasAccessToCase = true;
+
+    if (caseDeadlines && caseDeadlines.length > 0) {
+      showCaseDeadlinesInternal = true;
+    } else {
+      showCaseDeadlinesInternalEmpty = true;
+    }
   }
 
   return {
+    caseDeadlines,
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,
     showActionRequired,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
+    showCaseDeadlinesExternal,
+    showCaseDeadlinesInternal,
+    showCaseDeadlinesInternalEmpty,
     showCaseInformationPublic: isExternalUser,
     showCreateOrderButton,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
+    showEditContactButton: isExternalUser,
+    showEditSecondaryContactModal:
+      get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,

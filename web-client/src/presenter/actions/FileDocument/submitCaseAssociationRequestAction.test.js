@@ -18,9 +18,9 @@ describe('submitCaseAssociationRequestAction', () => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
-        fileExternalDocument: fileExternalDocumentStub,
-        submitCaseAssociationRequest: submitCaseAssociationRequestStub,
-        submitPendingCaseAssociationRequest: submitPendingCaseAssociationRequestStub,
+        fileExternalDocumentInteractor: fileExternalDocumentStub,
+        submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
+        submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,
       }),
     };
   });

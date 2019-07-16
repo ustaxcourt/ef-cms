@@ -3,16 +3,16 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  forwardWorkItem,
+  forwardWorkItemInteractor,
 } = require('../useCases/workitems/forwardWorkItemInteractor');
 const {
-  getInboxMessagesForUser,
+  getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  getSentMessagesForUser,
+  getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -71,7 +71,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       });
     };
 
-    const createdCase = await getCase({
+    const createdCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -80,26 +80,26 @@ describe('forwardWorkItemInteractor integration test', () => {
       d => d.documentType === 'Petition',
     ).workItems[0];
 
-    let inbox = await getInboxMessagesForUser({
+    let inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
     expect(inbox).toEqual([]);
 
-    let sentWorkItems = await getSentMessagesForUser({
+    let sentWorkItems = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(sentWorkItems).toEqual([]);
 
-    await forwardWorkItem({
+    await forwardWorkItemInteractor({
       applicationContext,
       assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       message: 'yolo',
       workItemId: workItem.workItemId,
     });
 
-    sentWorkItems = await getSentMessagesForUser({
+    sentWorkItems = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -136,7 +136,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       });
     };
 
-    inbox = await getInboxMessagesForUser({
+    inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -174,7 +174,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       },
     ]);
 
-    const caseAfterAssign = await getCase({
+    const caseAfterAssign = await getCaseInteractor({
       applicationContext,
       caseId,
     });

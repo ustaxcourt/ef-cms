@@ -1,15 +1,18 @@
 const { get } = require('../requests');
 
 /**
- * getTrialSessionDetails
+ * getTrialSessionDetailsInteractor
  *
  * @param applicationContext
  * @param trialSessionId
  * @returns {Promise<*>}
  */
-exports.getTrialSessionDetails = ({ applicationContext, trialSessionId }) => {
+exports.getTrialSessionDetailsInteractor = ({
+  applicationContext,
+  trialSessionId,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/trial-sessions/${trialSessionId}`,
+    endpoint: `/api/trial-sessions/${trialSessionId}`,
   });
 };

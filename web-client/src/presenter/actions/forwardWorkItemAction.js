@@ -24,7 +24,7 @@ export const forwardWorkItemAction = async ({
 
   const updatedWorkItem = await applicationContext
     .getUseCases()
-    .forwardWorkItem({
+    .forwardWorkItemInteractor({
       applicationContext,
       assigneeId: form.assigneeId,
       message: form.forwardMessage,

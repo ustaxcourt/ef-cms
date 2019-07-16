@@ -12,7 +12,7 @@ const { Case } = require('../../entities/cases/Case');
  * @param applicationContext
  * @returns {Promise<*|*>}
  */
-exports.getDocumentQCBatchedForSection = async ({
+exports.getDocumentQCBatchedForSectionInteractor = async ({
   applicationContext,
   section,
 }) => {

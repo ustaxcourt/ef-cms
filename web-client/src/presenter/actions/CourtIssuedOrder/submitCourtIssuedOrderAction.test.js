@@ -4,23 +4,23 @@ import { submitCourtIssuedOrderAction } from './submitCourtIssuedOrderAction';
 import sinon from 'sinon';
 
 describe('submitCourtIssuedOrderAction', () => {
-  let fileExternalDocumentStub;
+  let fileCourtIssuedOrderStub;
 
   beforeEach(() => {
-    fileExternalDocumentStub = sinon.stub();
+    fileCourtIssuedOrderStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        fileExternalDocument: fileExternalDocumentStub,
-        sanitizePdf: () => {},
-        validatePdf: () => {},
-        virusScanPdf: () => {},
+        fileCourtIssuedOrderInteractor: fileCourtIssuedOrderStub,
+        sanitizePdfInteractor: () => {},
+        validatePdfInteractor: () => {},
+        virusScanPdfInteractor: () => {},
       }),
     };
   });
 
-  it('should skip calling fileExternalDocument if there is no primaryDocumentFileId', async () => {
-    fileExternalDocumentStub.returns({ documents: [] });
+  it('should skip calling fileCourtIssuedOrder if there is no primaryDocumentFileId', async () => {
+    fileCourtIssuedOrderStub.returns({ documents: [] });
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
@@ -34,11 +34,11 @@ describe('submitCourtIssuedOrderAction', () => {
       },
     });
 
-    expect(fileExternalDocumentStub.calledOnce).toEqual(false);
+    expect(fileCourtIssuedOrderStub.calledOnce).toEqual(false);
   });
 
-  it('should call fileExternalDocument', async () => {
-    fileExternalDocumentStub.returns({ documents: [] });
+  it('should call fileCourtIssuedOrder', async () => {
+    fileCourtIssuedOrderStub.returns({ documents: [] });
     await runAction(submitCourtIssuedOrderAction, {
       modules: {
         presenter,
@@ -55,6 +55,6 @@ describe('submitCourtIssuedOrderAction', () => {
       },
     });
 
-    expect(fileExternalDocumentStub.calledOnce).toEqual(true);
+    expect(fileCourtIssuedOrderStub.calledOnce).toEqual(true);
   });
 });

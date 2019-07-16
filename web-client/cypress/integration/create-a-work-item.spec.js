@@ -1,23 +1,23 @@
 const {
-  navigateTo: navigateToDocumentDetail,
-  getMessagesTab,
-  getInProgressTab,
-  getCreateMessageButton,
-  getSectionSelect,
   getAssigneeIdSelect,
-  getMessageTextArea,
-  getSendMessageButton,
-  getModal,
   getCardContaining,
+  getCreateMessageButton,
+  getInProgressTab,
+  getMessagesTab,
+  getMessageTextArea,
+  getModal,
+  getSectionSelect,
+  getSendMessageButton,
+  navigateTo: navigateToDocumentDetail,
 } = require('../support/pages/document-detail');
 const {
-  viewMyOutbox,
-  getWorkItemContaining,
-  viewMyInbox,
-  viewSectionOutbox,
   getTableRows,
-  viewSectionInbox,
+  getWorkItemContaining,
   navigateTo: navigateToDashboard,
+  viewMyInbox,
+  viewMyOutbox,
+  viewSectionInbox,
+  viewSectionOutbox,
 } = require('../support/pages/dashboard');
 
 describe('Create a work item ', () => {

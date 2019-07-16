@@ -25,7 +25,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
-        .verifyPendingCaseForUser({
+        .verifyPendingCaseForUserInteractor({
           applicationContext,
           caseId,
           userId,

@@ -1,4 +1,4 @@
-exports.getItem = async ({ applicationContext, key }) => {
+exports.getItemInteractor = async ({ applicationContext, key }) => {
   return applicationContext.getPersistenceGateway().getItem({
     applicationContext,
     key,

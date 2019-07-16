@@ -5,13 +5,16 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getInboxMessagesForUser
+ * getInboxMessagesForUserInteractor
  *
  * @param userId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getInboxMessagesForUser = async ({ applicationContext, userId }) => {
+exports.getInboxMessagesForUserInteractor = async ({
+  applicationContext,
+  userId,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, WORKITEM)) {

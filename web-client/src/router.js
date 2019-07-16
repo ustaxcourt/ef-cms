@@ -45,6 +45,30 @@ const router = {
         });
       }),
     );
+
+    route(
+      '/case-detail/*/documents/*/sign',
+      checkLoggedIn((docketNumber, documentId) => {
+        app.getSequence('gotoSignPDFDocumentSequence')({
+          docketNumber,
+          documentId,
+          pageNumber: 1,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/documents/*/messages/*/sign',
+      checkLoggedIn((docketNumber, documentId, messageId) => {
+        app.getSequence('gotoSignPDFDocumentSequence')({
+          docketNumber,
+          documentId,
+          messageId,
+          pageNumber: 1,
+        });
+      }),
+    );
+
     route(
       '/case-detail/*/documents/*/mark/*',
       checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
@@ -82,10 +106,24 @@ const router = {
       ),
     );
     route(
+      '/case-detail/*/before-you-file-a-document',
+      checkLoggedIn(docketNumber => {
+        document.title = `Before you file a document ${pageTitleSuffix}`;
+        app.getSequence('gotoBeforeYouFileDocumentSequence')({ docketNumber });
+      }),
+    );
+    route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
         app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+      }),
+    );
+    route(
+      '/case-detail/*/contacts/primary/edit',
+      checkLoggedIn(docketNumber => {
+        document.title = `Primary contact ${pageTitleSuffix}`;
+        app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
       }),
     );
     route(

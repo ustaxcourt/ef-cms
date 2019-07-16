@@ -25,6 +25,7 @@ function Document(rawDocument) {
     caseId: rawDocument.caseId,
     category: rawDocument.category,
     certificateOfService: rawDocument.certificateOfService,
+    certificateOfServiceDate: rawDocument.certificateOfServiceDate,
     createdAt: rawDocument.createdAt || new Date().toISOString(),
     docketNumber: rawDocument.docketNumber,
     documentId: rawDocument.documentId,
@@ -36,6 +37,7 @@ function Document(rawDocument) {
     hasSupportingDocuments: rawDocument.hasSupportingDocuments,
     isPaper: rawDocument.isPaper,
     lodged: rawDocument.lodged,
+    objections: rawDocument.objections,
     partyPrimary: rawDocument.partyPrimary,
     partyRespondent: rawDocument.partyRespondent,
     partySecondary: rawDocument.partySecondary,
@@ -49,6 +51,8 @@ function Document(rawDocument) {
     scenario: rawDocument.scenario,
     servedDate: rawDocument.servedDate,
     serviceDate: rawDocument.serviceDate,
+    signedAt: rawDocument.signedAt,
+    signedByUserId: rawDocument.signedByUserId,
     status: rawDocument.status,
     supportingDocument: rawDocument.supportingDocument,
     userId: rawDocument.userId,
@@ -79,6 +83,10 @@ Document.initialDocumentTypes = {
   stin: 'Statement of Taxpayer Identification',
 };
 
+Document.signedDocumentTypes = {
+  signedStipulatedDecision: 'Signed Stipulated Decision',
+};
+
 Document.getDocumentTypes = () => {
   const allFilingEvents = flatten([
     ...Object.values(documentMapExternal),
@@ -86,11 +94,13 @@ Document.getDocumentTypes = () => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
+  const signedTypes = Object.values(Document.signedDocumentTypes);
   const documentTypes = [
     ...Object.values(Document.initialDocumentTypes),
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
     ...orderDocTypes,
+    ...signedTypes,
   ];
 
   return documentTypes;
@@ -142,6 +152,11 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    signedAt: joi
+      .date()
+      .iso()
+      .optional(),
+    signedByUserId: joi.string().optional(),
     status: joi.string().optional(),
     userId: joi.string().required(),
     validated: joi.boolean().optional(),
@@ -193,8 +208,20 @@ Document.prototype.generateFiledBy = function(caseDetail) {
       );
     }
 
-    this.filedBy = filedByArray.join(' & ');
+    if (filedByArray.length) {
+      this.filedBy = filedByArray.join(' & ');
+    }
   }
+};
+/**
+ * attaches a signedAt date to the document
+ *
+ * @param signByUserId
+ *
+ */
+Document.prototype.setSigned = function(signByUserId) {
+  this.signedByUserId = signByUserId;
+  this.signedAt = new Date().toISOString();
 };
 
 exports.Document = Document;

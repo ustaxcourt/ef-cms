@@ -1,16 +1,16 @@
 const { post } = require('./requests');
 
 /**
- * runBatchProcess
+ * runBatchProcessInteractor
  *
  * @param applicationContext
  * @param caseId
  * @param userId
  * @returns {Promise<*>}
  */
-exports.runBatchProcess = ({ applicationContext }) => {
+exports.runBatchProcessInteractor = ({ applicationContext }) => {
   return post({
     applicationContext,
-    endpoint: '/runBatchProcess',
+    endpoint: '/api/runBatchProcess',
   });
 };

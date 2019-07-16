@@ -309,4 +309,98 @@ describe('case detail computed', () => {
     expect(result.showPaymentRecord).toBeUndefined();
     expect(result.showPaymentOptions).toEqual(true);
   });
+
+  it('should show case deadlines external view for external user who is associated with the case if there are deadlines on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDeadlines: ['something'],
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(true);
+    expect(result.showCaseDeadlinesInternalEmpty).toEqual(false);
+    expect(result.showCaseDeadlinesInternal).toEqual(false);
+  });
+
+  it('should not show case deadlines external view for external user who is associated with the case if there are not deadlines on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDeadlines: [],
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: true,
+        },
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+    expect(result.showCaseDeadlinesInternalEmpty).toEqual(false);
+    expect(result.showCaseDeadlinesInternal).toEqual(false);
+  });
+
+  it('should not show case deadlines external view for external user who is not associated with the case and there are deadlines on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDeadlines: ['something'],
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+        user: {
+          role: 'respondent',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+    expect(result.showCaseDeadlinesInternalEmpty).toEqual(false);
+    expect(result.showCaseDeadlinesInternal).toEqual(false);
+  });
+
+  it('should show case deadlines internal view and not show case deadlines external view for internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDeadlines: ['something'],
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesInternalEmpty).toEqual(false);
+    expect(result.showCaseDeadlinesInternal).toEqual(true);
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+  });
+
+  it('should show case deadlines internal view as empty and not show case deadlines external view for internal user if case deadlines is empty', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDeadlines: [],
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showCaseDeadlinesInternalEmpty).toEqual(true);
+    expect(result.showCaseDeadlinesInternal).toEqual(false);
+    expect(result.showCaseDeadlinesExternal).toEqual(false);
+  });
 });
