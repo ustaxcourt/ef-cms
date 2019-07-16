@@ -78,7 +78,7 @@ class OverlayComponent extends React.Component {
         <dialog open className="modal-screen overlay-full">
           <div
             aria-modal="true"
-            className={'modal-overlay'}
+            className="modal-overlay"
             data-aria-live="assertive"
             role="dialog"
           >
