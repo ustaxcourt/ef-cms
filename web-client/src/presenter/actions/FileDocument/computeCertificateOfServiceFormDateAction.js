@@ -56,7 +56,7 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
       );
       year = get(
         state.form.supportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceYaer,
+          .certificateOfServiceYear,
       );
       store.set(
         state.form.supportingDocuments[idx].supportingDocumentMetadata
