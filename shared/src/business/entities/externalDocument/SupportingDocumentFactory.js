@@ -26,7 +26,6 @@ SupportingDocumentFactory.get = documentMetadata => {
       certificateOfServiceDate: rawProps.certificateOfServiceDate,
       documentType: rawProps.documentType,
       eventCode: rawProps.eventCode,
-      exhibits: rawProps.exhibits,
       supportingDocument: rawProps.supportingDocument,
       supportingDocumentFile: rawProps.supportingDocumentFile,
       supportingDocumentFileSize: rawProps.supportingDocumentFileSize,
@@ -37,7 +36,6 @@ SupportingDocumentFactory.get = documentMetadata => {
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
-    exhibits: joi.boolean().required(),
     supportingDocument: joi.string().required(),
   };
 
@@ -67,7 +65,6 @@ SupportingDocumentFactory.get = documentMetadata => {
       },
       'Enter a Certificate of Service Date.',
     ],
-    exhibits: 'Enter selection for Exhibits.',
     supportingDocument: 'Enter selection for Supporting Document.',
     supportingDocumentFile: 'A file was not selected.',
     supportingDocumentFileSize: [

@@ -71,7 +71,6 @@ export const PrimaryDocumentReadOnly = connect(
                     {fileDocumentHelper.certificateOfServiceDateFormatted}
                   </li>
                 )}
-                {form.exhibits && <li>Exhibit(s)</li>}
                 {form.attachments && <li>Attachment(s)</li>}
               </ul>
             </div>
@@ -88,7 +87,6 @@ export const PrimaryDocumentReadOnly = connect(
               </label>
               <ul className="ustc-unstyled-list without-margins">
                 {!form.certificateOfService && <li>Certificate of Service</li>}
-                {!form.exhibits && <li>Exhibit(s)</li>}
                 {!form.attachments && <li>Attachment(s)</li>}
                 {!form.hasSupportingDocuments && <li>Supporting Documents</li>}
               </ul>
