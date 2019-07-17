@@ -25,7 +25,11 @@ export const SupportingDocumentInclusionsForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="usa-form-group margin-bottom-0">
+        <div
+          className={`usa-form-group ${
+            !data.certificateOfService ? 'margin-bottom-0' : ''
+          }`}
+        >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
@@ -38,31 +42,6 @@ export const SupportingDocumentInclusionsForm = connect(
                 What can I include with my document?
               </button>
             </legend>
-            <div className="usa-checkbox">
-              <input
-                checked={data.exhibits || false}
-                className="usa-checkbox__input"
-                id={`${type}-exhibits`}
-                name={`${
-                  type === 'primaryDocument' ? 'exhibits' : `${type}.exhibits`
-                }`}
-                type="checkbox"
-                onChange={e => {
-                  updateFileDocumentWizardFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateExternalDocumentInformationSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label"
-                htmlFor={`${type}-exhibits`}
-              >
-                Exhibits
-              </label>
-            </div>
-
             <div className="usa-checkbox">
               <input
                 checked={data.attachments || false}
@@ -86,7 +65,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 className="usa-checkbox__label"
                 htmlFor={`${type}-attachments`}
               >
-                Attachments
+                Attachment(s)
               </label>
             </div>
 

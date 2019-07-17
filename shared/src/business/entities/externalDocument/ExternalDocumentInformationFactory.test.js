@@ -58,12 +58,6 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    it('should require exhibits radio be selected', () => {
-      expect(errors().exhibits).toEqual('Enter selection for Exhibits.');
-      baseDoc.exhibits = false;
-      expect(errors().exhibits).toEqual(undefined);
-    });
-
     it('should require attachments radio be selected', () => {
       expect(errors().attachments).toEqual('Enter selection for Attachments.');
       baseDoc.attachments = false;
@@ -94,7 +88,7 @@ describe('ExternalDocumentInformationFactory', () => {
       beforeEach(() => {
         baseDoc.hasSupportingDocuments = true;
         baseDoc.supportingDocuments = [
-          { attachments: false, certificateOfService: false, exhibits: false },
+          { attachments: false, certificateOfService: false },
         ];
       });
 
@@ -111,10 +105,9 @@ describe('ExternalDocumentInformationFactory', () => {
           {
             attachments: false,
             certificateOfService: false,
-            exhibits: false,
             supportingDocument: 'brief',
           },
-          { attachments: false, certificateOfService: false, exhibits: false },
+          { attachments: false, certificateOfService: false },
         ];
         expect(errors().supportingDocuments[0]).toEqual({
           index: 1,
@@ -138,7 +131,6 @@ describe('ExternalDocumentInformationFactory', () => {
             {
               attachments: false,
               certificateOfService: false,
-              exhibits: false,
               supportingDocument: 'Brief in Support',
             },
           ];
@@ -256,7 +248,6 @@ describe('ExternalDocumentInformationFactory', () => {
               {
                 attachments: false,
                 certificateOfService: false,
-                exhibits: false,
               },
             ];
           });
@@ -288,7 +279,6 @@ describe('ExternalDocumentInformationFactory', () => {
                 {
                   attachments: false,
                   certificateOfService: false,
-                  exhibits: false,
                   secondarySupportingDocument: 'Memorandum in Support',
                 },
               ];
@@ -310,7 +300,6 @@ describe('ExternalDocumentInformationFactory', () => {
                 {
                   attachments: false,
                   certificateOfService: false,
-                  exhibits: false,
                   secondarySupportingDocument: 'Declaration in Support',
                 },
               ];
