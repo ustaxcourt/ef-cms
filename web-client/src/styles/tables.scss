@@ -121,7 +121,7 @@ table.small-case-qualifications-table {
 
   thead th {
     background-color: color($theme-color-base-lightest);
-    color: $theme-color-base-darkest;
+    color: color($theme-color-base-darkest);
     font-family: $font-source-sans;
     font-size: 17px;
     font-weight: $font-semibold;
