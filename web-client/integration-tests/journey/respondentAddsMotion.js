@@ -92,6 +92,12 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
+      supportingDocuments: [
+        {
+          index: 0,
+          supportingDocumentFile: 'A file was not selected.',
+        },
+      ],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
