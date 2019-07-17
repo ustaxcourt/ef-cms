@@ -3,6 +3,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -57,7 +58,10 @@ export const FileDocumentReviewRedesign = connect(
                           {form.documentTitle}
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        {form.primaryDocumentFile.name}
+                        <PDFPreviewButton
+                          file={form.primaryDocumentFile}
+                          title={form.documentTitle}
+                        />
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
@@ -138,48 +142,53 @@ export const FileDocumentReviewRedesign = connect(
                           {form.supportingDocumentMetadata.documentTitle}
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        {form.supportingDocumentFile.name}
+                        <PDFPreviewButton
+                          file={form.supportingDocumentFile}
+                          title={form.supportingDocumentMetadata.documentTitle}
+                        />
                       </div>
                     </div>
                   )}
 
-                  {form.secondaryDocument &&
-                    form.secondaryDocument.documentTitle && (
-                      <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                        <div className="tablet:grid-col-6 margin-bottom-1">
-                          <label
-                            className="usa-label"
-                            htmlFor="secondary-filing"
-                          >
-                            {form.secondaryDocument.documentTitle}
-                          </label>
-                          {(form.secondaryDocumentFile &&
-                            form.secondaryDocumentFile.name && (
-                              <React.Fragment>
-                                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                                {form.secondaryDocumentFile.name}
-                              </React.Fragment>
-                            )) ||
-                            'No file attached'}
-                        </div>
-
-                        <div className="tablet:grid-col-6 margin-bottom-1">
-                          {fileDocumentHelper.showSecondaryFilingNotIncludes && (
-                            <div className=" margin-bottom-0">
-                              <label
-                                className="usa-label"
-                                htmlFor="filing-not-includes"
-                              >
-                                Filing Does Not Include
-                              </label>
-                              <ul className="ustc-unstyled-list without-margins">
-                                {!form.hasSecondarySupportingDocuments && (
-                                  <li>Supporting Documents</li>
-                                )}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
+                  {form.secondaryDocument.documentTitle && (
+                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        {form.secondaryDocumentFile && (
+                          <div className="">
+                            <label
+                              className="usa-label"
+                              htmlFor="secondary-filing"
+                            >
+                              {form.secondaryDocument.documentTitle}
+                              </label>    {(form.secondaryDocumentFile &&
+                                form.secondaryDocumentFile.name && (
+                                <React.Fragment>
+                                  <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                                  <PDFPreviewButton
+                                    file={form.secondaryDocumentFile}
+                                    title={form.secondaryDocument.documentTitle} />
+                                  </React.Fragment>
+                                )) ||
+                                'No file attached'}
+                          </div>
+                        )}
+                      </div>
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        {fileDocumentHelper.showSecondaryFilingNotIncludes && (
+                          <div className=" margin-bottom-0">
+                            <label
+                              className="usa-label"
+                              htmlFor="filing-not-includes"
+                            >
+                              Filing Does Not Include
+                            </label>
+                            <ul className="ustc-unstyled-list without-margins">
+                              {!form.hasSecondarySupportingDocuments && (
+                                <li>Supporting Documents</li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     )}
 
@@ -196,7 +205,13 @@ export const FileDocumentReviewRedesign = connect(
                           }
                         </label>
                         <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                        {form.secondarySupportingDocumentFile.name}
+                        <PDFPreviewButton
+                          file={form.secondarySupportingDocumentFile}
+                          title={
+                            form.secondarySupportingDocumentMetadata
+                              .documentTitle
+                          }
+                        />
                       </div>
                     </div>
                   )}
