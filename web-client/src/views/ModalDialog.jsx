@@ -64,6 +64,9 @@ export class ModalDialog extends React.Component {
     document.addEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(true);
     this.focusModal();
+    if (this.modalMounted) {
+      this.modalMounted();
+    }
   }
   componentWillUnmount() {
     modalRoot.removeChild(this.el);
