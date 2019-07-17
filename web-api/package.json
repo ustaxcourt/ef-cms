@@ -21,7 +21,7 @@
     "eslint": "5.16.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-cypress": "^2.6.0",
-    "eslint-plugin-jest": "^22.8.0",
+    "eslint-plugin-jest": "^22.10.0",
     "eslint-plugin-jsdoc": "^15.5.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
@@ -57,7 +57,10 @@
     "try-thread-sleep": "^2.0.0"
   },
   "scripts": {
-    "build": "parcel build --no-source-maps --bundle-node-modules --target node src/handlers.js",
+    "build": "npm run build:api && npm run build:users && npm run build:cases",
+    "build:api": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/apiHandlers.js",
+    "build:users": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/userHandlers.js",
+    "build:cases": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/caseHandlers.js",
     "postinstall": "npm run install:dynamodb",
     "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --userPoolId noop  --efcmsTableName=efcms-local | grep -v -e '^$'",
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",
