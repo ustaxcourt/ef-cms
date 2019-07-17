@@ -13,7 +13,7 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 find ./src -type f -exec chmod -R ugo+r {} ";"
 
-npm run build
+npm run build:api
 cp src/handlers.js /tmp
 cp dist/* src
 
@@ -24,4 +24,3 @@ ENVIRONMENT="${slsStage}" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./nod
 ./configure-custom-api-access-logging.sh "${slsStage}" ./config-custom-access-logs.json "${region}"
 
 cp /tmp/handlers.js src
-

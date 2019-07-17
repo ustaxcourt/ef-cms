@@ -13,7 +13,7 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 find ./src -type f -exec chmod -R ugo+r {} ";"
 
-npm run build
+npm run build:users
 cp src/userHandlers.js /tmp
 cp dist/* src
 
