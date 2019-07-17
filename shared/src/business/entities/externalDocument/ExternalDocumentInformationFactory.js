@@ -182,28 +182,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     if (documentMetadata.secondaryDocumentFile) {
       makeRequired('hasSecondarySupportingDocuments');
     }
-
-    /*if (documentMetadata.hasSecondarySupportingDocuments === true) {
-      makeRequired('secondarySupportingDocument');
-
-      if (
-        includes(
-          supportingDocumentFreeTextCategories,
-          documentMetadata.secondarySupportingDocument,
-        )
-      ) {
-        makeRequired('secondarySupportingDocumentFreeText');
-      }
-
-      if (
-        includes(
-          supportingDocumentFileCategories,
-          documentMetadata.secondarySupportingDocument,
-        )
-      ) {
-        makeRequired('secondarySupportingDocumentFile');
-      }
-    }*/
   }
 
   if (
