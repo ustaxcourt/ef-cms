@@ -115,9 +115,8 @@ class PDFPreviewModalComponent extends ModalDialog {
       this.initFile(atob(reader.result.replace(/[^,]+,/, '')));
       this.props.stopLoadSequence();
     };
-    reader.onerror = function(error) {
+    reader.onerror = function() {
       this.props.stopLoadSequence();
-      console.log('error: ', error);
     };
   }
 

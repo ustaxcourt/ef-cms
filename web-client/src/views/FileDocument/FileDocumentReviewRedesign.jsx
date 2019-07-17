@@ -159,13 +159,19 @@ export const FileDocumentReviewRedesign = connect(
                               className="usa-label"
                               htmlFor="secondary-filing"
                             >
-                              {form.secondaryDocument.documentTitle}
+                              {form.secondaryDocument.documentTitle}{' '}
                             </label>
-                            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                            <PDFPreviewButton
-                              file={form.secondaryDocumentFile}
-                              title={form.secondaryDocument.documentTitle}
-                            />
+                            {(form.secondaryDocumentFile &&
+                              form.secondaryDocumentFile.name && (
+                                <React.Fragment>
+                                  <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                                  <PDFPreviewButton
+                                    file={form.secondaryDocumentFile}
+                                    title={form.secondaryDocument.documentTitle}
+                                  />
+                                </React.Fragment>
+                              )) ||
+                              'No file attached'}
                           </div>
                         )}
                       </div>
