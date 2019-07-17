@@ -26,7 +26,6 @@ SecondarySupportingDocumentFactory.get = documentMetadata => {
       certificateOfServiceDate: rawProps.certificateOfServiceDate,
       documentType: rawProps.documentType,
       eventCode: rawProps.eventCode,
-      exhibits: rawProps.exhibits,
       lodged: rawProps.lodged,
       secondarySupportingDocument: rawProps.secondarySupportingDocument,
       secondarySupportingDocumentFile: rawProps.secondarySupportingDocumentFile,
@@ -40,7 +39,6 @@ SecondarySupportingDocumentFactory.get = documentMetadata => {
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
-    exhibits: joi.boolean().required(),
     secondarySupportingDocument: joi.string().required(),
   };
 
@@ -70,7 +68,6 @@ SecondarySupportingDocumentFactory.get = documentMetadata => {
       },
       'Enter a Certificate of Service Date.',
     ],
-    exhibits: 'Enter selection for Exhibits.',
     secondarySupportingDocument:
       'Enter selection for Secondary Supporting Document.',
     secondarySupportingDocumentFile: 'A file was not selected.',

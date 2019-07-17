@@ -52,12 +52,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
-  const showFilingIncludes =
-    form.certificateOfService || form.exhibits || form.attachments;
+  const showFilingIncludes = form.certificateOfService || form.attachments;
 
   const showFilingNotIncludes =
     !form.certificateOfService ||
-    !form.exhibits ||
     !form.attachments ||
     !form.hasSupportingDocuments;
 
