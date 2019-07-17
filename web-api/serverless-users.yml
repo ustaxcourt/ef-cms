@@ -1,4 +1,4 @@
-service: ef-cms-cases
+service: ef-cms-users
 plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
