@@ -4,7 +4,7 @@ const getDownloadPolicy = async ({ applicationContext, documentId }) => {
   } = await applicationContext
     .getHttpClient()
     .get(
-      `${applicationContext.getBaseUrl()}/api/documents/${documentId}/download-policy-url`,
+      `${applicationContext.getBaseUrl()}/documents/${documentId}/download-policy-url`,
       {
         headers: {
           Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,

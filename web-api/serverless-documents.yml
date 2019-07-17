@@ -1,4 +1,4 @@
-service: ef-cms-users
+service: ef-cms-documents
 plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -17,7 +17,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3003
+    port: 3004
 
   alerts:
     stages:
@@ -51,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'users'
+    basePath: 'documents'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -192,11 +192,11 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getInternalUsers:
-    handler: src/usersHandlers.getInternalUsersLambda
+  getDownloadPolicyUrl:
+    handler: src/apiHandlers.downloadPolicyUrlLambda
     events:
       - http:
-          path: /internal
+          path: /{documentId}/download-policy-url
           method: get
           cors: true
           authorizer:
@@ -204,14 +204,62 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createUser:
-    handler: src/usersHandlers.createUserLambda
+  sanitizePdf:
+    handler: src/apiHandlers.sanitizePdfLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
-          path: /
+          path: /{documentId}/sanitize
           method: post
+          cors: true
+          # async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  virusScan:
+    handler: src/apiHandlers.virusScanPdfLambda
+    memorySize: 3008
+    timeout: 900
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
+    events:
+      - http:
+          path: /{documentId}/virus-scan
+          method: post
+          cors: true
+          async: true
+
+  validate:
+    handler: src/apiHandlers.validatePdfLambda
+    events:
+      - http:
+          path: /{documentId}/validate
+          method: post
+          cors: true
+    alarms:
+      - errorExceptions
+
+  getUploadPolicy:
+    handler: src/apiHandlers.getUploadPolicyLambda
+    events:
+      - http:
+          path: /upload-policy
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getDocumentDownloadUrl:
+    handler: src/apiHandlers.getDocumentDownloadUrlLambda
+    events:
+      - http:
+          path: /{documentId}/document-download-url
+          method: get
+          cors: true
