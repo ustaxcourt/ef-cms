@@ -63,22 +63,7 @@ export const BeforeYouFileADocument = connect(
                       during the filing process.{' '}
                     </p>
 
-                    <p className="label">Exhibits</p>
-                    <p>
-                      An exhibit is evidence to be presented to the Court. If
-                      you have an exhibit, include it with your main document in
-                      a single PDF file. You may mail exhibits to the Court that
-                      cannot be converted to a PDF format. For more information
-                      on mailing exhibits, see the{' '}
-                      <a
-                        className="usa-link--external"
-                        href="https://www.ustaxcourt.gov/eaccess/Petitioners_Guide_to_eAccess_and_eFiling.pdf"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Petitioner’s Guide to E-filing
-                      </a>
-                    </p>
+
 
                     <p className="label">Attachments</p>
                     <p>
