@@ -4,9 +4,10 @@ import React from 'react';
 export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
     <h2>Which case procedure should I choose?</h2>
-<h3>Do I qualify for a small tax case procedure?</h3>
+    <h3>Do I qualify for a small tax case procedure?</h3>
     <p>
-      Depending on your case type and the amount at issue, you may qualify for a small tax case.
+      Depending on your case type and the amount at issue, you may qualify for a
+      small tax case.
     </p>
     <table
       aria-labelledby="small-case-qualifications"
@@ -14,12 +15,12 @@ export const CaseDifferenceExplained = () => (
     >
       <thead>
         <tr>
-        <th>Deficiency</th>
-        <th>Collection</th>
-        <th>Spousal Relief</th>
-        <th>Worker Classification</th>
-        <th>Interest Abatement</th>
-        <th>Whistleblower or Passport</th>
+          <th>Deficiency</th>
+          <th>Collection</th>
+          <th>Spousal Relief</th>
+          <th>Worker Classification</th>
+          <th>Interest Abatement</th>
+          <th>Whistleblower or Passport</th>
         </tr>
       </thead>
       <tbody>
@@ -58,7 +59,8 @@ export const CaseDifferenceExplained = () => (
         <div className="grid-col-3 feature benefit" role="listitem">
           <h4>
             <FontAwesomeIcon icon="check-circle" />
-            More Location Options</h4>
+            More Location Options
+          </h4>
           <p>
             Small case trials are held in 15 more locations than regular cases
           </p>
@@ -66,7 +68,8 @@ export const CaseDifferenceExplained = () => (
         <div className="grid-col-3 feature benefit" role="listitem">
           <h4>
             <FontAwesomeIcon icon="check-circle" />
-            Less Formal Procedures</h4>
+            Less Formal Procedures
+          </h4>
           <p>
             Small case pre-trial and trial procedures are less formal than
             regular cases
@@ -75,7 +78,8 @@ export const CaseDifferenceExplained = () => (
         <div className="grid-col-3 feature benefit" role="listitem">
           <h4>
             <FontAwesomeIcon icon="check-circle" />
-            Relaxed Evidence Rules</h4>
+            Relaxed Evidence Rules
+          </h4>
           <p>Judges can consider any evidence that’s relevant</p>
         </div>
         <div className="grid-col-3 feature warning" role="listitem">
