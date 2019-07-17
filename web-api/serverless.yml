@@ -491,48 +491,12 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getInternalUsers:
-    handler: src/handlers.getInternalUsersLambda
-    events:
-      - http:
-          path: users/internal
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getUsersInSection:
-    handler: src/handlers.getUsersInSectionLambda
-    events:
-      - http:
-          path: sections/{section}/users
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getNotifications:
     handler: src/handlers.getNotificationsLambda
     events:
       - http:
           path: notifications
           method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createUser:
-    handler: src/handlers.createUserLambda
-    events:
-      - http:
-          path: users
-          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -685,3 +649,14 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getUsersInSection:
+    handler: src/handlers.getUsersInSectionLambda
+    events:
+      - http:
+          path: sections/{section}/users
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
