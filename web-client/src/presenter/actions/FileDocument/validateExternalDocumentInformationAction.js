@@ -31,7 +31,6 @@ export const validateExternalDocumentInformationAction = ({
       'primaryDocumentFile',
       'certificateOfService',
       'certificateOfServiceDate',
-      'exhibits',
       'attachments',
       'objections',
       'hasSupportingDocuments',

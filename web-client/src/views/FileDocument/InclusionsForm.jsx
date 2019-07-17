@@ -58,31 +58,6 @@ export const InclusionsForm = connect(
             </legend>
             <div className="usa-checkbox">
               <input
-                checked={data.exhibits || false}
-                className="usa-checkbox__input"
-                id={`${type}-exhibits`}
-                name={`${
-                  type === 'primaryDocument' ? 'exhibits' : `${type}.exhibits`
-                }`}
-                type="checkbox"
-                onChange={e => {
-                  updateFileDocumentWizardFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateExternalDocumentInformationSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label"
-                htmlFor={`${type}-exhibits`}
-              >
-                Exhibits
-              </label>
-            </div>
-
-            <div className="usa-checkbox">
-              <input
                 checked={data.attachments || false}
                 className="usa-checkbox__input"
                 id={`${type}-attachments`}
@@ -104,7 +79,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__label"
                 htmlFor={`${type}-attachments`}
               >
-                Attachments
+                Attachment(s)
               </label>
             </div>
 

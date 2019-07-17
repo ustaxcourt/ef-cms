@@ -77,7 +77,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber: '201-19',
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
-        exhibits: false,
         hasSupportingDocuments: true,
         partyPrimary: true,
         scenario: 'Nonstandard H',
@@ -222,7 +221,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
-          exhibits: false,
           hasSupportingDocuments: true,
           partyPrimary: true,
           scenario: 'Nonstandard H',
@@ -247,7 +245,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 documentTitle:
                   'Motion for Leave to File Brief in Support of Petition',
                 documentType: 'Motion for Leave to File',
-                exhibits: false,
                 hasSupportingDocuments: true,
                 partyPrimary: true,
                 scenario: 'Nonstandard H',
@@ -450,7 +447,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
-          exhibits: false,
           hasSupportingDocuments: true,
           partyPrimary: true,
           scenario: 'Nonstandard H',

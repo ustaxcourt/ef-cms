@@ -88,7 +88,6 @@ export const FileDocumentReviewRedesign = connect(
                                 }
                               </li>
                             )}
-                            {form.exhibits && <li>Exhibit(s)</li>}
                             {form.attachments && <li>Attachment(s)</li>}
                           </ul>
                         </div>
@@ -112,7 +111,6 @@ export const FileDocumentReviewRedesign = connect(
                             {!form.certificateOfService && (
                               <li>Certificate of Service</li>
                             )}
-                            {!form.exhibits && <li>Exhibit(s)</li>}
                             {!form.attachments && <li>Attachment(s)</li>}
                             {!form.hasSupportingDocuments && (
                               <li>Supporting Documents</li>
