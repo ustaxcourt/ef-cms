@@ -2,15 +2,24 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
 import { PDFPreviewModal } from './PDFPreviewModal';
 
 export const PDFPreviewButton = connect(
   {
     openPdfPreviewModalSequence: sequences.openPdfPreviewModalSequence,
+    pdfPreviewModalHelper: state.pdfPreviewModalHelper,
     previewFile: state.previewPdfFile,
     showModal: state.showModal,
   },
-  ({ file, openPdfPreviewModalSequence, previewFile, showModal, title }) => {
+  ({
+    file,
+    openPdfPreviewModalSequence,
+    pdfPreviewModalHelper,
+    previewFile,
+    showModal,
+    title,
+  }) => {
     return (
       <>
         <button
@@ -20,9 +29,13 @@ export const PDFPreviewButton = connect(
         >
           {file.name}
         </button>
-        {showModal === 'PDFPreviewModal' && previewFile === file && (
-          <PDFPreviewModal pdfFile={file} title={title} />
-        )}
+        {showModal === 'PDFPreviewModal' &&
+          previewFile === file &&
+          (pdfPreviewModalHelper.displayErrorText ? (
+            <PDFPreviewErrorModal title={title} />
+          ) : (
+            <PDFPreviewModal pdfFile={file} title={title} />
+          ))}
       </>
     );
   },

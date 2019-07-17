@@ -9,7 +9,7 @@
     "dev:cognito": "COGNITO=true npm run dev -- --no-cache  --no-hmr --no-source-maps",
     "dev:cypress": "CYPRESS=true npm run dev -- --no-cache --no-hmr --no-source-maps",
     "dev:debug": "USTC_DEBUG=true npm run dev -- --no-cache --no-hmr --no-source-maps",
-    "dev": "FILE_UPLOAD_MODAL_TIMEOUT=1 GIT_COMMIT=$(git log --pretty=format:'%h' -n 1) USTC_ENV=dev parcel --no-source-maps src/index.pug",
+    "dev": "FILE_UPLOAD_MODAL_TIMEOUT=1 GIT_COMMIT=$(git log --pretty=format:'%h' -n 1) USTC_ENV=dev parcel --no-cache --no-source-maps src/index.pug",
     "dist": "rm -rf dist; GIT_COMMIT=$(git log --pretty=format:'%h' -n 1) USTC_ENV=prod parcel build --no-cache --no-source-maps src/index.pug; jsdoc -c jsdoc.conf.json",
     "docker:init": "./docker-init.sh",
     "lint:fix": "eslint --ext .js,.jsx --fix src/  && stylelint ./src/**/*.scss --fix",
