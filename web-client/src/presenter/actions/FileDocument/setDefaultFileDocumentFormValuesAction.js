@@ -14,7 +14,6 @@ export const setDefaultFileDocumentFormValuesAction = ({ get, store }) => {
     store.set(state.form.partyPrimary, true);
   }
 
-  store.set(state.form.exhibits, false);
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);

@@ -152,7 +152,6 @@ exports.uploadExternalDecisionDocument = async test => {
     documentTitle: 'Agreed Computation for Entry of Decision',
     documentType: 'Agreed Computation for Entry of Decision',
     eventCode: 'ACED',
-    exhibits: false,
     hasSupportingDocuments: false,
     partyPrimary: true,
     primaryDocumentFile: fakeFile,

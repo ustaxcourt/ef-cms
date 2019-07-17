@@ -30,7 +30,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       certificateOfServiceDate: rawProps.certificateOfServiceDate,
       documentType: rawProps.documentType,
       eventCode: rawProps.eventCode,
-      exhibits: rawProps.exhibits,
       freeText: rawProps.freeText,
       hasSecondarySupportingDocuments: rawProps.hasSecondarySupportingDocuments,
       hasSupportingDocuments: rawProps.hasSupportingDocuments,
@@ -65,7 +64,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
-    exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi
@@ -109,7 +107,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       },
       'Enter a Certificate of Service Date.',
     ],
-    exhibits: 'Enter selection for Exhibits.',
     hasSecondarySupportingDocuments:
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
