@@ -57,7 +57,10 @@ export const FileDocumentReviewRedesign = connect(
                         <label className="usa-label" htmlFor="primary-filing">
                           {form.documentTitle}
                         </label>
-                        <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                        <FontAwesomeIcon
+                          className="fa-icon-blue"
+                          icon={['fas', 'file-pdf']}
+                        />
                         <PDFPreviewButton
                           file={form.primaryDocumentFile}
                           title={form.documentTitle}
@@ -141,7 +144,10 @@ export const FileDocumentReviewRedesign = connect(
                         >
                           {form.supportingDocumentMetadata.documentTitle}
                         </label>
-                        <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                        <FontAwesomeIcon
+                          className="fa-icon-blue"
+                          icon={['fas', 'file-pdf']}
+                        />
                         <PDFPreviewButton
                           file={form.supportingDocumentFile}
                           title={form.supportingDocumentMetadata.documentTitle}
@@ -161,7 +167,10 @@ export const FileDocumentReviewRedesign = connect(
                             >
                               {form.secondaryDocument.documentTitle}
                             </label>
-                            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                            <FontAwesomeIcon
+                              className="fa-icon-blue"
+                              icon={['fas', 'file-pdf']}
+                            />
                             <PDFPreviewButton
                               file={form.secondaryDocumentFile}
                               title={form.secondaryDocument.documentTitle}
@@ -201,7 +210,10 @@ export const FileDocumentReviewRedesign = connect(
                               .documentTitle
                           }
                         </label>
-                        <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                        <FontAwesomeIcon
+                          className="fa-icon-blue"
+                          icon={['fas', 'file-pdf']}
+                        />
                         <PDFPreviewButton
                           file={form.secondarySupportingDocumentFile}
                           title={

@@ -63,6 +63,7 @@ import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
+import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
@@ -104,6 +105,7 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setModalDialogNameSequence } from './sequences/setModalDialogNameSequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
+import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
@@ -256,6 +258,7 @@ export const presenter = {
     gotoTrialSessionDetailSequence,
     gotoTrialSessionsSequence,
     gotoViewAllDocumentsSequence,
+    loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
     navigateToPathSequence,
@@ -296,6 +299,7 @@ export const presenter = {
     setModalDialogNameSequence,
     setPDFPageForSigningSequence,
     setPDFSignatureDataSequence,
+    setPageSequence,
     setPdfPreviewUrlSequence,
     setScannerSourceSequence,
     setTrialSessionCalendarSequence,
