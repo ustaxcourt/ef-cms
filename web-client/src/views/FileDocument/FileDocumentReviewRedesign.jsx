@@ -159,17 +159,19 @@ export const FileDocumentReviewRedesign = connect(
                               className="usa-label"
                               htmlFor="secondary-filing"
                             >
-                              {form.secondaryDocument.documentTitle}
-                              </label>    {(form.secondaryDocumentFile &&
-                                form.secondaryDocumentFile.name && (
+                              {form.secondaryDocument.documentTitle}{' '}
+                            </label>
+                            {(form.secondaryDocumentFile &&
+                              form.secondaryDocumentFile.name && (
                                 <React.Fragment>
                                   <FontAwesomeIcon icon={['fas', 'file-pdf']} />
                                   <PDFPreviewButton
                                     file={form.secondaryDocumentFile}
-                                    title={form.secondaryDocument.documentTitle} />
-                                  </React.Fragment>
-                                )) ||
-                                'No file attached'}
+                                    title={form.secondaryDocument.documentTitle}
+                                  />
+                                </React.Fragment>
+                              )) ||
+                              'No file attached'}
                           </div>
                         )}
                       </div>
@@ -190,7 +192,8 @@ export const FileDocumentReviewRedesign = connect(
                           </div>
                         )}
                       </div>
-                    )}
+                    </div>
+                  )}
 
                   {form.secondarySupportingDocumentFile && (
                     <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
