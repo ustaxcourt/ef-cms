@@ -57,14 +57,20 @@ export const FileDocumentReviewRedesign = connect(
                         <label className="usa-label" htmlFor="primary-filing">
                           {form.documentTitle}
                         </label>
-                        <FontAwesomeIcon
-                          className="fa-icon-blue"
-                          icon={['fas', 'file-pdf']}
-                        />
-                        <PDFPreviewButton
-                          file={form.primaryDocumentFile}
-                          title={form.documentTitle}
-                        />
+                        <div className="grid-row">
+                          <div className="grid-col flex-auto">
+                            <FontAwesomeIcon
+                              className="fa-icon-blue"
+                              icon={['fas', 'file-pdf']}
+                            />
+                          </div>
+                          <div className="grid-col flex-fill margin-top-neg-05">
+                            <PDFPreviewButton
+                              file={form.primaryDocumentFile}
+                              title={form.documentTitle}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
@@ -146,16 +152,22 @@ export const FileDocumentReviewRedesign = connect(
                           >
                             {item.supportingDocumentMetadata.documentTitle}
                           </label>
-                          <FontAwesomeIcon
-                            className="fa-icon-blue"
-                            icon={['fas', 'file-pdf']}
-                          />
-                          <PDFPreviewButton
-                            file={item.supportingDocumentFile}
-                            title={
-                              item.supportingDocumentMetadata.documentTitle
-                            }
-                          />
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <FontAwesomeIcon
+                                className="fa-icon-blue"
+                                icon={['fas', 'file-pdf']}
+                              />
+                            </div>
+                            <div className="grid-col flex-fill margin-top-neg-05">
+                              <PDFPreviewButton
+                                file={item.supportingDocumentFile}
+                                title={
+                                  item.supportingDocumentMetadata.documentTitle
+                                }
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -174,14 +186,22 @@ export const FileDocumentReviewRedesign = connect(
                             {(form.secondaryDocumentFile &&
                               form.secondaryDocumentFile.name && (
                                 <React.Fragment>
-                                  <FontAwesomeIcon
-                                    className="fa-icon-blue"
-                                    icon={['fas', 'file-pdf']}
-                                  />
-                                  <PDFPreviewButton
-                                    file={form.secondaryDocumentFile}
-                                    title={form.secondaryDocument.documentTitle}
-                                  />
+                                  <div className="grid-row">
+                                    <div className="grid-col flex-auto">
+                                      <FontAwesomeIcon
+                                        className="fa-icon-blue"
+                                        icon={['fas', 'file-pdf']}
+                                      />
+                                    </div>
+                                    <div className="grid-col flex-fill margin-top-neg-05">
+                                      <PDFPreviewButton
+                                        file={form.secondaryDocumentFile}
+                                        title={
+                                          form.secondaryDocument.documentTitle
+                                        }
+                                      />
+                                    </div>
+                                  </div>
                                 </React.Fragment>
                               )) ||
                               'No file attached'}
@@ -224,17 +244,23 @@ export const FileDocumentReviewRedesign = connect(
                                 .documentTitle
                             }
                           </label>
-                          <FontAwesomeIcon
-                            className="fa-icon-blue"
-                            icon={['fas', 'file-pdf']}
-                          />
-                          <PDFPreviewButton
-                            file={item.secondarySupportingDocumentFile}
-                            title={
-                              item.secondarySupportingDocumentMetadata
-                                .documentTitle
-                            }
-                          />
+                          <div className="grid-row">
+                            <div className="grid-col flex-auto">
+                              <FontAwesomeIcon
+                                className="fa-icon-blue"
+                                icon={['fas', 'file-pdf']}
+                              />
+                            </div>
+                            <div className="grid-col flex-fill margin-top-neg-05">
+                              <PDFPreviewButton
+                                file={item.secondarySupportingDocumentFile}
+                                title={
+                                  item.secondarySupportingDocumentMetadata
+                                    .documentTitle
+                                }
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
