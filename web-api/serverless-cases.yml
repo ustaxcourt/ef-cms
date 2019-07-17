@@ -193,7 +193,7 @@ resources:
 
 functions:
   createDocument:
-    handler: src/caseHandlers.createDocumentLambda
+    handler: src/casesHandlers.createDocumentLambda
     events:
       - http:
           path: /{caseId}/documents
@@ -205,7 +205,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   addCoversheet:
-    handler: src/caseHandlers.addCoversheetLambda
+    handler: src/casesHandlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
@@ -220,7 +220,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   signDocument:
-    handler: src/caseHandlers.signDocumentLambda
+    handler: src/casesHandlers.signDocumentLambda
     events:
       - http:
           path: /{caseId}/documents/{documentId}/sign
@@ -232,7 +232,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCase:
-    handler: src/caseHandlers.updateCaseLambda
+    handler: src/casesHandlers.updateCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -244,7 +244,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseTrialSortTags:
-    handler: src/caseHandlers.updateCaseTrialSortTagsLambda
+    handler: src/casesHandlers.updateCaseTrialSortTagsLambda
     events:
       - http:
           path: /{caseId}/update-case-trial-sort-tags
@@ -256,7 +256,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updatePrimaryContact:
-    handler: src/caseHandlers.updatePrimaryContactLambda
+    handler: src/casesHandlers.updatePrimaryContactLambda
     events:
       - http:
           path: /{caseId}/contact-primary
@@ -268,7 +268,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setCaseToReadyForTrial:
-    handler: src/caseHandlers.setCaseToReadyForTrialLambda
+    handler: src/casesHandlers.setCaseToReadyForTrialLambda
     events:
       - http:
           path: /{caseId}/set-to-ready-for-trial
@@ -280,7 +280,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCase:
-    handler: src/caseHandlers.createCaseLambda
+    handler: src/casesHandlers.createCaseLambda
     events:
       - http:
           path: /
@@ -292,7 +292,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseFromPaper:
-    handler: src/caseHandlers.createCaseFromPaperLambda
+    handler: src/casesHandlers.createCaseFromPaperLambda
     events:
       - http:
           path: /paper
@@ -304,7 +304,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileExternalDocument:
-    handler: src/caseHandlers.fileExternalDocumentToCaseLambda
+    handler: src/casesHandlers.fileExternalDocumentToCaseLambda
     events:
       - http:
           path: /{caseId}/external-document
@@ -316,7 +316,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileDocketEntry:
-    handler: src/caseHandlers.fileDocketEntryToCaseLambda
+    handler: src/casesHandlers.fileDocketEntryToCaseLambda
     events:
       - http:
           path: /{caseId}/docket-entry
@@ -328,7 +328,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileCourtIssuedOrder:
-    handler: src/caseHandlers.fileCourtIssuedOrderToCaseLambda
+    handler: src/casesHandlers.fileCourtIssuedOrderToCaseLambda
     events:
       - http:
           path: /{caseId}/court-issued-order
@@ -340,7 +340,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCase:
-    handler: src/caseHandlers.getCaseLambda
+    handler: src/casesHandlers.getCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -356,7 +356,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sendToIRS:
-    handler: src/caseHandlers.sendPetitionToIRSHoldingQueueLambda
+    handler: src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/send-to-irs-holding-queue
@@ -368,7 +368,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   recallFromIRS:
-    handler: src/caseHandlers.recallPetitionFromIRSHoldingQueueLambda
+    handler: src/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
@@ -380,7 +380,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createWorkItem:
-    handler: src/caseHandlers.createWorkItemLambda
+    handler: src/casesHandlers.createWorkItemLambda
     events:
       - http:
           path: /{caseId}/documents/{documentId}/work-items
@@ -392,7 +392,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseDeadline:
-    handler: src/caseHandlers.createCaseDeadlineLambda
+    handler: src/casesHandlers.createCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/case-deadline
@@ -404,7 +404,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCaseDeadlinesForCase:
-    handler: src/caseHandlers.getCaseDeadlinesForCaseLambda
+    handler: src/casesHandlers.getCaseDeadlinesForCaseLambda
     events:
       - http:
           path: /{caseId}/case-deadline
@@ -416,7 +416,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseDeadline:
-    handler: src/caseHandlers.updateCaseDeadlineLambda
+    handler: src/casesHandlers.updateCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/case-deadline/{caseDeadlineId}
@@ -428,7 +428,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseDeadline:
-    handler: src/caseHandlers.deleteCaseDeadlineLambda
+    handler: src/casesHandlers.deleteCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/case-deadline/{caseDeadlineId}
