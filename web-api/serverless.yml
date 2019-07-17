@@ -154,7 +154,6 @@ package:
     - .dynamodb/**
     - .nyc_output/**
     - dist/**
-    - src/handlers.js.map
     - runtimes/**
 
   excludeDevDependencies: true
