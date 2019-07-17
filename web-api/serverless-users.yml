@@ -194,7 +194,7 @@ resources:
 
 functions:
   getInternalUsers:
-    handler: src/handlers.getInternalUsersLambda
+    handler: src/userHandlers.getInternalUsersLambda
     events:
       - http:
           path: /internal
@@ -206,7 +206,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createUser:
-    handler: src/handlers.createUserLambda
+    handler: src/userHandlers.createUserLambda
     events:
       - http:
           path: /
