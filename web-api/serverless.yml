@@ -154,7 +154,6 @@ package:
     - .dynamodb/**
     - .nyc_output/**
     - dist/**
-    - src/handlers.js.map
     - runtimes/**
 
   excludeDevDependencies: true
@@ -195,7 +194,7 @@ resources:
 
 functions:
   getUploadPolicy:
-    handler: src/handlers.getUploadPolicyLambda
+    handler: src/apiHandlers.getUploadPolicyLambda
     events:
       - http:
           path: documents/upload-policy
@@ -207,7 +206,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentDownloadUrl:
-    handler: src/handlers.getDocumentDownloadUrlLambda
+    handler: src/apiHandlers.getDocumentDownloadUrlLambda
     events:
       - http:
           path: documents/{documentId}/document-download-url
@@ -215,7 +214,7 @@ functions:
           cors: true
 
   setWorkItemAsRead:
-    handler: src/handlers.setWorkItemAsReadLambda
+    handler: src/apiHandlers.setWorkItemAsReadLambda
     events:
       - http:
           path: work-items/{workItemId}/read
@@ -223,7 +222,7 @@ functions:
           cors: true
 
   getDownloadPolicyUrl:
-    handler: src/handlers.downloadPolicyUrlLambda
+    handler: src/apiHandlers.downloadPolicyUrlLambda
     events:
       - http:
           path: documents/{documentId}/download-policy-url
@@ -235,7 +234,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sanitizePdf:
-    handler: src/handlers.sanitizePdfLambda
+    handler: src/apiHandlers.sanitizePdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
     memorySize: 3008
@@ -252,7 +251,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   runBatchProcess:
-    handler: src/handlers.runBatchProcessLambda
+    handler: src/apiHandlers.runBatchProcessLambda
     events:
       - http:
           path: runBatchProcess
@@ -264,7 +263,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCasesByUser:
-    handler: src/handlers.getCasesByUserLambda
+    handler: src/apiHandlers.getCasesByUserLambda
     events:
       - http:
           path: users/{userId}/cases
@@ -276,7 +275,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   verifyCaseForUser:
-    handler: src/handlers.verifyCaseForUserLambda
+    handler: src/apiHandlers.verifyCaseForUserLambda
     events:
       - http:
           path: users/{userId}/case/{caseId}
@@ -288,7 +287,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   verifyPendingCaseForUser:
-    handler: src/handlers.verifyPendingCaseForUserLambda
+    handler: src/apiHandlers.verifyPendingCaseForUserLambda
     events:
       - http:
           path: users/{userId}/case/{caseId}/pending
@@ -300,7 +299,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   practitionerCaseAssociation:
-    handler: src/handlers.practitionerCaseAssociationLambda
+    handler: src/apiHandlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: users/{userId}/case/{caseId}
@@ -312,7 +311,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   practitionerPendingCaseAssociation:
-    handler: src/handlers.practitionerPendingCaseAssociationLambda
+    handler: src/apiHandlers.practitionerPendingCaseAssociationLambda
     events:
       - http:
           path: users/{userId}/case/{caseId}/pending
@@ -324,7 +323,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   assignWorkItems:
-    handler: src/handlers.assignWorkItemsLambda
+    handler: src/apiHandlers.assignWorkItemsLambda
     events:
       - http:
           path: work-items
@@ -336,7 +335,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getWorkItem:
-    handler: src/handlers.getWorkItemLambda
+    handler: src/apiHandlers.getWorkItemLambda
     events:
       - http:
           path: work-items/{workItemId}
@@ -348,7 +347,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   forwardWorkItem:
-    handler: src/handlers.forwardWorkItemLambda
+    handler: src/apiHandlers.forwardWorkItemLambda
     events:
       - http:
           path: work-items/{workItemId}/assignee
@@ -360,7 +359,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   completeWorkItem:
-    handler: src/handlers.completeWorkItemLambda
+    handler: src/apiHandlers.completeWorkItemLambda
     events:
       - http:
           path: work-items/{workItemId}/complete
@@ -372,7 +371,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getInboxMessagesForUser:
-    handler: src/handlers.getInboxMessagesForUserLambda
+    handler: src/apiHandlers.getInboxMessagesForUserLambda
     events:
       - http:
           path: users/{userId}/messages/inbox
@@ -384,7 +383,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getSentMessagesForUser:
-    handler: src/handlers.getSentMessagesForUserLambda
+    handler: src/apiHandlers.getSentMessagesForUserLambda
     events:
       - http:
           path: users/{userId}/messages/sent
@@ -396,7 +395,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getInboxMessagesForSection:
-    handler: src/handlers.getInboxMessagesForSectionLambda
+    handler: src/apiHandlers.getInboxMessagesForSectionLambda
     events:
       - http:
           path: sections/{section}/messages/inbox
@@ -408,7 +407,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getSentMessagesForSection:
-    handler: src/handlers.getSentMessagesForSectionLambda
+    handler: src/apiHandlers.getSentMessagesForSectionLambda
     events:
       - http:
           path: sections/{section}/messages/sent
@@ -420,7 +419,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForUser:
-    handler: src/handlers.getDocumentQCInboxForUserLambda
+    handler: src/apiHandlers.getDocumentQCInboxForUserLambda
     events:
       - http:
           path: users/{userId}/document-qc/inbox
@@ -432,7 +431,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCBatchedForUser:
-    handler: src/handlers.getDocumentQCBatchedForUserLambda
+    handler: src/apiHandlers.getDocumentQCBatchedForUserLambda
     events:
       - http:
           path: users/{userId}/document-qc/batched
@@ -444,7 +443,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForUser:
-    handler: src/handlers.getDocumentQCServedForUserLambda
+    handler: src/apiHandlers.getDocumentQCServedForUserLambda
     events:
       - http:
           path: users/{userId}/document-qc/served
@@ -456,7 +455,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForSection:
-    handler: src/handlers.getDocumentQCInboxForSectionLambda
+    handler: src/apiHandlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
           path: sections/{section}/document-qc/inbox
@@ -468,7 +467,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCBatchedForSection:
-    handler: src/handlers.getDocumentQCBatchedForSectionLambda
+    handler: src/apiHandlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
           path: sections/{section}/document-qc/batched
@@ -480,7 +479,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForSection:
-    handler: src/handlers.getDocumentQCServedForSectionLambda
+    handler: src/apiHandlers.getDocumentQCServedForSectionLambda
     events:
       - http:
           path: sections/{section}/document-qc/served
@@ -491,32 +490,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getInternalUsers:
-    handler: src/handlers.getInternalUsersLambda
-    events:
-      - http:
-          path: users/internal
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getUsersInSection:
-    handler: src/handlers.getUsersInSectionLambda
-    events:
-      - http:
-          path: sections/{section}/users
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getNotifications:
-    handler: src/handlers.getNotificationsLambda
+    handler: src/apiHandlers.getNotificationsLambda
     events:
       - http:
           path: notifications
@@ -527,25 +502,13 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createUser:
-    handler: src/handlers.createUserLambda
-    events:
-      - http:
-          path: users
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   checkForReadyForTrialCases:
-    handler: src/handlers.checkForReadyForTrialCases
+    handler: src/apiHandlers.checkForReadyForTrialCases
     events:
       - schedule: cron(0 7 * * ? *)
 
   swagger:
-    handler: src/handlers.swaggerLambda
+    handler: src/apiHandlers.swaggerLambda
     events:
       - http:
           path: swagger
@@ -553,7 +516,7 @@ functions:
           cors: true
 
   swaggerJson:
-    handler: src/handlers.swaggerJsonLambda
+    handler: src/apiHandlers.swaggerJsonLambda
     events:
       - http:
           path: swagger.json
@@ -561,7 +524,7 @@ functions:
           cors: true
 
   virusScan:
-    handler: src/handlers.virusScanPdfLambda
+    handler: src/apiHandlers.virusScanPdfLambda
     memorySize: 3008
     timeout: 900
     layers:
@@ -574,7 +537,7 @@ functions:
           async: true
 
   validate:
-    handler: src/handlers.validatePdfLambda
+    handler: src/apiHandlers.validatePdfLambda
     events:
       - http:
           path: documents/{documentId}/validate
@@ -584,7 +547,7 @@ functions:
       - errorExceptions
 
   getTrialSessions:
-    handler: src/handlers.getTrialSessionsLambda
+    handler: src/apiHandlers.getTrialSessionsLambda
     events:
       - http:
           path: trial-sessions
@@ -596,7 +559,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createTrialSession:
-    handler: src/handlers.createTrialSessionLambda
+    handler: src/apiHandlers.createTrialSessionLambda
     events:
       - http:
           path: trial-sessions
@@ -608,7 +571,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getTrialSessionDetails:
-    handler: src/handlers.getTrialSessionDetailsLambda
+    handler: src/apiHandlers.getTrialSessionDetailsLambda
     events:
       - http:
           path: trial-sessions/{trialSessionId}
@@ -620,7 +583,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setTrialSessionAsSwingSession:
-    handler: src/handlers.setTrialSessionAsSwingSessionLambda
+    handler: src/apiHandlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
           path: trial-sessions/{trialSessionId}/set-swing-session
@@ -632,7 +595,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getEligibleCasesForTrialSession:
-    handler: src/handlers.getEligibleCasesForTrialSessionLambda
+    handler: src/apiHandlers.getEligibleCasesForTrialSessionLambda
     events:
       - http:
           path: trial-sessions/{trialSessionId}/eligible-cases
@@ -644,7 +607,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setTrialSessionCalendar:
-    handler: src/handlers.setTrialSessionCalendarLambda
+    handler: src/apiHandlers.setTrialSessionCalendarLambda
     events:
       - http:
           path: trial-sessions/{trialSessionId}/set-calendar
@@ -656,7 +619,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCalendaredCasesForTrialSession:
-    handler: src/handlers.getCalendaredCasesForTrialSessionLambda
+    handler: src/apiHandlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
           path: trial-sessions/{trialSessionId}/get-calendared-cases
@@ -669,7 +632,7 @@ functions:
 
   createCourtIssuedOrderPdfFromHtml:
     runtime: nodejs8.10
-    handler: src/handlers.createCourtIssuedOrderPdfFromHtmlLambda
+    handler: src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -685,3 +648,14 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getUsersInSection:
+    handler: src/apiHandlers.getUsersInSectionLambda
+    events:
+      - http:
+          path: sections/{section}/users
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

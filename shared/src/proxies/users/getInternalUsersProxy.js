@@ -11,6 +11,6 @@ const { get } = require('../requests');
 exports.getInternalUsersInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/api/users/internal',
+    endpoint: '/users/internal',
   });
 };
