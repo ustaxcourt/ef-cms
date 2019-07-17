@@ -26,6 +26,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
@@ -103,6 +104,8 @@ export const state = {
     signatureApplied: false,
     signatureData: null,
   },
+  pdfPreviewModal: {},
+  pdfPreviewModalHelper,
   percentComplete: 0,
   petition: {},
   previewPdfFile: null,
