@@ -18,7 +18,6 @@ export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
     supportingDocuments.push({
       attachments: false,
       certificateOfService: false,
-      exhibits: false,
     });
     store.set(state.form.supportingDocuments, supportingDocuments);
 
@@ -34,7 +33,6 @@ export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
     secondarySupportingDocuments.push({
       attachments: false,
       certificateOfService: false,
-      exhibits: false,
     });
     store.set(
       state.form.secondarySupportingDocuments,

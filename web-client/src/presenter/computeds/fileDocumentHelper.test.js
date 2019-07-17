@@ -130,24 +130,22 @@ describe('fileDocumentHelper', () => {
     expect(result.showFilingIncludes).toEqual(true);
   });
 
-  it('does not show Filing Includes if certOfService, exhibits, and attachments are all false', async () => {
+  it('does not show Filing Includes if certOfService and attachments are false', async () => {
     state.form.certificateOfService = false;
     state.form.attachments = false;
-    state.form.exhibits = false;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showFilingIncludes).toEqual(false);
   });
 
-  it('shows Filing Does Not Include if exhibits is false', async () => {
-    state.form.exhibits = false;
+  it('shows Filing Does Not Include if attachments is false', async () => {
+    state.form.attachments = false;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
   });
 
-  it('does not show Filing Does Not Include if certOfService, exhibits, attachments, and hasSupportingDocuments are all true', async () => {
+  it('does not show Filing Does Not Include if certOfService, attachments, and hasSupportingDocuments are all true', async () => {
     state.form.certificateOfService = true;
     state.form.attachments = true;
-    state.form.exhibits = true;
     state.form.hasSupportingDocuments = true;
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(false);
