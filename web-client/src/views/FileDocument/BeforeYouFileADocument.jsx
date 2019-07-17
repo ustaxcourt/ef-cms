@@ -63,8 +63,6 @@ export const BeforeYouFileADocument = connect(
                       during the filing process.{' '}
                     </p>
 
-
-
                     <p className="label">Attachments</p>
                     <p>
                       An attachment is any other document you are submitting
