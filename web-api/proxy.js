@@ -27,7 +27,7 @@ app.use(
   '/users',
   proxy({
     pathRewrite: {
-      '^/cases': '/',
+      '^/users': '/',
     },
     target: 'http://localhost:3003',
   }),
