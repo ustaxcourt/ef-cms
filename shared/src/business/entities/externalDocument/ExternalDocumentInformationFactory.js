@@ -6,7 +6,11 @@ const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const {
+  SecondarySupportingDocumentFactory,
+} = require('./SecondarySupportingDocumentFactory');
 const { includes } = require('lodash');
+const { SupportingDocumentFactory } = require('./SupportingDocumentFactory');
 
 /**
  *
@@ -39,14 +43,23 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       previousDocument: rawProps.previousDocument,
       primaryDocumentFile: rawProps.primaryDocumentFile,
       secondaryDocumentFile: rawProps.secondaryDocumentFile,
-      secondarySupportingDocument: rawProps.secondarySupportingDocument,
-      secondarySupportingDocumentFile: rawProps.secondarySupportingDocumentFile,
-      secondarySupportingDocumentFreeText:
-        rawProps.secondarySupportingDocumentFreeText,
-      supportingDocument: rawProps.supportingDocument,
-      supportingDocumentFile: rawProps.supportingDocumentFile,
-      supportingDocumentFreeText: rawProps.supportingDocumentFreeText,
+      secondarySupportingDocuments: rawProps.secondarySupportingDocuments,
+      supportingDocuments: rawProps.supportingDocuments,
     });
+
+    if (this.supportingDocuments) {
+      this.supportingDocuments = this.supportingDocuments.map(item => {
+        return SupportingDocumentFactory.get(item);
+      });
+    }
+
+    if (this.secondarySupportingDocuments) {
+      this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
+        item => {
+          return SecondarySupportingDocumentFactory.get(item);
+        },
+      );
+    }
   };
 
   let schema = {
@@ -81,24 +94,8 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .min(1)
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
-    secondarySupportingDocument: joi.string(),
-    secondarySupportingDocumentFile: joi.object(),
-    secondarySupportingDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-    secondarySupportingDocumentFreeText: joi.string(),
-    supportingDocument: joi.string(),
-    supportingDocumentFile: joi.object(),
-    supportingDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-    supportingDocumentFreeText: joi.string(),
+    secondarySupportingDocuments: joi.array().optional(),
+    supportingDocuments: joi.array().optional(),
   };
 
   let errorToMessageMap = {
@@ -137,27 +134,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Secondary Document file size is empty.',
     ],
-    secondarySupportingDocument:
-      'Enter selection for Secondary Supporting Document.',
-    secondarySupportingDocumentFile: 'A file was not selected.',
-    secondarySupportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Supporting Document file size is empty.',
-    ],
-    secondarySupportingDocumentFreeText: 'Please provide a value.',
-    supportingDocument: 'Enter selection for Supporting Document.',
-    supportingDocumentFile: 'A file was not selected.',
-    supportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Document file size is empty.',
-    ],
-    supportingDocumentFreeText: 'Please provide a value.',
   };
 
   let customValidate;
@@ -174,19 +150,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       schema[itemName] = schemaOptionalItems[itemName].required();
     }
   };
-
-  /*const supportingDocumentFreeTextCategories = [
-    'Affidavit in Support',
-    'Declaration in Support',
-    'Unsworn Declaration under Penalty of Perjury in Support',
-  ];
-  const supportingDocumentFileCategories = [
-    'Memorandum in Support',
-    'Brief in Support',
-    'Affidavit in Support',
-    'Declaration in Support',
-    'Unsworn Declaration under Penalty of Perjury in Support',
-  ];*/
 
   if (documentMetadata.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');
@@ -206,28 +169,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     makeRequired('objections');
   }
 
-  if (documentMetadata.hasSupportingDocuments === true) {
-    /*makeRequired('supportingDocument');
-
-    if (
-      includes(
-        supportingDocumentFreeTextCategories,
-        documentMetadata.supportingDocument,
-      )
-    ) {
-      makeRequired('supportingDocumentFreeText');
-    }
-
-    if (
-      includes(
-        supportingDocumentFileCategories,
-        documentMetadata.supportingDocument,
-      )
-    ) {
-      makeRequired('supportingDocumentFile');
-    }
-  }
-
   if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
     if (
       includes(
@@ -242,7 +183,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       makeRequired('hasSecondarySupportingDocuments');
     }
 
-    if (documentMetadata.hasSecondarySupportingDocuments === true) {
+    /*if (documentMetadata.hasSecondarySupportingDocuments === true) {
       makeRequired('secondarySupportingDocument');
 
       if (
