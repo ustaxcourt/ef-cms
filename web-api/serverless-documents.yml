@@ -193,7 +193,7 @@ resources:
 
 functions:
   getDownloadPolicyUrl:
-    handler: src/apiHandlers.downloadPolicyUrlLambda
+    handler: src/documentsHandlers.downloadPolicyUrlLambda
     events:
       - http:
           path: /{documentId}/download-policy-url
@@ -205,7 +205,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sanitizePdf:
-    handler: src/apiHandlers.sanitizePdfLambda
+    handler: src/documentsHandlers.sanitizePdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
     memorySize: 3008
@@ -222,7 +222,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   virusScan:
-    handler: src/apiHandlers.virusScanPdfLambda
+    handler: src/documentsHandlers.virusScanPdfLambda
     memorySize: 3008
     timeout: 900
     layers:
@@ -235,7 +235,7 @@ functions:
           async: true
 
   validate:
-    handler: src/apiHandlers.validatePdfLambda
+    handler: src/documentsHandlers.validatePdfLambda
     events:
       - http:
           path: /{documentId}/validate
@@ -245,7 +245,7 @@ functions:
       - errorExceptions
 
   getUploadPolicy:
-    handler: src/apiHandlers.getUploadPolicyLambda
+    handler: src/documentsHandlers.getUploadPolicyLambda
     events:
       - http:
           path: /upload-policy
@@ -257,7 +257,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentDownloadUrl:
-    handler: src/apiHandlers.getDocumentDownloadUrlLambda
+    handler: src/documentsHandlers.getDocumentDownloadUrlLambda
     events:
       - http:
           path: /{documentId}/document-download-url
