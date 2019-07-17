@@ -13,8 +13,8 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 find ./src -type f -exec chmod -R ugo+r {} ";"
 
-npm run build
-cp src/handlers.js /tmp
+npm run build:api
+cp src/apiHandlers.js /tmp
 cp dist/* src
 
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
@@ -23,5 +23,4 @@ SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls create_
 ENVIRONMENT="${slsStage}" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls deploy --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}"  --userPoolId "${USER_POOL_ID}" --verbose --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}"
 ./configure-custom-api-access-logging.sh "${slsStage}" ./config-custom-access-logs.json "${region}"
 
-cp /tmp/handlers.js src
-
+cp /tmp/apiHandlers.js src
