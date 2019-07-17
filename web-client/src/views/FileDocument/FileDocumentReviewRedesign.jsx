@@ -91,7 +91,6 @@ export const FileDocumentReviewRedesign = connect(
                                 }
                               </li>
                             )}
-                            {form.exhibits && <li>Exhibit(s)</li>}
                             {form.attachments && <li>Attachment(s)</li>}
                           </ul>
                         </div>
@@ -115,7 +114,6 @@ export const FileDocumentReviewRedesign = connect(
                             {!form.certificateOfService && (
                               <li>Certificate of Service</li>
                             )}
-                            {!form.exhibits && <li>Exhibit(s)</li>}
                             {!form.attachments && <li>Attachment(s)</li>}
                             {!form.hasSupportingDocuments && (
                               <li>Supporting Documents</li>
@@ -135,26 +133,32 @@ export const FileDocumentReviewRedesign = connect(
                     </div>
                   </div>
 
-                  {form.supportingDocumentFile && (
-                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                      <div className="tablet:grid-col-6 margin-bottom-1">
-                        <label
-                          className="usa-label"
-                          htmlFor="supporting-documents"
-                        >
-                          {form.supportingDocumentMetadata.documentTitle}
-                        </label>
-                        <FontAwesomeIcon
-                          className="fa-icon-blue"
-                          icon={['fas', 'file-pdf']}
-                        />
-                        <PDFPreviewButton
-                          file={form.supportingDocumentFile}
-                          title={form.supportingDocumentMetadata.documentTitle}
-                        />
+                  {form.supportingDocuments &&
+                    form.supportingDocuments.map((item, idx) => (
+                      <div
+                        className="grid-row grid-gap overline padding-top-105 margin-top-105"
+                        key={idx}
+                      >
+                        <div className="tablet:grid-col-6 margin-bottom-1">
+                          <label
+                            className="usa-label"
+                            htmlFor={`supporting-documents-${idx}`}
+                          >
+                            {item.supportingDocumentMetadata.documentTitle}
+                          </label>
+                          <FontAwesomeIcon
+                            className="fa-icon-blue"
+                            icon={['fas', 'file-pdf']}
+                          />
+                          <PDFPreviewButton
+                            file={item.supportingDocumentFile}
+                            title={
+                              item.supportingDocumentMetadata.documentTitle
+                            }
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    ))}
 
                   {form.secondaryDocument.documentTitle && (
                     <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
@@ -165,16 +169,22 @@ export const FileDocumentReviewRedesign = connect(
                               className="usa-label"
                               htmlFor="secondary-filing"
                             >
-                              {form.secondaryDocument.documentTitle}
+                              {form.secondaryDocument.documentTitle}{' '}
                             </label>
-                            <FontAwesomeIcon
-                              className="fa-icon-blue"
-                              icon={['fas', 'file-pdf']}
-                            />
-                            <PDFPreviewButton
-                              file={form.secondaryDocumentFile}
-                              title={form.secondaryDocument.documentTitle}
-                            />
+                            {(form.secondaryDocumentFile &&
+                              form.secondaryDocumentFile.name && (
+                                <React.Fragment>
+                                  <FontAwesomeIcon
+                                    className="fa-icon-blue"
+                                    icon={['fas', 'file-pdf']}
+                                  />
+                                  <PDFPreviewButton
+                                    file={form.secondaryDocumentFile}
+                                    title={form.secondaryDocument.documentTitle}
+                                  />
+                                </React.Fragment>
+                              )) ||
+                              'No file attached'}
                           </div>
                         )}
                       </div>
@@ -198,32 +208,36 @@ export const FileDocumentReviewRedesign = connect(
                     </div>
                   )}
 
-                  {form.secondarySupportingDocumentFile && (
-                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                      <div className="tablet:grid-col-6 margin-bottom-1">
-                        <label
-                          className="usa-label"
-                          htmlFor="secondary-supporting-documents"
-                        >
-                          {
-                            form.secondarySupportingDocumentMetadata
-                              .documentTitle
-                          }
-                        </label>
-                        <FontAwesomeIcon
-                          className="fa-icon-blue"
-                          icon={['fas', 'file-pdf']}
-                        />
-                        <PDFPreviewButton
-                          file={form.secondarySupportingDocumentFile}
-                          title={
-                            form.secondarySupportingDocumentMetadata
-                              .documentTitle
-                          }
-                        />
+                  {form.secondarySupportingDocuments &&
+                    form.secondarySupportingDocuments.map((item, idx) => (
+                      <div
+                        className="grid-row grid-gap overline padding-top-105 margin-top-105"
+                        key={idx}
+                      >
+                        <div className="tablet:grid-col-6 margin-bottom-1">
+                          <label
+                            className="usa-label"
+                            htmlFor={`secondary-supporting-documents-${idx}`}
+                          >
+                            {
+                              item.secondarySupportingDocumentMetadata
+                                .documentTitle
+                            }
+                          </label>
+                          <FontAwesomeIcon
+                            className="fa-icon-blue"
+                            icon={['fas', 'file-pdf']}
+                          />
+                          <PDFPreviewButton
+                            file={item.secondarySupportingDocumentFile}
+                            title={
+                              item.secondarySupportingDocumentMetadata
+                                .documentTitle
+                            }
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    ))}
                 </div>
               </div>
             </div>
