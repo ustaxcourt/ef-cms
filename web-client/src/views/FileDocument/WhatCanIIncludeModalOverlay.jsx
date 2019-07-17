@@ -1,6 +1,6 @@
+import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { Modal } from '../../ustc-ui/Modal/Modal';
 import { Overlay } from '../../ustc-ui/Overlay/Overlay';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
@@ -12,7 +12,7 @@ export const WhatCanIIncludeModalOverlay = connect(
   },
   ({ clearModalSequence }) => {
     const content = () => (
-      <>
+      <React.Fragment>
         <div className="includeItem">
           <div className="includeItem__icon">
             <FontAwesomeIcon icon="check-circle" />
@@ -70,7 +70,7 @@ export const WhatCanIIncludeModalOverlay = connect(
             </p>
           </div>
         </div>
-      </>
+      </React.Fragment>
     );
 
     return (
@@ -107,7 +107,7 @@ export const WhatCanIIncludeModalOverlay = connect(
           </Overlay>
         </Mobile>
         <NonMobile>
-          <Modal
+          <ConfirmModal
             noCancel
             className="what-can-i-include"
             confirmLabel="Close"
@@ -116,7 +116,7 @@ export const WhatCanIIncludeModalOverlay = connect(
             onConfirmSequence="clearModalSequence"
           >
             {content()}
-          </Modal>
+          </ConfirmModal>
         </NonMobile>
       </React.Fragment>
     );
