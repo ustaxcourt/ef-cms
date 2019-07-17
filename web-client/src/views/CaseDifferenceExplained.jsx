@@ -4,9 +4,10 @@ import React from 'react';
 export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
     <h2>Which case procedure should I choose?</h2>
+    <h3>Do I qualify for a small tax case procedure?</h3>
     <p>
-      Small cases must adhere to the following dollar limits depending on the
-      notice you received:
+      Depending on your case type and the amount at issue, you may qualify for a
+      small tax case.
     </p>
     <table
       aria-labelledby="small-case-qualifications"
@@ -14,16 +15,15 @@ export const CaseDifferenceExplained = () => (
     >
       <thead>
         <tr>
-          <th colSpan="4">Do I qualify for a small tax case procedure?</th>
+          <th>Deficiency</th>
+          <th>Collection</th>
+          <th>Spousal Relief</th>
+          <th>Worker Classification</th>
+          <th>Interest Abatement</th>
+          <th>Whistleblower or Passport</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Deficiency</td>
-          <td>Collection</td>
-          <td>Spousal Relief</td>
-          <td>Worker Classification</td>
-        </tr>
         <tr>
           <td>
             <span className="responsive-label">Deficiency</span>
@@ -41,6 +41,14 @@ export const CaseDifferenceExplained = () => (
             <span className="responsive-label">Worker Classification</span>
             Less than $50,000 for any calendar quarter
           </td>
+          <td>
+            <span className="responsive-label">Interest Abatement</span>
+            Amount of abatement must be less then $50,000
+          </td>
+          <td>
+            <span className="responsive-label">Whistleblower or Passport</span>
+            These case types do not qualify for small case procedures
+          </td>
         </tr>
       </tbody>
     </table>
@@ -48,21 +56,30 @@ export const CaseDifferenceExplained = () => (
     <h3>If You File as a Small Tax Case, You’ll Have:</h3>
     <div className="small-case-features grid-container padding-x-0" role="list">
       <div className="grid-row">
-        <div className="grid-col-3 feature" role="listitem">
-          <h4>More Location Options</h4>
+        <div className="grid-col-3 feature benefit" role="listitem">
+          <h4>
+            <FontAwesomeIcon icon="check-circle" />
+            More Location Options
+          </h4>
           <p>
             Small case trials are held in 15 more locations than regular cases
           </p>
         </div>
-        <div className="grid-col-3 feature" role="listitem">
-          <h4>Less Formal Procedures</h4>
+        <div className="grid-col-3 feature benefit" role="listitem">
+          <h4>
+            <FontAwesomeIcon icon="check-circle" />
+            Less Formal Procedures
+          </h4>
           <p>
             Small case pre-trial and trial procedures are less formal than
             regular cases
           </p>
         </div>
-        <div className="grid-col-3 feature" role="listitem">
-          <h4>Relaxed Evidence Rules</h4>
+        <div className="grid-col-3 feature benefit" role="listitem">
+          <h4>
+            <FontAwesomeIcon icon="check-circle" />
+            Relaxed Evidence Rules
+          </h4>
           <p>Judges can consider any evidence that’s relevant</p>
         </div>
         <div className="grid-col-3 feature warning" role="listitem">
