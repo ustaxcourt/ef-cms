@@ -288,7 +288,7 @@ describe('ExternalDocumentInformationFactory', () => {
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual('A file was not selected.');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
-              expect(errors().supportingDocuments).toEqual(undefined);
+              expect(errors().secondarySupportingDocuments).toEqual(undefined);
             });
           });
 
