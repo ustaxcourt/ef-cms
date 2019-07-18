@@ -63,7 +63,7 @@ export const FileDocument = connect(
             Review Filing
           </button>
           <button
-            className="usa-button usa-button--outline"
+            className="usa-button usa-button--unstyled ustc-button--unstyled"
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
