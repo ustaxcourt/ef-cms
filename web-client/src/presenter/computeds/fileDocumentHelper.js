@@ -71,9 +71,15 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showAddSupportingDocuments =
     !form.supportingDocumentCount || form.supportingDocumentCount < 5;
 
+  const showSecondaryDocumentInclusionsForm =
+    form.documentType !== 'Motion for Leave to File' ||
+    !!form.secondaryDocumentFile;
+
   const showAddSecondarySupportingDocuments =
-    !form.secondarySupportingDocumentCount ||
-    form.secondarySupportingDocumentCount < 5;
+    (!form.secondarySupportingDocumentCount ||
+      form.secondarySupportingDocumentCount < 5) &&
+    (form.documentType !== 'Motion for Leave to File' ||
+      !!form.secondaryDocumentFile);
 
   let exported = {
     certificateOfServiceDateFormatted,
@@ -94,6 +100,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showFilingIncludes,
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
+    showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryFilingIncludes,
     showSecondaryParty,
