@@ -57,11 +57,12 @@
     "try-thread-sleep": "^2.0.0"
   },
   "scripts": {
-    "build": "npm run build:api && npm run build:users && npm run build:cases && npm run build:documents",
+    "build": "npm run build:api && npm run build:users && npm run build:cases && npm run build:documents && npm run build:workItems",
     "build:api": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/apiHandlers.js",
     "build:users": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/usersHandlers.js",
     "build:cases": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/casesHandlers.js",
     "build:documents": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/documentsHandlers.js",
+    "build:workItems": "parcel build --no-source-maps --no-cache --bundle-node-modules --target node src/workItemsHandlers.js",
     "postinstall": "npm run install:dynamodb",
     "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --userPoolId noop  --efcmsTableName=efcms-local | grep -v -e '^$'",
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",

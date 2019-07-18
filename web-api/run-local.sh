@@ -27,6 +27,9 @@ echo "starting users service"
 SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --config serverless-users.yml --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop &
 echo "starting documents service"
 SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --config serverless-documents.yml --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop &
+echo "starting work items service"
+SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --config serverless-work-items.yml --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop &
+
 
 echo "starting proxy"
 node proxy.js
