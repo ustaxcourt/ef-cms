@@ -331,47 +331,39 @@ describe('fileDocumentHelper', () => {
       });
 
       it('upload and free text not shown if no type selected', async () => {
-        state.form.secondarySupportingDocuments = [
-          { secondarySupportingDocument: '' },
-        ];
+        state.form.secondarySupportingDocuments = [{ supportingDocument: '' }];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentFreeText,
+          result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeFalsy();
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentUpload,
+          result.secondarySupportingDocuments[0].showSupportingDocumentUpload,
         ).toBeFalsy();
       });
 
       it('upload file is shown when supporting type is not empty', async () => {
         state.form.secondarySupportingDocuments = [
-          { secondarySupportingDocument: 'Declaration of Undying Love' },
+          { supportingDocument: 'Declaration of Undying Love' },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentFreeText,
+          result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeFalsy();
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentUpload,
+          result.secondarySupportingDocuments[0].showSupportingDocumentUpload,
         ).toBeTruthy();
       });
 
       it('upload file and signature are shown for type Affidavit in Support', async () => {
         state.form.secondarySupportingDocuments = [
-          { secondarySupportingDocument: 'Affidavit in Support' },
+          { supportingDocument: 'Affidavit in Support' },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentFreeText,
+          result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeTruthy();
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentUpload,
+          result.secondarySupportingDocuments[0].showSupportingDocumentUpload,
         ).toBeTruthy();
       });
 
