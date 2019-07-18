@@ -63,4 +63,14 @@ app.use(
   }),
 );
 
+app.use(
+  '/trial-sessions',
+  proxy({
+    pathRewrite: {
+      '^/trial-sessions': '/',
+    },
+    target: 'http://localhost:3007',
+  }),
+);
+
 app.listen(3000);
