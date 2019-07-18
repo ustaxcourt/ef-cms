@@ -49,11 +49,6 @@
     "barnumber": "12345-67"
   },
   {
-    "sk": "docketNumberCounter-2019",
-    "id": 1,
-    "pk": "docketNumberCounter-2019"
-  },
-  {
     "sk": "case-d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "pk": "catalog"
