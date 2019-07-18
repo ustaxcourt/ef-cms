@@ -53,7 +53,7 @@ export const FileDocumentReviewRedesign = connect(
                   <h3 className="underlined">Your Document(s)</h3>
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
-                      <div className="margin-bottom-1">
+                      <div className="tablet:margin-bottom-0 margin-bottom-205">
                         <label className="usa-label" htmlFor="primary-filing">
                           {form.documentTitle}
                         </label>
@@ -64,7 +64,7 @@ export const FileDocumentReviewRedesign = connect(
                               icon={['fas', 'file-pdf']}
                             />
                           </div>
-                          <div className="grid-col flex-fill">
+                          <div className="grid-col flex-fill margin-top-neg-05">
                             <PDFPreviewButton
                               file={form.primaryDocumentFile}
                               title={form.documentTitle}
@@ -118,27 +118,29 @@ export const FileDocumentReviewRedesign = connect(
                       <React.Fragment key={idx}>
                         <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                           <div className="tablet:grid-col-6 margin-bottom-1">
-                            <label
-                              className="usa-label"
-                              htmlFor={`supporting-documents-${idx}`}
-                            >
-                              {item.supportingDocumentMetadata.documentTitle}
-                            </label>
-                            <div className="grid-row">
-                              <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
-                                <PDFPreviewButton
-                                  file={item.supportingDocumentFile}
-                                  title={
-                                    item.supportingDocumentMetadata
-                                      .documentTitle
-                                  }
-                                />
+                            <div className="tablet:margin-bottom-0 margin-bottom-205">
+                              <label
+                                className="usa-label"
+                                htmlFor={`supporting-documents-${idx}`}
+                              >
+                                {item.supportingDocumentMetadata.documentTitle}
+                              </label>
+                              <div className="grid-row">
+                                <div className="grid-col flex-auto">
+                                  <FontAwesomeIcon
+                                    className="fa-icon-blue"
+                                    icon={['fas', 'file-pdf']}
+                                  />
+                                </div>
+                                <div className="grid-col flex-fill margin-top-neg-05">
+                                  <PDFPreviewButton
+                                    file={item.supportingDocumentFile}
+                                    title={
+                                      item.supportingDocumentMetadata
+                                        .documentTitle
+                                    }
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -177,38 +179,40 @@ export const FileDocumentReviewRedesign = connect(
                   {form.secondaryDocument.documentTitle && (
                     <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                       <div className="tablet:grid-col-6 margin-bottom-1">
-                        {form.secondaryDocumentFile && (
-                          <div className="">
-                            <label
-                              className="usa-label"
-                              htmlFor="secondary-filing"
-                            >
-                              {form.secondaryDocument.documentTitle}{' '}
-                            </label>
-                            {(form.secondaryDocumentFile &&
-                              form.secondaryDocumentFile.name && (
-                                <React.Fragment>
-                                  <div className="grid-row">
-                                    <div className="grid-col flex-auto">
-                                      <FontAwesomeIcon
-                                        className="fa-icon-blue"
-                                        icon={['fas', 'file-pdf']}
-                                      />
+                        <div className="tablet:margin-bottom-0 margin-bottom-205">
+                          {form.secondaryDocumentFile && (
+                            <div className="">
+                              <label
+                                className="usa-label"
+                                htmlFor="secondary-filing"
+                              >
+                                {form.secondaryDocument.documentTitle}{' '}
+                              </label>
+                              {(form.secondaryDocumentFile &&
+                                form.secondaryDocumentFile.name && (
+                                  <React.Fragment>
+                                    <div className="grid-row">
+                                      <div className="grid-col flex-auto">
+                                        <FontAwesomeIcon
+                                          className="fa-icon-blue"
+                                          icon={['fas', 'file-pdf']}
+                                        />
+                                      </div>
+                                      <div className="grid-col flex-fill margin-top-neg-05">
+                                        <PDFPreviewButton
+                                          file={form.secondaryDocumentFile}
+                                          title={
+                                            form.secondaryDocument.documentTitle
+                                          }
+                                        />
+                                      </div>
                                     </div>
-                                    <div className="grid-col flex-fill">
-                                      <PDFPreviewButton
-                                        file={form.secondaryDocumentFile}
-                                        title={
-                                          form.secondaryDocument.documentTitle
-                                        }
-                                      />
-                                    </div>
-                                  </div>
-                                </React.Fragment>
-                              )) ||
-                              'No file attached'}
-                          </div>
-                        )}
+                                  </React.Fragment>
+                                )) ||
+                                'No file attached'}
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {fileDocumentHelper.showSecondaryFilingIncludes && (
@@ -261,30 +265,32 @@ export const FileDocumentReviewRedesign = connect(
                       <React.Fragment key={idx}>
                         <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                           <div className="tablet:grid-col-6 margin-bottom-1">
-                            <label
-                              className="usa-label"
-                              htmlFor={`secondary-supporting-documents-${idx}`}
-                            >
-                              {
-                                item.secondarySupportingDocumentMetadata
-                                  .documentTitle
-                              }
-                            </label>
-                            <div className="grid-row">
-                              <div className="grid-col flex-auto">
-                                <FontAwesomeIcon
-                                  className="fa-icon-blue"
-                                  icon={['fas', 'file-pdf']}
-                                />
-                              </div>
-                              <div className="grid-col flex-fill">
-                                <PDFPreviewButton
-                                  file={item.secondarySupportingDocumentFile}
-                                  title={
-                                    item.secondarySupportingDocumentMetadata
-                                      .documentTitle
-                                  }
-                                />
+                            <div className="tablet:margin-bottom-0 margin-bottom-205">
+                              <label
+                                className="usa-label"
+                                htmlFor={`secondary-supporting-documents-${idx}`}
+                              >
+                                {
+                                  item.secondarySupportingDocumentMetadata
+                                    .documentTitle
+                                }
+                              </label>
+                              <div className="grid-row">
+                                <div className="grid-col flex-auto">
+                                  <FontAwesomeIcon
+                                    className="fa-icon-blue"
+                                    icon={['fas', 'file-pdf']}
+                                  />
+                                </div>
+                                <div className="grid-col flex-fill margin-top-neg-05">
+                                  <PDFPreviewButton
+                                    file={item.secondarySupportingDocumentFile}
+                                    title={
+                                      item.secondarySupportingDocumentMetadata
+                                        .documentTitle
+                                    }
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
