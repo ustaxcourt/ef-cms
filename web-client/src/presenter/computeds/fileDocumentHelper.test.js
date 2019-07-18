@@ -70,6 +70,21 @@ describe('fileDocumentHelper', () => {
     expect(result.isSecondaryDocumentUploadOptional).toBeTruthy();
   });
 
+  it('does not show secondary inclusions if document type is motion for leave to file and a secondary document has not been selected', async () => {
+    state.form = { documentType: 'Motion for Leave to File' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showSecondaryDocumentInclusionsForm).toBeFalsy();
+  });
+
+  it('shows secondary inclusions if document type is motion for leave to file and a secondary document has been selected', async () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      secondaryDocumentFile: 'something',
+    };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showSecondaryDocumentInclusionsForm).toBeTruthy();
+  });
+
   it('shows primary objection if primary document type is a motion', async () => {
     state.form = { documentType: 'Motion for Leave to File' };
     const result = await runCompute(fileDocumentHelper, { state });
@@ -292,6 +307,12 @@ describe('fileDocumentHelper', () => {
       it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is undefined', async () => {
         const result = await runCompute(fileDocumentHelper, { state });
         expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
+      });
+
+      it('does not show Add Secondary Supporting Document button when primary document type is Motion for Leave to File and secondary file is not selected', async () => {
+        state.form.documentType = 'Motion for Leave to File';
+        const result = await runCompute(fileDocumentHelper, { state });
+        expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
       });
 
       it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is less than 5', async () => {
