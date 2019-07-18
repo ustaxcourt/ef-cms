@@ -11,7 +11,6 @@ import React from 'react';
 export const FileDocumentReviewRedesign = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -20,7 +19,6 @@ export const FileDocumentReviewRedesign = connect(
   },
   ({
     caseDetail,
-    chooseWizardStepSequence,
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
@@ -389,7 +387,7 @@ export const FileDocumentReviewRedesign = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => chooseWizardStepSequence({ value: 'FileDocument' })}
+            onClick={() => history.back()}
           >
             Back
           </button>
