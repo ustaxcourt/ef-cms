@@ -400,7 +400,7 @@ export const FileDocumentReviewRedesign = connect(
             Back
           </button>
           <button
-            className="usa-button usa-button--unstyled"
+            className="usa-button usa-button--unstyled ustc-button--unstyled"
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();

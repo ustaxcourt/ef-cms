@@ -25,6 +25,21 @@
       color: color($theme-color-primary);
     }
   }
+
+  &.usa-button--unstyled {
+    padding: 2px;
+    &.no-underline {
+      text-decoration: none;
+    }
+    &:disabled {
+      color: color($theme-color-base);
+    }
+  }
+
+  &.ustc-button--unstyled {
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+  }
 }
 
 .button-switch-box {
