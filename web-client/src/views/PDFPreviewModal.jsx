@@ -1,6 +1,7 @@
 const pdfjsLib = require('pdfjs-dist');
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile } from '../ustc-ui/Responsive/Responsive';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -123,6 +124,20 @@ class PDFPreviewModalComponent extends ModalDialog {
   renderBody() {
     return (
       <>
+        <Mobile>
+          <div className="modal-mobile-header">
+            <h3>
+              <FontAwesomeIcon
+                className="back"
+                icon={['fas', 'caret-left']}
+                size="lg"
+                onClick={this.props.cancelSequence}
+              />
+              Back to Review Your Filing
+            </h3>
+          </div>
+          <h2 className="modal-mobile-title">{this.props.title}</h2>
+        </Mobile>
         <div className="margin-bottom-3">
           <FontAwesomeIcon
             className={
