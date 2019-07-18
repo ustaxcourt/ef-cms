@@ -1,6 +1,6 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -34,7 +34,7 @@ export const SelectDocumentType = connect(
 
               <div className="button-box-container margin-top-4">
                 <button
-                  className="usa-button margin-right-205"
+                  className="usa-button margin-right-205 margin-bottom-1"
                   id="submit-document"
                   type="submit"
                   onClick={() => {
@@ -43,28 +43,15 @@ export const SelectDocumentType = connect(
                 >
                   Continue
                 </button>
-                <NonMobile>
-                  <button
-                    className="usa-button usa-button--unstyled"
-                    type="button"
-                    onClick={() => {
-                      formCancelToggleCancelSequence();
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </NonMobile>
-                <Mobile>
-                  <button
-                    className="usa-button margin-top-1 usa-button--outline"
-                    type="button"
-                    onClick={() => {
-                      formCancelToggleCancelSequence();
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </Mobile>
+                <button
+                  className="usa-button usa-button--unstyled ustc-button--unstyled"
+                  type="button"
+                  onClick={() => {
+                    formCancelToggleCancelSequence();
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
 
