@@ -21,8 +21,9 @@ export const setPageAction = async ({ get, props, store }) => {
   const page = await pdfDoc.getPage(actualPage);
 
   const viewport = page.getViewport({
-    scale: 0.8,
+    scale: 2,
   });
+
   store.set(state.pdfPreviewModal.width, viewport.width);
   store.set(state.pdfPreviewModal.height, viewport.height);
 
