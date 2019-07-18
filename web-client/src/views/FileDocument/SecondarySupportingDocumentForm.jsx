@@ -37,12 +37,11 @@ export const SecondarySupportingDocumentForm = connect(
             className={`usa-form-group ${
               validationErrors.secondarySupportingDocuments &&
               validationErrors.secondarySupportingDocuments[index]
-                .secondarySupportingDocument
+                .supportingDocument
                 ? 'usa-form-group--error'
                 : ''
             } ${
-              !form.secondarySupportingDocuments[index]
-                .secondarySupportingDocument
+              !form.secondarySupportingDocuments[index].supportingDocument
                 ? 'margin-bottom-0'
                 : ''
             }`}
@@ -59,27 +58,27 @@ export const SecondarySupportingDocumentForm = connect(
               className={`usa-select ${
                 validationErrors.secondarySupportingDocuments &&
                 validationErrors.secondarySupportingDocuments[index]
-                  .secondarySupportingDocument
+                  .supportingDocument
                   ? 'usa-select--error'
                   : ''
               }`}
               id={`secondary-supporting-document-${index}`}
-              name={`secondarySupportingDocuments.${index}.secondarySupportingDocument`}
+              name={`secondarySupportingDocuments.${index}.supportingDocument`}
               value={
-                form.secondarySupportingDocuments[index]
-                  .secondarySupportingDocument || ''
+                form.secondarySupportingDocuments[index].supportingDocument ||
+                ''
               }
               onChange={e => {
                 updateFileDocumentWizardFormValueSequence({
-                  key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.category`,
+                  key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.category`,
                   value: 'Supporting Document',
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.documentType`,
+                  key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.documentType`,
                   value: e.target.value,
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.previousDocument`,
+                  key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.previousDocument`,
                   value: form.secondaryDocument.documentTitle,
                 });
                 updateFileDocumentWizardFormValueSequence({
@@ -99,18 +98,18 @@ export const SecondarySupportingDocumentForm = connect(
               })}
             </select>
             <Text
-              bind={`validationErrors.secondarySupportingDocuments.${index}.secondarySupportingDocument`}
+              bind={`validationErrors.secondarySupportingDocuments.${index}.supportingDocument`}
               className="usa-error-message"
             />
           </div>
 
           {fileDocumentHelper.secondarySupportingDocuments[index]
-            .showSecondarySupportingDocumentFreeText && (
+            .showSupportingDocumentFreeText && (
             <div
               className={`usa-form-group ${
                 validationErrors.secondarySupportingDocuments &&
                 validationErrors.secondarySupportingDocuments[index]
-                  .secondarySupportingDocumentFreeText
+                  .supportingDocumentFreeText
                   ? 'usa-form-group--error'
                   : ''
               }`}
@@ -127,18 +126,18 @@ export const SecondarySupportingDocumentForm = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id={`secondary-supporting-document-free-text-${index}`}
-                name={`secondarySupportingDocuments.${index}.secondarySupportingDocumentFreeText`}
+                name={`secondarySupportingDocuments.${index}.supportingDocumentFreeText`}
                 type="text"
                 value={
                   form.secondarySupportingDocuments[index]
-                    .secondarySupportingDocumentFreeText || ''
+                    .supportingDocumentFreeText || ''
                 }
                 onBlur={() => {
                   validateExternalDocumentInformationSequence();
                 }}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
-                    key: `secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata.freeText`,
+                    key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.freeText`,
                     value: e.target.value,
                   });
                   updateFileDocumentWizardFormValueSequence({
@@ -148,7 +147,7 @@ export const SecondarySupportingDocumentForm = connect(
                 }}
               />
               <Text
-                bind={`validationErrors.secondarySupportingDocuments.${index}.secondarySupportingDocumentFreeText`}
+                bind={`validationErrors.secondarySupportingDocuments.${index}.supportingDocumentFreeText`}
                 className="usa-error-message"
               />
             </div>
@@ -161,7 +160,7 @@ export const SecondarySupportingDocumentForm = connect(
                 className={`usa-form-group ${
                   validationErrors.secondarySupportingDocuments &&
                   validationErrors.secondarySupportingDocuments[index]
-                    .secondarySupportingDocumentFile
+                    .supportingDocumentFile
                     ? 'usa-form-group--error'
                     : ''
                 }`}
@@ -170,7 +169,7 @@ export const SecondarySupportingDocumentForm = connect(
                   className={
                     'usa-label ustc-upload with-hint ' +
                     (fileDocumentHelper.secondarySupportingDocuments[index]
-                      .showSecondarySupportingDocumentValid
+                      .showSupportingDocumentValid
                       ? 'validated'
                       : '')
                   }
@@ -189,19 +188,19 @@ export const SecondarySupportingDocumentForm = connect(
                 <StateDrivenFileInput
                   aria-describedby={`secondary-supporting-document-file-${index}-label`}
                   id={`secondary-supporting-document-file-${index}`}
-                  name={`secondarySupportingDocuments.${index}.secondarySupportingDocumentFile`}
+                  name={`secondarySupportingDocuments.${index}.supportingDocumentFile`}
                   updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                   validationSequence="validateExternalDocumentInformationSequence"
                 />
                 <Text
-                  bind={`validationErrors.secondarySupportingDocuments.${index}.secondarySupportingDocumentFile`}
+                  bind={`validationErrors.secondarySupportingDocuments.${index}.supportingDocumentFile`}
                   className="usa-error-message"
                 />
               </div>
 
               <SupportingDocumentInclusionsForm
-                bind={`form.secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata`}
-                type={`secondarySupportingDocuments.${index}.secondarySupportingDocumentMetadata`}
+                bind={`form.secondarySupportingDocuments.${index}.supportingDocumentMetadata`}
+                type={`secondarySupportingDocuments.${index}.supportingDocumentMetadata`}
                 validationBind={`validationErrors.supportingDocument${index}`}
               />
             </>
