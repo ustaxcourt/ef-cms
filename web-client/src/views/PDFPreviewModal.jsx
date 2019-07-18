@@ -11,7 +11,6 @@ class PDFPreviewModalComponent extends ModalDialog {
     super(props);
     this.canvasRef = React.createRef();
     this.modalMounted = this.modalMounted.bind(this);
-
     this.modal = {
       classNames: 'pdf-preview-modal',
       confirmLabel: 'OK',
