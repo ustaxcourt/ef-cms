@@ -57,7 +57,10 @@ export const FileDocumentReviewRedesign = connect(
                         <label className="usa-label" htmlFor="primary-filing">
                           {form.documentTitle}
                         </label>
-                        <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                        <FontAwesomeIcon
+                          className="fa-icon-blue"
+                          icon={['fas', 'file-pdf']}
+                        />
                         <PDFPreviewButton
                           file={form.primaryDocumentFile}
                           title={form.documentTitle}
@@ -143,7 +146,10 @@ export const FileDocumentReviewRedesign = connect(
                           >
                             {item.supportingDocumentMetadata.documentTitle}
                           </label>
-                          <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                          <FontAwesomeIcon
+                            className="fa-icon-blue"
+                            icon={['fas', 'file-pdf']}
+                          />
                           <PDFPreviewButton
                             file={item.supportingDocumentFile}
                             title={
@@ -168,7 +174,10 @@ export const FileDocumentReviewRedesign = connect(
                             {(form.secondaryDocumentFile &&
                               form.secondaryDocumentFile.name && (
                                 <React.Fragment>
-                                  <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                                  <FontAwesomeIcon
+                                    className="fa-icon-blue"
+                                    icon={['fas', 'file-pdf']}
+                                  />
                                   <PDFPreviewButton
                                     file={form.secondaryDocumentFile}
                                     title={form.secondaryDocument.documentTitle}
@@ -215,7 +224,10 @@ export const FileDocumentReviewRedesign = connect(
                                 .documentTitle
                             }
                           </label>
-                          <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                          <FontAwesomeIcon
+                            className="fa-icon-blue"
+                            icon={['fas', 'file-pdf']}
+                          />
                           <PDFPreviewButton
                             file={item.secondarySupportingDocumentFile}
                             title={
