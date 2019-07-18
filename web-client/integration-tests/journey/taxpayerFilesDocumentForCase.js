@@ -263,14 +263,13 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          secondarySupportingDocument:
-            'Enter selection for Secondary Supporting Document.',
+          supportingDocument: 'Enter selection for Supporting Document.',
         },
       ],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'secondarySupportingDocuments.0.secondarySupportingDocument',
+      key: 'secondarySupportingDocuments.0.supportingDocument',
       value: 'Declaration in Support',
     });
 
@@ -279,19 +278,19 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          secondarySupportingDocumentFile: 'A file was not selected.',
-          secondarySupportingDocumentFreeText: 'Please provide a value.',
+          supportingDocumentFile: 'A file was not selected.',
+          supportingDocumentFreeText: 'Please provide a value.',
         },
       ],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'secondarySupportingDocuments.0.secondarySupportingDocumentFile',
+      key: 'secondarySupportingDocuments.0.supportingDocumentFile',
       value: fakeFile,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'secondarySupportingDocuments.0.secondarySupportingDocumentFreeText',
+      key: 'secondarySupportingDocuments.0.supportingDocumentFreeText',
       value: 'Declaration in Support',
     });
 

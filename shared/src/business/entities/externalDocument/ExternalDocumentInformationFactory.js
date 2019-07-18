@@ -7,10 +7,9 @@ const {
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
 const {
-  SecondarySupportingDocumentFactory,
-} = require('./SecondarySupportingDocumentFactory');
+  SupportingDocumentInformationFactory,
+} = require('./SupportingDocumentInformationFactory');
 const { includes } = require('lodash');
-const { SupportingDocumentFactory } = require('./SupportingDocumentFactory');
 
 /**
  *
@@ -48,14 +47,14 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentFactory.get(item);
+        return SupportingDocumentInformationFactory.get(item);
       });
     }
 
     if (this.secondarySupportingDocuments) {
       this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
         item => {
-          return SecondarySupportingDocumentFactory.get(item);
+          return SupportingDocumentInformationFactory.get(item);
         },
       );
     }

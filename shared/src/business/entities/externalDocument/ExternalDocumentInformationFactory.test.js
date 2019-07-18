@@ -254,17 +254,16 @@ describe('ExternalDocumentInformationFactory', () => {
 
           it('should require supporting secondary document type be entered', () => {
             expect(
-              errors().secondarySupportingDocuments[0]
-                .secondarySupportingDocument,
-            ).toEqual('Enter selection for Secondary Supporting Document.');
-            baseDoc.secondarySupportingDocuments[0].secondarySupportingDocument =
+              errors().secondarySupportingDocuments[0].supportingDocument,
+            ).toEqual('Enter selection for Supporting Document.');
+            baseDoc.secondarySupportingDocuments[0].supportingDocument =
               'brief';
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
           });
 
           it('should require certificate of service date to be entered if certificateOfService is true', () => {
             baseDoc.secondarySupportingDocuments[0].certificateOfService = true;
-            baseDoc.secondarySupportingDocuments[0].secondarySupportingDocument =
+            baseDoc.secondarySupportingDocuments[0].supportingDocument =
               'brief';
             expect(
               errors().secondarySupportingDocuments[0].certificateOfServiceDate,
@@ -279,18 +278,17 @@ describe('ExternalDocumentInformationFactory', () => {
                 {
                   attachments: false,
                   certificateOfService: false,
-                  secondarySupportingDocument: 'Memorandum in Support',
+                  supportingDocument: 'Memorandum in Support',
                 },
               ];
             });
 
             it('should require supporting secondary document file to be added', () => {
               expect(
-                errors().secondarySupportingDocuments[0]
-                  .secondarySupportingDocumentFile,
+                errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual('A file was not selected.');
-              baseDoc.secondarySupportingDocuments[0].secondarySupportingDocumentFile = {};
-              expect(errors().secondarySupportingDocuments).toEqual(undefined);
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
+              expect(errors().supportingDocuments).toEqual(undefined);
             });
           });
 
@@ -300,33 +298,31 @@ describe('ExternalDocumentInformationFactory', () => {
                 {
                   attachments: false,
                   certificateOfService: false,
-                  secondarySupportingDocument: 'Declaration in Support',
+                  supportingDocument: 'Declaration in Support',
                 },
               ];
             });
 
             it('should require supporting secondary document file to be selected', () => {
               expect(
-                errors().secondarySupportingDocuments[0]
-                  .secondarySupportingDocumentFile,
+                errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual('A file was not selected.');
-              baseDoc.secondarySupportingDocuments[0].secondarySupportingDocumentFile = {};
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
               expect(
-                errors().secondarySupportingDocuments[0]
-                  .secondarySupportingDocumentFile,
+                errors().secondarySupportingDocuments[0].supportingDocumentFile,
               ).toEqual(undefined);
             });
 
             it('should require supporting secondary document text to be added', () => {
               expect(
                 errors().secondarySupportingDocuments[0]
-                  .secondarySupportingDocumentFreeText,
+                  .supportingDocumentFreeText,
               ).toEqual('Please provide a value.');
-              baseDoc.secondarySupportingDocuments[0].secondarySupportingDocumentFreeText =
+              baseDoc.secondarySupportingDocuments[0].supportingDocumentFreeText =
                 'Something';
               expect(
                 errors().secondarySupportingDocuments[0]
-                  .secondarySupportingDocumentFreeText,
+                  .supportingDocumentFreeText,
               ).toEqual(undefined);
             });
           });
