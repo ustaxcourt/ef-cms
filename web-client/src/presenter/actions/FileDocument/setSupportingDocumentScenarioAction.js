@@ -51,33 +51,31 @@ export const setSupportingDocumentScenarioAction = ({ get, store }) => {
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
-      const {
-        secondarySupportingDocumentMetadata,
-      } = secondarySupportingDocuments[i];
+      const { supportingDocumentMetadata } = secondarySupportingDocuments[i];
       if (
-        secondarySupportingDocumentMetadata &&
-        secondarySupportingDocumentMetadata.category &&
-        secondarySupportingDocumentMetadata.documentType
+        supportingDocumentMetadata &&
+        supportingDocumentMetadata.category &&
+        supportingDocumentMetadata.documentType
       ) {
-        const { category, documentType } = secondarySupportingDocumentMetadata;
+        const { category, documentType } = supportingDocumentMetadata;
 
         const categoryInformation = CATEGORY_MAP[category].find(
           itemDocumentType => itemDocumentType.documentType === documentType,
         );
 
         store.set(
-          state.form.secondarySupportingDocuments[i]
-            .secondarySupportingDocumentMetadata.scenario,
+          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
+            .scenario,
           categoryInformation.scenario,
         );
         store.set(
-          state.form.secondarySupportingDocuments[i]
-            .secondarySupportingDocumentMetadata.documentTitle,
+          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
+            .documentTitle,
           categoryInformation.documentTitle,
         );
         store.set(
-          state.form.secondarySupportingDocuments[i]
-            .secondarySupportingDocumentMetadata.eventCode,
+          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
+            .eventCode,
           categoryInformation.eventCode,
         );
       }

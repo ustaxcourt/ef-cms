@@ -53,7 +53,7 @@ describe('generateTitleAction', () => {
           },
           secondarySupportingDocuments: [
             {
-              secondarySupportingDocumentMetadata: {
+              supportingDocumentMetadata: {
                 category: 'Application',
                 documentType: 'Application for Waiver of Filing Fee',
               },

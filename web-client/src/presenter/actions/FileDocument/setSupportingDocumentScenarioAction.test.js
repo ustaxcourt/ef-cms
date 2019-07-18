@@ -41,7 +41,7 @@ describe('setSupportingDocumentScenarioAction', () => {
         form: {
           secondarySupportingDocuments: [
             {
-              secondarySupportingDocumentMetadata: {
+              supportingDocumentMetadata: {
                 category: 'Motion',
                 documentType: 'Motion for Judgment on the Pleadings',
               },
@@ -53,11 +53,11 @@ describe('setSupportingDocumentScenarioAction', () => {
 
     expect(
       result.state.form.secondarySupportingDocuments[0]
-        .secondarySupportingDocumentMetadata.scenario,
+        .supportingDocumentMetadata.scenario,
     ).toEqual('Standard');
     expect(
       result.state.form.secondarySupportingDocuments[0]
-        .secondarySupportingDocumentMetadata.documentTitle,
+        .supportingDocumentMetadata.documentTitle,
     ).toEqual('Motion for Judgment on the Pleadings');
   });
 });

@@ -57,7 +57,7 @@ exports.uploadExternalDocumentInteractor = async ({
       i < documentMetadata.secondarySupportingDocuments.length;
       i++
     ) {
-      const secondarySupportingDocumentFileId = await applicationContext
+      const supportingDocumentFileId = await applicationContext
         .getPersistenceGateway()
         .uploadDocument({
           applicationContext,
@@ -65,9 +65,7 @@ exports.uploadExternalDocumentInteractor = async ({
           onUploadProgress: progressFunctions[`secondarySupporting${i}`],
         });
 
-      secondarySupportingDocumentFileIds.push(
-        secondarySupportingDocumentFileId,
-      );
+      secondarySupportingDocumentFileIds.push(supportingDocumentFileId);
     }
   }
 

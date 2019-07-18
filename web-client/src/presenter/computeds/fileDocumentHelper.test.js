@@ -370,7 +370,7 @@ describe('fileDocumentHelper', () => {
       it('filing includes is shown if attachments is true', async () => {
         state.form.secondarySupportingDocuments = [
           {
-            secondarySupportingDocumentMetadata: { attachments: true },
+            supportingDocumentMetadata: { attachments: true },
           },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
@@ -382,7 +382,7 @@ describe('fileDocumentHelper', () => {
       it('certificate of service date is properly formatted', async () => {
         state.form.secondarySupportingDocuments = [
           {
-            secondarySupportingDocumentMetadata: {
+            supportingDocumentMetadata: {
               certificateOfService: true,
               certificateOfServiceDate: '2019-01-01',
             },

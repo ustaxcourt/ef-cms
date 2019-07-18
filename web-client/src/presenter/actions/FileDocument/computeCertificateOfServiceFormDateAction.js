@@ -73,20 +73,20 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach((item, idx) => {
       month = get(
-        state.form.secondarySupportingDocuments[idx]
-          .secondarySupportingDocumentMetadata.certificateOfServiceMonth,
+        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceMonth,
       );
       day = get(
-        state.form.secondarySupportingDocuments[idx]
-          .secondarySupportingDocumentMetadata.certificateOfServiceDay,
+        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceDay,
       );
       year = get(
-        state.form.secondarySupportingDocuments[idx]
-          .secondarySupportingDocumentMetadata.certificateOfServiceYear,
+        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceYear,
       );
       store.set(
-        state.form.secondarySupportingDocuments[idx]
-          .secondarySupportingDocumentMetadata.certificateOfServiceDate,
+        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
+          .certificateOfServiceDate,
         computeDate({ day, month, year }),
       );
     });

@@ -34,8 +34,7 @@ export const fileExternalDocumentAction = async ({
 
   if (form.hasSecondarySupportingDocuments) {
     form.secondarySupportingDocuments.forEach((item, idx) => {
-      documentFiles[`secondarySupporting${idx}`] =
-        item.secondarySupportingDocumentFile;
+      documentFiles[`secondarySupporting${idx}`] = item.supportingDocumentFile;
     });
   }
 

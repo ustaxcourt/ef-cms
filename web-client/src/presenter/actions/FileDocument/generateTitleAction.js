@@ -52,21 +52,18 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       if (
-        !isEmpty(
-          secondarySupportingDocuments[i].secondarySupportingDocumentMetadata,
-        )
+        !isEmpty(secondarySupportingDocuments[i].supportingDocumentMetadata)
       ) {
         documentTitle = applicationContext
           .getUseCases()
           .generateDocumentTitleInteractor({
             applicationContext,
             documentMetadata:
-              secondarySupportingDocuments[i]
-                .secondarySupportingDocumentMetadata,
+              secondarySupportingDocuments[i].supportingDocumentMetadata,
           });
         store.set(
-          state.form.secondarySupportingDocuments[i]
-            .secondarySupportingDocumentMetadata.documentTitle,
+          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
+            .documentTitle,
           documentTitle,
         );
       }
