@@ -34,7 +34,11 @@ export const PDFPreviewButton = connect(
           (pdfPreviewModalHelper.displayErrorText ? (
             <PDFPreviewErrorModal title={title} />
           ) : (
-            <PDFPreviewModal pdfFile={file} title={title} />
+            <PDFPreviewModal
+              pdfFile={file}
+              preventScrolling={false}
+              title={title}
+            />
           ))}
       </>
     );
