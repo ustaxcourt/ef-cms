@@ -51,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'users'
+    basePath: 'sections'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -196,7 +196,7 @@ functions:
     handler: src/sectionsHandlers.getInboxMessagesForSectionLambda
     events:
       - http:
-          path: sections/{section}/messages/inbox
+          path: /{section}/messages/inbox
           method: get
           cors: true
           authorizer:
@@ -207,7 +207,7 @@ functions:
     handler: src/sectionsHandlers.getSentMessagesForSectionLambda
     events:
       - http:
-          path: sections/{section}/messages/sent
+          path: /{section}/messages/sent
           method: get
           cors: true
           authorizer:
@@ -218,7 +218,7 @@ functions:
     handler: src/sectionsHandlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
-          path: sections/{section}/document-qc/batched
+          path: /{section}/document-qc/batched
           method: get
           cors: true
           authorizer:
@@ -230,7 +230,7 @@ functions:
     handler: src/sectionsHandlers.getDocumentQCServedForSectionLambda
     events:
       - http:
-          path: sections/{section}/document-qc/served
+          path: /{section}/document-qc/served
           method: get
           cors: true
           authorizer:
@@ -241,7 +241,7 @@ functions:
     handler: src/sectionsHandlers.getUsersInSectionLambda
     events:
       - http:
-          path: sections/{section}/users
+          path: /{section}/users
           method: get
           cors: true
           authorizer:
@@ -253,7 +253,7 @@ functions:
     handler: src/sectionsHandlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
-          path: sections/{section}/document-qc/inbox
+          path: /{section}/document-qc/inbox
           method: get
           cors: true
           authorizer:
