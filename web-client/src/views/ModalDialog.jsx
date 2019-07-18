@@ -14,15 +14,20 @@ export class ModalDialog extends React.Component {
 
     this.modal = {};
     this.preventCancelOnBlur = !!this.props.preventCancelOnBlur;
+    this.preventScrolling =
+      this.props.preventScrolling !== undefined
+        ? this.props.preventScrolling
+        : true;
     this.blurDialog = this.blurDialog.bind(this);
     this.keydownTriggered = this.keydownTriggered.bind(this);
     if (this.runCancelSequence) {
       this.runCancelSequence = this.runCancelSequence.bind(this);
     }
+    this.toggleNoScroll = this.toggleNoScroll.bind(this);
     this.runConfirmSequence = this.runConfirmSequence.bind(this);
   }
   toggleNoScroll(scrollingOn) {
-    if (scrollingOn) {
+    if (this.preventScrolling && scrollingOn) {
       document.body.classList.add('no-scroll');
       document.addEventListener('touchmove', this.touchmoveTriggered, {
         passive: false,
@@ -156,4 +161,5 @@ ModalDialog.propTypes = {
   confirmSequence: PropTypes.func,
   modal: PropTypes.object,
   preventCancelOnBlur: PropTypes.bool,
+  preventScrolling: PropTypes.bool,
 };
