@@ -89,7 +89,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
-            secondarySupportingDocumentMetadata: {
+            supportingDocumentMetadata: {
               category: 'Supporting Document',
               documentTitle: 'Brief in Support of Amended Answer',
               documentType: 'Brief in Support',

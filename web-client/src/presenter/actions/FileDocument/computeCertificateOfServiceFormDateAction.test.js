@@ -55,7 +55,7 @@ describe('computeCertificateOfServiceFormDateAction', () => {
           },
           secondarySupportingDocuments: [
             {
-              secondarySupportingDocumentMetadata: {
+              supportingDocumentMetadata: {
                 certificateOfServiceDay: '8',
                 certificateOfServiceMonth: '9',
                 certificateOfServiceYear: '2012',
@@ -85,7 +85,7 @@ describe('computeCertificateOfServiceFormDateAction', () => {
     ).toEqual('2012-10-07');
     expect(
       result.state.form.secondarySupportingDocuments[0]
-        .secondarySupportingDocumentMetadata.certificateOfServiceDate,
+        .supportingDocumentMetadata.certificateOfServiceDate,
     ).toEqual('2012-09-08');
   });
 });
