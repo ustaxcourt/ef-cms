@@ -107,7 +107,7 @@ export const CompleteDocumentTypeSection = connect(
           />
           <Mobile>
             <button
-              className="usa-button usa-button--unstyled"
+              className="usa-button usa-button--unstyled margin-top-2"
               onClick={() => openSelectDocumentWizardOverlaySequence()}
             >
               <FontAwesomeIcon icon="question-circle" size="sm" />
