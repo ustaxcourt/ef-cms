@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { navigateToReviewFileADocumentAction } from '../actions/FileDocument/navigateToReviewFileADocumentAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
@@ -25,7 +26,7 @@ export const reviewExternalDocumentInformationSequence = [
       generateTitleAction,
       set(state.showValidation, false),
       clearAlertsAction,
-      set(state.wizardStep, 'FileDocumentReview'),
+      navigateToReviewFileADocumentAction,
     ],
   },
 ];

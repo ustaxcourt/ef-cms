@@ -120,6 +120,53 @@ const router = {
       }),
     );
     route(
+      '/case-detail/*/file-a-document/details',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document ${pageTitleSuffix}`;
+        if (app.getState('wizardStep')) {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'FileDocument',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/file-a-document`,
+          });
+        }
+      }),
+    );
+    route(
+      '/case-detail/*/file-a-document/review',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document ${pageTitleSuffix}`;
+        if (app.getState('wizardStep')) {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'FileDocumentReview',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/file-a-document`,
+          });
+        }
+      }),
+    );
+
+    route(
+      '/case-detail/*/file-a-document/all-document-categories',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document ${pageTitleSuffix}`;
+        if (app.getState('wizardStep')) {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'ViewAllDocuments',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/file-a-document`,
+          });
+        }
+      }),
+    );
+
+    route(
       '/case-detail/*/contacts/primary/edit',
       checkLoggedIn(docketNumber => {
         document.title = `Primary contact ${pageTitleSuffix}`;
