@@ -137,20 +137,6 @@ describe('fileDocumentHelper', () => {
     expect(result.showFilingIncludes).toEqual(false);
   });
 
-  it('shows Filing Does Not Include if attachments is false', async () => {
-    state.form.attachments = false;
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showFilingNotIncludes).toEqual(true);
-  });
-
-  it('does not show Filing Does Not Include if certOfService, attachments, and hasSupportingDocuments are all true', async () => {
-    state.form.certificateOfService = true;
-    state.form.attachments = true;
-    state.form.hasSupportingDocuments = true;
-    const result = await runCompute(fileDocumentHelper, { state });
-    expect(result.showFilingNotIncludes).toEqual(false);
-  });
-
   it('does not show party validation error if none of the party validation errors exists', async () => {
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toBeUndefined();

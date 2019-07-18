@@ -52,15 +52,21 @@ export const fileDocumentHelper = (get, applicationContext) => {
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
+  const secondaryDocumentCertificateOfServiceDate =
+    form.secondaryDocument && form.secondaryDocument.certificateOfServiceDate;
+  let secondaryDocumentCertificateOfServiceDateFormatted;
+  if (secondaryDocumentCertificateOfServiceDate) {
+    secondaryDocumentCertificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(secondaryDocumentCertificateOfServiceDate, 'MMDDYY');
+  }
+
   const showFilingIncludes = form.certificateOfService || form.attachments;
 
-  const showFilingNotIncludes =
-    !form.certificateOfService ||
-    !form.attachments ||
-    !form.hasSupportingDocuments;
-
-  const showSecondaryFilingNotIncludes =
-    form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
+  const showSecondaryFilingIncludes =
+    form.secondaryDocument &&
+    (form.secondaryDocument.certificateOfService ||
+      form.secondaryDocument.attachments);
 
   const showAddSupportingDocuments =
     !form.supportingDocumentCount || form.supportingDocumentCount < 5;
@@ -78,6 +84,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       showObjection: objectionDocumentTypes.includes(form.documentType),
     },
     secondaryDocument: {
+      certificateOfServiceDateFormatted: secondaryDocumentCertificateOfServiceDateFormatted,
       showObjection:
         form.secondaryDocument &&
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
@@ -85,11 +92,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showAddSecondarySupportingDocuments,
     showAddSupportingDocuments,
     showFilingIncludes,
-    showFilingNotIncludes,
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
-    showSecondaryFilingNotIncludes,
+    showSecondaryFilingIncludes,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
     supportingDocumentTypeList,
@@ -106,7 +112,25 @@ export const fileDocumentHelper = (get, applicationContext) => {
       const supportingDocumentTypeIsSelected =
         item.supportingDocument && item.supportingDocument !== '';
 
+      let showFilingIncludes = false;
+      certificateOfServiceDateFormatted = undefined;
+      if (item.supportingDocumentMetadata) {
+        const documentMetadata = item.supportingDocumentMetadata;
+
+        showFilingIncludes =
+          documentMetadata.certificateOfService || documentMetadata.attachments;
+
+        const { certificateOfServiceDate } = documentMetadata;
+        if (certificateOfServiceDate) {
+          certificateOfServiceDateFormatted = applicationContext
+            .getUtilities()
+            .formatDateString(certificateOfServiceDate, 'MMDDYY');
+        }
+      }
+
       supportingDocuments.push({
+        certificateOfServiceDateFormatted,
+        showFilingIncludes,
         showSupportingDocumentFreeText,
         showSupportingDocumentUpload: supportingDocumentTypeIsSelected,
         showSupportingDocumentValid: !!item.supportingDocumentFile,
@@ -132,7 +156,25 @@ export const fileDocumentHelper = (get, applicationContext) => {
         item.secondarySupportingDocument &&
         item.secondarySupportingDocument !== '';
 
+      let showFilingIncludes = false;
+      certificateOfServiceDateFormatted = undefined;
+      if (item.secondarySupportingDocumentMetadata) {
+        const documentMetadata = item.secondarySupportingDocumentMetadata;
+
+        showFilingIncludes =
+          documentMetadata.certificateOfService || documentMetadata.attachments;
+
+        const { certificateOfServiceDate } = documentMetadata;
+        if (certificateOfServiceDate) {
+          certificateOfServiceDateFormatted = applicationContext
+            .getUtilities()
+            .formatDateString(certificateOfServiceDate, 'MMDDYY');
+        }
+      }
+
       secondarySupportingDocuments.push({
+        certificateOfServiceDateFormatted,
+        showFilingIncludes,
         showSecondarySupportingDocumentFreeText,
         showSecondarySupportingDocumentUpload: secondarySupportingDocumentTypeIsSelected,
         showSecondarySupportingDocumentValid: !!item.secondarySupportingDocumentFile,
