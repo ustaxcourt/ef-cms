@@ -8,8 +8,11 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object
  */
 export const setPageAction = async ({ get, props, store }) => {
-  const desiredPage = props.currentPage || 1;
-  // do not allow the page to go below 1 or above total pages
+  let desiredPage = 1;
+  if (props.currentPage !== undefined) {
+    desiredPage = props.currentPage;
+  }
+
   const actualPage = Math.min(
     Math.max(1, desiredPage),
     get(state.pdfPreviewModal.totalPages),
@@ -21,8 +24,9 @@ export const setPageAction = async ({ get, props, store }) => {
   const page = await pdfDoc.getPage(actualPage);
 
   const viewport = page.getViewport({
-    scale: 0.8,
+    scale: 2,
   });
+
   store.set(state.pdfPreviewModal.width, viewport.width);
   store.set(state.pdfPreviewModal.height, viewport.height);
 
