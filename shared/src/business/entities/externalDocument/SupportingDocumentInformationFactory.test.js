@@ -1,36 +1,35 @@
 const {
-  SecondarySupportingDocumentFactory,
-} = require('./SecondarySupportingDocumentFactory');
+  SupportingDocumentInformationFactory,
+} = require('./SupportingDocumentInformationFactory');
 
-describe('SecondarySupportingDocumentFactory', () => {
+describe('SupportingDocumentInformationFactory', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = SecondarySupportingDocumentFactory.get({});
+      const extDoc = SupportingDocumentInformationFactory.get({});
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         attachments: 'Enter selection for Attachments.',
         certificateOfService: 'Enter selection for Certificate of Service.',
-        secondarySupportingDocument:
-          'Enter selection for Secondary Supporting Document.',
+        supportingDocument: 'Enter selection for Supporting Document.',
       });
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = SecondarySupportingDocumentFactory.get({
+      const extDoc = SupportingDocumentInformationFactory.get({
         attachments: true,
         certificateOfService: false,
-        secondarySupportingDocument: 'Brief in Support',
-        secondarySupportingDocumentFile: {},
+        supportingDocument: 'Brief in Support',
+        supportingDocumentFile: {},
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     describe('Has Certificate of Service', () => {
       it('should require certificate of service date be entered', () => {
-        const extDoc = SecondarySupportingDocumentFactory.get({
+        const extDoc = SupportingDocumentInformationFactory.get({
           attachments: true,
           certificateOfService: true,
-          secondarySupportingDocument: 'Brief in Support',
-          secondarySupportingDocumentFile: {},
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFile: {},
         });
         expect(extDoc.getFormattedValidationErrors()).toEqual({
           certificateOfServiceDate: 'Enter a Certificate of Service Date.',
