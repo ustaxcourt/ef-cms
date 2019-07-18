@@ -12,20 +12,18 @@ const { includes } = require('lodash');
  *
  * @constructor
  */
-function SupportingDocumentFactory() {}
+function SupportingDocumentInformationFactory() {}
 
 /**
  *
  * @param documentMetadata
  */
-SupportingDocumentFactory.get = documentMetadata => {
+SupportingDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
     Object.assign(this, {
       attachments: rawProps.attachments,
       certificateOfService: rawProps.certificateOfService,
       certificateOfServiceDate: rawProps.certificateOfServiceDate,
-      documentType: rawProps.documentType,
-      eventCode: rawProps.eventCode,
       supportingDocument: rawProps.supportingDocument,
       supportingDocumentFile: rawProps.supportingDocumentFile,
       supportingDocumentFileSize: rawProps.supportingDocumentFileSize,
@@ -128,4 +126,4 @@ SupportingDocumentFactory.get = documentMetadata => {
   return new entityConstructor(documentMetadata);
 };
 
-module.exports = { SupportingDocumentFactory };
+module.exports = { SupportingDocumentInformationFactory };

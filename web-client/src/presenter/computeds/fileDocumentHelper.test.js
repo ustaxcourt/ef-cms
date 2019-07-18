@@ -70,6 +70,21 @@ describe('fileDocumentHelper', () => {
     expect(result.isSecondaryDocumentUploadOptional).toBeTruthy();
   });
 
+  it('does not show secondary inclusions if document type is motion for leave to file and a secondary document has not been selected', async () => {
+    state.form = { documentType: 'Motion for Leave to File' };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showSecondaryDocumentInclusionsForm).toBeFalsy();
+  });
+
+  it('shows secondary inclusions if document type is motion for leave to file and a secondary document has been selected', async () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      secondaryDocumentFile: 'something',
+    };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.showSecondaryDocumentInclusionsForm).toBeTruthy();
+  });
+
   it('shows primary objection if primary document type is a motion', async () => {
     state.form = { documentType: 'Motion for Leave to File' };
     const result = await runCompute(fileDocumentHelper, { state });
@@ -294,6 +309,12 @@ describe('fileDocumentHelper', () => {
         expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
       });
 
+      it('does not show Add Secondary Supporting Document button when primary document type is Motion for Leave to File and secondary file is not selected', async () => {
+        state.form.documentType = 'Motion for Leave to File';
+        const result = await runCompute(fileDocumentHelper, { state });
+        expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
+      });
+
       it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is less than 5', async () => {
         state.form.secondarySupportingDocumentCount = 4;
         const result = await runCompute(fileDocumentHelper, { state });
@@ -310,54 +331,46 @@ describe('fileDocumentHelper', () => {
       });
 
       it('upload and free text not shown if no type selected', async () => {
-        state.form.secondarySupportingDocuments = [
-          { secondarySupportingDocument: '' },
-        ];
+        state.form.secondarySupportingDocuments = [{ supportingDocument: '' }];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentFreeText,
+          result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeFalsy();
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentUpload,
+          result.secondarySupportingDocuments[0].showSupportingDocumentUpload,
         ).toBeFalsy();
       });
 
       it('upload file is shown when supporting type is not empty', async () => {
         state.form.secondarySupportingDocuments = [
-          { secondarySupportingDocument: 'Declaration of Undying Love' },
+          { supportingDocument: 'Declaration of Undying Love' },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentFreeText,
+          result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeFalsy();
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentUpload,
+          result.secondarySupportingDocuments[0].showSupportingDocumentUpload,
         ).toBeTruthy();
       });
 
       it('upload file and signature are shown for type Affidavit in Support', async () => {
         state.form.secondarySupportingDocuments = [
-          { secondarySupportingDocument: 'Affidavit in Support' },
+          { supportingDocument: 'Affidavit in Support' },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentFreeText,
+          result.secondarySupportingDocuments[0].showSupportingDocumentFreeText,
         ).toBeTruthy();
         expect(
-          result.secondarySupportingDocuments[0]
-            .showSecondarySupportingDocumentUpload,
+          result.secondarySupportingDocuments[0].showSupportingDocumentUpload,
         ).toBeTruthy();
       });
 
       it('filing includes is shown if attachments is true', async () => {
         state.form.secondarySupportingDocuments = [
           {
-            secondarySupportingDocumentMetadata: { attachments: true },
+            supportingDocumentMetadata: { attachments: true },
           },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
@@ -369,7 +382,7 @@ describe('fileDocumentHelper', () => {
       it('certificate of service date is properly formatted', async () => {
         state.form.secondarySupportingDocuments = [
           {
-            secondarySupportingDocumentMetadata: {
+            supportingDocumentMetadata: {
               certificateOfService: true,
               certificateOfServiceDate: '2019-01-01',
             },

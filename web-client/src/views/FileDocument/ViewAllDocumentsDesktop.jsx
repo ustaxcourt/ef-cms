@@ -7,9 +7,7 @@ import React from 'react';
 
 export const ViewAllDocumentsDesktop = connect(
   {
-    caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    gotoFileDocumentSequence: sequences.gotoFileDocumentSequence,
     openCompleteSelectDocumentTypeModalSequence:
       sequences.openCompleteSelectDocumentTypeModalSequence,
     showModal: state.showModal,
@@ -18,9 +16,7 @@ export const ViewAllDocumentsDesktop = connect(
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   ({
-    caseDetail,
     formCancelToggleCancelSequence,
-    gotoFileDocumentSequence,
     openCompleteSelectDocumentTypeModalSequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
@@ -90,10 +86,7 @@ export const ViewAllDocumentsDesktop = connect(
             <button
               className="usa-button margin-right-205"
               id="back-button"
-              onClick={() => {
-                const { docketNumber } = caseDetail;
-                gotoFileDocumentSequence({ docketNumber });
-              }}
+              onClick={() => history.back()}
             >
               Back to File a Document
             </button>
