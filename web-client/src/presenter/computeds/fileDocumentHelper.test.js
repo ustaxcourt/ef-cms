@@ -278,11 +278,7 @@ describe('fileDocumentHelper', () => {
     });
 
     it('filing includes is shown if attachments is true', async () => {
-      state.form.supportingDocuments = [
-        {
-          supportingDocumentMetadata: { attachments: true },
-        },
-      ];
+      state.form.supportingDocuments = [{ attachments: true }];
       const result = await runCompute(fileDocumentHelper, { state });
       expect(result.supportingDocuments[0].showFilingIncludes).toBeTruthy();
     });
@@ -290,10 +286,8 @@ describe('fileDocumentHelper', () => {
     it('certificate of service date is properly formatted', async () => {
       state.form.supportingDocuments = [
         {
-          supportingDocumentMetadata: {
-            certificateOfService: true,
-            certificateOfServiceDate: '2019-01-01',
-          },
+          certificateOfService: true,
+          certificateOfServiceDate: '2019-01-01',
         },
       ];
       const result = await runCompute(fileDocumentHelper, { state });
@@ -368,11 +362,7 @@ describe('fileDocumentHelper', () => {
       });
 
       it('filing includes is shown if attachments is true', async () => {
-        state.form.secondarySupportingDocuments = [
-          {
-            supportingDocumentMetadata: { attachments: true },
-          },
-        ];
+        state.form.secondarySupportingDocuments = [{ attachments: true }];
         const result = await runCompute(fileDocumentHelper, { state });
         expect(
           result.secondarySupportingDocuments[0].showFilingIncludes,
@@ -382,10 +372,8 @@ describe('fileDocumentHelper', () => {
       it('certificate of service date is properly formatted', async () => {
         state.form.secondarySupportingDocuments = [
           {
-            supportingDocumentMetadata: {
-              certificateOfService: true,
-              certificateOfServiceDate: '2019-01-01',
-            },
+            certificateOfService: true,
+            certificateOfServiceDate: '2019-01-01',
           },
         ];
         const result = await runCompute(fileDocumentHelper, { state });
