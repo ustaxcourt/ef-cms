@@ -154,7 +154,7 @@ export const SecondarySupportingDocumentForm = connect(
           )}
 
           {fileDocumentHelper.secondarySupportingDocuments[index]
-            .showSecondarySupportingDocumentUpload && (
+            .showSupportingDocumentUpload && (
             <>
               <div
                 className={`usa-form-group ${

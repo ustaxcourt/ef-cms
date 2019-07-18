@@ -270,10 +270,7 @@ export const FileDocumentReviewRedesign = connect(
                                 className="usa-label"
                                 htmlFor={`secondary-supporting-documents-${idx}`}
                               >
-                                {
-                                  item.secondarySupportingDocumentMetadata
-                                    .documentTitle
-                                }
+                                {item.supportingDocumentMetadata.documentTitle}
                               </label>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
@@ -284,9 +281,9 @@ export const FileDocumentReviewRedesign = connect(
                                 </div>
                                 <div className="grid-col flex-fill margin-top-neg-05">
                                   <PDFPreviewButton
-                                    file={item.secondarySupportingDocumentFile}
+                                    file={item.supportingDocumentFile}
                                     title={
-                                      item.secondarySupportingDocumentMetadata
+                                      item.supportingDocumentMetadata
                                         .documentTitle
                                     }
                                   />
@@ -306,7 +303,7 @@ export const FileDocumentReviewRedesign = connect(
                                   Document Includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
-                                  {item.secondarySupportingDocumentMetadata
+                                  {item.supportingDocumentMetadata
                                     .certificateOfServiceDate && (
                                     <li>
                                       Certificate of Service{' '}
@@ -317,7 +314,7 @@ export const FileDocumentReviewRedesign = connect(
                                       }
                                     </li>
                                   )}
-                                  {item.secondarySupportingDocumentMetadata
+                                  {item.supportingDocumentMetadata
                                     .attachments && <li>Attachment(s)</li>}
                                 </ul>
                               </div>

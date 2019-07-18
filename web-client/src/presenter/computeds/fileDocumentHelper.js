@@ -162,8 +162,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
       let showFilingIncludes = false;
       certificateOfServiceDateFormatted = undefined;
-      if (item.secondarySupportingDocumentMetadata) {
-        const documentMetadata = item.secondarySupportingDocumentMetadata;
+      if (item.supportingDocumentMetadata) {
+        const documentMetadata = item.supportingDocumentMetadata;
 
         showFilingIncludes =
           documentMetadata.certificateOfService || documentMetadata.attachments;
