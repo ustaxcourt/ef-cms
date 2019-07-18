@@ -70,15 +70,15 @@ export const SecondarySupportingDocumentForm = connect(
               }
               onChange={e => {
                 updateFileDocumentWizardFormValueSequence({
-                  key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.category`,
+                  key: `secondarySupportingDocuments.${index}.category`,
                   value: 'Supporting Document',
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.documentType`,
+                  key: `secondarySupportingDocuments.${index}.documentType`,
                   value: e.target.value,
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.previousDocument`,
+                  key: `secondarySupportingDocuments.${index}.previousDocument`,
                   value: form.secondaryDocument.documentTitle,
                 });
                 updateFileDocumentWizardFormValueSequence({
@@ -137,7 +137,7 @@ export const SecondarySupportingDocumentForm = connect(
                 }}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
-                    key: `secondarySupportingDocuments.${index}.supportingDocumentMetadata.freeText`,
+                    key: `secondarySupportingDocuments.${index}.freeText`,
                     value: e.target.value,
                   });
                   updateFileDocumentWizardFormValueSequence({
@@ -199,8 +199,8 @@ export const SecondarySupportingDocumentForm = connect(
               </div>
 
               <SupportingDocumentInclusionsForm
-                bind={`form.secondarySupportingDocuments.${index}.supportingDocumentMetadata`}
-                type={`secondarySupportingDocuments.${index}.supportingDocumentMetadata`}
+                bind={`form.secondarySupportingDocuments.${index}`}
+                type={`secondarySupportingDocuments.${index}`}
                 validationBind={`validationErrors.supportingDocument${index}`}
               />
             </>

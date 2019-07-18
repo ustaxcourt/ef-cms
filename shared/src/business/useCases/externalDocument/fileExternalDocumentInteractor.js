@@ -61,7 +61,7 @@ exports.fileExternalDocumentInteractor = async ({
   }
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
-      item.supportingDocumentMetadata.lodged = true;
+      item.lodged = true;
     });
   }
 
@@ -73,7 +73,7 @@ exports.fileExternalDocumentInteractor = async ({
     for (let i = 0; i < supportingDocuments.length; i++) {
       documentsToAdd.push([
         documentIds.shift(),
-        supportingDocuments[i].supportingDocumentMetadata,
+        supportingDocuments[i],
         'primarySupportingDocument',
       ]);
     }
@@ -89,7 +89,7 @@ exports.fileExternalDocumentInteractor = async ({
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
       documentsToAdd.push([
         documentIds.shift(),
-        secondarySupportingDocuments[i].supportingDocumentMetadata,
+        secondarySupportingDocuments[i],
         'supportingDocument',
       ]);
     }
