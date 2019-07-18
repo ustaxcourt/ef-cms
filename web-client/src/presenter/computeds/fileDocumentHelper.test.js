@@ -22,6 +22,21 @@ describe('fileDocumentHelper', () => {
     state.form = {};
   });
 
+  it('returns empty object when caseDetail is empty', async () => {
+    let testState = {
+      caseDetail: {},
+      constants: {
+        CATEGORY_MAP: Document.CATEGORY_MAP,
+        PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      },
+    };
+
+    const result = await runCompute(fileDocumentHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({});
+  });
+
   it('returns correct values when documentType is undefined', async () => {
     let testState = { ...state, form: { documentType: undefined } };
 
@@ -118,9 +133,28 @@ describe('fileDocumentHelper', () => {
     expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
+  it('generates correctly formatted service date for secondary document', async () => {
+    state.form.secondaryDocument = {
+      certificateOfService: true,
+      certificateOfServiceDate: '2012-06-30',
+    };
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(result.secondaryDocument.certificateOfServiceDateFormatted).toEqual(
+      '06/30/12',
+    );
+  });
+
   it('does not generate a formatted service date if a service date is not entered on the form', async () => {
     const result = await runCompute(fileDocumentHelper, { state });
     expect(result.certificateOfServiceDateFormatted).toBeUndefined();
+  });
+
+  it('does not generate a formatted service date for secondary document if a service date is not entered on the form', async () => {
+    state.form.secondaryDocument = undefined;
+    const result = await runCompute(fileDocumentHelper, { state });
+    expect(
+      result.secondaryDocument.certificateOfServiceDateFormatted,
+    ).toBeUndefined();
   });
 
   it('shows Filing Includes on review page if certificateOfService is true', async () => {
@@ -171,7 +205,27 @@ describe('fileDocumentHelper', () => {
       state.form.hasSecondarySupportingDocuments = true;
     });
 
-    it('not shown if no type selected', async () => {
+    it('shows Add Supporting Document button when supportingDocumentCount is undefined', async () => {
+      const result = await runCompute(fileDocumentHelper, { state });
+      expect(result.showAddSupportingDocuments).toBeTruthy();
+    });
+
+    it('shows Add Supporting Document button when supportingDocumentCount is less than 5', async () => {
+      state.form.supportingDocumentCount = 4;
+      const result = await runCompute(fileDocumentHelper, { state });
+      expect(result.showAddSupportingDocuments).toBeTruthy();
+    });
+
+    it('does not show Add Supporting Document button when supportingDocumentCount is 5 or greater', async () => {
+      state.form.supportingDocumentCount = 5;
+      let result = await runCompute(fileDocumentHelper, { state });
+      expect(result.showAddSupportingDocuments).toBeFalsy();
+      state.form.supportingDocumentCount = 6;
+      result = await runCompute(fileDocumentHelper, { state });
+      expect(result.showAddSupportingDocuments).toBeFalsy();
+    });
+
+    it('upload and free text not shown if no type selected', async () => {
       state.form.supportingDocuments = [{ supportingDocument: '' }];
       const result = await runCompute(fileDocumentHelper, { state });
       expect(
@@ -208,8 +262,54 @@ describe('fileDocumentHelper', () => {
       ).toBeTruthy();
     });
 
+    it('filing includes is shown if attachments is true', async () => {
+      state.form.supportingDocuments = [
+        {
+          supportingDocumentMetadata: { attachments: true },
+        },
+      ];
+      const result = await runCompute(fileDocumentHelper, { state });
+      expect(result.supportingDocuments[0].showFilingIncludes).toBeTruthy();
+    });
+
+    it('certificate of service date is properly formatted', async () => {
+      state.form.supportingDocuments = [
+        {
+          supportingDocumentMetadata: {
+            certificateOfService: true,
+            certificateOfServiceDate: '2019-01-01',
+          },
+        },
+      ];
+      const result = await runCompute(fileDocumentHelper, { state });
+      expect(result.supportingDocuments[0].showFilingIncludes).toBeTruthy();
+      expect(
+        result.supportingDocuments[0].certificateOfServiceDateFormatted,
+      ).toEqual('01/01/19');
+    });
+
     describe('for secondary supporting document', () => {
-      it('not shown if no type selected', async () => {
+      it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is undefined', async () => {
+        const result = await runCompute(fileDocumentHelper, { state });
+        expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
+      });
+
+      it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is less than 5', async () => {
+        state.form.secondarySupportingDocumentCount = 4;
+        const result = await runCompute(fileDocumentHelper, { state });
+        expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
+      });
+
+      it('does not show Add Secondary Supporting Document button when secondarySupportingDocumentCount is 5 or greater', async () => {
+        state.form.secondarySupportingDocumentCount = 5;
+        let result = await runCompute(fileDocumentHelper, { state });
+        expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
+        state.form.secondarySupportingDocumentCount = 6;
+        result = await runCompute(fileDocumentHelper, { state });
+        expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
+      });
+
+      it('upload and free text not shown if no type selected', async () => {
         state.form.secondarySupportingDocuments = [
           { secondarySupportingDocument: '' },
         ];
@@ -252,6 +352,37 @@ describe('fileDocumentHelper', () => {
           result.secondarySupportingDocuments[0]
             .showSecondarySupportingDocumentUpload,
         ).toBeTruthy();
+      });
+
+      it('filing includes is shown if attachments is true', async () => {
+        state.form.secondarySupportingDocuments = [
+          {
+            secondarySupportingDocumentMetadata: { attachments: true },
+          },
+        ];
+        const result = await runCompute(fileDocumentHelper, { state });
+        expect(
+          result.secondarySupportingDocuments[0].showFilingIncludes,
+        ).toBeTruthy();
+      });
+
+      it('certificate of service date is properly formatted', async () => {
+        state.form.secondarySupportingDocuments = [
+          {
+            secondarySupportingDocumentMetadata: {
+              certificateOfService: true,
+              certificateOfServiceDate: '2019-01-01',
+            },
+          },
+        ];
+        const result = await runCompute(fileDocumentHelper, { state });
+        expect(
+          result.secondarySupportingDocuments[0].showFilingIncludes,
+        ).toBeTruthy();
+        expect(
+          result.secondarySupportingDocuments[0]
+            .certificateOfServiceDateFormatted,
+        ).toEqual('01/01/19');
       });
     });
   });
