@@ -39,7 +39,7 @@ class PDFPreviewModalComponent extends ModalDialog {
                 className="back"
                 icon={['fas', 'caret-left']}
                 size="lg"
-                onClick={this.props.cancelSequence}
+                onClick={() => this.props.cancelSequence()}
               />
               Back to Review Your Filing
             </h3>
