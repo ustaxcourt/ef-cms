@@ -109,13 +109,13 @@ export const BeforeYouFileADocument = connect(
           </div>
           <div className="button-box-container">
             <a
-              className="usa-button margin-right-205"
+              className="usa-button margin-right-205 margin-bottom-1"
               href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
             >
               OK, Iʼm Ready to File
             </a>
             <button
-              className="usa-button usa-button--unstyled"
+              className="usa-button usa-button--unstyled ustc-button--unstyled"
               id="cancel-button"
               onClick={() => {
                 formCancelToggleCancelSequence();
