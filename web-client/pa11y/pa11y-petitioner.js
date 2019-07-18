@@ -303,6 +303,7 @@ module.exports = [
 
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19',
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document',
+  'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document/review',
   {
     actions: [
       'wait for element #document-type to be visible',

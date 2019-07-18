@@ -1,4 +1,4 @@
-service: ef-cms-users
+service: ef-cms-work-items
 plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -17,7 +17,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3003
+    port: 3005
 
   alerts:
     stages:
@@ -51,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'users'
+    basePath: 'work-items'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -192,11 +192,23 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getInternalUsers:
-    handler: src/usersHandlers.getInternalUsersLambda
+  assignWorkItems:
+    handler: src/workItemsHandlers.assignWorkItemsLambda
     events:
       - http:
-          path: /internal
+          path: /
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getWorkItem:
+    handler: src/workItemsHandlers.getWorkItemLambda
+    events:
+      - http:
+          path: /{workItemId}
           method: get
           cors: true
           authorizer:
@@ -204,14 +216,34 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createUser:
-    handler: src/usersHandlers.createUserLambda
+  forwardWorkItem:
+    handler: src/workItemsHandlers.forwardWorkItemLambda
     events:
       - http:
-          path: /
-          method: post
+          path: /{workItemId}/assignee
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  completeWorkItem:
+    handler: src/workItemsHandlers.completeWorkItemLambda
+    events:
+      - http:
+          path: /{workItemId}/complete
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setWorkItemAsRead:
+    handler: src/workItemsHandlers.setWorkItemAsReadLambda
+    events:
+      - http:
+          path: /{workItemId}/read
+          method: post
+          cors: true
