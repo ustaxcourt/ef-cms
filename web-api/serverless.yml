@@ -193,14 +193,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  setWorkItemAsRead:
-    handler: src/apiHandlers.setWorkItemAsReadLambda
-    events:
-      - http:
-          path: work-items/{workItemId}/read
-          method: post
-          cors: true
-
   runBatchProcess:
     handler: src/apiHandlers.runBatchProcessLambda
     events:
@@ -266,54 +258,6 @@ functions:
     events:
       - http:
           path: users/{userId}/case/{caseId}/pending
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  assignWorkItems:
-    handler: src/apiHandlers.assignWorkItemsLambda
-    events:
-      - http:
-          path: work-items
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getWorkItem:
-    handler: src/apiHandlers.getWorkItemLambda
-    events:
-      - http:
-          path: work-items/{workItemId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  forwardWorkItem:
-    handler: src/apiHandlers.forwardWorkItemLambda
-    events:
-      - http:
-          path: work-items/{workItemId}/assignee
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  completeWorkItem:
-    handler: src/apiHandlers.completeWorkItemLambda
-    events:
-      - http:
-          path: work-items/{workItemId}/complete
           method: put
           cors: true
           authorizer:

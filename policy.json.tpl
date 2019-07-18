@@ -171,6 +171,12 @@
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-users-prod-us-west-1-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-users-stg-us-east-1-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-users-stg-us-west-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-dev-us-east-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-dev-us-west-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-prod-us-east-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-prod-us-west-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-stg-us-east-1-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-stg-us-west-1-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_dev",
         "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_prod",
         "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_stg"

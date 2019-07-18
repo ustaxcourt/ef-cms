@@ -1,13 +1,10 @@
 module.exports = {
-  assignWorkItemsLambda: require('./workitems/assignWorkItemsLambda').handler,
   checkForReadyForTrialCases: require('./cases/checkForReadyForTrialCasesLambda')
     .handler,
-  completeWorkItemLambda: require('./workitems/completeWorkItemLambda').handler,
   createCourtIssuedOrderPdfFromHtmlLambda: require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda')
     .handler,
   createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
     .handler,
-  forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
     .handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
@@ -39,7 +36,6 @@ module.exports = {
   getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
     .handler,
   getUsersInSectionLambda: require('./users/getUsersInSectionLambda').handler,
-  getWorkItemLambda: require('./workitems/getWorkItemLambda').handler,
   practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
     .handler,
   practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')
@@ -48,8 +44,6 @@ module.exports = {
   setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
     .handler,
   setTrialSessionCalendarLambda: require('./trialSessions/setTrialSessionCalendarLambda')
-    .handler,
-  setWorkItemAsReadLambda: require('./workitems/setWorkItemAsReadLambda')
     .handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
