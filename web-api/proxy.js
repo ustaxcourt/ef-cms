@@ -43,4 +43,14 @@ app.use(
   }),
 );
 
+app.use(
+  '/work-items',
+  proxy({
+    pathRewrite: {
+      '^/work-items': '/',
+    },
+    target: 'http://localhost:3005',
+  }),
+);
+
 app.listen(3000);
