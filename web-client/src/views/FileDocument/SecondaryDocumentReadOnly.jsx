@@ -36,11 +36,20 @@ export const SecondaryDocumentReadOnly = connect(
               <label className="usa-label" htmlFor="secondary-filing">
                 {form.secondaryDocument.documentTitle}
               </label>
-              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-              <PDFPreviewButton
-                file={form.secondaryDocumentFile}
-                title={form.secondaryDocument.documentTitle}
-              />
+              <div className="grid-row">
+                <div className="grid-col flex-auto">
+                  <FontAwesomeIcon
+                    className="fa-icon-blue"
+                    icon={['fas', 'file-pdf']}
+                  />
+                </div>
+                <div className="grid-col flex-fill margin-top-neg-05">
+                  <PDFPreviewButton
+                    file={form.secondaryDocumentFile}
+                    title={form.secondaryDocument.documentTitle}
+                  />
+                </div>
+              </div>
             </div>
           )}
 
@@ -52,11 +61,22 @@ export const SecondaryDocumentReadOnly = connect(
               >
                 {form.secondarySupportingDocumentMetadata.documentTitle}
               </label>
-              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-              <PDFPreviewButton
-                file={form.secondarySupportingDocumentFile}
-                title={form.secondarySupportingDocumentMetadata.documentTitle}
-              />
+              <div className="grid-row">
+                <div className="grid-col flex-auto">
+                  <FontAwesomeIcon
+                    className="fa-icon-blue"
+                    icon={['fas', 'file-pdf']}
+                  />
+                </div>
+                <div className="grid-col flex-fill margin-top-neg-05">
+                  <PDFPreviewButton
+                    file={form.secondarySupportingDocumentFile}
+                    title={
+                      form.secondarySupportingDocumentMetadata.documentTitle
+                    }
+                  />
+                </div>
+              </div>
             </div>
           )}
 
