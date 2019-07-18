@@ -23,6 +23,10 @@ export const SecondaryDocumentForm = connect(
               validationErrors.secondaryDocumentFile
                 ? 'usa-form-group--error'
                 : ''
+            } ${
+              !fileDocumentHelper.showSecondaryDocumentInclusionsForm
+                ? 'margin-bottom-0'
+                : ''
             }`}
           >
             <label
@@ -61,11 +65,13 @@ export const SecondaryDocumentForm = connect(
             />
           </div>
 
-          <InclusionsForm
-            bind="form.secondaryDocument"
-            type="secondaryDocument"
-            validationBind="validationErrors.secondaryDocument"
-          />
+          {fileDocumentHelper.showSecondaryDocumentInclusionsForm && (
+            <InclusionsForm
+              bind="form.secondaryDocument"
+              type="secondaryDocument"
+              validationBind="validationErrors.secondaryDocument"
+            />
+          )}
         </div>
       </React.Fragment>
     );
