@@ -280,6 +280,17 @@ select[disabled] {
     }
   }
 
+  .benefit {
+    .fa-check-circle {
+      margin-right: 0.5rem;
+      color: color($theme-color-primary);
+    }
+
+    &.feature {
+      box-shadow: inset 0 -10px 0 color($theme-color-primary);
+    }
+  }
+
   .feature {
     min-height: 15rem;
     padding: 20px 18px 2px;
@@ -1177,16 +1188,20 @@ nav.usa-nav {
   column-count: 4;
   > button {
     width: 100%;
-    line-height: 22px;
+    margin-bottom: 20px;
+    line-height: 24px;
   }
 }
 
 .category-view {
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-top: 1px solid color($theme-color-base-lighter);
   &:last-child {
     border-bottom: 1px solid color($theme-color-base-lighter);
   }
   button {
+    line-height: 24px;
     text-decoration: none;
   }
 }
