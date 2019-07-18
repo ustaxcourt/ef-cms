@@ -82,5 +82,6 @@ describe('loadPdfAction', () => {
       ctx: 'abc',
       error: 'An error called via reader.onerror.',
     });
+    expect(pathError).toHaveBeenCalled();
   });
 });
