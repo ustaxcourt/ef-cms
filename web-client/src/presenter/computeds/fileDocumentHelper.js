@@ -121,18 +121,13 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
       let showFilingIncludes = false;
       certificateOfServiceDateFormatted = undefined;
-      if (item.supportingDocumentMetadata) {
-        const documentMetadata = item.supportingDocumentMetadata;
+      showFilingIncludes = item.certificateOfService || item.attachments;
 
-        showFilingIncludes =
-          documentMetadata.certificateOfService || documentMetadata.attachments;
-
-        const { certificateOfServiceDate } = documentMetadata;
-        if (certificateOfServiceDate) {
-          certificateOfServiceDateFormatted = applicationContext
-            .getUtilities()
-            .formatDateString(certificateOfServiceDate, 'MMDDYY');
-        }
+      const { certificateOfServiceDate } = item;
+      if (certificateOfServiceDate) {
+        certificateOfServiceDateFormatted = applicationContext
+          .getUtilities()
+          .formatDateString(certificateOfServiceDate, 'MMDDYY');
       }
 
       supportingDocuments.push({
@@ -162,18 +157,13 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
       let showFilingIncludes = false;
       certificateOfServiceDateFormatted = undefined;
-      if (item.supportingDocumentMetadata) {
-        const documentMetadata = item.supportingDocumentMetadata;
+      showFilingIncludes = item.certificateOfService || item.attachments;
 
-        showFilingIncludes =
-          documentMetadata.certificateOfService || documentMetadata.attachments;
-
-        const { certificateOfServiceDate } = documentMetadata;
-        if (certificateOfServiceDate) {
-          certificateOfServiceDateFormatted = applicationContext
-            .getUtilities()
-            .formatDateString(certificateOfServiceDate, 'MMDDYY');
-        }
+      const { certificateOfServiceDate } = item;
+      if (certificateOfServiceDate) {
+        certificateOfServiceDateFormatted = applicationContext
+          .getUtilities()
+          .formatDateString(certificateOfServiceDate, 'MMDDYY');
       }
 
       secondarySupportingDocuments.push({

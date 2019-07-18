@@ -123,7 +123,7 @@ export const FileDocumentReviewRedesign = connect(
                                 className="usa-label"
                                 htmlFor={`supporting-documents-${idx}`}
                               >
-                                {item.supportingDocumentMetadata.documentTitle}
+                                {item.documentTitle}
                               </label>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
@@ -135,10 +135,7 @@ export const FileDocumentReviewRedesign = connect(
                                 <div className="grid-col flex-fill margin-top-neg-05">
                                   <PDFPreviewButton
                                     file={item.supportingDocumentFile}
-                                    title={
-                                      item.supportingDocumentMetadata
-                                        .documentTitle
-                                    }
+                                    title={item.documentTitle}
                                   />
                                 </div>
                               </div>
@@ -155,8 +152,7 @@ export const FileDocumentReviewRedesign = connect(
                                   Document Includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
-                                  {item.supportingDocumentMetadata
-                                    .certificateOfServiceDate && (
+                                  {item.certificateOfServiceDate && (
                                     <li>
                                       Certificate of Service{' '}
                                       {
@@ -166,8 +162,7 @@ export const FileDocumentReviewRedesign = connect(
                                       }
                                     </li>
                                   )}
-                                  {item.supportingDocumentMetadata
-                                    .attachments && <li>Attachment(s)</li>}
+                                  {item.attachments && <li>Attachment(s)</li>}
                                 </ul>
                               </div>
                             )}
@@ -270,7 +265,7 @@ export const FileDocumentReviewRedesign = connect(
                                 className="usa-label"
                                 htmlFor={`secondary-supporting-documents-${idx}`}
                               >
-                                {item.supportingDocumentMetadata.documentTitle}
+                                {item.documentTitle}
                               </label>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
@@ -282,10 +277,7 @@ export const FileDocumentReviewRedesign = connect(
                                 <div className="grid-col flex-fill margin-top-neg-05">
                                   <PDFPreviewButton
                                     file={item.supportingDocumentFile}
-                                    title={
-                                      item.supportingDocumentMetadata
-                                        .documentTitle
-                                    }
+                                    title={item.documentTitle}
                                   />
                                 </div>
                               </div>
@@ -303,8 +295,7 @@ export const FileDocumentReviewRedesign = connect(
                                   Document Includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
-                                  {item.supportingDocumentMetadata
-                                    .certificateOfServiceDate && (
+                                  {item.certificateOfServiceDate && (
                                     <li>
                                       Certificate of Service{' '}
                                       {
@@ -314,8 +305,7 @@ export const FileDocumentReviewRedesign = connect(
                                       }
                                     </li>
                                   )}
-                                  {item.supportingDocumentMetadata
-                                    .attachments && <li>Attachment(s)</li>}
+                                  {item.attachments && <li>Attachment(s)</li>}
                                 </ul>
                               </div>
                             )}

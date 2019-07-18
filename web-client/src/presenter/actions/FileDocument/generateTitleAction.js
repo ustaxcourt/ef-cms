@@ -32,16 +32,15 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
   const { supportingDocuments } = documentMetadata;
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
-      if (!isEmpty(supportingDocuments[i].supportingDocumentMetadata)) {
+      if (!isEmpty(supportingDocuments[i])) {
         documentTitle = applicationContext
           .getUseCases()
           .generateDocumentTitleInteractor({
             applicationContext,
-            documentMetadata: supportingDocuments[i].supportingDocumentMetadata,
+            documentMetadata: supportingDocuments[i],
           });
         store.set(
-          state.form.supportingDocuments[i].supportingDocumentMetadata
-            .documentTitle,
+          state.form.supportingDocuments[i].documentTitle,
           documentTitle,
         );
       }
@@ -51,19 +50,15 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
   const { secondarySupportingDocuments } = documentMetadata;
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
-      if (
-        !isEmpty(secondarySupportingDocuments[i].supportingDocumentMetadata)
-      ) {
+      if (!isEmpty(secondarySupportingDocuments[i])) {
         documentTitle = applicationContext
           .getUseCases()
           .generateDocumentTitleInteractor({
             applicationContext,
-            documentMetadata:
-              secondarySupportingDocuments[i].supportingDocumentMetadata,
+            documentMetadata: secondarySupportingDocuments[i],
           });
         store.set(
-          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
-            .documentTitle,
+          state.form.secondarySupportingDocuments[i].documentTitle,
           documentTitle,
         );
       }

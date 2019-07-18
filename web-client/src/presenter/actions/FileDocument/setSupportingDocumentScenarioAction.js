@@ -15,30 +15,27 @@ export const setSupportingDocumentScenarioAction = ({ get, store }) => {
 
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
-      const { supportingDocumentMetadata } = supportingDocuments[i];
       if (
-        supportingDocumentMetadata &&
-        supportingDocumentMetadata.category &&
-        supportingDocumentMetadata.documentType
+        supportingDocuments[i] &&
+        supportingDocuments[i].category &&
+        supportingDocuments[i].documentType
       ) {
-        const { category, documentType } = supportingDocumentMetadata;
+        const { category, documentType } = supportingDocuments[i];
 
         const categoryInformation = CATEGORY_MAP[category].find(
           itemDocumentType => itemDocumentType.documentType === documentType,
         );
 
         store.set(
-          state.form.supportingDocuments[i].supportingDocumentMetadata.scenario,
+          state.form.supportingDocuments[i].scenario,
           categoryInformation.scenario,
         );
         store.set(
-          state.form.supportingDocuments[i].supportingDocumentMetadata
-            .documentTitle,
+          state.form.supportingDocuments[i].documentTitle,
           categoryInformation.documentTitle,
         );
         store.set(
-          state.form.supportingDocuments[i].supportingDocumentMetadata
-            .eventCode,
+          state.form.supportingDocuments[i].eventCode,
           categoryInformation.eventCode,
         );
       }
@@ -51,31 +48,27 @@ export const setSupportingDocumentScenarioAction = ({ get, store }) => {
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
-      const { supportingDocumentMetadata } = secondarySupportingDocuments[i];
       if (
-        supportingDocumentMetadata &&
-        supportingDocumentMetadata.category &&
-        supportingDocumentMetadata.documentType
+        secondarySupportingDocuments[i] &&
+        secondarySupportingDocuments[i].category &&
+        secondarySupportingDocuments[i].documentType
       ) {
-        const { category, documentType } = supportingDocumentMetadata;
+        const { category, documentType } = secondarySupportingDocuments[i];
 
         const categoryInformation = CATEGORY_MAP[category].find(
           itemDocumentType => itemDocumentType.documentType === documentType,
         );
 
         store.set(
-          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
-            .scenario,
+          state.form.secondarySupportingDocuments[i].scenario,
           categoryInformation.scenario,
         );
         store.set(
-          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
-            .documentTitle,
+          state.form.secondarySupportingDocuments[i].documentTitle,
           categoryInformation.documentTitle,
         );
         store.set(
-          state.form.secondarySupportingDocuments[i].supportingDocumentMetadata
-            .eventCode,
+          state.form.secondarySupportingDocuments[i].eventCode,
           categoryInformation.eventCode,
         );
       }
