@@ -64,17 +64,17 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.supportingDocumentMetadata.category',
+      key: 'supportingDocuments.0.category',
       value: 'Supporting Document',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.supportingDocumentMetadata.documentType',
+      key: 'supportingDocuments.0.documentType',
       value: 'Brief in Support',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'supportingDocuments.0.supportingDocumentMetadata.previousDocument',
+      key: 'supportingDocuments.0.previousDocument',
       value: 'Motion for Continuance',
     });
 

@@ -63,15 +63,15 @@ export const SupportingDocumentForm = connect(
               value={form.supportingDocuments[index].supportingDocument || ''}
               onChange={e => {
                 updateFileDocumentWizardFormValueSequence({
-                  key: `supportingDocuments.${index}.supportingDocumentMetadata.category`,
+                  key: `supportingDocuments.${index}.category`,
                   value: 'Supporting Document',
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `supportingDocuments.${index}.supportingDocumentMetadata.documentType`,
+                  key: `supportingDocuments.${index}.documentType`,
                   value: e.target.value,
                 });
                 updateFileDocumentWizardFormValueSequence({
-                  key: `supportingDocuments.${index}.supportingDocumentMetadata.previousDocument`,
+                  key: `supportingDocuments.${index}.previousDocument`,
                   value: form.documentTitle,
                 });
                 updateFileDocumentWizardFormValueSequence({
@@ -130,7 +130,7 @@ export const SupportingDocumentForm = connect(
                 }}
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
-                    key: `supportingDocuments.${index}.supportingDocumentMetadata.freeText`,
+                    key: `supportingDocuments.${index}.freeText`,
                     value: e.target.value,
                   });
                   updateFileDocumentWizardFormValueSequence({
@@ -192,8 +192,8 @@ export const SupportingDocumentForm = connect(
               </div>
 
               <SupportingDocumentInclusionsForm
-                bind={`form.supportingDocuments.${index}.supportingDocumentMetadata`}
-                type={`supportingDocuments.${index}.supportingDocumentMetadata`}
+                bind={`form.supportingDocuments.${index}`}
+                type={`supportingDocuments.${index}`}
                 validationBind={`validationErrors.supportingDocument${index}`}
               />
             </>
