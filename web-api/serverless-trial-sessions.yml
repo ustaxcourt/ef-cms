@@ -1,5 +1,4 @@
-service: ef-cms
-
+service: ef-cms-trial-sessions
 plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -9,7 +8,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-apigwy-binary
+  # - serverless-apigwy-binary
 
 custom:
   prune:
@@ -18,7 +17,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3001
+    port: 3007
 
   alerts:
     stages:
@@ -52,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'api'
+    basePath: 'trial-sessions'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -193,11 +192,22 @@ resources:
             MetricsEnabled: true
 
 functions:
-  runBatchProcess:
-    handler: src/apiHandlers.runBatchProcessLambda
+  getTrialSessions:
+    handler: src/trialSessionsHandlers.getTrialSessionsLambda
     events:
       - http:
-          path: runBatchProcess
+          path: /
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  createTrialSession:
+    handler: src/trialSessionsHandlers.createTrialSessionLambda
+    events:
+      - http:
+          path: /
           method: post
           cors: true
           authorizer:
@@ -205,11 +215,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getCasesByUser:
-    handler: src/apiHandlers.getCasesByUserLambda
+  getTrialSessionDetails:
+    handler: src/trialSessionsHandlers.getTrialSessionDetailsLambda
     events:
       - http:
-          path: users/{userId}/cases
+          path: /{trialSessionId}
           method: get
           cors: true
           authorizer:
@@ -217,160 +227,48 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  verifyCaseForUser:
-    handler: src/apiHandlers.verifyCaseForUserLambda
+  setTrialSessionAsSwingSession:
+    handler: src/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
-          path: users/{userId}/case/{caseId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  verifyPendingCaseForUser:
-    handler: src/apiHandlers.verifyPendingCaseForUserLambda
-    events:
-      - http:
-          path: users/{userId}/case/{caseId}/pending
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerCaseAssociation:
-    handler: src/apiHandlers.practitionerCaseAssociationLambda
-    events:
-      - http:
-          path: users/{userId}/case/{caseId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerPendingCaseAssociation:
-    handler: src/apiHandlers.practitionerPendingCaseAssociationLambda
-    events:
-      - http:
-          path: users/{userId}/case/{caseId}/pending
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getInboxMessagesForUser:
-    handler: src/apiHandlers.getInboxMessagesForUserLambda
-    events:
-      - http:
-          path: users/{userId}/messages/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getSentMessagesForUser:
-    handler: src/apiHandlers.getSentMessagesForUserLambda
-    events:
-      - http:
-          path: users/{userId}/messages/sent
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCInboxForUser:
-    handler: src/apiHandlers.getDocumentQCInboxForUserLambda
-    events:
-      - http:
-          path: users/{userId}/document-qc/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForUser:
-    handler: src/apiHandlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: users/{userId}/document-qc/batched
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCServedForUser:
-    handler: src/apiHandlers.getDocumentQCServedForUserLambda
-    events:
-      - http:
-          path: users/{userId}/document-qc/served
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getNotifications:
-    handler: src/apiHandlers.getNotificationsLambda
-    events:
-      - http:
-          path: notifications
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  checkForReadyForTrialCases:
-    handler: src/apiHandlers.checkForReadyForTrialCases
-    events:
-      - schedule: cron(0 7 * * ? *)
-
-  swagger:
-    handler: src/apiHandlers.swaggerLambda
-    events:
-      - http:
-          path: swagger
-          method: get
-          cors: true
-
-  swaggerJson:
-    handler: src/apiHandlers.swaggerJsonLambda
-    events:
-      - http:
-          path: swagger.json
-          method: get
-          cors: true
-
-  createCourtIssuedOrderPdfFromHtml:
-    runtime: nodejs8.10
-    handler: src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: court-issued-order
+          path: /{trialSessionId}/set-swing-session
           method: post
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getEligibleCasesForTrialSession:
+    handler: src/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/eligible-cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setTrialSessionCalendar:
+    handler: src/trialSessionsHandlers.setTrialSessionCalendarLambda
+    events:
+      - http:
+          path: /{trialSessionId}/set-calendar
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  getCalendaredCasesForTrialSession:
+    handler: src/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/get-calendared-cases
+          method: get
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
