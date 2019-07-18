@@ -43,7 +43,7 @@ export const SecondaryDocumentReadOnly = connect(
                     icon={['fas', 'file-pdf']}
                   />
                 </div>
-                <div className="grid-col flex-fill margin-top-neg-05">
+                <div className="grid-col flex-fill">
                   <PDFPreviewButton
                     file={form.secondaryDocumentFile}
                     title={form.secondaryDocument.documentTitle}
@@ -68,7 +68,7 @@ export const SecondaryDocumentReadOnly = connect(
                     icon={['fas', 'file-pdf']}
                   />
                 </div>
-                <div className="grid-col flex-fill margin-top-neg-05">
+                <div className="grid-col flex-fill">
                   <PDFPreviewButton
                     file={form.secondarySupportingDocumentFile}
                     title={
