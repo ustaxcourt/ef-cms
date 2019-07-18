@@ -47,11 +47,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 checked={data.attachments || false}
                 className="usa-checkbox__input"
                 id={`${type}-attachments`}
-                name={`${
-                  type === 'primaryDocument'
-                    ? 'attachments'
-                    : `${type}.attachments`
-                }`}
+                name={`${type}.attachments`}
                 type="checkbox"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
@@ -74,11 +70,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 checked={data.certificateOfService || false}
                 className="usa-checkbox__input"
                 id={`${type}-certificateOfService`}
-                name={`${
-                  type === 'primaryDocument'
-                    ? 'certificateOfService'
-                    : `${type}.certificateOfService`
-                }`}
+                name={`${type}.certificateOfService`}
                 type="checkbox"
                 onChange={e => {
                   updateFileDocumentWizardFormValueSequence({
@@ -125,11 +117,7 @@ export const SupportingDocumentInclusionsForm = connect(
                     id={`${type}-service-date-month`}
                     max="12"
                     min="1"
-                    name={`${
-                      type === 'primaryDocument'
-                        ? 'certificateOfServiceMonth'
-                        : `${type}.certificateOfServiceMonth`
-                    }`}
+                    name={`${type}.certificateOfServiceMonth`}
                     type="number"
                     value={data.certificateOfServiceMonth || ''}
                     onBlur={() => {
@@ -158,11 +146,7 @@ export const SupportingDocumentInclusionsForm = connect(
                     id={`${type}-service-date-day`}
                     max="31"
                     min="1"
-                    name={`${
-                      type === 'primaryDocument'
-                        ? 'certificateOfServiceDay'
-                        : `${type}.certificateOfServiceDay`
-                    }`}
+                    name={`${type}.certificateOfServiceDay`}
                     type="number"
                     value={data.certificateOfServiceDay || ''}
                     onBlur={() => {
@@ -191,11 +175,7 @@ export const SupportingDocumentInclusionsForm = connect(
                     id={`${type}-service-date-year`}
                     max="2100"
                     min="1900"
-                    name={`${
-                      type === 'primaryDocument'
-                        ? 'certificateOfServiceYear'
-                        : `${type}.certificateOfServiceYear`
-                    }`}
+                    name={`${type}.certificateOfServiceYear`}
                     type="number"
                     value={data.certificateOfServiceYear || ''}
                     onBlur={() => {
