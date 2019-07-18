@@ -49,6 +49,11 @@
     width: 500px;
     transform: translateY(-50%);
   }
+  /* short screens */
+  @media only screen and (max-height: 700px) {
+    top: 10px;
+    transform: translateY(0);
+  }
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1px) {
     top: 0;
@@ -247,6 +252,10 @@
 
     .button-box-container {
       display: none;
+    }
+
+    .usa-button.usa-button--unstyled {
+      width: auto;
     }
   }
 }
