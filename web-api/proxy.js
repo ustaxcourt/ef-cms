@@ -33,4 +33,24 @@ app.use(
   }),
 );
 
+app.use(
+  '/documents',
+  proxy({
+    pathRewrite: {
+      '^/documents': '/',
+    },
+    target: 'http://localhost:3004',
+  }),
+);
+
+app.use(
+  '/work-items',
+  proxy({
+    pathRewrite: {
+      '^/work-items': '/',
+    },
+    target: 'http://localhost:3005',
+  }),
+);
+
 app.listen(3000);
