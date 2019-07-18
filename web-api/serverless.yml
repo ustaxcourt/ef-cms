@@ -193,26 +193,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getUploadPolicy:
-    handler: src/apiHandlers.getUploadPolicyLambda
-    events:
-      - http:
-          path: documents/upload-policy
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentDownloadUrl:
-    handler: src/apiHandlers.getDocumentDownloadUrlLambda
-    events:
-      - http:
-          path: documents/{documentId}/document-download-url
-          method: get
-          cors: true
-
   setWorkItemAsRead:
     handler: src/apiHandlers.setWorkItemAsReadLambda
     events:
@@ -220,35 +200,6 @@ functions:
           path: work-items/{workItemId}/read
           method: post
           cors: true
-
-  getDownloadPolicyUrl:
-    handler: src/apiHandlers.downloadPolicyUrlLambda
-    events:
-      - http:
-          path: documents/{documentId}/download-policy-url
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  sanitizePdf:
-    handler: src/apiHandlers.sanitizePdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: documents/{documentId}/sanitize
-          method: post
-          cors: true
-          # async: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
 
   runBatchProcess:
     handler: src/apiHandlers.runBatchProcessLambda
@@ -522,29 +473,6 @@ functions:
           path: swagger.json
           method: get
           cors: true
-
-  virusScan:
-    handler: src/apiHandlers.virusScanPdfLambda
-    memorySize: 3008
-    timeout: 900
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
-    events:
-      - http:
-          path: documents/{documentId}/virus-scan
-          method: post
-          cors: true
-          async: true
-
-  validate:
-    handler: src/apiHandlers.validatePdfLambda
-    events:
-      - http:
-          path: documents/{documentId}/validate
-          method: post
-          cors: true
-    alarms:
-      - errorExceptions
 
   getTrialSessions:
     handler: src/apiHandlers.getTrialSessionsLambda
