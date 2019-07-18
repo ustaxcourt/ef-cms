@@ -226,8 +226,8 @@
 
 .pdf-preview-content {
   height: 500px;
-  overflow-y: scroll;
   border: 1px solid #ccc;
+  overflow-y: scroll;
 }
 
 @media only screen and (max-width: $medium-screen - 1px) {
@@ -252,8 +252,8 @@
 }
 
 .modal-mobile-header {
-  background: color($theme-color-primary-darker);
   padding: 12px;
+  background: color($theme-color-primary-darker);
   text-align: left;
 
   h3 {
@@ -269,7 +269,7 @@
 }
 
 .modal-mobile-title {
-  margin-top: 20px;
   padding: 12px;
+  margin-top: 20px;
   text-align: left;
 }
