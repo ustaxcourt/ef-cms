@@ -14,8 +14,10 @@ class OverlayComponent extends React.Component {
     super(props);
     this.el = document.createElement('div');
     this.preventEsc = !!this.props.preventEsc;
+    this.preventScrolling = !!this.props.preventScrolling;
     this.keydownTriggered = this.keydownTriggered.bind(this);
     this.blurDialog = this.blurDialog.bind(this);
+    this.toggleNoScroll = this.toggleNoScroll.bind(this);
     this.onEscSequence = () => {};
     if (this.props.onEscSequence) {
       this.onEscSequence = this.props.onEscSequence.bind(this);
@@ -23,7 +25,7 @@ class OverlayComponent extends React.Component {
   }
 
   toggleNoScroll(scrollingOn) {
-    if (scrollingOn) {
+    if (this.preventScrolling && scrollingOn) {
       document.body.classList.add('no-scroll');
       document.addEventListener('touchmove', this.touchmoveTriggered, {
         passive: false,
@@ -103,6 +105,7 @@ OverlayComponent.propTypes = {
   className: PropTypes.string,
   onEscSequence: PropTypes.func,
   preventEsc: PropTypes.bool,
+  preventScrolling: PropTypes.bool,
 };
 
 export const Overlay = connect(
