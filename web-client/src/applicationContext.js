@@ -126,6 +126,7 @@ import { validateTrialSessionInteractor } from '../../shared/src/business/useCas
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
+const pdfjsLib = require('pdfjs-dist');
 
 const {
   uploadDocument,
@@ -316,7 +317,12 @@ const applicationContext = {
   getError: e => {
     return ErrorFactory.getError(e);
   },
+  getFileReader: () => FileReader,
   getHttpClient: () => axios,
+  getPdfJs: () => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    return pdfjsLib;
+  },
   getPdfStyles: () => {
     return pdfStyles;
   },
