@@ -64,7 +64,7 @@ export const FileDocumentReviewRedesign = connect(
                               icon={['fas', 'file-pdf']}
                             />
                           </div>
-                          <div className="grid-col flex-fill margin-top-neg-05">
+                          <div className="grid-col flex-fill">
                             <PDFPreviewButton
                               file={form.primaryDocumentFile}
                               title={form.documentTitle}
@@ -132,7 +132,7 @@ export const FileDocumentReviewRedesign = connect(
                                     icon={['fas', 'file-pdf']}
                                   />
                                 </div>
-                                <div className="grid-col flex-fill margin-top-neg-05">
+                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={item.supportingDocumentFile}
                                     title={
@@ -198,7 +198,7 @@ export const FileDocumentReviewRedesign = connect(
                                           icon={['fas', 'file-pdf']}
                                         />
                                       </div>
-                                      <div className="grid-col flex-fill margin-top-neg-05">
+                                      <div className="grid-col flex-fill">
                                         <PDFPreviewButton
                                           file={form.secondaryDocumentFile}
                                           title={
@@ -282,7 +282,7 @@ export const FileDocumentReviewRedesign = connect(
                                     icon={['fas', 'file-pdf']}
                                   />
                                 </div>
-                                <div className="grid-col flex-fill margin-top-neg-05">
+                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={item.secondarySupportingDocumentFile}
                                     title={
