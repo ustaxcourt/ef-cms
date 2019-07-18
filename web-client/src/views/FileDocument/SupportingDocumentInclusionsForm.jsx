@@ -7,6 +7,7 @@ import React from 'react';
 export const SupportingDocumentInclusionsForm = connect(
   {
     data: state[props.bind],
+    openCleanModalSequence: sequences.openCleanModalSequence,
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -17,6 +18,7 @@ export const SupportingDocumentInclusionsForm = connect(
   },
   ({
     data,
+    openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -33,7 +35,14 @@ export const SupportingDocumentInclusionsForm = connect(
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
-              <button className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105">
+              <button
+                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105"
+                onClick={() =>
+                  openCleanModalSequence({
+                    value: 'WhatCanIIncludeModalOverlay',
+                  })
+                }
+              >
                 <FontAwesomeIcon
                   className="margin-right-05"
                   icon="question-circle"
