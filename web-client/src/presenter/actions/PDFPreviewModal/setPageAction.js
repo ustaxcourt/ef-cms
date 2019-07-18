@@ -30,6 +30,8 @@ export const setPageAction = async ({ get, props, store }) => {
   store.set(state.pdfPreviewModal.width, viewport.width);
   store.set(state.pdfPreviewModal.height, viewport.height);
 
+  ctx.scale(2, 2);
+
   const renderContext = {
     canvasContext: ctx,
     viewport: viewport,
