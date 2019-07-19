@@ -44,7 +44,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     validationErrors.partySecondary ||
     validationErrors.partyRespondent;
 
-  const { certificateOfServiceDate } = form;
+  let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = applicationContext
@@ -61,7 +61,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       .formatDateString(secondaryDocumentCertificateOfServiceDate, 'MMDDYY');
   }
 
-  const showFilingIncludes = form.certificateOfService || form.attachments;
+  let showFilingIncludes = form.certificateOfService || form.attachments;
 
   const showSecondaryFilingIncludes =
     form.secondaryDocument &&
@@ -128,11 +128,11 @@ export const fileDocumentHelper = (get, applicationContext) => {
       const supportingDocumentTypeIsSelected =
         item.supportingDocument && item.supportingDocument !== '';
 
-      let showFilingIncludes = false;
+      showFilingIncludes = false;
       certificateOfServiceDateFormatted = undefined;
       showFilingIncludes = item.certificateOfService || item.attachments;
 
-      const { certificateOfServiceDate } = item;
+      ({ certificateOfServiceDate } = item);
       if (certificateOfServiceDate) {
         certificateOfServiceDateFormatted = applicationContext
           .getUtilities()
@@ -164,11 +164,11 @@ export const fileDocumentHelper = (get, applicationContext) => {
       const secondarySupportingDocumentTypeIsSelected =
         item.supportingDocument && item.supportingDocument !== '';
 
-      let showFilingIncludes = false;
+      showFilingIncludes = false;
       certificateOfServiceDateFormatted = undefined;
       showFilingIncludes = item.certificateOfService || item.attachments;
 
-      const { certificateOfServiceDate } = item;
+      ({ certificateOfServiceDate } = item);
       if (certificateOfServiceDate) {
         certificateOfServiceDateFormatted = applicationContext
           .getUtilities()
