@@ -4,8 +4,8 @@ import { ContactFactory } from '../../../../shared/src/business/entities/contact
 import { caseDetailEditContactsHelper } from './caseDetailEditContactsHelper';
 
 describe('caseDetailEditContactsHelper', () => {
-  it('should validate form view information for party type Conservator', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Conservator', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.conservator },
         constants: {
@@ -27,8 +27,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Corporation', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Corporation', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.corporation },
         constants: {
@@ -45,8 +45,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Custodian', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Custodian', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.custodian },
         constants: {
@@ -68,8 +68,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Donor', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Donor', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: { partyType: ContactFactory.PARTY_TYPES.donor },
         constants: {
@@ -85,8 +85,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc.', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.estate,
@@ -109,8 +109,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc.', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc.', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
@@ -129,8 +129,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Guardian', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Guardian', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
@@ -154,8 +154,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
@@ -179,8 +179,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
@@ -204,8 +204,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime)', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
@@ -229,8 +229,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner)', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Partnership (as a partner other than tax matters partner)', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
@@ -254,8 +254,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner)', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Partnership (as the tax matters partner)', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
@@ -279,8 +279,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Petitioner', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
@@ -298,8 +298,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner & Spouse', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Petitioner & Spouse', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
@@ -323,8 +323,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner & Deceased Spouse', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Petitioner & Deceased Spouse', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
@@ -346,8 +346,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Surviving Spouse', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Surviving Spouse', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
@@ -369,8 +369,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Transferee', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Transferee', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
@@ -388,8 +388,8 @@ describe('caseDetailEditContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Trust', async () => {
-    const result = await runCompute(caseDetailEditContactsHelper, {
+  it('should validate form view information for party type Trust', () => {
+    const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.trust,
