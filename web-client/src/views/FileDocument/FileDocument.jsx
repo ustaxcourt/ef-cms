@@ -63,6 +63,13 @@ export const FileDocument = connect(
             Review Filing
           </button>
           <button
+            className="usa-button usa-button--outline margin-bottom-1"
+            type="button"
+            onClick={() => history.back()}
+          >
+            Back
+          </button>
+          <button
             className="usa-button usa-button--unstyled ustc-button--unstyled"
             type="button"
             onClick={() => {
