@@ -16,6 +16,6 @@ exports.serveSignedStipDecisionInteractor = ({
   return put({
     applicationContext,
     body: { caseId, documentId },
-    endpoint: `/cases/${caseId}/serve/${documentId}`,
+    endpoint: `/cases/${caseId}/documents/${documentId}/serve`,
   });
 };
