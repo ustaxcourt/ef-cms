@@ -105,6 +105,7 @@ export const InclusionsForm = connect(
               <label
                 className="usa-checkbox__label"
                 htmlFor={`${type}-certificateOfService`}
+                id={`${type}-certificateOfService-label`}
               >
                 Certificate Of Service
               </label>
