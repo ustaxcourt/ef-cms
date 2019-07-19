@@ -4,8 +4,8 @@ import { generateTitleAction } from '../actions/FileDocument/generateTitleAction
 import { navigateToReviewFileADocumentAction } from '../actions/FileDocument/navigateToReviewFileADocumentAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setFileDocumentValidationAlertErrorsAction } from '../actions/FileDocument/setFileDocumentValidationAlertErrorsAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
-import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
@@ -19,7 +19,7 @@ export const reviewExternalDocumentInformationSequence = [
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
-      setValidationAlertErrorsAction,
+      setFileDocumentValidationAlertErrorsAction,
     ],
     success: [
       setSupportingDocumentScenarioAction,

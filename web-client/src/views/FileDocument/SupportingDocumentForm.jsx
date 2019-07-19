@@ -34,6 +34,7 @@ export const SupportingDocumentForm = connect(
           <div
             className={`usa-form-group ${
               validationErrors.supportingDocuments &&
+              validationErrors.supportingDocuments[index] &&
               validationErrors.supportingDocuments[index].supportingDocument
                 ? 'usa-form-group--error '
                 : ''
@@ -54,6 +55,7 @@ export const SupportingDocumentForm = connect(
               aria-describedby={`supporting-document-${index}-label`}
               className={`usa-select ${
                 validationErrors.supportingDocuments &&
+                validationErrors.supportingDocuments[index] &&
                 validationErrors.supportingDocuments[index].supportingDocument
                   ? 'usa-select--error'
                   : ''
@@ -101,6 +103,7 @@ export const SupportingDocumentForm = connect(
             <div
               className={`usa-form-group ${
                 validationErrors.supportingDocuments &&
+                validationErrors.supportingDocuments[index] &&
                 validationErrors.supportingDocuments[index]
                   .supportingDocumentFreeText
                   ? 'usa-form-group--error'
@@ -152,6 +155,7 @@ export const SupportingDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.supportingDocuments &&
+                  validationErrors.supportingDocuments[index] &&
                   validationErrors.supportingDocuments[index]
                     .supportingDocumentFile
                     ? 'usa-form-group--error'
@@ -194,7 +198,7 @@ export const SupportingDocumentForm = connect(
               <SupportingDocumentInclusionsForm
                 bind={`form.supportingDocuments.${index}`}
                 type={`supportingDocuments.${index}`}
-                validationBind={`validationErrors.supportingDocument${index}`}
+                validationBind={`validationErrors.supportingDocuments.${index}`}
               />
             </>
           )}
