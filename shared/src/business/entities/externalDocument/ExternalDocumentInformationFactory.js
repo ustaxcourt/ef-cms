@@ -38,6 +38,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       partyPrimary: rawProps.partyPrimary,
       partyRespondent: rawProps.partyRespondent,
       partySecondary: rawProps.partySecondary,
+      practitioner: rawProps.practitioner,
       previousDocument: rawProps.previousDocument,
       primaryDocumentFile: rawProps.primaryDocumentFile,
       secondaryDocumentFile: rawProps.secondaryDocumentFile,
@@ -80,10 +81,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
-    partyPractitioner: joi.boolean(),
     partyPrimary: joi.boolean(),
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
+    practitioner: joi.array(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
       .number()
@@ -110,10 +111,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
-    partyPractitioner: 'Select a party.',
     partyPrimary: 'Select a party.',
     partyRespondent: 'Select a party.',
     partySecondary: 'Select a party.',
+    practitioner: 'Select a party.',
     primaryDocumentFile: 'A file was not selected.',
     primaryDocumentFileSize: [
       {
@@ -180,11 +181,20 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
+  let partyPractitioner = false;
+  if (Array.isArray(documentMetadata.practitioner)) {
+    documentMetadata.practitioner.forEach(practitioner => {
+      if (practitioner.partyPractitioner) {
+        partyPractitioner = true;
+      }
+    });
+  }
+
   if (
     documentMetadata.partyPrimary !== true &&
     documentMetadata.partySecondary !== true &&
     documentMetadata.partyRespondent !== true &&
-    documentMetadata.partyPractitioner !== true
+    partyPractitioner !== true
   ) {
     addProperty(
       'partyPrimary',
