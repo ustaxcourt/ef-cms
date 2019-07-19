@@ -10,6 +10,6 @@ exports.verifyCaseForUserInteractor = ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
   return get({
     applicationContext,
-    endpoint: `/api/users/${user.userId}/case/${caseId}`,
+    endpoint: `/users/${user.userId}/case/${caseId}`,
   });
 };

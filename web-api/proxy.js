@@ -53,4 +53,24 @@ app.use(
   }),
 );
 
+app.use(
+  '/sections',
+  proxy({
+    pathRewrite: {
+      '^/sections': '/',
+    },
+    target: 'http://localhost:3006',
+  }),
+);
+
+app.use(
+  '/trial-sessions',
+  proxy({
+    pathRewrite: {
+      '^/trial-sessions': '/',
+    },
+    target: 'http://localhost:3007',
+  }),
+);
+
 app.listen(3000);
