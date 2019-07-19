@@ -8,6 +8,22 @@ resource "aws_ses_domain_mail_from" "main" {
   mail_from_domain = "noreply.${aws_ses_domain_identity.email_domain_east.domain}"
 }
 
+#
+# SES DKIM Verification
+#
+resource "aws_ses_domain_dkim" "main" {
+  domain = "${aws_ses_domain_identity.email_domain_east.domain}"
+}
+
+resource "aws_route53_record" "dkim" {
+  count = 3
+  zone_id = "${data.aws_route53_zone.zone.id}"
+  name    = "${format("%s._domainkey.%s", element(aws_ses_domain_dkim.main.dkim_tokens, count.index), var.dns_domain)}"
+  type    = "CNAME"
+  ttl     = "600"
+  records = ["${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}.dkim.amazonses.com"]
+}
+
 # SPF Validation Record
 resource "aws_route53_record" "spf_mail_from" {
   zone_id = "${data.aws_route53_zone.zone.id}"
