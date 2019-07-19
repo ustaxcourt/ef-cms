@@ -271,7 +271,7 @@ functions:
     handler: src/casesHandlers.serveSignedStipDecisionLambda
     events:
       - http:
-          path: /cases/${caseId}/documents/${documentId}/serve
+          path: /{caseId}/documents/{documentId}/serve
           method: put
           cors: true
           authorizer:
