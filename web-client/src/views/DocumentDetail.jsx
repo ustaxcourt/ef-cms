@@ -7,6 +7,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PendingMessages } from './DocumentDetail/PendingMessages';
 import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
+import { ServeConfirmModalDialog } from './ServeConfirmModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -23,6 +24,8 @@ export const DocumentDetail = connect(
     helper: state.documentDetailHelper,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    openServeConfirmModalDialogSequence:
+      sequences.openServeConfirmModalDialogSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
@@ -35,6 +38,7 @@ export const DocumentDetail = connect(
     helper,
     messageId,
     navigateToPathSequence,
+    openServeConfirmModalDialogSequence,
     setModalDialogNameSequence,
     showModal,
     token,
@@ -128,7 +132,7 @@ export const DocumentDetail = connect(
                   {helper.showServeDocumentButton && (
                     <button
                       className="usa-button serve-to-irs margin-right-0"
-                      onClick={() => null}
+                      onClick={() => openServeConfirmModalDialogSequence()}
                     >
                       <FontAwesomeIcon icon={['fas', 'paper-plane']} />
                       Serve Document
@@ -185,6 +189,11 @@ export const DocumentDetail = connect(
         )}
         {showModal === 'CreateMessageModalDialog' && (
           <CreateMessageModalDialog />
+        )}
+        {showModal === 'ServeConfirmModalDialog' && (
+          <ServeConfirmModalDialog
+            documentType={helper.formattedDocument.documentType}
+          />
         )}
       </>
     );
