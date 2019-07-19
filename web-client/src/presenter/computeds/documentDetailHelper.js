@@ -10,6 +10,8 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   const SIGNED_STIPULATED_DECISION = 'Signed Stipulated Decision';
 
+  let showServeDocumentButton = false;
+
   const documentId = get(state.documentId);
   const document = (caseDetail.documents || []).find(
     document => document.documentId === documentId,
@@ -52,6 +54,11 @@ export const documentDetailHelper = (get, applicationContext) => {
       !!stipulatedWorkItem &&
       currentUser.role === 'seniorattorney' &&
       !signedDocument;
+
+    showServeDocumentButton =
+      document.status !== 'served' &&
+      currentUser.role === 'docketclerk' &&
+      document.documentType === SIGNED_STIPULATED_DECISION;
   }
 
   const formattedDocumentIsPetition =
@@ -60,10 +67,6 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showCaseDetailsView = ['Batched for IRS'].includes(caseDetail.status);
   const showDocumentInfoTab =
     formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
-
-  const showServeDocumentButton =
-    currentUser.role === 'docketclerk' &&
-    document.documentType === SIGNED_STIPULATED_DECISION;
 
   const showDocumentViewerTopMargin =
     !showServeDocumentButton &&
