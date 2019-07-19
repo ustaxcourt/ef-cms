@@ -271,7 +271,7 @@ functions:
     handler: src/casesHandlers.updatePrimaryContactLambda
     events:
       - http:
-          path: /{caseId}/serve/{documentId}
+          path: /cases/${caseId}/documents/${documentId}/serve
           method: put
           cors: true
           authorizer:
