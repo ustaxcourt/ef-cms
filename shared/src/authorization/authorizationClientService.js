@@ -11,6 +11,7 @@ exports.GET_READ_MESSAGES = 'getReadMessages';
 exports.TRIAL_SESSIONS = 'trialSessions';
 exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
+exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -26,6 +27,7 @@ const AUTHORIZATION_MAP = {
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.TRIAL_SESSIONS,
     exports.CASE_DEADLINE,
+    exports.SERVE_DOCUMENT,
   ],
   petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
