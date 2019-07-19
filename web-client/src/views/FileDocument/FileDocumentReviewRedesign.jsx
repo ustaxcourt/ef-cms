@@ -333,9 +333,13 @@ export const FileDocumentReviewRedesign = connect(
                             {caseDetail.contactSecondary.name}, Petitioner
                           </li>
                         )}
-                        {form.partyPractitioner && (
-                          <li>{caseDetail.practitioners[0].name}, Counsel</li>
-                        )}
+                        {form.practitioner &&
+                          form.practitioner.map(
+                            practitioner =>
+                              practitioner.partyPractitioner && (
+                                <li>{practitioner.name}, Counsel</li>
+                              ),
+                          )}
                         {form.partyRespondent && <li>Respondent</li>}
                       </ul>
                     </div>

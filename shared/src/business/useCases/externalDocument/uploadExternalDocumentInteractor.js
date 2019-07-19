@@ -69,7 +69,7 @@ exports.uploadExternalDocumentInteractor = async ({
     }
   }
 
-  if (user.role === 'practitioner') {
+  if (user.role === 'practitioner' && !documentMetadata.practitioner) {
     documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
   }
 
