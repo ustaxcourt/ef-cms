@@ -125,6 +125,15 @@ export const DocumentDetail = connect(
                         Serve to IRS
                       </button>
                     )}
+                  {helper.showServeDocumentButton && (
+                    <button
+                      className="usa-button serve-to-irs margin-right-0"
+                      onClick={() => null}
+                    >
+                      <FontAwesomeIcon icon={['fas', 'paper-plane']} />
+                      Serve Document
+                    </button>
+                  )}
                   {caseHelper.showRecallButton &&
                     helper.formattedDocument.isPetition && (
                       <span className="recall-button-box">

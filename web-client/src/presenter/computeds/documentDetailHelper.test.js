@@ -3,11 +3,36 @@ import { runCompute } from 'cerebral/test';
 import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
+let role = 'petitionsclerk';
+
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
+  {
+    getCurrentUser: () => ({
+      role,
+      userId: 'abc',
+    }),
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
+      };
+    },
+  },
 );
 
 describe('formatted work queue computed', () => {
+  beforeEach(() => {
+    role = 'petitionsclerk';
+  });
+
   it('formats the workitems', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
@@ -134,6 +159,60 @@ describe('formatted work queue computed', () => {
         },
       });
       expect(result.showDocumentInfoTab).toEqual(false);
+    });
+
+    it('should show the serve button when a docketclerk and the document is a signed stipulated decision', () => {
+      role = 'docketclerk';
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Signed Stipulated Decision',
+              },
+            ],
+          },
+          documentId: 'abc',
+        },
+      });
+      expect(result.showServeDocumentButton).toEqual(true);
+    });
+
+    it('should NOT show the serve button when user is a NOT a docketclerk', () => {
+      role = 'petitionsclerk';
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Signed Stipulated Decision',
+              },
+            ],
+          },
+          documentId: 'abc',
+        },
+      });
+      expect(result.showServeDocumentButton).toEqual(false);
+    });
+
+    it('should NOT show the serve button when the document is NOT a signed stipulated decisiion', () => {
+      role = 'petitionsclerk';
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Proposed Stipulated Decision',
+              },
+            ],
+          },
+          documentId: 'abc',
+        },
+      });
+      expect(result.showServeDocumentButton).toEqual(false);
     });
   });
 });
