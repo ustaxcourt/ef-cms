@@ -13,8 +13,8 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 find ./src -type f -exec chmod -R ugo+r {} ";"
 
-npm run build:users
-cp src/usersHandlers.js /tmp
+npm run build:trialSessions
+cp src/trialSessionsHandlers.js /tmp
 cp dist/* src
 
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
