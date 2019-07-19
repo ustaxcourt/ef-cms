@@ -116,14 +116,20 @@ const router = {
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
-        app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'SelectDocumentType',
+          });
+        } else {
+          app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+        }
       }),
     );
     route(
       '/case-detail/*/file-a-document/details',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
-        if (app.getState('wizardStep')) {
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'FileDocument',
           });
@@ -138,7 +144,7 @@ const router = {
       '/case-detail/*/file-a-document/review',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
-        if (app.getState('wizardStep')) {
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'FileDocumentReview',
           });
@@ -154,7 +160,7 @@ const router = {
       '/case-detail/*/file-a-document/all-document-categories',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
-        if (app.getState('wizardStep')) {
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'ViewAllDocuments',
           });
