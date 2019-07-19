@@ -304,6 +304,9 @@ const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  serveSignedStipDecisionInteractor,
+} = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
+const {
   setCaseToReadyForTrialInteractor,
 } = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
 const {
@@ -573,6 +576,7 @@ module.exports = (appContextUser = {}) => {
           process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
+        serveSignedStipDecisionInteractor,
         setCaseToReadyForTrialInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

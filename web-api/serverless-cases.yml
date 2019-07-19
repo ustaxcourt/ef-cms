@@ -267,6 +267,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  serveSignedStipDecision:
+    handler: src/casesHandlers.updatePrimaryContactLambda
+    events:
+      - http:
+          path: /{caseId}/serve/{documentId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   setCaseToReadyForTrial:
     handler: src/casesHandlers.setCaseToReadyForTrialLambda
     events:
