@@ -1,7 +1,7 @@
 service: ef-cms
 
 plugins:
-  - serverless-plugin-split-stacks
+  # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
