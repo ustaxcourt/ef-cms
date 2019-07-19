@@ -67,7 +67,7 @@ Comments in the code should describe complex bits of logic that aren’t easily 
 If code exposes a public API — whether that’s public methods on a class or HTTP endpoints in a REST service — those public methods should be documented.  We like documentation that can be extracted into some pretty markup (e.g., .NET’s XML comments, jsdoc, OAS, Swagger). We’ll check that any public-facing methods have useful documentation.
 
 ### Adherence to the project’s style guide
-The project should adopt a code style guide and code should conform. Which guide the team chooses is less important than the consistency that comes from actually using it.  We’ll check to make sure there’s a linter configured to check code style, that it passes, and that any exceptions are documented and explained in the code.
+The project should adopt a code style guide and code should conform. Which guide the team chooses is less important than the consistency that comes from actually using it. We’ll check to make sure there’s a linter configured to check code style, that it passes, and that any exceptions are documented and explained in the code.
 
 ## What we’ll do
 

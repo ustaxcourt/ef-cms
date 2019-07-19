@@ -1,6 +1,6 @@
-#!/bin/bash -e 
+#!/bin/bash -e
 
-# This script runs lint, tests, cypress, and pa11y over an already running 
+# This script runs lint, tests, cypress, and pa11y over an already running
 # application.  This can only be run with a clean start of the web-api.
 
 # For more thorough validations, run the ./build-all.sh script since that
@@ -8,18 +8,21 @@
 
 # shared
 pushd shared
+npm ci
 npm run lint
 npm test
 popd
 
 # web-api
 pushd web-api
+npm ci
 npm run lint
 npm test
 popd
 
 # web-client
 pushd web-client
+npm ci
 npm run lint
 npm run test:unit
 npm test
