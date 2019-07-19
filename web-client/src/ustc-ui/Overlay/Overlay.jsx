@@ -85,6 +85,7 @@ class OverlayComponent extends React.Component {
             'overlay-full',
             this.props.className,
           )}
+          ref={this.props.forwardedRef}
         >
           <div
             aria-modal="true"
@@ -103,14 +104,40 @@ class OverlayComponent extends React.Component {
 OverlayComponent.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  forwardedRef: PropTypes.any,
   onEscSequence: PropTypes.func,
   preventEsc: PropTypes.bool,
   preventScrolling: PropTypes.bool,
 };
 
-export const Overlay = connect(
+const OverlayUnRef = connect(
   {
     onEscSequence: sequences[props.onEscSequence],
   },
   OverlayComponent,
 );
+
+/**
+ * OverlayWithRef
+ *
+ * @returns {*} the wrapped overlay component
+ */
+function OverlayWithRef() {
+  /**
+   * forwardRef
+   *
+   * @param {*} props props
+   * @param {*} ref ref
+   * @returns {*} the component
+   */
+  function forwardRef(props, ref) {
+    return <OverlayUnRef {...props} forwardedRef={ref} />;
+  }
+
+  const name = OverlayUnRef.displayName || OverlayUnRef.name;
+  forwardRef.displayName = `Overlay(${name})`;
+
+  return React.forwardRef(forwardRef);
+}
+
+export const Overlay = OverlayWithRef();
