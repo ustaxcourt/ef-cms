@@ -7,7 +7,7 @@ const { DocketRecord } = require('../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
- * runBatchProcessInteractor
+ * serveSignedStipDecisionInteractor
  *
  * @param caseId
  * @param documentId
