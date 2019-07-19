@@ -85,7 +85,7 @@ jobs:
           command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "GIT_COMMIT=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "cd web-client && ./build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
       - run:
           name: 'Deploy - API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL} --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: 'Deploy - API - Layers - Puppeteer - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-puppeteer.sh ${ENV} us-east-1"
