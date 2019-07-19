@@ -21,7 +21,7 @@ export const serveDocumentAction = async ({ applicationContext, get }) => {
 
   return {
     alertSuccess: {
-      title: 'The document has been served successfully',
+      title: 'Service has been initiated.',
     },
   };
 };
