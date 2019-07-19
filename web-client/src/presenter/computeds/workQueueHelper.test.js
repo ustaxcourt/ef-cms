@@ -3,8 +3,8 @@ import { runCompute } from 'cerebral/test';
 import { workQueueHelper } from './workQueueHelper';
 
 describe('workQueueHelper', () => {
-  it('returns the expected state when set', async () => {
-    const result = await runCompute(workQueueHelper, {
+  it('returns the expected state when set', () => {
+    const result = runCompute(workQueueHelper, {
       state: {
         notifications: {
           myInboxUnreadCount: 0,
@@ -24,8 +24,8 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('returns the expected state when not set', async () => {
-    const result = await runCompute(workQueueHelper, {
+  it('returns the expected state when not set', () => {
+    const result = runCompute(workQueueHelper, {
       state: {
         notifications: {
           myInboxUnreadCount: 0,
@@ -45,8 +45,8 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('shows the start a case button when role is petitions clerk', async () => {
-    const result = await runCompute(workQueueHelper, {
+  it('shows the start a case button when role is petitions clerk', () => {
+    const result = runCompute(workQueueHelper, {
       state: {
         notifications: {
           myInboxUnreadCount: 0,
@@ -64,8 +64,8 @@ describe('workQueueHelper', () => {
     });
   });
 
-  it('shows the start a case button when role is docket clerk', async () => {
-    const result = await runCompute(workQueueHelper, {
+  it('shows the start a case button when role is docket clerk', () => {
+    const result = runCompute(workQueueHelper, {
       state: {
         notifications: {
           myInboxUnreadCount: 0,
