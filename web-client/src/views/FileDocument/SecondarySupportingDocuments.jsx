@@ -22,6 +22,7 @@ export const SecondarySupportingDocuments = connect(
         {fileDocumentHelper.showAddSecondarySupportingDocuments && (
           <button
             className="usa-button usa-button--outline margin-top-205"
+            id="add-secondary-supporting-document-button"
             onClick={() => {
               addSupportingDocumentToFormSequence({ type: 'secondary' });
             }}
