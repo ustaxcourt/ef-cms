@@ -84,7 +84,6 @@
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "create-tables": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop node create-dynamo-tables.js",
     "docker:shellcheck": "./docker-shellcheck.sh",
-    "docker:audit": "./docker-audit.sh",
     "docker:lint": "./docker-lint.sh",
     "docker:test": "./docker-test.sh",
     "docker:sonarqube": "./docker-sonarqube.sh",
