@@ -1,4 +1,4 @@
-service: ef-cms-users
+service: ef-cms-sections
 plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -17,7 +17,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3003
+    port: 3006
 
   alerts:
     stages:
@@ -51,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'users'
+    basePath: 'sections'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -192,11 +192,33 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getInternalUsers:
-    handler: src/usersHandlers.getInternalUsersLambda
+  getInboxMessagesForSection:
+    handler: src/sectionsHandlers.getInboxMessagesForSectionLambda
     events:
       - http:
-          path: /internal
+          path: /{section}/messages/inbox
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  getSentMessagesForSection:
+    handler: src/sectionsHandlers.getSentMessagesForSectionLambda
+    events:
+      - http:
+          path: /{section}/messages/sent
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+  getDocumentQCBatchedForSection:
+    handler: src/sectionsHandlers.getDocumentQCBatchedForSectionLambda
+    events:
+      - http:
+          path: /{section}/document-qc/batched
           method: get
           cors: true
           authorizer:
@@ -204,23 +226,22 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createUser:
-    handler: src/usersHandlers.createUserLambda
+  getDocumentQCServedForSection:
+    handler: src/sectionsHandlers.getDocumentQCServedForSectionLambda
     events:
       - http:
-          path: /
-          method: post
+          path: /{section}/document-qc/served
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
-  getCasesByUser:
-    handler: src/usersHandlers.getCasesByUserLambda
+  getUsersInSection:
+    handler: src/sectionsHandlers.getUsersInSectionLambda
     events:
       - http:
-          path: /{userId}/cases
+          path: /{section}/users
           method: get
           cors: true
           authorizer:
@@ -228,107 +249,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  verifyCaseForUser:
-    handler: src/usersHandlers.verifyCaseForUserLambda
+  getDocumentQCInboxForSection:
+    handler: src/sectionsHandlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
-          path: /{userId}/case/{caseId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  verifyPendingCaseForUser:
-    handler: src/usersHandlers.verifyPendingCaseForUserLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}/pending
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerCaseAssociation:
-    handler: src/usersHandlers.practitionerCaseAssociationLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerPendingCaseAssociation:
-    handler: src/usersHandlers.practitionerPendingCaseAssociationLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}/pending
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getInboxMessagesForUser:
-    handler: src/usersHandlers.getInboxMessagesForUserLambda
-    events:
-      - http:
-          path: /{userId}/messages/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getSentMessagesForUser:
-    handler: src/usersHandlers.getSentMessagesForUserLambda
-    events:
-      - http:
-          path: /{userId}/messages/sent
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCInboxForUser:
-    handler: src/usersHandlers.getDocumentQCInboxForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForUser:
-    handler: src/usersHandlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/batched
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCServedForUser:
-    handler: src/usersHandlers.getDocumentQCServedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/served
+          path: /{section}/document-qc/inbox
           method: get
           cors: true
           authorizer:

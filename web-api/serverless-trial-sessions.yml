@@ -1,4 +1,4 @@
-service: ef-cms-users
+service: ef-cms-trial-sessions
 plugins:
   - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -17,7 +17,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3003
+    port: 3007
 
   alerts:
     stages:
@@ -51,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'users'
+    basePath: 'trial-sessions'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -192,20 +192,19 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getInternalUsers:
-    handler: src/usersHandlers.getInternalUsersLambda
+  getTrialSessions:
+    handler: src/trialSessionsHandlers.getTrialSessionsLambda
     events:
       - http:
-          path: /internal
+          path: /
           method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
-  createUser:
-    handler: src/usersHandlers.createUserLambda
+  createTrialSession:
+    handler: src/trialSessionsHandlers.createTrialSessionLambda
     events:
       - http:
           path: /
@@ -216,11 +215,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getCasesByUser:
-    handler: src/usersHandlers.getCasesByUserLambda
+  getTrialSessionDetails:
+    handler: src/trialSessionsHandlers.getTrialSessionDetailsLambda
     events:
       - http:
-          path: /{userId}/cases
+          path: /{trialSessionId}
           method: get
           cors: true
           authorizer:
@@ -228,11 +227,23 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  verifyCaseForUser:
-    handler: src/usersHandlers.verifyCaseForUserLambda
+  setTrialSessionAsSwingSession:
+    handler: src/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
-          path: /{userId}/case/{caseId}
+          path: /{trialSessionId}/set-swing-session
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getEligibleCasesForTrialSession:
+    handler: src/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/eligible-cases
           method: get
           cors: true
           authorizer:
@@ -240,95 +251,22 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  verifyPendingCaseForUser:
-    handler: src/usersHandlers.verifyPendingCaseForUserLambda
+  setTrialSessionCalendar:
+    handler: src/trialSessionsHandlers.setTrialSessionCalendarLambda
     events:
       - http:
-          path: /{userId}/case/{caseId}/pending
-          method: get
+          path: /{trialSessionId}/set-calendar
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
-  practitionerCaseAssociation:
-    handler: src/usersHandlers.practitionerCaseAssociationLambda
+  getCalendaredCasesForTrialSession:
+    handler: src/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
-          path: /{userId}/case/{caseId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerPendingCaseAssociation:
-    handler: src/usersHandlers.practitionerPendingCaseAssociationLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}/pending
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getInboxMessagesForUser:
-    handler: src/usersHandlers.getInboxMessagesForUserLambda
-    events:
-      - http:
-          path: /{userId}/messages/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getSentMessagesForUser:
-    handler: src/usersHandlers.getSentMessagesForUserLambda
-    events:
-      - http:
-          path: /{userId}/messages/sent
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCInboxForUser:
-    handler: src/usersHandlers.getDocumentQCInboxForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForUser:
-    handler: src/usersHandlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/batched
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCServedForUser:
-    handler: src/usersHandlers.getDocumentQCServedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/served
+          path: /{trialSessionId}/get-calendared-cases
           method: get
           cors: true
           authorizer:
