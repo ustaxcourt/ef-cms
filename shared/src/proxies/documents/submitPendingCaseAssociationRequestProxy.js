@@ -14,6 +14,6 @@ exports.submitPendingCaseAssociationRequestInteractor = ({
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
-    endpoint: `users/${user.userId}/case/${caseId}/pending`,
+    endpoint: `/users/${user.userId}/case/${caseId}/pending`,
   });
 };
