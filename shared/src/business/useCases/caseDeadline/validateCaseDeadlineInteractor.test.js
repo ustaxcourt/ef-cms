@@ -19,7 +19,7 @@ describe('validateCaseDeadlineInteractor', () => {
     );
   });
 
-  it('returns the null when there are no errors', () => {
+  it('returns null when there are no errors', () => {
     const mockCaseDeadline = {
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
