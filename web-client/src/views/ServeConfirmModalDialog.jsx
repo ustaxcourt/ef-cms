@@ -31,8 +31,7 @@ class ServeConfirmModalDialogComponent extends ModalDialog {
 export const ServeConfirmModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    // TODO: 530 - replace with serve sequence
-    confirmSequence: sequences.dismissModalSequence,
+    confirmSequence: sequences.serveDocumentSequence,
   },
   ServeConfirmModalDialogComponent,
 );
