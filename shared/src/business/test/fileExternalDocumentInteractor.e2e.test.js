@@ -89,25 +89,21 @@ describe('fileExternalDocumentInteractor integration test', () => {
         },
         secondarySupportingDocuments: [
           {
-            supportingDocumentMetadata: {
-              category: 'Supporting Document',
-              documentTitle: 'Brief in Support of Amended Answer',
-              documentType: 'Brief in Support',
-              previousDocument: 'Amended Answer',
-              scenario: 'Nonstandard A',
-            },
+            category: 'Supporting Document',
+            documentTitle: 'Brief in Support of Amended Answer',
+            documentType: 'Brief in Support',
+            previousDocument: 'Amended Answer',
+            scenario: 'Nonstandard A',
           },
         ],
         supportingDocument: 'Brief in Support',
         supportingDocuments: [
           {
-            supportingDocumentMetadata: {
-              category: 'Supporting Document',
-              documentTitle: 'Brief in Support of Amended Answer',
-              documentType: 'Brief in Support',
-              previousDocument: 'Amended Answer',
-              scenario: 'Nonstandard A',
-            },
+            category: 'Supporting Document',
+            documentTitle: 'Brief in Support of Amended Answer',
+            documentType: 'Brief in Support',
+            previousDocument: 'Amended Answer',
+            scenario: 'Nonstandard A',
           },
         ],
       },
