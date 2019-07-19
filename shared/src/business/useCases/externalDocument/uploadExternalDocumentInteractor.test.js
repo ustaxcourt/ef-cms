@@ -129,7 +129,12 @@ describe('uploadExternalDocumentInteractor', () => {
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-        documentMetadata: {},
+        documentMetadata: {
+          hasSecondarySupportingDocuments: true,
+          hasSupportingDocuments: true,
+          secondarySupportingDocuments: [{ supportingDocument: 'something' }],
+          supportingDocuments: [{ supportingDocument: 'something' }],
+        },
         progressFunctions: {
           primary: 'something',
           primarySupporting0: 'something3',
