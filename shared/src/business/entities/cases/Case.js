@@ -17,6 +17,7 @@ const { YearAmount } = require('../YearAmount');
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
+  closed: 'Closed',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
@@ -443,6 +444,10 @@ Case.prototype.addDocument = function(document) {
 Case.prototype.addDocumentWithoutDocketRecord = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
+};
+
+Case.prototype.closeCase = function() {
+  this.status = Case.STATUS_TYPES.closed;
 };
 
 /**
