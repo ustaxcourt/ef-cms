@@ -34,6 +34,13 @@ export const SecondarySupportingDocuments = connect(
             Add Secondary Supporting Document
           </button>
         )}
+
+        {fileDocumentHelper.showAddSecondarySupportingDocumentsLimitReached && (
+          <p>
+            You can only add 5 supporting documents at a time. You may file
+            another supporting document in a separate filing.
+          </p>
+        )}
       </>
     );
   },
