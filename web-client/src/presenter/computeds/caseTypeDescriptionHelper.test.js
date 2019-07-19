@@ -3,8 +3,8 @@ import { runCompute } from 'cerebral/test';
 import { caseTypeDescriptionHelper } from './caseTypeDescriptionHelper';
 
 describe('caseTypeDescriptionHelper', () => {
-  it('should return case types with proper descriptions for hasIrsNotice true', async () => {
-    const result = await runCompute(caseTypeDescriptionHelper, {
+  it('should return case types with proper descriptions for hasIrsNotice true', () => {
+    const result = runCompute(caseTypeDescriptionHelper, {
       state: {
         caseTypes: [
           'Deficiency',
@@ -73,8 +73,8 @@ describe('caseTypeDescriptionHelper', () => {
     });
   });
 
-  it('should return case types with proper descriptions for hasIrsNotice false', async () => {
-    const result = await runCompute(caseTypeDescriptionHelper, {
+  it('should return case types with proper descriptions for hasIrsNotice false', () => {
+    const result = runCompute(caseTypeDescriptionHelper, {
       state: {
         caseTypes: [
           'Deficiency',
