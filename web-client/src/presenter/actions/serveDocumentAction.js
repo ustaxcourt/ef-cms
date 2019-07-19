@@ -18,4 +18,10 @@ export const serveDocumentAction = async ({ applicationContext, get }) => {
     caseId,
     documentId,
   });
+
+  return {
+    alertSuccess: {
+      title: 'The document has been served successfully',
+    },
+  };
 };
