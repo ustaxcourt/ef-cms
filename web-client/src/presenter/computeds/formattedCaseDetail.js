@@ -6,6 +6,16 @@ export const formatDocument = (applicationContext, document) => {
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
+
+  result.servedAtFormatted = `${applicationContext
+    .getUtilities()
+    .formatDateString(
+      result.servedAt,
+      'MMDDYY',
+    )} at ${applicationContext
+    .getUtilities()
+    .formatDateString(result.servedAt, 'hh:mm A')}`;
+
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';

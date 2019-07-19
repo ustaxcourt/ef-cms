@@ -9,15 +9,23 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.alertError
  * @returns the path to take
  */
-export const serveDocumentAction = async ({ applicationContext, get }) => {
+export const serveDocumentAction = async ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
-  await applicationContext.getUseCases().serveSignedStipDecisionInteractor({
-    applicationContext,
-    caseId,
-    documentId,
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .serveSignedStipDecisionInteractor({
+      applicationContext,
+      caseId,
+      documentId,
+    });
+
+  store.set(state.caseDetail, caseDetail);
 
   return {
     alertSuccess: {

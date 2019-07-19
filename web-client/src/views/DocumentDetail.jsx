@@ -48,11 +48,14 @@ export const DocumentDetail = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
-          <span className="filed-by">
-            Filed {helper.formattedDocument.createdAtFormatted}
-            {helper.formattedDocument.filedBy &&
-              ` by ${helper.formattedDocument.filedBy}`}
-          </span>
+          <div className="filed-by">
+            <div className="padding-bottom-1">
+              Filed {helper.formattedDocument.createdAtFormatted}
+              {helper.formattedDocument.filedBy &&
+                ` by ${helper.formattedDocument.filedBy}`}
+            </div>
+            <div>Served {helper.formattedDocument.servedAtFormatted}</div>
+          </div>
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-container padding-x-0">
