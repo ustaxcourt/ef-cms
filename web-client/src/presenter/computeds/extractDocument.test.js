@@ -6,8 +6,8 @@ import { withAppContextDecorator } from '../../../src/withAppContext';
 const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 
 describe('extractedDocument', () => {
-  it('should return an empty object if no document was found', async () => {
-    const result = await runCompute(extractedDocument, {
+  it('should return an empty object if no document was found', () => {
+    const result = runCompute(extractedDocument, {
       state: {
         caseDetail: {
           documents: [],
@@ -18,8 +18,8 @@ describe('extractedDocument', () => {
     expect(result).toMatchObject({});
   });
 
-  it('should return an empty object if no document was found', async () => {
-    const result = await runCompute(extractedDocument, {
+  it('should return an empty object if no document was found', () => {
+    const result = runCompute(extractedDocument, {
       state: {
         caseDetail: {},
         documentId: 'abc',
@@ -28,8 +28,8 @@ describe('extractedDocument', () => {
     expect(result).toMatchObject({});
   });
 
-  it('should not fail when workItems is undefined', async () => {
-    const result = await runCompute(extractedDocument, {
+  it('should not fail when workItems is undefined', () => {
+    const result = runCompute(extractedDocument, {
       state: {
         caseDetail: {
           documents: [

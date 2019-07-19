@@ -25,8 +25,8 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
 );
 
 describe('extractPendingMessagesFromCaseDetail', () => {
-  it('should not fail if work items is not defined', async () => {
-    const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
+  it('should not fail if work items is not defined', () => {
+    const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
         caseDetail: {
           documents: [{}],
@@ -36,8 +36,8 @@ describe('extractPendingMessagesFromCaseDetail', () => {
     expect(result).toMatchObject([]);
   });
 
-  it('should not fail if documents is not defined', async () => {
-    const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
+  it('should not fail if documents is not defined', () => {
+    const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
         caseDetail: {},
       },
@@ -45,8 +45,8 @@ describe('extractPendingMessagesFromCaseDetail', () => {
     expect(result).toMatchObject([]);
   });
 
-  it('sorts the workQueue by the latest currentMessage for each work item', async () => {
-    const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
+  it('sorts the workQueue by the latest currentMessage for each work item', () => {
+    const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
         caseDetail: {
           documents: [
@@ -127,8 +127,8 @@ describe('extractPendingMessagesFromCaseDetail', () => {
     ]);
   });
 
-  it('should filter out the batched for IRS messages', async () => {
-    const result = await runCompute(extractedPendingMessagesFromCaseDetail, {
+  it('should filter out the batched for IRS messages', () => {
+    const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
         caseDetail: {
           documents: [

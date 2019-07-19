@@ -28,6 +28,9 @@ export const validateExternalDocumentInformationAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
+      'supportingDocument',
+      'supportingDocumentFreeText',
+      'supportingDocumentFile',
       'primaryDocumentFile',
       'certificateOfService',
       'certificateOfServiceDate',
@@ -43,10 +46,16 @@ export const validateExternalDocumentInformationAction = ({
       'partyRespondent',
     ];
 
+    const errorDisplayMap = {
+      secondarySupportingDocuments: 'Secondary Supporting Document',
+      supportingDocuments: 'Supporting Document',
+    };
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayMap,
       errorDisplayOrder,
       errors,
     });

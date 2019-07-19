@@ -126,14 +126,14 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it('sets shouldShowIrsNoticeDate to true when hasIrsNotice is true and hasVerifiedIrsNotice is undefined', async () => {
+    it('sets shouldShowIrsNoticeDate to true when hasIrsNotice is true and hasVerifiedIrsNotice is undefined', () => {
       const caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         hasIrsNotice: true,
         hasVerifiedIrsNotice: undefined,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -143,14 +143,14 @@ describe('formattedCaseDetail', () => {
       expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     });
 
-    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when hasIrsNotice is true and hasVerifiedIrsNotice is true', async () => {
+    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when hasIrsNotice is true and hasVerifiedIrsNotice is true', () => {
       const caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         hasIrsNotice: true,
         hasVerifiedIrsNotice: true,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -161,14 +161,14 @@ describe('formattedCaseDetail', () => {
       expect(result.shouldShowYearAmounts).toBeTruthy();
     });
 
-    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is undefined', async () => {
+    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is undefined', () => {
       const caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         hasIrsNotice: false,
         hasVerifiedIrsNotice: undefined,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -179,14 +179,14 @@ describe('formattedCaseDetail', () => {
       expect(result.shouldShowYearAmounts).toBeFalsy();
     });
 
-    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is false', async () => {
+    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is false', () => {
       const caseDetail = {
         caseCaption: 'Brett Osborne, Petitioner',
         hasIrsNotice: false,
         hasVerifiedIrsNotice: false,
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -198,7 +198,7 @@ describe('formattedCaseDetail', () => {
     });
   });
 
-  it('maps docket record dates', async () => {
+  it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
@@ -212,7 +212,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
-    const result = await runCompute(formattedCaseDetail, {
+    const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail,
         caseDetailErrors: {},
@@ -222,7 +222,7 @@ describe('formattedCaseDetail', () => {
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/19');
   });
 
-  it('maps docket record documents', async () => {
+  it('maps docket record documents', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       docketRecord: [
@@ -246,7 +246,7 @@ describe('formattedCaseDetail', () => {
       hasVerifiedIrsNotice: false,
       petitioners: [{ name: 'bob' }],
     };
-    const result = await runCompute(formattedCaseDetail, {
+    const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail,
         caseDetailErrors: {},
@@ -258,7 +258,7 @@ describe('formattedCaseDetail', () => {
     );
   });
 
-  it('formats docket record document data strings correctly', async () => {
+  it('formats docket record document data strings correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {
@@ -384,7 +384,7 @@ describe('formattedCaseDetail', () => {
       petitioners: [{ name: 'bob' }],
       practitioner: { name: 'Test Practitioner' },
     };
-    const result = await runCompute(formattedCaseDetail, {
+    const result = runCompute(formattedCaseDetail, {
       state: {
         caseDetail,
         caseDetailErrors: {},
@@ -469,9 +469,9 @@ describe('formattedCaseDetail', () => {
         petitioners: [{ name: 'bob' }],
       };
     });
-    it('sorts the docket record in the expected default order (ascending date)', async () => {
+    it('sorts the docket record in the expected default order (ascending date)', () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -499,9 +499,9 @@ describe('formattedCaseDetail', () => {
         },
       });
     });
-    it('sorts the docket record by descending date', async () => {
+    it('sorts the docket record by descending date', () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -533,9 +533,9 @@ describe('formattedCaseDetail', () => {
       });
     });
 
-    it('sorts the docket record by ascending index', async () => {
+    it('sorts the docket record by ascending index', () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -566,9 +566,9 @@ describe('formattedCaseDetail', () => {
         },
       });
     });
-    it('sorts the docket record by descending index', async () => {
+    it('sorts the docket record by descending index', () => {
       const caseDetail = sortedCaseDetail;
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -602,11 +602,11 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('case name mapping', () => {
-    it('should not error if caseCaption does not exist', async () => {
+    it('should not error if caseCaption does not exist', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -616,12 +616,12 @@ describe('formattedCaseDetail', () => {
       expect(result.caseName).toEqual('');
     });
 
-    it("should remove ', Petitioner' from caseCaption", async () => {
+    it("should remove ', Petitioner' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -631,12 +631,12 @@ describe('formattedCaseDetail', () => {
       expect(result.caseName).toEqual('Sisqo');
     });
 
-    it("should remove ', Petitioners' from caseCaption", async () => {
+    it("should remove ', Petitioners' from caseCaption", () => {
       const caseDetail = {
         caseCaption: 'Sisqo and friends,  Petitioners ',
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -646,12 +646,12 @@ describe('formattedCaseDetail', () => {
       expect(result.caseName).toEqual('Sisqo and friends');
     });
 
-    it("should remove ', Petitioner(s)' from caseCaption", async () => {
+    it("should remove ', Petitioner(s)' from caseCaption", () => {
       const caseDetail = {
         caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -663,13 +663,13 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('practitioner mapping', () => {
-    it('should add barnumber into formatted name if available', async () => {
+    it('should add barnumber into formatted name if available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
         practitioner: { barNumber: '9999', name: 'Jackie Chan' },
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -678,13 +678,13 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan (9999)');
     });
-    it('should not add barnumber into formatted name if not available', async () => {
+    it('should not add barnumber into formatted name if not available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
         practitioner: { name: 'Jackie Chan' },
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -696,11 +696,11 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('trial detail mapping mapping', () => {
-    it('should provide defaults for trial information if no trial session id exists', async () => {
+    it('should provide defaults for trial information if no trial session id exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -712,12 +712,12 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialJudge).toEqual('Not assigned');
     });
 
-    it('should provide defaults for trial information if no trial session id exists', async () => {
+    it('should provide defaults for trial information if no trial session id exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
         preferredTrialCity: 'England is my City',
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -729,7 +729,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialJudge).toEqual('Not assigned');
     });
 
-    it('should format trial information if a trial session id exists', async () => {
+    it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
         trialDate: '2018-12-11T05:00:00Z',
@@ -738,7 +738,7 @@ describe('formattedCaseDetail', () => {
         trialSessionId: '123',
         trialTime: '20:30',
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -750,7 +750,7 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialJudge).toEqual('Judge Judy');
     });
 
-    it('should not add time if no time stamp exists', async () => {
+    it('should not add time if no time stamp exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
         trialDate: '2018-12-11T05:00:00Z',
@@ -758,7 +758,7 @@ describe('formattedCaseDetail', () => {
         trialLocation: 'England is my City',
         trialSessionId: '123',
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
@@ -772,7 +772,7 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('formats case deadlines', () => {
-    it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', async () => {
+    it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
       };
@@ -788,7 +788,7 @@ describe('formattedCaseDetail', () => {
         },
       ];
 
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDeadlines,
           caseDetail,
@@ -815,12 +815,12 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it('does not format empty caseDeadlines array', async () => {
+    it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],
         petitioners: [{ name: 'bob' }],
       };
-      const result = await runCompute(formattedCaseDetail, {
+      const result = runCompute(formattedCaseDetail, {
         state: {
           caseDetail,
           caseDetailErrors: {},
