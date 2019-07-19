@@ -93,6 +93,7 @@ import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { serveDocumentSequence } from './sequences/serveDocumentSequence';
 import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
 import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
@@ -289,6 +290,7 @@ export const presenter = {
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
+    serveDocumentSequence,
     setCanvasForPDFSigningSequence,
     setCaseCaptionSequence,
     setCaseDetailPageTabSequence,
