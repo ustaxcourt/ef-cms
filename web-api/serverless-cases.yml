@@ -268,7 +268,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   serveSignedStipDecision:
-    handler: src/casesHandlers.updatePrimaryContactLambda
+    handler: src/casesHandlers.serveSignedStipDecisionLambda
     events:
       - http:
           path: /{caseId}/serve/{documentId}
