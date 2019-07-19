@@ -71,6 +71,9 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showAddSupportingDocuments =
     !form.supportingDocumentCount || form.supportingDocumentCount < 5;
 
+  const showAddSupportingDocumentsLimitReached =
+    form.supportingDocumentCount && form.supportingDocumentCount >= 5;
+
   const showSecondaryDocumentInclusionsForm =
     form.documentType !== 'Motion for Leave to File' ||
     !!form.secondaryDocumentFile;
@@ -80,6 +83,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
       form.secondarySupportingDocumentCount < 5) &&
     (form.documentType !== 'Motion for Leave to File' ||
       !!form.secondaryDocumentFile);
+
+  const showAddSecondarySupportingDocumentsLimitReached =
+    form.secondarySupportingDocumentCount &&
+    form.secondarySupportingDocumentCount >= 5;
 
   let exported = {
     certificateOfServiceDateFormatted,
@@ -96,7 +103,9 @@ export const fileDocumentHelper = (get, applicationContext) => {
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
     },
     showAddSecondarySupportingDocuments,
+    showAddSecondarySupportingDocumentsLimitReached,
     showAddSupportingDocuments,
+    showAddSupportingDocumentsLimitReached,
     showFilingIncludes,
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
