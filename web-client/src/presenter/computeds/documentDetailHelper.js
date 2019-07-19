@@ -8,13 +8,17 @@ export const documentDetailHelper = (get, applicationContext) => {
   const currentUser = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
 
+  const SIGNED_STIPULATED_DECISION = 'Signed Stipulated Decision';
+
+  let showServeDocumentButton = false;
+
   const documentId = get(state.documentId);
-  const selectedDocument = (caseDetail.documents || []).find(
+  const document = (caseDetail.documents || []).find(
     document => document.documentId === documentId,
   );
   let formattedDocument = {};
-  if (selectedDocument) {
-    formattedDocument = formatDocument(applicationContext, selectedDocument);
+  if (document) {
+    formattedDocument = formatDocument(applicationContext, document);
     const allWorkItems = _.orderBy(
       formattedDocument.workItems,
       'createdAt',
@@ -43,13 +47,18 @@ export const documentDetailHelper = (get, applicationContext) => {
     // Check all documents assosicated with the case
     // to see if there is a signed stip decision
     const signedDocument = caseDetail.documents.find(
-      document => document.documentType === 'Signed Stipulated Decision',
+      doc => doc.documentType === SIGNED_STIPULATED_DECISION,
     );
 
     showSignDocumentButton =
       !!stipulatedWorkItem &&
       currentUser.role === 'seniorattorney' &&
       !signedDocument;
+
+    showServeDocumentButton =
+      document.status !== 'served' &&
+      currentUser.role === 'docketclerk' &&
+      document.documentType === SIGNED_STIPULATED_DECISION;
   }
 
   const formattedDocumentIsPetition =
@@ -60,9 +69,10 @@ export const documentDetailHelper = (get, applicationContext) => {
     formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
 
   const showDocumentViewerTopMargin =
-    !showSignDocumentButton &&
-    (!['New', 'Recalled'].includes(caseDetail.status) ||
-      !formattedDocument.isPetition);
+    !showServeDocumentButton &&
+    (!showSignDocumentButton &&
+      (!['New', 'Recalled'].includes(caseDetail.status) ||
+        !formattedDocument.isPetition));
 
   return {
     formattedDocument,
@@ -74,6 +84,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCaseDetailsView,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
+    showServeDocumentButton,
     showSignDocumentButton,
   };
 };
