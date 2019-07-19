@@ -24,66 +24,66 @@ describe('requestAccessHelper', () => {
     state.form = {};
   });
 
-  it('returns correct values when documentType is undefined', async () => {
+  it('returns correct values when documentType is undefined', () => {
     let testState = { ...state, form: { documentType: undefined } };
 
     const expected = {
       showPrimaryDocumentValid: false,
     };
 
-    const result = await runCompute(requestAccessHelper, {
+    const result = runCompute(requestAccessHelper, {
       state: testState,
     });
     expect(result).toMatchObject(expected);
   });
 
-  it('indicates file uploads are valid', async () => {
+  it('indicates file uploads are valid', () => {
     state.form = {
       documentType: 'Entry of Appearance',
       primaryDocumentFile: { some: 'file' },
     };
 
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.showPrimaryDocumentValid).toBeTruthy();
   });
 
-  it('generates correctly formatted service date', async () => {
+  it('generates correctly formatted service date', () => {
     state.form.certificateOfServiceDate = '2012-05-31';
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.certificateOfServiceDateFormatted).toEqual('05/31/12');
   });
 
-  it('does not generate a formatted service date if a service date is not entered on the form', async () => {
-    const result = await runCompute(requestAccessHelper, { state });
+  it('does not generate a formatted service date if a service date is not entered on the form', () => {
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.certificateOfServiceDateFormatted).toBeUndefined();
   });
 
-  it('does not show party validation error if none of the party validation errors exists', async () => {
-    const result = await runCompute(requestAccessHelper, { state });
+  it('does not show party validation error if none of the party validation errors exists', () => {
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.partyValidationError).toBeUndefined();
   });
 
-  it('shows party validation error if any one of the party validation errors exists', async () => {
+  it('shows party validation error if any one of the party validation errors exists', () => {
     state.validationErrors = { representingPrimary: 'You did something bad.' };
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('returns correct number of document options for user role practitioner', async () => {
+  it('returns correct number of document options for user role practitioner', () => {
     state.user = { role: 'practitioner' };
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(6);
   });
 
-  it('returns correct number of document options for user role respondent', async () => {
+  it('returns correct number of document options for user role respondent', () => {
     state.user = { role: 'respondent' };
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);
   });
 
-  it('shows filing includes if certificate of service, exhibits, or attachments is true', async () => {
+  it('shows filing includes if certificate of service, exhibits, or attachments is true', () => {
     state.form = { certificateOfService: true };
-    let result = await runCompute(requestAccessHelper, { state });
+    let result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
 
     state.form = {
@@ -91,7 +91,7 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       exhibits: true,
     };
-    result = await runCompute(requestAccessHelper, { state });
+    result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
 
     state.form = {
@@ -100,24 +100,24 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       exhibits: false,
     };
-    result = await runCompute(requestAccessHelper, { state });
+    result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
   });
 
-  it('does not show filing includes if certificate of service, exhibits, and attachments are false', async () => {
+  it('does not show filing includes if certificate of service, exhibits, and attachments are false', () => {
     state.form = {
       attachments: false,
       certificateOfService: false,
       documentType: 'Notice of Intervention',
       exhibits: false,
     };
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(false);
   });
 
-  it('shows filing not includes if certificate of service, exhibits, attachments, or supporting documents is false', async () => {
+  it('shows filing not includes if certificate of service, exhibits, attachments, or supporting documents is false', () => {
     state.form = { certificateOfService: false };
-    let result = await runCompute(requestAccessHelper, { state });
+    let result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
@@ -125,7 +125,7 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       exhibits: false,
     };
-    result = await runCompute(requestAccessHelper, { state });
+    result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
@@ -134,7 +134,7 @@ describe('requestAccessHelper', () => {
       documentType: 'Notice of Intervention',
       exhibits: true,
     };
-    result = await runCompute(requestAccessHelper, { state });
+    result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
 
     state.form = {
@@ -144,11 +144,11 @@ describe('requestAccessHelper', () => {
       exhibits: true,
       hasSupportingDocuments: false,
     };
-    result = await runCompute(requestAccessHelper, { state });
+    result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(true);
   });
 
-  it('does not show filing not includes if certificate of service, exhibits, attachments, and supporting documents are true', async () => {
+  it('does not show filing not includes if certificate of service, exhibits, attachments, and supporting documents are true', () => {
     state.form = {
       attachments: true,
       certificateOfService: true,
@@ -156,7 +156,7 @@ describe('requestAccessHelper', () => {
       exhibits: true,
       hasSupportingDocuments: true,
     };
-    const result = await runCompute(requestAccessHelper, { state });
+    const result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(false);
   });
 });

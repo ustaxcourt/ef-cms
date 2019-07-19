@@ -4,8 +4,8 @@ import { ContactFactory } from '../../../../shared/src/business/entities/contact
 import { contactsHelper } from './contactsHelper';
 
 describe('contactsHelper', () => {
-  it('should validate form view information for party type Conservator and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Conservator and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -30,8 +30,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Corporation and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Corporation and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -51,8 +51,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Custodian and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Custodian and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -77,8 +77,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Donor and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Donor and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -97,8 +97,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -125,8 +125,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -148,8 +148,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Guardian and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Guardian and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -176,8 +176,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -206,8 +206,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -234,8 +234,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -262,8 +262,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner) and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Partnership (as a partner other than tax matters partner) and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -291,8 +291,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner) and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Partnership (as the tax matters partner) and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -319,8 +319,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Petitioner and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -341,8 +341,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner & Spouse and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Petitioner & Spouse and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -369,8 +369,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner & Deceased Spouse and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Petitioner & Deceased Spouse and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -395,8 +395,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Surviving Spouse and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Surviving Spouse and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -421,8 +421,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Transferee and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Transferee and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -443,8 +443,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Trust and user role petitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Trust and user role petitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -471,8 +471,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Conservator and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Conservator and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -497,8 +497,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Corporation and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Corporation and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -518,8 +518,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Custodian and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Custodian and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -544,8 +544,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Donor and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Donor and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -564,8 +564,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -592,8 +592,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -615,8 +615,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Guardian and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Guardian and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -643,8 +643,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -673,8 +673,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -701,8 +701,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -729,8 +729,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner) and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Partnership (as a partner other than tax matters partner) and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -757,8 +757,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner) and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Partnership (as the tax matters partner) and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -785,8 +785,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Petitioner and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -807,8 +807,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner & Spouse and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Petitioner & Spouse and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -835,8 +835,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Petitioner & Deceased Spouse and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Petitioner & Deceased Spouse and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -861,8 +861,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Surviving Spouse and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Surviving Spouse and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -887,8 +887,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Transferee and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Transferee and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
@@ -909,8 +909,8 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Trust and user role practitioner', async () => {
-    const result = await runCompute(contactsHelper, {
+  it('should validate form view information for party type Trust and user role practitioner', () => {
+    const result = runCompute(contactsHelper, {
       state: {
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
