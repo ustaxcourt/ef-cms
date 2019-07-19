@@ -38,6 +38,11 @@ exports.serveSignedStipDecisionInteractor = async ({
   }
   const caseEntity = new Case(caseToUpdate);
 
+  const stipulatedDecisionDocument = caseEntity.getDocumentById({
+    documentId,
+  });
+  stipulatedDecisionDocument.setAsServed();
+
   // may need to move the document from a draft state
   // - "signed stipulated decision" becomes "stipulated decision"
 

@@ -1,5 +1,6 @@
 import { applicationContext } from '../../applicationContext';
 import {
+  formatDocument,
   formatYearAmounts,
   formattedCaseDetail as formattedCaseDetailComputed,
 } from './formattedCaseDetail';
@@ -828,6 +829,17 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);
+    });
+  });
+});
+
+describe('formatDocument', () => {
+  it('should format the sersvedAt date', () => {
+    const results = formatDocument(applicationContext, {
+      servedAt: '2019-03-27T21:53:00.297Z',
+    });
+    expect(results).toMatchObject({
+      servedAtFormatted: '03/27/19 at 05:53 PM',
     });
   });
 });

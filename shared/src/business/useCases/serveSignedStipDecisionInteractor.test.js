@@ -17,7 +17,21 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
-      getCaseByCaseId: () => MOCK_CASE,
+      getCaseByCaseId: () => ({
+        ...MOCK_CASE,
+        documents: [
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+            documentType: 'Signed Stipulated Decision',
+            processingStatus: 'pending',
+            reviewDate: '2018-11-21T20:49:28.192Z',
+            reviewUser: 'petitionsclerk',
+            userId: 'taxpayer',
+            workItems: [],
+          },
+        ],
+      }),
       updateCase: ({ caseToUpdate }) => {
         updatedCase = caseToUpdate;
         updateCaseStub();
@@ -36,10 +50,19 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
     await serveSignedStipDecisionInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      documentId: '123',
+      documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(updatedCase.status).toEqual('Closed');
+  });
+
+  it('updates the document status to served', async () => {
+    await serveSignedStipDecisionInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    expect(updatedCase.documents[0].status).toEqual('served');
   });
 
   it('throws an unathorized error when a non docketclerk role attempts to serve', async () => {
@@ -55,7 +78,7 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
       await serveSignedStipDecisionInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
-        documentId: '123',
+        documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     } catch (err) {
       error = err;
