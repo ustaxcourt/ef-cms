@@ -36,6 +36,7 @@ export const SecondarySupportingDocumentForm = connect(
           <div
             className={`usa-form-group ${
               validationErrors.secondarySupportingDocuments &&
+              validationErrors.secondarySupportingDocuments[index] &&
               validationErrors.secondarySupportingDocuments[index]
                 .supportingDocument
                 ? 'usa-form-group--error'
@@ -57,6 +58,7 @@ export const SecondarySupportingDocumentForm = connect(
               aria-describedby={`secondary-supporting-document-${index}-label`}
               className={`usa-select ${
                 validationErrors.secondarySupportingDocuments &&
+                validationErrors.secondarySupportingDocuments[index] &&
                 validationErrors.secondarySupportingDocuments[index]
                   .supportingDocument
                   ? 'usa-select--error'
@@ -108,6 +110,7 @@ export const SecondarySupportingDocumentForm = connect(
             <div
               className={`usa-form-group ${
                 validationErrors.secondarySupportingDocuments &&
+                validationErrors.secondarySupportingDocuments[index] &&
                 validationErrors.secondarySupportingDocuments[index]
                   .supportingDocumentFreeText
                   ? 'usa-form-group--error'
@@ -159,6 +162,7 @@ export const SecondarySupportingDocumentForm = connect(
               <div
                 className={`usa-form-group ${
                   validationErrors.secondarySupportingDocuments &&
+                  validationErrors.secondarySupportingDocuments[index] &&
                   validationErrors.secondarySupportingDocuments[index]
                     .supportingDocumentFile
                     ? 'usa-form-group--error'
