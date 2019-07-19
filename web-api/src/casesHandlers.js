@@ -22,6 +22,8 @@ module.exports = {
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
+  serveSignedStipDecisionLambda: require('./cases/serveSignedStipDecisionLambda')
+    .handler,
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
     .handler,
   signDocumentLambda: require('./documents/signDocumentLambda').handler,

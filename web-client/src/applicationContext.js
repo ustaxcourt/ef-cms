@@ -93,6 +93,7 @@ import { removeItemInteractor } from '../../shared/src/business/useCases/removeI
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
 import { setCaseToReadyForTrialInteractor } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
@@ -209,6 +210,7 @@ const allUseCases = {
   sanitizePdfInteractor: args =>
     process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
   sendPetitionToIRSHoldingQueueInteractor,
+  serveSignedStipDecisionInteractor,
   setCaseToReadyForTrialInteractor,
   setItemInteractor,
   setTrialSessionAsSwingSessionInteractor,
