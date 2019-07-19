@@ -47,20 +47,12 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
   if (supportingDocuments) {
     supportingDocuments.forEach((item, idx) => {
       month = get(
-        state.form.supportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceMonth,
+        state.form.supportingDocuments[idx].certificateOfServiceMonth,
       );
-      day = get(
-        state.form.supportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceDay,
-      );
-      year = get(
-        state.form.supportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceYear,
-      );
+      day = get(state.form.supportingDocuments[idx].certificateOfServiceDay);
+      year = get(state.form.supportingDocuments[idx].certificateOfServiceYear);
       store.set(
-        state.form.supportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceDate,
+        state.form.supportingDocuments[idx].certificateOfServiceDate,
         computeDate({ day, month, year }),
       );
     });
@@ -73,20 +65,16 @@ export const computeCertificateOfServiceFormDateAction = ({ get, store }) => {
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach((item, idx) => {
       month = get(
-        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceMonth,
+        state.form.secondarySupportingDocuments[idx].certificateOfServiceMonth,
       );
       day = get(
-        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceDay,
+        state.form.secondarySupportingDocuments[idx].certificateOfServiceDay,
       );
       year = get(
-        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceYear,
+        state.form.secondarySupportingDocuments[idx].certificateOfServiceYear,
       );
       store.set(
-        state.form.secondarySupportingDocuments[idx].supportingDocumentMetadata
-          .certificateOfServiceDate,
+        state.form.secondarySupportingDocuments[idx].certificateOfServiceDate,
         computeDate({ day, month, year }),
       );
     });
