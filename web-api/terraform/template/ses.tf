@@ -1,11 +1,36 @@
+# Domain Identity & From
 resource "aws_ses_domain_identity" "email_domain_east" {
   provider = "aws.us-east-1"
-  domain = "${var.dns_domain}"
+  domain   = "efcms-${var.environment}.${var.dns_domain}"
 }
 
 resource "aws_ses_domain_mail_from" "main" {
   domain           = "${aws_ses_domain_identity.email_domain_east.domain}"
   mail_from_domain = "noreply.${aws_ses_domain_identity.email_domain_east.domain}"
+}
+
+# Email Template
+resource "aws_ses_template" "case_served" {
+  name    = "case_served"
+  subject = "eService Notification from US Tax Court"
+  html    = <<EOF
+  <p>Dear {{name}},</p>
+  <p>A document has been served on your Tax Court case:</p>
+  <p>
+    {{docketNumber}}<br />
+    {{caseCaption}}
+  </p>
+  <p>
+    {{documentName}}<br />
+    Served {{serviceDate}} {{serviceTime}} EST
+  </p>
+  <p>To view this document, please log in to the US Tax Court online.</p>
+  <p>Certain documents may require your action.</p>
+  <p>
+    Please do not reply to this message. This e-mail is an automated
+    notification from an account which is unable to receive replies.
+  </p>
+EOF
 }
 
 #
