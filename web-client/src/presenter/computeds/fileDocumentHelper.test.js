@@ -220,24 +220,28 @@ describe('fileDocumentHelper', () => {
       state.form.hasSecondarySupportingDocuments = true;
     });
 
-    it('shows Add Supporting Document button when supportingDocumentCount is undefined', async () => {
+    it('shows Add Supporting Document button and not limit reached message when supportingDocumentCount is undefined', async () => {
       const result = await runCompute(fileDocumentHelper, { state });
       expect(result.showAddSupportingDocuments).toBeTruthy();
+      expect(result.showAddSupportingDocumentsLimitReached).toBeFalsy();
     });
 
-    it('shows Add Supporting Document button when supportingDocumentCount is less than 5', async () => {
+    it('shows Add Supporting Document button and not limit reached message when supportingDocumentCount is less than 5', async () => {
       state.form.supportingDocumentCount = 4;
       const result = await runCompute(fileDocumentHelper, { state });
       expect(result.showAddSupportingDocuments).toBeTruthy();
+      expect(result.showAddSupportingDocumentsLimitReached).toBeFalsy();
     });
 
-    it('does not show Add Supporting Document button when supportingDocumentCount is 5 or greater', async () => {
+    it('does not show Add Supporting Document button and shows limit reached message when supportingDocumentCount is 5 or greater', async () => {
       state.form.supportingDocumentCount = 5;
       let result = await runCompute(fileDocumentHelper, { state });
       expect(result.showAddSupportingDocuments).toBeFalsy();
+      expect(result.showAddSupportingDocumentsLimitReached).toBeTruthy();
       state.form.supportingDocumentCount = 6;
       result = await runCompute(fileDocumentHelper, { state });
       expect(result.showAddSupportingDocuments).toBeFalsy();
+      expect(result.showAddSupportingDocumentsLimitReached).toBeTruthy();
     });
 
     it('upload and free text not shown if no type selected', async () => {
@@ -298,30 +302,45 @@ describe('fileDocumentHelper', () => {
     });
 
     describe('for secondary supporting document', () => {
-      it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is undefined', async () => {
+      it('shows Add Secondary Supporting Document button and not limit reached message when secondarySupportingDocumentCount is undefined', async () => {
         const result = await runCompute(fileDocumentHelper, { state });
         expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
+        expect(
+          result.showAddSecondarySupportingDocumentsLimitReached,
+        ).toBeFalsy();
       });
 
-      it('does not show Add Secondary Supporting Document button when primary document type is Motion for Leave to File and secondary file is not selected', async () => {
+      it('does not show Add Secondary Supporting Document button or limit reached message when primary document type is Motion for Leave to File and secondary file is not selected', async () => {
         state.form.documentType = 'Motion for Leave to File';
         const result = await runCompute(fileDocumentHelper, { state });
         expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
+        expect(
+          result.showAddSecondarySupportingDocumentsLimitReached,
+        ).toBeFalsy();
       });
 
-      it('shows Add Secondary Supporting Document button when secondarySupportingDocumentCount is less than 5', async () => {
+      it('shows Add Secondary Supporting Document button and not limit reached message when secondarySupportingDocumentCount is less than 5', async () => {
         state.form.secondarySupportingDocumentCount = 4;
         const result = await runCompute(fileDocumentHelper, { state });
         expect(result.showAddSecondarySupportingDocuments).toBeTruthy();
+        expect(
+          result.showAddSecondarySupportingDocumentsLimitReached,
+        ).toBeFalsy();
       });
 
-      it('does not show Add Secondary Supporting Document button when secondarySupportingDocumentCount is 5 or greater', async () => {
+      it('does not show Add Secondary Supporting Document button and shows limit reached message when secondarySupportingDocumentCount is 5 or greater', async () => {
         state.form.secondarySupportingDocumentCount = 5;
         let result = await runCompute(fileDocumentHelper, { state });
         expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
+        expect(
+          result.showAddSecondarySupportingDocumentsLimitReached,
+        ).toBeTruthy();
         state.form.secondarySupportingDocumentCount = 6;
         result = await runCompute(fileDocumentHelper, { state });
         expect(result.showAddSecondarySupportingDocuments).toBeFalsy();
+        expect(
+          result.showAddSecondarySupportingDocumentsLimitReached,
+        ).toBeTruthy();
       });
 
       it('upload and free text not shown if no type selected', async () => {

@@ -325,14 +325,16 @@ export const FileDocumentReviewRedesign = connect(
                         Filing Parties
                       </label>
                       <ul className="ustc-unstyled-list without-margins">
-                        {form.partyPractitioner && (
-                          <li>Myself as Petitioner’s Counsel</li>
-                        )}
                         {form.partyPrimary && (
-                          <li>{caseDetail.contactPrimary.name}</li>
+                          <li>{caseDetail.contactPrimary.name}, Petitioner</li>
                         )}
                         {form.partySecondary && (
-                          <li>{caseDetail.contactSecondary.name}</li>
+                          <li>
+                            {caseDetail.contactSecondary.name}, Petitioner
+                          </li>
+                        )}
+                        {form.partyPractitioner && (
+                          <li>{caseDetail.practitioners[0].name}, Counsel</li>
                         )}
                         {form.partyRespondent && <li>Respondent</li>}
                       </ul>
