@@ -1,43 +1,33 @@
-# Domain Identity & From
-resource "aws_ses_domain_identity" "email_domain_east" {
+# Domain Identity, Verification and From
+resource "aws_ses_domain_identity" "main" {
   provider = "aws.us-east-1"
-  domain   = "efcms-${var.environment}.${var.dns_domain}"
+  domain   = "${var.dns_domain}"
+}
+
+resource "aws_route53_record" "ses_verification_record" {
+  zone_id = "${data.aws_route53_zone.zone.id}"
+  name    = "_amazonses.${aws_ses_domain_identity.main.id}"
+  type    = "TXT"
+  ttl     = "600"
+  records = ["${aws_ses_domain_identity.main.verification_token}"]
+}
+
+resource "aws_ses_domain_identity_verification" "example_verification" {
+  domain = "${aws_ses_domain_identity.main.id}"
+
+  depends_on = ["aws_route53_record.ses_verification_record"]
 }
 
 resource "aws_ses_domain_mail_from" "main" {
-  domain           = "${aws_ses_domain_identity.email_domain_east.domain}"
-  mail_from_domain = "noreply.${aws_ses_domain_identity.email_domain_east.domain}"
-}
-
-# Email Template
-resource "aws_ses_template" "case_served" {
-  name    = "case_served"
-  subject = "eService Notification from US Tax Court"
-  html    = <<EOF
-  <p>Dear {{name}},</p>
-  <p>A document has been served on your Tax Court case:</p>
-  <p>
-    {{docketNumber}}<br />
-    {{caseCaption}}
-  </p>
-  <p>
-    {{documentName}}<br />
-    Served {{serviceDate}} {{serviceTime}} EST
-  </p>
-  <p>To view this document, please log in to the US Tax Court online.</p>
-  <p>Certain documents may require your action.</p>
-  <p>
-    Please do not reply to this message. This e-mail is an automated
-    notification from an account which is unable to receive replies.
-  </p>
-EOF
+  domain           = "${aws_ses_domain_identity.main.domain}"
+  mail_from_domain = "noreply.${aws_ses_domain_identity.main.domain}"
 }
 
 #
 # SES DKIM Verification
 #
 resource "aws_ses_domain_dkim" "main" {
-  domain = "${aws_ses_domain_identity.email_domain_east.domain}"
+  domain = "${aws_ses_domain_identity.main.domain}"
 }
 
 resource "aws_route53_record" "dkim" {
@@ -95,4 +85,28 @@ resource "aws_route53_record" "txt_dmarc" {
   type    = "TXT"
   ttl     = "600"
   records = ["v=DMARC1; p=none; rua=mailto:${var.ses_dmarc_rua};"]
+}
+
+# Email Template
+resource "aws_ses_template" "case_served" {
+  name    = "case_served"
+  subject = "eService Notification from US Tax Court"
+  html    = <<EOF
+  <p>Dear {{name}},</p>
+  <p>A document has been served on your Tax Court case:</p>
+  <p>
+    {{docketNumber}}<br />
+    {{caseCaption}}
+  </p>
+  <p>
+    {{documentName}}<br />
+    Served {{serviceDate}} {{serviceTime}} EST
+  </p>
+  <p>To view this document, please log in to the US Tax Court online.</p>
+  <p>Certain documents may require your action.</p>
+  <p>
+    Please do not reply to this message. This e-mail is an automated
+    notification from an account which is unable to receive replies.
+  </p>
+EOF
 }
