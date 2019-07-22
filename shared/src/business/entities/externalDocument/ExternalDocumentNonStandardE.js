@@ -23,9 +23,9 @@ ExternalDocumentNonStandardE.prototype.getDocumentTitle = function() {
 };
 
 ExternalDocumentNonStandardE.errorToMessageMap = {
-  category: 'You must select a category.',
-  documentType: 'You must select a document type.',
-  trialLocation: 'You must select a trial location.',
+  category: 'Select a Category.',
+  documentType: 'Select a Document Type.',
+  trialLocation: 'Select a trial location.',
 };
 
 ExternalDocumentNonStandardE.schema = {

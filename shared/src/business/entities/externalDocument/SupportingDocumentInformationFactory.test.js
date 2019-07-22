@@ -9,7 +9,7 @@ describe('SupportingDocumentInformationFactory', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         attachments: 'Enter selection for Attachments.',
         certificateOfService: 'Enter selection for Certificate of Service.',
-        supportingDocument: 'Choose a Document Type',
+        supportingDocument: 'Select a Document Type.',
       });
     });
 
@@ -32,7 +32,7 @@ describe('SupportingDocumentInformationFactory', () => {
           supportingDocumentFile: {},
         });
         expect(extDoc.getFormattedValidationErrors()).toEqual({
-          certificateOfServiceDate: 'Enter date for Certificate of Service',
+          certificateOfServiceDate: 'Enter date for Certificate of Service.',
         });
       });
     });
