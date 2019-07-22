@@ -41,7 +41,29 @@ exports.serveSignedStipDecisionInteractor = async ({
   const stipulatedDecisionDocument = caseEntity.getDocumentById({
     documentId,
   });
-  stipulatedDecisionDocument.setAsServed();
+
+  const aggregateServedParties = parties => {
+    const aggregated = [];
+    parties.map(party => {
+      if (party && party.email) {
+        aggregated.push({
+          email: party.email,
+          name: party.name,
+        });
+      }
+    });
+    return aggregated;
+  };
+
+  // since this is a stip decision, we will serve all parties
+  const servedParties = aggregateServedParties([
+    caseEntity.contactPrimary,
+    caseEntity.contactSecondary,
+    ...caseEntity.practitioners,
+    ...caseEntity.respondents,
+  ]);
+
+  stipulatedDecisionDocument.setAsServed(servedParties);
 
   // may need to move the document from a draft state
   // - "signed stipulated decision" becomes "stipulated decision"
