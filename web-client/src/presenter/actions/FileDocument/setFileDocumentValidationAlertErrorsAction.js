@@ -27,11 +27,11 @@ export const setFileDocumentValidationAlertErrorsAction = ({
         if (Array.isArray(error)) {
           return error.map(subError => {
             let subErrorKeys = Object.keys(subError).filter(
-              key => key !== 'index',
+              subKey => subKey !== 'index',
             );
             if (props.errorDisplayOrder) {
               subErrorKeys = props.errorDisplayOrder.filter(
-                key => subError[key] !== undefined,
+                subKey => subError[subKey] !== undefined,
               );
             }
             let displayKey = key;

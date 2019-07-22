@@ -20,7 +20,7 @@ cp dist/* src
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls create_domain --config "serverless-work-items.yml" --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}" --userPoolId "${USER_POOL_ID}" --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}" --verbose
 
-ENVIRONMENT="${slsStage}" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls deploy --config "serverless-users.yml" --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}"  --userPoolId "${USER_POOL_ID}" --verbose --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}"
+ENVIRONMENT="${slsStage}" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls deploy --config "serverless-work-items.yml" --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}"  --userPoolId "${USER_POOL_ID}" --verbose --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}"
 ./configure-custom-api-access-logging.sh "${slsStage}" ./config-custom-access-logs.json "${region}"
 
 cp /tmp/workItemsHandlers.js src
