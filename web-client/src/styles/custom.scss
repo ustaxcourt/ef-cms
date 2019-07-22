@@ -365,8 +365,16 @@ select[disabled] {
 .before-filing-document {
   [role='listitem'] {
     position: relative;
-    margin-top: 30px;
-    margin-bottom: 30px;
+
+    /* big screens */
+    @media only screen and (min-width: $medium-screen) {
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+    /* little screens */
+    @media only screen and (max-width: $medium-screen - 1) {
+      margin-top: 20px;
+    }
   }
   [role='listitem'],
   .button-box-container {

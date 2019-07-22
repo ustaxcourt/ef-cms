@@ -41,19 +41,25 @@ export const InclusionsForm = connect(
             <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
               <button
-                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105"
+                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 include-modal-button"
                 onClick={() =>
                   openCleanModalSequence({
                     value: 'WhatCanIIncludeModalOverlay',
                   })
                 }
               >
-                <FontAwesomeIcon
-                  className="margin-right-05"
-                  icon="question-circle"
-                  size="1x"
-                />
-                What can I include with my document?
+                <div className="grid-row">
+                  <div className="grid-col-1">
+                    <FontAwesomeIcon
+                      className="margin-right-05"
+                      icon="question-circle"
+                      size="1x"
+                    />
+                  </div>
+                  <div className="grid-col-11">
+                    What can I include with my document?
+                  </div>
+                </div>
               </button>
             </legend>
             <div className="usa-checkbox">
