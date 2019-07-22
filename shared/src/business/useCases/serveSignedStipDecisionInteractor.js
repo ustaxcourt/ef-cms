@@ -4,6 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
+const { formatDateString } = require('../utilities/DateHandler');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -69,6 +70,27 @@ exports.serveSignedStipDecisionInteractor = async ({
   // - "signed stipulated decision" becomes "stipulated decision"
 
   // email parties
+  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+    applicationContext,
+    desinations: servedParties.map(party => ({
+      email: party.email,
+      templateData: {
+        caseCaption: caseToUpdate.caseCaption,
+        docketNumber: caseToUpdate.docketNumber,
+        documentName: stipulatedDecisionDocument.documentTitle,
+        name: party.name,
+        serviceDate: formatDateString(
+          stipulatedDecisionDocument.servedAt,
+          'MMDDYYYY',
+        ),
+        serviceTime: formatDateString(
+          stipulatedDecisionDocument.servedAt,
+          'TIME',
+        ),
+      },
+    })),
+    templateName: 'case_served',
+  });
 
   // generate docket record
   caseEntity.addDocketRecord(
