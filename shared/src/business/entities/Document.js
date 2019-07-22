@@ -49,6 +49,7 @@ function Document(rawDocument) {
     reviewDate: rawDocument.reviewDate,
     reviewUser: rawDocument.reviewUser,
     scenario: rawDocument.scenario,
+    servedAt: rawDocument.servedAt,
     servedDate: rawDocument.servedDate,
     serviceDate: rawDocument.serviceDate,
     signedAt: rawDocument.signedAt,
@@ -148,6 +149,10 @@ joiValidationDecorator(
       .iso()
       .optional(),
     reviewUser: joi.string().optional(),
+    servedAt: joi
+      .date()
+      .iso()
+      .optional(),
     servedDate: joi
       .date()
       .iso()
@@ -172,6 +177,11 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+Document.prototype.setAsServed = function() {
+  this.status = 'served';
+  this.servedAt = new Date().toISOString();
 };
 
 /**

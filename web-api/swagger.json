@@ -71,7 +71,6 @@
       }
     },
 
-
     "/cases/{caseId}/contact-primary": {
       "parameters": [
         {
@@ -259,6 +258,110 @@
         "tags": ["documents"],
         "summary": "create a new document inside of a case",
         "description": "Create a new document and attaches it to a case.  It will also create a generic work item.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/external-document": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["documents"],
+        "summary": "file a new external document on a case",
+        "description": "Creates a new external document and attaches it to a case. It will also create a work item.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/docket-entry": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["documents"],
+        "summary": "file a new docket entry on a case",
+        "description": "Creates a new docket entry/document and attaches it to a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {

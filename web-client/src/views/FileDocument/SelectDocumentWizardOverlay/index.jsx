@@ -5,22 +5,26 @@ import { ViewDocumentCategory } from './ViewDocumentCategory';
 import { WhatDocumentIsThis } from './WhatDocumentIsThis';
 import React from 'react';
 
-export const SelectDocumentWizardOverlay = () => (
-  <Overlay onEscSequence="clearModalSequence">
-    <Tabs
-      asSwitch
-      bind="modal.wizardStep"
-      defaultActiveTab="WhatDocumentIsThis"
-    >
-      <Tab tabName="WhatDocumentIsThis">
-        <WhatDocumentIsThis />
-      </Tab>
-      <Tab tabName="ViewAllDocuments">
-        <ViewAllDocumentsMobile />
-      </Tab>
-      <Tab tabName="ViewDocumentCategory">
-        <ViewDocumentCategory />
-      </Tab>
-    </Tabs>
-  </Overlay>
-);
+export const SelectDocumentWizardOverlay = () => {
+  const ref = React.createRef();
+
+  return (
+    <Overlay ref={ref} onEscSequence="clearModalSequence">
+      <Tabs
+        asSwitch
+        bind="modal.wizardStep"
+        defaultActiveTab="WhatDocumentIsThis"
+      >
+        <Tab tabName="WhatDocumentIsThis">
+          <WhatDocumentIsThis overlayRef={ref} />
+        </Tab>
+        <Tab tabName="ViewAllDocuments">
+          <ViewAllDocumentsMobile overlayRef={ref} />
+        </Tab>
+        <Tab tabName="ViewDocumentCategory">
+          <ViewDocumentCategory overlayRef={ref} />
+        </Tab>
+      </Tabs>
+    </Overlay>
+  );
+};

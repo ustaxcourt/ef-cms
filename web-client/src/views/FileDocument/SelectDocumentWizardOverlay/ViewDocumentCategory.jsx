@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ViewDocumentCategory = connect(
@@ -8,6 +8,7 @@ export const ViewDocumentCategory = connect(
     chooseModalWizardStepSequence: sequences.chooseModalWizardStepSequence,
     clearModalSequence: sequences.clearModalSequence,
     modal: state.modal,
+    overlayRef: props.overlayRef,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
@@ -16,9 +17,13 @@ export const ViewDocumentCategory = connect(
     chooseModalWizardStepSequence,
     clearModalSequence,
     modal,
+    overlayRef,
     updateFileDocumentWizardFormValueSequence,
     viewAllDocumentsHelper,
   }) => {
+    if (overlayRef && overlayRef.current) {
+      overlayRef.current.scrollTo(0, 0);
+    }
     return (
       <React.Fragment>
         <div className="overlay-blue-header">
