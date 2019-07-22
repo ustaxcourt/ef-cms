@@ -66,8 +66,7 @@ exports.serveSignedStipDecisionInteractor = async ({
 
   stipulatedDecisionDocument.setAsServed(servedParties);
 
-  // may need to move the document from a draft state
-  // - "signed stipulated decision" becomes "stipulated decision"
+  // email parties
 
   // generate docket record
   caseEntity.addDocketRecord(
