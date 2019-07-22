@@ -1,9 +1,8 @@
+import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
+import { PDFPreviewModal } from './PDFPreviewModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
-import { PDFPreviewModal } from './PDFPreviewModal';
 
 export const PDFPreviewButton = connect(
   {

@@ -9,6 +9,9 @@
 
   .svg-inline--fa {
     margin-right: 5px;
+    &.fa-1x {
+      font-size: 14.5px;
+    }
   }
 
   &.float-right {
@@ -33,6 +36,10 @@
     }
     &:disabled {
       color: color($theme-color-base);
+    }
+    /* little screens */
+    @media only screen and (max-width: $medium-screen) {
+      font-size: 14px;
     }
   }
 
@@ -84,8 +91,4 @@
 
 .button-box-container {
   margin-top: 40px;
-}
-
-#init-file-petition {
-  margin-right: 0;
 }

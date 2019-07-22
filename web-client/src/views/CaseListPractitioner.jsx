@@ -51,7 +51,7 @@ export const CaseListPractitioner = connect(
     const renderStartButton = () => (
       <a
         className={
-          'usa-button tablet-full-width ' +
+          'usa-button tablet-full-width margin-right-0 ' +
           (helper.showCaseList ? 'new-case' : '')
         }
         href="/start-a-case"
