@@ -76,7 +76,7 @@ export const StartCaseInternal = connect(
                   All fields required unless otherwise noted
                 </p>
 
-                <div className="blue-container document-detail-one-third">
+                <div className="blue-container">
                   <div
                     className={`usa-form-group ${
                       validationErrors.petitionFile
@@ -489,6 +489,7 @@ export const StartCaseInternal = connect(
                         showSecondaryContact={
                           startCaseInternalHelper.showSecondaryContact
                         }
+                        onBlur="validatePetitionFromPaperSequence"
                         onChange="updateFormValueSequence"
                       />
                     </div>
