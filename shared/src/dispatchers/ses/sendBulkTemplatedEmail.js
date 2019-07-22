@@ -9,7 +9,7 @@
  * ]
  *
  * @param {object} applicationContext application context
- * @param {Array} destinations array of desinations matching the format described above
+ * @param {Array} destinations array of destinations matching the format described above
  * @param {string} templateName name of the SES template
  * @returns {void}
  */

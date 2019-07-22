@@ -72,7 +72,7 @@ exports.serveSignedStipDecisionInteractor = async ({
   // email parties
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
-    desinations: servedParties.map(party => ({
+    destinations: servedParties.map(party => ({
       email: party.email,
       templateData: {
         caseCaption: caseToUpdate.caseCaption,
