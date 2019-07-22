@@ -16,7 +16,6 @@ export const submitCourtIssuedOrderAction = async ({
 }) => {
   let caseDetail;
   const { caseId, docketNumber } = get(state.caseDetail);
-  const userName = get(state.user.name);
   const { primaryDocumentFileId } = props;
   const documentId = primaryDocumentFileId;
 
@@ -31,30 +30,33 @@ export const submitCourtIssuedOrderAction = async ({
     ...documentMetadata,
     docketNumber,
     caseId,
-    filedBy: userName,
   };
 
   if (primaryDocumentFileId) {
-    await applicationContext.getUseCases().virusScanPdf({
+    await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
     });
 
-    await applicationContext.getUseCases().validatePdf({
+    await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,
     });
 
-    await applicationContext.getUseCases().sanitizePdf({
+    // TODO: ghostscript is causing problems with fonts on generated orders
+    // - this will be resolved in a cleanup issue later
+    /*await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
-    });
+    });*/
 
-    caseDetail = await applicationContext.getUseCases().fileExternalDocument({
-      applicationContext,
-      documentMetadata,
-      primaryDocumentFileId,
-    });
+    caseDetail = await applicationContext
+      .getUseCases()
+      .fileCourtIssuedOrderInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId,
+      });
   }
 
   return {

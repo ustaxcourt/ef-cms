@@ -6,12 +6,12 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/TrialSession');
 
 /**
- * getTrialSessionDetails
+ * getTrialSessionDetailsInteractor
  * @param applicationContext
  * @param trialSessionId
  * @returns {*|Promise<*>}
  */
-exports.getTrialSessionDetails = async ({
+exports.getTrialSessionDetailsInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {

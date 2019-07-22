@@ -10,10 +10,12 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
+import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -26,10 +28,12 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
@@ -51,6 +55,7 @@ export const state = {
   caseTypes: [],
   cases: [],
   cognitoLoginUrl: null,
+  completeDocumentTypeSectionHelper,
   completeForm: {},
   contactsHelper,
   currentPage: 'Interstitial',
@@ -65,6 +70,7 @@ export const state = {
   documentDetailHelper,
   documentHelper,
   documentId: null,
+  documentSigningHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
@@ -91,8 +97,10 @@ export const state = {
   },
   pdfForSigning: {
     documentId: null,
+    nameForSigning: '',
     pageNumber: 1,
     pdfjsObj: null,
+    signatureApplied: false,
     signatureData: null,
   },
   percentComplete: 0,
@@ -104,6 +112,7 @@ export const state = {
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
+  selectDocumentSelectHelper,
   selectDocumentTypeHelper,
   selectedWorkItems: [],
   sessionMetadata: {},
@@ -120,6 +129,7 @@ export const state = {
   user: null,
   users: [],
   validationErrors: {},
+  viewAllDocumentsHelper,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},

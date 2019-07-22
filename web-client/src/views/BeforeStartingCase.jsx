@@ -20,24 +20,37 @@ export const BeforeStartingCase = () => (
       </div>
     </div>
     <section className="usa-section before-starting-case grid-container">
-      <h1 className="captioned" tabIndex="-1">
-        Before you begin…
+      <h1 className="captioned margin-bottom-2" tabIndex="-1">
+        Tips for Preparing Documents Before You File
       </h1>
-      <h2 className="tablet:margin-bottom-7">
-        There are a few things you need to do to prepare your documents before
-        filing your case.
-      </h2>
-
       <div className="grid-container padding-x-0" role="list">
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">
             <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
+                <FontAwesomeIcon icon="user-check" />
+              </div>
+              <h2 className="caseItem__heading">
+                1. Are you authorized to file on behalf of this taxpayer?
+              </h2>
+              <div className="caseItem__content">
+                <p>
+                  To file a case on behalf of another taxpayer, you must be
+                  authorized to litigate in this Court as provided by the Tax
+                  Court Rules of Practice and Procedure (Rule 60). Enrolled
+                  agents, certified public accountants, and powers of attorney
+                  who are not admitted to practice before the Court are not
+                  eligible to represent taxpayers.
+                </p>
+              </div>
+            </div>
+            <div className="caseItem" role="listitem">
+              <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </div>
-              <h3 className="caseItem__heading">
-                1. Have the IRS Notice(s) Youʼve Received Available to Submit
-              </h3>
+              <h2 className="caseItem__heading">
+                2. Have the IRS Notice(s) Youʼve Received Available to Submit
+              </h2>
               <div className="caseItem__content">
                 <p>
                   If you’ve received an IRS notice, such as a Notice of
@@ -57,9 +70,9 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'edit']} />
               </div>
-              <h3 className="caseItem__heading">
-                2. Fill Out The Required Forms
-              </h3>
+              <h2 className="caseItem__heading">
+                3. Fill Out The Required Forms
+              </h2>
               <div className="caseItem__content">
                 <p className="label">Petition Form</p>
                 <p>
@@ -122,10 +135,10 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['fa', 'shield-alt']} />
               </div>
-              <h3 className="caseItem__heading">
-                3. Remove Personal Information From Your Petition and IRS
+              <h2 className="caseItem__heading">
+                4. Remove Personal Information From Your Petition and IRS
                 Notice(s)
-              </h3>
+              </h2>
               <div className="caseItem__content">
                 <p>
                   If the IRS notice includes personal information (such as
@@ -143,9 +156,9 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'file-pdf']} />
               </div>
-              <h3 className="caseItem__heading">
-                4. Combine Your Petition and IRS Notice(s) Into a Single PDF
-              </h3>
+              <h2 className="caseItem__heading">
+                5. Combine Your Petition and IRS Notice(s) Into a Single PDF
+              </h2>
               <div className="caseItem__content">
                 <p>
                   Scan your Petition and IRS notice into one Petition PDF or
@@ -172,9 +185,9 @@ export const BeforeStartingCase = () => (
                   />
                 </div>
               </div>
-              <h3 className="caseItem__heading">
-                5. Donʼt Submit Extra Documents With Your Petition
-              </h3>
+              <h2 className="caseItem__heading">
+                6. Donʼt Submit Extra Documents With Your Petition
+              </h2>
               <div className="caseItem__content">
                 <p>
                   <strong>Do not</strong> include any additional documents with

@@ -20,10 +20,12 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
     });
   }
 
-  const caseDetail = await applicationContext.getUseCases().updateCase({
-    applicationContext,
-    caseToUpdate,
-  });
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .updateCaseInteractor({
+      applicationContext,
+      caseToUpdate,
+    });
 
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
     const { Case } = applicationContext.getEntityConstructors();
@@ -31,7 +33,7 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
 
     const caseSortTags = caseEntity.generateTrialSortTags();
 
-    await applicationContext.getUseCases().updateCaseTrialSortTags({
+    await applicationContext.getUseCases().updateCaseTrialSortTagsInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       caseSortTags,

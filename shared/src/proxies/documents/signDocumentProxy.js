@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * signDocument
+ * signDocumentInteractor
  *
  * @param caseId
  * @param document
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.signDocument = ({
+exports.signDocumentInteractor = ({
   applicationContext,
   caseId,
   originalDocumentId,

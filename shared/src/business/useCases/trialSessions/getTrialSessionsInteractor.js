@@ -6,11 +6,11 @@ const { TrialSession } = require('../../entities/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getTrialSessions
+ * getTrialSessionsInteractor
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getTrialSessions = async ({ applicationContext }) => {
+exports.getTrialSessionsInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');

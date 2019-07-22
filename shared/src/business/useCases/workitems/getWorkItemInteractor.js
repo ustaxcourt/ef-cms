@@ -6,14 +6,14 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
- * getWorkItem
+ * getWorkItemInteractor
  *
  * @param userId
  * @param workItemId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getWorkItem = async ({ applicationContext, workItemId }) => {
+exports.getWorkItemInteractor = async ({ applicationContext, workItemId }) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({

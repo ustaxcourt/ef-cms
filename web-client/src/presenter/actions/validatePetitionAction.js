@@ -20,7 +20,7 @@ export const validatePetitionAction = ({ applicationContext, get, path }) => {
     ['year', 'month', 'day', 'trialCities'],
   );
 
-  const errors = applicationContext.getUseCases().validatePetition({
+  const errors = applicationContext.getUseCases().validatePetitionInteractor({
     applicationContext,
     petition: { ...petition, ...form },
   });

@@ -18,7 +18,7 @@ export const validateInitialWorkItemMessageAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateInitialWorkItemMessage({
+    .validateInitialWorkItemMessageInteractor({
       applicationContext,
       message,
     });

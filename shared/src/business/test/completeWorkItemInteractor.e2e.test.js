@@ -6,17 +6,17 @@ const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
 const {
-  createWorkItem,
+  createWorkItemInteractor,
 } = require('../useCases/workitems/createWorkItemInteractor');
 const {
-  getInboxMessagesForUser,
+  getInboxMessagesForUserInteractor,
 } = require('../useCases/workitems/getInboxMessagesForUserInteractor');
 const {
-  getSentMessagesForUser,
+  getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
 
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
-const { getCase } = require('../useCases/getCaseInteractor');
+const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -75,7 +75,7 @@ describe('completeWorkItemInteractor integration test', () => {
       });
     };
 
-    const createdCase = await getCase({
+    const createdCase = await getCaseInteractor({
       applicationContext,
       caseId,
     });
@@ -84,7 +84,7 @@ describe('completeWorkItemInteractor integration test', () => {
       d => d.documentType === 'Petition',
     );
 
-    const workItem = await createWorkItem({
+    const workItem = await createWorkItemInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       caseId,
@@ -92,7 +92,7 @@ describe('completeWorkItemInteractor integration test', () => {
       message: 'this is a test',
     });
 
-    let inbox = await getInboxMessagesForUser({
+    let inbox = await getInboxMessagesForUserInteractor({
       applicationContext,
       userId: applicationContext.getCurrentUser().userId,
     });
@@ -111,13 +111,13 @@ describe('completeWorkItemInteractor integration test', () => {
       completedMessage: 'game over man',
       workItemId: workItem.workItemId,
     });
-    const outbox = await getSentMessagesForUser({
+    const outbox = await getSentMessagesForUserInteractor({
       applicationContext,
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(outbox).toMatchObject([]);
 
-    const caseAfterAssign = await getCase({
+    const caseAfterAssign = await getCaseInteractor({
       applicationContext,
       caseId,
     });

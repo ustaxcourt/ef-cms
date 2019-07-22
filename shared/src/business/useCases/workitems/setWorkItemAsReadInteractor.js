@@ -5,14 +5,17 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * setWorkItemAsRead
+ * setWorkItemAsReadInteractor
  *
  * @param user
  * @param caseId
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.setWorkItemAsRead = async ({ applicationContext, workItemId }) => {
+exports.setWorkItemAsReadInteractor = async ({
+  applicationContext,
+  workItemId,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, GET_READ_MESSAGES)) {

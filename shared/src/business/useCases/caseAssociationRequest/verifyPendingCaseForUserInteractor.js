@@ -5,7 +5,7 @@
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.verifyPendingCaseForUser = async ({
+exports.verifyPendingCaseForUserInteractor = async ({
   applicationContext,
   caseId,
   userId,

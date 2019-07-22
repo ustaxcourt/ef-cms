@@ -102,7 +102,7 @@ describe('creation form', () => {
   it('selects state', () => {
     cy.get('select[name="contactPrimary.state"]')
       .scrollIntoView()
-      .select('Alabama');
+      .select('AL');
   });
 
   it('fills in zipcode', () => {
@@ -178,7 +178,7 @@ describe('creation form', () => {
 
   it('submits forms and shows a success message', () => {
     cy.server();
-    cy.route('POST', '*/cases').as('postCase');
+    cy.route('POST', '**/cases').as('postCase');
     cy.get('form button#submit-case')
       .scrollIntoView()
       .click();

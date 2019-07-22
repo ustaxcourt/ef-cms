@@ -8,7 +8,10 @@ const qs = require('qs');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.refreshToken = async ({ applicationContext, refreshToken }) => {
+exports.refreshTokenInteractor = async ({
+  applicationContext,
+  refreshToken,
+}) => {
   const data = qs.stringify({
     client_id: applicationContext.getCognitoClientId(),
     grant_type: 'refresh_token',

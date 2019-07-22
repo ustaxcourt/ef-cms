@@ -17,10 +17,12 @@ export const validateSelectDocumentTypeAction = ({
 }) => {
   const documentMetadata = get(state.form);
 
-  const errors = applicationContext.getUseCases().validateExternalDocument({
-    applicationContext,
-    documentMetadata,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateExternalDocumentInteractor({
+      applicationContext,
+      documentMetadata,
+    });
 
   if (!errors) {
     return path.success();

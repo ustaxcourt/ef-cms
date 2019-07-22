@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param applicationContext
  * @returns {Promise<*|*>}
  */
-exports.getDocumentQCInboxForSection = async ({
+exports.getDocumentQCInboxForSectionInteractor = async ({
   applicationContext,
   section,
 }) => {

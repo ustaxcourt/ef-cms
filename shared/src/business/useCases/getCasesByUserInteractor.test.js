@@ -1,4 +1,4 @@
-const { getCasesByUser } = require('./getCasesByUserInteractor');
+const { getCasesByUserInteractor } = require('./getCasesByUserInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 
@@ -17,7 +17,7 @@ describe('Send petition to IRS', () => {
     };
     let error;
     try {
-      await getCasesByUser({
+      await getCasesByUserInteractor({
         applicationContext,
         userId: 'petitionsclerk',
       });

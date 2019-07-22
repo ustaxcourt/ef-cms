@@ -21,7 +21,7 @@ describe('validateExternalDocumentInformationAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateExternalDocumentInformation: validateExternalDocumentInformationStub,
+        validateExternalDocumentInformationInteractor: validateExternalDocumentInformationStub,
       }),
     };
 

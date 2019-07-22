@@ -92,7 +92,7 @@ export const PartyInformation = connect(
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/documents/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/api/documents/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

@@ -1,6 +1,7 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
+import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -20,6 +21,7 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { PDFSigner } from './PDFSigner';
+import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
@@ -37,6 +39,7 @@ const pages = {
   AddDocketEntry,
   AddTrialSession,
   BeforeStartingCase,
+  BeforeYouFileADocument,
   CaseDetail,
   CaseDetailInternal,
   CreateOrder,
@@ -54,6 +57,7 @@ const pages = {
   Loading,
   LogIn,
   PDFSigner,
+  PrimaryContactEdit,
   RequestAccessWizard,
   SelectDocumentType,
   StartCase,

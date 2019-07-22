@@ -4,7 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-exports.filePetitionFromPaper = async ({
+exports.filePetitionFromPaperInteractor = async ({
   applicationContext,
   ownershipDisclosureFile,
   ownershipDisclosureUploadProgress,
@@ -57,17 +57,17 @@ exports.filePetitionFromPaper = async ({
   ].filter(documentId => documentId);
 
   for (let documentId of documentIds) {
-    await applicationContext.getUseCases().virusScanPdf({
+    await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
     });
 
-    await applicationContext.getUseCases().validatePdf({
+    await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,
     });
 
-    await applicationContext.getUseCases().sanitizePdf({
+    await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });

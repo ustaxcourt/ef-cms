@@ -13,7 +13,7 @@ export const getEligibleCasesForTrialSessionAction = async ({
   const { trialSessionId } = props;
   const eligibleCases = await applicationContext
     .getUseCases()
-    .getEligibleCasesForTrialSession({
+    .getEligibleCasesForTrialSessionInteractor({
       applicationContext,
       trialSessionId,
     });

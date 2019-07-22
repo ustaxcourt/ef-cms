@@ -17,20 +17,24 @@ import React from 'react';
 export const DocumentDetail = connect(
   {
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
-    gotoSignPDFDocumentSequence: sequences.gotoSignPDFDocumentSequence,
     helper: state.documentDetailHelper,
+    messageId: state.messageId,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
   },
   ({
     baseUrl,
+    caseDetail,
     caseHelper,
     clickServeToIrsSequence,
-    gotoSignPDFDocumentSequence,
     helper,
+    messageId,
+    navigateToPathSequence,
     setModalDialogNameSequence,
     showModal,
     token,
@@ -41,8 +45,9 @@ export const DocumentDetail = connect(
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
           <span className="filed-by">
-            Filed {helper.formattedDocument.createdAtFormatted} by{' '}
-            {helper.formattedDocument.filedBy}
+            Filed {helper.formattedDocument.createdAtFormatted}
+            {helper.formattedDocument.filedBy &&
+              ` by ${helper.formattedDocument.filedBy}`}
           </span>
           <SuccessNotification />
           <ErrorNotification />
@@ -104,8 +109,7 @@ export const DocumentDetail = connect(
               </div>
               <div
                 className={`grid-col-7 ${
-                  !caseHelper.showServeToIrsButton ||
-                  !helper.formattedDocument.isPetition
+                  helper.showDocumentViewerTopMargin
                     ? 'document-viewer-top-margin'
                     : ''
                 }`}
@@ -142,13 +146,14 @@ export const DocumentDetail = connect(
                     <button
                       className="usa-button serve-to-irs margin-right-0"
                       onClick={() =>
-                        gotoSignPDFDocumentSequence({
-                          documentId: helper.formattedDocument.documentId,
-                          pageNumber: 1,
+                        navigateToPathSequence({
+                          path: messageId
+                            ? `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/messages/${messageId}/sign`
+                            : `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/sign`,
                         })
                       }
                     >
-                      <FontAwesomeIcon icon={['far', 'edit']} />
+                      <FontAwesomeIcon icon={['fas', 'edit']} />
                       Sign This Document
                     </button>
                   )}
@@ -157,7 +162,7 @@ export const DocumentDetail = connect(
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CYPRESS && (
                   <iframe
-                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
+                    src={`${baseUrl}/api/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
                     title={`Document type: ${helper.formattedDocument.documentType}`}
                   />
                 )}

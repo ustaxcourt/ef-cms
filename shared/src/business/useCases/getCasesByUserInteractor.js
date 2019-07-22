@@ -1,12 +1,12 @@
 const { Case } = require('../entities/cases/Case');
 
 /**
- * getCasesByUser
+ * getCasesByUserInteractor
  * @param userId
  * @param applicationContext
  * @returns {*|Promise<*>}
  */
-exports.getCasesByUser = async ({ applicationContext, userId }) => {
+exports.getCasesByUserInteractor = async ({ applicationContext, userId }) => {
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesByUser({

@@ -1,8 +1,10 @@
 const sinon = require('sinon');
-const { fileExternalDocument } = require('./fileExternalDocumentInteractor');
+const {
+  fileExternalDocumentInteractor,
+} = require('./fileExternalDocumentInteractor');
 const { User } = require('../../entities/User');
 
-describe('fileExternalDocument', () => {
+describe('fileExternalDocumentInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
@@ -47,7 +49,7 @@ describe('fileExternalDocument', () => {
           updateCase: async () => caseRecord,
         }),
       };
-      await fileExternalDocument({
+      await fileExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
@@ -82,7 +84,7 @@ describe('fileExternalDocument', () => {
           updateCase: updateCaseSpy,
         }),
       };
-      await fileExternalDocument({
+      await fileExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
@@ -122,7 +124,7 @@ describe('fileExternalDocument', () => {
           updateCase: updateCaseSpy,
         }),
       };
-      await fileExternalDocument({
+      await fileExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,

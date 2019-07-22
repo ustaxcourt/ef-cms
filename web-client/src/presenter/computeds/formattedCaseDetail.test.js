@@ -770,4 +770,64 @@ describe('formattedCaseDetail', () => {
       expect(result.formattedTrialJudge).toEqual('Judge Judy');
     });
   });
+
+  describe('formats case deadlines', () => {
+    it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', async () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+      };
+      const caseDeadlines = [
+        {
+          deadlineDate: '2019-06-30T04:00:00.000Z',
+        },
+        {
+          deadlineDate: '2019-01-30T05:00:00.000Z',
+        },
+        {
+          deadlineDate: '2025-07-30T04:00:00.000Z',
+        },
+      ];
+
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDeadlines,
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.caseDeadlines.length).toEqual(3);
+      expect(result.caseDeadlines).toEqual([
+        {
+          deadlineDate: '2019-01-30T05:00:00.000Z',
+          deadlineDateFormatted: '01/30/19',
+          overdue: true,
+        },
+        {
+          deadlineDate: '2019-06-30T04:00:00.000Z',
+          deadlineDateFormatted: '06/30/19',
+          overdue: true,
+        },
+        {
+          deadlineDate: '2025-07-30T04:00:00.000Z',
+          deadlineDateFormatted: '07/30/25',
+        },
+      ]);
+    });
+
+    it('does not format empty caseDeadlines array', async () => {
+      const caseDetail = {
+        caseDeadlines: [],
+        petitioners: [{ name: 'bob' }],
+      };
+      const result = await runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+          constants,
+        },
+      });
+      expect(result.caseDeadlines.length).toEqual(0);
+    });
+  });
 });

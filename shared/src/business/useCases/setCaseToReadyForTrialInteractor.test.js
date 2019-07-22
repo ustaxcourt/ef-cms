@@ -1,5 +1,5 @@
 const {
-  setCaseToReadyForTrial,
+  setCaseToReadyForTrialInteractor,
 } = require('./setCaseToReadyForTrialInteractor');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -33,7 +33,7 @@ describe('set case status to ready for trial', () => {
   });
 
   it('sets the case status to General Docket - At Issue (Ready for Trial)', async () => {
-    const result = await setCaseToReadyForTrial({
+    const result = await setCaseToReadyForTrialInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -49,7 +49,7 @@ describe('set case status to ready for trial', () => {
     };
     let error;
     try {
-      await setCaseToReadyForTrial({
+      await setCaseToReadyForTrialInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -78,7 +78,7 @@ describe('set case status to ready for trial', () => {
     };
     let error;
     try {
-      await setCaseToReadyForTrial({
+      await setCaseToReadyForTrialInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
       });
@@ -112,7 +112,7 @@ describe('set case status to ready for trial', () => {
     };
     let error;
     try {
-      await setCaseToReadyForTrial({
+      await setCaseToReadyForTrialInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });

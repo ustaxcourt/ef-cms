@@ -86,30 +86,95 @@ export const StartCase = connect(
               submitFilePetitionSequence();
             }}
           >
-            {showModal === 'FormCancelModalDialogComponent' && (
+            {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
             )}
             <ErrorNotification />
             <h1
-              className="margin-bottom-05"
+              className="margin-bottom-2"
               id="start-case-header"
               tabIndex="-1"
             >
-              Start a Case
+              1. Provide Your Statement of Identity
             </h1>
-            <p className="required-statement margin-top-05 margin-bottom-5">
+            <p className="required-statement margin-top-05 margin-bottom-2">
               All fields required unless otherwise noted
             </p>
-            <h2>Upload Your Petition to Start Your Case</h2>
-
+            <Hint>
+              The Statement of Taxpayer Identification is the only document that
+              should include personal information (such as Social Security
+              Numbers, Taxpayer Identification Numbers, or Employer
+              Identification Numbers). It’s sent to the IRS to help identify
+              you, but is never viewed by the Court or stored as part of the
+              public record.
+            </Hint>
+            <h2>Upload Your Statement of Taxpayer Identification</h2>
+            <div className="blue-container">
+              <div
+                className={`usa-form-group ${
+                  validationErrors.stinFile ? 'usa-form-group--error' : ''
+                }`}
+              >
+                <label
+                  className={
+                    'usa-label ustc-upload-stin with-hint ' +
+                    (startCaseHelper.showStinFileValid ? 'validated' : '')
+                  }
+                  htmlFor="stin-file"
+                >
+                  Upload Your Statement of Taxpayer Identification
+                  <span className="success-message">
+                    <FontAwesomeIcon icon="check-circle" size="1x" />
+                  </span>
+                </label>
+                <span className="usa-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
+                <input
+                  accept=".pdf"
+                  className="usa-input"
+                  id="stin-file"
+                  name="stinFile"
+                  type="file"
+                  onChange={e => {
+                    limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                      updatePetitionValueSequence({
+                        key: e.target.name,
+                        value: e.target.files[0],
+                      });
+                      updatePetitionValueSequence({
+                        key: `${e.target.name}Size`,
+                        value: e.target.files[0].size,
+                      });
+                      validateStartCaseSequence();
+                    });
+                  }}
+                />
+                <Text
+                  bind="validationErrors.stinFile"
+                  className="usa-error-message"
+                />
+                <Text
+                  bind="validationErrors.stinFileSize"
+                  className="usa-error-message"
+                />
+              </div>
+            </div>
+            <h1 className="margin-top-5"> 2. Tell Us About Your Petition </h1>
+            <p className="required-statement margin-top-05 margin-bottom-2">
+              All fields required unless otherwise noted
+            </p>
+            <h2 className="margin-top-4">
+              Upload Your Petition to Start Your Case
+            </h2>
+            <Hint>
+              Your Petition upload should include your Petition form and any IRS
+              notices. Don’t forget to remove or redact your personal
+              information on all of your documents, including any IRS notice(s).
+            </Hint>
             <div className="blue-container grid-container padding-x-0">
               <div className="grid-row grid-gap">
-                <div className="mobile-lg:grid-col-7 push-right">
-                  <Hint>
-                    This should include your Petition form and any IRS notice
-                    <span aria-hidden="true">(s)</span> you received.
-                  </Hint>
-                </div>
                 <div className="mobile-lg:grid-col-5">
                   <div
                     className={`usa-form-group ${
@@ -170,75 +235,194 @@ export const StartCase = connect(
               </div>
             </div>
 
-            <h2 className="margin-top-4">
-              Upload Your Statement of Taxpayer Identification
-            </h2>
+            <h2 className="margin-top-4">Why are you filing this petition?</h2>
             <div className="blue-container">
-              <div
-                className={`usa-form-group ${
-                  validationErrors.stinFile ? 'usa-form-group--error' : ''
-                }`}
-              >
-                <label
+              <div className="usa-form-group">
+                <fieldset
                   className={
-                    'usa-label ustc-upload-stin with-hint ' +
-                    (startCaseHelper.showStinFileValid ? 'validated' : '')
+                    'usa-fieldset ' +
+                    (validationErrors.hasIrsNotice
+                      ? 'usa-form-group--error'
+                      : '')
                   }
-                  htmlFor="stin-file"
+                  id="irs-notice-radios"
                 >
-                  Upload Your Statement of Taxpayer Identification
-                  <span className="success-message">
-                    <FontAwesomeIcon icon="check-circle" size="1x" />
-                  </span>
-                </label>
-                <span className="usa-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
-                </span>
-                <input
-                  accept=".pdf"
-                  className="usa-input"
-                  id="stin-file"
-                  name="stinFile"
-                  type="file"
-                  onChange={e => {
-                    limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                      updatePetitionValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      updatePetitionValueSequence({
-                        key: `${e.target.name}Size`,
-                        value: e.target.files[0].size,
-                      });
-                      validateStartCaseSequence();
-                    });
-                  }}
-                />
-                <Text
-                  bind="validationErrors.stinFile"
-                  className="usa-error-message"
-                />
-                <Text
-                  bind="validationErrors.stinFileSize"
-                  className="usa-error-message"
-                />
+                  <legend className="usa-legend">
+                    {startCaseHelper.noticeLegend}
+                  </legend>
+                  <div className="usa-form-group">
+                    {['Yes', 'No'].map((hasIrsNotice, idx) => (
+                      <div
+                        className="usa-radio usa-radio__inline"
+                        key={hasIrsNotice}
+                      >
+                        <input
+                          className="usa-radio__input"
+                          id={`hasIrsNotice-${hasIrsNotice}`}
+                          name="hasIrsNotice"
+                          type="radio"
+                          value={hasIrsNotice === 'Yes'}
+                          onChange={e => {
+                            updateHasIrsNoticeFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value === 'true',
+                            });
+                            validateStartCaseSequence();
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                          id={`hasIrsNotice-${idx}`}
+                        >
+                          {hasIrsNotice}
+                        </label>
+                      </div>
+                    ))}
+                    <Text
+                      bind="validationErrors.hasIrsNotice"
+                      className="usa-error-message"
+                    />
+                  </div>
+                </fieldset>
+
+                {startCaseHelper.showHasIrsNoticeOptions && (
+                  <React.Fragment>
+                    <CaseTypeSelect
+                      allowDefaultOption={true}
+                      caseTypes={caseTypeDescriptionHelper.caseTypes}
+                      legend="Type of Notice / Case"
+                      validation="validateStartCaseSequence"
+                      onChange="updateFormValueSequence"
+                    />
+                    <div
+                      className={
+                        'usa-form-group' +
+                        (validationErrors.irsNoticeDate
+                          ? ' usa-form-group--error'
+                          : '')
+                      }
+                    >
+                      <fieldset className="usa-fieldset">
+                        <legend
+                          className="usa-legend"
+                          id="date-of-notice-legend"
+                        >
+                          Date of Notice
+                        </legend>
+                        <div className="usa-memorable-date">
+                          <div className="usa-form-group usa-form-group--month">
+                            <label
+                              aria-hidden="true"
+                              htmlFor="date-of-notice-month"
+                            >
+                              MM
+                            </label>
+                            <input
+                              aria-describedby="date-of-notice-legend"
+                              aria-label="month, two digits"
+                              className="usa-input usa-input--inline"
+                              id="date-of-notice-month"
+                              max="12"
+                              min="1"
+                              name="month"
+                              type="number"
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <div className="usa-form-group usa-form-group--day">
+                            <label
+                              aria-hidden="true"
+                              htmlFor="date-of-notice-day"
+                            >
+                              DD
+                            </label>
+                            <input
+                              aria-describedby="date-of-notice-legend"
+                              aria-label="day, two digits"
+                              className="usa-input usa-input--inline"
+                              id="date-of-notice-day"
+                              max="31"
+                              min="1"
+                              name="day"
+                              type="number"
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <div className="usa-form-group usa-form-group--year">
+                            <label
+                              aria-hidden="true"
+                              htmlFor="date-of-notice-year"
+                            >
+                              YYYY
+                            </label>
+                            <input
+                              aria-describedby="date-of-notice-legend"
+                              aria-label="year, four digits"
+                              className="usa-input usa-input--inline"
+                              id="date-of-notice-year"
+                              max="2100"
+                              min="1900"
+                              name="year"
+                              type="number"
+                              onBlur={() => {
+                                validateStartCaseSequence();
+                              }}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <Text
+                            bind="validationErrors.irsNoticeDate"
+                            className="usa-error-message"
+                          />
+                        </div>
+                      </fieldset>
+                    </div>
+                  </React.Fragment>
+                )}
+                {startCaseHelper.showNotHasIrsNoticeOptions && (
+                  <CaseTypeSelect
+                    allowDefaultOption={true}
+                    caseTypes={caseTypeDescriptionHelper.caseTypes}
+                    legend="Which topic most closely matches your complaint with the
+                IRS?"
+                    validation="validateStartCaseSequence"
+                    onChange="updateFormValueSequence"
+                  />
+                )}
               </div>
             </div>
 
-            <h2 className="margin-top-4">Who is Filing This Case?</h2>
+            <h1 className="margin-top-5">
+              {' '}
+              Who are you filing this petition for?{' '}
+            </h1>
+            <p className="required-statement margin-top-05 margin-bottom-2">
+              All fields required unless otherwise noted
+            </p>
             <div className="blue-container grid-container padding-x-0">
               <div className="grid-row grid-gap">
-                <div className="mobile-lg:grid-col-7 push-right">
-                  <Hint>
-                    To file a case on behalf of another taxpayer, you must be
-                    authorized to litigate in this Court as provided by the Tax
-                    Court Rules of Practice and Procedure (Rule 60). Enrolled
-                    agents, certified public accountants, and powers of attorney
-                    who are not admitted to practice before the Court are not
-                    eligible to represent taxpayers.
-                  </Hint>
-                </div>
                 <div className="mobile-lg:grid-col-5">
                   <div
                     className={
@@ -603,185 +787,10 @@ export const StartCase = connect(
               </>
             )}
 
-            <h2 className="margin-top-4">What Kind of Case Are You Filing?</h2>
-            <div className="blue-container">
-              <div className="usa-form-group">
-                <fieldset
-                  className={
-                    'usa-fieldset ' +
-                    (validationErrors.hasIrsNotice
-                      ? 'usa-form-group--error'
-                      : '')
-                  }
-                  id="irs-notice-radios"
-                >
-                  <legend className="usa-legend">
-                    {startCaseHelper.noticeLegend}
-                  </legend>
-                  <div className="usa-form-group">
-                    {['Yes', 'No'].map((hasIrsNotice, idx) => (
-                      <div
-                        className="usa-radio usa-radio__inline"
-                        key={hasIrsNotice}
-                      >
-                        <input
-                          className="usa-radio__input"
-                          id={`hasIrsNotice-${hasIrsNotice}`}
-                          name="hasIrsNotice"
-                          type="radio"
-                          value={hasIrsNotice === 'Yes'}
-                          onChange={e => {
-                            updateHasIrsNoticeFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value === 'true',
-                            });
-                            validateStartCaseSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-radio__label"
-                          htmlFor={`hasIrsNotice-${hasIrsNotice}`}
-                          id={`hasIrsNotice-${idx}`}
-                        >
-                          {hasIrsNotice}
-                        </label>
-                      </div>
-                    ))}
-                    <Text
-                      bind="validationErrors.hasIrsNotice"
-                      className="usa-error-message"
-                    />
-                  </div>
-                </fieldset>
-
-                {startCaseHelper.showHasIrsNoticeOptions && (
-                  <React.Fragment>
-                    <CaseTypeSelect
-                      allowDefaultOption={true}
-                      caseTypes={caseTypeDescriptionHelper.caseTypes}
-                      legend="Type of Notice / Case"
-                      validation="validateStartCaseSequence"
-                      onChange="updateFormValueSequence"
-                    />
-                    <div
-                      className={
-                        'usa-form-group' +
-                        (validationErrors.irsNoticeDate
-                          ? ' usa-form-group--error'
-                          : '')
-                      }
-                    >
-                      <fieldset className="usa-fieldset">
-                        <legend
-                          className="usa-legend"
-                          id="date-of-notice-legend"
-                        >
-                          Date of Notice
-                        </legend>
-                        <div className="usa-memorable-date">
-                          <div className="usa-form-group usa-form-group--month">
-                            <label
-                              aria-hidden="true"
-                              htmlFor="date-of-notice-month"
-                            >
-                              MM
-                            </label>
-                            <input
-                              aria-describedby="date-of-notice-legend"
-                              aria-label="month, two digits"
-                              className="usa-input usa-input--inline"
-                              id="date-of-notice-month"
-                              max="12"
-                              min="1"
-                              name="month"
-                              type="number"
-                              onBlur={() => {
-                                validateStartCaseSequence();
-                              }}
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                          </div>
-                          <div className="usa-form-group usa-form-group--day">
-                            <label
-                              aria-hidden="true"
-                              htmlFor="date-of-notice-day"
-                            >
-                              DD
-                            </label>
-                            <input
-                              aria-describedby="date-of-notice-legend"
-                              aria-label="day, two digits"
-                              className="usa-input usa-input--inline"
-                              id="date-of-notice-day"
-                              max="31"
-                              min="1"
-                              name="day"
-                              type="number"
-                              onBlur={() => {
-                                validateStartCaseSequence();
-                              }}
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                          </div>
-                          <div className="usa-form-group usa-form-group--year">
-                            <label
-                              aria-hidden="true"
-                              htmlFor="date-of-notice-year"
-                            >
-                              YYYY
-                            </label>
-                            <input
-                              aria-describedby="date-of-notice-legend"
-                              aria-label="year, four digits"
-                              className="usa-input usa-input--inline"
-                              id="date-of-notice-year"
-                              max="2100"
-                              min="1900"
-                              name="year"
-                              type="number"
-                              onBlur={() => {
-                                validateStartCaseSequence();
-                              }}
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                          </div>
-                          <Text
-                            bind="validationErrors.irsNoticeDate"
-                            className="usa-error-message"
-                          />
-                        </div>
-                      </fieldset>
-                    </div>
-                  </React.Fragment>
-                )}
-                {startCaseHelper.showNotHasIrsNoticeOptions && (
-                  <CaseTypeSelect
-                    allowDefaultOption={true}
-                    caseTypes={caseTypeDescriptionHelper.caseTypes}
-                    legend="Which topic most closely matches your complaint with the
-                IRS?"
-                    validation="validateStartCaseSequence"
-                    onChange="updateFormValueSequence"
-                  />
-                )}
-              </div>
-            </div>
-            <h2 className="margin-top-4">How Do You Want This Case Handled?</h2>
+            <h1 className="margin-top-4">How do you want your case handled?</h1>
+            <p className="required-statement margin-top-05 margin-bottom-2">
+              All fields required unless otherwise noted
+            </p>
             <p>
               Tax laws allow you to file your case as a “small case,” which
               means it’s handled a bit differently than a regular case. If you
@@ -799,8 +808,7 @@ export const StartCase = connect(
               >
                 <span className="usa-accordion__heading usa-banner__button-text">
                   <FontAwesomeIcon icon="question-circle" size="lg" />
-                  How is a small case different than a regular case, and do I
-                  qualify?
+                  Which case procedure should I choose?
                   {screenMetadata.showCaseDifference ? (
                     <FontAwesomeIcon icon="caret-up" />
                   ) : (
