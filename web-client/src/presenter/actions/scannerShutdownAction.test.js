@@ -1,4 +1,4 @@
-const { JSDOM } = require('jsdom');
+import { JSDOM } from 'jsdom';
 import { runAction } from 'cerebral/test';
 import { scannerShutdownAction } from './scannerShutdownAction';
 

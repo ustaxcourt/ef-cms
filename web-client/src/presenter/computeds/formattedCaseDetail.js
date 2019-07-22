@@ -19,6 +19,20 @@ export const formatDocument = (applicationContext, document) => {
   result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
+
+  // Served parties code - R = Respondent, P = Petitioner, B = Both
+  if (
+    result.isStatusServed &&
+    !!result.servedAt &&
+    result.servedParties &&
+    result.servedParties.length > 0
+  ) {
+    result.servedPartiesCode = 'B';
+  } else {
+    // TODO: Address Respondent and Petitioner codes
+    result.servedPartiesCode = '';
+  }
+
   return result;
 };
 
@@ -252,7 +266,7 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
         .formatDateString(result.irsNoticeDate, 'MMDDYY')
     : 'No notice provided';
 
-  result.datePetitionSentToIrsMessage = `Respondent served ${result.irsDateFormatted}`;
+  result.datePetitionSentToIrsMessage = result.irsDateFormatted;
 
   result.shouldShowIrsNoticeDate =
     result.hasVerifiedIrsNotice ||

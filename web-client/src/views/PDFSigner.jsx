@@ -1,11 +1,10 @@
+import { CaseDetailHeader } from './CaseDetailHeader';
+import { PDFSignerMessage } from './PDFSignerMessage';
+import { PDFSignerToolbar } from './PDFSignerToolbar';
 import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { CaseDetailHeader } from './CaseDetailHeader';
-import { PDFSignerMessage } from './PDFSignerMessage';
-import { PDFSignerToolbar } from './PDFSignerToolbar';
 
 class PDFSignerComponent extends React.Component {
   constructor(props) {

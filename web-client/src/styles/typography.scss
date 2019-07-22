@@ -14,7 +14,13 @@ h1,
   font-family: $font-serif;
   font-size: 32px;
   font-weight: $font-bold;
-  line-height: 1.3em;
+  line-height: 2.7em;
+
+  /* little screens */
+  @media only screen and (max-width: $medium-screen) {
+    font-size: 28px;
+    line-height: 1.3em;
+  }
 }
 
 h2,
@@ -25,6 +31,10 @@ h2,
   font-size: 24px;
   font-weight: $font-bold;
   line-height: 1.3em;
+
+  @media only screen and (max-width: $medium-screen) {
+    font-size: 22px;
+  }
 }
 
 h3,
@@ -35,6 +45,10 @@ h3,
   font-size: 20px;
   font-weight: $font-bold;
   line-height: 1.3em;
+
+  @media only screen and (max-width: $medium-screen) {
+    font-size: 18px;
+  }
 }
 
 h4,
@@ -100,6 +114,15 @@ h6 {
   }
 }
 
+p {
+  font-size: 17px;
+  line-height: 1.4em;
+
+  @media only screen and (max-width: $medium-screen) {
+    font-size: 14px;
+  }
+}
+
 p.lead {
   font-family: $font-serif;
   font-size: 20px;
@@ -124,6 +147,10 @@ p.semi-bold {
 
 a {
   color: color($theme-color-primary);
+
+  @media only screen and (max-width: $medium-screen) {
+    font-size: 14px;
+  }
 }
 
 a:hover {
