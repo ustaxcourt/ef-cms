@@ -1,6 +1,18 @@
 .ustc-ui-tabs {
   position: relative;
 
+  &.ustc-ui-tabs--right-button-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .usa-button {
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
   ul {
     padding-left: 0px;
     border-bottom: 1px solid color($theme-color-base-lighter);
