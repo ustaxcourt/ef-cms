@@ -72,9 +72,12 @@ export const createCaseFromPaperAction = async ({
   props,
   store,
 }) => {
-  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
-    state.petition,
-  );
+  const {
+    ownershipDisclosureFile,
+    petitionFile,
+    requestForPlaceOfTrialFile,
+    stinFile,
+  } = get(state.petition);
 
   const receivedAt = // AAAA-BB-CC
     (props.computedDate &&
@@ -97,6 +100,7 @@ export const createCaseFromPaperAction = async ({
       ownership: ownershipDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
+      trial: requestForPlaceOfTrialFile,
     },
     store,
   );
@@ -113,6 +117,8 @@ export const createCaseFromPaperAction = async ({
         petitionFile,
         petitionMetadata: form,
         petitionUploadProgress: progressFunctions.petition,
+        requestForPlaceOfTrialFile,
+        requestForPlaceOfTrialUploadProgress: progressFunctions.trial,
         stinFile,
         stinUploadProgress: progressFunctions.stin,
       });
