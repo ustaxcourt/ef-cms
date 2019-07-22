@@ -93,7 +93,7 @@ exports.serveSignedStipDecisionInteractor = async ({
     templateData: {
       caseCaption: caseToUpdate.caseCaption,
       docketNumber: caseToUpdate.docketNumber,
-      documentName: stipulatedDecisionDocument.documentTitle,
+      documentName: stipulatedDecisionDocument.documentType,
       name: party.name,
       serviceDate: formatDateString(
         stipulatedDecisionDocument.servedAt,
