@@ -9,6 +9,9 @@
 
   .svg-inline--fa {
     margin-right: 5px;
+    &.fa-1x {
+      font-size: 14.5px;
+    }    
   }
 
   &.float-right {
@@ -86,6 +89,3 @@
   margin-top: 40px;
 }
 
-#init-file-petition {
-  margin-right: 0;
-}
