@@ -1,7 +1,7 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileDocument } from './FileDocument';
-import { FileDocumentReviewRedesign } from './FileDocumentReviewRedesign';
+import { FileDocumentReview } from './FileDocumentReview';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { SelectDocumentType } from './SelectDocumentType';
 import { SuccessNotification } from '../SuccessNotification';
@@ -45,7 +45,7 @@ export const FileDocumentWizard = connect(
             </Tab>
             <Tab tabName="FileDocumentReview">
               <div className="grid-container">
-                <FileDocumentReviewRedesign />
+                <FileDocumentReview />
               </div>
             </Tab>
           </Tabs>

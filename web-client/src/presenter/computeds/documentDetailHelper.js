@@ -14,7 +14,7 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   const documentId = get(state.documentId);
   const document = (caseDetail.documents || []).find(
-    document => document.documentId === documentId,
+    item => item.documentId === documentId,
   );
   let formattedDocument = {};
   if (document) {
