@@ -3,7 +3,6 @@ import { Mobile } from '../ustc-ui/Responsive/Responsive';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 
 class PDFPreviewModalComponent extends ModalDialog {
