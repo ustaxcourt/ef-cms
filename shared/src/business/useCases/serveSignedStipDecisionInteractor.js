@@ -73,9 +73,10 @@ exports.serveSignedStipDecisionInteractor = async ({
   // generate docket record
   caseEntity.addDocketRecord(
     new DocketRecord({
-      description: `Stipulated Decision Entered, Judge Foley`,
+      description: 'Stipulated Decision',
       documentId,
       filingDate: dateOfService,
+      signatory: 'Entered, Judge Foley',
     }),
   );
 

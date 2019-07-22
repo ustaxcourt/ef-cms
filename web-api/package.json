@@ -6,7 +6,7 @@
   "devDependencies": {
     "artillery": "^1.6.0-28",
     "artillery-plugin-fuzzer": "^1.0.1",
-    "aws-sdk": "^2.495.0",
+    "aws-sdk": "^2.497.0",
     "aws-sdk-mock": "^4.5.0",
     "aws-xray-sdk": "^2.3.3",
     "chrome-aws-lambda": "^1.18.1",
@@ -14,7 +14,7 @@
     "eslint": "5.16.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-cypress": "^2.6.0",
-    "eslint-plugin-jest": "^22.13.2",
+    "eslint-plugin-jest": "^22.13.4",
     "eslint-plugin-jsdoc": "^15.5.3",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
