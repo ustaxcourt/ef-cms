@@ -115,7 +115,9 @@ class DocketRecordOverlayComponent extends React.Component {
               )}
             </p>
             <p className="semi-bold label margin-top-3">Parties</p>
-            <p className="margin-top-0">{record.servedPartiesCode}</p>
+            <p className="margin-top-0">
+              {document && document.servedPartiesCode}
+            </p>
           </div>
         </dialog>
       </FocusLock>
