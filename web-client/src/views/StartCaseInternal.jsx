@@ -1,44 +1,53 @@
 import { BigHeader } from './BigHeader';
+import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
+import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
+import { ProcedureType } from './StartCase/ProcedureType';
 import { Scan } from '../ustc-ui/Scan/Scan';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 
 export const StartCaseInternal = connect(
   {
+    caseTypes: state.caseTypes,
     completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     scanHelper: state.scanHelper,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
+    startCaseInternalHelper: state.startCaseInternalHelper,
     startScanSequence: sequences.startScanSequence,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
+    updateStartCaseInternalPartyTypeSequence:
+      sequences.updateStartCaseInternalPartyTypeSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
     validationErrors: state.validationErrors,
   },
   ({
+    caseTypes,
     completeScanSequence,
     constants,
+    form,
     formCancelToggleCancelSequence,
     scanHelper,
     showModal,
     startCaseHelper,
+    startCaseInternalHelper,
     startScanSequence,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
-    updatePetitionValueSequence,
+    updateStartCaseInternalPartyTypeSequence,
     validatePetitionFromPaperSequence,
     validationErrors,
   }) => {
@@ -66,7 +75,7 @@ export const StartCaseInternal = connect(
                   All fields required unless otherwise noted
                 </p>
 
-                <div className="blue-container">
+                <div className="blue-container document-detail-one-third">
                   <div
                     className={`usa-form-group ${
                       validationErrors.petitionFile
@@ -97,11 +106,11 @@ export const StartCaseInternal = connect(
                       type="file"
                       onChange={e => {
                         limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                          updatePetitionValueSequence({
+                          updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.files[0],
                           });
-                          updatePetitionValueSequence({
+                          updateFormValueSequence({
                             key: `${e.target.name}Size`,
                             value: e.target.files[0].size,
                           });
@@ -128,11 +137,11 @@ export const StartCaseInternal = connect(
                               file,
                               constants.MAX_FILE_SIZE_MB,
                               () => {
-                                updatePetitionValueSequence({
+                                updateFormValueSequence({
                                   key: 'petitionFile',
                                   value: file,
                                 });
-                                updatePetitionValueSequence({
+                                updateFormValueSequence({
                                   key: 'petitionFileSize',
                                   value: file.size,
                                 });
@@ -174,11 +183,11 @@ export const StartCaseInternal = connect(
                       type="file"
                       onChange={e => {
                         limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                          updatePetitionValueSequence({
+                          updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.files[0],
                           });
-                          updatePetitionValueSequence({
+                          updateFormValueSequence({
                             key: `${e.target.name}Size`,
                             value: e.target.files[0].size,
                           });
@@ -222,11 +231,11 @@ export const StartCaseInternal = connect(
                       type="file"
                       onChange={e => {
                         limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                          updatePetitionValueSequence({
+                          updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.files[0],
                           });
-                          updatePetitionValueSequence({
+                          updateFormValueSequence({
                             key: `${e.target.name}Size`,
                             value: e.target.files[0].size,
                           });
@@ -241,11 +250,11 @@ export const StartCaseInternal = connect(
                   </div>
 
                   <div
-                    className={
+                    className={`usa-form-group ${
                       validationErrors.receivedAt ? 'usa-form-group--error' : ''
-                    }
+                    }`}
                   >
-                    <fieldset className="usa-fieldset">
+                    <fieldset className="usa-fieldset margin-bottom-0">
                       <legend
                         className="usa-legend"
                         id="date-received-legend with-hint"
@@ -253,7 +262,7 @@ export const StartCaseInternal = connect(
                         Date Received
                       </legend>
                       <div className="usa-memorable-date">
-                        <div className="usa-form-group usa-form-group--month">
+                        <div className="usa-form-group usa-form-group--month margin-bottom-0">
                           <input
                             aria-describedby="date-received-legend"
                             aria-label="month, two digits"
@@ -275,7 +284,7 @@ export const StartCaseInternal = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-form-group usa-form-group--day">
+                        <div className="usa-form-group usa-form-group--day margin-bottom-0">
                           <input
                             aria-describedby="date-received-legend"
                             aria-label="day, two digits"
@@ -297,7 +306,7 @@ export const StartCaseInternal = connect(
                             }}
                           />
                         </div>
-                        <div className="usa-form-group usa-form-group--year">
+                        <div className="usa-form-group usa-form-group--year margin-bottom-0">
                           <input
                             aria-describedby="date-received-legend"
                             aria-label="year, four digits"
@@ -358,58 +367,134 @@ export const StartCaseInternal = connect(
                       className="usa-error-message"
                     />
                   </div>
-                </div>
 
-                <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
-                <div className="blue-container">
-                  <label
-                    className={
-                      'usa-label ustc-upload-ods ' +
-                      (startCaseHelper.showOwnershipDisclosureValid
-                        ? 'validated'
-                        : '')
-                    }
-                    htmlFor="ownership-disclosure-file"
-                  >
-                    Upload the Ownership Disclosure Statement
-                    <span className="success-message margin-left-2px">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
-                    </span>
-                  </label>
-                  <input
-                    accept=".pdf"
-                    className="usa-input"
-                    id="ownership-disclosure-file"
-                    name="ownershipDisclosureFile"
-                    type="file"
+                  <CaseTypeSelect
+                    allowDefaultOption={true}
+                    caseTypes={caseTypes}
+                    legend="Notice/Case Type"
+                    validation="validatePetitionFromPaperSequence"
+                    value={form.caseType}
+                    onChange="updateFormValueSequence"
+                  />
+
+                  <ProcedureType
+                    legend="Case Procedure"
+                    value={form.procedureType}
                     onChange={e => {
-                      limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                        updatePetitionValueSequence({
-                          key: e.target.name,
-                          value: e.target.files[0],
-                        });
-                        updatePetitionValueSequence({
-                          key: `${e.target.name}Size`,
-                          value: e.target.files[0].size,
-                        });
+                      updateFormValueSequence({
+                        key: 'procedureType',
+                        value: e.target.value,
                       });
+                      validatePetitionFromPaperSequence();
                     }}
                   />
-                  <Text
-                    bind="validationErrors.ownershipDisclosureFileSize"
-                    className="usa-error-message"
-                  />
+
+                  <div className="usa-form-group">
+                    <label className="usa-label" htmlFor="party-type">
+                      Party Type
+                    </label>
+                    <select
+                      className="usa-select"
+                      id="party-type"
+                      name="partyType"
+                      value={form.partyType}
+                      onChange={e => {
+                        updateStartCaseInternalPartyTypeSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validatePetitionFromPaperSequence();
+                      }}
+                    >
+                      <option value="">- Select -</option>
+                      {Object.keys(startCaseInternalHelper.partyTypes).map(
+                        partyType => (
+                          <option
+                            key={partyType}
+                            value={
+                              startCaseInternalHelper.partyTypes[partyType]
+                            }
+                          >
+                            {startCaseInternalHelper.partyTypes[partyType]}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </div>
+
+                  {startCaseInternalHelper.showOwnershipDisclosureStatement && (
+                    <div className="usa-form-group">
+                      <label
+                        className={
+                          'usa-label ustc-upload-ods ' +
+                          (startCaseHelper.showOwnershipDisclosureValid
+                            ? 'validated'
+                            : '')
+                        }
+                        htmlFor="ownership-disclosure-file"
+                      >
+                        Upload Your Ownership Disclosure Statement{' '}
+                        <span className="usa-hint">(optional)</span>
+                        <span className="success-message margin-left-2px">
+                          <FontAwesomeIcon icon="check-circle" size="sm" />
+                        </span>
+                      </label>
+                      <input
+                        accept=".pdf"
+                        className="usa-input"
+                        id="ownership-disclosure-file"
+                        name="ownershipDisclosureFile"
+                        type="file"
+                        onChange={e => {
+                          limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.files[0],
+                            });
+                            updateFormValueSequence({
+                              key: `${e.target.name}Size`,
+                              value: e.target.files[0].size,
+                            });
+                          });
+                        }}
+                      />
+                      <Text
+                        bind="validationErrors.ownershipDisclosureFileSize"
+                        className="usa-error-message"
+                      />
+                    </div>
+                  )}
+
+                  {(startCaseInternalHelper.showPrimaryContact ||
+                    startCaseInternalHelper.showSecondaryContact) && (
+                    <div className="subsection contacts">
+                      <Contacts
+                        bind="form"
+                        contactsHelper="startCaseInternalContactsHelper"
+                        emailBind="form.contactPrimary"
+                        parentView="StartCaseInternal"
+                        showPrimaryContact={
+                          startCaseInternalHelper.showPrimaryContact
+                        }
+                        showSecondaryContact={
+                          startCaseInternalHelper.showSecondaryContact
+                        }
+                        onChange="updateFormValueSequence"
+                      />
+                    </div>
+                  )}
                 </div>
+
                 <div className="margin-top-4">
                   <button
                     className="usa-button margin-bottom-2"
                     id="submit-case"
                     type="submit"
                   >
-                    Create Case
+                    Finish
                   </button>
                   <button
-                    className="usa-button usa-button--outline"
+                    className="usa-button usa-button--unstyled ustc-button--unstyled"
                     type="button"
                     onClick={() => {
                       formCancelToggleCancelSequence();
