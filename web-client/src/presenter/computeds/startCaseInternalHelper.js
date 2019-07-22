@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the start case internal form view options based on partyType
- * and documents
  *
  * @param {Function} get the cerebral get function
  * @returns {object} object containing the view settings
