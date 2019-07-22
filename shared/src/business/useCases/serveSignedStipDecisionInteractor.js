@@ -43,9 +43,6 @@ exports.serveSignedStipDecisionInteractor = async ({
   });
   stipulatedDecisionDocument.setAsServed();
 
-  // may need to move the document from a draft state
-  // - "Stipulated Decision" becomes "stipulated decision"
-
   // email parties
 
   // generate docket record
