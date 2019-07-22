@@ -85,7 +85,7 @@ Document.initialDocumentTypes = {
 };
 
 Document.signedDocumentTypes = {
-  signedStipulatedDecision: 'Signed Stipulated Decision',
+  signedStipulatedDecision: 'Stipulated Decision',
 };
 
 Document.getDocumentTypes = () => {
