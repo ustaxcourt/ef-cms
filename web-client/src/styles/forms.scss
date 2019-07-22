@@ -11,14 +11,14 @@
 .ustc-time-of-day--minute {
   width: 3em;
   flex: 0 0 auto;
-  margin-right: 1rem;  
+  margin-right: 1rem;
   margin-bottom: 0;
 }
 .ustc-time-of-day--am-pm {
   position: absolute;
   bottom: 0;
   width: 9em;
-  margin-right: 1rem;  
+  margin-right: 1rem;
   margin-bottom: 0;
 }
 
@@ -359,6 +359,7 @@ label.validated::after {
 
 label.ustc-upload-petition,
 label.ustc-upload-stin,
+label.ustc-upload-rpt,
 label.ustc-upload-ods,
 label.ustc-upload {
   .success-message {
