@@ -110,13 +110,13 @@ describe('addDocketEntryHelper', () => {
 
   it('does not show respondent option under Parties Filing if no respondent is associated with case', () => {
     const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showRespondentParty).toBeFalsy();
+    expect(result.showRespondentParty).toBe(false);
   });
 
   it('shows respondent option under Parties Filing if a respondent is associated with case', () => {
     state.caseDetail.respondents = [{ name: 'Test Respondent' }];
     const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showRespondentParty).toBeTruthy();
+    expect(result.showRespondentParty).toBe(true);
   });
 
   it('does not show practitioner option under Parties Filing if practitioners on case is an empty array', () => {
