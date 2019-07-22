@@ -161,7 +161,7 @@ describe('formatted work queue computed', () => {
       expect(result.showDocumentInfoTab).toEqual(false);
     });
 
-    it('should show the serve button when a docketclerk and the document is a signed stipulated decision and the document is not served already', () => {
+    it('should show the serve button when a docketclerk and the document is a Stipulated Decision and the document is not served already', () => {
       role = 'docketclerk';
       const result = runCompute(documentDetailHelper, {
         state: {
@@ -169,7 +169,7 @@ describe('formatted work queue computed', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'Signed Stipulated Decision',
+                documentType: 'Stipulated Decision',
                 status: 'new',
               },
             ],
@@ -188,7 +188,7 @@ describe('formatted work queue computed', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'Signed Stipulated Decision',
+                documentType: 'Stipulated Decision',
               },
             ],
           },
@@ -217,7 +217,7 @@ describe('formatted work queue computed', () => {
     });
   });
 
-  it('should NOT show the serve button when a docketclerk and the document is a signed stipulated decision and document has already been served', () => {
+  it('should NOT show the serve button when a docketclerk and the document is a Stipulated Decision and document has already been served', () => {
     role = 'docketclerk';
     const result = runCompute(documentDetailHelper, {
       state: {
@@ -225,7 +225,7 @@ describe('formatted work queue computed', () => {
           documents: [
             {
               documentId: 'abc',
-              documentType: 'Signed Stipulated Decision',
+              documentType: 'Stipulated Decision',
               status: 'served',
             },
           ],

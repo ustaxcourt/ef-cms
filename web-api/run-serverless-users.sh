@@ -15,7 +15,9 @@ find ./src -type f -exec chmod -R ugo+r {} ";"
 
 npm run build:users
 cp src/usersHandlers.js /tmp
+ls -la dist
 cp dist/* src
+ls -la src
 
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls create_domain --config "serverless-users.yml" --stage "${slsStage}" --region "${region}" --domain "${EFCMS_DOMAIN}" --userPoolId "${USER_POOL_ID}" --efcmsTableName="efcms-${slsStage}" --accountId "${ACCOUNT_ID}" --verbose
