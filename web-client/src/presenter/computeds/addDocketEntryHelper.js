@@ -140,7 +140,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showRespondentParty:
-      caseDetail.respondents && caseDetail.respondents.length,
+      caseDetail.respondents && caseDetail.respondents.length > 0,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
