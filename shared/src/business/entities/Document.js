@@ -157,6 +157,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    servedParties: joi.array().optional(),
     signedAt: joi
       .date()
       .iso()
@@ -179,9 +180,10 @@ Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
 };
 
-Document.prototype.setAsServed = function() {
+Document.prototype.setAsServed = function(servedParties) {
   this.status = 'served';
   this.servedAt = new Date().toISOString();
+  this.servedParties = servedParties;
 };
 
 /**
