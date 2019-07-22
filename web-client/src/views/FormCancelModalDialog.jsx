@@ -6,7 +6,7 @@ class FormCancelModalDialogComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
-      cancelLabel: 'No, continue',
+      cancelLabel: 'No, take me back',
       classNames: '',
       confirmLabel: 'Yes, cancel',
       message: 'If you cancel, your form selections will be lost.',

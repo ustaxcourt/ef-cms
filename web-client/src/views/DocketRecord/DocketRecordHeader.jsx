@@ -80,7 +80,7 @@ export const DocketRecordHeader = connect(
                 </select>
               </div>
               <div className="only-small-screens">
-                <div className="margin-top-3 margin-bottom-3">
+                <div className="margin-top-3 margin-bottom-1">
                   <button
                     aria-label="docket record sort"
                     className="usa-button usa-button--unstyled mobile-sort-docket-button"
