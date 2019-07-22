@@ -19,6 +19,11 @@ const applicationContext = {
     return {
       getCaseByCaseId: () => ({
         ...MOCK_CASE,
+        contactPrimary: {
+          email: 'contactprimary@example.com',
+          name: 'Test Taxpayer',
+          title: 'Executor',
+        },
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -29,6 +34,18 @@ const applicationContext = {
             reviewUser: 'petitionsclerk',
             userId: 'taxpayer',
             workItems: [],
+          },
+        ],
+        practitioners: [
+          {
+            email: 'practitioner@example.com',
+            name: 'Practitioner',
+          },
+        ],
+        respondents: [
+          {
+            email: 'respondent@example.com',
+            name: 'Respondent',
           },
         ],
       }),
@@ -63,6 +80,16 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
       documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(updatedCase.documents[0].status).toEqual('served');
+  });
+
+  it('includes parties to be served on the document', async () => {
+    await serveSignedStipDecisionInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(updatedCase.documents[0].servedParties).toHaveLength(3);
   });
 
   it('throws an unathorized error when a non docketclerk role attempts to serve', async () => {
