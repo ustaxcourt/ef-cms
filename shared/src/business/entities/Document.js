@@ -51,6 +51,7 @@ function Document(rawDocument) {
     scenario: rawDocument.scenario,
     servedAt: rawDocument.servedAt,
     servedDate: rawDocument.servedDate,
+    servedParties: rawDocument.servedParties,
     serviceDate: rawDocument.serviceDate,
     signedAt: rawDocument.signedAt,
     signedByUserId: rawDocument.signedByUserId,
