@@ -98,6 +98,7 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
     GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
 
   iamRoleStatements:
     - Effect: 'Allow'
