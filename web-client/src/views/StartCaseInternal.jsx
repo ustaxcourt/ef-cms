@@ -76,7 +76,7 @@ export const StartCaseInternal = connect(
                   All fields required unless otherwise noted
                 </p>
 
-                <div className="blue-container">
+                <div className="blue-container document-detail-one-third">
                   <div
                     className={`usa-form-group ${
                       validationErrors.petitionFile
