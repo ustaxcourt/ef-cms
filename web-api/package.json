@@ -21,7 +21,7 @@
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-cypress": "^2.6.0",
-    "eslint-plugin-jest": "^22.13.1",
+    "eslint-plugin-jest": "^22.13.2",
     "eslint-plugin-jsdoc": "^15.6.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
@@ -58,7 +58,6 @@
   },
   "scripts": {
     "build": "parcel build --no-source-maps --bundle-node-modules --target node src/handlers.js",
-    "postinstall": "npm run install:dynamodb",
     "install:dynamodb": "sls dynamodb install -s local -r us-east-1 --domain noop --accountId noop --userPoolId noop  --efcmsTableName=efcms-local | grep -v -e '^$'",
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",
     "seed:db": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop sls dynamodb seed --seed test --noTimeout --stage local --region us-east-1 --domain noop  --userPoolId noop --efcmsTableName=efcms-local --accountId noop",
