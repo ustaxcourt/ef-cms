@@ -244,7 +244,7 @@ export const InclusionsForm = connect(
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend id={`${type}-objections-legend`}>
-                Are There Any Objections to This Document?
+                Are there any objections to this document?
               </legend>
               {['Yes', 'No', 'Unknown'].map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>

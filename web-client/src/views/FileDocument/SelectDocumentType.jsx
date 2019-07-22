@@ -86,7 +86,7 @@ export const SelectDocumentType = connect(
                       );
                     })}
                   </Accordion>
-                  <div className="content-wrapper">
+                  <div className="content-wrapper margin-top-3">
                     <div>
                       <button
                         className="usa-button usa-button--outline"
