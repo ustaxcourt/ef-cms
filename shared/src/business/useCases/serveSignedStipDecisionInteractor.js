@@ -89,26 +89,28 @@ exports.serveSignedStipDecisionInteractor = async ({
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
+  const destinations = servedParties.map(party => ({
+    email: party.email,
+    templateData: {
+      caseCaption: caseToUpdate.caseCaption,
+      docketNumber: caseToUpdate.docketNumber,
+      documentName: stipulatedDecisionDocument.documentTitle,
+      name: party.name,
+      serviceDate: formatDateString(
+        stipulatedDecisionDocument.servedAt,
+        'MMDDYYYY',
+      ),
+      serviceTime: formatDateString(
+        stipulatedDecisionDocument.servedAt,
+        'TIME',
+      ),
+    },
+  }));
+
   // email parties
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
-    destinations: servedParties.map(party => ({
-      email: party.email,
-      templateData: {
-        caseCaption: caseToUpdate.caseCaption,
-        docketNumber: caseToUpdate.docketNumber,
-        documentName: stipulatedDecisionDocument.documentTitle,
-        name: party.name,
-        serviceDate: formatDateString(
-          stipulatedDecisionDocument.servedAt,
-          'MMDDYYYY',
-        ),
-        serviceTime: formatDateString(
-          stipulatedDecisionDocument.servedAt,
-          'TIME',
-        ),
-      },
-    })),
+    destinations,
     templateName: 'case_served',
   });
 
