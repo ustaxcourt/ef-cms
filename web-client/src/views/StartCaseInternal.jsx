@@ -8,7 +8,6 @@ import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 
 export const StartCaseInternal = connect(
