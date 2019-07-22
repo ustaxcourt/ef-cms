@@ -4,6 +4,8 @@ module.exports = {
   checkForReadyForTrialCases: require('./cases/checkForReadyForTrialCasesLambda')
     .handler,
   completeWorkItemLambda: require('./workitems/completeWorkItemLambda').handler,
+  createCaseDeadlineLambda: require('./caseDeadline/createCaseDeadlineLambda')
+    .handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
@@ -14,31 +16,47 @@ module.exports = {
     .handler,
   createUserLambda: require('./users/createUserLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
+  deleteCaseDeadlineLambda: require('./caseDeadline/deleteCaseDeadlineLambda')
+    .handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
+    .handler,
+  fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
     .handler,
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   forwardWorkItemLambda: require('./workitems/forwardWorkItemLambda').handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
     .handler,
+  getCaseDeadlinesForCaseLambda: require('./caseDeadline/getCaseDeadlinesForCaseLambda')
+    .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')
     .handler,
-  getDocumentQCBatchedForSectionLambda: require('./workitems/getDocumentQCBatchedForSectionLambda').handler,
-  getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda').handler,
-  getDocumentQCInboxForSectionLambda: require('./workitems/getDocumentQCInboxForSectionLambda').handler,
-  getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda').handler,
-  getDocumentQCServedForSectionLambda: require('./workitems/getDocumentQCServedForSectionLambda').handler,
-  getDocumentQCServedForUserLambda: require('./workitems/getDocumentQCServedForUserLambda').handler,
+  getDocumentQCBatchedForSectionLambda: require('./workitems/getDocumentQCBatchedForSectionLambda')
+    .handler,
+  getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda')
+    .handler,
+  getDocumentQCInboxForSectionLambda: require('./workitems/getDocumentQCInboxForSectionLambda')
+    .handler,
+  getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda')
+    .handler,
+  getDocumentQCServedForSectionLambda: require('./workitems/getDocumentQCServedForSectionLambda')
+    .handler,
+  getDocumentQCServedForUserLambda: require('./workitems/getDocumentQCServedForUserLambda')
+    .handler,
   getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
     .handler,
-  getInboxMessagesForSectionLambda: require('./workitems/getInboxMessagesForSectionLambda').handler,
-  getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda').handler,
+  getInboxMessagesForSectionLambda: require('./workitems/getInboxMessagesForSectionLambda')
+    .handler,
+  getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda')
+    .handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
-  getSentMessagesForSectionLambda: require('./workitems/getSentMessagesForSectionLambda').handler,
-  getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda').handler,
+  getSentMessagesForSectionLambda: require('./workitems/getSentMessagesForSectionLambda')
+    .handler,
+  getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda')
+    .handler,
   getTrialSessionDetailsLambda: require('./trialSessions/getTrialSessionDetailsLambda')
     .handler,
   getTrialSessionsLambda: require('./trialSessions/getTrialSessionsLambda')
@@ -67,12 +85,16 @@ module.exports = {
   signDocumentLambda: require('./documents/signDocumentLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,
   swaggerLambda: require('./swagger/swaggerLambda').handler,
+  updateCaseDeadlineLambda: require('./caseDeadline/updateCaseDeadlineLambda')
+    .handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
+    .handler,
+  updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,
   validatePdfLambda: require('./documents/validatePdfLambda').handler,
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,
-  virusScanPdfLambda: require('./documents/virusScanPdfLambda').handler
+  virusScanPdfLambda: require('./documents/virusScanPdfLambda').handler,
 };

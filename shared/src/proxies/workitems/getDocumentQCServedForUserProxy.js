@@ -1,13 +1,16 @@
 const { get } = require('../requests');
 
 /**
- * getDocumentQCServedForUser
+ * getDocumentQCServedForUserInteractor
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCServedForUser = ({ applicationContext, userId }) => {
+exports.getDocumentQCServedForUserInteractor = ({
+  applicationContext,
+  userId,
+}) => {
   return get({
     applicationContext,
-    endpoint: `/users/${userId}/document-qc/served`,
+    endpoint: `/api/users/${userId}/document-qc/served`,
   });
 };

@@ -1,8 +1,8 @@
 const {
-  uploadExternalDocument,
+  uploadExternalDocumentInteractor,
 } = require('./uploadExternalDocumentInteractor');
 
-describe('uploadExternalDocument', () => {
+describe('uploadExternalDocumentInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
@@ -43,12 +43,12 @@ describe('uploadExternalDocument', () => {
         uploadDocument: async () => caseRecord,
       }),
       getUseCases: () => ({
-        fileExternalDocument: () => {},
+        fileExternalDocumentInteractor: () => {},
       }),
     };
     let error;
     try {
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',
@@ -74,13 +74,13 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
-          sanitizePdf: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',
@@ -106,13 +106,13 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
-          sanitizePdf: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',
@@ -141,13 +141,13 @@ describe('uploadExternalDocument', () => {
           uploadDocument: async () => caseRecord,
         }),
         getUseCases: () => ({
-          fileExternalDocument: () => {},
-          sanitizePdf: () => null,
-          validatePdf: () => null,
-          virusScanPdf: () => null,
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
-      await uploadExternalDocument({
+      await uploadExternalDocumentInteractor({
         applicationContext,
         documentMetadata: {},
         primaryDocumentFile: 'something',

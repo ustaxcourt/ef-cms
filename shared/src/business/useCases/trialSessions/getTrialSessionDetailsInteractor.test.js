@@ -1,5 +1,5 @@
 const {
-  getTrialSessionDetails,
+  getTrialSessionDetailsInteractor,
 } = require('./getTrialSessionDetailsInteractor');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -33,7 +33,7 @@ describe('Get trial session details', () => {
       },
     };
     await expect(
-      getTrialSessionDetails({
+      getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       }),
@@ -58,7 +58,7 @@ describe('Get trial session details', () => {
     };
     let error;
     try {
-      await getTrialSessionDetails({
+      await getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       });
@@ -87,7 +87,7 @@ describe('Get trial session details', () => {
     };
     let error;
     try {
-      await getTrialSessionDetails({
+      await getTrialSessionDetailsInteractor({
         applicationContext,
         trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       });
@@ -114,7 +114,7 @@ describe('Get trial session details', () => {
         };
       },
     };
-    const result = await getTrialSessionDetails({
+    const result = await getTrialSessionDetailsInteractor({
       applicationContext,
       trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
     });

@@ -6,10 +6,13 @@ const { get } = require('./requests');
  * @param caseId
  * @returns {Promise<*>}
  */
-exports.verifyPendingCaseForUser = ({ applicationContext, caseId }) => {
+exports.verifyPendingCaseForUserInteractor = ({
+  applicationContext,
+  caseId,
+}) => {
   const user = applicationContext.getCurrentUser();
   return get({
     applicationContext,
-    endpoint: `/users/${user.userId}/case/${caseId}/pending`,
+    endpoint: `/api/users/${user.userId}/case/${caseId}/pending`,
   });
 };

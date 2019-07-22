@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().createWorkItem({
+      const results = await applicationContext.getUseCases().createWorkItemInteractor({
         applicationContext,
         caseId: event.pathParameters.caseId,
         documentId: event.pathParameters.documentId,

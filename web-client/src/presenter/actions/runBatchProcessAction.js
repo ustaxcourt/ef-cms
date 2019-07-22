@@ -6,7 +6,7 @@
  * @returns {Promise} async action
  */
 export const runBatchProcessAction = async ({ applicationContext }) => {
-  await applicationContext.getUseCases().runBatchProcess({
+  await applicationContext.getUseCases().runBatchProcessInteractor({
     applicationContext,
   });
 };

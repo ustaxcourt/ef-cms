@@ -1,4 +1,4 @@
-const { removeItem } = require('./removeItemInteractor');
+const { removeItemInteractor } = require('./removeItemInteractor');
 
 describe('removeItemInteractor', () => {
   let applicationContext;
@@ -22,7 +22,7 @@ describe('removeItemInteractor', () => {
       key: 'abc',
     });
     expect(result).toEqual('123');
-    await removeItem({
+    await removeItemInteractor({
       applicationContext,
       key: 'abc',
     });

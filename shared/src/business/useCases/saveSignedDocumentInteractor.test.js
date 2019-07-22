@@ -1,8 +1,10 @@
+const {
+  saveSignedDocumentInteractor,
+} = require('./saveSignedDocumentInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
-const { saveSignedDocument } = require('./saveSignedDocumentInteractor');
 
-describe('saveSignedDocument', () => {
+describe('saveSignedDocumentInteractor', () => {
   it('should add the signed document to the case', async () => {
     const mockCase = {
       ...MOCK_CASE,
@@ -25,7 +27,7 @@ describe('saveSignedDocument', () => {
       },
     };
 
-    const caseEntity = await saveSignedDocument({
+    const caseEntity = await saveSignedDocumentInteractor({
       applicationContext,
       caseId: mockCase.caseId,
       originalDocumentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',

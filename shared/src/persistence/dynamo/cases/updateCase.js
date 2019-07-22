@@ -7,7 +7,7 @@ const {
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
 const { saveVersionedCase } = require('./saveCase');
 /**
- * createWorkItem
+ * updateCase
  *
  * @param workItemId
  * @param message

@@ -1,8 +1,10 @@
-const { validateCaseDetail } = require('./validateCaseDetailInteractor');
+const {
+  validateCaseDetailInteractor,
+} = require('./validateCaseDetailInteractor');
 
 describe('validate case detail', () => {
   it('returns the expected errors object on an empty case', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {},
     });
     expect(errors).toBeTruthy();
@@ -12,7 +14,7 @@ describe('validate case detail', () => {
   });
 
   it('does not return an error if that field is valid', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         caseTitle: 'A case title',
       },
@@ -24,7 +26,7 @@ describe('validate case detail', () => {
   });
 
   it('returns no errors if the case validates', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',
@@ -64,7 +66,7 @@ describe('validate case detail', () => {
   });
 
   it('returns the expected errors when passed bad date objects', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         hasIrsNotice: true,
         irsNoticeDate: 'aa',
@@ -77,7 +79,7 @@ describe('validate case detail', () => {
   });
 
   it('returns an error if yearAmounts have duplicate years', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',
@@ -129,7 +131,7 @@ describe('validate case detail', () => {
   });
 
   it('returns an error if yearAmounts is in the future', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',
@@ -183,7 +185,7 @@ describe('validate case detail', () => {
   });
 
   it('returns no errors on valid amounts and years', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',
@@ -237,7 +239,7 @@ describe('validate case detail', () => {
   });
 
   it('returns no errors on null irsNoticeDate', () => {
-    const errors = validateCaseDetail({
+    const errors = validateCaseDetailInteractor({
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',

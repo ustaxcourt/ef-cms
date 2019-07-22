@@ -1,16 +1,16 @@
 const { get } = require('../requests');
 
 /**
- * getCaseProxy
+ * getInternalUsersInteractor
  *
  * @param applicationContext
  * @param caseId
  * @param userToken
  * @returns {Promise<*>}
  */
-exports.getInternalUsers = ({ applicationContext }) => {
+exports.getInternalUsersInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/users/internal',
+    endpoint: '/api/users/internal',
   });
 };

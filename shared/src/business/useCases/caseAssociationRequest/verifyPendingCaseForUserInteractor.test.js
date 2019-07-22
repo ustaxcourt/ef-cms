@@ -1,6 +1,6 @@
 const sinon = require('sinon');
 const {
-  verifyPendingCaseForUser,
+  verifyPendingCaseForUserInteractor,
 } = require('./verifyPendingCaseForUserInteractor');
 
 describe('verifyPendingCaseForUser', () => {
@@ -28,7 +28,7 @@ describe('verifyPendingCaseForUser', () => {
       }),
     };
 
-    await verifyPendingCaseForUser({
+    await verifyPendingCaseForUserInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -16,6 +16,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
+  faCalendarAlt,
   faCalendarCheck,
   faCaretDown,
   faCaretLeft,
@@ -31,7 +32,6 @@ import {
   faEdit as faEditSolid,
   faEnvelope as faEnvelopeSolid,
   faExclamationTriangle,
-  faExternalLinkAlt,
   faFile,
   faFileAlt as faFileAltSolid,
   faFilePdf,
@@ -52,6 +52,8 @@ import {
   faSpinner,
   faSync,
   faTimesCircle,
+  faTrash,
+  faUserCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -69,7 +71,8 @@ const app = {
     const user =
       (await applicationContext
         .getUseCases()
-        .getItem({ applicationContext, key: 'user' })) || presenter.state.user;
+        .getItemInteractor({ applicationContext, key: 'user' })) ||
+      presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
@@ -84,7 +87,7 @@ const app = {
     const token =
       (await applicationContext
         .getUseCases()
-        .getItem({ applicationContext, key: 'token' })) ||
+        .getItemInteractor({ applicationContext, key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
@@ -96,6 +99,7 @@ const app = {
     library.add(
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
+      faCalendarAlt,
       faCalendarCheck,
       faCaretDown,
       faCaretLeft,
@@ -116,7 +120,6 @@ const app = {
       faEditSolid,
       faEnvelopeSolid,
       faExclamationTriangle,
-      faExternalLinkAlt,
       faEyeSlash,
       faFile,
       faFileAlt,
@@ -140,7 +143,9 @@ const app = {
       faSpinner,
       faSync,
       faTimesCircle,
+      faTrash,
       faUser,
+      faUserCheck,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

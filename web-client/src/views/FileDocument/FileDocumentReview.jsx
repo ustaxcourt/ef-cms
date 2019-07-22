@@ -1,6 +1,7 @@
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PartiesFilingReadOnly } from './PartiesFilingReadOnly';
 import { PrimaryDocumentReadOnly } from './PrimaryDocumentReadOnly';
 import { SecondaryDocumentReadOnly } from './SecondaryDocumentReadOnly';
@@ -28,21 +29,16 @@ export const FileDocumentReview = connect(
             Review Your Filing
           </h1>
         </Focus>
+
         <p>
           You can’t edit your filing once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
 
-        <div className="usa-alert usa-alert--warning" id="file-document-hint">
-          <div className="usa-alert__body">
-            <h3 className="usa-alert__heading">Before You Submit...</h3>
-            <p className="usa-alert__text">
-              Verify the documents you uploaded are correct and ensure all
-              personal information has been removed or redacted from your
-              documents.
-            </p>
-          </div>
-        </div>
+        <Hint>
+          Don’t forget to check your PDF(s) to ensure all personal information
+          has been removed or redacted.
+        </Hint>
 
         <PrimaryDocumentReadOnly />
 

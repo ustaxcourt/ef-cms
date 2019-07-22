@@ -5,13 +5,13 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getInboxMessagesForSection
+ * getInboxMessagesForSectionInteractor
  *
  * @param section
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getInboxMessagesForSection = async ({
+exports.getInboxMessagesForSectionInteractor = async ({
   applicationContext,
   section,
 }) => {

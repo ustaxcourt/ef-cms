@@ -9,6 +9,7 @@ import { state } from 'cerebral';
 
  */
 export const setPDFSignatureDataAction = async ({ props, store }) => {
-  const { signatureData } = props;
+  const { signatureApplied, signatureData } = props;
   store.set(state.pdfForSigning.signatureData, signatureData);
+  store.set(state.pdfForSigning.signatureApplied, signatureApplied);
 };

@@ -7,6 +7,6 @@
 export const getInternalUsersAction = async ({ applicationContext }) => {
   const users = await applicationContext
     .getUseCases()
-    .getInternalUsers({ applicationContext });
+    .getInternalUsersInteractor({ applicationContext });
   return { users };
 };

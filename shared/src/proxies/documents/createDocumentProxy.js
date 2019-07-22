@@ -7,7 +7,11 @@ const { post } = require('../requests');
  * @param userId
  * @returns {Promise<*>}
  */
-exports.createDocument = ({ applicationContext, caseId, document }) => {
+exports.createDocumentInteractor = ({
+  applicationContext,
+  caseId,
+  document,
+}) => {
   return post({
     applicationContext,
     body: document,

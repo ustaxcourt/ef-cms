@@ -120,7 +120,10 @@ table.small-case-qualifications-table {
   }
 
   thead th {
-    background-color: $color-primary-alt-lightest;
+    background-color: color($theme-color-accent-cool-dark);
+    color: $color-white;
+    font-family: $font-serif;
+    font-size: 20px;
     font-weight: $font-semibold;
   }
 }
@@ -503,5 +506,23 @@ table.case-list tbody tr:nth-child(even) td {
       margin-bottom: 0.5em;
       font-weight: $font-bold;
     }
+  }
+}
+
+.deadlines {
+  .smaller-column {
+    width: 130px;
+  }
+
+  .center-column {
+    text-align: center;
+  }
+
+  .semi-bold {
+    font-weight: $font-semibold;
+  }
+
+  .overdue {
+    color: color($theme-color-secondary);
   }
 }

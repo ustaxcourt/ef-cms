@@ -6,29 +6,41 @@ import React from 'react';
 export const PDFSignerToolbar = connect(
   {
     currentPageNumber: state.pdfForSigning.pageNumber,
+    disableNext: state.documentSigningHelper.disableNext,
+    disablePrevious: state.documentSigningHelper.disablePrevious,
+    nextPageNumber: state.documentSigningHelper.nextPageNumber,
     pdfObj: state.pdfForSigning.pdfjsObj,
+    previousPageNumber: state.documentSigningHelper.previousPageNumber,
     setPage: sequences.setPDFPageForSigningSequence,
+    signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
+    totalPages: state.documentSigningHelper.totalPages,
   },
   ({
     applySignature,
     clearSignature,
     currentPageNumber,
-    pdfObj,
+    disableNext,
+    disablePrevious,
+    nextPageNumber,
+    previousPageNumber,
     setPage,
-    signatureApplied = false,
-    signatureData,
+    signatureApplied,
+    totalPages,
   }) => {
     const getPreviousPage = () => {
-      const previousPageNumber =
-        currentPageNumber === 1 ? 1 : currentPageNumber - 1;
+      if (disablePrevious) {
+        return;
+      }
+
       setPage({ pageNumber: previousPageNumber });
     };
 
     const getNextPage = () => {
-      const totalPages = pdfObj.numPages;
-      const nextPageNumber =
-        currentPageNumber === totalPages ? totalPages : currentPageNumber + 1;
+      if (disableNext) {
+        return;
+      }
+
       setPage({ pageNumber: nextPageNumber });
     };
 
@@ -38,21 +50,16 @@ export const PDFSignerToolbar = connect(
         <>
           <div className="margin-bottom-3">
             <FontAwesomeIcon
-              className={
-                'icon-button' + (currentPageNumber === 1 ? ' disabled' : '')
-              }
+              className={'icon-button' + (disablePrevious ? ' disabled' : '')}
               icon={['fas', 'caret-left']}
               size="2x"
               onClick={getPreviousPage}
             />
             <span className="pages">
-              Page {currentPageNumber} of {pdfObj.numPages}
+              Page {currentPageNumber} of {totalPages}
             </span>
             <FontAwesomeIcon
-              className={
-                'icon-button' +
-                (currentPageNumber === pdfObj.numPages ? ' disabled' : '')
-              }
+              className={'icon-button' + (disableNext ? ' disabled' : '')}
               icon={['fas', 'caret-right']}
               size="2x"
               onClick={getNextPage}
@@ -61,13 +68,13 @@ export const PDFSignerToolbar = connect(
           <div className="margin-top-3">
             <button
               className="usa-button"
-              disabled={!!signatureData || signatureApplied}
+              disabled={signatureApplied}
               onClick={() => applySignature()}
             >
-              <FontAwesomeIcon icon={['far', 'edit']} />
+              <FontAwesomeIcon icon={['fas', 'edit']} />
               Apply Signature
             </button>
-            {!!signatureData && (
+            {signatureApplied && (
               <button
                 className="usa-button usa-button--unstyled"
                 onClick={() => clearSignature()}

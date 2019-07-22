@@ -24,7 +24,7 @@ presenter.providers.applicationContext = {
     },
   }),
   getUseCases: () => ({
-    generatePDFFromPNGData: () => {
+    generatePDFFromPNGDataInteractor: () => {
       return mockGeneratePDFFromPNGData();
     },
   }),

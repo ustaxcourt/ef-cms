@@ -10,14 +10,14 @@ export const getUsersInSectionAction = ({ section }) =>
   /**
    * get the users in a section
    *
-   * @param {Object} providers the providers object
-   * @param {Object} providers.applicationContext the cerebral get function used for getting the state.user
-   * @returns {Object} the list of users in a section
+   * @param {object} providers the providers object
+   * @param {object} providers.applicationContext the cerebral get function used for getting the state.user
+   * @returns {object} the list of users in a section
    */
   async ({ applicationContext }) => {
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSection({ applicationContext, section });
+      .getUsersInSectionInteractor({ applicationContext, section });
 
     return {
       users: sortBy(users, 'name'),

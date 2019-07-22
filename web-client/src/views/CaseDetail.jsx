@@ -1,4 +1,5 @@
 import { ActionRequired } from './CaseDetail/ActionRequired';
+import { CaseDeadlinesExternal } from './CaseDetail/CaseDeadlinesExternal';
 import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
@@ -15,14 +16,12 @@ export const CaseDetail = connect(
   {
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
-    setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
-    showDetails: state.paymentInfo.showDetails,
-    togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
+    setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
   function CaseDetail({
     caseDetail,
     caseHelper,
-    setDocumentDetailTabSequence,
+    setCaseDetailPageTabSequence,
   }) {
     return (
       <React.Fragment>
@@ -78,6 +77,7 @@ export const CaseDetail = connect(
               <ActionRequired />
             </div>
           )}
+          <CaseDeadlinesExternal />
           <div className="only-small-screens">
             <div className="margin-bottom-3">
               <select
@@ -87,7 +87,7 @@ export const CaseDetail = connect(
                 name="partyType"
                 value={caseHelper.documentDetailTab}
                 onChange={e => {
-                  setDocumentDetailTabSequence({
+                  setCaseDetailPageTabSequence({
                     tab: e.target.value,
                   });
                 }}
@@ -99,7 +99,7 @@ export const CaseDetail = connect(
           </div>
           <div className="mobile-document-detail-tabs">
             <Tabs
-              bind="documentDetail.tab"
+              bind="caseDetailPage.informationTab"
               className="classic-horizontal-header3 tab-border"
             >
               <Tab

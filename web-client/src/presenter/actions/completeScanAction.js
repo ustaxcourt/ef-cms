@@ -22,7 +22,7 @@ export const completeScanAction = async ({
   } else {
     const pdfBlob = await applicationContext
       .getUseCases()
-      .generatePDFFromPNGData(scannedBuffer);
+      .generatePDFFromPNGDataInteractor(scannedBuffer);
 
     const pdfFile = new File([pdfBlob], 'myfile.pdf');
 

@@ -7,7 +7,7 @@ const { post } = require('../requests');
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.fileExternalDocument = ({
+exports.fileExternalDocumentInteractor = ({
   applicationContext,
   documentMetadata,
   primaryDocumentFileId,

@@ -135,8 +135,10 @@ describe('internalTypesHelper', () => {
         { label: 'Answer', value: 'A' },
         { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
       ];
-      expect(result.internalDocumentTypesForSelect).toEqual(expected);
-      expect(result.internalDocumentTypesForSelectSorted).toEqual(expected);
+      expect(result.internalDocumentTypesForSelect).toMatchObject(expected);
+      expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
+        expected,
+      );
     });
     describe('when searchText is defined', () => {
       it('and is an empty string', () => {
@@ -154,7 +156,9 @@ describe('internalTypesHelper', () => {
           { label: 'Answer', value: 'A' },
           { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
         ];
-        expect(result.internalDocumentTypesForSelectSorted).toEqual(expected);
+        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
+          expected,
+        );
       });
       it('and is not matching an event code', () => {
         const result = runCompute(internalTypesHelper, {
@@ -171,7 +175,9 @@ describe('internalTypesHelper', () => {
           { label: 'Answer', value: 'A' },
           { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
         ];
-        expect(result.internalDocumentTypesForSelectSorted).toEqual(expected);
+        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
+          expected,
+        );
       });
       it('and matches the beginning of an eventCode', () => {
         const result = runCompute(internalTypesHelper, {
@@ -188,7 +194,9 @@ describe('internalTypesHelper', () => {
           { label: 'Amendment to Answer', value: 'ATAN' },
           { label: 'Answer', value: 'A' },
         ];
-        expect(result.internalDocumentTypesForSelectSorted).toEqual(expected);
+        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
+          expected,
+        );
       });
 
       it('and matches an event code exactly', () => {
@@ -206,7 +214,9 @@ describe('internalTypesHelper', () => {
           { label: 'Answer', value: 'A' },
           { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
         ];
-        expect(result.internalDocumentTypesForSelectSorted).toEqual(expected);
+        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
+          expected,
+        );
       });
     });
   });

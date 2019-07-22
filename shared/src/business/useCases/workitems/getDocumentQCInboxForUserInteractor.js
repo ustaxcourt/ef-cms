@@ -5,13 +5,16 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getInboxMessagesForSection
+ * getDocumentQCInboxForUserInteractor
  *
  * @param section
  * @param applicationContext
  * @returns {Promise<*>}
  */
-exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
+exports.getDocumentQCInboxForUserInteractor = async ({
+  applicationContext,
+  userId,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, WORKITEM)) {

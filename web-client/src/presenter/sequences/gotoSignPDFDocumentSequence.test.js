@@ -6,7 +6,10 @@ let test;
 presenter.providers.applicationContext = {
   ...applicationContext,
   getUseCases: () => ({
-    loadPDFForSigning: () => {
+    getCaseInteractor: () => ({
+      caseId: '123',
+    }),
+    loadPDFForSigningInteractor: () => {
       1;
     },
   }),

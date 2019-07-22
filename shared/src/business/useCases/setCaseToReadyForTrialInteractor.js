@@ -6,13 +6,16 @@ const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
- * setCaseToReadyForTrial
+ * setCaseToReadyForTrialInteractor
  *
  * @param applicationContext
  * @param caseToUpdate
  * @returns {*}
  */
-exports.setCaseToReadyForTrial = async ({ applicationContext, caseId }) => {
+exports.setCaseToReadyForTrialInteractor = async ({
+  applicationContext,
+  caseId,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, UPDATE_CASE)) {

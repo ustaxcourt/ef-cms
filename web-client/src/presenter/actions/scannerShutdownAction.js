@@ -3,8 +3,8 @@ import { state } from 'cerebral';
 /**
  * removes third-party scanner scripts from the DOM and sets associated state
  *
- * @param {Object} providers the providers object
- * @param {Object} providers.store the cerebral store used for setting state.scanner
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store used for setting state.scanner
  * @param {Function} providers.get the cerebral get helper function
  */
 

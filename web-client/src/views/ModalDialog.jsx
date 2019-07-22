@@ -16,7 +16,9 @@ export class ModalDialog extends React.Component {
     this.preventCancelOnBlur = !!this.props.preventCancelOnBlur;
     this.blurDialog = this.blurDialog.bind(this);
     this.keydownTriggered = this.keydownTriggered.bind(this);
-    this.runCancelSequence = this.runCancelSequence.bind(this);
+    if (this.runCancelSequence) {
+      this.runCancelSequence = this.runCancelSequence.bind(this);
+    }
     this.runConfirmSequence = this.runConfirmSequence.bind(this);
   }
   toggleNoScroll(scrollingOn) {
@@ -129,13 +131,15 @@ export class ModalDialog extends React.Component {
               >
                 {modal.confirmLabel}
               </button>
-              <button
-                className="usa-button usa-button--outline"
-                type="button"
-                onClick={this.runCancelSequence}
-              >
-                {modal.cancelLabel}
-              </button>
+              {modal.cancelLabel && (
+                <button
+                  className="usa-button usa-button--outline"
+                  type="button"
+                  onClick={this.runCancelSequence}
+                >
+                  {modal.cancelLabel}
+                </button>
+              )}
             </div>
           </div>
         </dialog>

@@ -2,7 +2,6 @@ FROM cypress/base:10.15.3
 
 WORKDIR /home/app
 
-RUN echo "clearing cache - remove this at some point"
 RUN echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
 RUN sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
 

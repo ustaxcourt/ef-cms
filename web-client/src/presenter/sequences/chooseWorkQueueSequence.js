@@ -56,6 +56,7 @@ export const chooseWorkQueueSequence = [
         messagessectioninbox: [
           getInboxMessagesForSectionAction,
           setWorkItemsAction,
+          setSectionInboxCountAction,
         ],
         messagessectionoutbox: [
           getSentMessagesForSectionAction,
