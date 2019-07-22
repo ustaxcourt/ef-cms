@@ -7,6 +7,7 @@ import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateT
 import { set } from 'cerebral/factories';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
@@ -18,7 +19,7 @@ export const completeDocumentSelectSequence = [
   defaultSecondaryDocumentAction,
   validateSelectDocumentTypeAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       clearAlertsAction,
       set(state.showValidation, false),
