@@ -11,6 +11,8 @@ exports.filePetitionFromPaperInteractor = async ({
   petitionFile,
   petitionMetadata,
   petitionUploadProgress,
+  requestForPlaceOfTrialFile,
+  requestForPlaceOfTrialUploadProgress,
   stinFile,
   stinUploadProgress,
 }) => {
@@ -50,10 +52,22 @@ exports.filePetitionFromPaperInteractor = async ({
       });
   }
 
+  let requestForPlaceOfTrialFileId;
+  if (requestForPlaceOfTrialFile) {
+    requestForPlaceOfTrialFileId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: requestForPlaceOfTrialFile,
+        onUploadProgress: requestForPlaceOfTrialUploadProgress,
+      });
+  }
+
   const documentIds = [
     ownershipDisclosureFileId,
     petitionFileId,
     stinFileId,
+    requestForPlaceOfTrialFileId,
   ].filter(documentId => documentId);
 
   for (let documentId of documentIds) {
@@ -78,6 +92,7 @@ exports.filePetitionFromPaperInteractor = async ({
     ownershipDisclosureFileId,
     petitionFileId,
     petitionMetadata,
+    requestForPlaceOfTrialFileId,
     stinFileId,
   });
 };
