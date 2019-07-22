@@ -3,7 +3,7 @@ import { resetContactsAction } from '../actions/StartCaseInternal/resetContactsA
 import { set } from 'cerebral/factories';
 
 /**
- * set state.caseDetail.partyType to the passed
+ * set state.form.partyType to the passed
  * in props.value, and call the resetContactsAction
  * to clear the contacts
  */
