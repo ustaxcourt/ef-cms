@@ -1,7 +1,7 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
   provider = "aws.us-east-1"
-  domain   = "${var.dns_domain}"
+  domain   = "mail.efcms-${var.environment}.${var.dns_domain}"
 }
 
 resource "aws_route53_record" "ses_verification_record" {
@@ -33,7 +33,7 @@ resource "aws_ses_domain_dkim" "main" {
 resource "aws_route53_record" "dkim" {
   count = 3
   zone_id = "${data.aws_route53_zone.zone.id}"
-  name    = "${format("%s._domainkey.%s", element(aws_ses_domain_dkim.main.dkim_tokens, count.index), var.dns_domain)}"
+  name    = "${format("%s._domainkey.%s", element(aws_ses_domain_dkim.main.dkim_tokens, count.index), aws_ses_domain_identity.main.domain)}"
   type    = "CNAME"
   ttl     = "600"
   records = ["${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}.dkim.amazonses.com"]
