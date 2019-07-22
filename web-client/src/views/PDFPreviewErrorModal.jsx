@@ -1,7 +1,6 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
-
 import React from 'react';
 
 class PDFPreviewErrorModalComponent extends ModalDialog {
