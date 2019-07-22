@@ -53,7 +53,7 @@ export const FileDocument = connect(
 
         <div className="button-box-container margin-top-4">
           <button
-            className="usa-button margin-right-205"
+            className="usa-button margin-right-205 margin-bottom-1"
             id="submit-document"
             type="submit"
             onClick={() => {
