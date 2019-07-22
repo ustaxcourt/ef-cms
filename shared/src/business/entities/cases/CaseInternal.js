@@ -23,6 +23,8 @@ function CaseInternal(rawCase) {
   this.petitionFileSize = rawCase.petitionFileSize;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
+  this.requestForPlaceOfTrialFile = rawCase.requestForPlaceOfTrialFile;
+  this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
 
@@ -57,6 +59,15 @@ CaseInternal.errorToMessageMap = {
     },
     'Please enter a valid date.',
   ],
+  requestForPlaceOfTrialFile:
+    'The Request for Place of Trial file was not selected.',
+  requestForPlaceOfTrialFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Request for Place of Trial file size is empty.',
+  ],
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
@@ -88,6 +99,17 @@ const paperRequirements = joi.object().keys({
     .iso()
     .max('now')
     .required(),
+  requestForPlaceOfTrialFile: joi.object().optional(),
+  requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
+    is: joi.exist(),
+    otherwise: joi.optional().allow(null),
+    then: joi
+      .number()
+      .required()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
+  }),
   stinFile: joi.object().optional(),
   stinFileSize: joi.when('stinFile', {
     is: joi.exist(),
