@@ -24,10 +24,11 @@ exports.sendBulkTemplatedEmail = async ({
     const params = {
       Destinations: destinations.map(destination => ({
         Destination: {
-          ReplacementTemplateData: destination.templateData,
-          toAddresses: [destination.email],
+          ReplacementTemplateData: JSON.stringify(destination.templateData),
+          ToAddresses: [destination.email],
         },
       })),
+      Source: '',
       Template: templateName,
     };
 
