@@ -54,7 +54,9 @@ export const DocumentDetail = connect(
               {helper.formattedDocument.filedBy &&
                 ` by ${helper.formattedDocument.filedBy}`}
             </div>
-            <div>Served {helper.formattedDocument.servedAtFormatted}</div>
+            {helper.formattedDocument.servedAt && (
+              <div>Served {helper.formattedDocument.servedAtFormatted}</div>
+            )}
           </div>
           <SuccessNotification />
           <ErrorNotification />
