@@ -6,6 +6,8 @@ const { User } = require('../entities/User');
 let updatedCase;
 
 const updateCaseStub = jest.fn();
+const sendBulkTemplatedEmailStub = jest.fn();
+
 const applicationContext = {
   environment: { stage: 'local' },
   getCurrentUser: () => {
@@ -15,6 +17,9 @@ const applicationContext = {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   },
+  getDispatchers: () => ({
+    sendBulkTemplatedEmail: sendBulkTemplatedEmailStub,
+  }),
   getPersistenceGateway: () => {
     return {
       getCaseByCaseId: () => ({
