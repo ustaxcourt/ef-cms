@@ -113,9 +113,9 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      objections: 'Enter selection for Objections',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -129,14 +129,14 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter a Certificate of Service Date.',
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      certificateOfServiceDate: 'Enter date for Certificate of Service',
+      objections: 'Enter selection for Objections',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Enter selection for Supporting Document.',
+          supportingDocument: 'Choose a Document Type',
         },
       ],
     });
@@ -148,13 +148,13 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter a Certificate of Service Date.',
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      certificateOfServiceDate: 'Enter date for Certificate of Service',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Enter selection for Supporting Document.',
+          supportingDocument: 'Choose a Document Type',
         },
       ],
     });
@@ -176,12 +176,12 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         'Certificate of Service date is in the future. Please enter a valid date.',
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Enter selection for Supporting Document.',
+          supportingDocument: 'Choose a Document Type',
         },
       ],
     });
@@ -193,12 +193,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Enter selection for Supporting Document.',
+          supportingDocument: 'Choose a Document Type',
         },
       ],
     });
@@ -210,13 +210,13 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'A file was not selected.',
-          supportingDocumentFreeText: 'Please provide a value.',
+          supportingDocumentFile: 'You must upload a document',
+          supportingDocumentFreeText: 'Enter name',
         },
       ],
     });
@@ -228,12 +228,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'A file was not selected.',
-      secondaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFile: 'You must upload a document',
+      secondaryDocumentFile: 'You must upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'A file was not selected.',
+          supportingDocumentFile: 'You must upload a document',
         },
       ],
     });
@@ -263,7 +263,7 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Enter selection for Supporting Document.',
+          supportingDocument: 'Choose a Document Type',
         },
       ],
     });
@@ -278,8 +278,8 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'A file was not selected.',
-          supportingDocumentFreeText: 'Please provide a value.',
+          supportingDocumentFile: 'You must upload a document',
+          supportingDocumentFreeText: 'Enter name',
         },
       ],
     });
