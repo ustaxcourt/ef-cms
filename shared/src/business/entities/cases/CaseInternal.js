@@ -6,6 +6,7 @@ const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
  * CaseInternal Entity
@@ -15,16 +16,31 @@ const {
  */
 function CaseInternal(rawCase) {
   this.caseCaption = rawCase.caseCaption;
+  this.caseType = rawCase.caseType;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
+  this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
+  this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
+
+  const contacts = ContactFactory.createContacts({
+    contactInfo: {
+      primary: rawCase.contactPrimary,
+      secondary: rawCase.contactSecondary,
+    },
+    partyType: rawCase.partyType,
+  });
+  this.contactPrimary = contacts.primary;
+  this.contactSecondary = contacts.secondary;
 }
 
 CaseInternal.errorToMessageMap = {
   caseCaption: 'Case Caption is required.',
+  caseType: 'Case Type is a required field.',
+  partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
   petitionFileSize: [
     {
@@ -33,6 +49,7 @@ CaseInternal.errorToMessageMap = {
     },
     'Your Petition file size is empty.',
   ],
+  procedureType: 'Procedure Type is a required field.',
   receivedAt: [
     {
       contains: 'must be less than or equal to',
@@ -51,7 +68,9 @@ CaseInternal.errorToMessageMap = {
 
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
+  caseType: joi.string().required(),
   ownershipDisclosureFile: joi.object().optional(),
+  partyType: joi.string().required(),
   petitionFile: joi.object().required(),
   petitionFileSize: joi.when('petitionFile', {
     is: joi.exist(),
@@ -63,6 +82,7 @@ const paperRequirements = joi.object().keys({
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
+  procedureType: joi.string().required(),
   receivedAt: joi
     .date()
     .iso()
