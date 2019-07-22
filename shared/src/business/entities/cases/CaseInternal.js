@@ -88,7 +88,7 @@ const paperRequirements = joi.object().keys({
   caseType: joi.string().required(),
   ownershipDisclosureFile: joi.object().optional(),
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
-    is: joi.exist(),
+    is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
     then: joi
       .number()
@@ -100,7 +100,7 @@ const paperRequirements = joi.object().keys({
   partyType: joi.string().required(),
   petitionFile: joi.object().required(),
   petitionFileSize: joi.when('petitionFile', {
-    is: joi.exist(),
+    is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
     then: joi
       .number()
@@ -117,7 +117,7 @@ const paperRequirements = joi.object().keys({
     .required(),
   requestForPlaceOfTrialFile: joi.object().optional(),
   requestForPlaceOfTrialFileSize: joi.when('requestForPlaceOfTrialFile', {
-    is: joi.exist(),
+    is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
     then: joi
       .number()
@@ -128,7 +128,7 @@ const paperRequirements = joi.object().keys({
   }),
   stinFile: joi.object().optional(),
   stinFileSize: joi.when('stinFile', {
-    is: joi.exist(),
+    is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
     then: joi
       .number()
