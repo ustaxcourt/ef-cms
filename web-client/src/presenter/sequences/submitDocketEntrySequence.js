@@ -6,7 +6,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
-import { generateTitleAction } from '../actions/DocketEntry/generateTitleAction';
+import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';

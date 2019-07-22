@@ -105,31 +105,31 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         message:
           'Certificate of Service date is in the future. Please enter a valid date.',
       },
-      'Enter a Certificate of Service Date.',
+      'Enter date for Certificate of Service',
     ],
     hasSecondarySupportingDocuments:
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a party.',
-    partyRespondent: 'Select a party.',
-    partySecondary: 'Select a party.',
-    practitioner: 'Select a party.',
-    primaryDocumentFile: 'A file was not selected.',
+    objections: 'Enter selection for Objections',
+    partyPrimary: 'Select a filing party',
+    partyRespondent: 'Select a filing party',
+    partySecondary: 'Select a filing party',
+    practitioner: 'Select a filing party',
+    primaryDocumentFile: 'You must upload a document',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
         message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       },
-      'Your Primary Document file size is empty.',
+      'Your Primary Document file size is empty',
     ],
-    secondaryDocumentFile: 'A file was not selected.',
+    secondaryDocumentFile: 'You must upload a document',
     secondaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
         message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       },
-      'Your Secondary Document file size is empty.',
+      'Your Secondary Document file size is empty',
     ],
   };
 

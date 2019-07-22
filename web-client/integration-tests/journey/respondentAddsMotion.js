@@ -86,11 +86,11 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
+      objections: 'Enter selection for Objections',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'A file was not selected.',
+          supportingDocumentFile: 'You must upload a document',
         },
       ],
     });
