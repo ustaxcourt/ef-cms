@@ -303,11 +303,11 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  sendBulkTemplatedEmail,
+} = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
-const {
-  sendTemplatedBulkEmailDispatcher,
-} = require('../../shared/src/dispatchers/ses/sendTemplatedBulkEmailDispatcher');
 const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
@@ -437,7 +437,7 @@ module.exports = (appContextUser = {}) => {
     },
     getCurrentUser,
     getDispatchers: () => ({
-      sendTemplatedBulkEmailDispatcher,
+      sendBulkTemplatedEmail,
     }),
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
