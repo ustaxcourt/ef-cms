@@ -35,7 +35,8 @@ export const ViewAllDocumentsDesktop = connect(
                 All Document Categories
               </h1>
               <p className="margin-bottom-5 margin-top-05 ">
-                Select the document type under the category you wish to file....
+                Expand a document category and select the document type you wish
+                to file.
               </p>
               <Accordion bind="allDocumentsAccordion" headingLevel="3">
                 {viewAllDocumentsHelper.sections.map((title, index) => {

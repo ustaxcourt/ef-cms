@@ -1,7 +1,6 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
-
 import React from 'react';
 
 class ServeConfirmModalDialogComponent extends ModalDialog {
@@ -20,9 +19,7 @@ class ServeConfirmModalDialogComponent extends ModalDialog {
     return (
       <>
         <div>The following document will be served on all parties:</div>
-        <p>
-          <b>{this.props.documentType}</b>
-        </p>
+        <p className="semi-bold">{this.props.documentType}</p>
       </>
     );
   }

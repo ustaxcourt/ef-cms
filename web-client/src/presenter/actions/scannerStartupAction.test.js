@@ -1,8 +1,8 @@
-const { JSDOM } = require('jsdom');
-const path = require('path');
+import { JSDOM } from 'jsdom';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { scannerStartupAction } from './scannerStartupAction';
+import path from 'path';
 
 const jsdom = new JSDOM(
   '<!DOCTYPE html><html><head></head><body></body></html>',
