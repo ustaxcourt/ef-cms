@@ -69,6 +69,26 @@ exports.serveSignedStipDecisionInteractor = async ({
   // may need to move the document from a draft state
   // - "signed stipulated decision" becomes "stipulated decision"
 
+  // generate docket record
+  caseEntity.addDocketRecord(
+    new DocketRecord({
+      description: `Stipulated Decision Entered, Judge Foley`,
+      documentId,
+      filingDate: dateOfService,
+    }),
+  );
+
+  // close case
+  caseEntity.closeCase();
+
+  // update case
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
   // email parties
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
@@ -92,21 +112,5 @@ exports.serveSignedStipDecisionInteractor = async ({
     templateName: 'case_served',
   });
 
-  // generate docket record
-  caseEntity.addDocketRecord(
-    new DocketRecord({
-      description: `Stipulated Decision Entered, Judge Foley`,
-      documentId,
-      filingDate: dateOfService,
-    }),
-  );
-
-  // close case
-  caseEntity.closeCase();
-
-  // update case
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  return updatedCase;
 };
