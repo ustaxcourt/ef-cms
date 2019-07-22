@@ -51,7 +51,7 @@ export const WhatToExpect = () => (
       </div>
     </div>
     <a
-      className="usa-button"
+      className="usa-button margin-right-0"
       href="/before-starting-a-case"
       id="init-file-petition"
     >
