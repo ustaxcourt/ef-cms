@@ -25,8 +25,7 @@ export const CaseDetailHeader = connect(
       <div className="big-blue-header">
         <div className="grid-container foo-bar">
           <div className="grid-row">
-            <div className="grid-col-8">
-              {' '}
+            <div className="tablet:grid-col-8">
               <div className="margin-bottom-1">
                 <h1 className="heading-2 captioned" tabIndex="-1">
                   <a href={'/case-detail/' + caseDetail.docketNumber}>
@@ -63,7 +62,7 @@ export const CaseDetailHeader = connect(
                 <UpdateCaseCaptionModalDialog />
               )}
             </div>
-            <div className="grid-col-4 text-">
+            <div className="tablet:grid-col-4">
               {caseHelper.showCreateOrderButton && (
                 <button
                   className="usa-button usa-button--inverse float-right"
