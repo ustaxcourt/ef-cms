@@ -306,6 +306,9 @@ const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  sendTemplatedBulkEmailDispatcher,
+} = require('../../shared/src/dispatchers/ses/sendTemplatedBulkEmailDispatcher');
+const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
 const {
@@ -389,7 +392,7 @@ const {
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 
-const { DynamoDB, S3 } = AWS;
+const { DynamoDB, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -413,6 +416,7 @@ const setCurrentUser = newUser => {
 
 let dynamoClientCache = {};
 let s3Cache;
+let sesCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -432,6 +436,9 @@ module.exports = (appContextUser = {}) => {
       return chromium;
     },
     getCurrentUser,
+    getDispatchers: () => ({
+      sendTemplatedBulkEmailDispatcher,
+    }),
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
       if (!dynamoClientCache[type]) {
@@ -448,6 +455,12 @@ module.exports = (appContextUser = {}) => {
     },
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
+    },
+    getEmailClient: () => {
+      if (!sesCache) {
+        sesCache = new SES();
+      }
+      return sesCache;
     },
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
