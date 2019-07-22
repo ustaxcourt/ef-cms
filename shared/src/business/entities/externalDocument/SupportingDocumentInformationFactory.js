@@ -61,18 +61,18 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
         message:
           'Certificate of Service date is in the future. Please enter a valid date.',
       },
-      'Enter date for Certificate of Service',
+      'Enter date for Certificate of Service.',
     ],
-    supportingDocument: 'Choose a Document Type',
-    supportingDocumentFile: 'You must upload a document',
+    supportingDocument: 'Select a Document Type.',
+    supportingDocumentFile: 'Upload a document.',
     supportingDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
         message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       },
-      'Your Supporting Document file size is empty',
+      'Your Supporting Document file size is empty.',
     ],
-    supportingDocumentFreeText: 'Enter name',
+    supportingDocumentFreeText: 'Enter name.',
   };
 
   const makeRequired = itemName => {
