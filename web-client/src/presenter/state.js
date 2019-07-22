@@ -33,6 +33,8 @@ import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelp
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
+import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
+import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -124,6 +126,8 @@ export const state = {
   showModal: '',
   showValidation: false,
   startCaseHelper,
+  startCaseInternalContactsHelper,
+  startCaseInternalHelper,
   submitting: false,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
