@@ -18,6 +18,7 @@ function CaseInternal(rawCase) {
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
+  this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
@@ -42,6 +43,14 @@ function CaseInternal(rawCase) {
 CaseInternal.errorToMessageMap = {
   caseCaption: 'Case Caption is required.',
   caseType: 'Case Type is a required field.',
+  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Ownership Disclosure Statement file size is empty.',
+  ],
   partyType: 'Party Type is a required field.',
   petitionFile: 'The Petition file was not selected.',
   petitionFileSize: [
@@ -81,6 +90,16 @@ const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
   ownershipDisclosureFile: joi.object().optional(),
+  ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
+    is: joi.exist(),
+    otherwise: joi.optional().allow(null),
+    then: joi
+      .number()
+      .required()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
+  }),
   partyType: joi.string().required(),
   petitionFile: joi.object().required(),
   petitionFileSize: joi.when('petitionFile', {
