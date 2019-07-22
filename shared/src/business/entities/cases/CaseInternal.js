@@ -43,7 +43,6 @@ function CaseInternal(rawCase) {
 CaseInternal.errorToMessageMap = {
   caseCaption: 'Case Caption is required.',
   caseType: 'Case Type is a required field.',
-  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
   ownershipDisclosureFileSize: [
     {
       contains: 'must be less than or equal to',
@@ -68,8 +67,6 @@ CaseInternal.errorToMessageMap = {
     },
     'Please enter a valid date.',
   ],
-  requestForPlaceOfTrialFile:
-    'The Request for Place of Trial file was not selected.',
   requestForPlaceOfTrialFileSize: [
     {
       contains: 'must be less than or equal to',

@@ -5,8 +5,22 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
+        caseType: 'other',
+        contactPrimary: {
+          address1: '876 12th Ave',
+          city: 'Nashville',
+          country: 'USA',
+          countryType: 'domestic',
+          email: 'someone@example.com',
+          name: 'Jimmy Dean',
+          phone: '1234567890',
+          postalCode: '05198',
+          state: 'AK',
+        },
+        partyType: 'Petitioner',
         petitionFile: { anObject: true },
         petitionFileSize: 1,
+        procedureType: 'Small',
         receivedAt: new Date().toISOString(),
       });
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
