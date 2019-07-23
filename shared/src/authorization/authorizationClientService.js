@@ -69,8 +69,8 @@ const AUTHORIZATION_MAP = {
 };
 
 /**
- *
- * @param userId
+ * Checks user permissions for an action
+ * @param user
  * @param action
  * @param owner
  * @returns {boolean}
