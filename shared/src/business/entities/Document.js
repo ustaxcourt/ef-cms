@@ -53,7 +53,6 @@ function Document(rawDocument) {
     reviewUser: rawDocument.reviewUser,
     scenario: rawDocument.scenario,
     servedAt: rawDocument.servedAt,
-    servedDate: rawDocument.servedDate,
     servedParties: rawDocument.servedParties,
     serviceDate: rawDocument.serviceDate,
     signedAt: rawDocument.signedAt,
@@ -157,10 +156,6 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
-    servedDate: joi
-      .date()
-      .iso()
-      .optional(),
     servedParties: joi.array().optional(),
     signedAt: joi
       .date()
@@ -184,10 +179,12 @@ Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
 };
 
-Document.prototype.setAsServed = function(servedParties) {
+Document.prototype.setAsServed = function(servedParties = null) {
   this.status = 'served';
   this.servedAt = new Date().toISOString();
-  this.servedParties = servedParties;
+  if (servedParties) {
+    this.servedParties = servedParties;
+  }
 };
 
 /**
