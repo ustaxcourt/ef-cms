@@ -691,6 +691,20 @@ Case.prototype.updateDocketRecord = function(
 };
 
 /**
+ *
+ * @param updatedDocument
+ */
+Case.prototype.updateDocument = function(updatedDocument) {
+  this.documents.some(document => {
+    if (document.documentId === updatedDocument.documentId) {
+      Object.assign(document, updatedDocument);
+      return true;
+    }
+  });
+  return this;
+};
+
+/**
  * isValidCaseId
  *
  * @param caseId
