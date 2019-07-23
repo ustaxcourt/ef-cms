@@ -37,7 +37,7 @@ exports.sendBulkTemplatedEmail = async ({
         ReplacementTemplateData: JSON.stringify(destination.templateData),
       })),
       Source: process.env.EMAIL_SOURCE,
-      Template: templateName,
+      Template: process.env.EMAIL_SERVED_TEMPLATE,
     };
 
     await SES.sendBulkTemplatedEmail(params).promise();
