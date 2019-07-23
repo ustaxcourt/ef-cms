@@ -87,6 +87,11 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       document =>
         document.documentType === Document.initialDocumentTypes.petitionFile,
     );
+
+    const petitionDocumentEntity = new Document(petitionDocument);
+    petitionDocumentEntity.setAsServed();
+    caseEntity.updateDocument(petitionDocumentEntity);
+
     const initializeCaseWorkItem = petitionDocument.workItems.find(
       workItem => workItem.isInitializeCase,
     );
