@@ -153,21 +153,27 @@ exports.fileDocketEntryInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
+  const workItemsSaved = [];
   for (let workItem of workItems) {
     if (workItem.document.isPaper) {
-      await applicationContext
-        .getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument({
+      workItemsSaved.push(
+        applicationContext
+          .getPersistenceGateway()
+          .saveWorkItemForDocketClerkFilingExternalDocument({
+            applicationContext,
+            workItem: workItem.validate().toRawObject(),
+          }),
+      );
+    } else {
+      workItemsSaved.push(
+        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
           applicationContext,
           workItem: workItem.validate().toRawObject(),
-        });
-    } else {
-      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
+        }),
+      );
     }
   }
+  await Promise.all(workItemsSaved);
 
   return caseEntity.toRawObject();
 };
