@@ -186,12 +186,12 @@ export const ContactPrimary = connect(
             <label className="usa-label" htmlFor="phone">
               Phone Number
               {contactsHelper.contactPrimary.phoneNumberLabelHint && (
-                <span>
+                <>
                   {' '}
                   <span className="usa-hint">
                     ({contactsHelper.contactPrimary.phoneNumberLabelHint})
                   </span>
-                </span>
+                </>
               )}
             </label>
             <input
