@@ -66,7 +66,7 @@ class DocketRecordOverlayComponent extends React.Component {
     const { document, record } = this.props.caseDetail.docketRecordWithDocument[
       this.props.docketRecordIndex
     ];
-    const { baseUrl, caseDetail, token } = this.props;
+    const { baseUrl, token } = this.props;
     return (
       <FocusLock>
         <dialog
