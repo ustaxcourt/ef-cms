@@ -77,7 +77,7 @@ export const createCaseFromPaperAction = async ({
     petitionFile,
     requestForPlaceOfTrialFile,
     stinFile,
-  } = get(state.petition);
+  } = get(state.form);
 
   const receivedAt = // AAAA-BB-CC
     (props.computedDate &&
