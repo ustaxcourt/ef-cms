@@ -7,16 +7,9 @@ export const formatDocument = (applicationContext, document) => {
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
-  const dateServedAtFormatted = applicationContext
+  result.servedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.servedAt, 'MMDDYY');
-  const timeServedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.servedAt, 'hh:mm A');
-
-  if (dateServedAtFormatted && timeServedAtFormatted) {
-    result.servedAtFormatted = `${dateServedAtFormatted} at ${timeServedAtFormatted}`;
-  }
+    .formatDateString(result.servedAt, 'DATE_TIME');
 
   result.showServedAt = !!result.servedAt;
   result.showValidationInput = !result.reviewDate;
