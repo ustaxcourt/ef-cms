@@ -1,6 +1,5 @@
 const moment = require('moment');
 const { CaseExternal } = require('../entities/cases/CaseExternal');
-const { omit } = require('lodash');
 const { validatePetitionInteractor } = require('./validatePetitionInteractor');
 
 describe('validatePetitionInteractor', () => {
@@ -14,16 +13,16 @@ describe('validatePetitionInteractor', () => {
       petition: {},
     });
 
-    expect(errors).toEqual({
-      ...omit(CaseExternal.errorToMessageMap, [
-        'ownershipDisclosureFile',
-        'ownershipDisclosureFileSize',
-        'irsNoticeDate',
-        'caseType',
-        'petitionFileSize',
-        'stinFileSize',
-      ]),
-    });
+    expect(Object.keys(errors)).toEqual([
+      'filingType',
+      'hasIrsNotice',
+      'partyType',
+      'petitionFile',
+      'preferredTrialCity',
+      'procedureType',
+      'signature',
+      'stinFile',
+    ]);
   });
 
   it('returns the expected errors object when caseType is defined', () => {
@@ -42,19 +41,14 @@ describe('validatePetitionInteractor', () => {
         stinFileSize: 1,
       },
     });
-    expect(errors).toEqual({
-      ...omit(CaseExternal.errorToMessageMap, [
-        'caseType',
-        'hasIrsNotice',
-        'ownershipDisclosureFile',
-        'ownershipDisclosureFileSize',
-        'petitionFile',
-        'petitionFileSize',
-        'stinFile',
-        'stinFileSize',
-      ]),
-      irsNoticeDate: 'Notice Date is a required field.',
-    });
+    expect(Object.keys(errors)).toEqual([
+      'filingType',
+      'irsNoticeDate',
+      'partyType',
+      'preferredTrialCity',
+      'procedureType',
+      'signature',
+    ]);
   });
 
   it('returns the expected errors object', () => {
@@ -107,8 +101,6 @@ describe('validatePetitionInteractor', () => {
       },
     });
 
-    expect(errors).toEqual({
-      irsNoticeDate: 'Notice Date is in the future. Please enter a valid date.',
-    });
+    expect(Object.keys(errors)).toEqual(['irsNoticeDate']);
   });
 });
