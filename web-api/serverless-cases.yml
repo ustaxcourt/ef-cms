@@ -142,6 +142,11 @@ provider:
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
         - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
         - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
+    - Effect: 'Allow'
+      Action:
+        - 'ses:*'
+      Resource:
+        - '*'
 
 package:
   exclude:

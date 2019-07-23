@@ -95,6 +95,7 @@ exports.serveSignedStipDecisionInteractor = async ({
       caseCaption: caseToUpdate.caseCaption,
       docketNumber: caseToUpdate.docketNumber,
       documentName: stipulatedDecisionDocument.documentType,
+      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
       name: party.name,
       serviceDate: formatDateString(
         stipulatedDecisionDocument.servedAt,
@@ -110,8 +111,17 @@ exports.serveSignedStipDecisionInteractor = async ({
   // email parties
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
+    defaultTemplateData: {
+      caseCaption: 'undefined',
+      docketNumber: 'undefined',
+      documentName: 'undefined',
+      loginUrl: 'undefined',
+      name: 'undefined',
+      serviceDate: 'undefined',
+      serviceTime: 'undefined',
+    },
     destinations,
-    templateName: 'case_served',
+    templateName: `case_served_${process.env.STAGE}`,
   });
 
   return updatedCase;
