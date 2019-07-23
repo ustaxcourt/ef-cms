@@ -41,20 +41,11 @@ createAccount() {
     --auth-parameters USERNAME="ustcadmin@example.com"',PASSWORD'="${USTC_ADMIN_PASS}") 
   
   adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
-  echo "--"
-  echo $adminToken
-  echo "--"
-  echo "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
-
-  echo "$(generate_post_data "${email}" "${role}" "${name}")"
-
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
     --data "$(generate_post_data "${email}" "${role}" "${name}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
-
-  echo "here"
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
@@ -79,4 +70,4 @@ createAccount() {
 email=$2
 role=$3
 name=$4
-createAccount $email $role $name
+createAccount "${email}" "${role}" "${name}"
