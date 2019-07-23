@@ -96,11 +96,11 @@ exports.createCaseFromPaperInteractor = async ({
     isPaper: true,
   });
 
-  const caseCaption = Case.getCaseCaption(caseToAdd.toRawObject());
-  const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
+  caseToAdd.caseCaption = petitionEntity.caseCaption;
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
-    createdAt: caseToAdd.createdAt,
+    createdAt: caseToAdd.receivedAt,
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
     filedBy: caseCaptionNames,
@@ -120,7 +120,7 @@ exports.createCaseFromPaperInteractor = async ({
 
   if (requestForPlaceOfTrialFileId) {
     const requestForPlaceOfTrialDocumentEntity = new Document({
-      createdAt: caseToAdd.createdAt,
+      createdAt: caseToAdd.receivedAt,
       documentId: requestForPlaceOfTrialFileId,
       documentType: Document.initialDocumentTypes.requestForPlaceOfTrial,
       filedBy: caseCaptionNames,
@@ -133,7 +133,7 @@ exports.createCaseFromPaperInteractor = async ({
 
   if (stinFileId) {
     const stinDocumentEntity = new Document({
-      createdAt: caseToAdd.createdAt,
+      createdAt: caseToAdd.receivedAt,
       documentId: stinFileId,
       documentType: Document.initialDocumentTypes.stin,
       filedBy: caseCaptionNames,
@@ -146,7 +146,7 @@ exports.createCaseFromPaperInteractor = async ({
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
-      createdAt: caseToAdd.createdAt,
+      createdAt: caseToAdd.receivedAt,
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,
