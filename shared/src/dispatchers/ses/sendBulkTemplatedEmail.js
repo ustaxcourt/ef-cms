@@ -22,12 +22,21 @@ exports.sendBulkTemplatedEmail = async ({
 
   try {
     const params = {
+      DefaultTemplateData: JSON.stringify({
+        caseCaption: 'undefined',
+        docketNumber: 'undefined',
+        documentName: 'undefined',
+        name: 'undefined',
+        serviceDate: 'undefined',
+        serviceTime: 'undefined',
+      }),
       Destinations: destinations.map(destination => ({
         Destination: {
-          ReplacementTemplateData: destination.templateData,
-          toAddresses: [destination.email],
+          ToAddresses: [destination.email],
         },
+        ReplacementTemplateData: JSON.stringify(destination.templateData),
       })),
+      Source: process.env.EMAIL_SOURCE,
       Template: templateName,
     };
 

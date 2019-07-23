@@ -37,13 +37,13 @@ describe('sendBulkTemplatedEmail', () => {
       Destinations: [
         {
           Destination: {
-            ReplacementTemplateData: {
-              name: 'Guy Fieri',
-              welcomeMessage: 'Welcome to Flavortown',
-              whoAmI: 'The Sauce Boss',
-            },
-            toAddresses: ['test.email@gmail.com'],
+            ToAddresses: ['test.email@gmail.com'],
           },
+          ReplacementTemplateData: JSON.stringify({
+            name: 'Guy Fieri',
+            welcomeMessage: 'Welcome to Flavortown',
+            whoAmI: 'The Sauce Boss',
+          }),
         },
       ],
       Template: 'case_served',
