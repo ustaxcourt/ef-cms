@@ -102,7 +102,7 @@ resource "aws_ses_template" "case_served" {
     {{documentName}}<br />
     Served {{serviceDate}} {{serviceTime}} EST
   </p>
-  <p>To view this document, please log in to the US Tax Court online.</p>
+  <p>To view this document, please <a href="{{loginUrl}}">log in to the US Tax Court online</a>.</p>
   <p>Certain documents may require your action.</p>
   <p>
     Please do not reply to this message. This e-mail is an automated
