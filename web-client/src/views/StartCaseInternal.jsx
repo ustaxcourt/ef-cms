@@ -257,8 +257,8 @@ export const StartCaseInternal = connect(
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
                       <legend
-                        className="usa-legend"
-                        id="date-received-legend with-hint"
+                        className="usa-legend with-hint"
+                        id="date-received-legend"
                       >
                         Date Received
                       </legend>
