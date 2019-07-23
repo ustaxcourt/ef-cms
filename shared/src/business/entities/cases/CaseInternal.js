@@ -4,8 +4,8 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -40,48 +40,7 @@ function CaseInternal(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseInternal.errorToMessageMap = {
-  caseCaption: 'Case Caption is required.',
-  caseType: 'Case Type is a required field.',
-  ownershipDisclosureFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Ownership Disclosure Statement file size is empty.',
-  ],
-  partyType: 'Party Type is a required field.',
-  petitionFile: 'The Petition file was not selected.',
-  petitionFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Petition file size is empty.',
-  ],
-  procedureType: 'Procedure Type is a required field.',
-  receivedAt: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'The received date is in the future. Please enter a valid date.',
-    },
-    'Please enter a valid date.',
-  ],
-  requestForPlaceOfTrialFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Request for Place of Trial file size is empty.',
-  ],
-  stinFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your STIN file size is empty.',
-  ],
-};
+CaseInternal.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
 
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),

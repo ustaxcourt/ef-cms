@@ -12,7 +12,7 @@ export default (test, fakeFile) => {
     );
 
     expect(test.getState('validationErrors.receivedAt')).toEqual(
-      'Please enter a valid date.',
+      'Please enter a valid Date Received.',
     );
 
     expect(test.getState('validationErrors.petitionFile')).toEqual(
