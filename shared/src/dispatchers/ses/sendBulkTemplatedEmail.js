@@ -4,17 +4,25 @@
  * destinations = [
  *   {
  *      email: 'mayor@flavortown.com',
- *      templateData: { var1: 'value', var2: 'value' }
+ *      templateData: { myCustomVar1: 'value', myCustomVar2: 'value' }
  *   }
  * ]
  *
+ * For each key in 'templateData', we must have default template data values:
+ * defaultTemplateData: {
+ *   myCustomVar1: 'undefined',
+ *   myCustomVar2: 'undefined'
+ * }
+ *
  * @param {object} applicationContext application context
+ * @param {object} defaultTemplateData default values correlated with templateData matching the format described above
  * @param {Array} destinations array of destinations matching the format described above
  * @param {string} templateName name of the SES template
  * @returns {void}
  */
 exports.sendBulkTemplatedEmail = async ({
   applicationContext,
+  defaultTemplateData,
   destinations,
   templateName,
 }) => {
@@ -22,14 +30,7 @@ exports.sendBulkTemplatedEmail = async ({
 
   try {
     const params = {
-      DefaultTemplateData: JSON.stringify({
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
-      }),
+      DefaultTemplateData: JSON.stringify(defaultTemplateData),
       Destinations: destinations.map(destination => ({
         Destination: {
           ToAddresses: [destination.email],
