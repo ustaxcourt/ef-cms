@@ -51,6 +51,12 @@
   &.ustc-button--mobile-inline {
     width: auto;
   }
+
+  @media only screen and (min-width: $medium-screen) {
+    &.ustc-button--unstyled-with-left-icon {
+      width: 305px;
+    }
+  }
 }
 
 .button-switch-box {
@@ -91,10 +97,4 @@
 
 .button-box-container {
   margin-top: 40px;
-}
-
-@media only screen and (min-width: $medium-screen) {
-  .include-modal-button {
-    width: 305px;
-  }
 }
