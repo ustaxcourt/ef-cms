@@ -14,6 +14,8 @@ Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
+Document.validationName = 'Document';
+
 /**
  * constructor
  * @param rawDocument
@@ -67,8 +69,6 @@ function Document(rawDocument) {
     workItem => new WorkItem(workItem),
   );
 }
-
-Document.name = 'Document';
 
 const practitionerAssociationDocumentTypes = [
   'Entry of Appearance',

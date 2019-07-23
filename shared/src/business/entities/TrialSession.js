@@ -106,6 +106,8 @@ TrialSession.STATUS_TYPES = {
   upcoming: 'Upcoming',
 };
 
+TrialSession.validationName = 'TrialSession';
+
 /**
  * constructor
  * @param rawSession

@@ -43,7 +43,7 @@ function WorkItem(rawWorkItem) {
 
 const IRS_BATCH_SYSTEM_USER_ID = '63784910-c1af-4476-8988-a02f92da8e09';
 
-WorkItem.name = 'WorkItem';
+WorkItem.validationName = 'WorkItem';
 
 joiValidationDecorator(
   WorkItem,
@@ -147,10 +147,14 @@ WorkItem.prototype.getLatestMessageEntity = function() {
 };
 
 /**
- *
- * @param assigneeId
- * @param assigneeName
- * @param role
+ * Assign to a user
+ * @param {object} props
+ * @param {string} props.assigneeId
+ * @param {string} props.assigneeName
+ * @param {string} props.role
+ * @param {string} props.sentBy
+ * @param {string} props.sentByUserId
+ * @param {string} props.sentByUserRole
  * @returns {WorkItem}
  */
 WorkItem.prototype.assignToUser = function({

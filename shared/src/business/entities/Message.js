@@ -19,7 +19,7 @@ function Message(rawMessage) {
   this.toUserId = rawMessage.toUserId;
 }
 
-Message.name = 'Message';
+Message.validationName = 'Message';
 
 joiValidationDecorator(
   Message,
