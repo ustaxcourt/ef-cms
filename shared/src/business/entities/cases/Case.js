@@ -148,7 +148,7 @@ Case.COMMON_ERROR_MESSAGES = {
   ],
 };
 
-Case.name = 'Case';
+Case.validationName = 'Case';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
