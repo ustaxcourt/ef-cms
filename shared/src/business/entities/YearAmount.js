@@ -5,6 +5,7 @@ const {
 
 /**
  * YearAmount constructor
+ *
  * @param rawYearAmount
  * @constructor
  */

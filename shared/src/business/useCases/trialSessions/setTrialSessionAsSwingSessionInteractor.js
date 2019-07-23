@@ -7,6 +7,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * setTrialSessionAsSwingSessionInteractor
+ *
  * @param trialSessionId
  * @param swingSessionId
  * @param applicationContext

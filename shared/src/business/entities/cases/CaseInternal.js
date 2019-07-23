@@ -11,6 +11,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 /**
  * CaseInternal Entity
  * Represents a Case with required documents that a Petitions Clerk is attempting to add to the system.
+ *
  * @param rawCase
  * @constructor
  */

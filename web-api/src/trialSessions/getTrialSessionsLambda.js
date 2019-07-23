@@ -13,9 +13,11 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().getTrialSessionsInteractor({
-        applicationContext,
-      });
+      const results = await applicationContext
+        .getUseCases()
+        .getTrialSessionsInteractor({
+          applicationContext,
+        });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
       return results;

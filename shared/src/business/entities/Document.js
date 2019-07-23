@@ -18,6 +18,7 @@ Document.validationName = 'Document';
 
 /**
  * constructor
+ *
  * @param rawDocument
  * @constructor
  */
@@ -77,6 +78,7 @@ const practitionerAssociationDocumentTypes = [
 
 /**
  * documentTypes
+ *
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
  */
 Document.initialDocumentTypes = {

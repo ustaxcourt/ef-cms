@@ -10,8 +10,8 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 exports.handler = event =>
   handle(event, async () => {
-    const {userId} = event.pathParameters || {};
-    const {caseId} = event.pathParameters || {};
+    const { userId } = event.pathParameters || {};
+    const { caseId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {

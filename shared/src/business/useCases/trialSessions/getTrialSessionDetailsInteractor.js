@@ -7,6 +7,7 @@ const { TrialSession } = require('../../entities/TrialSession');
 
 /**
  * getTrialSessionDetailsInteractor
+ *
  * @param applicationContext
  * @param trialSessionId
  * @returns {*|Promise<*>}

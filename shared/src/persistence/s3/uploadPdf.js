@@ -1,5 +1,6 @@
 /**
  * uploadPdf
+ *
  * @param policy
  * @param file
  * @returns {Promise<*>}

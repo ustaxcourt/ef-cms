@@ -110,6 +110,7 @@ TrialSession.validationName = 'TrialSession';
 
 /**
  * constructor
+ *
  * @param rawSession
  * @constructor
  */

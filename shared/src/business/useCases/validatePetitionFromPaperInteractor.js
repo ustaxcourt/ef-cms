@@ -1,5 +1,6 @@
 /**
  * validatePetition
+ *
  * @param petition
  * @param applicationContext
  * @returns {Promise<{petitionFileId}>}
