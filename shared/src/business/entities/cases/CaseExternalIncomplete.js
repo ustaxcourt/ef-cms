@@ -9,6 +9,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * CaseExternalIncomplete
  * Represents a Case without required documents that a Petitioner is attempting to add to the system.
  * After the Case's files have been saved, a Petition is created to include the document metadata.
+ *
  * @param rawCase
  * @constructor
  */

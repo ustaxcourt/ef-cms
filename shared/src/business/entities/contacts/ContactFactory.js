@@ -331,6 +331,7 @@ ContactFactory.createContactFactory = ({
   return ({ countryType, isPaper }) => {
     /**
      * creates a contact entities
+     *
      * @param {object} rawContact the options object
      * @returns {object} the entity constructor function
      */

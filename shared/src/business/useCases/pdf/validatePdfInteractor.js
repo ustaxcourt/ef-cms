@@ -2,6 +2,7 @@ const { StringDecoder } = require('string_decoder');
 
 /**
  * validatePdfInteractor
+ *
  * @param applicationContext
  * @param documentId
  * @returns {object} errors (null if no errors)

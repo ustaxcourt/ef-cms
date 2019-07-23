@@ -6,6 +6,7 @@ const {
 
 /**
  * constructor
+ *
  * @param rawMessage
  * @constructor
  */

@@ -93,6 +93,7 @@ const client = require('../../dynamodbClientService');
 
 /**
  * getUserById
+ *
  * @param userId
  * @returns {*}
  */

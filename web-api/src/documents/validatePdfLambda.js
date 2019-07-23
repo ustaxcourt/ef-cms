@@ -16,10 +16,12 @@ exports.handler = event =>
 
     applicationContext.logger.info('Event', event);
     try {
-      const result = await applicationContext.getUseCases().validatePdfInteractor({
-        applicationContext,
-        documentId,
-      });
+      const result = await applicationContext
+        .getUseCases()
+        .validatePdfInteractor({
+          applicationContext,
+          documentId,
+        });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Validate PDF Result', result);
 

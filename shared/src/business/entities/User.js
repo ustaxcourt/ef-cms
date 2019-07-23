@@ -6,6 +6,7 @@ const { getSectionForRole } = require('./WorkQueue');
 
 /**
  * constructor
+ *
  * @param rawUser
  * @constructor
  */

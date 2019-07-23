@@ -7,6 +7,7 @@ const execPromise = util.promisify(exec);
 
 /**
  * sanitizes PDF input, removing interactive elements, saves altered PDF to persistence
+ *
  * @param applicationContext
  * @param documentId
  * @returns {Uint8Array} modified PDF data

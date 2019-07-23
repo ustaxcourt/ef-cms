@@ -9,6 +9,7 @@ const { orderBy } = require('lodash');
 
 /**
  * constructor
+ *
  * @param rawWorkItem
  * @constructor
  */
@@ -140,6 +141,7 @@ WorkItem.prototype.setAsInternal = function() {
 
 /**
  * get the latest message (by createdAt)
+ *
  * @returns {Message}
  */
 WorkItem.prototype.getLatestMessageEntity = function() {
@@ -148,6 +150,7 @@ WorkItem.prototype.getLatestMessageEntity = function() {
 
 /**
  * Assign to a user
+ *
  * @param {object} props
  * @param {string} props.assigneeId
  * @param {string} props.assigneeName

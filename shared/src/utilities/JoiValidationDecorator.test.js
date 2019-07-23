@@ -3,6 +3,7 @@ const { joiValidationDecorator } = require('./JoiValidationDecorator');
 
 /**
  * fake entity constructor
+ *
  * @param raw {object}
  */
 function MockEntity1(raw) {

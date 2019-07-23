@@ -4,6 +4,7 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 const client = require('../../dynamodbClientService');
 /**
  * getCaseByCaseId
+ *
  * @param caseId
  * @param applicationContext
  * @returns {*}

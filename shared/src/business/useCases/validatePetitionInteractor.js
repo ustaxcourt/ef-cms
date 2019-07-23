@@ -1,5 +1,6 @@
 /**
  * validatePetitionInteractor
+ *
  * @param petition
  * @param applicationContext
  * @returns {Promise<{petitionFileId}>}
