@@ -56,6 +56,8 @@ const addPetitionDocumentWithWorkItemToCase = (
  * @param petitionMetadata
  * @param petitionFileId
  * @param ownershipDisclosureFileId
+ * @param requestForPlaceOfTrialFileId
+ * @param stinFileId
  * @param applicationContext
  * @returns {Promise<*>}
  */
@@ -64,6 +66,7 @@ exports.createCaseFromPaperInteractor = async ({
   ownershipDisclosureFileId,
   petitionFileId,
   petitionMetadata,
+  requestForPlaceOfTrialFileId,
   stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -114,6 +117,19 @@ exports.createCaseFromPaperInteractor = async ({
     caseToAdd,
     petitionDocumentEntity,
   );
+
+  if (requestForPlaceOfTrialFileId) {
+    const requestForPlaceOfTrialDocumentEntity = new Document({
+      createdAt: caseToAdd.createdAt,
+      documentId: requestForPlaceOfTrialFileId,
+      documentType: Document.initialDocumentTypes.requestForPlaceOfTrial,
+      filedBy: caseCaptionNames,
+      isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
+      userId: user.userId,
+    });
+    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
+  }
 
   if (stinFileId) {
     const stinDocumentEntity = new Document({

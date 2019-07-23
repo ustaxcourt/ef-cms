@@ -8,7 +8,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const currentUser = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
 
-  const SIGNED_STIPULATED_DECISION = 'Signed Stipulated Decision';
+  const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
 
   let showServeDocumentButton = false;
 

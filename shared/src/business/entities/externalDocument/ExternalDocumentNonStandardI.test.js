@@ -7,10 +7,10 @@ describe('ExternalDocumentNonStandardI', () => {
         scenario: 'Nonstandard I',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'You must select a category.',
-        documentType: 'You must select a document type.',
-        freeText: 'You must provide a value.',
-        ordinalValue: 'You must select an iteration.',
+        category: 'Select a Category.',
+        documentType: 'Select a Document Type.',
+        freeText: 'Provide an answer.',
+        ordinalValue: 'Select an iteration.',
       });
     });
 

@@ -4,6 +4,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
+const { formatDateString } = require('../utilities/DateHandler');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -65,9 +66,6 @@ exports.serveSignedStipDecisionInteractor = async ({
 
   stipulatedDecisionDocument.setAsServed(servedParties);
 
-  // may need to move the document from a draft state
-  // - "signed stipulated decision" becomes "stipulated decision"
-
   // email parties
 
   // generate docket record
@@ -84,8 +82,37 @@ exports.serveSignedStipDecisionInteractor = async ({
   caseEntity.closeCase();
 
   // update case
-  return await applicationContext.getPersistenceGateway().updateCase({
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  const destinations = servedParties.map(party => ({
+    email: party.email,
+    templateData: {
+      caseCaption: caseToUpdate.caseCaption,
+      docketNumber: caseToUpdate.docketNumber,
+      documentName: stipulatedDecisionDocument.documentTitle,
+      name: party.name,
+      serviceDate: formatDateString(
+        stipulatedDecisionDocument.servedAt,
+        'MMDDYYYY',
+      ),
+      serviceTime: formatDateString(
+        stipulatedDecisionDocument.servedAt,
+        'TIME',
+      ),
+    },
+  }));
+
+  // email parties
+  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    destinations,
+    templateName: 'case_served',
   });
+
+  return updatedCase;
 };

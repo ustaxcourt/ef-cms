@@ -82,11 +82,12 @@ const practitionerAssociationDocumentTypes = [
 Document.initialDocumentTypes = {
   ownershipDisclosure: 'Ownership Disclosure Statement',
   petitionFile: 'Petition',
+  requestForPlaceOfTrial: 'Request for Place of Trial',
   stin: 'Statement of Taxpayer Identification',
 };
 
 Document.signedDocumentTypes = {
-  signedStipulatedDecision: 'Signed Stipulated Decision',
+  signedStipulatedDecision: 'Stipulated Decision',
 };
 
 Document.getDocumentTypes = () => {
