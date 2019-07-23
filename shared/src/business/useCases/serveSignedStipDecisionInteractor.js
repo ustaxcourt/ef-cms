@@ -73,17 +73,16 @@ exports.serveSignedStipDecisionInteractor = async ({
 
   stipulatedDecisionDocument.setAsServed(servedParties);
 
-  // email parties
-
   // generate docket record
-  caseEntity.addDocketRecord(
-    new DocketRecord({
-      description: 'Stipulated Decision',
-      documentId,
-      filingDate: dateOfService,
-      signatory: 'Entered, Judge Foley',
-    }),
-  );
+  const newDocketRecord = new DocketRecord({
+    description: 'Stipulated Decision',
+    documentId,
+    filingDate: dateOfService,
+    signatory: 'Entered, Judge Foley',
+  });
+
+  newDocketRecord.validate();
+  caseEntity.addDocketRecord(newDocketRecord);
 
   // close case
   caseEntity.closeCase();
