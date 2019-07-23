@@ -111,7 +111,7 @@ exports.serveSignedStipDecisionInteractor = async ({
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
     destinations,
-    templateName: 'case_served',
+    templateName: process.env.EMAIL_SERVED_TEMPLATE,
   });
 
   return updatedCase;
