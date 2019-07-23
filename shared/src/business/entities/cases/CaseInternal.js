@@ -34,6 +34,7 @@ function CaseInternal(rawCase) {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
+    isPaper: true,
     partyType: rawCase.partyType,
   });
   this.contactPrimary = contacts.primary;
