@@ -13,6 +13,7 @@ import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const StartCaseInternal = connect(
   {
@@ -328,11 +329,11 @@ export const StartCaseInternal = connect(
                             }}
                           />
                         </div>
-                        <Text
-                          bind="validationErrors.receivedAt"
-                          className="usa-error-message"
-                        />
                       </div>
+                      <Text
+                        bind="validationErrors.receivedAt"
+                        className="usa-error-message"
+                      />
                     </fieldset>
                   </div>
 
@@ -389,7 +390,12 @@ export const StartCaseInternal = connect(
                     }}
                   />
 
-                  <div className="usa-form-group">
+                  <div
+                    className={classNames(
+                      'usa-form-group',
+                      validationErrors.partyType && 'usa-form-group--error',
+                    )}
+                  >
                     <label className="usa-label" htmlFor="party-type">
                       Party Type
                     </label>
@@ -420,6 +426,10 @@ export const StartCaseInternal = connect(
                         ),
                       )}
                     </select>
+                    <Text
+                      bind="validationErrors.partyType"
+                      className="usa-error-message"
+                    />
                   </div>
 
                   {startCaseInternalHelper.showOwnershipDisclosureStatement && (
@@ -479,6 +489,7 @@ export const StartCaseInternal = connect(
                         showSecondaryContact={
                           startCaseInternalHelper.showSecondaryContact
                         }
+                        onBlur="validatePetitionFromPaperSequence"
                         onChange="updateFormValueSequence"
                       />
                     </div>

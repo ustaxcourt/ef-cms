@@ -18,11 +18,11 @@ describe('validatePetition', () => {
     expect(Object.keys(errors)).toEqual(
       Object.keys(
         omit(CaseInternal.errorToMessageMap, [
-          'caseType',
           'irsNoticeDate',
-          'ownershipDisclosureFile',
+          'ownershipDisclosureFileSize',
           'petitionFileSize',
           'stinFileSize',
+          'requestForPlaceOfTrialFileSize',
         ]),
       ),
     );
