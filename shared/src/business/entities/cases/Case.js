@@ -12,6 +12,7 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
 const { formatDateString } = require('../../utilities/DateHandler');
+const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { YearAmount } = require('../YearAmount');
 
 Case.STATUS_TYPES = {
@@ -71,6 +72,81 @@ Case.ANSWER_DOCUMENT_CODES = [
   'ASAP',
   'AATT',
 ];
+
+Case.COMMON_ERROR_MESSAGES = {
+  caseCaption: 'Case Caption is required.',
+  caseType: 'Case Type is required.',
+  docketNumber: 'Docket number is required.',
+  documents: 'At least one valid document is required.',
+  filingType: 'Filing Type is required.',
+  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
+  irsNoticeDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'The IRS notice date is in the future. Please enter a valid date.',
+    },
+    'Please enter a valid IRS notice date.',
+  ],
+  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Ownership Disclosure Statement file size is empty.',
+  ],
+  partyType: 'Party Type is required.',
+  payGovDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'The Fee Payment date is in the future. Please enter a valid date.',
+    },
+    'Please enter a valid Fee Payment date.',
+  ],
+  payGovId: 'Fee Payment Id must be in a valid format',
+  petitionFile: 'The Petition file was not selected.',
+  petitionFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Petition file size is empty.',
+  ],
+  preferredTrialCity: 'Preferred Trial City is required.',
+  procedureType: 'Procedure Type is required.',
+  receivedAt: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'The Date Received is in the future. Please enter a valid date.',
+    },
+    'Please enter a valid Date Received.',
+  ],
+  requestForPlaceOfTrialFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Request for Place of Trial file size is empty.',
+  ],
+  signature: 'You must review the form before submitting.',
+  stinFile: 'Statement of Taxpayer Identification Number is required.',
+  stinFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your STIN file size is empty.',
+  ],
+  yearAmounts: [
+    {
+      contains: 'contains a duplicate',
+      message: 'Duplicate years are not allowed',
+    },
+    'A valid year and amount are required.',
+  ],
+};
 
 Case.name = 'Case';
 
@@ -283,48 +359,7 @@ joiValidationDecorator(
       DocketRecord.validateCollection(this.docketRecord)
     );
   },
-  {
-    caseType: 'Case Type is required.',
-    docketNumber: 'Docket number is required.',
-    documents: 'At least one valid document is required.',
-    filingType: 'Filing Type is required.',
-    hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-    irsNoticeDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The IRS notice date is in the future. Please enter a valid date.',
-      },
-      'Please enter a valid IRS notice date.',
-    ],
-    partyType: 'Party Type is required.',
-    payGovDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The Fee Payment date is in the future. Please enter a valid date.',
-      },
-      'Please enter a valid Fee Payment date.',
-    ],
-    payGovId: 'Fee Payment Id must be in a valid format',
-    preferredTrialCity: 'Preferred Trial City is required.',
-    procedureType: 'Procedure Type is required.',
-    receivedAt: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The Date Received is in the future. Please enter a valid date.',
-      },
-      'Please enter a valid Date Received.',
-    ],
-    yearAmounts: [
-      {
-        contains: 'contains a duplicate',
-        message: 'Duplicate years are not allowed',
-      },
-      'A valid year and amount are required.',
-    ],
-  },
+  Case.COMMON_ERROR_MESSAGES,
 );
 
 /**
