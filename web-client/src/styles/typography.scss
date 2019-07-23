@@ -117,10 +117,6 @@ h6 {
 p {
   font-size: 17px;
   line-height: 1.4em;
-
-  @media only screen and (max-width: $medium-screen) {
-    font-size: 14px;
-  }
 }
 
 p.lead {
@@ -149,7 +145,7 @@ a {
   color: color($theme-color-primary);
 
   @media only screen and (max-width: $medium-screen) {
-    font-size: 14px;
+    line-height: 1.4em;
   }
 }
 
