@@ -2,7 +2,6 @@ const {
   validatePetitionFromPaperInteractor,
 } = require('./validatePetitionFromPaperInteractor');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
-const { omit } = require('lodash');
 
 describe('validatePetition', () => {
   it('returns the expected errors object on an empty petition', () => {
@@ -15,16 +14,13 @@ describe('validatePetition', () => {
       petition: {},
     });
 
-    expect(Object.keys(errors)).toEqual(
-      Object.keys(
-        omit(CaseInternal.errorToMessageMap, [
-          'irsNoticeDate',
-          'ownershipDisclosureFileSize',
-          'petitionFileSize',
-          'stinFileSize',
-          'requestForPlaceOfTrialFileSize',
-        ]),
-      ),
-    );
+    expect(Object.keys(errors)).toEqual([
+      'caseCaption',
+      'caseType',
+      'partyType',
+      'petitionFile',
+      'procedureType',
+      'receivedAt',
+    ]);
   });
 });

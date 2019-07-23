@@ -88,10 +88,7 @@ export const DocketRecord = connect(
                   <td className="hide-on-mobile">{record.action}</td>
                   <td>
                     {document && document.isStatusServed && (
-                      <span>
-                        {document.servedAtFormatted ||
-                          caseDetail.datePetitionSentToIrsMessage}
-                      </span>
+                      <span>{document.servedAtFormatted}</span>
                     )}
                   </td>
                   <td className="center-column hide-on-mobile">
