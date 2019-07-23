@@ -114,6 +114,8 @@ export const FilingsAndProceedings = connect(
           </a>
         )}
 
+        <span> {record.signatory}</span>
+
         {!document && record.description}
 
         <span className="filings-and-proceedings">
