@@ -10,6 +10,7 @@ const {
  */
 function DocketRecord(rawDocketRecord) {
   this.description = rawDocketRecord.description;
+  this.signatory = rawDocketRecord.signatory;
   this.documentId = rawDocketRecord.documentId;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
@@ -41,6 +42,10 @@ joiValidationDecorator(
       .number()
       .integer()
       .optional(),
+    signatory: joi
+      .string()
+      .optional()
+      .allow(null),
     status: joi
       .string()
       .allow(null)

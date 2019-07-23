@@ -54,7 +54,7 @@ export const DocumentDetail = connect(
               {helper.formattedDocument.filedBy &&
                 ` by ${helper.formattedDocument.filedBy}`}
             </div>
-            {helper.formattedDocument.servedAt && (
+            {helper.formattedDocument.showServedAt && (
               <div>Served {helper.formattedDocument.servedAtFormatted}</div>
             )}
           </div>
