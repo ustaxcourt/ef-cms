@@ -4,8 +4,8 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
- *
- * @param docketRecord
+ * DocketRecord constructor
+ * @param rawDocketRecord
  * @constructor
  */
 function DocketRecord(rawDocketRecord) {
