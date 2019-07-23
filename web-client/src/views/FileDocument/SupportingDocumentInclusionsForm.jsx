@@ -36,7 +36,7 @@ export const SupportingDocumentInclusionsForm = connect(
             <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
               <button
-                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 include-modal-button"
+                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 ustc-button--unstyled-with-left-icon"
                 onClick={() =>
                   openCleanModalSequence({
                     value: 'WhatCanIIncludeModalOverlay',
