@@ -134,7 +134,7 @@ exports.serveSignedStipDecisionInteractor = async ({
       serviceTime: 'undefined',
     },
     destinations,
-    templateName: `case_served_${process.env.STAGE}`,
+    templateName: process.env.EMAIL_SERVED_TEMPLATE,
   });
 
   applicationContext.logger.timeEnd('Dispatching Service Email');
