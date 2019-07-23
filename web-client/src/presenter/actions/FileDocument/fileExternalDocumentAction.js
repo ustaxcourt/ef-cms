@@ -66,15 +66,17 @@ export const fileExternalDocumentAction = async ({
     return path.error();
   }
 
-  for (let document of caseDetail.documents) {
-    if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheetInteractor({
-        applicationContext,
-        caseId: caseDetail.caseId,
-        documentId: document.documentId,
-      });
-    }
-  }
+  const pendingDocuments = caseDetail.documents.filter(
+    document => document.processingStatus === 'pending',
+  );
+  const createCoverSheetInteractor = document => {
+    return applicationContext.getUseCases().createCoverSheetInteractor({
+      applicationContext,
+      caseId: caseDetail.caseId,
+      documentId: document.documentId,
+    });
+  };
+  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
 
   return path.success({
     caseDetail,
