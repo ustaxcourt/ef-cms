@@ -15,5 +15,11 @@ export const startCaseInternalContactsHelper = get => {
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
+  ['contactPrimary', 'contactSecondary'].forEach(contactLabel => {
+    if (contacts[contactLabel]) {
+      contacts[contactLabel].phoneNumberLabelHint = 'optional';
+    }
+  });
+
   return contacts;
 };

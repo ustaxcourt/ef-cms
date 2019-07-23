@@ -160,6 +160,14 @@ export const ContactSecondary = connect(
             >
               <label className="usa-label" htmlFor="secondaryPhone">
                 Phone Number
+                {contactsHelper.contactSecondary.phoneNumberLabelHint && (
+                  <span>
+                    {' '}
+                    <span className="usa-hint">
+                      ({contactsHelper.contactSecondary.phoneNumberLabelHint})
+                    </span>
+                  </span>
+                )}
               </label>
               <input
                 autoCapitalize="none"
