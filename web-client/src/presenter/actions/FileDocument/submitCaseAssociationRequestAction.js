@@ -99,8 +99,8 @@ export const submitCaseAssociationRequestAction = async ({
   const pendingDocuments = caseDetail.documents.filter(
     document => document.processingStatus === 'pending',
   );
-  const createCoverSheetInteractor = async document => {
-    return await applicationContext.getUseCases().createCoverSheetInteractor({
+  const createCoverSheetInteractor = document => {
+    return applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,
