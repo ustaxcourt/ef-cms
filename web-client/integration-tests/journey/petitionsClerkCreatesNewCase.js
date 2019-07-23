@@ -128,6 +128,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('submitPetitionFromPaperSequence');
 
-    //expect(test.getState('currentPage')).toEqual('DocumentDetail');
+    expect(test.getState('currentPage')).toEqual('DocumentDetail');
   });
 };
