@@ -2843,10 +2843,6 @@
           "type": "string",
           "description": "id of user who created the document"
         },
-        "servedDate": {
-          "type": "string",
-          "description": "date document served"
-        },
         "status": {
           "type": "string",
           "description": "the status of the document"

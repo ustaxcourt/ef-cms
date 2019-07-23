@@ -7,14 +7,9 @@ export const formatDocument = (applicationContext, document) => {
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
-  result.servedAtFormatted = `${applicationContext
+  result.servedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(
-      result.servedAt,
-      'MMDDYY',
-    )} at ${applicationContext
-    .getUtilities()
-    .formatDateString(result.servedAt, 'hh:mm A')}`;
+    .formatDateString(result.servedAt, 'DATE_TIME');
 
   result.showServedAt = !!result.servedAt;
   result.showValidationInput = !result.reviewDate;
