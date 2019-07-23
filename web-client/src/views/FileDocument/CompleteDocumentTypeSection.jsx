@@ -110,8 +110,14 @@ export const CompleteDocumentTypeSection = connect(
               className="usa-button usa-button--unstyled margin-top-2"
               onClick={() => openSelectDocumentWizardOverlaySequence()}
             >
-              <FontAwesomeIcon icon="question-circle" size="sm" />
-              Need help selecting a document?
+              <div className="grid-row">
+                <div className="grid-col-1">
+                  <FontAwesomeIcon icon="question-circle" size="sm" />
+                </div>
+                <div className="grid-col-11">
+                  Need help selecting a document?
+                </div>
+              </div>
             </button>
           </Mobile>
           <Text
