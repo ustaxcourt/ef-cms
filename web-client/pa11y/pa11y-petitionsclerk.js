@@ -4,7 +4,8 @@ module.exports = [
   {
     actions: [
       'wait for #party-type to be visible',
-      'set field #party-type to Innocent Spouse',
+      'set field #party-type to Surviving Spouse',
+      'check field #party-type',
       'wait for #secondaryName to be visible',
     ],
     notes: 'checks a11y of Create Case with inputs revealed',
