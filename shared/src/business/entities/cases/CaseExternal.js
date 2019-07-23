@@ -4,8 +4,8 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -45,46 +45,7 @@ function CaseExternal(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseExternal.errorToMessageMap = {
-  caseType: 'Case Type is a required field.',
-  filingType: 'Filing Type is a required field.',
-  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-  irsNoticeDate: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Notice Date is in the future. Please enter a valid date.',
-    },
-    'Notice Date is a required field.',
-  ],
-  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
-  ownershipDisclosureFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Ownership Disclosure Statement file size is empty.',
-  ],
-  partyType: 'Party Type is a required field.',
-  petitionFile: 'The Petition file was not selected.',
-  petitionFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Petition file size is empty.',
-  ],
-  preferredTrialCity: 'Preferred Trial City is a required field.',
-  procedureType: 'Procedure Type is a required field.',
-  signature: 'You must review the form before submitting.',
-  stinFile: 'Statement of Taxpayer Identification Number is required.',
-  stinFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your STIN file size is empty.',
-  ],
-};
+CaseExternal.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
 
 joiValidationDecorator(
   CaseExternal,
