@@ -21,10 +21,14 @@ export const ProcedureType = connect(
         }
       >
         <fieldset className="usa-fieldset" id="procedure-type-radios">
-          <legend className="usa-legend">{legend}</legend>
+          <legend className="usa-legend" id="procedure-type-legend">
+            {legend}
+          </legend>
           {procedureTypes.map((procedureType, idx) => (
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
+                aria-describedby="procedure-type-legend"
+                aria-labelledby={`proc-type-${idx}`}
                 checked={value === procedureType}
                 className="usa-radio__input"
                 data-type={procedureType}
