@@ -14,14 +14,13 @@ const {
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 
-const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
 
 describe('createCaseFromPaperInteractor integration test', () => {
   let applicationContext;
 
   beforeEach(() => {
-    sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
+    sinon.stub(window.Date.prototype, 'toISOString').returns(RECEIVED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Alex Petitionsclerk',
@@ -54,7 +53,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         caseCaption: 'Bob Jones2, Petitioner',
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
-        createdAt: CREATED_DATE,
+        createdAt: RECEIVED_DATE,
         receivedAt: RECEIVED_DATE,
       },
     });
@@ -68,45 +67,45 @@ describe('createCaseFromPaperInteractor integration test', () => {
       caseCaption: 'Bob Jones2, Petitioner',
       caseTitle:
         'Bob Jones2, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      createdAt: CREATED_DATE,
+      createdAt: RECEIVED_DATE,
       currentVersion: '1',
       docketNumber: '101-19',
       docketNumberSuffix: null,
       docketRecord: [
         {
           description: 'Petition',
-          filedBy: 'Bob Jones',
+          filedBy: 'Bob Jones2',
           filingDate: RECEIVED_DATE,
           status: undefined,
         },
       ],
       documents: [
         {
-          createdAt: CREATED_DATE,
+          createdAt: RECEIVED_DATE,
           documentType: 'Petition',
-          filedBy: 'Bob Jones',
+          filedBy: 'Bob Jones2',
           receivedAt: RECEIVED_DATE,
           workItems: [
             {
               assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               assigneeName: 'Alex Petitionsclerk',
               caseStatus: 'New',
-              createdAt: CREATED_DATE,
+              createdAt: RECEIVED_DATE,
               docketNumber: '101-19',
               docketNumberSuffix: null,
               document: {
                 documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
                 documentType: 'Petition',
-                filedBy: 'Bob Jones',
+                filedBy: 'Bob Jones2',
                 workItems: [],
               },
               isInitializeCase: true,
               messages: [
                 {
-                  createdAt: CREATED_DATE,
+                  createdAt: RECEIVED_DATE,
                   from: 'Alex Petitionsclerk',
                   fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'Petition filed by Bob Jones is ready for review.',
+                  message: 'Petition filed by Bob Jones2 is ready for review.',
                 },
               ],
               section: 'petitions',
@@ -144,7 +143,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: null,
         document: {
-          createdAt: CREATED_DATE,
+          createdAt: RECEIVED_DATE,
           documentType: 'Petition',
         },
         isInitializeCase: true,
@@ -152,7 +151,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           {
             from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Bob Jones is ready for review.',
+            message: 'Petition filed by Bob Jones2 is ready for review.',
           },
         ],
         section: 'petitions',
@@ -172,7 +171,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         docketNumber: '101-19',
         docketNumberSuffix: null,
         document: {
-          createdAt: CREATED_DATE,
+          createdAt: RECEIVED_DATE,
           documentType: 'Petition',
         },
         isInitializeCase: true,
@@ -180,7 +179,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           {
             from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Bob Jones is ready for review.',
+            message: 'Petition filed by Bob Jones2 is ready for review.',
           },
         ],
         section: 'petitions',
