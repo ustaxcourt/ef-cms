@@ -860,10 +860,6 @@ export const StartCase = connect(
                   }}
                 />
               )}
-              <Text
-                bind="validationErrors.procedureType"
-                className="usa-error-message"
-              />
               {!validationErrors.procedureType && (
                 <Text
                   bind="validationErrors.preferredTrialCity"
