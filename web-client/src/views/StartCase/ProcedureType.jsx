@@ -1,3 +1,4 @@
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -20,7 +21,10 @@ export const ProcedureType = connect(
             : 'usa-form-group'
         }
       >
-        <fieldset className="usa-fieldset" id="procedure-type-radios">
+        <fieldset
+          className="usa-fieldset margin-bottom-0"
+          id="procedure-type-radios"
+        >
           <legend className="usa-legend" id="procedure-type-legend">
             {legend}
           </legend>
@@ -48,6 +52,10 @@ export const ProcedureType = connect(
             </div>
           ))}
         </fieldset>
+        <Text
+          bind="validationErrors.procedureType"
+          className="usa-error-message"
+        />
       </div>
     );
   },
