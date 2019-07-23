@@ -177,10 +177,12 @@ Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
 };
 
-Document.prototype.setAsServed = function(servedParties) {
+Document.prototype.setAsServed = function(servedParties = null) {
   this.status = 'served';
   this.servedAt = new Date().toISOString();
-  this.servedParties = servedParties;
+  if (servedParties) {
+    this.servedParties = servedParties;
+  }
 };
 
 /**
