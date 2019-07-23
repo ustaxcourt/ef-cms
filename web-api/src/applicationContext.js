@@ -33,8 +33,8 @@ const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
 const {
-  CaseInternalIncomplete,
-} = require('../../shared/src/business/entities/cases/CaseInternalIncomplete');
+  CaseInternal,
+} = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -464,7 +464,7 @@ module.exports = (appContextUser = {}) => {
     },
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternalIncomplete,
+      CaseInternal: CaseInternal,
     }),
     getPersistenceGateway: () => {
       return {
