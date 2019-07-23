@@ -16,56 +16,66 @@ exports.uploadExternalDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const primaryDocumentFileId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocument({
-      applicationContext,
-      document: documentFiles.primary,
-      onUploadProgress: progressFunctions.primary,
-    });
+  const uploadedDocumentPromises = [];
 
-  let secondaryDocumentFileId;
-  if (documentFiles.secondary) {
-    secondaryDocumentFileId = await applicationContext
+  /**
+   * uploads a document and then immediately processes it to scan for viruses,
+   * validate the PDF content, and sanitize the document.
+   *
+   * @param {string} documentLabel the string identifying which documentFile and progressFunction
+   * @returns {Promise<string>} the documentId returned from a successful upload
+   */
+  const uploadDocumentAndMakeSafe = async documentLabel => {
+    const documentId = await applicationContext
       .getPersistenceGateway()
       .uploadDocument({
         applicationContext,
-        document: documentFiles.secondary,
-        onUploadProgress: progressFunctions.secondary,
+        document: documentFiles[documentLabel],
+        onUploadProgress: progressFunctions[documentLabel],
       });
+    await applicationContext.getUseCases().virusScanPdfInteractor({
+      applicationContext,
+      documentId,
+    });
+    await applicationContext.getUseCases().validatePdfInteractor({
+      applicationContext,
+      documentId,
+    });
+    await applicationContext.getUseCases().sanitizePdfInteractor({
+      applicationContext,
+      documentId,
+    });
+    return documentId;
+  };
+
+  /**
+   * @param {string} documentId the id of a document found in storage
+   * @returns {Promise<*>} resolves after sequentially scanning, validating, and sanitizing the document
+   */
+
+  uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('primary'));
+
+  if (documentFiles.secondary) {
+    uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('secondary'));
   }
 
-  const supportingDocumentFileIds = [];
   if (documentMetadata.hasSupportingDocuments) {
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
-      const supportingDocumentFileId = await applicationContext
-        .getPersistenceGateway()
-        .uploadDocument({
-          applicationContext,
-          document: documentFiles[`primarySupporting${i}`],
-          onUploadProgress: progressFunctions[`primarySupporting${i}`],
-        });
-
-      supportingDocumentFileIds.push(supportingDocumentFileId);
+      uploadedDocumentPromises.push(
+        uploadDocumentAndMakeSafe(`primarySupporting${i}`),
+      );
     }
   }
 
-  const secondarySupportingDocumentFileIds = [];
   if (documentMetadata.hasSecondarySupportingDocuments) {
     for (
       let i = 0;
       i < documentMetadata.secondarySupportingDocuments.length;
       i++
     ) {
-      const supportingDocumentFileId = await applicationContext
-        .getPersistenceGateway()
-        .uploadDocument({
-          applicationContext,
-          document: documentFiles[`secondarySupporting${i}`],
-          onUploadProgress: progressFunctions[`secondarySupporting${i}`],
-        });
-
-      secondarySupportingDocumentFileIds.push(supportingDocumentFileId);
+      uploadedDocumentPromises.push(
+        uploadDocumentAndMakeSafe(`secondarySupporting${i}`),
+      );
     }
   }
 
@@ -73,29 +83,7 @@ exports.uploadExternalDocumentInteractor = async ({
     documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
   }
 
-  const documentIds = [
-    primaryDocumentFileId,
-    secondaryDocumentFileId,
-    ...supportingDocumentFileIds,
-    ...secondarySupportingDocumentFileIds,
-  ].filter(documentId => documentId);
-
-  for (let documentId of documentIds) {
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId,
-    });
-
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdfInteractor({
-      applicationContext,
-      documentId,
-    });
-  }
+  const documentIds = await Promise.all(uploadedDocumentPromises);
 
   return await applicationContext.getUseCases().fileExternalDocumentInteractor({
     applicationContext,
