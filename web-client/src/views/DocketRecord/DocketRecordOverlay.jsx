@@ -66,7 +66,7 @@ class DocketRecordOverlayComponent extends React.Component {
     const { document, record } = this.props.caseDetail.docketRecordWithDocument[
       this.props.docketRecordIndex
     ];
-    const { baseUrl, caseDetail, token } = this.props;
+    const { baseUrl, token } = this.props;
     return (
       <FocusLock>
         <dialog
@@ -108,10 +108,7 @@ class DocketRecordOverlayComponent extends React.Component {
             <p className="semi-bold label margin-top-3">Served</p>
             <p className="margin-top-0">
               {document && document.isStatusServed && (
-                <span>
-                  {document.servedAtFormatted ||
-                    caseDetail.datePetitionSentToIrsMessage}
-                </span>
+                <span>{document.servedAtFormatted}</span>
               )}
             </p>
             <p className="semi-bold label margin-top-3">Parties</p>
