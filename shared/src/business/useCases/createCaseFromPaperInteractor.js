@@ -96,8 +96,8 @@ exports.createCaseFromPaperInteractor = async ({
     isPaper: true,
   });
 
-  caseToAdd.caseCaption = petitionEntity.caseCaption;
-  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
+  const caseCaption = Case.getCaseCaption(caseToAdd.toRawObject());
+  const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
   const petitionDocumentEntity = new Document({
     createdAt: caseToAdd.createdAt,
