@@ -63,14 +63,17 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
     workItem => workItem.isInitializeCase,
   );
 
+  let workItemsUpdated = [];
   for (let workItem of caseEntity.getWorkItems()) {
     workItem.setStatus(Case.STATUS_TYPES.recalled);
-
-    await applicationContext.getPersistenceGateway().updateWorkItem({
-      applicationContext,
-      workItemToUpdate: workItem.toRawObject(),
-    });
+    workItemsUpdated.push(
+      applicationContext.getPersistenceGateway().updateWorkItem({
+        applicationContext,
+        workItemToUpdate: workItem.toRawObject(),
+      }),
+    );
   }
+  await Promise.all(workItemsUpdated);
 
   if (initializeCaseWorkItem) {
     await deleteWorkItemFromInbox({
@@ -107,27 +110,26 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
       workItemToUpdate: initializeCaseWorkItem.toRawObject(),
     });
 
-    await deleteUserOutboxRecord({
-      applicationContext,
-      createdAt,
-      userId: fromUserId,
-    });
-
-    await deleteSectionOutboxRecord({
-      applicationContext,
-      createdAt,
-      section: 'petitions',
-    });
-
-    await createUserInboxRecord({
-      applicationContext,
-      workItem: initializeCaseWorkItem,
-    });
-
-    await createSectionInboxRecord({
-      applicationContext,
-      workItem: initializeCaseWorkItem,
-    });
+    await Promise.all([
+      deleteUserOutboxRecord({
+        applicationContext,
+        createdAt,
+        userId: fromUserId,
+      }),
+      deleteSectionOutboxRecord({
+        applicationContext,
+        createdAt,
+        section: 'petitions',
+      }),
+      createUserInboxRecord({
+        applicationContext,
+        workItem: initializeCaseWorkItem,
+      }),
+      createSectionInboxRecord({
+        applicationContext,
+        workItem: initializeCaseWorkItem,
+      }),
+    ]);
 
     return caseEntity.toRawObject();
   } else {
