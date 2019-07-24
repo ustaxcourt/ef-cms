@@ -28,6 +28,7 @@ import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeMod
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completeScanSequence } from './sequences/completeScanSequence';
+import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence';
@@ -59,6 +60,7 @@ import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseSequence } from './sequences/gotoStartCaseSequence';
+import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
@@ -226,6 +228,7 @@ export const presenter = {
     completeDocumentSelectSequence,
     completeDocumentSigningSequence,
     completeScanSequence,
+    completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
     convertHtml2PdfSequence,
     countryTypeChangeSequence,
@@ -257,6 +260,7 @@ export const presenter = {
     gotoSelectDocumentTypeSequence,
     gotoSignPDFDocumentSequence,
     gotoStartCaseSequence,
+    gotoStartCaseWizardSequence,
     gotoStyleGuideSequence,
     gotoTrialSessionDetailSequence,
     gotoTrialSessionsSequence,

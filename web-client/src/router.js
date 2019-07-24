@@ -276,6 +276,58 @@ const router = {
         app.getSequence('gotoStartCaseSequence')();
       }),
     );
+    route(
+      '/start-a-case-wizard/step-1',
+      checkLoggedIn(() => {
+        document.title = `Start a case ${pageTitleSuffix}`;
+        app.getSequence('gotoStartCaseWizardSequence')();
+      }),
+    );
+    route(
+      '/start-a-case-wizard/step-2',
+      checkLoggedIn(() => {
+        document.title = `Start a case ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'StartCaseWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'StartCaseStep2',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: '/start-a-case-wizard/step-1',
+          });
+        }
+      }),
+    );
+    route(
+      '/start-a-case-wizard/step-3',
+      checkLoggedIn(() => {
+        document.title = `Start a case ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'StartCaseWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'StartCaseStep3',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: '/start-a-case-wizard/step-1',
+          });
+        }
+      }),
+    );
+    route(
+      '/start-a-case-wizard/step-4',
+      checkLoggedIn(() => {
+        document.title = `Start a case ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'StartCaseWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'StartCaseStep4',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: '/start-a-case-wizard/step-1',
+          });
+        }
+      }),
+    );
 
     route(
       '/add-a-trial-session',
