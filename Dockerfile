@@ -38,6 +38,10 @@ ENV SONAR_RUNNER_HOME=/home/app/sonar_home
 ENV PATH ${SONAR_RUNNER_HOME}/bin:$PATH
 ENV GS4JS_HOME=/usr/lib
 
+COPY package.json /home/app/package.json
+COPY package-lock.json /home/app/package-lock.json
+RUN cd /home/app && npm i
+
 COPY shared/package.json /home/app/shared/package.json
 COPY shared/package-lock.json /home/app/shared/package-lock.json
 RUN cd /home/app/shared && npm i
