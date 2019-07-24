@@ -1,7 +1,6 @@
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -36,15 +35,9 @@ export const StartCaseStep1 = connect(
   }) => {
     return (
       <>
-        {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
-        )}
         <h1 className="margin-bottom-2" id="start-case-header" tabIndex="-1">
-          1. Provide Your Statement of Identity
+          1. Provide Statement of Identity
         </h1>
-        <p className="required-statement margin-top-05 margin-bottom-2">
-          All fields required unless otherwise noted
-        </p>
         <Hint>
           The Statement of Taxpayer Identification is the only document that
           should include personal information (such as Social Security Numbers,
@@ -52,7 +45,6 @@ export const StartCaseStep1 = connect(
           It’s sent to the IRS to help identify you, but is never viewed by the
           Court or stored as part of the public record.
         </Hint>
-        <h2>Upload Your Statement of Taxpayer Identification</h2>
         <div className="blue-container">
           <div
             className={`usa-form-group ${
@@ -66,7 +58,7 @@ export const StartCaseStep1 = connect(
               }
               htmlFor="stin-file"
             >
-              Upload Your Statement of Taxpayer Identification
+              Upload Your Statement of Taxpayer Identification{' '}
               <span className="success-message">
                 <FontAwesomeIcon icon="check-circle" size="1x" />
               </span>
@@ -108,7 +100,7 @@ export const StartCaseStep1 = connect(
 
         <div className="button-box-container">
           <button
-            className="usa-button margin-right-205"
+            className="usa-button margin-right-205 margin-bottom-4"
             id="submit-case"
             type="button"
             onClick={() => {
@@ -117,7 +109,11 @@ export const StartCaseStep1 = connect(
           >
             Continue to Step 2 of 5
           </button>
-          <button className="usa-button usa-button--outline" type="button">
+          <button
+            className="usa-button usa-button--outline margin-bottom-1"
+            type="button"
+            onClick={() => history.back()}
+          >
             Back
           </button>
           <button
