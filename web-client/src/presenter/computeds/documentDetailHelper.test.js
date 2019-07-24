@@ -235,4 +235,101 @@ describe('formatted work queue computed', () => {
     });
     expect(result.showServeDocumentButton).toEqual(false);
   });
+
+  it('should filter out completed work items with Served on IRS messages', () => {
+    role = 'seniorattorney';
+
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentType: 'Proposed Stipulated Decision',
+              processingStatus: 'pending',
+              reviewDate: '2018-11-21T20:49:28.192Z',
+              // reviewUser: 'petitionsclerk',
+              userId: 'taxpayer',
+              workItems: [
+                {
+                  caseStatus: 'New',
+                  completedAt: '2018-11-21T20:49:28.192Z',
+                  document: {
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+                {
+                  assigneeId: 'abc',
+                  caseStatus: 'New',
+                  document: {
+                    documentType: 'Proposed Stipulated Decision',
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        workQueueIsInternal: true,
+      },
+    });
+
+    expect(result.formattedDocument.workItems).toHaveLength(1);
+  });
+
+  it('default to empty array when caseDetail.documents is undefined', () => {
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: undefined,
+        },
+      },
+    });
+
+    expect(result.formattedDocument).toMatchObject({});
+  });
+
+  it("default to empty array when a document's workItems are non-existent", () => {
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItems: undefined,
+            },
+          ],
+        },
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      },
+    });
+
+    expect(result.formattedDocument.documentId).toEqual(
+      'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    );
+  });
 });

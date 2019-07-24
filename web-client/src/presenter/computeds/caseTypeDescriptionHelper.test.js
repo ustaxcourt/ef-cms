@@ -132,4 +132,15 @@ describe('caseTypeDescriptionHelper', () => {
       ],
     });
   });
+
+  it('should return an empty caseTypes result if there is an invalid caseType', () => {
+    const result = runCompute(caseTypeDescriptionHelper, {
+      state: {
+        caseTypes: ['invalid type'],
+        form: { hasIrsNotice: true },
+      },
+    });
+
+    expect(result).toMatchObject({ caseTypes: [] });
+  });
 });
