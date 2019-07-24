@@ -34,17 +34,21 @@ exports.updateCaseInteractor = async ({
     throw new UnprocessableEntityError();
   }
 
-  if (caseToUpdate.contactPrimary && !isEmpty(caseToUpdate.contactPrimary)) {
+  if (!isEmpty(caseToUpdate.contactPrimary)) {
     caseToUpdate.contactPrimary = ContactFactory.createContacts({
       contactInfo: { primary: caseToUpdate.contactPrimary },
       partyType: caseToUpdate.partyType,
     }).primary.toRawObject();
   }
 
-  if (
-    caseToUpdate.contactSecondary &&
-    !isEmpty(caseToUpdate.contactSecondary)
-  ) {
+  console.log(
+    ContactFactory.createContacts({
+      contactInfo: { secondary: caseToUpdate.contactSecondary },
+      partyType: caseToUpdate.partyType,
+    }),
+  );
+
+  if (!isEmpty(caseToUpdate.contactSecondary)) {
     caseToUpdate.contactSecondary = ContactFactory.createContacts({
       contactInfo: { secondary: caseToUpdate.contactSecondary },
       partyType: caseToUpdate.partyType,
