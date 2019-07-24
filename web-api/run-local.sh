@@ -20,7 +20,7 @@ echo "seeding dynamo"
 node seed-dynamo.js
 
 echo "starting api service"
-SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --config serverless.yml --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop &
+SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --config serverless-api.yml --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop &
 echo "starting cases service"
 SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop ./node_modules/.bin/sls offline start --config serverless-cases.yml --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop &
 echo "starting users service"
