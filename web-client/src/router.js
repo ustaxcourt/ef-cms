@@ -276,6 +276,27 @@ const router = {
         app.getSequence('gotoStartCaseSequence')();
       }),
     );
+    route(
+      '/start-a-case-wizard/step-*',
+      checkLoggedIn(step => {
+        document.title = `Start a case ${pageTitleSuffix}`;
+        switch (step) {
+          case '1':
+            app.getSequence('gotoStartCaseWizardSequence')();
+            break;
+          default:
+            if (app.getState('currentPage') === 'StartCaseWizard') {
+              app.getSequence('chooseWizardStepSequence')({
+                value: `StartCaseStep${step}`,
+              });
+            } else {
+              app.getSequence('navigateToPathSequence')({
+                path: '/start-a-case-wizard/step-1',
+              });
+            }
+        }
+      }),
+    );
 
     route(
       '/add-a-trial-session',

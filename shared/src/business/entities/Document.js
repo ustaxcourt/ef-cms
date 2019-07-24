@@ -49,8 +49,6 @@ function Document(rawDocument) {
     processingStatus: rawDocument.processingStatus,
     receivedAt: rawDocument.receivedAt || new Date().toISOString(),
     relationship: rawDocument.relationship,
-    reviewDate: rawDocument.reviewDate,
-    reviewUser: rawDocument.reviewUser,
     scenario: rawDocument.scenario,
     servedAt: rawDocument.servedAt,
     servedParties: rawDocument.servedParties,
@@ -60,7 +58,6 @@ function Document(rawDocument) {
     status: rawDocument.status,
     supportingDocument: rawDocument.supportingDocument,
     userId: rawDocument.userId,
-    validated: rawDocument.validated,
     workItems: rawDocument.workItems,
   });
 
@@ -147,11 +144,6 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
-    reviewDate: joi
-      .date()
-      .iso()
-      .optional(),
-    reviewUser: joi.string().optional(),
     servedAt: joi
       .date()
       .iso()
@@ -164,7 +156,6 @@ joiValidationDecorator(
     signedByUserId: joi.string().optional(),
     status: joi.string().optional(),
     userId: joi.string().required(),
-    validated: joi.boolean().optional(),
   }),
   function() {
     return WorkItem.validateCollection(this.workItems);

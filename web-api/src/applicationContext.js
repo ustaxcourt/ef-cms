@@ -66,9 +66,6 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
-  createDocumentInteractor,
-} = require('../../shared/src/business/useCases/createDocumentInteractor');
-const {
   createISODateString,
   formatDateString,
   prepareDateFromString,
@@ -553,7 +550,6 @@ module.exports = (appContextUser = {}) => {
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
-        createDocumentInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
