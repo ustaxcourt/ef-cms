@@ -1281,3 +1281,11 @@ nav.usa-nav {
     }
   }
 }
+
+@media only screen and (min-width: $medium-screen) {
+  .usa-form {
+    .tablet\:usa-input--medium {
+      max-width: 7.5em;
+    }
+  }
+}

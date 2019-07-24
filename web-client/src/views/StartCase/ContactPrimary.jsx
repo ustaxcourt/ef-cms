@@ -44,12 +44,6 @@ export const ContactPrimary = connect(
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
         <div className="blue-container contact-group">
-          <Country
-            bind={bind}
-            type="contactPrimary"
-            onBlur={onBlur}
-            onChange={onChange}
-          />
           <div
             className={
               'usa-form-group ' +
@@ -84,6 +78,14 @@ export const ContactPrimary = connect(
               className="usa-error-message"
             />
           </div>
+
+          <Country
+            bind={bind}
+            type="contactPrimary"
+            onBlur={onBlur}
+            onChange={onChange}
+          />
+
           {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
               <label className="usa-label with-hint" htmlFor="title">
@@ -173,7 +175,6 @@ export const ContactPrimary = connect(
               onChange={onChange}
             />
           )}
-          {contactsHelper.showEmail && <Email bind={emailBind} />}
           <div
             className={
               'usa-form-group phone-input ' +
