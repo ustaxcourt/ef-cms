@@ -59,7 +59,8 @@ describe('a user signs and serves a stipulated decision', () => {
   it('login as a tax payer and create a case', async () => {
     await loginAs(test, 'taxpayer');
     caseDetail = await uploadPetition(test);
-    {docketNumber} = caseDetail;
+    // eslint-disable-next-line prefer-destructuring
+    docketNumber = caseDetail.docketNumber;
   });
 
   it('respondent uploads a proposed stipulated decision', async () => {

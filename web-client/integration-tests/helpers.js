@@ -337,7 +337,7 @@ exports.loginAs = async (test, user) => {
   await exports.waitForRouter();
 };
 
-exports.setupTest = ({ useCases }) => {
+exports.setupTest = ({ useCases = {} } = {}) => {
   let test;
   global.FormData = FormData;
   global.Blob = () => {};
