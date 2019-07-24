@@ -50,7 +50,7 @@ createAdmin() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD'="${USTC_ADMIN_PASS}") 
+    --auth-parameters USERNAME="${email}"',PASSWORD'="${USTC_ADMIN_PASS}")
   adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 }
 
@@ -70,7 +70,7 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"') 
+    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"')
 
   session=$(echo "${response}" | jq -r ".Session")
 
@@ -83,7 +83,7 @@ createAccount() {
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
       --session "${session}"
   fi
-} 
+}
 
 createManyAccounts() {
   emailPrefix=$1
