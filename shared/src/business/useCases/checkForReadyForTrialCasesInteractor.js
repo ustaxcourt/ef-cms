@@ -15,6 +15,25 @@ exports.checkForReadyForTrialCasesInteractor = async ({
       applicationContext,
     });
 
+  const updateForTrial = async entity => {
+    // assuming we want these done serially; if first fails, promise is rejected and error thrown
+    const caseEntity = entity.validate();
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.toRawObject(),
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseId: caseEntity.caseId,
+        caseSortTags: caseEntity.generateTrialSortTags(),
+      });
+  };
+
+  const updatedCases = [];
+
   for (let caseRecord of caseCatalog) {
     const { caseId } = caseRecord;
     const caseToCheck = await applicationContext
@@ -33,22 +52,12 @@ exports.checkForReadyForTrialCasesInteractor = async ({
         if (
           caseEntity.status === Case.STATUS_TYPES.generalDocketReadyForTrial
         ) {
-          await applicationContext.getPersistenceGateway().updateCase({
-            applicationContext,
-            caseToUpdate: caseEntity.validate().toRawObject(),
-          });
-
-          await applicationContext
-            .getPersistenceGateway()
-            .createCaseTrialSortMappingRecords({
-              applicationContext,
-              caseId,
-              caseSortTags: caseEntity.validate().generateTrialSortTags(),
-            });
+          updatedCases.push(updateForTrial(caseEntity));
         }
       }
     }
   }
+  await Promise.all(updatedCases);
 
   applicationContext.logger.info('Time', new Date().toISOString());
 };
