@@ -1,0 +1,131 @@
+.display-1 {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  font-family: $font-serif;
+  font-size: 52px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h1,
+.heading-1 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 32px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h2,
+.heading-2 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 24px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h3,
+.heading-3 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 20px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h4,
+.heading-4 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 18px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h5,
+.heading-5 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 16px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}
+
+h6,
+.heading-6 {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: $font-serif;
+  font-size: 13px;
+  font-weight: $font-semibold;
+  line-height: 1.3em;
+  text-transform: uppercase;
+}
+
+.captioned {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  &.underlined {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid color($theme-color-base-lighter);
+  }
+}
+
+#main-content,
+#modal-root {
+  h1[tabIndex='-1'],
+  h2[tabIndex='-1'],
+  h3[tabIndex='-1'],
+  h4[tabIndex='-1'],
+  h5[tabIndex='-1'],
+  h6[tabIndex='-1'] {
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+p.lead {
+  font-family: $font-serif;
+  font-size: 20px;
+  font-weight: $font-regular;
+  line-height: 1.7em;
+  &.bold {
+    font-weight: $font-bold;
+  }
+}
+
+p.semi-bold {
+  font-size: 17px;
+  font-weight: $font-semibold;
+  &.label {
+    margin-bottom: 5px;
+  }
+}
+
+.semi-bold {
+  font-weight: $font-semibold;
+}
+
+a {
+  color: color($theme-color-primary);
+}
+
+a:hover {
+  color: color($theme-color-primary-darker);
+}

@@ -1,0 +1,13 @@
+{
+  "Role": "arn:aws:iam::ACCOUNT_NUMBER:role/s3_replication_role_ENV",
+  "Rules": [
+    {
+      "Prefix": "",
+      "Status": "Enabled",
+      "Destination": {
+        "Bucket": "arn:aws:s3:::BACKUP_BUCKET",
+        "StorageClass": "STANDARD"
+      }
+    }
+  ]
+}

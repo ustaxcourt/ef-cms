@@ -1,0 +1,8 @@
+.nyc_output
+.scannerwork
+.sonar-cache
+coverage
+dist
+node_modules
+terraform/main/.terraform
+terraform/common/.terraform

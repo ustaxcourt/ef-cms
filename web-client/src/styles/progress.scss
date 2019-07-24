@@ -1,0 +1,38 @@
+.loading-overlay {
+  position: fixed;
+  z-index: 9600;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  pointer-events: all;
+  touch-action: auto;
+}
+
+.progress-indicator {
+  .spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    color: color($theme-color-base-light);
+  }
+}
+
+* {
+  animation: fadein 0.2s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
