@@ -31,7 +31,6 @@ import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCa
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createCoverSheetInteractor } from '../../shared/src/proxies/documents/createCoverSheetProxy';
-import { createDocumentInteractor } from '../../shared/src/proxies/documents/createDocumentProxy';
 import {
   createISODateString,
   formatDateString,
@@ -158,7 +157,6 @@ const allUseCases = {
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createCoverSheetInteractor,
-  createDocumentInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
