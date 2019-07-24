@@ -17,27 +17,27 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
     await documentClient
       .scan({
         ExclusiveStartKey: lastKey,
-        TableName: 'efcms-dev'
+        TableName: 'efcms-dev',
       })
       .promise()
       .then(async results => {
         console.log('results.Count', results.Count);
-        hasMoreResults = !!results.LastEvaluatedKey
+        hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-  
+
         for (const result of results.Items) {
           if (result.gsi1pk && result.gsi1pk.indexOf('workitem-') !== -1) {
             if (!result.document.receivedAt) {
               result.document.receivedAt = result.document.createdAt;
-              await documentClient.put({
-                Item: result,
-                TableName: 'efcms-dev',
-              }).promise();
+              await documentClient
+                .put({
+                  Item: result,
+                  TableName: 'efcms-dev',
+                })
+                .promise();
             }
           }
         }
       });
-  
   }
-  
 })();
