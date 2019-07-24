@@ -1,6 +1,8 @@
 import { Contacts } from './Contacts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import { limitFileSize } from '../limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -12,6 +14,7 @@ export const StartCaseStep3 = connect(
     filingTypes: state.filingTypes,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
+    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
@@ -23,6 +26,7 @@ export const StartCaseStep3 = connect(
     filingTypes,
     formCancelToggleCancelSequence,
     startCaseHelper,
+    updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
     validateStartCaseSequence,
     validationErrors,
@@ -327,6 +331,74 @@ export const StartCaseStep3 = connect(
           onBlur="validateStartCaseSequence"
           onChange="updateFormValueSequence"
         />
+
+        {startCaseHelper.showOwnershipDisclosure && (
+          <>
+            <h2 className="margin-top-4">Ownership Disclosure Statement</h2>
+            <p>
+              Tax Court Rules of Practice and Procedure (Rule 60) requires a
+              corporation, partnership, or limited liability company, filing a
+              Petition with the Court to also file an Ownership Disclosure
+              Statement (ODS). Complete your{' '}
+              <a
+                href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Ownership Disclosure Statement Form 6
+              </a>
+              .
+            </p>
+            <div className="blue-container">
+              <label
+                className={
+                  'ustc-upload-ods usa-label with-hint ' +
+                  (startCaseHelper.showOwnershipDisclosureValid
+                    ? 'validated'
+                    : '')
+                }
+                htmlFor="ownership-disclosure-file"
+              >
+                Upload your Ownership Disclosure Statement
+                <span className="success-message">
+                  <FontAwesomeIcon icon="check-circle" size="1x" />
+                </span>
+              </label>
+              <span className="usa-hint">
+                File must be in PDF format (.pdf). Max file size{' '}
+                {constants.MAX_FILE_SIZE_MB}MB.
+              </span>
+              <input
+                accept=".pdf"
+                className="usa-input"
+                id="ownership-disclosure-file"
+                name="ownershipDisclosureFile"
+                type="file"
+                onChange={e => {
+                  limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                    updatePetitionValueSequence({
+                      key: e.target.name,
+                      value: e.target.files[0],
+                    });
+                    updatePetitionValueSequence({
+                      key: `${e.target.name}Size`,
+                      value: e.target.files[0].size,
+                    });
+                    validateStartCaseSequence();
+                  });
+                }}
+              />
+              <Text
+                bind="validationErrors.ownershipDisclosureFile"
+                className="usa-error-message"
+              />
+              <Text
+                bind="validationErrors.ownershipDisclosureFileSize"
+                className="usa-error-message"
+              />
+            </div>
+          </>
+        )}
 
         <div className="button-box-container">
           <button

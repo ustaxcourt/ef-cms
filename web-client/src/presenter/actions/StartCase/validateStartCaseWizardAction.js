@@ -1,5 +1,5 @@
 /**
- * validates the petition.
+ * validates the petition based on the current wizard step.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
@@ -8,6 +8,7 @@
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateStartCaseWizardAction = ({ path }) => {
+  //TODO
   /*const petition = get(state.petition);
 
   const form = omit(
