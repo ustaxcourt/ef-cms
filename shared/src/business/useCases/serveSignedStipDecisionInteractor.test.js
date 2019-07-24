@@ -35,8 +35,6 @@ const applicationContext = {
             documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
             documentType: 'Stipulated Decision',
             processingStatus: 'pending',
-            reviewDate: '2018-11-21T20:49:28.192Z',
-            reviewUser: 'petitionsclerk',
             userId: 'taxpayer',
             workItems: [],
           },

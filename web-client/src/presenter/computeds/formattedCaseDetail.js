@@ -12,7 +12,6 @@ export const formatDocument = (applicationContext, document) => {
     .formatDateString(result.servedAt, 'DATE_TIME');
 
   result.showServedAt = !!result.servedAt;
-  result.showValidationInput = !result.reviewDate;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
 

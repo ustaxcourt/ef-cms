@@ -245,58 +245,6 @@
         }
       }
     },
-    "/cases/{caseId}/documents": {
-      "parameters": [
-        {
-          "name": "caseId",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "post": {
-        "tags": ["documents"],
-        "summary": "create a new document inside of a case",
-        "description": "Create a new document and attaches it to a case.  It will also create a generic work item.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/document"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/cases/{caseId}/external-document": {
       "parameters": [
         {
@@ -2815,25 +2763,13 @@
           "type": "string",
           "description": "date document created"
         },
-        "validated": {
-          "type": "boolean",
-          "description": "if the document has been validated"
-        },
         "documentType": {
           "type": "string",
           "description": "type of this document"
         },
-        "reviewDate": {
-          "type": "string",
-          "description": "the date the user reviewed the document"
-        },
         "filedBy": {
           "type": "boolean",
           "description": "the user name who filed the document"
-        },
-        "reviewUser": {
-          "type": "string",
-          "description": "the user who reviewed the document"
         },
         "documentId": {
           "type": "string",
