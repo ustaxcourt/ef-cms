@@ -79,13 +79,6 @@ export const ContactPrimary = connect(
             />
           </div>
 
-          <Country
-            bind={bind}
-            type="contactPrimary"
-            onBlur={onBlur}
-            onChange={onChange}
-          />
-
           {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
               <label className="usa-label with-hint" htmlFor="title">
@@ -157,6 +150,14 @@ export const ContactPrimary = connect(
               />
             </div>
           )}
+
+          <Country
+            bind={bind}
+            type="contactPrimary"
+            onBlur={onBlur}
+            onChange={onChange}
+          />
+
           {data.contactPrimary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (
             <Address

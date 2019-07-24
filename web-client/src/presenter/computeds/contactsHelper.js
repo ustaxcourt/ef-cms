@@ -173,11 +173,14 @@ export const contactsHelper = get => {
       case PARTY_TYPES.petitionerDeceasedSpouse:
         contactPrimary = {
           header: 'Tell Us About Yourself',
-          nameLabel: 'Name',
+          nameLabel: 'Name of Petitioner/Surviving Spouse',
         };
         contactSecondary = {
+          displayInCareOf: true,
+          displayPhone: true,
           header: 'Tell Us About Your Deceased Spouse',
-          nameLabel: "Spouse's Name",
+          inCareOfLabel: 'In Care Of',
+          nameLabel: 'Name of Deceased Spouse',
         };
         break;
       case PARTY_TYPES.survivingSpouse:
