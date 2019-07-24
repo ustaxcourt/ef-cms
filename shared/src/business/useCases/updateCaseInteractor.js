@@ -10,20 +10,6 @@ const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
 
-const setDocumentDetails = (userId, documents) => {
-  if (documents && userId) {
-    documents.forEach(document => {
-      if (document.validated && !document.reviewDate) {
-        document.reviewDate = new Date().toISOString();
-        document.reviewUser = userId;
-        document.status = 'reviewed';
-      }
-    });
-  }
-
-  return documents;
-};
-
 /**
  * updateCaseInteractor
  *
@@ -46,13 +32,6 @@ exports.updateCaseInteractor = async ({
 
   if (!caseToUpdate || caseId !== caseToUpdate.caseId) {
     throw new UnprocessableEntityError();
-  }
-
-  if (caseToUpdate.documents) {
-    caseToUpdate.documents = setDocumentDetails(
-      user.userId,
-      caseToUpdate.documents,
-    );
   }
 
   if (caseToUpdate.contactPrimary && !isEmpty(caseToUpdate.contactPrimary)) {

@@ -138,11 +138,6 @@ describe('updateCase', () => {
   it('should update the validated documents on a case', async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;
-    caseToUpdate.documents.forEach(document => {
-      document.validated = true;
-      document.reviewDate = undefined;
-      return document;
-    });
 
     applicationContext = {
       environment: { stage: 'local' },
