@@ -48,11 +48,6 @@ exports.uploadExternalDocumentInteractor = async ({
     return documentId;
   };
 
-  /**
-   * @param {string} documentId the id of a document found in storage
-   * @returns {Promise<*>} resolves after sequentially scanning, validating, and sanitizing the document
-   */
-
   uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('primary'));
 
   if (documentFiles.secondary) {
