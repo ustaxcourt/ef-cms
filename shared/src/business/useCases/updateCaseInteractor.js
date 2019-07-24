@@ -41,13 +41,6 @@ exports.updateCaseInteractor = async ({
     }).primary.toRawObject();
   }
 
-  console.log(
-    ContactFactory.createContacts({
-      contactInfo: { secondary: caseToUpdate.contactSecondary },
-      partyType: caseToUpdate.partyType,
-    }),
-  );
-
   if (!isEmpty(caseToUpdate.contactSecondary)) {
     caseToUpdate.contactSecondary = ContactFactory.createContacts({
       contactInfo: { secondary: caseToUpdate.contactSecondary },
