@@ -5,7 +5,6 @@ module.exports = {
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
-  createDocumentLambda: require('./users/createDocumentLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
   deleteCaseDeadlineLambda: require('./caseDeadline/deleteCaseDeadlineLambda')
     .handler,
