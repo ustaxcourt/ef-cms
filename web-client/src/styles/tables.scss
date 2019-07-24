@@ -1,0 +1,528 @@
+table,
+.usa-table {
+  width: 100%;
+  margin: 0 0 2em 0;
+
+  tr:hover {
+    background: $color-primary-alt-lightest;
+    box-shadow: 5px 0 0 0 color($theme-color-primary) inset;
+    transition-duration: 0.2s;
+    transition-property: all;
+  }
+
+  td {
+    padding: 15px 20px;
+    background-color: transparent;
+    vertical-align: top;
+  }
+
+  p {
+    margin-bottom: 4px;
+  }
+}
+
+.ustc-table /* TODO - eliminate work-queue rule? */ {
+  th {
+    border: 0;
+  }
+
+  td {
+    border: none;
+    font-size: 17px;
+    label {
+      margin: 0;
+    }
+  }
+
+  tr {
+    border-top: 1px solid color($theme-color-base-lighter);
+  }
+
+  tbody:not(.action-bar) {
+    &:hover {
+      td.focus-toggle {
+        button.focus-button {
+          background-color: color($theme-color-primary);
+        }
+      }
+    }
+
+    tr {
+      &:not(:first-child) {
+        border-top-width: 0;
+      }
+
+      &.queue-message {
+        td {
+          background-color: $color-primary-alt-lightest;
+        }
+      }
+    }
+  }
+
+  thead {
+    th {
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+
+      .collapse-header {
+        padding: 0;
+      }
+    }
+  }
+
+  .action-bar {
+    background-color: $color-primary-alt-lightest;
+    font-size: 1em;
+
+    label {
+      display: inline-block;
+      margin: 0;
+    }
+
+    select {
+      display: inline-block;
+      width: auto;
+      margin: 0 1em;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    .selected-count {
+      margin-right: 3em;
+      font-weight: $font-bold;
+    }
+  }
+
+  width: 100%;
+  border-top: none;
+  border-right: 1px solid color($theme-color-base-lighter);
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  border-left: 1px solid color($theme-color-base-lighter);
+}
+
+table.trial-sessions {
+  tr.trial-date {
+    td {
+      background-color: $color-primary-alt-lightest;
+    }
+  }
+}
+
+table.small-case-qualifications-table {
+  margin-bottom: 2em;
+
+  th,
+  td {
+    border: 1px solid color($theme-color-base-light);
+  }
+
+  thead th {
+    background-color: color($theme-color-accent-cool-dark);
+    color: $color-white;
+    font-family: $font-serif;
+    font-size: 20px;
+    font-weight: $font-semibold;
+  }
+}
+
+table.dashboard {
+  thead {
+    min-height: 50px;
+    border-bottom: 1px solid color($theme-color-base-lighter);
+
+    th {
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+    }
+  }
+
+  tr {
+    border-bottom: 1px solid color($theme-color-base-lighter);
+  }
+
+  td {
+    display: table-cell;
+    padding: 0.5rem 1rem;
+    border: none;
+
+    label {
+      margin: 0;
+    }
+  }
+
+  /* only medium up */
+  @media only screen and (min-width: $medium-screen) {
+    border: 1px solid color($theme-color-base-lighter);
+  }
+
+  /* small only */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    margin-bottom: 20px;
+    td {
+      padding-bottom: 0.5em;
+    }
+  }
+}
+
+.usa-table td {
+  .message-detail {
+    font-size: 15px;
+  }
+}
+
+table.messages {
+  thead {
+    th {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+
+      &.header-fixed-width {
+        width: 200px;
+      }
+    }
+  }
+}
+
+table.work-queue {
+  th {
+    border: 0;
+    &.padding-left-0 {
+      padding-left: 0;
+    }
+    &.padding-right-0 {
+      padding-right: 0;
+    }
+  }
+
+  td {
+    padding: 15px 16px;
+    border: none;
+    font-size: 17px;
+
+    &.padding-left-0 {
+      padding-left: 0;
+    }
+    &.padding-right-0 {
+      padding-right: 0;
+    }
+
+    &.message-select-control {
+      label {
+        left: 5px;
+      }
+    }
+
+    &.message-queue-row {
+      padding-top: 14px;
+    }
+
+    &.message-queue-document {
+      max-width: units('tablet');
+    }
+
+    &.has-icon {
+      width: 44px;
+    }
+
+    .message-document-title {
+      overflow: hidden;
+      max-width: units('tablet');
+      padding: 4px;
+      margin: -4px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .message-document-detail {
+      display: -webkit-box;
+      overflow: hidden;
+      height: 100%;
+      max-height: 57px; /* fallback */
+      /* autoprefixer: ignore next */
+      -webkit-box-orient: vertical;
+      font-size: 15px;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-height: 19px; /* fallback */
+      text-overflow: ellipsis;
+    }
+
+    label {
+      margin: 0;
+    }
+  }
+
+  tr {
+    border-top: 1px solid color($theme-color-base-lighter);
+  }
+
+  tbody:not(.action-bar) {
+    &:hover {
+      td.focus-toggle {
+        button.focus-button {
+          background-color: color($theme-color-primary);
+        }
+      }
+    }
+
+    tr {
+      &:not(:first-child) {
+        border-top-width: 0;
+      }
+
+      td {
+        transition: all 0.1s ease-in-out;
+
+        &.focus-toggle {
+          position: relative;
+          overflow: hidden;
+          width: 5px;
+          padding: 0;
+          margin: 0;
+
+          .focus-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 5px;
+            padding: 50px;
+            margin: 0;
+            background-color: transparent;
+            border-radius: 0;
+
+            &:hover,
+            &:focus,
+            &:active {
+              background-color: color($theme-color-primary);
+            }
+          }
+        }
+      }
+
+      &.queue-message {
+        td {
+          background-color: $color-primary-alt-lightest;
+        }
+      }
+    }
+  }
+
+  thead {
+    th {
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+
+      .collapse-header {
+        padding: 0;
+      }
+    }
+  }
+
+  .action-bar {
+    background-color: $color-primary-alt-lightest;
+    font-size: 1em;
+
+    label {
+      display: inline-block;
+      margin: 0;
+    }
+
+    select {
+      display: inline-block;
+      width: auto;
+      margin: 0 1em;
+    }
+
+    button {
+      margin: 0;
+    }
+
+    .selected-count {
+      margin-right: 3em;
+      font-weight: $font-bold;
+    }
+  }
+
+  width: 100%;
+  border-top: none;
+  border-right: 1px solid color($theme-color-base-lighter);
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  border-left: 1px solid color($theme-color-base-lighter);
+}
+
+@media only screen and (max-width: $medium-screen - 1px) {
+  .scrollable-table-container-mobile {
+    margin-top: 300px;
+    overflow-x: scroll;
+  }
+}
+
+table.row-border-only {
+  th {
+    background-color: inherit;
+  }
+
+  th,
+  td {
+    border: none;
+  }
+
+  thead tr,
+  tbody tr {
+    border: 1px solid color($theme-color-base-lighter);
+  }
+}
+
+table.docket-record {
+  thead th {
+    background-color: color($theme-color-base-lightest);
+    font-weight: $font-semibold;
+  }
+
+  /* big screens */
+  @media only screen and (min-width: $medium-screen) {
+    &.mobile-only-extra-table {
+      display: none;
+    }
+
+    .center-column {
+      text-align: center;
+    }
+
+    .filing-type-icon {
+      text-align: right;
+
+      svg {
+        margin-right: 0;
+      }
+    }
+
+    .filing-type-icon-mobile {
+      display: none;
+    }
+
+    thead tr th {
+      height: 50px;
+    }
+
+    tbody td {
+      height: 65px;
+    }
+  }
+
+  /* little screens */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    .hide-on-mobile {
+      display: none;
+    }
+
+    td {
+      display: table-cell;
+    }
+
+    .filings-and-proceedings {
+      display: block;
+    }
+
+    tbody tr {
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
+  }
+}
+
+table.case-list thead th,
+table.case-list thead td {
+  background-color: color($theme-color-base-light);
+  color: color($theme-color-base-darkest);
+}
+
+table.case-list tbody tr:nth-child(even) td {
+  background-color: color($theme-color-base-lightest);
+}
+
+.responsive-table {
+  /* stylelint-disable */
+  label {
+    margin: 1em 0 !important;
+  }
+  /* stylelint-enable */
+
+  .responsive-label {
+    display: none;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    .show-on-mobile {
+      display: none;
+    }
+  }
+
+  @media only screen and (max-width: $medium-screen - 1px) {
+    .hide-on-mobile {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: $medium-screen - 1px) {
+  .responsive-table {
+    display: block;
+
+    tbody {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: block;
+    }
+
+    td {
+      display: block;
+      border: none;
+    }
+
+    .responsive-title {
+      border-bottom: 1px solid color($theme-color-base-light);
+      background: color($theme-color-base-lightest);
+      font-weight: $font-bold;
+    }
+
+    .responsive-label {
+      display: block;
+      margin-bottom: 0.5em;
+      font-weight: $font-bold;
+    }
+  }
+}
+
+.deadlines {
+  .smaller-column {
+    width: 130px;
+  }
+
+  .center-column {
+    text-align: center;
+  }
+
+  .semi-bold {
+    font-weight: $font-semibold;
+  }
+
+  .overdue {
+    color: color($theme-color-secondary);
+  }
+}

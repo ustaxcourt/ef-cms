@@ -1,0 +1,140 @@
+.ustc-ui-tabs {
+  position: relative;
+
+  ul {
+    padding-left: 0px;
+    border-bottom: 1px solid color($theme-color-base-lighter);
+    margin-top: 0;
+    margin-bottom: 40px;
+    list-style-type: none;
+
+    li {
+      display: inline-block;
+
+      button {
+        position: relative;
+        top: 2px;
+        padding: 0px;
+        border: none;
+        margin-right: 45px;
+        background: none;
+        color: color($theme-color-primary);
+        cursor: pointer;
+        font-family: $font-serif;
+        font-size: 32px;
+        font-weight: bold;
+        text-align: left;
+
+        &:hover {
+          border-bottom: 3px solid color($theme-color-primary-darker);
+          background-color: none;
+          color: color($theme-color-primary-darker);
+        }
+
+        &:focus {
+          outline: 0;
+        }
+      }
+
+      &.active {
+        button {
+          border-bottom: 3px solid color($theme-color-primary);
+          color: color($theme-color-base-darkest);
+
+          &:hover {
+            border-bottom: 3px solid color($theme-color-primary-darker);
+            color: color($theme-color-primary-darker);
+          }
+        }
+      }
+    }
+  }
+
+  &.no-full-border-bottom {
+    ul {
+      border-bottom: none;
+    }
+  }
+
+  &.container-tabs {
+    nav {
+      ul {
+        margin: 0px;
+
+        li {
+          border-right: 1px solid color($theme-color-base-lighter);
+          border-bottom: 1px solid color($theme-color-base-lighter);
+          margin-right: 0px;
+          text-align: center;
+
+          &:last-child {
+            border-right-width: 0;
+          }
+
+          button {
+            display: inline-block;
+            padding-top: 10px;
+            padding-right: 30px;
+            padding-bottom: 15px;
+            padding-left: 30px;
+            margin-right: 0px;
+            font-size: 17px;
+            text-align: center;
+
+            &:hover {
+              border-bottom: none;
+              background-color: none;
+              color: color($theme-color-primary-darker);
+
+              span {
+                padding-bottom: 0;
+                border-bottom: 1px solid color($theme-color-primary-darker);
+              }
+            }
+
+            span {
+              padding-bottom: 5px;
+            }
+          }
+
+          &.active {
+            border-bottom: 2px solid $color-primary-alt-lightest;
+            background-color: $color-primary-alt-lightest;
+
+            button {
+              border-bottom: none;
+              color: inherit;
+              cursor: default;
+
+              &:hover {
+                span {
+                  padding-bottom: 5px;
+                  border-bottom: 3px solid color($theme-color-primary);
+                }
+              }
+
+              span {
+                border-bottom: 3px solid color($theme-color-primary);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.tab-button-h2 {
+    > nav ul {
+      margin-bottom: 20px;
+      li button {
+        font-size: 24px;
+      }
+    }
+  }
+
+  &.tab-button-h3 {
+    nav ul li button {
+      font-size: 17px;
+    }
+  }
+}
