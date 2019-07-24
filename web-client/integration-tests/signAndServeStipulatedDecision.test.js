@@ -55,16 +55,11 @@ describe('a user signs and serves a stipulated decision', () => {
   let docketNumber = null;
   let signedDocumentId = null;
   let caseDetail;
-  let qcMyInboxCountBefore;
-  let qcSectionInboxCountBefore;
-  let notificationsBefore;
-  let decisionWorkItem;
 
   it('login as a tax payer and create a case', async () => {
     await loginAs(test, 'taxpayer');
     caseDetail = await uploadPetition(test);
-    docketNumber = caseDetail.docketNumber;
-    console.log('caseDetail', caseDetail);
+    {docketNumber} = caseDetail;
   });
 
   it('respondent uploads a proposed stipulated decision', async () => {
