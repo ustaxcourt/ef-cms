@@ -21,6 +21,7 @@ exports.loadPDFForSigningInteractor = async ({
     const arrayBuffer = await new Response(pdfData).arrayBuffer();
     return await pdfjsLib.getDocument(arrayBuffer).promise;
   } catch (err) {
+    console.log(err.stack);
     throw new Error('error loading PDF');
   }
 };

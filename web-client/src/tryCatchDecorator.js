@@ -22,6 +22,7 @@ export const tryCatchDecorator = useCases => {
       if (response && response.then) {
         return new Promise((resolve, reject) => {
           response.then(resolve).catch(e => {
+            console.log('e', e);
             reject(ErrorFactory.getError(e));
           });
         });
