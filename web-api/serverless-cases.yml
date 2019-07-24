@@ -200,18 +200,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createDocument:
-    handler: web-api/src/casesHandlers.createDocumentLambda
-    events:
-      - http:
-          path: /{caseId}/documents
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   addCoversheet:
     handler: web-api/src/casesHandlers.addCoversheetLambda
     memorySize: 3008

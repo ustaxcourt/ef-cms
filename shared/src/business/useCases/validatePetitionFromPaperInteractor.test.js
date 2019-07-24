@@ -23,4 +23,25 @@ describe('validatePetition', () => {
       'receivedAt',
     ]);
   });
+
+  it('returns null if no errors exist', () => {
+    const errors = validatePetitionFromPaperInteractor({
+      applicationContext: {
+        getEntityConstructors: () => ({
+          CaseInternal,
+        }),
+      },
+      petition: {
+        caseCaption: 'testing',
+        caseType: 'testing',
+        partyType: 'testing',
+        petitionFile: {},
+        petitionFileSize: 100,
+        procedureType: 'testing',
+        receivedAt: new Date().toISOString(),
+      },
+    });
+
+    expect(errors).toBeNull();
+  });
 });
