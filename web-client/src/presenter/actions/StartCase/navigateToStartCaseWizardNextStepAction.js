@@ -1,11 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * changes the route to view the file-a-document of the docketNUmber
+ * changes the route to the next step (the step passed in via props.nextStep)
+ * for the start case wizard
  *
  * @param {object} providers the providers object
  * @param {object} providers.router the riot.router object that is used for changing the route
- * @param {object} providers.props the cerebral props that contain the props.caseId
+ * @param {object} providers.props the cerebral props that contain the props.nextStep
+ * @param {object} providers.store the cerebral store function to store state.wizardStep
  */
 export const navigateToStartCaseWizardNextStepAction = ({
   props,
