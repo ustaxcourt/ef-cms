@@ -18,7 +18,7 @@ jobs:
           command: docker run --rm efcms /bin/sh -c 'cd shared && ./run-shellcheck.sh'
       - run:
           name: Shared - Test
-          command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'cd npm run test:shared'
+          command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'npm run test:shared'
       - run:
           name: Shared - SonarQube
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage -e "SONAR_KEY=${SHARED_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${SHARED_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd shared && ./verify-sonarqube-passed.sh'
@@ -38,7 +38,7 @@ jobs:
           command: docker run --rm efcms /bin/sh -c 'cd web-client && ./run-shellcheck.sh'
       - run:
           name: UI - Test
-          command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "(npm start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && cd ./web-client && sleep 5 && npm run test:client"
+          command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "(npm start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && npm run test:client"
       - run:
           name: UI - SonarQube
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
