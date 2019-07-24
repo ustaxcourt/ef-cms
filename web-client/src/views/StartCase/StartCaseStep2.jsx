@@ -277,7 +277,7 @@ export const StartCaseStep2 = connect(
 
         <div className="button-box-container">
           <button
-            className="usa-button margin-right-205"
+            className="usa-button margin-right-205 margin-bottom-4"
             id="submit-case"
             type="button"
             onClick={() => {
@@ -286,7 +286,11 @@ export const StartCaseStep2 = connect(
           >
             Continue to Step 3 of 5
           </button>
-          <button className="usa-button usa-button--outline" type="button">
+          <button
+            className="usa-button usa-button--outline margin-bottom-1"
+            type="button"
+            onClick={() => history.back()}
+          >
             Back
           </button>
           <button
