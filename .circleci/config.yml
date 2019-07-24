@@ -9,13 +9,13 @@ jobs:
       - run:
           name: Build Docker Image
           command: docker build -t efcms -f Dockerfile .
+      - run:
+          name: Lint
+          command: docker run --rm efcms /bin/sh -c 'npm run lint'
 
       - run:
           name: Shared - Shellcheck
           command: docker run --rm efcms /bin/sh -c 'cd shared && ./run-shellcheck.sh'
-      - run:
-          name: Shared - Lint
-          command: docker run --rm efcms /bin/sh -c 'cd shared && npm run lint'
       - run:
           name: Shared - Test
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'cd shared && npm run test'
@@ -27,9 +27,6 @@ jobs:
           name: Service - Shellcheck
           command: docker run --rm efcms /bin/sh -c 'cd web-api && ./run-shellcheck.sh'
       - run:
-          name: Service - Lint
-          command: docker run --rm efcms /bin/sh -c 'cd web-api && npm run lint'
-      - run:
           name: Service - Test
           command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage --rm efcms /bin/sh -c 'cd web-api && npm run test'
       - run:
@@ -39,9 +36,6 @@ jobs:
       - run:
           name: UI - Shellcheck
           command: docker run --rm efcms /bin/sh -c 'cd web-client && ./run-shellcheck.sh'
-      - run:
-          name: UI - Lint
-          command: docker run --rm efcms /bin/sh -c 'cd web-client && npm run lint'
       - run:
           name: UI - Test
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "cd web-api && (npm start > /dev/null &) && ../wait-until.sh http://localhost:3000/api/swagger && cd ../web-client && sleep 5 && npm run test"
