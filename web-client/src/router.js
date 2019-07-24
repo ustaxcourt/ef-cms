@@ -277,54 +277,23 @@ const router = {
       }),
     );
     route(
-      '/start-a-case-wizard/step-1',
-      checkLoggedIn(() => {
+      '/start-a-case-wizard/step-*',
+      checkLoggedIn(step => {
         document.title = `Start a case ${pageTitleSuffix}`;
-        app.getSequence('gotoStartCaseWizardSequence')();
-      }),
-    );
-    route(
-      '/start-a-case-wizard/step-2',
-      checkLoggedIn(() => {
-        document.title = `Start a case ${pageTitleSuffix}`;
-        if (app.getState('currentPage') === 'StartCaseWizard') {
-          app.getSequence('chooseWizardStepSequence')({
-            value: 'StartCaseStep2',
-          });
-        } else {
-          app.getSequence('navigateToPathSequence')({
-            path: '/start-a-case-wizard/step-1',
-          });
-        }
-      }),
-    );
-    route(
-      '/start-a-case-wizard/step-3',
-      checkLoggedIn(() => {
-        document.title = `Start a case ${pageTitleSuffix}`;
-        if (app.getState('currentPage') === 'StartCaseWizard') {
-          app.getSequence('chooseWizardStepSequence')({
-            value: 'StartCaseStep3',
-          });
-        } else {
-          app.getSequence('navigateToPathSequence')({
-            path: '/start-a-case-wizard/step-1',
-          });
-        }
-      }),
-    );
-    route(
-      '/start-a-case-wizard/step-4',
-      checkLoggedIn(() => {
-        document.title = `Start a case ${pageTitleSuffix}`;
-        if (app.getState('currentPage') === 'StartCaseWizard') {
-          app.getSequence('chooseWizardStepSequence')({
-            value: 'StartCaseStep4',
-          });
-        } else {
-          app.getSequence('navigateToPathSequence')({
-            path: '/start-a-case-wizard/step-1',
-          });
+        switch (step) {
+          case '1':
+            app.getSequence('gotoStartCaseWizardSequence')();
+            break;
+          default:
+            if (app.getState('currentPage') === 'StartCaseWizard') {
+              app.getSequence('chooseWizardStepSequence')({
+                value: `StartCaseStep${step}`,
+              });
+            } else {
+              app.getSequence('navigateToPathSequence')({
+                path: '/start-a-case-wizard/step-1',
+              });
+            }
         }
       }),
     );
