@@ -26,6 +26,7 @@
   "dependencies": {
     "aws-sdk": "^2.498.0",
     "axios": "^0.19.0",
+    "cerebral": "^5.1.1",
     "csv-parse": "^4.4.3",
     "eslint": "5.16.0",
     "eslint-config-prettier": "^6.0.0",
