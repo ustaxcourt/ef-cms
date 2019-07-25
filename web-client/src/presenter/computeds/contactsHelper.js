@@ -73,14 +73,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.guardian:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Guardian for This Taxpayer',
-          nameLabel: 'Name of Guardian',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Taxpayer You Are Filing For',
           nameLabel: 'Name of Taxpayer',
+          secondaryNameLabel: 'Name of Guardian',
         };
         break;
       case PARTY_TYPES.nextFriendForIncompetentPerson:
@@ -248,14 +244,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.guardian:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About the Guardian for This Taxpayer',
-          nameLabel: 'Name of Guardian',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Taxpayer You Are Filing For',
           nameLabel: 'Name of Taxpayer',
+          secondaryNameLabel: 'Name of Guardian',
         };
         break;
       case PARTY_TYPES.nextFriendForIncompetentPerson:

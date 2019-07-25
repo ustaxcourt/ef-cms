@@ -22,7 +22,6 @@ export const showContactsHelper = (partyType, PARTY_TYPES) => {
 
   const contactSecondary = [
     PARTY_TYPES.custodian,
-    PARTY_TYPES.guardian,
     PARTY_TYPES.nextFriendForIncompetentPerson,
     PARTY_TYPES.nextFriendForMinor,
     PARTY_TYPES.petitionerDeceasedSpouse,
