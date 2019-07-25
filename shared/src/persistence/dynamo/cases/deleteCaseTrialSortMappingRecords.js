@@ -23,18 +23,17 @@ exports.deleteCaseTrialSortMappingRecords = async ({
     applicationContext,
   });
 
-  const results = [];
-
-  for (let record of records) {
-    const result = await client.delete({
+  const clientDelete = record => {
+    return client.delete({
       applicationContext,
       key: {
         pk: record.pk,
         sk: record.sk,
       },
     });
-    results.push(result);
-  }
+  };
+
+  const results = await Promise.all(records.map(clientDelete));
 
   return results;
 };
