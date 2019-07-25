@@ -15,6 +15,9 @@ const scannerResourcePath = path.join(
   '../../../../shared/test-assets',
 );
 presenter.providers.applicationContext = {
+  getScanner: () => ({
+    loadDynamsoft: ({ cb }) => cb('dynam-scanner-injection'),
+  }),
   getScannerResourceUri: () => scannerResourcePath,
 };
 
@@ -30,11 +33,7 @@ describe('scannerStartupAction', () => {
     });
 
     const dynamScriptClass = result.state.scanner.dynanScriptClass;
-    const scriptElements = Array.from(
-      document.getElementsByClassName(dynamScriptClass),
-    );
 
     expect(dynamScriptClass).toEqual('dynam-scanner-injection');
-    expect(scriptElements.length).toEqual(2);
   });
 });
