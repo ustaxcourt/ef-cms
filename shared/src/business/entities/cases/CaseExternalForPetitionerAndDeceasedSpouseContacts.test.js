@@ -40,6 +40,7 @@ describe('CaseExternal', () => {
           countryType: 'domestic',
           name: 'Betty Crocker',
           postalCode: '78774',
+          inCareOf: 'USTC',
           state: 'WA',
         },
         filingType: 'Myself',
