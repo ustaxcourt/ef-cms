@@ -23,10 +23,10 @@ export const CaseDetailInternalPrint = connect(
                   </div>
                 </div>
                 <div className="grid-col-8">
-                  <h1 className="margin-bottom-0 text-align-center margin-top-3">
+                  <h1 className="margin-bottom-0 text-align-center margin-top-1">
                     United States Tax Court
                   </h1>
-                  <h2 className="margin-top-0 text-align-center">
+                  <h2 className="margin-top-neg-3 text-align-center">
                     Docket Record
                   </h2>
                 </div>
@@ -56,7 +56,6 @@ export const CaseDetailInternalPrint = connect(
             </div>
           </section>
         </div>
-        <iframe name="print-view"></iframe>
       </>
     );
   },
