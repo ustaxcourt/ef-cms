@@ -278,7 +278,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
     // Partnership BBA party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {

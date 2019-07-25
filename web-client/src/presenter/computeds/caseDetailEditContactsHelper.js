@@ -133,28 +133,20 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.partnershipOtherThanTaxMatters:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Partnership (Other than Tax Matters Partner) Information',
-          nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Partnership Information',
           nameLabel: 'Business Name',
+          secondaryNameLabel: 'Name of Partner (Other than TMP)',
         },
       };
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Tax Matters Partner Information',
-          nameLabel: 'Name of Tax Matters Partner',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Partnership Information',
           nameLabel: 'Business Name',
+          secondaryNameLabel: 'Name of Tax Matters Partner',
         },
       };
       break;
@@ -181,6 +173,20 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       };
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
+      contacts = {
+        contactPrimary: {
+          header: 'Petitioner Information',
+          nameLabel: 'Name',
+        },
+        contactSecondary: {
+          displayInCareOf: true,
+          displayPhone: true,
+          header: 'Spouse Information',
+          inCareOfLabel: 'In Care Of',
+          nameLabel: "Spouse's Name",
+        },
+      };
+      break;
     case PARTY_TYPES.survivingSpouse:
       contacts = {
         contactPrimary: {

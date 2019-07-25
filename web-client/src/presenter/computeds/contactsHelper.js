@@ -129,15 +129,11 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         contactPrimary = {
+          displaySecondaryName: true,
           header:
             'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
-          nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Partnership You Are Filing For',
           nameLabel: 'Business Name',
+          secondaryNameLabel: 'Name of Partner (Other than TMP)',
         };
         break;
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
@@ -322,14 +318,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
-          nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Partnership You Are Filing For',
           nameLabel: 'Business Name',
+          secondaryNameLabel: 'Name of Partner (Other than TMP)',
         };
         break;
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
@@ -364,7 +356,10 @@ export const contactsHelper = get => {
           nameLabel: 'Name',
         };
         contactSecondary = {
+          displayInCareOf: true,
+          displayPhone: true,
           header: 'Tell Us About the Deceased Petitioner',
+          inCareOfLabel: 'In Care Of',
           nameLabel: 'Deceased Petitioner Name',
         };
         break;

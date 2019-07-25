@@ -242,14 +242,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Partnership (Other than Tax Matters Partner) Information',
-        nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Partnership Information',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });
   });
@@ -267,14 +263,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tax Matters Partner Information',
-        nameLabel: 'Name of Tax Matters Partner',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Partnership Information',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Tax Matters Partner',
       },
     });
   });
