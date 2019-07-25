@@ -31,7 +31,7 @@ describe('chooseNextStepAction', () => {
     expect(supportingDocumentStub).toHaveBeenCalled();
   });
 
-  it('chooses the next step as supporting document if it exists', async () => {
+  it('does not choose the next step as supporting document if it does not exist', async () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,

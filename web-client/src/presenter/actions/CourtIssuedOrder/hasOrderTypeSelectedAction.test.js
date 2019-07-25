@@ -36,7 +36,7 @@ describe('hasOrderTypeSelectedAction', () => {
     expect(proceedStub).toHaveBeenCalled();
   });
 
-  it('proceeds if an eventCode has been selected', async () => {
+  it('does not proceed if an eventCode has not been selected', async () => {
     await runAction(hasOrderTypeSelectedAction, {
       modules: {
         presenter,
