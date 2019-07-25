@@ -113,6 +113,7 @@ import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequ
 import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
+import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
@@ -314,6 +315,7 @@ export const presenter = {
     setPageSequence,
     setPdfPreviewUrlSequence,
     setScannerSourceSequence,
+    setSelectedBatchIndexSequence,
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { Scan } from '../ustc-ui/Scan/Scan';
+import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
@@ -129,7 +130,7 @@ export const StartCaseInternal = connect(
                     />
                   </div>
 
-                  {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
+                  {/* {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
                     <Scan
                       onDoneClicked={() =>
                         completeScanSequence({
@@ -154,7 +155,7 @@ export const StartCaseInternal = connect(
                       }
                       onScanClicked={() => startScanSequence()}
                     />
-                  )}
+                  )} */}
 
                   <div
                     className={`usa-form-group ${
@@ -515,6 +516,9 @@ export const StartCaseInternal = connect(
                     Cancel
                   </button>
                 </div>
+              </div>
+              <div className="grid-col-7">
+                <ScanBatchPreviewer />
               </div>
             </div>
           </form>
