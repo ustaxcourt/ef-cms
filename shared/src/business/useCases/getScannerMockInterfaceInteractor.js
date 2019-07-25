@@ -90,8 +90,8 @@ exports.getScannerInterface = () => {
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;
 
-  const loadDynamsoft = ({ cb }) => {
-    cb();
+  const loadDynamsoft = () => {
+    return 'noop';
   };
 
   const getSources = () => {

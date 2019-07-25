@@ -16,7 +16,7 @@ const scannerResourcePath = path.join(
 );
 presenter.providers.applicationContext = {
   getScanner: () => ({
-    loadDynamsoft: ({ cb }) => cb('dynam-scanner-injection'),
+    loadDynamsoft: () => 'dynam-scanner-injection',
   }),
   getScannerResourceUri: () => scannerResourcePath,
 };

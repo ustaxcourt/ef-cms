@@ -8,12 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.scanner
  */
 
-export const scannerStartupAction = ({ applicationContext, store }) => {
-  applicationContext.getScanner().loadDynamsoft({
-    cb: dynanScriptClass => {
-      store.set(state.scanner.dynanScriptClass, dynanScriptClass);
-      store.set(state.scanner.initiateScriptLoaded, true);
-      store.set(state.scanner.configScriptLoaded, true);
-    },
+export const scannerStartupAction = async ({ applicationContext, store }) => {
+  const dynanScriptClass = await applicationContext.getScanner().loadDynamsoft({
+    applicationContext,
   });
+  store.set(state.scanner.dynanScriptClass, dynanScriptClass);
+  store.set(state.scanner.initiateScriptLoaded, true);
+  store.set(state.scanner.configScriptLoaded, true);
 };
