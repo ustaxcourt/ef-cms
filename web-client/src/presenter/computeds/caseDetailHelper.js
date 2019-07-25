@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case'
 import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
@@ -66,6 +67,7 @@ export const caseDetailHelper = get => {
   }
 
   return {
+    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,
