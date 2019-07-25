@@ -153,7 +153,7 @@
     "seed:s3": "rm -rf storage/s3/noop-documents-local-us-east-1 && cp -R storage/fixtures/s3/ storage/s3/noop-documents-local-us-east-1",
     "start:api": "./web-api/run-local.sh",
     "start:client:cypress": "CYPRESS=true npm run start:client",
-    "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 GIT_COMMIT=$(git log --pretty=format:'%h' -n 1) USTC_ENV=dev parcel --no-cache --no-source-maps web-client/src/index.pug",
+    "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 GIT_COMMIT=$(git log --pretty=format:'%h' -n 1 2>/dev/null) USTC_ENV=dev parcel --no-cache --no-source-maps web-client/src/index.pug",
     "start:dynamodb": "sls dynamodb start -p 8000 --migrate true --stage local",
     "test:api": "jest --config web-api/jest.config.js \"web-api/.*\\.test\\.js\"",
     "test:client": "SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --config web-client/jest.config.js \"web-client/.*\\.test\\.js\"",
