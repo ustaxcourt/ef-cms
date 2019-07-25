@@ -73,6 +73,7 @@ import { getItemInteractor } from '../../shared/src/business/useCases/getItemInt
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
+import { getScannerInterface as getScannerMockInterfaceInteractor } from '../../shared/src/business/useCases/getScannerMockInterfaceInteractor';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -333,7 +334,9 @@ const applicationContext = {
       uploadPdf,
     };
   },
-  getScanner: getScannerInterface,
+  getScanner: process.env.NO_SCANNER
+    ? getScannerMockInterfaceInteractor
+    : getScannerInterface,
   getScannerResourceUri: () => {
     return (
       process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
