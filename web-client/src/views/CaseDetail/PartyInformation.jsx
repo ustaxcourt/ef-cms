@@ -153,17 +153,11 @@ export const PartyInformation = connect(
     };
     return (
       <div className="subsection party-information">
-        <div className="only-large-screens">
-          <div className="card">
-            <div className="content-wrapper">
-              <h3 className="underlined">Party Information</h3>
-              {mainPartyInformation()}
-            </div>
+        <div className="card">
+          <div className="content-wrapper">
+            <h3 className="underlined">Party Information</h3>
+            {mainPartyInformation()}
           </div>
-        </div>
-        <div className="only-small-screens">
-          <h3>Party Information</h3>
-          {mainPartyInformation()}
         </div>
 
         {caseHelper.showEditSecondaryContactModal && (

@@ -99,6 +99,21 @@
 
 .party-information {
   font-size: 17px;
+
+  @media only screen and (max-width: $medium-screen) {
+    .card {
+      box-shadow: none;
+      border: none;
+
+      .content-wrapper {
+        padding: 0px;
+
+        .underlined {
+          border-bottom: none;
+        }
+      }
+    }
+  }
 }
 
 .frequently-used-docs {
