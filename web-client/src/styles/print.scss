@@ -24,6 +24,19 @@
     display: block !important;
   }
 
+  table td, table th {
+    padding: 8px;
+    &.hide-on-mobile {
+      display: table-cell !important;
+    }
+  }
+
+  a {
+    color: #000;
+    font-weight: $font-bold;
+    text-decoration: none;
+  }
+
   .responsive-table thead {
     display: table-header-group;
   }

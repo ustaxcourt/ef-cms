@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case'
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = get => {
