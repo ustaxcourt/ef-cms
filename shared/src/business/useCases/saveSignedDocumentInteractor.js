@@ -37,8 +37,9 @@ exports.saveSignedDocumentInteractor = async ({
     createdAt: applicationContext.getUtilities().createISODateString(),
     documentId: signedDocumentId,
     documentType: Document.signedDocumentTypes.signedStipulatedDecision,
+    eventCode: 'SDEC',
     filedBy: originalDocumentEntity.filedBy,
-    isPaper: originalDocumentEntity.isPaper,
+    isPaper: false,
     userId: user.userId,
   });
 

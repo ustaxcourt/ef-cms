@@ -22,7 +22,6 @@ describe('formatted case details computed', () => {
             {
               createdAt: '2018-11-21T20:49:28.192Z',
               documentType: 'Petition',
-              reviewDate: '2018-11-22T20:49:28.192Z',
               status: 'served',
             },
           ],
@@ -49,7 +48,6 @@ describe('formatted case details computed', () => {
               {
                 createdAt: '2018-11-21T20:49:28.192Z',
                 documentType: 'fakeType',
-                reviewDate: '2018-11-22T20:49:28.192Z',
                 status: 'served',
               },
             ],

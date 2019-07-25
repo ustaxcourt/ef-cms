@@ -1,7 +1,12 @@
 # README
   When developing new views or URLs, please add a check for accessibility as seen below. If further actions are required at a given URL, use the `actions` array to carry out the necessary steps. If tests fail due to timeouts, try walking through tests manually. See info on actions here: [https://github.com/pa11y/pa11y#actions](https://github.com/pa11y/pa11y#actions)
 
-  To fire onChange when altering a select menu, use `set field` followed by `check field`. To check a checkbox or radio, use `click element` on the element label.
+  To fire onChange when altering a select menu:
+  * use `set field` 
+  * immediately followed by `check field`
+  
+  To check a checkbox or radio:
+  * use `click element` on the element label.
 
 ## EXAMPLE
  ```

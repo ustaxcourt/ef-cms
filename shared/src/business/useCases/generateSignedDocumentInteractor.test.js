@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   generateSignedDocumentInteractor,
+  getPageDimensions,
 } = require('./generateSignedDocumentInteractor.js');
 const { PDFDocumentFactory } = require('pdf-lib');
 
@@ -12,38 +13,36 @@ const testPdfDocBytes = () => {
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 };
 
-const testSignatureImgBytes = () => {
-  return fs.readFileSync(testAssetsPath + 'signature.png');
-};
+describe('getPageDimensions', () => {
+  it('should throw an error if the pdf does not have a media box element', async () => {
+    let error;
+    try {
+      getPageDimensions({
+        Parent: {
+          ascend: cb => {
+            cb({
+              getMaybe: () => false,
+            });
+          },
+        },
+        get: () => true,
+        getMaybe: () => true,
+        index: {
+          lookup: () => null,
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('Page Tree is missing MediaBox');
+  });
+});
 
 describe('generateSignedDocument', () => {
   let testDoc;
-  let testSig;
+
   beforeEach(() => {
     testDoc = testPdfDocBytes();
-    testSig = testSignatureImgBytes();
-  });
-
-  it('generates a pdf document with the provided signature attached', async () => {
-    const args = {
-      pageIndex: 0,
-      pdfData: testDoc,
-      posX: 100,
-      posY: 100,
-      scale: 1,
-      sigImgData: testSig,
-    };
-
-    const newPdfData = await generateSignedDocumentInteractor(args);
-
-    fs.writeFileSync(
-      testOutputPath + 'generateSignedDocument_Image.pdf',
-      newPdfData,
-    );
-
-    const newPdfDoc = PDFDocumentFactory.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
   });
 
   it('generates a pdf document with the provided signature text attached', async () => {

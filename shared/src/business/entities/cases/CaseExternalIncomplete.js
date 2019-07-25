@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -35,22 +36,6 @@ function CaseExternalIncomplete(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseExternalIncomplete.errorToMessageMap = {
-  caseType: 'Case Type is a required field.',
-  filingType: 'Filing Type is a required field.',
-  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-  irsNoticeDate: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Notice Date is in the future. Please enter a valid date.',
-    },
-    'Notice Date is a required field.',
-  ],
-  partyType: 'Party Type is a required field.',
-  preferredTrialCity: 'Preferred Trial City is a required field.',
-  procedureType: 'Procedure Type is a required field.',
-};
-
 joiValidationDecorator(
   CaseExternalIncomplete,
   joi.object().keys({
@@ -82,7 +67,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  CaseExternalIncomplete.errorToMessageMap,
+  Case.COMMON_ERROR_MESSAGES,
 );
 
 module.exports = { CaseExternalIncomplete };

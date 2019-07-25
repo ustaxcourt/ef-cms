@@ -43,10 +43,6 @@ export default (test, fakeFile) => {
       value: false,
     });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'exhibits',
-      value: false,
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
       value: 'no',
     });

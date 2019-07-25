@@ -9,3 +9,7 @@ variable "dns_domain" {
 variable "cognito_suffix" {
   type = "string"
 }
+
+variable "ses_dmarc_rua" {
+  type = "string"
+}

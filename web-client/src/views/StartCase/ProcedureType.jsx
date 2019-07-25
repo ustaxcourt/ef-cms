@@ -1,3 +1,4 @@
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -20,11 +21,18 @@ export const ProcedureType = connect(
             : 'usa-form-group'
         }
       >
-        <fieldset className="usa-fieldset" id="procedure-type-radios">
-          <legend className="usa-legend">{legend}</legend>
+        <fieldset
+          className="usa-fieldset margin-bottom-0"
+          id="procedure-type-radios"
+        >
+          <legend className="usa-legend" id="procedure-type-legend">
+            {legend}
+          </legend>
           {procedureTypes.map((procedureType, idx) => (
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
+                aria-describedby="procedure-type-legend"
+                aria-labelledby={`proc-type-${idx}`}
                 checked={value === procedureType}
                 className="usa-radio__input"
                 data-type={procedureType}
@@ -44,6 +52,10 @@ export const ProcedureType = connect(
             </div>
           ))}
         </fieldset>
+        <Text
+          bind="validationErrors.procedureType"
+          className="usa-error-message"
+        />
       </div>
     );
   },

@@ -59,7 +59,7 @@ export const StateDrivenFileInput = connect(
           <div>
             <span className="mr-1">{form[name].name}</span>
             <button
-              className="usa-button usa-button--unstyled margin-left-1"
+              className="usa-button usa-button--unstyled ustc-button--mobile-inline margin-left-1"
               onClick={() => {
                 updateFormValueSequence({
                   key: name,
