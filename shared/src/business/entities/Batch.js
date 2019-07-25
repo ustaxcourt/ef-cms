@@ -16,7 +16,7 @@ function Batch(rawBatch) {
   this.pages = rawBatch.pages || [];
 }
 
-Batch.name = 'Batch';
+Batch.validationName = 'Batch';
 
 /**
  * adds a page to current Batch
