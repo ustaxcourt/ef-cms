@@ -173,6 +173,9 @@ const getContactConstructor = ({
   partyType,
 }) => {
   const {
+    getPartnershipAsTaxMattersPartnerPrimaryContact,
+  } = require('./PartnershipAsTaxMattersPartnerContact');
+  const {
     getPetitionerConservatorContact,
   } = require('./PetitionerConservatorContact');
   const {
@@ -240,8 +243,11 @@ const getContactConstructor = ({
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner]: {
-      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
-      secondary: getPetitionerIntermediaryContact({ countryType, isPaper }),
+      primary: getPartnershipAsTaxMattersPartnerPrimaryContact({
+        countryType,
+        isPaper,
+      }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
@@ -347,6 +353,7 @@ ContactFactory.createContactFactory = ({
         name: rawContact.name,
         phone: rawContact.phone,
         postalCode: rawContact.postalCode,
+        secondaryName: rawContact.secondaryName,
         state: rawContact.state,
         title: rawContact.title,
       });

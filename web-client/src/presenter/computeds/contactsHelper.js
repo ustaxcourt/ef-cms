@@ -142,14 +142,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Tax Matters Partner',
-          nameLabel: 'Name of Tax Matters Partner',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Partnership You Are Filing For',
-          nameLabel: 'Business Name',
+          nameLabel: 'Partnership Name',
+          secondaryNameLabel: 'Tax Matters Partner Name',
         };
         break;
       case PARTY_TYPES.petitioner:
@@ -338,14 +334,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About the Tax Matters Partner',
-          nameLabel: 'Name of Tax Matters Partner',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Partnership You Are Filing For',
-          nameLabel: 'Business Name',
+          nameLabel: 'Name of Partnership',
+          secondaryNameLabel: 'Name of Tax Matters Partner',
         };
         break;
       case PARTY_TYPES.petitioner:

@@ -1,11 +1,11 @@
 import { Address } from './Address';
 import { Country } from './Country';
-import { Email } from './Email';
 import { InternationalAddress } from './InternationalAddress';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const ContactPrimary = connect(
   {
@@ -13,7 +13,6 @@ export const ContactPrimary = connect(
     constants: state.constants,
     contactsHelper: state[props.contactsHelper],
     data: state[props.bind],
-    emailBind: props.emailBind,
     onBlur: props.onBlur,
     onBlurSequence: sequences[props.onBlur],
     onChange: props.onChange,
@@ -26,7 +25,6 @@ export const ContactPrimary = connect(
     constants,
     contactsHelper,
     data,
-    emailBind,
     onBlur,
     onBlurSequence,
     onChange,
@@ -101,6 +99,41 @@ export const ContactPrimary = connect(
               />
             </div>
           )}
+
+          {contactsHelper.contactPrimary.displaySecondaryName && (
+            <div
+              className={classNames(
+                'usa-form-group',
+                validationErrors &&
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.secondaryName &&
+                  'usa-form-group--error',
+              )}
+            >
+              <label className="usa-label" htmlFor="secondary-name">
+                {contactsHelper.contactPrimary.secondaryNameLabel}
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="secondary-name"
+                name="contactPrimary.secondaryName"
+                type="text"
+                value={data.contactPrimary.secondaryName || ''}
+                onChange={e => {
+                  onChangeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <Text
+                bind="validationErrors.contactPrimary.secondaryName"
+                className="usa-error-message"
+              />
+            </div>
+          )}
+
           {contactsHelper.contactPrimary.displayInCareOf && (
             <div
               className={
