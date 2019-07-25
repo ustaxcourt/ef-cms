@@ -1,20 +1,60 @@
-let DWObject = null;
+const { image1, image2 } = require('../../business/useCases/scannerMockFiles');
+
+let scanBuffer = [];
+
+const DWObject = {
+  AcquireImage: () => {
+    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+      const byteCharacters = atob(b64Data);
+      const byteArrays = [];
+
+      for (
+        let offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+
+      const blob = new Blob(byteArrays, { type: contentType });
+      return blob;
+    };
+
+    scanBuffer.push(b64toBlob(image1, 'image/png'));
+    scanBuffer.push(b64toBlob(image2, 'image/png'));
+    DWObject.HowManyImagesInBuffer += 2;
+  },
+  CloseSource: () => null,
+  ConvertToBlob: (indicies, type, resolve) => {
+    const blob = scanBuffer[indicies[0]];
+    resolve(blob);
+  },
+  DataSourceStatus: null,
+  ErrorCode: null,
+  ErrorString: null,
+  HowManyImagesInBuffer: 0,
+  OpenSource: () => null,
+  RemoveAllImages: () => (scanBuffer = []),
+  SelectSourceByIndex: () => null,
+};
 
 exports.getScannerInterface = () => {
   const completeScanSession = async () => {
     const count = DWObject.HowManyImagesInBuffer;
     const promises = [];
     const response = { error: null, scannedBuffer: null };
-
     for (let index = 0; index < count; index++) {
       promises.push(
         new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob(
-            [index],
-            window['EnumDWT_ImageType'].IT_PNG,
-            resolve,
-            reject,
-          );
+          DWObject.ConvertToBlob([index], null, resolve, reject);
         }),
       );
     }
@@ -43,13 +83,12 @@ exports.getScannerInterface = () => {
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;
 
+  const loadDynamsoft = () => {
+    return 'noop';
+  };
+
   const getSources = () => {
-    var count = DWObject.SourceCount;
-    const sources = [];
-    for (var i = 0; i < count; i++) {
-      sources.push(DWObject.GetSourceNameItems(i));
-    }
-    return sources;
+    return ['scanner A', 'scanner B'];
   };
 
   const getScanError = () => {
@@ -57,52 +96,6 @@ exports.getScannerInterface = () => {
       code: DWObject.ErrorCode,
       message: DWObject.ErrorString,
     };
-  };
-
-  const loadDynamsoft = ({ applicationContext }) => {
-    return new Promise(resolve => {
-      const dynanScriptClass = 'dynam-scanner-injection';
-
-      // Create a script element to inject into the header
-      const initiateScript = document.createElement('script');
-      initiateScript.type = 'text/javascript';
-      initiateScript.async = true;
-      initiateScript.setAttribute('class', dynanScriptClass);
-
-      // Reduce duplicating the above code
-      const configScript = initiateScript.cloneNode();
-
-      let leftToLoad = 2;
-
-      const handleScriptOnLoad = () => {
-        leftToLoad--;
-        if (leftToLoad <= 0) {
-          const interval = setInterval(() => {
-            const { Dynamsoft } = window;
-            Dynamsoft.WebTwainEnv.ScanDirectly = true;
-            DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
-            if (!DWObject) return;
-            clearInterval(interval);
-            resolve(dynanScriptClass);
-          }, 100);
-        }
-      };
-
-      // Set some state when the scripts are loaded
-      initiateScript.onload = handleScriptOnLoad;
-      configScript.onload = handleScriptOnLoad;
-
-      // Handle script load errors?
-
-      // Get the scanner resources URI based on applicationContext
-      const scannerResourceUri = applicationContext.getScannerResourceUri();
-      initiateScript.src = `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`;
-      configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
-
-      // Inject scripts into <head />
-      document.getElementsByTagName('head')[0].appendChild(initiateScript);
-      document.getElementsByTagName('head')[0].appendChild(configScript);
-    });
   };
 
   const getSourceStatus = () => {
@@ -133,18 +126,13 @@ exports.getScannerInterface = () => {
     }
   };
 
-  const setDWObject = dw => {
-    DWObject = dw;
-    ret.DWObject = DWObject;
-  };
-
   const startScanSession = () => {
     DWObject.IfDisableSourceAfterAcquire = true;
     DWObject.OpenSource();
     DWObject.AcquireImage();
   };
 
-  const ret = {
+  return {
     DWObject,
     completeScanSession,
     getScanCount,
@@ -153,11 +141,8 @@ exports.getScannerInterface = () => {
     getSourceStatus,
     getSources,
     loadDynamsoft,
-    setDWObject,
     setSourceByIndex,
     setSourceByName,
     startScanSession,
   };
-
-  return ret;
 };
