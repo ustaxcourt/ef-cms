@@ -279,8 +279,8 @@ const getContactConstructor = ({
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.conservator]: {
-      primary: getPetitionerTaxpayerContact({ countryType, isPaper }),
-      secondary: getPetitionerConservatorContact({ countryType, isPaper }),
+      primary: getPetitionerConservatorContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.guardian]: {
       primary: getPetitionerGuardianContact({ countryType, isPaper }),

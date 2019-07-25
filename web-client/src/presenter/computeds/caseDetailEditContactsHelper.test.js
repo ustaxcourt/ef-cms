@@ -15,14 +15,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Conservator Information',
-        nameLabel: 'Name of Conservator',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Conservator',
       },
     });
   });

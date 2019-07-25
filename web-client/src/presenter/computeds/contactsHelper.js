@@ -19,14 +19,10 @@ export const contactsHelper = get => {
     switch (form.partyType) {
       case PARTY_TYPES.conservator:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
-          nameLabel: 'Name of Conservator',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Taxpayer You Are Filing For',
           nameLabel: 'Name of Taxpayer',
+          secondaryNameLabel: 'Name of Conservator',
         };
         break;
       case PARTY_TYPES.corporation:
@@ -200,14 +196,10 @@ export const contactsHelper = get => {
     switch (form.partyType) {
       case PARTY_TYPES.conservator:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About the Conservator for This Taxpayer',
-          nameLabel: 'Name of Conservator',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Taxpayer You Are Filing For',
           nameLabel: 'Name of Taxpayer',
+          secondaryNameLabel: 'Name of Conservator',
         };
         break;
       case PARTY_TYPES.corporation:
