@@ -23,7 +23,7 @@ export const CaseDetailHeader = connect(
   }) => {
     return (
       <div className="big-blue-header">
-        <div className="grid-container foo-bar">
+        <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-8">
               <div className="margin-bottom-1">
