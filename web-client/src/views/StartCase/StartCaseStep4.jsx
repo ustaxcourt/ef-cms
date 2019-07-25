@@ -1,5 +1,7 @@
 import { CaseDifferenceExplained } from '../CaseDifferenceExplained';
+import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from './TrialCity';
@@ -14,26 +16,28 @@ export const StartCaseStep4 = connect(
       sequences.completeStartCaseWizardStepSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openCaseDifferenceModalSequence: sequences.openCaseDifferenceModalSequence,
     screenMetadata: state.screenMetadata,
+    showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseSequence: sequences.validateStartCaseSequence,
-    validationErrors: state.validationErrors,
   },
   ({
     clearPreferredTrialCitySequence,
     completeStartCaseWizardStepSequence,
     form,
     formCancelToggleCancelSequence,
+    openCaseDifferenceModalSequence,
     screenMetadata,
+    showModal,
     startCaseHelper,
     toggleCaseDifferenceSequence,
     trialCitiesHelper,
     updateFormValueSequence,
     validateStartCaseSequence,
-    validationErrors,
   }) => {
     return (
       <>
@@ -49,23 +53,41 @@ export const StartCaseStep4 = connect(
           you qualify.
         </p>
         <div className="usa-accordion start-a-case">
-          <button
-            aria-controls="case-difference-container"
-            aria-expanded={!!screenMetadata.showCaseDifference}
-            className="usa-accordion__button case-difference"
-            type="button"
-            onClick={() => toggleCaseDifferenceSequence()}
-          >
-            <span className="usa-accordion__heading usa-banner__button-text">
-              <FontAwesomeIcon icon="question-circle" size="lg" />
-              Which case procedure should I choose?
-              {screenMetadata.showCaseDifference ? (
-                <FontAwesomeIcon icon="caret-up" />
-              ) : (
-                <FontAwesomeIcon icon="caret-down" />
-              )}
-            </span>
-          </button>
+          <NonMobile>
+            <button
+              aria-controls="case-difference-container"
+              aria-expanded={!!screenMetadata.showCaseDifference}
+              className="usa-accordion__button case-difference"
+              type="button"
+              onClick={() => toggleCaseDifferenceSequence()}
+            >
+              <span className="usa-accordion__heading">
+                <FontAwesomeIcon icon="question-circle" size="lg" />
+                Which case procedure should I choose?
+                {screenMetadata.showCaseDifference ? (
+                  <FontAwesomeIcon icon="caret-up" />
+                ) : (
+                  <FontAwesomeIcon icon="caret-down" />
+                )}
+              </span>
+            </button>
+          </NonMobile>
+
+          <Mobile>
+            <button
+              aria-controls="case-difference-container"
+              aria-expanded={!!screenMetadata.showCaseDifference}
+              className="usa-accordion__button case-difference"
+              type="button"
+              onClick={() => openCaseDifferenceModalSequence()}
+            >
+              <span className="usa-accordion__heading">
+                <FontAwesomeIcon icon="question-circle" size="lg" />
+                Which case procedure should I choose?
+              </span>
+            </button>
+          </Mobile>
+
           <div
             aria-hidden={!screenMetadata.showCaseDifference}
             className="usa-accordion__content"
@@ -87,37 +109,45 @@ export const StartCaseStep4 = connect(
               validateStartCaseSequence();
             }}
           />
-          {startCaseHelper.showSelectTrial && (
-            <TrialCity
-              label="Select a Trial Location"
-              showDefaultOption={true}
-              showHint={true}
-              showRegularTrialCitiesHint={
-                startCaseHelper.showRegularTrialCitiesHint
-              }
-              showSmallTrialCitiesHint={
-                startCaseHelper.showSmallTrialCitiesHint
-              }
-              trialCitiesByState={
-                trialCitiesHelper(form.procedureType).trialCitiesByState
-              }
-              value={form.preferredTrialCity}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value || null,
-                });
-                validateStartCaseSequence();
-              }}
-            />
-          )}
-          {!validationErrors.procedureType && (
-            <Text
-              bind="validationErrors.preferredTrialCity"
-              className="usa-error-message"
-            />
-          )}
         </div>
+
+        {startCaseHelper.showSelectTrial && (
+          <>
+            <h2 className="margin-top-4">U.S. Tax Court Trial Locations</h2>
+            <p>
+              If your case goes to trial, this is where it will be held. Keep in
+              mind that the nearest location may not be in your state.
+            </p>
+            <div className="blue-container">
+              <TrialCity
+                label="Select a Trial Location"
+                showDefaultOption={true}
+                showHint={true}
+                showRegularTrialCitiesHint={
+                  startCaseHelper.showRegularTrialCitiesHint
+                }
+                showSmallTrialCitiesHint={
+                  startCaseHelper.showSmallTrialCitiesHint
+                }
+                trialCitiesByState={
+                  trialCitiesHelper(form.procedureType).trialCitiesByState
+                }
+                value={form.preferredTrialCity}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value || null,
+                  });
+                  validateStartCaseSequence();
+                }}
+              />
+              <Text
+                bind="validationErrors.preferredTrialCity"
+                className="usa-error-message"
+              />
+            </div>
+          </>
+        )}
 
         <div className="button-box-container">
           <button
@@ -147,6 +177,9 @@ export const StartCaseStep4 = connect(
             Cancel
           </button>
         </div>
+        {showModal === 'CaseDifferenceModalOverlay' && (
+          <CaseDifferenceModalOverlay />
+        )}
       </>
     );
   },
