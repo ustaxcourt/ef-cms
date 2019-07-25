@@ -204,14 +204,10 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.trust:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Trustee Information',
-          nameLabel: 'Name of Trustee',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Trust Information',
           nameLabel: 'Name of Trust',
+          secondaryNameLabel: 'Name of Trustee',
         },
       };
       break;

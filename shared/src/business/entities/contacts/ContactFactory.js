@@ -208,7 +208,6 @@ const getContactConstructor = ({
   const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
   const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
-  const { getPetitionerTrusteeContact } = require('./PetitionerTrusteeContact');
   return {
     [ContactFactory.PARTY_TYPES.petitioner]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
@@ -277,7 +276,7 @@ const getContactConstructor = ({
     }[contactType],
     [ContactFactory.PARTY_TYPES.trust]: {
       primary: getPetitionerTrustContact({ countryType, isPaper }),
-      secondary: getPetitionerTrusteeContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.conservator]: {
       primary: getPetitionerTaxpayerContact({ countryType, isPaper }),

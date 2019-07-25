@@ -263,15 +263,14 @@ describe('Case entity', () => {
     });
 
     it('party type Trust', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.trust,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Trustee, Petitioner(s)',
+        'Test Taxpayer, Test Taxpayer 2, Trustee, Petitioner(s)',
       );
     });
 
