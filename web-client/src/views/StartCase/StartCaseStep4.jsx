@@ -23,7 +23,7 @@ export const StartCaseStep4 = connect(
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
   },
   ({
     clearPreferredTrialCitySequence,
@@ -37,7 +37,7 @@ export const StartCaseStep4 = connect(
     toggleCaseDifferenceSequence,
     trialCitiesHelper,
     updateFormValueSequence,
-    validateStartCaseSequence,
+    validateStartCaseWizardSequence,
   }) => {
     return (
       <>
@@ -106,7 +106,7 @@ export const StartCaseStep4 = connect(
                 value: e.target.value,
               });
               clearPreferredTrialCitySequence();
-              validateStartCaseSequence();
+              validateStartCaseWizardSequence();
             }}
           />
         </div>
@@ -138,7 +138,7 @@ export const StartCaseStep4 = connect(
                     key: e.target.name,
                     value: e.target.value || null,
                   });
-                  validateStartCaseSequence();
+                  validateStartCaseWizardSequence();
                 }}
               />
               <Text
