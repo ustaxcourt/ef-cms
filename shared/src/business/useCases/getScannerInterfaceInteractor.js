@@ -12,9 +12,7 @@ exports.getScannerInterface = () => {
           DWObject.ConvertToBlob(
             [index],
             window['EnumDWT_ImageType'].IT_PNG,
-            data => {
-              resolve(data);
-            },
+            resolve,
             reject,
           );
         }),
