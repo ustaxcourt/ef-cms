@@ -136,14 +136,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Guardian Information',
-        nameLabel: 'Name of Guardian',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Guardian',
       },
     });
   });
