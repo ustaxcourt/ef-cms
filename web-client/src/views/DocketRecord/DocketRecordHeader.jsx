@@ -22,7 +22,7 @@ export const DocketRecordHeader = connect(
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row">
-            <div className="tablet:grid-col-9">
+            <div className="tablet:grid-col-8">
               {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button"
@@ -43,7 +43,7 @@ export const DocketRecordHeader = connect(
                 </a>
               )}
             </div>
-            <div className="tablet:grid-col-1 text-align-right">
+            <div className="tablet:grid-col-2 text-align-right">
               <button
                 className="usa-button usa-button--unstyled margin-top-1 margin-right-1"
                 onClick={() => {
