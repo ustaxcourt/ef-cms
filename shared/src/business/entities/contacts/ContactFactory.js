@@ -176,6 +176,9 @@ const getContactConstructor = ({
     getPartnershipAsTaxMattersPartnerPrimaryContact,
   } = require('./PartnershipAsTaxMattersPartnerContact');
   const {
+    getPartnershipBBAPrimaryContact,
+  } = require('./PartnershipBBAContact');
+  const {
     getPartnershipOtherThanTaxMattersPrimaryContact,
   } = require('./PartnershipOtherThanTaxMattersContact');
   const {
@@ -202,9 +205,6 @@ const getContactConstructor = ({
   const {
     getPetitionerIntermediaryContact,
   } = require('./PetitionerIntermediaryContact');
-  const {
-    getPetitionerPartnershipRepContact,
-  } = require('./PetitionerPartnershipRepContact');
   const {
     getPetitionerTaxpayerContact,
   } = require('./PetitionerTaxpayerContact');
@@ -275,8 +275,8 @@ const getContactConstructor = ({
       secondary: getPetitionerEstateExecutorContact({ countryType, isPaper }),
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipBBA]: {
-      primary: getPetitionerIntermediaryContact({ countryType, isPaper }),
-      secondary: getPetitionerPartnershipRepContact({ countryType, isPaper }),
+      primary: getPartnershipBBAPrimaryContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.trust]: {
       primary: getPetitionerTrustContact({ countryType, isPaper }),
