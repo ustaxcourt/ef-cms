@@ -1,14 +1,14 @@
 const { CaseExternal } = require('./CaseExternal');
 
 describe('CaseExternal', () => {
-  describe('for Partnership (as the tax matters partner) Contacts', () => {
+  describe('for Partnership (as the Tax Matters Partner) Contacts', () => {
     it('should not validate without contacts', () => {
       const caseExternal = new CaseExternal({
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType: 'Partnership (as the Tax Matters Partner)',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -49,7 +49,7 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Partnership (as the tax matters partner)',
+        partyType: 'Partnership (as the Tax Matters Partner)',
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',

@@ -24,11 +24,11 @@ ContactFactory.PARTY_TYPES = {
     'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
   nextFriendForMinor:
     'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-  partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
+  partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
   partnershipBBA:
     'Partnership (as a partnership representative under the BBA regime)',
   partnershipOtherThanTaxMatters:
-    'Partnership (as a partner other than tax matters partner)',
+    'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',
   petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
   petitionerSpouse: 'Petitioner & Spouse',

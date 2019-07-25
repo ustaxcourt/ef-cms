@@ -227,7 +227,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: 'Partnership (as the tax matters partner)',
+      value: 'Partnership (as the Tax Matters Partner)',
     });
 
     result = runCompute(startCaseHelper, {
