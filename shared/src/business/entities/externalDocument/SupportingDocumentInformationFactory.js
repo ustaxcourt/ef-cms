@@ -7,6 +7,7 @@ const {
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
 const { includes } = require('lodash');
+const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
 /**
  *
@@ -76,9 +77,11 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
   };
 
   const makeRequired = itemName => {
-    if (schemaOptionalItems[itemName]) {
-      schema[itemName] = schemaOptionalItems[itemName].required();
-    }
+    makeRequiredHelper({
+      itemName,
+      schema,
+      schemaOptionalItems,
+    });
   };
 
   if (documentMetadata.certificateOfService === true) {

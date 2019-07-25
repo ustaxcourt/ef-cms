@@ -1,11 +1,18 @@
 const joi = require('joi-browser');
 const {
+  addPropertyHelper,
+  makeRequiredHelper,
+} = require('./externalDocumentHelpers');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const {
+  SecondaryDocumentInformationFactory,
+} = require('./SecondaryDocumentInformationFactory');
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
@@ -41,10 +48,18 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       practitioner: rawProps.practitioner,
       previousDocument: rawProps.previousDocument,
       primaryDocumentFile: rawProps.primaryDocumentFile,
+      secondaryDocument: rawProps.secondaryDocument,
       secondaryDocumentFile: rawProps.secondaryDocumentFile,
       secondarySupportingDocuments: rawProps.secondarySupportingDocuments,
       supportingDocuments: rawProps.supportingDocuments,
     });
+
+    if (this.secondaryDocument) {
+      this.secondaryDocument = SecondaryDocumentInformationFactory.get({
+        ...this.secondaryDocument,
+        secondaryDocumentFile: this.secondaryDocumentFile,
+      });
+    }
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
@@ -136,16 +151,21 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   let customValidate;
 
   const addProperty = (itemName, itemSchema, itemErrorMessage) => {
-    schema[itemName] = itemSchema;
-    if (itemErrorMessage) {
-      errorToMessageMap[itemName] = itemErrorMessage;
-    }
+    addPropertyHelper({
+      errorToMessageMap,
+      itemErrorMessage,
+      itemName,
+      itemSchema,
+      schema,
+    });
   };
 
   const makeRequired = itemName => {
-    if (schemaOptionalItems[itemName]) {
-      schema[itemName] = schemaOptionalItems[itemName].required();
-    }
+    makeRequiredHelper({
+      itemName,
+      schema,
+      schemaOptionalItems,
+    });
   };
 
   if (documentMetadata.certificateOfService === true) {
