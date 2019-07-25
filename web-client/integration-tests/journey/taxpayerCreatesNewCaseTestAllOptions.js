@@ -234,7 +234,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
     await test.runSequence('submitFilePetitionSequence');
@@ -642,6 +642,10 @@ export default (test, fakeFile, overrides = {}) => {
       value: 'Test Person',
     });
     await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.inCareOf',
+      value: 'USTC',
+    });
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactSecondary.address1',
       value: '123 Abc Ln',
     });
@@ -676,6 +680,7 @@ export default (test, fakeFile, overrides = {}) => {
       city: 'Cityville',
       countryType: 'domestic',
       email: 'test@example.com',
+      inCareOf: 'USTC',
       name: 'Test Person',
       phone: '1234567890',
       postalCode: '12345',
@@ -780,6 +785,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('submitFilePetitionSequence');
 
+    expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({
