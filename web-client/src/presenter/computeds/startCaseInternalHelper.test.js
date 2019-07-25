@@ -180,7 +180,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeTruthy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is partnershipOtherThanTaxMatters', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is partnershipOtherThanTaxMatters', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -192,7 +192,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is petitioner', () => {

@@ -2,7 +2,7 @@ const joi = require('joi-browser');
 const { ContactFactory } = require('./ContactFactory');
 
 /**
- * returns the constructor used for creating the PetitionerPrimaryContact entity
+ * returns the constructor used for creating the PartnershipAsTaxMattersPartnerPrimaryContact entity
  */
 exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createContactFactory(
   {

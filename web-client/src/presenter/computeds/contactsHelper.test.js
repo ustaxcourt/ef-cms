@@ -278,15 +278,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header:
           'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
-        nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Partnership You Are Filing For',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });
   });
@@ -741,14 +737,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
-        nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Partnership You Are Filing For',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });
   });
