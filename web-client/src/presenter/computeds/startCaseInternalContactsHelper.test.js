@@ -217,14 +217,10 @@ describe('startCaseInternalContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Partnership Representative',
-        nameLabel: 'Name of Partnership Representative',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Partnership Information',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partnership Representative',
       },
     });
   });

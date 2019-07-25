@@ -250,14 +250,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Partnership Representative',
-        nameLabel: 'Name of Partnership Representative',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Partnership You Are Filing For',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Partnership Representative Name',
       },
     });
   });
@@ -709,14 +705,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About the Partnership Representative',
-        nameLabel: 'Name of Partnership Representative',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Partnership You Are Filing For',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partnership Representative',
       },
     });
   });

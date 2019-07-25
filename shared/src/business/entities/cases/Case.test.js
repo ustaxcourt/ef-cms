@@ -288,9 +288,6 @@ describe('Case entity', () => {
       const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
       };
       mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
       const caseTitle = Case.getCaseCaption(mockCase);
@@ -303,9 +300,6 @@ describe('Case entity', () => {
       const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
       };
       mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
       const caseTitle = Case.getCaseCaption(mockCase);
@@ -315,15 +309,14 @@ describe('Case entity', () => {
     });
 
     it('party type Partnership BBA', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Partnership Representative, Petitioner(s)',
+        'Test Taxpayer, Test Taxpayer 2, Partnership Representative, Petitioner(s)',
       );
     });
 

@@ -119,14 +119,10 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.partnershipBBA:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Partnership Representative',
-          nameLabel: 'Name of Partnership Representative',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Partnership Information',
           nameLabel: 'Business Name',
+          secondaryNameLabel: 'Name of Partnership Representative',
         },
       };
       break;
