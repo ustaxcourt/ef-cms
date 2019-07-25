@@ -57,6 +57,10 @@ Batch.schema = joi.object().keys({
     .integer()
     .min(0)
     .required(),
+  createdAt: joi
+    .date()
+    .iso()
+    .required(),
   pages: joi
     .array()
     .min(1)
