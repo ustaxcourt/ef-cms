@@ -249,7 +249,6 @@ describe('formatted work queue computed', () => {
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
               reviewDate: '2018-11-21T20:49:28.192Z',
-              // reviewUser: 'petitionsclerk',
               userId: 'taxpayer',
               workItems: [
                 {
