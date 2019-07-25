@@ -262,7 +262,7 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner) and user role petitioner', () => {
+  it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
         constants: {
@@ -291,7 +291,7 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner) and user role petitioner', () => {
+  it('should validate form view information for party type Partnership (as the Tax Matters Partner) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
         constants: {
@@ -729,7 +729,7 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner) and user role practitioner', () => {
+  it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
         constants: {
@@ -757,7 +757,7 @@ describe('contactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner) and user role practitioner', () => {
+  it('should validate form view information for party type Partnership (as the Tax Matters Partner) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
         constants: {

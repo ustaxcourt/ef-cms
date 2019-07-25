@@ -229,7 +229,7 @@ describe('startCaseInternalContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner)', () => {
+  it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner)', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
@@ -254,7 +254,7 @@ describe('startCaseInternalContactsHelper', () => {
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner)', () => {
+  it('should validate form view information for party type Partnership (as the Tax Matters Partner)', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
