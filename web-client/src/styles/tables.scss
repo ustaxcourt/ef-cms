@@ -112,18 +112,19 @@ table.trial-sessions {
 }
 
 table.small-case-qualifications-table {
-  margin-bottom: 2em;
-
-  th,
-  td {
+  tr {
     border: 1px solid color($theme-color-base-light);
+
+    td:first-child {
+      font-weight: $font-semibold;
+    }
   }
 
   thead th {
-    background-color: color($theme-color-base-lightest);
+    background-color: color($theme-color-accent-cool-dark);
     color: color($theme-color-base-darkest);
-    font-family: $font-source-sans;
-    font-size: 17px;
+    font-family: $font-serif;
+    font-size: 18px;
     font-weight: $font-semibold;
   }
 }
