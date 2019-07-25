@@ -138,7 +138,7 @@
     "docker:route53": "./web-api/docker-route53.sh",
     "docker:s3replication": "./web-api/docker-s3replication.sh",
     "docker:serverless": "./web-api/docker-serverless.sh",
-    "docker:shellcheck": "./web-api/docker-shellcheck.sh",
+    "docker:shellcheck": "./docker-shellcheck.sh",
     "docker:smoketests": "./web-api/docker-smoketests.sh",
     "docker:sonarqube": "./docker-sonarqube.sh",
     "docker:terraform": "./docker-terraform.sh",
