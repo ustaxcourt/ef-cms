@@ -173,38 +173,36 @@ export const FileDocumentReview = connect(
                     <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         <div className="tablet:margin-bottom-0 margin-bottom-205">
-                          {form.secondaryDocumentFile && (
-                            <div className="">
-                              <label
-                                className="usa-label"
-                                htmlFor="secondary-filing"
-                              >
-                                {form.secondaryDocument.documentTitle}{' '}
-                              </label>
-                              {(form.secondaryDocumentFile &&
-                                form.secondaryDocumentFile.name && (
-                                  <React.Fragment>
-                                    <div className="grid-row">
-                                      <div className="grid-col flex-auto">
-                                        <FontAwesomeIcon
-                                          className="fa-icon-blue"
-                                          icon={['fas', 'file-pdf']}
-                                        />
-                                      </div>
-                                      <div className="grid-col flex-fill">
-                                        <PDFPreviewButton
-                                          file={form.secondaryDocumentFile}
-                                          title={
-                                            form.secondaryDocument.documentTitle
-                                          }
-                                        />
-                                      </div>
+                          <div className="">
+                            <label
+                              className="usa-label"
+                              htmlFor="secondary-filing"
+                            >
+                              {form.secondaryDocument.documentTitle}{' '}
+                            </label>
+                            {(form.secondaryDocumentFile &&
+                              form.secondaryDocumentFile.name && (
+                                <React.Fragment>
+                                  <div className="grid-row">
+                                    <div className="grid-col flex-auto">
+                                      <FontAwesomeIcon
+                                        className="fa-icon-blue"
+                                        icon={['fas', 'file-pdf']}
+                                      />
                                     </div>
-                                  </React.Fragment>
-                                )) ||
-                                'No file attached'}
-                            </div>
-                          )}
+                                    <div className="grid-col flex-fill">
+                                      <PDFPreviewButton
+                                        file={form.secondaryDocumentFile}
+                                        title={
+                                          form.secondaryDocument.documentTitle
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                </React.Fragment>
+                              )) ||
+                              'No file attached'}
+                          </div>
                         </div>
                       </div>
                       <div className="tablet:grid-col-6 margin-bottom-1">
