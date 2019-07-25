@@ -103,7 +103,7 @@ export const Address = connect(
         </div>
         <div
           className={
-            'usa-form-group ' +
+            'usa-form-group margin-bottom-0 ' +
             (validationErrors &&
             validationErrors[type] &&
             (validationErrors[type].city || validationErrors[type].state)
@@ -112,7 +112,7 @@ export const Address = connect(
           }
         >
           <div className="grid-row grid-gap state-and-city">
-            <div className="mobile-lg:grid-col-8">
+            <div className="mobile-lg:grid-col-8 margin-bottom-30px">
               <label className="usa-label" htmlFor={`${type}.city`}>
                 City
               </label>
@@ -134,7 +134,7 @@ export const Address = connect(
                 }}
               />
             </div>
-            <div className="mobile-lg:grid-col-4">
+            <div className="mobile-lg:grid-col-4 margin-bottom-30px">
               <label className="usa-label" htmlFor={`${type}.state`}>
                 State
               </label>
