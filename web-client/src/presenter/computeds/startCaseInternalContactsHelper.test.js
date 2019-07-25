@@ -98,13 +98,11 @@ describe('startCaseInternalContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         displayTitle: true,
         header: 'Executor/Personal Representative/Etc.',
-        nameLabel: 'Name of Executor/Personal Representative, etc.',
-      },
-      contactSecondary: {
-        header: 'Estate Information',
         nameLabel: 'Name of Decedent',
+        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
       },
     });
   });

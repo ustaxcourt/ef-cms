@@ -194,9 +194,6 @@ const getContactConstructor = ({
     getPetitionerDeceasedSpouseContact,
   } = require('./PetitionerDeceasedSpouseContact');
   const {
-    getPetitionerEstateExecutorContact,
-  } = require('./PetitionerEstateExecutorContact');
-  const {
     getPetitionerEstateWithExecutorPrimaryContact,
   } = require('./PetitionerEstateWithExecutorPrimaryContact');
   const {
@@ -272,7 +269,7 @@ const getContactConstructor = ({
         countryType,
         isPaper,
       }),
-      secondary: getPetitionerEstateExecutorContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipBBA]: {
       primary: getPartnershipBBAPrimaryContact({ countryType, isPaper }),

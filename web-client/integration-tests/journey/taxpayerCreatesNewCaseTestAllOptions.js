@@ -214,7 +214,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
-    // Partnership tax matters party type primary/secondary contact
+    // Partnership tax matters party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -253,7 +253,7 @@ export default (test, fakeFile, overrides = {}) => {
       'Ownership Disclosure Statement is required.',
     );
 
-    // Partnership other than tax matters party type primary/secondary contact
+    // Partnership other than tax matters party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -280,7 +280,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
 
-    // Partnership BBA party type primary/secondary contact
+    // Partnership BBA party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -302,7 +302,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
 
-    // Estate with executor party type primary/secondary contact
+    // Estate with executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -334,7 +334,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
     // Estate without executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
