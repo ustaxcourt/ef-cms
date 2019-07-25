@@ -54,14 +54,7 @@ exports.getScannerInterface = () => {
     for (let index = 0; index < count; index++) {
       promises.push(
         new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob(
-            [index],
-            null,
-            data => {
-              resolve(data);
-            },
-            reject,
-          );
+          DWObject.ConvertToBlob([index], null, resolve, reject);
         }),
       );
     }
