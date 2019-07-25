@@ -27,7 +27,6 @@ export const showContactsHelper = (partyType, PARTY_TYPES) => {
     PARTY_TYPES.guardian,
     PARTY_TYPES.nextFriendForIncompetentPerson,
     PARTY_TYPES.nextFriendForMinor,
-    PARTY_TYPES.partnershipAsTaxMattersPartner,
     PARTY_TYPES.partnershipBBA,
     PARTY_TYPES.partnershipOtherThanTaxMatters,
     PARTY_TYPES.petitionerDeceasedSpouse,

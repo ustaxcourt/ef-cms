@@ -307,14 +307,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Tax Matters Partner',
-        nameLabel: 'Name of Tax Matters Partner',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Partnership You Are Filing For',
-        nameLabel: 'Business Name',
+        nameLabel: 'Partnership Name',
+        secondaryNameLabel: 'Tax Matters Partner Name',
       },
     });
   });
@@ -386,11 +382,11 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About Yourself',
-        nameLabel: 'Name',
+        nameLabel: 'Name of Petitioner/Surviving Spouse',
       },
       contactSecondary: {
         header: 'Tell Us About Your Deceased Spouse',
-        nameLabel: "Spouse's Name",
+        nameLabel: 'Name of Deceased Spouse',
       },
     });
   });
@@ -773,14 +769,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About the Tax Matters Partner',
-        nameLabel: 'Name of Tax Matters Partner',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Partnership You Are Filing For',
-        nameLabel: 'Business Name',
+        nameLabel: 'Name of Partnership',
+        secondaryNameLabel: 'Name of Tax Matters Partner',
       },
     });
   });
