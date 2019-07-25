@@ -382,7 +382,7 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
     case ContactFactory.PARTY_TYPES.estate:
-      caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
+      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;

@@ -241,15 +241,14 @@ describe('Case entity', () => {
     });
 
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.estate,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor, Petitioner(s)',
+        'Estate of Test Taxpayer, Deceased, Test Taxpayer 2, Executor, Petitioner(s)',
       );
     });
 

@@ -58,14 +58,12 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.estate:
         contactPrimary = {
+          displaySecondaryName: true,
           displayTitle: true,
           header:
             'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
-          nameLabel: 'Name of Executor/Personal Representative, etc.',
-        };
-        contactSecondary = {
-          header: 'Tell Us About the Estate You Are Filing For',
           nameLabel: 'Name of Decedent',
+          secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
         };
         break;
       case PARTY_TYPES.estateWithoutExecutor:
@@ -244,14 +242,12 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.estate:
         contactPrimary = {
+          displaySecondaryName: true,
           displayTitle: true,
           header:
             'Tell Us About the Executor/Personal Representative/etc. For This Estate',
-          nameLabel: 'Name of Executor/Personal Representative, etc.',
-        };
-        contactSecondary = {
-          header: 'Tell Us About the Estate You Are Filing For',
           nameLabel: 'Name of Decedent',
+          secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
         };
         break;
       case PARTY_TYPES.estateWithoutExecutor:
