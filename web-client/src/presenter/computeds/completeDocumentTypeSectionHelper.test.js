@@ -42,8 +42,8 @@ describe('completeDocumentTypeSectionHelper', () => {
   });
 
   it('returns document info with primary and secondaryDocument info', () => {
-    const categoryKey = 'Application';
-    const categoryIdx = 0;
+    const categoryKey = 'Motion';
+    const categoryIdx = 22;
 
     const { category, documentType } = Document.CATEGORY_MAP[categoryKey][
       categoryIdx
@@ -61,8 +61,8 @@ describe('completeDocumentTypeSectionHelper', () => {
           category,
           documentType,
           secondaryDocument: {
-            category,
-            documentType,
+            category: 'Motion',
+            documentType: 'Motion for Leave to File',
           },
         },
       },
@@ -70,7 +70,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.secondary).toBeTruthy();
-    expect(result.primary.showNonstandardForm).toBe(false);
-    expect(result.secondary.showNonstandardForm).toBe(false);
+    expect(result.primary.showNonstandardForm).toBe(true);
+    expect(result.primary.showSecondaryDocumentSelect).toBe(false);
   });
 });
