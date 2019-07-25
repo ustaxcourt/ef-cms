@@ -4,36 +4,37 @@ let scanBuffer = [];
 
 const DWObject = {
   AcquireImage: () => {
-
-    const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
       const byteCharacters = atob(b64Data);
       const byteArrays = [];
-    
-      for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+
+      for (
+        let offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
         const slice = byteCharacters.slice(offset, offset + sliceSize);
-    
+
         const byteNumbers = new Array(slice.length);
         for (let i = 0; i < slice.length; i++) {
           byteNumbers[i] = slice.charCodeAt(i);
         }
-    
+
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
       }
-    
+
       const blob = new Blob(byteArrays, { type: contentType });
       return blob;
-    }
+    };
 
-    scanBuffer.push(b64toBlob(image1, 'image/png'))
-    scanBuffer.push(b64toBlob(image2, 'image/png'))
+    scanBuffer.push(b64toBlob(image1, 'image/png'));
+    scanBuffer.push(b64toBlob(image2, 'image/png'));
     DWObject.HowManyImagesInBuffer += 2;
   },
   CloseSource: () => null,
   ConvertToBlob: (indicies, type, resolve) => {
-    console.log('indicies', indicies);
     const blob = scanBuffer[indicies[0]];
-    console.log('blob', blob);
     resolve(blob);
   },
   DataSourceStatus: null,
@@ -50,16 +51,13 @@ exports.getScannerInterface = () => {
     const count = DWObject.HowManyImagesInBuffer;
     const promises = [];
     const response = { error: null, scannedBuffer: null };
-    console.log('count', count);
     for (let index = 0; index < count; index++) {
       promises.push(
         new Promise((resolve, reject) => {
-          console.log('we are here');
           DWObject.ConvertToBlob(
             [index],
             null,
             data => {
-              console.log('data', data);
               resolve(data);
             },
             reject,
@@ -70,7 +68,6 @@ exports.getScannerInterface = () => {
 
     return await Promise.all(promises)
       .then(async blobs => {
-        console.log('blobs', blobs);
         const blobBuffers = [];
 
         for (let blob of blobs) {
