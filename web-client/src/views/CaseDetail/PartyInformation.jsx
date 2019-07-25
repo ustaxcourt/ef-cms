@@ -1,6 +1,5 @@
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -16,7 +15,7 @@ export const PartyInformation = connect(
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          <div className="tablet:grid-col-2">
+          <div className="tablet:grid-col-2 hide-print">
             <p className="label">Party Type</p>
             <p>{caseDetail.partyType || 'My Party Type'}</p>
           </div>
@@ -154,18 +153,18 @@ export const PartyInformation = connect(
     };
     return (
       <div className="subsection party-information">
-        <NonMobile>
+        <div className="only-large-screens">
           <div className="card">
             <div className="content-wrapper">
               <h3 className="underlined">Party Information</h3>
               {mainPartyInformation()}
             </div>
           </div>
-        </NonMobile>
-        <Mobile>
+        </div>
+        <div className="only-small-screens">
           <h3>Party Information</h3>
           {mainPartyInformation()}
-        </Mobile>
+        </div>
 
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
