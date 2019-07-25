@@ -2,7 +2,7 @@ import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
- * Set document title.
+ * File external documents
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -19,25 +19,28 @@ export const fileExternalDocumentAction = async ({
   const userRole = get(state.user.role);
   const isRespondent = userRole === 'respondent';
 
-  let {
-    primaryDocumentFile,
-    secondaryDocumentFile,
-    secondarySupportingDocumentFile,
-    supportingDocumentFile,
-    ...documentMetadata
-  } = get(state.form);
+  const form = get(state.form);
 
-  documentMetadata = { ...documentMetadata, docketNumber, caseId };
+  const documentFiles = {
+    primary: form.primaryDocumentFile,
+    secondary: form.secondaryDocumentFile,
+  };
 
-  const progressFunctions = setupPercentDone(
-    {
-      primary: primaryDocumentFile,
-      primarySupporting: supportingDocumentFile,
-      secondary: secondaryDocumentFile,
-      secondarySupporting: secondarySupportingDocumentFile,
-    },
-    store,
-  );
+  if (form.hasSupportingDocuments) {
+    form.supportingDocuments.forEach((item, idx) => {
+      documentFiles[`primarySupporting${idx}`] = item.supportingDocumentFile;
+    });
+  }
+
+  if (form.hasSecondarySupportingDocuments) {
+    form.secondarySupportingDocuments.forEach((item, idx) => {
+      documentFiles[`secondarySupporting${idx}`] = item.supportingDocumentFile;
+    });
+  }
+
+  const documentMetadata = { ...form, docketNumber, caseId };
+
+  const progressFunctions = setupPercentDone(documentFiles, store);
 
   let caseDetail;
 
@@ -46,15 +49,9 @@ export const fileExternalDocumentAction = async ({
       .getUseCases()
       .uploadExternalDocumentInteractor({
         applicationContext,
+        documentFiles,
         documentMetadata,
-        onPrimarySupportingUploadProgress: progressFunctions.primarySupporting,
-        onPrimaryUploadProgress: progressFunctions.primary,
-        onSecondarySupportUploadProgress: progressFunctions.secondarySupporting,
-        onSecondaryUploadProgress: progressFunctions.secondary,
-        primaryDocumentFile,
-        secondaryDocumentFile,
-        secondarySupportingDocumentFile,
-        supportingDocumentFile,
+        progressFunctions,
       });
 
     if (isRespondent) {
@@ -69,15 +66,17 @@ export const fileExternalDocumentAction = async ({
     return path.error();
   }
 
-  for (let document of caseDetail.documents) {
-    if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheetInteractor({
-        applicationContext,
-        caseId: caseDetail.caseId,
-        documentId: document.documentId,
-      });
-    }
-  }
+  const pendingDocuments = caseDetail.documents.filter(
+    document => document.processingStatus === 'pending',
+  );
+  const createCoverSheetInteractor = document => {
+    return applicationContext.getUseCases().createCoverSheetInteractor({
+      applicationContext,
+      caseId: caseDetail.caseId,
+      documentId: document.documentId,
+    });
+  };
+  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
 
   return path.success({
     caseDetail,

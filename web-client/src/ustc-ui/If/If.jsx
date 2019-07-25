@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 
 export const If = connect(props => {
-  const { bind, children, get } = props;
+  const { bind, children, get, not } = props;
 
   let show = false;
 
@@ -10,7 +10,7 @@ export const If = connect(props => {
     show = get(state[bind]);
   }
 
-  if (show) {
+  if (!!show ^ !!not) {
     return children;
   }
 

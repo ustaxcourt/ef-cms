@@ -100,6 +100,19 @@ describe('computeTrialSessionFormDataAction', () => {
     });
   });
 
+  it('should store an afternoon (pm) startTime in 12hr format if it is 12', async () => {
+    let result;
+    form.startTimeHours = '12';
+    form.startTimeMinutes = '15';
+    form.startTimeExtension = 'pm';
+    result = await runAction(computeTrialSessionFormDataAction, {
+      state: { form },
+    });
+    expect(result.state.form).toMatchObject({
+      startTime: '12:15',
+    });
+  });
+
   it('should store a morning (am) startTime in 24hr format', async () => {
     let result;
     form.startTimeHours = '6';

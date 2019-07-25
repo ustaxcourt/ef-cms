@@ -138,11 +138,6 @@ describe('updateCase', () => {
   it('should update the validated documents on a case', async () => {
     const caseToUpdate = Object.assign(MOCK_CASE);
     caseToUpdate.documents = MOCK_DOCUMENTS;
-    caseToUpdate.documents.forEach(document => {
-      document.validated = true;
-      document.reviewDate = undefined;
-      return document;
-    });
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -162,13 +157,87 @@ describe('updateCase', () => {
     const updatedCase = await updateCaseInteractor({
       applicationContext,
       caseId: caseToUpdate.caseId,
-      caseToUpdate: caseToUpdate,
-      petitioners: [{ name: 'Test Taxpayer' }],
+      caseToUpdate: {
+        ...caseToUpdate,
+        caseCaption: 'Iola Snow & Linda Singleton, Petitioners',
+        caseType: 'Innocent Spouse',
+        contactPrimary: {
+          address1: '193 South Hague Freeway',
+          address2: 'Sunt maiores vitae ',
+          address3: 'Culpa ex aliquip ven',
+          city: 'Aperiam minim sunt r',
+          countryType: 'domestic',
+          email: 'taxpayer@example.com',
+          name: 'Iola Snow',
+          phone: '+1 (772) 246-3448',
+          postalCode: '26037',
+          state: 'IA',
+        },
+        contactSecondary: {
+          address1: '86 West Rocky Cowley Extension',
+          address2: 'Aperiam aliquip volu',
+          address3: 'Eos consequuntur max',
+          city: 'Deleniti lorem sit ',
+          countryType: 'domestic',
+          name: 'Linda Singleton',
+          phone: '+1 (153) 683-1448',
+          postalCode: '89985',
+          state: 'FL',
+        },
+        createdAt: '2019-07-24T16:30:01.940Z',
+        currentVersion: '1',
+        docketNumber: '168-19',
+        docketNumberSuffix: 'S',
+        filingType: 'Myself and my spouse',
+        hasIrsNotice: false,
+        isPaper: false,
+        partyType: 'Petitioner & Spouse',
+        practitioners: [],
+        preferredTrialCity: 'Mobile, Alabama',
+        procedureType: 'Small',
+      },
     });
 
     const returnedDocument = omit(updatedCase.documents[0], 'createdAt');
     const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
     expect(returnedDocument).toMatchObject(documentToMatch);
+  });
+
+  it('should not fail even if the primary or secondary contact is empty', async () => {
+    const caseToUpdate = Object.assign(MOCK_CASE);
+    caseToUpdate.documents = MOCK_DOCUMENTS;
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'petitionsclerk',
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          updateCase: () => Promise.resolve(MOCK_CASE),
+        };
+      },
+    };
+
+    let error = null;
+    try {
+      await updateCaseInteractor({
+        applicationContext,
+        caseId: caseToUpdate.caseId,
+        caseToUpdate: {
+          ...caseToUpdate,
+          contactPrimary: null,
+          contactSecondary: {},
+        },
+        petitioners: [{ name: 'Test Taxpayer' }],
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeNull();
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {

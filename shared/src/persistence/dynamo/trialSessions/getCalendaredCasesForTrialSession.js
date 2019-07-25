@@ -13,7 +13,7 @@ exports.getCalendaredCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const ids = (trialSession.caseOrder || []).map(metadata => metadata.caseId);
+  const ids = trialSession.caseOrder.map(metadata => metadata.caseId);
 
   const results = await client.batchGet({
     applicationContext,

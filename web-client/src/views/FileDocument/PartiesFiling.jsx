@@ -88,15 +88,22 @@ export const PartiesFiling = connect(
                     <div className="usa-checkbox" key={idx}>
                       <input
                         aria-describedby="who-legend"
-                        checked={form.partyPractitioner || false}
+                        checked={
+                          (form.practitioner[idx] &&
+                            form.practitioner[idx].partyPractitioner) ||
+                          false
+                        }
                         className="usa-checkbox__input"
                         id={`party-practitioner-${idx}`}
-                        name="partyPractitioner"
+                        name={`practitioner.${idx}`}
                         type="checkbox"
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
                             key: e.target.name,
-                            value: e.target.checked,
+                            value: {
+                              name: practitioner.name,
+                              partyPractitioner: e.target.checked,
+                            },
                           });
                           validateExternalDocumentInformationSequence();
                         }}

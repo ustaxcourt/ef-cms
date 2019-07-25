@@ -1,7 +1,8 @@
 const { User } = require('../entities/User');
+
 /**
  * getUserInteractor
- * @param userId
+ * @param user
  * @returns {User}
  */
 exports.getUserInteractor = async user => {

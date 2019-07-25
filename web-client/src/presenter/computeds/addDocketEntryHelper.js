@@ -128,6 +128,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     });
   }
 
+  const hasRespondents =
+    caseDetail.respondents && caseDetail.respondents.length > 0;
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
@@ -139,8 +142,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
-    showRespondentParty:
-      caseDetail.respondents && caseDetail.respondents.length,
+    showRespondentParty: !!hasRespondents,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,

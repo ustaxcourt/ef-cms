@@ -76,7 +76,7 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(caseExternal.getFormattedValidationErrors().irsNoticeDate).toEqual(
-        'Notice Date is a required field.',
+        'Please enter a valid IRS notice date.',
       );
     });
 
@@ -130,7 +130,7 @@ describe('CaseExternal entity', () => {
         signature: true,
       });
       expect(caseExternal.getFormattedValidationErrors().irsNoticeDate).toEqual(
-        'Notice Date is in the future. Please enter a valid date.',
+        'The IRS notice date is in the future. Please enter a valid date.',
       );
     });
   });

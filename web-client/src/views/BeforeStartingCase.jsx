@@ -203,6 +203,12 @@ export const BeforeStartingCase = () => (
         <a className="usa-button margin-right-205" href="/start-a-case">
           Got It, Letʼs Start My Case
         </a>
+        <a
+          className="usa-button margin-right-205"
+          href="/start-a-case-wizard/step-1"
+        >
+          Got It, Letʼs Start My Case (New Wizard)
+        </a>
         <a className="usa-button usa-button--outline" href="/">
           Cancel
         </a>
