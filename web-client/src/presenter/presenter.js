@@ -71,6 +71,7 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
+import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
@@ -271,6 +272,7 @@ export const presenter = {
     navigateToPathSequence,
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
+    openCaseDifferenceModalSequence,
     openCleanModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
     openCreateCaseDeadlineModalSequence,

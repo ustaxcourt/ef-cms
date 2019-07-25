@@ -15,7 +15,6 @@ export const StartCaseStep2 = connect(
     constants: state.constants,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     updateHasIrsNoticeFormValueSequence:
       sequences.updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
@@ -29,7 +28,6 @@ export const StartCaseStep2 = connect(
     constants,
     formCancelToggleCancelSequence,
     startCaseHelper,
-    updateFormValueSequence,
     updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence,
     validateStartCaseSequence,
@@ -41,13 +39,10 @@ export const StartCaseStep2 = connect(
         <p className="required-statement margin-top-05 margin-bottom-2">
           All fields required unless otherwise noted
         </p>
-        <h2 className="margin-top-4">
-          Upload Your Petition to Start Your Case
-        </h2>
+        <h2 className="margin-top-4">Upload Your Petition</h2>
         <Hint>
-          Your Petition upload should include your Petition form and any IRS
-          notices. Don’t forget to remove or redact your personal information on
-          all of your documents, including any IRS notice(s).
+          Don’t forget to remove or redact your personal information on all your
+          documents, including any IRS notice(s).
         </Hint>
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
@@ -157,110 +152,13 @@ export const StartCaseStep2 = connect(
             </fieldset>
 
             {startCaseHelper.showHasIrsNoticeOptions && (
-              <React.Fragment>
-                <CaseTypeSelect
-                  allowDefaultOption={true}
-                  caseTypes={caseTypeDescriptionHelper.caseTypes}
-                  legend="Type of Notice / Case"
-                  validation="validateStartCaseSequence"
-                  onChange="updateFormValueSequence"
-                />
-                <div
-                  className={
-                    'usa-form-group' +
-                    (validationErrors.irsNoticeDate
-                      ? ' usa-form-group--error'
-                      : '')
-                  }
-                >
-                  <fieldset className="usa-fieldset">
-                    <legend className="usa-legend" id="date-of-notice-legend">
-                      Date of Notice
-                    </legend>
-                    <div className="usa-memorable-date">
-                      <div className="usa-form-group usa-form-group--month">
-                        <label
-                          aria-hidden="true"
-                          htmlFor="date-of-notice-month"
-                        >
-                          MM
-                        </label>
-                        <input
-                          aria-describedby="date-of-notice-legend"
-                          aria-label="month, two digits"
-                          className="usa-input usa-input--inline"
-                          id="date-of-notice-month"
-                          max="12"
-                          min="1"
-                          name="month"
-                          type="number"
-                          onBlur={() => {
-                            validateStartCaseSequence();
-                          }}
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="usa-form-group usa-form-group--day">
-                        <label aria-hidden="true" htmlFor="date-of-notice-day">
-                          DD
-                        </label>
-                        <input
-                          aria-describedby="date-of-notice-legend"
-                          aria-label="day, two digits"
-                          className="usa-input usa-input--inline"
-                          id="date-of-notice-day"
-                          max="31"
-                          min="1"
-                          name="day"
-                          type="number"
-                          onBlur={() => {
-                            validateStartCaseSequence();
-                          }}
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                      <div className="usa-form-group usa-form-group--year">
-                        <label aria-hidden="true" htmlFor="date-of-notice-year">
-                          YYYY
-                        </label>
-                        <input
-                          aria-describedby="date-of-notice-legend"
-                          aria-label="year, four digits"
-                          className="usa-input usa-input--inline"
-                          id="date-of-notice-year"
-                          max="2100"
-                          min="1900"
-                          name="year"
-                          type="number"
-                          onBlur={() => {
-                            validateStartCaseSequence();
-                          }}
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                      <Text
-                        bind="validationErrors.irsNoticeDate"
-                        className="usa-error-message"
-                      />
-                    </div>
-                  </fieldset>
-                </div>
-              </React.Fragment>
+              <CaseTypeSelect
+                allowDefaultOption={true}
+                caseTypes={caseTypeDescriptionHelper.caseTypes}
+                legend="Type of Notice / Case"
+                validation="validateStartCaseSequence"
+                onChange="updateFormValueSequence"
+              />
             )}
             {startCaseHelper.showNotHasIrsNoticeOptions && (
               <CaseTypeSelect
