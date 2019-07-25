@@ -285,15 +285,17 @@ describe('Case entity', () => {
     });
 
     it('party type Partnership Tax Matters', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         contactSecondary: {
           name: 'Test Taxpayer 2',
         },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Tax Matters Partner, Petitioner',
+        'Test Taxpayer, Test Taxpayer 2, Tax Matters Partner, Petitioner',
       );
     });
 
