@@ -3,7 +3,6 @@
 .dynamodb/
 .scannerwork/
 .terraform/
-/cypress
 aws.json
 coverage/
 dist/
