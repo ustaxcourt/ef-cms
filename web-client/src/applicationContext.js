@@ -7,6 +7,7 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
+import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
@@ -121,6 +122,7 @@ import { validatePdfInteractor } from '../../shared/src/proxies/documents/valida
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
+import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
@@ -233,6 +235,7 @@ const allUseCases = {
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
   validatePrimaryContactInteractor,
+  validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   verifyCaseForUserInteractor,
   verifyPendingCaseForUserInteractor,
@@ -302,6 +305,7 @@ const applicationContext = {
     CaseAssociationRequestFactory,
     CaseDeadline,
     CaseExternal,
+    CaseExternalInformationFactory,
     CaseInternal,
     DocketEntryFactory,
     ExternalDocumentFactory,

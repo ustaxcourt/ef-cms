@@ -13,7 +13,5 @@ exports.validateCaseAssociationRequestInteractor = ({
     .getEntityConstructors()
     .CaseAssociationRequestFactory(caseAssociationRequest)
     .getFormattedValidationErrors();
-  if (!errors) return null;
-
-  return errors;
+  return errors || null;
 };
