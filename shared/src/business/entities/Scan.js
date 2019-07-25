@@ -17,7 +17,7 @@ function Scan({ applicationContext, rawScan }) {
   });
 }
 
-Scan.name = 'Scan';
+Scan.validationName = 'Scan';
 
 /**
  * adds a batch to the current scan
