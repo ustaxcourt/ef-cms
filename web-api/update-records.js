@@ -12,7 +12,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   let lastKey = null;
   while (hasMoreResults) {
     hasMoreResults = false;
-    console.log('making a scan request');
 
     await documentClient
       .scan({
@@ -21,23 +20,25 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
       })
       .promise()
       .then(async results => {
-        console.log('results.Count', results.Count);
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-
+        const recordsUpdated = [];
         for (const result of results.Items) {
           if (result.gsi1pk && result.gsi1pk.indexOf('workitem-') !== -1) {
             if (!result.document.receivedAt) {
               result.document.receivedAt = result.document.createdAt;
-              await documentClient
-                .put({
-                  Item: result,
-                  TableName: 'efcms-dev',
-                })
-                .promise();
+              recordsUpdated.push(
+                documentClient
+                  .put({
+                    Item: result,
+                    TableName: 'efcms-dev',
+                  })
+                  .promise(),
+              );
             }
           }
         }
+        await Promise.all(recordsUpdated);
       });
   }
 })();
