@@ -2,6 +2,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 import { StateSelect } from './StateSelect';
 
@@ -102,17 +103,16 @@ export const Address = connect(
           />
         </div>
         <div
-          className={
-            'usa-form-group margin-bottom-0 ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            (validationErrors[type].city || validationErrors[type].state)
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              (validationErrors[type].city || validationErrors[type].state) &&
+              'usa-form-group--error',
+          )}
         >
           <div className="grid-row grid-gap state-and-city">
-            <div className="mobile-lg:grid-col-8 margin-bottom-30px">
+            <div className="mobile-lg:grid-col-8">
               <label className="usa-label" htmlFor={`${type}.city`}>
                 City
               </label>
@@ -134,7 +134,7 @@ export const Address = connect(
                 }}
               />
             </div>
-            <div className="mobile-lg:grid-col-4 margin-bottom-30px">
+            <div className="mobile-lg:grid-col-4">
               <label className="usa-label" htmlFor={`${type}.state`}>
                 State
               </label>
