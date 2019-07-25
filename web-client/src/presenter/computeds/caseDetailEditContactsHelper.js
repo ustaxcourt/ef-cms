@@ -6,14 +6,10 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.conservator:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Conservator Information',
-          nameLabel: 'Name of Conservator',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Taxpayer Information',
           nameLabel: 'Name of Taxpayer',
+          secondaryNameLabel: 'Name of Conservator',
         },
       };
       break;

@@ -400,7 +400,7 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.conservator:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Conservator, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Conservator, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.guardian:
       caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Guardian, Petitioner`;

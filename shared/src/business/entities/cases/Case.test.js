@@ -319,15 +319,14 @@ describe('Case entity', () => {
     });
 
     it('party type Conservator', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.conservator,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Test Taxpayer, Conservator, Petitioner',
+        'Test Taxpayer, Test Taxpayer 2, Conservator, Petitioner',
       );
     });
 

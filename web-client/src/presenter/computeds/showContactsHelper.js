@@ -21,7 +21,6 @@ export const showContactsHelper = (partyType, PARTY_TYPES) => {
   ].includes(partyType);
 
   const contactSecondary = [
-    PARTY_TYPES.conservator,
     PARTY_TYPES.custodian,
     PARTY_TYPES.guardian,
     PARTY_TYPES.nextFriendForIncompetentPerson,
