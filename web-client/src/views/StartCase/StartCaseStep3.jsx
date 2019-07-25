@@ -17,7 +17,7 @@ export const StartCaseStep3 = connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
+    validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -28,7 +28,7 @@ export const StartCaseStep3 = connect(
     startCaseHelper,
     updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
-    validateStartCaseSequence,
+    validateStartCaseWizardSequence,
     validationErrors,
   }) => {
     return (
@@ -68,7 +68,7 @@ export const StartCaseStep3 = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
-                          validateStartCaseSequence();
+                          validateStartCaseWizardSequence();
                         }}
                       />
                       <label
@@ -119,7 +119,7 @@ export const StartCaseStep3 = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateStartCaseSequence();
+                        validateStartCaseWizardSequence();
                       }}
                     />
                     <label
@@ -163,7 +163,7 @@ export const StartCaseStep3 = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateStartCaseSequence();
+                        validateStartCaseWizardSequence();
                       }}
                     />
                     <label
@@ -208,7 +208,7 @@ export const StartCaseStep3 = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateStartCaseSequence();
+                        validateStartCaseWizardSequence();
                       }}
                     />
                     <label
@@ -255,7 +255,7 @@ export const StartCaseStep3 = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
-                          validateStartCaseSequence();
+                          validateStartCaseWizardSequence();
                         }}
                       />
                       <label
@@ -304,7 +304,7 @@ export const StartCaseStep3 = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
-                          validateStartCaseSequence();
+                          validateStartCaseWizardSequence();
                         }}
                       />
                       <label
@@ -328,7 +328,7 @@ export const StartCaseStep3 = connect(
           parentView="StartCase"
           showPrimaryContact={startCaseHelper.showPrimaryContact}
           showSecondaryContact={startCaseHelper.showSecondaryContact}
-          onBlur="validateStartCaseSequence"
+          onBlur="validateStartCaseWizardSequence"
           onChange="updateFormValueSequence"
         />
 
@@ -384,7 +384,7 @@ export const StartCaseStep3 = connect(
                       key: `${e.target.name}Size`,
                       value: e.target.files[0].size,
                     });
-                    validateStartCaseSequence();
+                    validateStartCaseWizardSequence();
                   });
                 }}
               />
