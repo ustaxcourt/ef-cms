@@ -77,7 +77,8 @@ export const workQueueHelper = get => {
     showSentColumn: !isDisplayingQC,
     showServedColumn: userIsPetitionsClerk && isDisplayingQC,
     showStartCaseButton:
-      !!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk,
+      (!!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk) &&
+      isDisplayingQC,
     workQueueIsInternal,
     workQueueTitle,
     workQueueType,
