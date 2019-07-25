@@ -1,4 +1,4 @@
-const { getScannerInterface } = require('./getScannerInterfaceInteractor');
+const { getScannerInterface } = require('./getScannerInterface');
 const { JSDOM } = require('jsdom');
 
 const jsdom = new JSDOM('');
@@ -123,5 +123,49 @@ describe('getScannerInterface', () => {
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
     expect(mockAcquireImage).toHaveBeenCalled();
+  });
+
+  it('should attempt to load the dynamsoft libraries', async () => {
+    delete global.document;
+    let calls = 0;
+    global.document = {
+      addEventListener: () => null,
+      createElement: () => ({
+        cloneNode: function() {
+          return {
+            ...this,
+          };
+        },
+        onload: null,
+        setAttribute: () => null,
+      }),
+      getElementsByTagName: () => {
+        calls++;
+        return [
+          {
+            appendChild: script => {
+              script.onload();
+            },
+          },
+        ];
+      },
+    };
+    // global.window.document = ;
+    const scannerAPI = getScannerInterface();
+    let script = await scannerAPI.loadDynamsoft({
+      applicationContext: {
+        getScannerResourceUri: () => 'abc',
+      },
+    });
+    expect(script).toEqual('dynam-scanner-injection');
+
+    // try to load it again to verify it doesn't attempt to download the scripts again
+    script = await scannerAPI.loadDynamsoft({
+      applicationContext: {
+        getScannerResourceUri: () => 'abc',
+      },
+    });
+    expect(script).toEqual('dynam-scanner-injection');
+    expect(calls).toEqual(2);
   });
 });
