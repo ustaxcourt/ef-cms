@@ -187,14 +187,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.trust:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Trustee',
-          nameLabel: 'Name of Trustee',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Trust You Are Filing For',
           nameLabel: 'Name of Trust',
+          secondaryNameLabel: 'Name of Trustee',
         };
         break;
     }
@@ -369,14 +365,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.trust:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About the Trustee',
-          nameLabel: 'Name of Trustee',
-        };
-        contactSecondary = {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Tell Us About the Trust You Are Filing For',
           nameLabel: 'Name of Trust',
+          secondaryNameLabel: 'Name of Trustee',
         };
         break;
     }
