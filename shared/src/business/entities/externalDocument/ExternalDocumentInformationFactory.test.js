@@ -190,6 +190,16 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 
+        it('should require objections for secondary document even if file is not added, if secondary document is a Motion', () => {
+          baseDoc.secondaryDocument = {
+            category: 'Motion',
+            documentType: 'Motion for Continuance',
+          };
+          expect(errors().secondaryDocument.objections).toEqual(
+            'Enter selection for Objections.',
+          );
+        });
+
         it(`should not require 'has supporting secondary documents' radio be selected`, () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
         });
@@ -205,6 +215,13 @@ describe('ExternalDocumentInformationFactory', () => {
             );
             baseDoc.hasSecondarySupportingDocuments = false;
             expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
+          });
+
+          it('should require certificateOfServiceDate if secondary document file is selected and certificateOfService is true', () => {
+            baseDoc.secondaryDocument = { certificateOfService: true };
+            expect(errors().secondaryDocument.certificateOfServiceDate).toEqual(
+              'Enter date for Certificate of Service.',
+            );
           });
         });
       });
