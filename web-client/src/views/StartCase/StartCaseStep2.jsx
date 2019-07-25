@@ -20,6 +20,7 @@ export const StartCaseStep2 = connect(
     updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
+    validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -30,7 +31,7 @@ export const StartCaseStep2 = connect(
     startCaseHelper,
     updateHasIrsNoticeFormValueSequence,
     updatePetitionValueSequence,
-    validateStartCaseSequence,
+    validateStartCaseWizardSequence,
     validationErrors,
   }) => {
     return (
@@ -85,7 +86,7 @@ export const StartCaseStep2 = connect(
                         key: `${e.target.name}Size`,
                         value: e.target.files[0].size,
                       });
-                      validateStartCaseSequence();
+                      validateStartCaseWizardSequence();
                     });
                   }}
                 />
@@ -132,7 +133,7 @@ export const StartCaseStep2 = connect(
                           key: e.target.name,
                           value: e.target.value === 'true',
                         });
-                        validateStartCaseSequence();
+                        validateStartCaseWizardSequence();
                       }}
                     />
                     <label
@@ -156,7 +157,7 @@ export const StartCaseStep2 = connect(
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 legend="Type of Notice / Case"
-                validation="validateStartCaseSequence"
+                validation="validateStartCaseWizardSequence"
                 onChange="updateFormValueSequence"
               />
             )}
@@ -166,7 +167,7 @@ export const StartCaseStep2 = connect(
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
-                validation="validateStartCaseSequence"
+                validation="validateStartCaseWizardSequence"
                 onChange="updateFormValueSequence"
               />
             )}

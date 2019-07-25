@@ -1,3 +1,6 @@
+import { omit } from 'lodash';
+import { state } from 'cerebral';
+
 /**
  * validates the petition based on the current wizard step.
  *
@@ -7,9 +10,12 @@
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateStartCaseWizardAction = ({ path }) => {
-  //TODO
-  /*const petition = get(state.petition);
+export const validateStartCaseWizardAction = ({
+  applicationContext,
+  get,
+  path,
+}) => {
+  const petition = get(state.petition);
 
   const form = omit(
     {
@@ -18,12 +24,12 @@ export const validateStartCaseWizardAction = ({ path }) => {
     ['year', 'month', 'day', 'trialCities'],
   );
 
-  const errors = applicationContext.getUseCases().validatePetitionInteractor({
-    applicationContext,
-    petition: { ...petition, ...form },
-  });*/
-
-  const errors = null;
+  const errors = applicationContext
+    .getUseCases()
+    .validateStartCaseWizardInteractor({
+      applicationContext,
+      petition: { ...petition, ...form },
+    });
 
   if (!errors) {
     return path.success();
