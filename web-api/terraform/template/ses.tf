@@ -50,7 +50,7 @@ resource "aws_route53_record" "spf_mail_from" {
 
 resource "aws_route53_record" "spf_domain" {
   zone_id = "${data.aws_route53_zone.zone.id}"
-  name    = "${var.dns_domain}"
+  name    = "efcms-${var.environment}.${var.dns_domain}"
   type    = "TXT"
   ttl     = "600"
   records = ["v=spf1 include:amazonses.com -all"]
@@ -70,7 +70,7 @@ resource "aws_route53_record" "mx_send_mail_from" {
 # Receiving MX Record
 resource "aws_route53_record" "mx_receive" {
   zone_id = "${data.aws_route53_zone.zone.id}"
-  name    = "${var.dns_domain}"
+  name    = "efcms-${var.environment}.${var.dns_domain}"
   type    = "MX"
   ttl     = "600"
   records = ["10 inbound-smtp.${data.aws_region.current.name}.amazonaws.com"]
@@ -81,7 +81,7 @@ resource "aws_route53_record" "mx_receive" {
 #
 resource "aws_route53_record" "txt_dmarc" {
   zone_id = "${data.aws_route53_zone.zone.id}"
-  name    = "_dmarc.${var.dns_domain}"
+  name    = "_dmarc.efcms-${var.environment}.${var.dns_domain}"
   type    = "TXT"
   ttl     = "600"
   records = ["v=DMARC1; p=none; rua=mailto:${var.ses_dmarc_rua};"]
