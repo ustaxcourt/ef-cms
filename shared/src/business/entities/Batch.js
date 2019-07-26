@@ -10,13 +10,11 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @constructor
  */
 function Batch({ applicationContext, rawBatch }) {
-  Object.assign(this, rawBatch, {
-    applicationContext,
-    batchId: rawBatch.batchId || applicationContext.getUniqueId(),
-    batchIndex: rawBatch.batchIndex || 0,
-    createdAt: rawBatch.createdAt || createISODateString(),
-    pages: rawBatch.pages || [],
-  });
+  this.applicationContext = applicationContext;
+  this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
+  this.batchIndex = rawBatch.batchIndex || 0;
+  this.createdAt = rawBatch.createdAt || createISODateString();
+  this.pages = rawBatch.pages || [];
 }
 
 Batch.validationName = 'Batch';

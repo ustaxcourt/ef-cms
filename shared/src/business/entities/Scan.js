@@ -11,12 +11,10 @@ const { remove } = require('lodash');
  * @constructor
  */
 function Scan({ applicationContext, rawScan }) {
-  Object.assign(this, rawScan, {
-    applicationContext,
-    batches: rawScan.batches || [],
-    createdAt: rawScan.createdAt || createISODateString(),
-    scanId: rawScan.scanId || applicationContext.getUniqueId(),
-  });
+  this.applicationContext = applicationContext;
+  this.batches = rawScan.batches || [];
+  this.createdAt = rawScan.createdAt || createISODateString();
+  this.scanId = rawScan.scanId || applicationContext.getUniqueId();
 }
 
 Scan.validationName = 'Scan';
