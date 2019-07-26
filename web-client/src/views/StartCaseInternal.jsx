@@ -1,6 +1,7 @@
 import { BigHeader } from './BigHeader';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
+import { DocumentSelect } from '../ustc-ui/DocumentSelect/DocumentSelect';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
@@ -67,12 +68,31 @@ export const StartCaseInternal = connect(
             )}
             <ErrorNotification />
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
+              <div className="grid-col-12">
                 <h1>Case Information</h1>
                 <p className="required-statement margin-top-0 margin-bottom-4">
                   All fields required unless otherwise noted
                 </p>
+              </div>
 
+              <div className="grid-col-5">
+                <DocumentSelect
+                  options={[
+                    {
+                      name: 'Statement of Taxpayer Identification',
+                      value: 'stinFile',
+                    },
+                    {
+                      name: 'Ownership Discloser Statement',
+                      value: 'ownershipFile',
+                    },
+                    {
+                      name: 'Request for Place of Trial',
+                      value: 'ownershipFile',
+                    },
+                  ]}
+                  title="Petition"
+                />
                 <div className="blue-container document-detail-one-third">
                   <div
                     className={`usa-form-group ${
