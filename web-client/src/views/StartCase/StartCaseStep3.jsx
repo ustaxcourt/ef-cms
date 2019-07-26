@@ -110,9 +110,7 @@ export const StartCaseStep3 = connect(
                     key={isSpouseDeceased}
                   >
                     <input
-                      checked={
-                        form.isSpouseDeceased === (isSpouseDeceased === 'Yes')
-                      }
+                      checked={form.isSpouseDeceased === isSpouseDeceased}
                       className="usa-radio__input"
                       id={`isSpouseDeceased-${isSpouseDeceased}`}
                       name="isSpouseDeceased"

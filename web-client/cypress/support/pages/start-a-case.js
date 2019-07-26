@@ -1,5 +1,5 @@
 exports.navigateTo = username => {
-  cy.login(username, '/start-a-case');
+  cy.login(username, '/file-a-petition/step-1');
 };
 
 exports.fillInAndSubmitForm = () => {
