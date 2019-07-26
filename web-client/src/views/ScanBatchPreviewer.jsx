@@ -13,6 +13,7 @@ export const ScanBatchPreviewer = connect(
     constants: state.constants,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
+    removeBatchSequence: sequences.removeBatchSequence,
     rescanBatchSequence: sequences.rescanBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
@@ -30,6 +31,7 @@ export const ScanBatchPreviewer = connect(
     constants,
     documentType,
     openChangeScannerSourceModalSequence,
+    removeBatchSequence,
     rescanBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
@@ -141,22 +143,45 @@ export const ScanBatchPreviewer = connect(
                 <FontAwesomeIcon icon={['fas', 'redo-alt']} />
                 Rescan
               </button>
-              <button className="usa-button usa-button--unstyled">
+              <button
+                className="usa-button usa-button--unstyled"
+                onClick={e => {
+                  e.preventDefault();
+                  removeBatchSequence({
+                    batchIndex: batch.index,
+                  });
+                }}
+              >
                 <FontAwesomeIcon icon={['fas', 'times-circle']} />
                 Remove
               </button>
             </div>
           ))}
-          <button
-            className="usa-button usa-button--unstyled margin-bottom-2"
-            onClick={e => {
-              e.preventDefault();
-              startScanSequence();
-            }}
-          >
-            <FontAwesomeIcon icon={['fas', 'plus-circle']} />
-            Add Batch
-          </button>
+
+          {scanBatchPreviewerHelper.scannerSource && (
+            <button
+              className="usa-button usa-button--unstyled margin-bottom-2"
+              onClick={e => {
+                e.preventDefault();
+                startScanSequence();
+              }}
+            >
+              <FontAwesomeIcon icon={['fas', 'plus-circle']} />
+              Add Batch
+            </button>
+          )}
+
+          {!scanBatchPreviewerHelper.scannerSource && (
+            <button
+              className="usa-button usa-button--unstyled margin-bottom-2"
+              onClick={e => {
+                e.preventDefault();
+                openChangeScannerSourceModalSequence();
+              }}
+            >
+              Select Scanner Source
+            </button>
+          )}
 
           <br />
 
