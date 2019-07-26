@@ -91,12 +91,25 @@ describe('fileDocumentHelper', () => {
     expect(result.primaryDocument.showObjection).toBeTruthy();
   });
 
-  it('shows secondary objection if secondary document type is a motion', () => {
+  it('does not show secondary objection if secondary document type is a motion and secondary document file is not selected', () => {
     state.form = {
       documentType: 'Motion for Leave to File',
       secondaryDocument: {
         documentType: 'Motion for Continuance',
       },
+    };
+    const result = runCompute(fileDocumentHelper, { state });
+    expect(result.primaryDocument.showObjection).toBeTruthy();
+    expect(result.secondaryDocument.showObjection).toBeFalsy();
+  });
+
+  it('shows secondary objection if secondary document type is a motion and secondary document file is selected', () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      secondaryDocument: {
+        documentType: 'Motion for Continuance',
+      },
+      secondaryDocumentFile: 'something',
     };
     const result = runCompute(fileDocumentHelper, { state });
     expect(result.primaryDocument.showObjection).toBeTruthy();
