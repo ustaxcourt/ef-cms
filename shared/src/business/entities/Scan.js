@@ -3,7 +3,6 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { generatePdfFromPngs } = require('../../utilities/generatePdfFromPngs');
 const { remove } = require('lodash');
 
 /**
