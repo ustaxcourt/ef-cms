@@ -190,7 +190,16 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 
-        it('should require objections for secondary document even if file is not added, if secondary document is a Motion', () => {
+        it('should not require objections for secondary document if file is not added and secondary document is a Motion', () => {
+          baseDoc.secondaryDocument = {
+            category: 'Motion',
+            documentType: 'Motion for Continuance',
+          };
+          expect(errors().secondaryDocument).toBeUndefined();
+        });
+
+        it('should require objections for secondary document if file is added and secondary document is a Motion', () => {
+          baseDoc.secondaryDocumentFile = {};
           baseDoc.secondaryDocument = {
             category: 'Motion',
             documentType: 'Motion for Continuance',
