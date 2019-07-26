@@ -56,6 +56,8 @@ const addPetitionDocumentWithWorkItemToCase = (
  * @param petitionMetadata
  * @param petitionFileId
  * @param ownershipDisclosureFileId
+ * @param requestForPlaceOfTrialFileId
+ * @param stinFileId
  * @param applicationContext
  * @returns {Promise<*>}
  */
@@ -64,6 +66,7 @@ exports.createCaseFromPaperInteractor = async ({
   ownershipDisclosureFileId,
   petitionFileId,
   petitionMetadata,
+  requestForPlaceOfTrialFileId,
   stinFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -97,7 +100,7 @@ exports.createCaseFromPaperInteractor = async ({
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document({
-    createdAt: caseToAdd.createdAt,
+    createdAt: caseToAdd.receivedAt,
     documentId: petitionFileId,
     documentType: Document.initialDocumentTypes.petitionFile,
     filedBy: caseCaptionNames,
@@ -115,9 +118,22 @@ exports.createCaseFromPaperInteractor = async ({
     petitionDocumentEntity,
   );
 
+  if (requestForPlaceOfTrialFileId) {
+    const requestForPlaceOfTrialDocumentEntity = new Document({
+      createdAt: caseToAdd.receivedAt,
+      documentId: requestForPlaceOfTrialFileId,
+      documentType: Document.initialDocumentTypes.requestForPlaceOfTrial,
+      filedBy: caseCaptionNames,
+      isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
+      userId: user.userId,
+    });
+    caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
+  }
+
   if (stinFileId) {
     const stinDocumentEntity = new Document({
-      createdAt: caseToAdd.createdAt,
+      createdAt: caseToAdd.receivedAt,
       documentId: stinFileId,
       documentType: Document.initialDocumentTypes.stin,
       filedBy: caseCaptionNames,
@@ -130,7 +146,7 @@ exports.createCaseFromPaperInteractor = async ({
 
   if (ownershipDisclosureFileId) {
     const odsDocumentEntity = new Document({
-      createdAt: caseToAdd.createdAt,
+      createdAt: caseToAdd.receivedAt,
       documentId: ownershipDisclosureFileId,
       documentType: Document.initialDocumentTypes.ownershipDisclosure,
       filedBy: caseCaptionNames,

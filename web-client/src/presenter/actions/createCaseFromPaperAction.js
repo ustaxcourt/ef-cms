@@ -72,9 +72,12 @@ export const createCaseFromPaperAction = async ({
   props,
   store,
 }) => {
-  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
-    state.petition,
-  );
+  const {
+    ownershipDisclosureFile,
+    petitionFile,
+    requestForPlaceOfTrialFile,
+    stinFile,
+  } = get(state.form);
 
   const receivedAt = // AAAA-BB-CC
     (props.computedDate &&
@@ -97,6 +100,7 @@ export const createCaseFromPaperAction = async ({
       ownership: ownershipDisclosureFile,
       petition: petitionFile,
       stin: stinFile,
+      trial: requestForPlaceOfTrialFile,
     },
     store,
   );
@@ -113,6 +117,8 @@ export const createCaseFromPaperAction = async ({
         petitionFile,
         petitionMetadata: form,
         petitionUploadProgress: progressFunctions.petition,
+        requestForPlaceOfTrialFile,
+        requestForPlaceOfTrialUploadProgress: progressFunctions.trial,
         stinFile,
         stinUploadProgress: progressFunctions.stin,
       });
@@ -120,13 +126,14 @@ export const createCaseFromPaperAction = async ({
     return path.error();
   }
 
-  for (let document of caseDetail.documents) {
-    await applicationContext.getUseCases().createCoverSheetInteractor({
+  const createCoversheet = document => {
+    return applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,
     });
-  }
+  };
+  await Promise.all(caseDetail.documents.map(createCoversheet));
 
   return path.success({
     caseDetail,

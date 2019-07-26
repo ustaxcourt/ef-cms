@@ -3,8 +3,8 @@ import { runCompute } from 'cerebral/test';
 import { trialCitiesHelper } from './trialCitiesHelper';
 
 describe('trialCitiesHelper', () => {
-  it('returns trialCitiesByState which is an object of state => city pairs', async () => {
-    const result = await runCompute(trialCitiesHelper, {
+  it('returns trialCitiesByState which is an object of state => city pairs', () => {
+    const result = runCompute(trialCitiesHelper, {
       state: {
         constants: {
           TRIAL_CITIES: {
@@ -25,8 +25,8 @@ describe('trialCitiesHelper', () => {
     });
   });
 
-  it('returns all trialCitiesByState if param is "All"', async () => {
-    const result = await runCompute(trialCitiesHelper, {
+  it('returns all trialCitiesByState if param is "All"', () => {
+    const result = runCompute(trialCitiesHelper, {
       state: {
         constants: {
           TRIAL_CITIES: {
@@ -47,8 +47,8 @@ describe('trialCitiesHelper', () => {
     });
   });
 
-  it('returns regular trialCitiesByState if param is "Regular"', async () => {
-    const result = await runCompute(trialCitiesHelper, {
+  it('returns regular trialCitiesByState if param is "Regular"', () => {
+    const result = runCompute(trialCitiesHelper, {
       state: {
         constants: {
           TRIAL_CITIES: {
@@ -69,8 +69,8 @@ describe('trialCitiesHelper', () => {
     });
   });
 
-  it('returns regular trialCitiesByState by default if param is not "small" or "all"', async () => {
-    const result = await runCompute(trialCitiesHelper, {
+  it('returns regular trialCitiesByState by default if param is not "small" or "all"', () => {
+    const result = runCompute(trialCitiesHelper, {
       state: {
         constants: {
           TRIAL_CITIES: {

@@ -116,9 +116,62 @@ const router = {
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
         document.title = `File a document ${pageTitleSuffix}`;
-        app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'SelectDocumentType',
+          });
+        } else {
+          app.getSequence('gotoFileDocumentSequence')({ docketNumber });
+        }
       }),
     );
+    route(
+      '/case-detail/*/file-a-document/details',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'FileDocument',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/file-a-document`,
+          });
+        }
+      }),
+    );
+    route(
+      '/case-detail/*/file-a-document/review',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'FileDocumentReview',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/file-a-document`,
+          });
+        }
+      }),
+    );
+
+    route(
+      '/case-detail/*/file-a-document/all-document-categories',
+      checkLoggedIn(docketNumber => {
+        document.title = `File a document ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'FileDocumentWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'ViewAllDocuments',
+          });
+        } else {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/file-a-document`,
+          });
+        }
+      }),
+    );
+
     route(
       '/case-detail/*/contacts/primary/edit',
       checkLoggedIn(docketNumber => {
@@ -221,6 +274,28 @@ const router = {
       checkLoggedIn(() => {
         document.title = `Start a case ${pageTitleSuffix}`;
         app.getSequence('gotoStartCaseSequence')();
+      }),
+    );
+    route(
+      '/start-a-case-wizard/step-*',
+      checkLoggedIn(step => {
+        document.title = `Start a case ${pageTitleSuffix}`;
+        if (app.getState('currentPage') === 'StartCaseWizard') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: `StartCaseStep${step}`,
+          });
+        } else {
+          switch (step) {
+            case '1':
+              app.getSequence('gotoStartCaseWizardSequence')();
+
+              break;
+            default:
+              app.getSequence('navigateToPathSequence')({
+                path: '/start-a-case-wizard/step-1',
+              });
+          }
+        }
       }),
     );
 

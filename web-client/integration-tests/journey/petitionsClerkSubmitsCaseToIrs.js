@@ -1,6 +1,14 @@
 export default test => {
   return it('Petitions clerk submits case to IRS holding queue', async () => {
     await test.runSequence('updateFormValueSequence', {
+      key: 'irsDay',
+      value: '24',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'irsMonth',
+      value: '12',
+    });
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2050',
     });
@@ -15,14 +23,6 @@ export default test => {
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2017',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsDay',
-      value: '24',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'irsMonth',
-      value: '12',
     });
     await test.runSequence('autoSaveCaseSequence');
 

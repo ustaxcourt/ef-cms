@@ -18,7 +18,7 @@ describe('validateDocketEntryInteractor', () => {
 
     expect(errors).toEqual({
       dateReceived: 'Enter date received.',
-      documentType: 'You must select a document type.',
+      documentType: 'Select a Document Type.',
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
       primaryDocumentFile: 'A file was not selected.',

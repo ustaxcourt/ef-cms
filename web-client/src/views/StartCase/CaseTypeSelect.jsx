@@ -31,9 +31,11 @@ export const CaseTypeSelect = connect(
           }
         >
           <fieldset className="usa-fieldset">
-            <legend className="usa-legend">{legend}</legend>
+            <legend className="usa-legend" id="case-type-select-legend">
+              {legend}
+            </legend>
             <select
-              aria-labelledby="case-type"
+              aria-labelledby="case-type-select-legend"
               className="usa-select"
               id="case-type"
               name="caseType"

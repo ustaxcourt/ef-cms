@@ -13,7 +13,6 @@ import { TrialCity } from './StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 
 export const StartCase = connect(
@@ -861,10 +860,6 @@ export const StartCase = connect(
                   }}
                 />
               )}
-              <Text
-                bind="validationErrors.procedureType"
-                className="usa-error-message"
-              />
               {!validationErrors.procedureType && (
                 <Text
                   bind="validationErrors.preferredTrialCity"

@@ -3,6 +3,8 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { PDFPreviewButton } from '../PDFPreviewButton';
+
 export const RequestAccessDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
@@ -29,8 +31,20 @@ export const RequestAccessDocumentReadOnly = connect(
             <label className="usa-label" htmlFor="primary-filing">
               {form.documentTitle}
             </label>
-            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            {form.primaryDocumentFile.name}
+            <div className="grid-row">
+              <div className="grid-col flex-auto">
+                <FontAwesomeIcon
+                  className="fa-icon-blue"
+                  icon={['fas', 'file-pdf']}
+                />
+              </div>
+              <div className="grid-col flex-fill">
+                <PDFPreviewButton
+                  file={form.primaryDocumentFile}
+                  title={form.documentTitle}
+                />
+              </div>
+            </div>
           </div>
 
           {form.hasSupportingDocuments && (
@@ -38,8 +52,20 @@ export const RequestAccessDocumentReadOnly = connect(
               <label className="usa-label" htmlFor="supporting-filing">
                 {form.supportingDocumentMetadata.documentTitle}
               </label>
-              <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-              {form.supportingDocumentFile.name}
+              <div className="grid-row">
+                <div className="grid-col flex-auto">
+                  <FontAwesomeIcon
+                    className="fa-icon-blue"
+                    icon={['fas', 'file-pdf']}
+                  />
+                </div>
+                <div className="grid-col flex-fill">
+                  <PDFPreviewButton
+                    file={form.supportingDocumentFile}
+                    title={form.supportingDocumentMetadata.documentTitle}
+                  />
+                </div>
+              </div>
             </div>
           )}
 

@@ -4,6 +4,7 @@ import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
+import { CaseDetailInternalPrint } from './CaseDetailInternalPrint';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
@@ -26,6 +27,7 @@ import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
+import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessions } from './TrialSessions/TrialSessions';
@@ -42,6 +44,7 @@ const pages = {
   BeforeYouFileADocument,
   CaseDetail,
   CaseDetailInternal,
+  CaseDetailInternalPrint,
   CreateOrder,
   DashboardDocketClerk,
   DashboardPetitioner,
@@ -62,6 +65,7 @@ const pages = {
   SelectDocumentType,
   StartCase,
   StartCaseInternal,
+  StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
   TrialSessions,

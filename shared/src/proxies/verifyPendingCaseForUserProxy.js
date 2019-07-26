@@ -13,6 +13,6 @@ exports.verifyPendingCaseForUserInteractor = ({
   const user = applicationContext.getCurrentUser();
   return get({
     applicationContext,
-    endpoint: `/api/users/${user.userId}/case/${caseId}/pending`,
+    endpoint: `/users/${user.userId}/case/${caseId}/pending`,
   });
 };

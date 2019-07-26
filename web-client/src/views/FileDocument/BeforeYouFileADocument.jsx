@@ -63,23 +63,6 @@ export const BeforeYouFileADocument = connect(
                       during the filing process.{' '}
                     </p>
 
-                    <p className="label">Exhibits</p>
-                    <p>
-                      An exhibit is evidence to be presented to the Court. If
-                      you have an exhibit, include it with your main document in
-                      a single PDF file. You may mail exhibits to the Court that
-                      cannot be converted to a PDF format. For more information
-                      on mailing exhibits, see the{' '}
-                      <a
-                        className="usa-link--external"
-                        href="https://www.ustaxcourt.gov/eaccess/Petitioners_Guide_to_eAccess_and_eFiling.pdf"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        Petitioner’s Guide to E-filing
-                      </a>
-                    </p>
-
                     <p className="label">Attachments</p>
                     <p>
                       An attachment is any other document you are submitting
@@ -126,13 +109,13 @@ export const BeforeYouFileADocument = connect(
           </div>
           <div className="button-box-container">
             <a
-              className="usa-button margin-right-205"
+              className="usa-button margin-right-205 margin-bottom-1"
               href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
             >
               OK, Iʼm Ready to File
             </a>
             <button
-              className="usa-button usa-button--unstyled"
+              className="usa-button usa-button--unstyled ustc-button--unstyled"
               id="cancel-button"
               onClick={() => {
                 formCancelToggleCancelSequence();

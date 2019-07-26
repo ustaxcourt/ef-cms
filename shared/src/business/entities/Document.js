@@ -46,17 +46,15 @@ function Document(rawDocument) {
     processingStatus: rawDocument.processingStatus,
     receivedAt: rawDocument.receivedAt || new Date().toISOString(),
     relationship: rawDocument.relationship,
-    reviewDate: rawDocument.reviewDate,
-    reviewUser: rawDocument.reviewUser,
     scenario: rawDocument.scenario,
-    servedDate: rawDocument.servedDate,
+    servedAt: rawDocument.servedAt,
+    servedParties: rawDocument.servedParties,
     serviceDate: rawDocument.serviceDate,
     signedAt: rawDocument.signedAt,
     signedByUserId: rawDocument.signedByUserId,
     status: rawDocument.status,
     supportingDocument: rawDocument.supportingDocument,
     userId: rawDocument.userId,
-    validated: rawDocument.validated,
     workItems: rawDocument.workItems,
   });
 
@@ -80,11 +78,12 @@ const practitionerAssociationDocumentTypes = [
 Document.initialDocumentTypes = {
   ownershipDisclosure: 'Ownership Disclosure Statement',
   petitionFile: 'Petition',
+  requestForPlaceOfTrial: 'Request for Place of Trial',
   stin: 'Statement of Taxpayer Identification',
 };
 
 Document.signedDocumentTypes = {
-  signedStipulatedDecision: 'Signed Stipulated Decision',
+  signedStipulatedDecision: 'Stipulated Decision',
 };
 
 Document.getDocumentTypes = () => {
@@ -143,15 +142,11 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
-    reviewDate: joi
+    servedAt: joi
       .date()
       .iso()
       .optional(),
-    reviewUser: joi.string().optional(),
-    servedDate: joi
-      .date()
-      .iso()
-      .optional(),
+    servedParties: joi.array().optional(),
     signedAt: joi
       .date()
       .iso()
@@ -159,7 +154,6 @@ joiValidationDecorator(
     signedByUserId: joi.string().optional(),
     status: joi.string().optional(),
     userId: joi.string().required(),
-    validated: joi.boolean().optional(),
   }),
   function() {
     return WorkItem.validateCollection(this.workItems);
@@ -172,6 +166,14 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+Document.prototype.setAsServed = function(servedParties = null) {
+  this.status = 'served';
+  this.servedAt = new Date().toISOString();
+  if (servedParties) {
+    this.servedParties = servedParties;
+  }
 };
 
 /**
