@@ -52,14 +52,10 @@ describe('startCaseInternalContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Custodian Information',
-        nameLabel: 'Name of Custodian',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Custodian',
       },
     });
   });

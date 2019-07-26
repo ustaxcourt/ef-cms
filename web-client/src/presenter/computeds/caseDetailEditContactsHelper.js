@@ -27,14 +27,10 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.custodian:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Custodian Information',
-          nameLabel: 'Name of Custodian',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Taxpayer Information',
           nameLabel: 'Name of Taxpayer',
+          secondaryNameLabel: 'Name of Custodian',
         },
       };
       break;
