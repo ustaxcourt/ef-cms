@@ -7,7 +7,6 @@ import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
-import { Scan } from '../ustc-ui/Scan/Scan';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -38,15 +37,12 @@ export const StartCaseInternal = connect(
   },
   ({
     caseTypes,
-    completeScanSequence,
     constants,
     form,
     formCancelToggleCancelSequence,
-    scanHelper,
     showModal,
     startCaseHelper,
     startCaseInternalHelper,
-    startScanSequence,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
@@ -491,7 +487,7 @@ export const StartCaseInternal = connect(
                 </div>
               </div>
               <div className="grid-col-7">
-                <ScanBatchPreviewer />
+                <ScanBatchPreviewer documentType="Petition!!" />
               </div>
             </div>
           </form>

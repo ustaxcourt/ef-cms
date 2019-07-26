@@ -18,7 +18,6 @@ export const ScanBatchPreviewer = connect(
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
-    startCaseHelper: state.startCaseHelper,
     startScanSequence: sequences.startScanSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionFromPaperSequence:
@@ -28,13 +27,13 @@ export const ScanBatchPreviewer = connect(
   ({
     completeScanSequence,
     constants,
+    documentType,
     openChangeScannerSourceModalSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
-    startCaseHelper,
     startScanSequence,
     updateFormValueSequence,
     validatePetitionFromPaperSequence,
@@ -299,7 +298,7 @@ export const ScanBatchPreviewer = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <h3 style={{ marginBottom: '0px' }}>Add Petition</h3>
+                <h3 style={{ marginBottom: '0px' }}>Add {documentType}</h3>
               </div>
               {scanBatchPreviewerHelper.uploadMode === 'scan' && (
                 <div className="grid-col-6 text-right">
