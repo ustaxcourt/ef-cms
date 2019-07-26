@@ -13,6 +13,7 @@ export const ScanBatchPreviewer = connect(
     constants: state.constants,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
+    rescanBatchSequence: sequences.rescanBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
@@ -29,6 +30,7 @@ export const ScanBatchPreviewer = connect(
     constants,
     documentType,
     openChangeScannerSourceModalSequence,
+    rescanBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
     setCurrentPageIndexSequence,
@@ -127,7 +129,15 @@ export const ScanBatchPreviewer = connect(
                 Batch {batch.index + 1}
               </button>
               <span>{batch.pages.length} pages</span>
-              <button className="usa-button usa-button--unstyled">
+              <button
+                className="usa-button usa-button--unstyled"
+                onClick={e => {
+                  e.preventDefault();
+                  rescanBatchSequence({
+                    batchIndex: batch.index,
+                  });
+                }}
+              >
                 <FontAwesomeIcon icon={['fas', 'redo-alt']} />
                 Rescan
               </button>

@@ -246,6 +246,9 @@ const allUseCases = {
 tryCatchDecorator(allUseCases);
 
 const applicationContext = {
+  convertBlobToUInt8Array: async blob => {
+    return new Uint8Array(await new Response(blob).arrayBuffer());
+  },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
   },
