@@ -54,7 +54,7 @@ export const CaseListPractitioner = connect(
           'usa-button tablet-full-width margin-right-0 ' +
           (helper.showCaseList ? 'new-case' : '')
         }
-        href="/start-a-case"
+        href="/start-a-case-wizard/step-1"
         id="init-file-petition"
       >
         <FontAwesomeIcon icon="file" size="1x" /> File a Petition
