@@ -34,7 +34,7 @@ export const ScanBatchPreviewer = connect(
     }, []);
 
     return (
-      <div>
+      <div style={{ border: '1px solid #AAA', padding: '10px' }}>
         <h4>Scanned Documents</h4>
         {scanBatchPreviewerHelper.batches.map(batch => (
           <div className="batch" key={batch.index}>
@@ -145,9 +145,18 @@ export const ScanBatchPreviewer = connect(
               </div>
             </div>
 
-            <img
-              src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
-            />
+            <div style={{ backgroundColor: '#999' }}>
+              <img
+                src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
+                style={{
+                  display: 'block',
+                  margin: '0 auto',
+                  paddingBottom: '10px',
+                  paddingTop: '10px',
+                  width: '50%',
+                }}
+              />
+            </div>
           </>
         )}
       </div>

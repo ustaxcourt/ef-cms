@@ -18,6 +18,10 @@ export const completeScanAction = async ({
   // const scanner = applicationContext.getScanner();
   // console.log('completing');
   // const { error, scannedBuffer } = await scanner.completeScanSession();
+  store.set(state.submitting, true);
+
+  // wait a bit so that the spinner shows up because generatePDFFromPNGDataInteractor blocks the browser
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const batches = get(state.batches);
 
@@ -26,6 +30,7 @@ export const completeScanAction = async ({
     batch.pages.forEach(page => scannedBuffer.push(page)),
   );
 
+  // this blocks the browser
   const pdfBlob = await applicationContext
     .getUseCases()
     .generatePDFFromPNGDataInteractor(scannedBuffer);
@@ -33,5 +38,6 @@ export const completeScanAction = async ({
   const pdfFile = new File([pdfBlob], 'myfile.pdf');
 
   props.onComplete(pdfFile);
+  store.set(state.submitting, false);
   store.set(state.isScanning, false);
 };
