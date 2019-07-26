@@ -29,12 +29,15 @@ export const startScanAction = async ({
       applicationContext,
     });
     const batches = get(state.batches);
+    const nextIndex = batches.length
+      ? Math.max(...batches.map(b => b.index)) + 1
+      : 0;
 
     store.set(state.batches, [
       ...batches,
       ...[
         {
-          index: batches.length,
+          index: nextIndex,
           pages,
         },
       ],

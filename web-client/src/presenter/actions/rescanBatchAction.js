@@ -22,7 +22,7 @@ export const rescanBatchAction = async ({
       applicationContext,
     });
     const batches = get(state.batches);
-    batches[batchIndex].pages = pages;
+    batches.find(b => b.index === batchIndex).pages = pages;
     store.set(state.batches, batches);
     store.set(state.submitting, false);
   } else {
