@@ -5,6 +5,7 @@ module.exports = {
     '!src/tools/**/*.js',
     '!src/proxies/**/*.js',
     '!src/**/ContactFactory.js',
+    '!src/**/getScannerMockInterface.js',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {
