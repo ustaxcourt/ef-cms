@@ -25,7 +25,9 @@ export const startScanAction = async ({
       props.scannerSourceName
   ) {
     scanner.setSourceByIndex(props.scannerSourceIndex);
-    const { scannedBuffer: pages } = await scanner.startScanSession();
+    const { scannedBuffer: pages } = await scanner.startScanSession({
+      applicationContext,
+    });
     const batches = get(state.batches);
 
     store.set(state.batches, [
