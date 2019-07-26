@@ -62,7 +62,6 @@ describe('Docket Clerk Creates A Trial', () => {
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORIES,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP: Document.CATEGORIES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,

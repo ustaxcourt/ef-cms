@@ -22,7 +22,6 @@ function CaseExternal(rawCase) {
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.irsNoticeDate = rawCase.irsNoticeDate;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -30,7 +29,6 @@ function CaseExternal(rawCase) {
   this.petitionFileSize = rawCase.petitionFileSize;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.signature = rawCase.signature;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
 
@@ -62,15 +60,6 @@ joiValidationDecorator(
     countryType: joi.string().optional(),
     filingType: joi.string().required(),
     hasIrsNotice: joi.boolean().required(),
-    irsNoticeDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .when('hasIrsNotice', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
     ownershipDisclosureFile: joi.object().when('filingType', {
       is: 'A business',
       otherwise: joi.optional().allow(null),
@@ -100,7 +89,6 @@ joiValidationDecorator(
     }),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
-    signature: joi.boolean().required(),
     stinFile: joi.object().required(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist(),

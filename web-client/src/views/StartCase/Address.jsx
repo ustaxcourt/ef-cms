@@ -1,9 +1,10 @@
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { StateSelect } from './StateSelect';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-
-import { StateSelect } from './StateSelect';
+import classNames from 'classnames';
 
 export const Address = connect(
   {
@@ -101,60 +102,120 @@ export const Address = connect(
             }}
           />
         </div>
-        <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            (validationErrors[type].city || validationErrors[type].state)
-              ? 'usa-form-group--error'
-              : '')
-          }
-        >
-          <div className="grid-row grid-gap state-and-city">
-            <div className="mobile-lg:grid-col-8">
-              <label className="usa-label" htmlFor={`${type}.city`}>
-                City
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input usa-input--inline"
-                id={`${type}.city`}
-                name={`${type}.city`}
-                type="text"
-                value={data[type].city || ''}
-                onBlur={() => {
-                  validateStartCaseSequence();
-                }}
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
+        <NonMobile>
+          <div
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors[type] &&
+                (validationErrors[type].city || validationErrors[type].state) &&
+                'usa-form-group--error',
+            )}
+          >
+            <div className="grid-row grid-gap state-and-city">
+              <div className="grid-col-8">
+                <label className="usa-label" htmlFor={`${type}.city`}>
+                  City
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input usa-input--inline"
+                  id={`${type}.city`}
+                  name={`${type}.city`}
+                  type="text"
+                  value={data[type].city || ''}
+                  onBlur={() => {
+                    validateStartCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="grid-col-4">
+                <label className="usa-label" htmlFor={`${type}.state`}>
+                  State
+                </label>
+                <StateSelect
+                  data={data}
+                  type={type}
+                  updateFormValueSequence={updateFormValueSequence}
+                  validateStartCaseSequence={validateStartCaseSequence}
+                />
+              </div>
+              <Text
+                bind={`validationErrors.${type}.city`}
+                className="usa-error-message"
+              />
+              <Text
+                bind={`validationErrors.${type}.state`}
+                className="usa-error-message"
               />
             </div>
-            <div className="mobile-lg:grid-col-4">
-              <label className="usa-label" htmlFor={`${type}.state`}>
-                State
-              </label>
-              <StateSelect
-                data={data}
-                type={type}
-                updateFormValueSequence={updateFormValueSequence}
-                validateStartCaseSequence={validateStartCaseSequence}
-              />
-            </div>
+          </div>
+        </NonMobile>
+        <Mobile>
+          <div
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors[type] &&
+                validationErrors[type].city &&
+                'usa-form-group--error',
+            )}
+          >
+            <label className="usa-label" htmlFor={`${type}.city`}>
+              City
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id={`${type}.city`}
+              name={`${type}.city`}
+              type="text"
+              value={data[type].city || ''}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
             <Text
               bind={`validationErrors.${type}.city`}
               className="usa-error-message"
+            />
+          </div>
+          <div
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors[type] &&
+                validationErrors[type].state &&
+                'usa-form-group--error',
+            )}
+          >
+            <label className="usa-label" htmlFor={`${type}.state`}>
+              State
+            </label>
+            <StateSelect
+              data={data}
+              type={type}
+              updateFormValueSequence={updateFormValueSequence}
+              validateStartCaseSequence={validateStartCaseSequence}
             />
             <Text
               bind={`validationErrors.${type}.state`}
               className="usa-error-message"
             />
           </div>
-        </div>
+        </Mobile>
         <div
           className={
             'usa-form-group ' +
@@ -174,7 +235,7 @@ export const Address = connect(
           </label>
           <input
             autoCapitalize="none"
-            className="usa-input usa-input--medium"
+            className="usa-input tablet:usa-input--medium"
             id={`${type}.postalCode`}
             name={`${type}.postalCode`}
             type="text"

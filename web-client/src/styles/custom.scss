@@ -15,6 +15,18 @@ hr {
   margin: 20px 0;
 }
 
+.text-align-left {
+  text-align: left;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
 #dwtcontrolContainer {
   display: none;
 }
@@ -1326,4 +1338,16 @@ nav.usa-nav {
       padding-left: 40px;
     }
   }
+}
+
+@media only screen and (min-width: $medium-screen) {
+  .usa-form {
+    .tablet\:usa-input--medium {
+      max-width: 7.5em;
+    }
+  }
+}
+
+.margin-bottom-30px {
+  margin-bottom: 30px;
 }

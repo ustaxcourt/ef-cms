@@ -1,4 +1,4 @@
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -18,6 +18,8 @@ export default (test, overrides = {}) => {
         state: test.getState(),
       },
     );
+    const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
@@ -25,6 +27,12 @@ export default (test, overrides = {}) => {
       `${test.docketNumber}${docketNumberSuffix}`,
     );
     expect(caseDetail.documents.length).toEqual(2);
+
+    //verify that event codes were added to initial documents/docket entries
+    expect(caseDetail.documents[0].eventCode).toEqual('P');
+    expect(caseDetail.documents[1].eventCode).toEqual('STIN');
+    expect(caseDetail.docketRecord[1].eventCode).toEqual('RQT');
+
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
 
     const helper = runCompute(caseDetailHelper, {
