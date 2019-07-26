@@ -1,10 +1,12 @@
 import { runCompute } from 'cerebral/test';
 
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { documentDetailHelper as documentDetailHelperComputed } from '../../src/presenter/computeds/documentDetailHelper';
 
 import { waitForRouter } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,

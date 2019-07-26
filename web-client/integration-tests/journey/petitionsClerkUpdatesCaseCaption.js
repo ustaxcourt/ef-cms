@@ -7,14 +7,14 @@ export default test => {
     });
 
     expect(test.getState('caseDetail.caseTitle')).toEqual(
-      'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
     );
 
     await test.runSequence('openCaseCaptionModalSequence');
 
     expect(test.getState('showModal')).toEqual('UpdateCaseCaptionModalDialog');
     expect(test.getState('caseCaption')).toEqual(
-      'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
+      'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner',
     );
 
     test.setState('caseCaption', 'Mark Althavan Andrews');
@@ -22,7 +22,7 @@ export default test => {
     await test.runSequence('dismissCaseCaptionModalSequence');
 
     expect(test.getState('caseDetail.caseTitle')).toEqual(
-      'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
+      'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
     );
     expect(test.getState('showModal')).toEqual('');
     expect(test.getState('caseCaption')).toEqual('');
@@ -31,7 +31,7 @@ export default test => {
 
     expect(test.getState('showModal')).toEqual('UpdateCaseCaptionModalDialog');
     expect(test.getState('caseCaption')).toEqual(
-      'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
+      'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner',
     );
 
     test.setState('caseCaption', 'Sisqo');

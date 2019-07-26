@@ -4,7 +4,7 @@ const {
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 describe('validatePrimaryContactInteractor', () => {
-  it('validates a contact with no invalid properties', async () => {
+  it('runs validation on a contact with no invalid properties', async () => {
     const contactPrimary = {
       address1: '100 Main St.',
       address2: 'Grand View Apartments',
@@ -28,7 +28,7 @@ describe('validatePrimaryContactInteractor', () => {
     expect(errors).toBeFalsy();
   });
 
-  it('validates a contact with invalid properties', async () => {
+  it('runs validation on a contact with invalid properties', async () => {
     const contactPrimary = {
       address1: '100 Main St.',
       address2: 'Grand View Apartments',

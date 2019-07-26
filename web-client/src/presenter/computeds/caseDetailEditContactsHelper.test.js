@@ -15,14 +15,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Conservator Information',
-        nameLabel: 'Name of Conservator',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Conservator',
       },
     });
   });
@@ -56,14 +52,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Custodian Information',
-        nameLabel: 'Name of Custodian',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Custodian',
       },
     });
   });
@@ -98,13 +90,11 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         displayTitle: true,
         header: 'Executor/Personal Representative/Etc.',
-        nameLabel: 'Name of Executor/Personal Representative, etc.',
-      },
-      contactSecondary: {
-        header: 'Estate Information',
         nameLabel: 'Name of Decedent',
+        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
       },
     });
   });
@@ -142,14 +132,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Guardian Information',
-        nameLabel: 'Name of Guardian',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Taxpayer Information',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Guardian',
       },
     });
   });
@@ -167,14 +153,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Legally Incompetent Person Information',
         nameLabel: 'Name of Legally Incompetent Person',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });
@@ -192,14 +174,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Minor Information',
         nameLabel: 'Name of Minor',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });
@@ -217,19 +195,15 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Partnership Representative',
-        nameLabel: 'Name of Partnership Representative',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Partnership Information',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partnership Representative',
       },
     });
   });
 
-  it('should validate form view information for party type Partnership (as a partner other than tax matters partner)', () => {
+  it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner)', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
@@ -242,19 +216,15 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Partnership (Other than Tax Matters Partner) Information',
-        nameLabel: 'Name of Partner (Other than a Tax Matters Partner)',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Partnership Information',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });
   });
 
-  it('should validate form view information for party type Partnership (as the tax matters partner)', () => {
+  it('should validate form view information for party type Partnership (as the Tax Matters Partner)', () => {
     const result = runCompute(caseDetailEditContactsHelper, {
       state: {
         caseDetail: {
@@ -267,14 +237,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tax Matters Partner Information',
-        nameLabel: 'Name of Tax Matters Partner',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Partnership Information',
         nameLabel: 'Business Name',
+        secondaryNameLabel: 'Name of Tax Matters Partner',
       },
     });
   });
@@ -359,12 +325,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Petitioner Information',
-        nameLabel: 'Name',
-      },
-      contactSecondary: {
-        header: 'Spouse Information',
-        nameLabel: "Spouse's Name",
+        nameLabel: 'Name of Deceased Spouse',
+        secondaryNameLabel: 'Name of Surviving Spouse',
       },
     });
   });
@@ -401,14 +365,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Trustee Information',
-        nameLabel: 'Name of Trustee',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Trust Information',
         nameLabel: 'Name of Trust',
+        secondaryNameLabel: 'Name of Trustee',
       },
     });
   });
