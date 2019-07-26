@@ -229,6 +229,18 @@
   }
 }
 
+button {
+  &.disabled {
+    color: gray;
+    cursor: default;
+    pointer-events: none;
+
+    .svg-inline--fa {
+      color: gray;
+    }
+  }
+}
+
 .pdf-preview-content {
   height: 500px;
   border: 1px solid #ccc;

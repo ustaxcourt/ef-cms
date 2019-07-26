@@ -102,7 +102,8 @@ exports.createCaseFromPaperInteractor = async ({
   const petitionDocumentEntity = new Document({
     createdAt: caseToAdd.receivedAt,
     documentId: petitionFileId,
-    documentType: Document.initialDocumentTypes.petitionFile,
+    documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+    eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
     filedBy: caseCaptionNames,
     isPaper: true,
     receivedAt: caseToAdd.receivedAt,
@@ -122,7 +123,10 @@ exports.createCaseFromPaperInteractor = async ({
     const requestForPlaceOfTrialDocumentEntity = new Document({
       createdAt: caseToAdd.receivedAt,
       documentId: requestForPlaceOfTrialFileId,
-      documentType: Document.initialDocumentTypes.requestForPlaceOfTrial,
+      documentType:
+        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+      eventCode:
+        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
       filedBy: caseCaptionNames,
       isPaper: true,
       receivedAt: caseToAdd.receivedAt,
@@ -135,7 +139,8 @@ exports.createCaseFromPaperInteractor = async ({
     const stinDocumentEntity = new Document({
       createdAt: caseToAdd.receivedAt,
       documentId: stinFileId,
-      documentType: Document.initialDocumentTypes.stin,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
       filedBy: caseCaptionNames,
       isPaper: true,
       receivedAt: caseToAdd.receivedAt,
@@ -148,7 +153,9 @@ exports.createCaseFromPaperInteractor = async ({
     const odsDocumentEntity = new Document({
       createdAt: caseToAdd.receivedAt,
       documentId: ownershipDisclosureFileId,
-      documentType: Document.initialDocumentTypes.ownershipDisclosure,
+      documentType:
+        Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
       filedBy: caseCaptionNames,
       isPaper: true,
       receivedAt: caseToAdd.receivedAt,

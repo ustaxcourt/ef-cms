@@ -25,7 +25,6 @@ import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
-import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
@@ -63,7 +62,6 @@ const pages = {
   PrimaryContactEdit,
   RequestAccessWizard,
   SelectDocumentType,
-  StartCase,
   StartCaseInternal,
   StartCaseWizard,
   StyleGuide,

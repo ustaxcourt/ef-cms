@@ -1,5 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { ErrorNotification } from '../ErrorNotification';
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
+import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { StartCaseStep1 } from './StartCaseStep1';
 import { StartCaseStep2 } from './StartCaseStep2';
@@ -8,14 +10,15 @@ import { StartCaseStep4 } from './StartCaseStep4';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const StartCaseWizard = connect(
   {
     showModal: state.showModal,
+    submitFilePetitionSequence: sequences.submitFilePetitionSequence,
   },
-  ({ showModal }) => {
+  ({ showModal, submitFilePetitionSequence }) => {
     return (
       <>
         <BigHeader text="File a Petition" />
@@ -23,9 +26,6 @@ export const StartCaseWizard = connect(
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
         >
-          {showModal == 'FormCancelModalDialog' && (
-            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
-          )}
           <SuccessNotification />
           <ErrorNotification />
 
@@ -44,6 +44,13 @@ export const StartCaseWizard = connect(
             </Tab>
           </Tabs>
         </section>
+        {showModal == 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+        )}
+        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
+        )}
       </>
     );
   },

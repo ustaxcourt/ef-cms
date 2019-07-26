@@ -102,7 +102,6 @@ describe('Petitions Clerk Create Order Journey', () => {
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
