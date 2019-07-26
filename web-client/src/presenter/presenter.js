@@ -102,6 +102,7 @@ import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTrialSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
+import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
@@ -304,6 +305,7 @@ export const presenter = {
     setCaseCaptionSequence,
     setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence,
+    setCurrentPageIndexSequence,
     setDocumentDetailTabSequence,
     setFocusedWorkItemSequence,
     setFormSubmittingSequence,

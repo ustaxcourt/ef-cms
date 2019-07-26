@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PreviewControls } from './PreviewControls';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
@@ -10,6 +11,7 @@ export const ScanBatchPreviewer = connect(
     constants: state.constants,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
+    setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     startScanSequence: sequences.startScanSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -21,6 +23,7 @@ export const ScanBatchPreviewer = connect(
     constants,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
+    setCurrentPageIndexSequence,
     setSelectedBatchIndexSequence,
     startScanSequence,
     updateFormValueSequence,
@@ -68,7 +71,6 @@ export const ScanBatchPreviewer = connect(
               className="usa-button"
               type="button"
               onClick={e => {
-                console.log('we are here');
                 e.preventDefault();
                 completeScanSequence({
                   onComplete: file => {
@@ -91,10 +93,58 @@ export const ScanBatchPreviewer = connect(
               Create PDF
             </button>
             <hr />
-            <h4>
-              Scan Preview: Batch{' '}
-              {scanBatchPreviewerHelper.selectedBatch.index + 1}
-            </h4>
+            <div className="grid-container padding-x-0">
+              <div className="grid-row grid-gap">
+                <div className="grid-col-6">
+                  <h4>
+                    Scan Preview: Batch{' '}
+                    {scanBatchPreviewerHelper.selectedBatch.index + 1}
+                  </h4>
+                </div>
+
+                <div className="grid-col-6 text-right">
+                  <PreviewControls
+                    currentPage={scanBatchPreviewerHelper.currentPage + 1}
+                    disableLeftButtons={
+                      scanBatchPreviewerHelper.currentPage === 0
+                    }
+                    disableRightButtons={
+                      scanBatchPreviewerHelper.currentPage ===
+                      scanBatchPreviewerHelper.totalPages - 1
+                    }
+                    totalPages={scanBatchPreviewerHelper.totalPages}
+                    onFirstPage={e => {
+                      e.preventDefault();
+                      setCurrentPageIndexSequence({
+                        currentPageIndex: 0,
+                      });
+                    }}
+                    onLastPage={e => {
+                      e.preventDefault();
+                      setCurrentPageIndexSequence({
+                        currentPageIndex:
+                          scanBatchPreviewerHelper.totalPages - 1,
+                      });
+                    }}
+                    onNextPage={e => {
+                      e.preventDefault();
+                      setCurrentPageIndexSequence({
+                        currentPageIndex:
+                          scanBatchPreviewerHelper.currentPage + 1,
+                      });
+                    }}
+                    onPreviousPage={e => {
+                      e.preventDefault();
+                      setCurrentPageIndexSequence({
+                        currentPageIndex:
+                          scanBatchPreviewerHelper.currentPage - 1,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
             <img
               src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
             />
