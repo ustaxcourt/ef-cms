@@ -1,6 +1,6 @@
-import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
 
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
 import sinon from 'sinon';
