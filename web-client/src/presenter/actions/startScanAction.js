@@ -15,6 +15,7 @@ export const startScanAction = async ({
   store,
 }) => {
   store.set(state.isScanning, true);
+  store.set(state.submitting, true);
 
   const scanner = applicationContext.getScanner();
 
