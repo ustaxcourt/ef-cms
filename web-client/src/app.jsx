@@ -44,6 +44,7 @@ import {
   faPlusCircle,
   faPrint,
   faQuestionCircle,
+  faRedoAlt,
   faSearch,
   faShareSquare,
   faShieldAlt,
@@ -71,6 +72,13 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
+    const scannerSourceName = await applicationContext
+      .getUseCases()
+      .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+    presenter.state.scanner = {
+      scannerSourceName,
+    };
+
     const user =
       (await applicationContext
         .getUseCases()
@@ -136,6 +144,7 @@ const app = {
       faLink,
       faListUl,
       faPaperclip,
+      faRedoAlt,
       faPaperPlane,
       faPlusCircle,
       faPrint,
