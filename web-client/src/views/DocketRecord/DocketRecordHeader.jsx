@@ -7,18 +7,20 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
+    printView: sequences.printViewSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
     caseDetail,
     helper,
+    printView,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
     return (
       <React.Fragment>
-        <div className="grid-container padding-0">
+        <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row">
             <div className="tablet:grid-col-8">
               {helper.showAddDocketEntryButton && (
@@ -41,7 +43,24 @@ export const DocketRecordHeader = connect(
                 </a>
               )}
             </div>
-            <div className="tablet:grid-offset-2 tablet:grid-col-2">
+            <div className="tablet:grid-col-2 text-align-right">
+              <button
+                className="usa-button usa-button--unstyled margin-top-1 margin-right-1"
+                onClick={() => {
+                  updateSessionMetadataSequence({
+                    key: `docketRecordSort.${caseDetail.caseId}`,
+                    value: 'byDate',
+                  });
+                  printView({
+                    printView: 'CaseDetailInternalPrint',
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon="print" size="sm" />
+                Print
+              </button>
+            </div>
+            <div className="tablet:grid-col-2">
               <div className="only-large-screens">
                 <select
                   aria-label="docket record"
@@ -80,7 +99,7 @@ export const DocketRecordHeader = connect(
                 </select>
               </div>
               <div className="only-small-screens">
-                <div className="margin-top-3 margin-bottom-3">
+                <div className="margin-top-3 margin-bottom-1">
                   <button
                     aria-label="docket record sort"
                     className="usa-button usa-button--unstyled mobile-sort-docket-button"

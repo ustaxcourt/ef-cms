@@ -2,8 +2,8 @@ import { runCompute } from 'cerebral/test';
 import { scanHelper } from './scanHelper';
 
 describe('scanHelper', () => {
-  it('sets hasScanFeature to `true` for `petitionsclerk` user roles', async () => {
-    const result = await runCompute(scanHelper, {
+  it('sets hasScanFeature to `true` for `petitionsclerk` user roles', () => {
+    const result = runCompute(scanHelper, {
       state: {
         user: {
           role: 'petitionsclerk',
@@ -13,8 +13,8 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeTruthy();
   });
 
-  it('sets hasScanFeature to `true` for `docketclerk` user roles', async () => {
-    const result = await runCompute(scanHelper, {
+  it('sets hasScanFeature to `true` for `docketclerk` user roles', () => {
+    const result = runCompute(scanHelper, {
       state: {
         user: {
           role: 'docketclerk',
@@ -24,8 +24,8 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeTruthy();
   });
 
-  it('sets hasScanFeature to `true` for `seniorattorney` user roles', async () => {
-    const result = await runCompute(scanHelper, {
+  it('sets hasScanFeature to `true` for `seniorattorney` user roles', () => {
+    const result = runCompute(scanHelper, {
       state: {
         user: {
           role: 'seniorattorney',
@@ -35,8 +35,8 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeTruthy();
   });
 
-  it('sets hasScanFeature to `false` for `petitioner` user roles', async () => {
-    const result = await runCompute(scanHelper, {
+  it('sets hasScanFeature to `false` for `petitioner` user roles', () => {
+    const result = runCompute(scanHelper, {
       state: {
         user: {
           role: 'petitioner',
@@ -46,8 +46,8 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeFalsy();
   });
 
-  it('sets hasScanFeature to `false` for `practitioner` user roles', async () => {
-    const result = await runCompute(scanHelper, {
+  it('sets hasScanFeature to `false` for `practitioner` user roles', () => {
+    const result = runCompute(scanHelper, {
       state: {
         user: {
           role: 'practitioner',
@@ -57,8 +57,8 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeFalsy();
   });
 
-  it('sets hasScanFeature to `false` for `respondent` user roles', async () => {
-    const result = await runCompute(scanHelper, {
+  it('sets hasScanFeature to `false` for `respondent` user roles', () => {
+    const result = runCompute(scanHelper, {
       state: {
         user: {
           role: 'respondent',
@@ -68,8 +68,8 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeFalsy();
   });
 
-  it('shows the scanner source selection modal', async () => {
-    const result = await runCompute(scanHelper, {
+  it('shows the scanner source selection modal', () => {
+    const result = runCompute(scanHelper, {
       state: {
         showModal: 'SelectScannerSourceModal',
       },
@@ -77,9 +77,9 @@ describe('scanHelper', () => {
     expect(result.showScannerSourceModal).toBeTruthy();
   });
 
-  it('gets the scanner sources from state', async () => {
+  it('gets the scanner sources from state', () => {
     const mockSources = ['Test Source 1', 'Test Source 2'];
-    const result = await runCompute(scanHelper, {
+    const result = runCompute(scanHelper, {
       state: {
         scanner: {
           sources: mockSources,

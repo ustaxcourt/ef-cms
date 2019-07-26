@@ -11,6 +11,6 @@ const { get } = require('../requests');
 exports.getUsersInSectionInteractor = ({ applicationContext, section }) => {
   return get({
     applicationContext,
-    endpoint: `/api/sections/${section}/users`,
+    endpoint: `/sections/${section}/users`,
   });
 };

@@ -89,6 +89,7 @@ export const viewAllDocumentsHelper = get => {
       reason: 'Respond to a Previous Document',
     },
   ];
+
   return {
     categoryMap,
     documentTypesForSelect,

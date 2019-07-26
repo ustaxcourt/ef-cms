@@ -8,6 +8,6 @@ const { get } = require('../requests');
 exports.getSentMessagesForUserInteractor = ({ applicationContext, userId }) => {
   return get({
     applicationContext,
-    endpoint: `/api/users/${userId}/messages/sent`,
+    endpoint: `/users/${userId}/messages/sent`,
   });
 };

@@ -116,7 +116,7 @@ presenter.state = mapValues(presenter.state, value => {
 
 test = CerebralTest(presenter);
 
-describe('Sr. Attroney Signs Proposed Stipulated Decision', () => {
+describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {

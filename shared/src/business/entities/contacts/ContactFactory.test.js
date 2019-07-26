@@ -1,4 +1,5 @@
 const { CaseExternal } = require('../cases/CaseExternal');
+const { CaseInternal } = require('../cases/CaseInternal');
 const { ContactFactory } = require('./ContactFactory');
 
 let caseExternal;
@@ -546,5 +547,35 @@ describe('Petition', () => {
       stinFileSize: 1,
     });
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('does not require phone number for internal cases', () => {
+    const caseInternal = new CaseInternal({
+      caseCaption: 'Sisqo',
+      caseType: 'other',
+      contactPrimary: {
+        address1: '876 12th Ave',
+        city: 'Nashville',
+        country: 'USA',
+        countryType: 'domestic',
+        email: 'someone@example.com',
+        name: 'Jimmy Dean',
+        postalCode: '05198',
+        state: 'AK',
+      },
+      filingType: 'Myself',
+      hasIrsNotice: true,
+      irsNoticeDate: '2009-10-13',
+      partyType: ContactFactory.PARTY_TYPES.transferee,
+      petitionFile: {},
+      petitionFileSize: 1,
+      preferredTrialCity: 'Chattanooga, TN',
+      procedureType: 'Small',
+      receivedAt: '2009-10-13',
+      signature: true,
+      stinFile: {},
+      stinFileSize: 1,
+    });
+    expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
   });
 });

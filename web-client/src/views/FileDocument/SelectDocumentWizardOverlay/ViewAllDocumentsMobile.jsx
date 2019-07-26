@@ -1,19 +1,24 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ViewAllDocumentsMobile = connect(
   {
     chooseModalWizardStepSequence: sequences.chooseModalWizardStepSequence,
+    overlayRef: props.overlayRef,
     updateModalValueSequence: sequences.updateModalValueSequence,
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   ({
     chooseModalWizardStepSequence,
+    overlayRef,
     updateModalValueSequence,
     viewAllDocumentsHelper,
   }) => {
+    if (overlayRef && overlayRef.current) {
+      overlayRef.current.scrollTo(0, 0);
+    }
     return (
       <React.Fragment>
         <div className="overlay-blue-header">

@@ -35,7 +35,10 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
   const caseEntity = new Case(caseToUpdate);
   caseEntity.sendToIRSHoldingQueue();
 
-  for (let workItem of caseEntity.getWorkItems()) {
+  const processWorkItem = async workItem => {
+    // when a work item is processed in this manner, is it necessary
+    // that each of the following steps be done sequentially?
+    // could further unwind these serial promises...
     if (workItem.isInitializeCase) {
       await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
         applicationContext,
@@ -66,7 +69,9 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
       applicationContext,
       workItemToUpdate: workItem.validate().toRawObject(),
     });
-  }
+  };
+
+  await Promise.all(caseEntity.getWorkItems().map(processWorkItem));
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

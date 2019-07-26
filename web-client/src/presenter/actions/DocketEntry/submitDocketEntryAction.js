@@ -1,4 +1,4 @@
-import { omit, pick } from 'lodash';
+import { isEmpty, negate, omit, pick } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -50,46 +50,47 @@ export const submitDocketEntryAction = async ({
   }
 
   const documentIds = [primaryDocumentFileId, secondaryDocumentFileId].filter(
-    documentId => documentId,
+    negate(isEmpty),
   );
 
-  for (let documentId of documentIds) {
-    if (documentId) {
-      await applicationContext.getUseCases().virusScanPdfInteractor({
-        applicationContext,
-        documentId,
-      });
+  const makePdfSafe = async documentId => {
+    await applicationContext.getUseCases().virusScanPdfInteractor({
+      applicationContext,
+      documentId,
+    });
 
-      await applicationContext.getUseCases().validatePdfInteractor({
-        applicationContext,
-        documentId,
-      });
+    await applicationContext.getUseCases().validatePdfInteractor({
+      applicationContext,
+      documentId,
+    });
 
-      await applicationContext.getUseCases().sanitizePdfInteractor({
-        applicationContext,
-        documentId,
-      });
-    }
-  }
+    await applicationContext.getUseCases().sanitizePdfInteractor({
+      applicationContext,
+      documentId,
+    });
+  };
+  await Promise.all(documentIds.map(makePdfSafe));
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .fileExternalDocumentInteractor({
+    .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
       secondaryDocumentFileId,
     });
 
-  for (let document of caseDetail.documents) {
-    if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheetInteractor({
-        applicationContext,
-        caseId: caseDetail.caseId,
-        documentId: document.documentId,
-      });
-    }
-  }
+  const pendingDocuments = caseDetail.documents.filter(
+    document => document.processingStatus === 'pending',
+  );
+  const createCoverSheetInteractor = document => {
+    return applicationContext.getUseCases().createCoverSheetInteractor({
+      applicationContext,
+      caseId: caseDetail.caseId,
+      documentId: document.documentId,
+    });
+  };
+  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
 
   return {
     caseDetail,

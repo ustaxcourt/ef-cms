@@ -41,7 +41,7 @@ export const FilingsAndProceedings = connect(
               <NonMobile>
                 <a
                   aria-label={`View PDF: ${description}`}
-                  href={`${baseUrl}/api/documents/${documentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
                   rel="noreferrer noopener"
                   target="_blank"
                 >
@@ -113,6 +113,8 @@ export const FilingsAndProceedings = connect(
             {record.description}
           </a>
         )}
+
+        <span> {record.signatory}</span>
 
         {!document && record.description}
 

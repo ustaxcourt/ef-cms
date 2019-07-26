@@ -7,9 +7,7 @@ import React from 'react';
 
 export const ViewAllDocumentsDesktop = connect(
   {
-    caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    gotoFileDocumentSequence: sequences.gotoFileDocumentSequence,
     openCompleteSelectDocumentTypeModalSequence:
       sequences.openCompleteSelectDocumentTypeModalSequence,
     showModal: state.showModal,
@@ -18,9 +16,7 @@ export const ViewAllDocumentsDesktop = connect(
     viewAllDocumentsHelper: state.viewAllDocumentsHelper,
   },
   ({
-    caseDetail,
     formCancelToggleCancelSequence,
-    gotoFileDocumentSequence,
     openCompleteSelectDocumentTypeModalSequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
@@ -39,7 +35,8 @@ export const ViewAllDocumentsDesktop = connect(
                 All Document Categories
               </h1>
               <p className="margin-bottom-5 margin-top-05 ">
-                Select the document type under the category you wish to file....
+                Expand a document category and select the document type you wish
+                to file.
               </p>
               <Accordion bind="allDocumentsAccordion" headingLevel="3">
                 {viewAllDocumentsHelper.sections.map((title, index) => {
@@ -90,10 +87,7 @@ export const ViewAllDocumentsDesktop = connect(
             <button
               className="usa-button margin-right-205"
               id="back-button"
-              onClick={() => {
-                const { docketNumber } = caseDetail;
-                gotoFileDocumentSequence({ docketNumber });
-              }}
+              onClick={() => history.back()}
             >
               Back to File a Document
             </button>
