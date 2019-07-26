@@ -87,7 +87,7 @@ export const FileDocumentReview = connect(
                             Document Includes
                           </label>
                           <ul className="ustc-unstyled-list without-margins">
-                            {form.certificateOfServiceDate && (
+                            {form.certificateOfService && (
                               <li>
                                 Certificate of Service{' '}
                                 {
@@ -150,7 +150,7 @@ export const FileDocumentReview = connect(
                                   Document Includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
-                                  {item.certificateOfServiceDate && (
+                                  {item.certificateOfService && (
                                     <li>
                                       Certificate of Service{' '}
                                       {
@@ -222,8 +222,7 @@ export const FileDocumentReview = connect(
                               Document Includes
                             </label>
                             <ul className="ustc-unstyled-list without-margins">
-                              {form.secondaryDocument
-                                .certificateOfServiceDate && (
+                              {form.secondaryDocument.certificateOfService && (
                                 <li>
                                   Certificate of Service{' '}
                                   {
@@ -291,7 +290,7 @@ export const FileDocumentReview = connect(
                                   Document Includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
-                                  {item.certificateOfServiceDate && (
+                                  {item.certificateOfService && (
                                     <li>
                                       Certificate of Service{' '}
                                       {
