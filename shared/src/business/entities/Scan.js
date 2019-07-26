@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
+const { generatePdfFromPngs } = require('../../utilities/generatePdfFromPngs');
 const { remove } = require('lodash');
 
 /**
@@ -44,6 +45,27 @@ Scan.prototype.removeBatch = function(batchEntity) {
   });
 
   return this;
+};
+
+/**
+ * aggregates all pages for all associated Batch entities
+ * note: after each Batch's pages are aggregated, its pages are
+ * cleared for memory purposes
+ *
+ * @returns {Array} array of PNGs
+ */
+Scan.prototype.getPages = function() {
+  // flattens the array of pages for each batch
+  const aggregatedPngs = this.batches.reduce((acc, val, idx) => {
+    const aggregatedBatch = [...acc, ...val.pages];
+
+    // free up memory after we've gotten the pages
+    this.batches[idx].clear();
+
+    return aggregatedBatch;
+  }, []);
+
+  return aggregatedPngs;
 };
 
 Scan.errorToMessageMap = {
