@@ -1,4 +1,5 @@
 import { Contacts } from './Contacts';
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
@@ -33,9 +34,11 @@ export const StartCaseStep3 = connect(
   }) => {
     return (
       <>
-        <h1 className="margin-top-5">
-          3. Who are you filing this petition for?
-        </h1>
+        <Focus>
+          <h1 className="focusable margin-top-5" tabIndex="-1">
+            3. Who are you filing this petition for?
+          </h1>
+        </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
           All fields required unless otherwise noted
         </p>
@@ -51,12 +54,13 @@ export const StartCaseStep3 = connect(
                   className="usa-fieldset usa-sans"
                   id="filing-type-radios"
                 >
-                  <legend htmlFor="filing-type-radios">
+                  <legend htmlFor="filing-type-radios" id="filing-type-legend">
                     I am filing this petition on behalf of …
                   </legend>
                   {filingTypes.map((filingType, idx) => (
                     <div className="usa-radio" key={filingType}>
                       <input
+                        aria-describedby="filing-type-legend"
                         checked={form.filingType === filingType}
                         className="usa-radio__input"
                         data-type={filingType}
@@ -101,7 +105,10 @@ export const StartCaseStep3 = connect(
                 className="usa-fieldset usa-sans"
                 id="deceased-spouse-radios"
               >
-                <legend htmlFor="deceased-spouse-radios">
+                <legend
+                  htmlFor="deceased-spouse-radios"
+                  id="deceased-spouse-legend"
+                >
                   {startCaseHelper.deceasedSpouseLegend}
                 </legend>
                 {['Yes', 'No'].map((isSpouseDeceased, idx) => (
@@ -110,6 +117,7 @@ export const StartCaseStep3 = connect(
                     key={isSpouseDeceased}
                   >
                     <input
+                      aria-describedby="deceased-spouse-radios"
                       checked={form.isSpouseDeceased === isSpouseDeceased}
                       className="usa-radio__input"
                       id={`isSpouseDeceased-${isSpouseDeceased}`}
@@ -144,7 +152,10 @@ export const StartCaseStep3 = connect(
               }
             >
               <fieldset className="usa-fieldset" id="business-type-radios">
-                <legend htmlFor="business-type-radios">
+                <legend
+                  htmlFor="business-type-radios"
+                  id="business-type-legend"
+                >
                   What type of business are you filing for?
                 </legend>
                 {[
@@ -155,6 +166,7 @@ export const StartCaseStep3 = connect(
                 ].map((businessType, idx) => (
                   <div className="usa-radio" key={businessType}>
                     <input
+                      aria-describedby="business-type-legend"
                       checked={form.businessType === businessType}
                       className="usa-radio__input"
                       id={`businessType-${businessType}`}
@@ -189,7 +201,7 @@ export const StartCaseStep3 = connect(
               }
             >
               <fieldset className="usa-fieldset" id="other-type-radios">
-                <legend htmlFor="other-type-radios">
+                <legend htmlFor="other-type-radios" id="other-type-legend">
                   What other type of taxpayer are you filing for?
                 </legend>
                 {[
@@ -201,6 +213,7 @@ export const StartCaseStep3 = connect(
                 ].map((otherType, idx) => (
                   <div className="usa-radio" key={otherType}>
                     <input
+                      aria-describedby="other-type-legend"
                       checked={form.otherType === otherType}
                       className="usa-radio__input"
                       id={`otherType-${otherType}`}
@@ -239,7 +252,7 @@ export const StartCaseStep3 = connect(
                   className="usa-fieldset usa-sans"
                   id="estate-type-radios"
                 >
-                  <legend htmlFor="estate-type-radios">
+                  <legend htmlFor="estate-type-radios" id="estate-type-legend">
                     What type of estate or trust are you filing for?
                   </legend>
                   {[
@@ -249,6 +262,7 @@ export const StartCaseStep3 = connect(
                   ].map((estateType, idx) => (
                     <div className="usa-radio" key={estateType}>
                       <input
+                        aria-describedby="estate-type-legend"
                         checked={form.estateType === estateType}
                         className="usa-radio__input"
                         id={`estateType-${estateType}`}
@@ -287,7 +301,10 @@ export const StartCaseStep3 = connect(
                   className="usa-fieldset"
                   id="minorIncompetent-type-radios"
                 >
-                  <legend htmlFor="minorIncompetent-type-radios">
+                  <legend
+                    htmlFor="minorIncompetent-type-radios"
+                    id="minorIncompetent-type-legend"
+                  >
                     {startCaseHelper.minorIncompetentLegend}
                   </legend>
                   {[
@@ -299,6 +316,7 @@ export const StartCaseStep3 = connect(
                   ].map((minorIncompetentType, idx) => (
                     <div className="usa-radio" key={minorIncompetentType}>
                       <input
+                        aria-describedby="minorIncompetent-type-legend"
                         checked={
                           form.minorIncompetentType === minorIncompetentType
                         }
