@@ -7,22 +7,22 @@ import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
 export default (test, fakeFile, overrides = {}) => {
   return it('Taxpayer creates a new case, testing all form options', async () => {
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFileSize',
       value: 1,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFileSize',
       value: 1,
     });
@@ -243,7 +243,7 @@ export default (test, fakeFile, overrides = {}) => {
       'Ownership Disclosure Statement is required.',
     );
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'ownershipDisclosureFile',
       value: fakeFile,
     });
@@ -603,6 +603,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
+    expect(test.getState('form.partyType')).toEqual('Transferee');
 
     // surviving spouse party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -625,6 +626,7 @@ export default (test, fakeFile, overrides = {}) => {
     });
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
+    expect(test.getState('form.partyType')).toEqual('Surviving Spouse');
 
     await test.runSequence('submitFilePetitionSequence');
 
@@ -686,7 +688,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: 'CA',
     });
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });
@@ -697,7 +699,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showHasIrsNoticeOptions).toBeFalsy();
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });
@@ -708,34 +710,22 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showHasIrsNoticeOptions).toBeTruthy();
     expect(result.showNotHasIrsNoticeOptions).toBeFalsy();
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'caseType',
       value: overrides.caseType || 'Whistleblower',
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2001',
-    });
-
-    // try without checking the signature
-    await test.runSequence('submitFilePetitionSequence');
-    expect(test.getState('alertError.title')).toEqual(
-      'Please correct the following errors on the page:',
-    );
-
-    // click the signature and try again
-    await test.runSequence('updateFormValueSequence', {
-      key: 'signature',
-      value: true,
+    expect(test.getState('form.contactPrimary')).toEqual({
+      address1: '123 Abc Ln',
+      address2: 'Apt 2',
+      city: 'Cityville',
+      countryType: 'domestic',
+      email: 'test@example.com',
+      name: 'Test Person',
+      phone: '1234567890',
+      postalCode: '12345',
+      secondaryName: 'Test Person 2',
+      state: 'CA',
     });
 
     await test.runSequence('submitFilePetitionSequence');

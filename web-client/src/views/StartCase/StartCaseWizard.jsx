@@ -23,13 +23,12 @@ export const StartCaseWizard = connect(
           className="usa-section grid-container"
           id="ustc-start-a-case-form"
         >
-          <div className="grid-container">
-            {showModal == 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
-            )}
-            <SuccessNotification />
-            <ErrorNotification />
-          </div>
+          {showModal == 'FormCancelModalDialog' && (
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
+          )}
+          <SuccessNotification />
+          <ErrorNotification />
+
           <Tabs asSwitch bind="wizardStep" defaultActiveTab="StartCaseStep1">
             <Tab tabName="StartCaseStep1">
               <StartCaseStep1 />

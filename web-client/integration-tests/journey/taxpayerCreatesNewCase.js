@@ -1,21 +1,23 @@
 export default (test, fakeFile, overrides = {}) => {
   return it('Taxpayer creates a new case', async () => {
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('gotoStartCaseWizardSequence');
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFileSize',
       value: 1,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFileSize',
       value: 1,
     });
@@ -81,7 +83,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: 'CA',
     });
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });
@@ -92,24 +94,22 @@ export default (test, fakeFile, overrides = {}) => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '01',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2001',
+      key: 'preferredTrialCity',
+      value: 'Seattle, Washington',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'signature',
-      value: true,
+      key: 'procedureType',
+      value: 'Regular',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'wizardStep',
+      value: '4',
     });
 
     await test.runSequence('submitFilePetitionSequence');
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toEqual(null);
