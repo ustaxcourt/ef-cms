@@ -100,6 +100,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       certificateOfServiceDateFormatted: secondaryDocumentCertificateOfServiceDateFormatted,
       showObjection:
         form.secondaryDocument &&
+        form.secondaryDocumentFile &&
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
     },
     showAddSecondarySupportingDocuments,
