@@ -124,6 +124,8 @@ exports.createCaseInteractor = async ({
   caseToAdd.addDocketRecord(
     new DocketRecord({
       description: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+      eventCode:
+        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
       filingDate: caseToAdd.receivedAt || caseToAdd.createdAt,
     }),
   );
