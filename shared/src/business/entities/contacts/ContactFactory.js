@@ -173,6 +173,9 @@ const getContactConstructor = ({
   partyType,
 }) => {
   const {
+    getNextFriendForMinorContact,
+  } = require('./NextFriendForMinorContact');
+  const {
     getPartnershipAsTaxMattersPartnerPrimaryContact,
   } = require('./PartnershipAsTaxMattersPartnerContact');
   const {
@@ -256,8 +259,8 @@ const getContactConstructor = ({
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.nextFriendForMinor]: {
-      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
-      secondary: getPetitionerIntermediaryContact({ countryType, isPaper }),
+      primary: getNextFriendForMinorContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),

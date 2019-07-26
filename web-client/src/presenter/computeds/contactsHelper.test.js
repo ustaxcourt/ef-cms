@@ -208,14 +208,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Next Friend for This Minor',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Minor You Are Filing For',
         nameLabel: 'Name of Minor',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });
@@ -645,14 +641,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About the Next Friend for This Minor',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Minor You Are Filing For',
         nameLabel: 'Name of Minor',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });

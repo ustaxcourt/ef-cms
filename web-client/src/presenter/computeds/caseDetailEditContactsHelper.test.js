@@ -178,14 +178,10 @@ describe('caseDetailEditContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Minor Information',
         nameLabel: 'Name of Minor',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });
