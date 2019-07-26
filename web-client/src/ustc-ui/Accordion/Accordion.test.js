@@ -6,7 +6,7 @@ import React from 'react';
 import TestRenderer, { act } from 'react-test-renderer';
 
 describe('Accordion', () => {
-  it('should show no items if nothing if active', () => {
+  it('should show no items if nothing is active', () => {
     const testModule = {
       sequences: {
         cerebralBindSimpleSetStateSequence,
@@ -39,7 +39,7 @@ describe('Accordion', () => {
     ).toThrow();
   });
 
-  it('should show the binded item', () => {
+  it('should show the bound item', () => {
     const testModule = {
       sequences: {
         cerebralBindSimpleSetStateSequence,

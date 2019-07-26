@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
-export const caseDetailHelper = get => {
+export const caseDetailHelper = (get, applicationContext) => {
+  const { Case } = applicationContext.getEntityConstructors();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const caseHasRespondent =
@@ -66,6 +67,7 @@ export const caseDetailHelper = get => {
   }
 
   return {
+    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,

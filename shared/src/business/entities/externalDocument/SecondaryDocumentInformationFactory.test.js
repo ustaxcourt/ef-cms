@@ -9,14 +9,23 @@ describe('SecondaryDocumentInformationFactory', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should not be valid when document is a Motion and objections is not present', () => {
+    it('should not be valid when document is a Motion, a file is selected, and objections is not present', () => {
+      const extDoc = SecondaryDocumentInformationFactory.get({
+        category: 'Motion',
+        documentType: 'Motion for New Trial',
+        secondaryDocumentFile: {},
+      });
+      expect(extDoc.getFormattedValidationErrors().objections).toEqual(
+        'Enter selection for Objections.',
+      );
+    });
+
+    it('should be valid when document is a Motion, a file is not selected, and objections is not present', () => {
       const extDoc = SecondaryDocumentInformationFactory.get({
         category: 'Motion',
         documentType: 'Motion for New Trial',
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
-        objections: 'Enter selection for Objections.',
-      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be valid when document is not a Motion and objections is not present', () => {

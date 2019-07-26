@@ -1,4 +1,4 @@
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -18,6 +18,8 @@ export default (test, overrides = {}) => {
         state: test.getState(),
       },
     );
+    const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
