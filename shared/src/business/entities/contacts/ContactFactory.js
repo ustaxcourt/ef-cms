@@ -211,6 +211,7 @@ const getContactConstructor = ({
   const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
   const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
+  const { getSurvivingSpouseContact } = require('./SurvivingSpouseContact');
   return {
     [ContactFactory.PARTY_TYPES.petitioner]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),
@@ -229,8 +230,8 @@ const getContactConstructor = ({
       secondary: getPetitionerDeceasedSpouseContact({ countryType, isPaper }),
     }[contactType],
     [ContactFactory.PARTY_TYPES.survivingSpouse]: {
-      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
-      secondary: getPetitionerDeceasedSpouseContact({ countryType, isPaper }),
+      primary: getSurvivingSpouseContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.petitionerSpouse]: {
       primary: getPetitionerPrimaryContact({ countryType, isPaper }),

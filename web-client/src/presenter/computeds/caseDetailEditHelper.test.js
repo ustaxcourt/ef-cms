@@ -240,7 +240,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeTruthy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is survivingSpouse', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is survivingSpouse', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
         caseDetail: {
@@ -252,7 +252,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is transferee', () => {

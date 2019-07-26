@@ -382,9 +382,6 @@ describe('Case entity', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.donor,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
       });
       expect(caseTitle).toEqual('Test Taxpayer, Donor, Petitioner');
     });
@@ -393,23 +390,19 @@ describe('Case entity', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.transferee,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
       });
       expect(caseTitle).toEqual('Test Taxpayer, Transferee, Petitioner');
     });
 
     it('party type Surviving Spouse', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioner',
+        'Test Taxpayer, Deceased, Test Taxpayer 2, Surviving Spouse, Petitioner',
       );
     });
   });
