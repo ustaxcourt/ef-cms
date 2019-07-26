@@ -11,22 +11,33 @@ import { state } from 'cerebral';
  */
 export const completeScanAction = async ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
-  const scanner = applicationContext.getScanner();
-  const { error, scannedBuffer } = await scanner.completeScanSession();
+  // const scanner = applicationContext.getScanner();
+  // console.log('completing');
+  // const { error, scannedBuffer } = await scanner.completeScanSession();
+  store.set(state.submitting, true);
 
-  if (error) {
-    // let's handle the error
-  } else {
-    const pdfBlob = await applicationContext
-      .getUseCases()
-      .generatePDFFromPNGDataInteractor(scannedBuffer);
+  // wait a bit so that the spinner shows up because generatePDFFromPNGDataInteractor blocks the browser
+  await new Promise(resolve => setTimeout(resolve, 100));
 
-    const pdfFile = new File([pdfBlob], 'myfile.pdf');
+  const batches = get(state.batches);
 
-    props.onComplete(pdfFile);
-    store.set(state.isScanning, false);
-  }
+  const scannedBuffer = [];
+  batches.forEach(batch =>
+    batch.pages.forEach(page => scannedBuffer.push(page)),
+  );
+
+  // this blocks the browser
+  const pdfBlob = await applicationContext
+    .getUseCases()
+    .generatePDFFromPNGDataInteractor(scannedBuffer);
+
+  const pdfFile = new File([pdfBlob], 'myfile.pdf');
+
+  props.onComplete(pdfFile);
+  store.set(state.submitting, false);
+  store.set(state.isScanning, false);
 };

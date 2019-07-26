@@ -17,6 +17,7 @@ function DocketRecord(rawDocketRecord) {
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
   this.status = rawDocketRecord.status;
+  this.eventCode = rawDocketRecord.eventCode;
 }
 
 joiValidationDecorator(
@@ -27,6 +28,10 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     documentId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    eventCode: joi
       .string()
       .allow(null)
       .optional(),
