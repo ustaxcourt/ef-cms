@@ -15,38 +15,33 @@ jobs:
       - run:
           name: Shellcheck
           command: docker run --rm efcms /bin/sh -c './run-shellcheck.sh'
-
       - run:
           name: Shared - Test
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'npm run test:shared'
       - run:
           name: Shared - SonarQube
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage -e "SONAR_KEY=${SHARED_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${SHARED_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd shared && ./verify-sonarqube-passed.sh'
-
       - run:
-          name: Service - Test
+          name: Web API - Test
           command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage --rm efcms /bin/sh -c 'npm run test:api'
       - run:
-          name: Service - SonarQube
+          name: Web API - SonarQube
           command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-api && ./verify-sonarqube-passed.sh'
-
       - run:
-          name: UI - Test
+          name: Web Client - Test
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "(npm run start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && npm run test:client"
       - run:
-          name: UI - SonarQube
+          name: Web Client - SonarQube
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
 
   e2e:
     machine:
       docker_layer_caching: true
-
     steps:
       - checkout
       - run:
           name: Build Docker Image
           command: docker build -t efcms -f Dockerfile .
-
       - run:
           name: Pa11y
           command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npm run start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && (npm run start:client &) && ./wait-until.sh http://localhost:1234 && npm run test:pa11y'
@@ -72,88 +67,88 @@ jobs:
           name: 'Deploy - Web Client - S3'
           command: docker run -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "GIT_COMMIT=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "cd web-client && ./build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
       - run:
-          name: 'Deploy - API - Terraform'
+          name: 'Deploy - Web API - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
-          name: 'Deploy - API - Layers - Puppeteer - us-east-1'
+          name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-puppeteer.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Layers - Puppeteer - us-west-1'
+          name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-puppeteer.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Layers - Ghostscript - us-east-1'
+          name: 'Deploy - Web API - Layers - Ghostscript - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-ghostscript.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Layers - Ghostscript - us-west-1'
+          name: 'Deploy - Web API - Layers - Ghostscript - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-ghostscript.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Layers - ClamAV - us-east-1'
+          name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-clamav.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Layers - ClamAV - us-west-1'
+          name: 'Deploy - Web API - Layers - ClamAV - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./run-serverless-clamav.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - API - us-east-1'
+          name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-api.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - Cases - us-east-1'
+          name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-cases.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - Users - us-east-1'
+          name: 'Deploy - Web API - Serverless - Users - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-users.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - Documents - us-east-1'
+          name: 'Deploy - Web API - Serverless - Documents - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-documents.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - Work Items - us-east-1'
+          name: 'Deploy - Web API - Serverless - Work Items - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-work-items.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - Sections - us-east-1'
+          name: 'Deploy - Web API - Serverless - Sections - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-sections.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - Trial Sessions - us-east-1'
+          name: 'Deploy - Web API - Serverless - Trial Sessions - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-trial-sessions.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Serverless - API - us-west-1'
+          name: 'Deploy - Web API - Serverless - API - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-api.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - Cases - us-west-1'
+          name: 'Deploy - Web API - Serverless - Cases - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-cases.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - Users - us-west-1'
+          name: 'Deploy - Web API - Serverless - Users - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-users.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - Documents - us-west-1'
+          name: 'Deploy - Web API - Serverless - Documents - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-documents.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - Work Items - us-west-1'
+          name: 'Deploy - Web API - Serverless - Work Items - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-work-items.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - Sections - us-west-1'
+          name: 'Deploy - Web API - Serverless - Sections - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-sections.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Serverless - Trial Sessions - us-west-1'
+          name: 'Deploy - Web API - Serverless - Trial Sessions - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/web-api/.cache:/home/app/web-api/.cache --rm efcms /bin/sh -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-trial-sessions.sh ${ENV} us-west-1"
       - run:
-          name: 'Deploy - API - Route53'
+          name: 'Deploy - Web API - Route53'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./setup-regional-route53.sh ${ENV}"
       - run:
-          name: 'Deploy - API - S3 Replication'
+          name: 'Deploy - Web API - S3 Replication'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "cd web-api && ./setup-s3-replication.sh ${ENV}"
       - run:
-          name: 'Deploy - API - Global Tables'
+          name: 'Deploy - Web API - Global Tables'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && node setup-global-tables.js efcms-${ENV} us-east-1,us-west-1"
       - run:
-          name: 'Deploy - API - Cognito Customize'
+          name: 'Deploy - Web API - Cognito Customize'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
       - run:
-          name: 'Deploy - API - Cognito Create Users'
+          name: 'Deploy - Web API - Cognito Create Users'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV}"
       - run:
-          name: 'Deploy - API - Smoke Tests - us-east-1'
+          name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./run-smoketests.sh ${ENV} us-east-1"
       - run:
-          name: 'Deploy - API - Smoke Tests - us-west-1'
+          name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./run-smoketests.sh ${ENV} us-west-1"
 
 workflows:
