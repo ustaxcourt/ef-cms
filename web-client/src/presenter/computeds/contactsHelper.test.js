@@ -61,14 +61,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
-        nameLabel: 'Name of Custodian',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Taxpayer You Are Filing For',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Custodian',
       },
     });
   });
@@ -502,14 +498,10 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Tell Us About the Custodian for This Taxpayer',
-        nameLabel: 'Name of Custodian',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header: 'Tell Us About the Taxpayer You Are Filing For',
         nameLabel: 'Name of Taxpayer',
+        secondaryNameLabel: 'Name of Custodian',
       },
     });
   });
