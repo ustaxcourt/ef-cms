@@ -3,22 +3,22 @@ import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
 export default (test, fakeFile) => {
   return it('Practitioner creates a new case', async () => {
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFileSize',
       value: 1,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updatePetitionValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'stinFileSize',
       value: 1,
     });
@@ -137,11 +137,6 @@ export default (test, fakeFile) => {
     await test.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: 'Whistleblower',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'signature',
-      value: true,
     });
 
     await test.runSequence('submitFilePetitionSequence');

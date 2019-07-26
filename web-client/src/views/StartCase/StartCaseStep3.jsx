@@ -1,8 +1,8 @@
 import { Contacts } from './Contacts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from '../limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -12,9 +12,9 @@ export const StartCaseStep3 = connect(
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
     filingTypes: state.filingTypes,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
-    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
@@ -24,9 +24,9 @@ export const StartCaseStep3 = connect(
     completeStartCaseWizardStepSequence,
     constants,
     filingTypes,
+    form,
     formCancelToggleCancelSequence,
     startCaseHelper,
-    updatePetitionValueSequence,
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
@@ -57,6 +57,7 @@ export const StartCaseStep3 = connect(
                   {filingTypes.map((filingType, idx) => (
                     <div className="usa-radio" key={filingType}>
                       <input
+                        checked={form.filingType === filingType}
                         className="usa-radio__input"
                         data-type={filingType}
                         id={filingType}
@@ -109,6 +110,9 @@ export const StartCaseStep3 = connect(
                     key={isSpouseDeceased}
                   >
                     <input
+                      checked={
+                        form.isSpouseDeceased === (isSpouseDeceased === 'Yes')
+                      }
                       className="usa-radio__input"
                       id={`isSpouseDeceased-${isSpouseDeceased}`}
                       name="isSpouseDeceased"
@@ -153,6 +157,7 @@ export const StartCaseStep3 = connect(
                 ].map((businessType, idx) => (
                   <div className="usa-radio" key={businessType}>
                     <input
+                      checked={form.businessType === businessType}
                       className="usa-radio__input"
                       id={`businessType-${businessType}`}
                       name="businessType"
@@ -198,6 +203,7 @@ export const StartCaseStep3 = connect(
                 ].map((otherType, idx) => (
                   <div className="usa-radio" key={otherType}>
                     <input
+                      checked={form.otherType === otherType}
                       className="usa-radio__input"
                       id={`otherType-${otherType}`}
                       name="otherType"
@@ -245,6 +251,7 @@ export const StartCaseStep3 = connect(
                   ].map((estateType, idx) => (
                     <div className="usa-radio" key={estateType}>
                       <input
+                        checked={form.estateType === estateType}
                         className="usa-radio__input"
                         id={`estateType-${estateType}`}
                         name="estateType"
@@ -294,6 +301,9 @@ export const StartCaseStep3 = connect(
                   ].map((minorIncompetentType, idx) => (
                     <div className="usa-radio" key={minorIncompetentType}>
                       <input
+                        checked={
+                          form.minorIncompetentType === minorIncompetentType
+                        }
                         className="usa-radio__input"
                         id={`minorIncompetentType-${minorIncompetentType}`}
                         name="minorIncompetentType"
@@ -358,6 +368,7 @@ export const StartCaseStep3 = connect(
                     : '')
                 }
                 htmlFor="ownership-disclosure-file"
+                id="ownership-disclosure-file-label"
               >
                 Upload your Ownership Disclosure Statement
                 <span className="success-message">
@@ -368,25 +379,12 @@ export const StartCaseStep3 = connect(
                 File must be in PDF format (.pdf). Max file size{' '}
                 {constants.MAX_FILE_SIZE_MB}MB.
               </span>
-              <input
-                accept=".pdf"
-                className="usa-input"
+              <StateDrivenFileInput
+                aria-describedby="ownership-disclosure-file-label"
                 id="ownership-disclosure-file"
                 name="ownershipDisclosureFile"
-                type="file"
-                onChange={e => {
-                  limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                    updatePetitionValueSequence({
-                      key: e.target.name,
-                      value: e.target.files[0],
-                    });
-                    updatePetitionValueSequence({
-                      key: `${e.target.name}Size`,
-                      value: e.target.files[0].size,
-                    });
-                    validateStartCaseWizardSequence();
-                  });
-                }}
+                updateFormValueSequence="updateStartCaseFormValueSequence"
+                validationSequence="validateStartCaseWizardSequence"
               />
               <Text
                 bind="validationErrors.ownershipDisclosureFile"

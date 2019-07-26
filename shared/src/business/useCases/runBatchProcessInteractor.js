@@ -69,7 +69,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
 
     const stinDocument = caseToBatch.documents.find(
-      document => document.documentType === Document.initialDocumentTypes.stin,
+      document =>
+        document.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
     );
 
     if (stinDocument) {
@@ -85,7 +87,8 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
 
     const petitionDocument = caseEntity.documents.find(
       document =>
-        document.documentType === Document.initialDocumentTypes.petitionFile,
+        document.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
 
     const petitionDocumentEntity = new Document(petitionDocument);

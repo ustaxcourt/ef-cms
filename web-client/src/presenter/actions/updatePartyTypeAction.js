@@ -54,27 +54,29 @@ export const updatePartyTypeAction = async ({ get, props, store }) => {
     store.set(state.form.otherType, 'A minor or legally incompetent person');
     partyType = props.value;
   }
-  store.set(state.form.partyType, partyType);
+  if (partyType) {
+    store.set(state.form.partyType, partyType);
+
+    const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+
+    store.set(
+      state.form.contactPrimary,
+      (showContacts.contactPrimary && {
+        countryType: COUNTRY_TYPES.DOMESTIC,
+      }) ||
+        {},
+    );
+    store.set(
+      state.form.contactSecondary,
+      (showContacts.contactSecondary && {
+        countryType: COUNTRY_TYPES.DOMESTIC,
+      }) ||
+        {},
+    );
+  }
   if (get(state.form.filingType) !== 'A business') {
     // clear the ownership disclosure file and business type
-    store.set(state.petition.ownershipDisclosureFile, undefined);
-    store.set(state.form.businessType, undefined);
+    store.unset(state.form.ownershipDisclosureFile);
+    store.unset(state.form.businessType);
   }
-
-  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
-
-  store.set(
-    state.form.contactPrimary,
-    (showContacts.contactPrimary && {
-      countryType: COUNTRY_TYPES.DOMESTIC,
-    }) ||
-      {},
-  );
-  store.set(
-    state.form.contactSecondary,
-    (showContacts.contactSecondary && {
-      countryType: COUNTRY_TYPES.DOMESTIC,
-    }) ||
-      {},
-  );
 };
