@@ -1,6 +1,9 @@
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-import { caseDetailHelper } from './caseDetailHelper';
+import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
+
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 describe('case detail computed', () => {
   it('should set showFileDocumentButton to true if current page is CaseDetail, user role is practitioner, and case is owned by user', () => {
