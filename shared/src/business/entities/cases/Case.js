@@ -383,37 +383,37 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
     case ContactFactory.PARTY_TYPES.estate:
-      caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
+      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.trust:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Trustee, Petitioner(s)`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Trustee, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Tax Matters Partner, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Tax Matters Partner, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, A Partner Other Than the Tax Matters Partner, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.partnershipBBA:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Partnership Representative, Petitioner(s)`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.conservator:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Conservator, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Conservator, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.guardian:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Guardian, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Guardian, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.custodian:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Custodian, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Custodian, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.nextFriendForMinor:
-      caseCaption = `${rawCase.contactSecondary.name}, Minor, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Minor, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson:
-      caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Incompetent, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.donor:
       caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
@@ -422,7 +422,7 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.survivingSpouse:
-      caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;

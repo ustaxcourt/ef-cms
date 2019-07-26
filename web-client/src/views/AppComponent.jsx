@@ -4,6 +4,7 @@ import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
+import { CaseDetailInternalPrint } from './CaseDetailInternalPrint';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
@@ -43,6 +44,7 @@ const pages = {
   BeforeYouFileADocument,
   CaseDetail,
   CaseDetailInternal,
+  CaseDetailInternalPrint,
   CreateOrder,
   DashboardDocketClerk,
   DashboardPetitioner,

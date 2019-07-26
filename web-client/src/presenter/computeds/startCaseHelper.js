@@ -5,7 +5,6 @@ export const startCaseHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
 
   const form = get(state.form);
-  const petition = get(state.petition);
   const userRole = get(state.user.role);
 
   const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
@@ -33,9 +32,9 @@ export const startCaseHelper = get => {
     showOtherFilingTypeOptions: form.filingType === 'Other',
 
     showOwnershipDisclosure: form.partyType && form.filingType === 'A business',
-    showOwnershipDisclosureValid: petition && petition.ownershipDisclosureFile,
+    showOwnershipDisclosureValid: form.ownershipDisclosureFile,
 
-    showPetitionFileValid: petition && petition.petitionFile,
+    showPetitionFileValid: form.petitionFile,
     showPetitionerDeceasedSpouseForm:
       form.filingType === 'Myself and my spouse' ||
       form.filingType === 'Petitioner and spouse',
@@ -46,6 +45,6 @@ export const startCaseHelper = get => {
     showSelectTrial: !!form.procedureType,
     showSmallTrialCitiesHint: form.procedureType === 'Small',
 
-    showStinFileValid: petition && petition.stinFile,
+    showStinFileValid: form.stinFile,
   };
 };

@@ -21,7 +21,6 @@ function CaseExternalIncomplete(rawCase) {
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.irsNoticeDate = rawCase.irsNoticeDate;
   this.partyType = rawCase.partyType;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
@@ -52,15 +51,6 @@ joiValidationDecorator(
     countryType: joi.string().optional(),
     filingType: joi.string().required(),
     hasIrsNotice: joi.boolean().required(),
-    irsNoticeDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .when('hasIrsNotice', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
     partyType: joi.string().required(),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
