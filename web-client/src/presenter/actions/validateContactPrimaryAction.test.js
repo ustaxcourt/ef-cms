@@ -18,7 +18,7 @@ describe('validateContactPrimaryAction', () => {
     };
   });
 
-  it('validates the primary contact with a successful result', async () => {
+  it('runs validation on the primary contact with a successful result', async () => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         validatePrimaryContactInteractor: sinon.stub().returns(null),
@@ -41,7 +41,7 @@ describe('validateContactPrimaryAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('validates the primary contact with an invalid result', async () => {
+  it('runs validation on the primary contact with an invalid result', async () => {
     presenter.providers.applicationContext = applicationContext;
 
     const result = await runAction(validateContactPrimaryAction, {
