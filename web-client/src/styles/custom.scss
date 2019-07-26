@@ -107,6 +107,21 @@ select[disabled] {
   background-color: color($theme-color-base-lightest);
 }
 
+.document-select-header {
+  &.grid-container {
+    margin-bottom: 5px;
+  }
+
+  padding: 15px;
+  background-color: color($theme-color-base-lightest);
+  border-left: 5px solid color($theme-color-primary-darker);
+}
+
+.document-select-option {
+  border: 1px solid color($theme-color-base-lightest);
+  border-top: 0;
+}
+
 .completed-card {
   margin-bottom: 20px;
   color: color($theme-color-base-darkest);
