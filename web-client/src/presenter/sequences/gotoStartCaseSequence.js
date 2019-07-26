@@ -27,13 +27,19 @@ export const gotoStartCaseSequence = [
   setProcedureTypesAction,
   getUserRoleAction,
   {
-    docketclerk: [setCurrentPageAction('StartCaseInternal')],
+    docketclerk: [
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     petitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
       setCurrentPageAction('StartCase'),
     ],
-    petitionsclerk: [setCurrentPageAction('StartCaseInternal')],
+    petitionsclerk: [
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     practitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
