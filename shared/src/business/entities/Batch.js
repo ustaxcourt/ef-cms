@@ -9,10 +9,13 @@ const {
  * @constructor
  */
 function Batch({ applicationContext, rawBatch }) {
-  this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
-  this.batchIndex = rawBatch.batchIndex || 0;
-  this.createdAt = rawBatch.createdAt || new Date().toISOString();
-  this.pages = rawBatch.pages || [];
+  Object.assign(this, rawBatch, {
+    applicationContext,
+    batchId: rawBatch.batchId || applicationContext.getUniqueId(),
+    batchIndex: rawBatch.batchIndex || 0,
+    createdAt: rawBatch.createdAt || new Date().toISOString(),
+    pages: rawBatch.pages || [],
+  });
 }
 
 Batch.validationName = 'Batch';
