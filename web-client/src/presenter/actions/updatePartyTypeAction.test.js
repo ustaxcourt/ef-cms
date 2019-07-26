@@ -134,7 +134,7 @@ describe('updatePartyTypeAction', () => {
     );
   });
 
-  it('resets the state.petition.ownershipDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
+  it('resets the state.form.ownershipDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
@@ -150,15 +150,13 @@ describe('updatePartyTypeAction', () => {
           form: {
             businessType: 'some value',
             filingType: 'Not A business',
-          },
-          petition: {
             ownershipDisclosureFile: 'a file',
           },
         },
       ),
     );
     expect(state.form.businessType).toBeUndefined();
-    expect(state.petition.ownershipDisclosureFile).toBeUndefined();
+    expect(state.form.ownershipDisclosureFile).toBeUndefined();
   });
 
   it('does not clear the petition.ownershipDisclosureFile and form.businessType when form.filingType is "A business"', async () => {
@@ -177,24 +175,22 @@ describe('updatePartyTypeAction', () => {
           form: {
             businessType: 'some value',
             filingType: 'A business',
-          },
-          petition: {
             ownershipDisclosureFile: 'a file',
           },
         },
       ),
     );
     expect(state.form.businessType).toEqual('some value');
-    expect(state.petition.ownershipDisclosureFile).toEqual('a file');
+    expect(state.form.ownershipDisclosureFile).toEqual('a file');
   });
 
-  it('sets form.contactPrimary and form.contactSecondary to empty objects', async () => {
+  it('sets form.contactPrimary and form.contactSecondary to empty objects if the party type was overridden', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
         {
-          key: 'anything',
-          value: 'Any Value',
+          key: 'filingType',
+          value: 'Myself',
         },
         {
           constants: {
@@ -208,7 +204,7 @@ describe('updatePartyTypeAction', () => {
         },
       ),
     );
-    expect(state.form.contactPrimary).toEqual({});
+    expect(state.form.contactPrimary).toEqual({ countryType: 'domestic' });
     expect(state.form.contactSecondary).toEqual({});
   });
 });

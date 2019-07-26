@@ -2,9 +2,9 @@ import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from '../limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -17,10 +17,6 @@ export const StartCaseStep1 = connect(
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
-    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
-    updateStartCaseFormValueSequence:
-      sequences.updateStartCaseFormValueSequence,
-    validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -30,8 +26,6 @@ export const StartCaseStep1 = connect(
     showModal,
     startCaseHelper,
     submitFilePetitionSequence,
-    updatePetitionValueSequence,
-    validateStartCaseWizardSequence,
     validationErrors,
   }) => {
     return (
@@ -58,6 +52,7 @@ export const StartCaseStep1 = connect(
                 (startCaseHelper.showStinFileValid ? 'validated' : '')
               }
               htmlFor="stin-file"
+              id="stin-file-label"
             >
               Upload Your Statement of Taxpayer Identification{' '}
               <span className="success-message">
@@ -68,25 +63,12 @@ export const StartCaseStep1 = connect(
               File must be in PDF format (.pdf). Max file size{' '}
               {constants.MAX_FILE_SIZE_MB}MB.
             </span>
-            <input
-              accept=".pdf"
-              className="usa-input"
+            <StateDrivenFileInput
+              aria-describedby="stin-file-label"
               id="stin-file"
               name="stinFile"
-              type="file"
-              onChange={e => {
-                limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                  updatePetitionValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                  updatePetitionValueSequence({
-                    key: `${e.target.name}Size`,
-                    value: e.target.files[0].size,
-                  });
-                  validateStartCaseWizardSequence();
-                });
-              }}
+              updateFormValueSequence="updateStartCaseFormValueSequence"
+              validationSequence="validateStartCaseWizardSequence"
             />
             <Text
               bind="validationErrors.stinFile"
