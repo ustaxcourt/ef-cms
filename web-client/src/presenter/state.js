@@ -77,6 +77,7 @@ export const state = {
   documentHelper,
   documentId: null,
   documentSigningHelper,
+  documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
