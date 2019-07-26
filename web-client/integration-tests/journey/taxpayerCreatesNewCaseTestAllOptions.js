@@ -638,58 +638,12 @@ export default (test, fakeFile, overrides = {}) => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.name',
-      value: 'Test Person',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.inCareOf',
-      value: 'USTC',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.address1',
-      value: '123 Abc Ln',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.address2',
-      value: 'Apt 2',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.city',
-      value: 'Cityville',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.state',
-      value: 'CA',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.postalCode',
-      value: '12345',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.email',
-      value: 'test@example.com',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.phone',
-      value: '1234567890',
-    });
-
-    expect(test.getState('form.contactSecondary')).toEqual({
-      address1: '123 Abc Ln',
-      address2: 'Apt 2',
-      city: 'Cityville',
-      countryType: 'domestic',
-      email: 'test@example.com',
-      inCareOf: 'USTC',
-      name: 'Test Person',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Test Person',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.secondaryName',
+      value: 'Test Person 2',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -728,6 +682,7 @@ export default (test, fakeFile, overrides = {}) => {
       name: 'Test Person',
       phone: '1234567890',
       postalCode: '12345',
+      secondaryName: 'Test Person 2',
       state: 'CA',
     });
 
