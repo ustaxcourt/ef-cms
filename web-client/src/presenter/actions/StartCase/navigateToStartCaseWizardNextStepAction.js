@@ -16,5 +16,5 @@ export const navigateToStartCaseWizardNextStepAction = ({
 }) => {
   const { nextStep } = props;
   store.set(state.wizardStep, `StartCaseStep${nextStep}`);
-  router.route(`/start-a-case-wizard/step-${nextStep}`);
+  router.route(`/file-a-petition/step-${nextStep}`);
 };
