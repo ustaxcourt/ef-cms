@@ -284,7 +284,6 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
     ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,

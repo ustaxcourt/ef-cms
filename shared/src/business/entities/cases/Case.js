@@ -652,6 +652,8 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
     this.addDocketRecord(
       new DocketRecord({
         description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         filingDate: this.receivedAt || this.createdAt,
       }),
     );

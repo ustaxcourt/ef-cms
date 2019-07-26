@@ -17,6 +17,20 @@ describe('updateFormValueWithoutEmptyStringAction', () => {
     expect(state.form.something).toEqual('yes');
   });
 
+  it('sets the form value for the key provided if the value is false', async () => {
+    const { state } = await runAction(updateFormValueWithoutEmptyStringAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        key: 'something',
+        value: false,
+      },
+      state: { form: {} },
+    });
+    expect(state.form.something).toEqual(false);
+  });
+
   it('removes the form value for the key provided if the value is an empty string', async () => {
     const { state } = await runAction(updateFormValueWithoutEmptyStringAction, {
       modules: {
