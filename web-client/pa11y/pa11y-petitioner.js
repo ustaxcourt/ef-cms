@@ -284,7 +284,6 @@ module.exports = [
   },
   {
     actions: [
-      'wait for .case-type-select to be visible',
       'wait for button.case-difference to be visible',
       'click element button.case-difference',
       'wait for #case-difference-container to be visible',
