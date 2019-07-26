@@ -87,6 +87,7 @@ import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSe
 import { printViewSequence } from './sequences/printViewSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
+import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -293,6 +294,7 @@ export const presenter = {
     printViewSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
+    removeBatchSequence,
     removeYearAmountSequence,
     rescanBatchSequence,
     reviewExternalDocumentInformationSequence,
