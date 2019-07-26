@@ -1,5 +1,8 @@
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 export default (test, overrides = {}) => {
   return it('Petitions clerk deletes a case deadline', async () => {

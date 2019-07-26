@@ -15,15 +15,13 @@ export const createCaseAction = async ({
   path,
   store,
 }) => {
-  const { ownershipDisclosureFile, petitionFile, stinFile } = get(
-    state.petition,
-  );
+  const { ownershipDisclosureFile, petitionFile, stinFile } = get(state.form);
 
   const form = omit(
     {
       ...get(state.form),
     },
-    ['year', 'month', 'day', 'trialCities', 'signature'],
+    'trialCities',
   );
 
   form.contactPrimary.email = get(state.user.email);

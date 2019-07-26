@@ -14,7 +14,6 @@ describe('start a case computed', () => {
         },
         form: {},
         getTrialCityName,
-        petition: {},
       },
     });
     expect(result.showPetitionFileValid).toBeFalsy();
@@ -27,11 +26,8 @@ describe('start a case computed', () => {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
           TRIAL_CITIES: TrialSession.TRIAL_CITIES,
         },
-        form: {},
+        form: { petitionFile: true },
         getTrialCityName,
-        petition: {
-          petitionFile: true,
-        },
       },
     });
     expect(result.showPetitionFileValid).toBeTruthy();
@@ -47,11 +43,9 @@ describe('start a case computed', () => {
         form: {
           filingType: 'A business',
           partyType: true,
-        },
-        getTrialCityName,
-        petition: {
           petitionFile: true,
         },
+        getTrialCityName,
       },
     });
     expect(result.showOwnershipDisclosure).toBeTruthy();
@@ -67,11 +61,9 @@ describe('start a case computed', () => {
         form: {
           filingType: 'not A business',
           partyType: true,
-        },
-        getTrialCityName,
-        petition: {
           petitionFile: true,
         },
+        getTrialCityName,
       },
     });
     expect(result.showOwnershipDisclosure).toBeFalsy();
