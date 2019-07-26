@@ -130,33 +130,6 @@ export const StartCaseInternal = connect(
                     />
                   </div>
 
-                  {/* {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
-                    <Scan
-                      onDoneClicked={() =>
-                        completeScanSequence({
-                          onComplete: file => {
-                            limitFileSize(
-                              file,
-                              constants.MAX_FILE_SIZE_MB,
-                              () => {
-                                updateFormValueSequence({
-                                  key: 'petitionFile',
-                                  value: file,
-                                });
-                                updateFormValueSequence({
-                                  key: 'petitionFileSize',
-                                  value: file.size,
-                                });
-                                validatePetitionFromPaperSequence();
-                              },
-                            );
-                          },
-                        })
-                      }
-                      onScanClicked={() => startScanSequence()}
-                    />
-                  )} */}
-
                   <div
                     className={`usa-form-group ${
                       validationErrors.stinFileSize

@@ -72,6 +72,7 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
+import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
@@ -104,6 +105,7 @@ import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTri
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
+import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
@@ -276,6 +278,7 @@ export const presenter = {
     notFoundErrorSequence,
     openCaseCaptionModalSequence,
     openCaseDifferenceModalSequence,
+    openChangeScannerSourceModalSequence,
     openCleanModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
     openCreateCaseDeadlineModalSequence,
@@ -307,6 +310,7 @@ export const presenter = {
     setCaseToReadyForTrialSequence,
     setCurrentPageIndexSequence,
     setDocumentDetailTabSequence,
+    setDocumentUploadModeSequence,
     setFocusedWorkItemSequence,
     setFormSubmittingSequence,
     setIdleStatusIdleSequence,

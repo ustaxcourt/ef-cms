@@ -7,6 +7,7 @@ export const scanBatchPreviewerHelper = get => {
     ? batches[selectedBatchIndex]
     : { pages: [] };
   const currentPageIndex = get(state.currentPageIndex);
+  const documentUploadMode = get(state.documentUploadMode);
   let selectPageImage = null;
 
   const bufferToBase64 = buf => {
@@ -31,8 +32,12 @@ export const scanBatchPreviewerHelper = get => {
   return {
     batches,
     currentPage: currentPageIndex,
+    scannerSource: get(state.scanner.scannerSourceName),
     selectedBatch: batches.length ? batches[selectedBatchIndex] : {},
     selectedPageImage: selectPageImage,
+    // sources: get(state.scanner.sources),
+    showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
     totalPages: selectedBatch.pages.length,
+    uploadMode: documentUploadMode,
   };
 };
