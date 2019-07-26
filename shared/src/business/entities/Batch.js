@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -9,14 +8,14 @@ const {
  * @param rawBatch
  * @constructor
  */
-function Batch(rawBatch) {
-  this.batchId = rawBatch.batchId || uuid.v4();
+function Batch({ applicationContext, rawBatch }) {
+  this.batchId = rawBatch.batchId || applicationContext.getUniqueId();
   this.batchIndex = rawBatch.batchIndex || 0;
   this.createdAt = rawBatch.createdAt || new Date().toISOString();
   this.pages = rawBatch.pages || [];
 }
 
-Batch.name = 'Batch';
+Batch.validationName = 'Batch';
 
 /**
  * adds a page to current Batch
@@ -56,6 +55,10 @@ Batch.schema = joi.object().keys({
     .number()
     .integer()
     .min(0)
+    .required(),
+  createdAt: joi
+    .date()
+    .iso()
     .required(),
   pages: joi
     .array()
