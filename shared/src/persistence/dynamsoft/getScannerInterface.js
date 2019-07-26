@@ -3,43 +3,8 @@ let dynamsoftLoader = null;
 
 exports.getScannerInterface = () => {
   const completeScanSession = async () => {
-    const count = DWObject.HowManyImagesInBuffer;
-    const promises = [];
-    const response = { error: null, scannedBuffer: null };
-
-    for (let index = 0; index < count; index++) {
-      promises.push(
-        new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob(
-            [index],
-            window['EnumDWT_ImageType'].IT_PNG,
-            resolve,
-            reject,
-          );
-        }),
-      );
-    }
-
-    return await Promise.all(promises)
-      .then(async blobs => {
-        const blobBuffers = [];
-
-        for (let blob of blobs) {
-          blobBuffers.push(
-            new Uint8Array(await new Response(blob).arrayBuffer()),
-          );
-        }
-        response.scannedBuffer = blobBuffers;
-        return response;
-      })
-      .catch(err => {
-        response.error = err;
-        return response;
-      })
-      .finally(() => {
-        DWObject.RemoveAllImages();
-        DWObject.CloseSource();
-      });
+    DWObject.RemoveAllImages();
+    DWObject.CloseSource();
   };
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;
@@ -144,10 +109,52 @@ exports.getScannerInterface = () => {
     ret.DWObject = DWObject;
   };
 
-  const startScanSession = () => {
-    DWObject.IfDisableSourceAfterAcquire = true;
-    DWObject.OpenSource();
-    DWObject.AcquireImage();
+  const startScanSession = ({ applicationContext }) => {
+    return new Promise((resolve, reject) => {
+      const onScanFinished = () => {
+        const count = DWObject.HowManyImagesInBuffer;
+        const promises = [];
+        const response = { error: null, scannedBuffer: null };
+        for (let index = 0; index < count; index++) {
+          promises.push(
+            new Promise((resolve, reject) => {
+              DWObject.ConvertToBlob(
+                [index],
+                window['EnumDWT_ImageType'].IT_PNG,
+                resolve,
+                reject,
+              );
+            }),
+          );
+        }
+
+        return Promise.all(promises)
+          .then(async blobs => {
+            const blobBuffers = [];
+
+            for (let blob of blobs) {
+              blobBuffers.push(
+                await applicationContext.convertBlobToUInt8Array(blob),
+              );
+            }
+            response.scannedBuffer = blobBuffers;
+            DWObject.RemoveAllImages();
+            resolve(response);
+          })
+          .catch(err => {
+            response.error = err;
+            reject(response);
+          })
+          .finally(() => {
+            DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+          });
+      };
+
+      DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
+      DWObject.IfDisableSourceAfterAcquire = true;
+      DWObject.OpenSource();
+      DWObject.AcquireImage();
+    });
   };
 
   const ret = {
