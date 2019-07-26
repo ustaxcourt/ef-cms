@@ -3,8 +3,10 @@ import { state } from 'cerebral';
 export const scanBatchPreviewerHelper = get => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
   const batches = get(state.batches);
-  const selectedBatch = batches.length ? batches[selectedBatchIndex] : {};
-  const selectedPageIndex = get(state.selectedPageIndex);
+  const selectedBatch = batches.length
+    ? batches[selectedBatchIndex]
+    : { pages: [] };
+  const currentPageIndex = get(state.currentPageIndex);
   let selectPageImage = null;
 
   const bufferToBase64 = buf => {
@@ -18,18 +20,19 @@ export const scanBatchPreviewerHelper = get => {
 
   if (
     batches.length &&
-    selectedPageIndex !== null &&
+    currentPageIndex !== null &&
     selectedBatchIndex !== null
   ) {
-    const page = selectedBatch.pages[selectedPageIndex];
+    const page = selectedBatch.pages[currentPageIndex];
     const b64encoded = bufferToBase64(page);
     selectPageImage = b64encoded;
   }
 
   return {
     batches,
-    currentPage: 0,
+    currentPage: currentPageIndex,
     selectedBatch: batches.length ? batches[selectedBatchIndex] : {},
     selectedPageImage: selectPageImage,
+    totalPages: selectedBatch.pages.length,
   };
 };
