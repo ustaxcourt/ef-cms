@@ -28,6 +28,7 @@ export const ScanBatchPreviewer = connect(
     completeScanSequence,
     constants,
     documentType,
+    documentTypeName,
     openChangeScannerSourceModalSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
@@ -161,11 +162,11 @@ export const ScanBatchPreviewer = connect(
                     onComplete: file => {
                       limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
                         updateFormValueSequence({
-                          key: 'petitionFile',
+                          key: documentType,
                           value: file,
                         });
                         updateFormValueSequence({
-                          key: 'petitionFileSize',
+                          key: `${documentType}Size`,
                           value: file.size,
                         });
                         validatePetitionFromPaperSequence();
@@ -253,15 +254,15 @@ export const ScanBatchPreviewer = connect(
         <div className="document-detail-one-third">
           <div
             className={`usa-form-group ${
-              validationErrors.petitionFile ? 'usa-form-group--error' : ''
+              validationErrors[documentType] ? 'usa-form-group--error' : ''
             }`}
           >
             <input
               accept=".pdf"
-              aria-describedby="petition-hint"
+              aria-describedby={`${documentType}-hint`}
               className="usa-input"
-              id="petition-file"
-              name="petitionFile"
+              id={`${documentType}-file`}
+              name={documentType}
               type="file"
               onChange={e => {
                 limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
@@ -278,11 +279,11 @@ export const ScanBatchPreviewer = connect(
               }}
             />
             <Text
-              bind="validationErrors.petitionFile"
+              bind={`validationErrors.${documentType}`}
               className="usa-error-message"
             />
             <Text
-              bind="validationErrors.petitionFileSize"
+              bind={`validationErrors.${documentType}Size`}
               className="usa-error-message"
             />
           </div>
@@ -301,11 +302,11 @@ export const ScanBatchPreviewer = connect(
         >
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-6">
-                <h3 style={{ marginBottom: '0px' }}>Add {documentType}</h3>
+              <div className="grid-col-8">
+                <h3 style={{ marginBottom: '0px' }}>Add {documentTypeName}</h3>
               </div>
               {scanBatchPreviewerHelper.uploadMode === 'scan' && (
-                <div className="grid-col-6 text-right">
+                <div className="grid-col-4 text-right">
                   <span className="margin-right-1">
                     Scanner:{' '}
                     {scanBatchPreviewerHelper.scannerSource ||
