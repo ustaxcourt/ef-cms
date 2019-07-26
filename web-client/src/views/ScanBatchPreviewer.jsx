@@ -46,9 +46,13 @@ export const ScanBatchPreviewer = connect(
     const renderModeRadios = () => {
       return (
         <fieldset
+          aria-label="scan mode selection"
           className="usa-fieldset margin-bottom-3 margin-top-2"
-          id="procedure-type-radios"
+          id="scan-mode-radios"
         >
+          <legend className="usa-legend with-hint" id="scan-mode-radios-legend">
+            File Upload
+          </legend>
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="upload-mode"
@@ -309,6 +313,7 @@ export const ScanBatchPreviewer = connect(
                   </span>
                   <button
                     className="usa-button usa-button--unstyled"
+                    style={{ color: 'white' }}
                     onClick={e => {
                       e.preventDefault();
                       openChangeScannerSourceModalSequence();
