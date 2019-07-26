@@ -77,29 +77,6 @@ export const ContactPrimary = connect(
             />
           </div>
 
-          {contactsHelper.contactPrimary.displayTitle && (
-            <div className="usa-form-group">
-              <label className="usa-label with-hint" htmlFor="title">
-                Title
-              </label>
-              <span className="usa-hint">For example, Executor, PR, etc.</span>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="title"
-                name="contactPrimary.title"
-                type="text"
-                value={data.contactPrimary.title || ''}
-                onChange={e => {
-                  onChangeSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
-          )}
-
           {contactsHelper.contactPrimary.displaySecondaryName && (
             <div
               className={classNames(
@@ -130,6 +107,29 @@ export const ContactPrimary = connect(
               <Text
                 bind="validationErrors.contactPrimary.secondaryName"
                 className="usa-error-message"
+              />
+            </div>
+          )}
+
+          {contactsHelper.contactPrimary.displayTitle && (
+            <div className="usa-form-group">
+              <label className="usa-label with-hint" htmlFor="title">
+                Title
+              </label>
+              <span className="usa-hint">For example, Executor, PR, etc.</span>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="title"
+                name="contactPrimary.title"
+                type="text"
+                value={data.contactPrimary.title || ''}
+                onChange={e => {
+                  onChangeSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
               />
             </div>
           )}
