@@ -76,7 +76,7 @@ export const updatePartyTypeAction = async ({ get, props, store }) => {
   }
   if (get(state.form.filingType) !== 'A business') {
     // clear the ownership disclosure file and business type
-    store.set(state.form.ownershipDisclosureFile, undefined);
-    store.set(state.form.businessType, undefined);
+    store.unset(state.form.ownershipDisclosureFile);
+    store.unset(state.form.businessType);
   }
 };
