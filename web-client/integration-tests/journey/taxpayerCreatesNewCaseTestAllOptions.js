@@ -529,7 +529,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
 
-    // legally incompetent person party type primary/secondary contact
+    // legally incompetent person party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -560,7 +560,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
     // donor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {

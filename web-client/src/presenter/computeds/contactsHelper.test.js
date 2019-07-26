@@ -178,16 +178,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header:
           'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header:
-          'Tell Us About the Legally Incompetent Person You Are Filing For',
         nameLabel: 'Name of Legally Incompetent Person',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });
@@ -611,16 +606,11 @@ describe('contactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header:
           'Tell Us About the Next Friend for This Legally Incompetent Person',
-        nameLabel: 'Name of Next Friend',
-      },
-      contactSecondary: {
-        displayInCareOf: true,
-        displayPhone: true,
-        header:
-          'Tell Us About the Legally Incompetent Person You Are Filing For',
         nameLabel: 'Name of Legally Incompetent Person',
+        secondaryNameLabel: 'Name of Next Friend',
       },
     });
   });
