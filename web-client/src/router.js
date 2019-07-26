@@ -280,8 +280,10 @@ const router = {
         } else {
           switch (step) {
             case '1':
-              app.getSequence('gotoStartCaseWizardSequence')();
-
+              app.getSequence('gotoStartCaseWizardSequence')({
+                step,
+                wizardStep: `StartCaseStep${step}`,
+              });
               break;
             default:
               app.getSequence('navigateToPathSequence')({
@@ -289,6 +291,17 @@ const router = {
               });
           }
         }
+      }),
+    );
+
+    route(
+      '/file-a-petition-pa11y/step-*',
+      checkLoggedIn(step => {
+        document.title = `File a petition ${pageTitleSuffix}`;
+        app.getSequence('gotoStartCaseWizardSequence')({
+          step,
+          wizardStep: `StartCaseStep${step}`,
+        });
       }),
     );
 
