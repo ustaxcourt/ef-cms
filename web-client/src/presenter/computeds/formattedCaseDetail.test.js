@@ -11,13 +11,6 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-const constants = {
-  DOCUMENT_TYPES_MAP: {
-    ownershipDisclosure: 'Ownership Disclosure Statement',
-    petitionFile: 'Petition',
-  },
-};
-
 describe('formattedCaseDetail', () => {
   describe('formatYearAmounts', () => {
     it('does not return 2018 when a blank string is passed in', () => {
@@ -138,7 +131,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -155,7 +147,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.shouldShowIrsNoticeDate).toBeTruthy();
@@ -173,7 +164,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -191,7 +181,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.shouldShowIrsNoticeDate).toBeFalsy();
@@ -217,7 +206,6 @@ describe('formattedCaseDetail', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants,
       },
     });
     expect(result.docketRecord[0].createdAtFormatted).toEqual('02/28/19');
@@ -251,7 +239,6 @@ describe('formattedCaseDetail', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants,
       },
     });
     expect(result.docketRecordWithDocument[0].document.documentId).toEqual(
@@ -389,7 +376,6 @@ describe('formattedCaseDetail', () => {
       state: {
         caseDetail,
         caseDetailErrors: {},
-        constants,
       },
     });
     expect(
@@ -476,7 +462,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.docketRecordWithDocument[0]).toMatchObject({
@@ -506,7 +491,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
           sessionMetadata: {
             docketRecordSort: { [caseDetail.caseId]: 'byDateDesc' },
           },
@@ -540,7 +524,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
           sessionMetadata: {
             docketRecordSort: { [caseDetail.caseId]: 'byIndex' },
           },
@@ -573,7 +556,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
           sessionMetadata: {
             docketRecordSort: { [caseDetail.caseId]: 'byIndexDesc' },
           },
@@ -611,7 +593,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.caseName).toEqual('');
@@ -626,7 +607,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.caseName).toEqual('Sisqo');
@@ -641,7 +621,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.caseName).toEqual('Sisqo and friends');
@@ -656,7 +635,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.caseName).toEqual("Sisqo's entourage,");
@@ -674,7 +652,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan (9999)');
@@ -689,7 +666,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan');
@@ -705,7 +681,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.formattedTrialCity).toEqual('Not assigned');
@@ -722,7 +697,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
@@ -743,7 +717,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
@@ -763,7 +736,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
@@ -794,7 +766,6 @@ describe('formattedCaseDetail', () => {
           caseDeadlines,
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.caseDeadlines.length).toEqual(3);
@@ -825,7 +796,6 @@ describe('formattedCaseDetail', () => {
         state: {
           caseDetail,
           caseDetailErrors: {},
-          constants,
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);

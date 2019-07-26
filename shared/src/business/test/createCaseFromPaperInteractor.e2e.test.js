@@ -83,6 +83,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Bob Jones2',
           receivedAt: RECEIVED_DATE,
           workItems: [
@@ -145,6 +146,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
+          eventCode: 'P',
         },
         isInitializeCase: true,
         messages: [
@@ -173,6 +175,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         document: {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
+          eventCode: 'P',
         },
         isInitializeCase: true,
         messages: [

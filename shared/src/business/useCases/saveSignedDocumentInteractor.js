@@ -36,8 +36,10 @@ exports.saveSignedDocumentInteractor = async ({
   const signedDocumentEntity = new Document({
     createdAt: applicationContext.getUtilities().createISODateString(),
     documentId: signedDocumentId,
-    documentType: Document.signedDocumentTypes.signedStipulatedDecision,
-    eventCode: 'SDEC',
+    documentType:
+      Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+    eventCode:
+      Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
     filedBy: originalDocumentEntity.filedBy,
     isPaper: false,
     userId: user.userId,
