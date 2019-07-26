@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * constructor
@@ -13,7 +14,7 @@ function Batch({ applicationContext, rawBatch }) {
     applicationContext,
     batchId: rawBatch.batchId || applicationContext.getUniqueId(),
     batchIndex: rawBatch.batchIndex || 0,
-    createdAt: rawBatch.createdAt || new Date().toISOString(),
+    createdAt: rawBatch.createdAt || createISODateString(),
     pages: rawBatch.pages || [],
   });
 }

@@ -1,8 +1,9 @@
-const _ = require('lodash');
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
+const { remove } = require('lodash');
 
 /**
  * constructor
@@ -13,7 +14,7 @@ function Scan({ applicationContext, rawScan }) {
   Object.assign(this, rawScan, {
     applicationContext,
     batches: rawScan.batches || [],
-    createdAt: rawScan.createdAt || new Date().toISOString(),
+    createdAt: rawScan.createdAt || createISODateString(),
     scanId: rawScan.scanId || applicationContext.getUniqueId(),
   });
 }
@@ -40,7 +41,7 @@ Scan.prototype.addBatch = function(batch) {
 Scan.prototype.removeBatch = function(batchEntity) {
   const { batchId } = batchEntity;
 
-  _.remove(this.batches, batch => {
+  remove(this.batches, batch => {
     return batchId === batch.batchId;
   });
 
