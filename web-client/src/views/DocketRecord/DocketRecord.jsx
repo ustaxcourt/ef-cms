@@ -57,7 +57,7 @@ export const DocketRecord = connect(
                     <span className="no-wrap">{record.createdAtFormatted}</span>
                   </td>
                   <td className="center-column hide-on-mobile">
-                    {document && document.eventCode}
+                    {record.eventCode || (document && document.eventCode)}
                   </td>
                   <td
                     aria-hidden="true"
