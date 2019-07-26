@@ -39,7 +39,7 @@ describe('File a petition', function() {
 
 describe('creation form', () => {
   before(() => {
-    cy.login('taxpayer', 'start-a-case-wizard/step-1');
+    cy.login('taxpayer', 'file-a-petition/step-1');
   });
 
   it('has a stin file input', () => {

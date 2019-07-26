@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-import { showContactsHelper } from '../computeds/showContactsHelper';
+import { showContactsHelper } from '../../computeds/showContactsHelper';
 
 /**
  * updates the partyType, filingType, otherType, businessType,
