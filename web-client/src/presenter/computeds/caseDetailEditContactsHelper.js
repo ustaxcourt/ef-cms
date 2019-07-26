@@ -77,14 +77,10 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.nextFriendForIncompetentPerson:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Next Friend Information',
-          nameLabel: 'Name of Next Friend',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Legally Incompetent Person Information',
           nameLabel: 'Name of Legally Incompetent Person',
+          secondaryNameLabel: 'Name of Next Friend',
         },
       };
       break;

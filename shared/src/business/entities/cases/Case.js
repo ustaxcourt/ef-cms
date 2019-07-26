@@ -412,7 +412,7 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name}, Minor, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson:
-      caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Incompetent, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.donor:
       caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
