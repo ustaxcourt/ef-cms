@@ -39,7 +39,11 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
-        return cy.wrap(subject).trigger('change');
+        if (subject.is(':visible')) {
+          return cy.wrap(subject).trigger('change');
+        } else {
+          return cy.wrap(subject);
+        }
       });
     });
   });

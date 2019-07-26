@@ -69,20 +69,20 @@ SecondaryDocumentInformationFactory.get = documentMetadata => {
     if (documentMetadata.certificateOfService === true) {
       makeRequired('certificateOfServiceDate');
     }
-  }
 
-  if (
-    documentMetadata.category === 'Motion' ||
-    includes(
-      [
-        'Motion to Withdraw Counsel',
-        'Motion to Withdraw As Counsel',
-        'Application to Take Deposition',
-      ],
-      documentMetadata.documentType,
-    )
-  ) {
-    makeRequired('objections');
+    if (
+      documentMetadata.category === 'Motion' ||
+      includes(
+        [
+          'Motion to Withdraw Counsel',
+          'Motion to Withdraw As Counsel',
+          'Application to Take Deposition',
+        ],
+        documentMetadata.documentType,
+      )
+    ) {
+      makeRequired('objections');
+    }
   }
 
   joiValidationDecorator(
