@@ -1,12 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
-import { clearPetitionAction } from '../actions/clearPetitionAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
 import { getFilingTypesAction } from '../actions/getFilingTypesAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
-import { prepareFormAction } from '../actions/prepareFormAction';
+import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
 import { set } from 'cerebral/factories';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -16,7 +15,6 @@ import { state } from 'cerebral';
 
 export const gotoStartCaseWizardSequence = [
   clearAlertsAction,
-  clearPetitionAction,
   clearFormAction,
   clearScreenMetadataAction,
   prepareFormAction,
@@ -27,7 +25,10 @@ export const gotoStartCaseWizardSequence = [
   setProcedureTypesAction,
   getUserRoleAction,
   {
-    docketclerk: [setCurrentPageAction('StartCaseInternal')],
+    docketclerk: [
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     petitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
@@ -35,7 +36,10 @@ export const gotoStartCaseWizardSequence = [
       set(state.form.wizardStep, '1'),
       setCurrentPageAction('StartCaseWizard'),
     ],
-    petitionsclerk: [setCurrentPageAction('StartCaseInternal')],
+    petitionsclerk: [
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     practitioner: [
       getFilingTypesAction,
       setFilingTypesAction,

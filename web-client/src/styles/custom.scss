@@ -523,6 +523,11 @@ select[disabled] {
       width: 100%;
       height: 100%;
       color: $color-white;
+
+      &.fa-user-check {
+        margin-top: -3px;
+        margin-left: 5px;
+      }
     }
 
     .svg-wrapper img.svg {

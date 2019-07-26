@@ -1,14 +1,6 @@
 import { state } from 'cerebral';
 
-/**
- * starts scanning documents based on current data source
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting the scanner API
- * @param {Function} providers.store the cerebral store used for setting state.path
- *
- */
-export const startScanAction = async ({
+export const rescanBatchAction = async ({
   applicationContext,
   get,
   props,
@@ -16,6 +8,7 @@ export const startScanAction = async ({
 }) => {
   store.set(state.isScanning, true);
   store.set(state.submitting, true);
+  const { batchIndex } = props;
 
   const scanner = applicationContext.getScanner();
 
@@ -29,16 +22,8 @@ export const startScanAction = async ({
       applicationContext,
     });
     const batches = get(state.batches);
-
-    store.set(state.batches, [
-      ...batches,
-      ...[
-        {
-          index: batches.length,
-          pages,
-        },
-      ],
-    ]);
+    batches[batchIndex].pages = pages;
+    store.set(state.batches, batches);
     store.set(state.submitting, false);
   } else {
     await applicationContext.getUseCases().removeItemInteractor({
