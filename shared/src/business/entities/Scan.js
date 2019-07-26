@@ -39,24 +39,25 @@ Scan.prototype.addBatch = function(batch) {
 Scan.prototype.removeBatch = function(batchEntity) {
   const { batchId } = batchEntity;
 
-  this.batches = _.remove(this.batches, batch => batchId === batch.batchId);
+  _.remove(this.batches, batch => {
+    return batchId === batch.batchId;
+  });
 
   return this;
 };
 
 Scan.errorToMessageMap = {
-  batches: 'Invalid batch index',
-  pages: 'At least one page is required',
+  batches: 'At least one batch is required',
 };
 
 Scan.schema = joi.object().keys({
+  batches: joi
+    .array()
+    .min(1)
+    .required(),
   createdAt: joi
     .date()
     .iso()
-    .required(),
-  pages: joi
-    .array()
-    .min(1)
     .required(),
   scanId: joi
     .string()
