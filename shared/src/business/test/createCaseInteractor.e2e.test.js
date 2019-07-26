@@ -82,6 +82,7 @@ describe('createCase integration test', () => {
       documents: [
         {
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Rick Petitioner',
           workItems: [
             {
@@ -111,6 +112,7 @@ describe('createCase integration test', () => {
         },
         {
           documentType: 'Statement of Taxpayer Identification',
+          eventCode: 'STIN',
           filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
@@ -152,6 +154,7 @@ describe('createCase integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
