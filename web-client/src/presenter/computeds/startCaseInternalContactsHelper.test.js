@@ -325,12 +325,10 @@ describe('startCaseInternalContactsHelper', () => {
     });
     expect(result).toMatchObject({
       contactPrimary: {
+        displaySecondaryName: true,
         header: 'Petitioner Information',
-        nameLabel: 'Name',
-      },
-      contactSecondary: {
-        header: 'Spouse Information',
-        nameLabel: "Spouse's Name",
+        nameLabel: 'Name of Deceased Spouse',
+        secondaryNameLabel: 'Name of Surviving Spouse',
       },
     });
   });

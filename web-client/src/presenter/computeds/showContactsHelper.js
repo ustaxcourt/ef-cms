@@ -23,7 +23,6 @@ export const showContactsHelper = (partyType, PARTY_TYPES) => {
   const contactSecondary = [
     PARTY_TYPES.petitionerDeceasedSpouse,
     PARTY_TYPES.petitionerSpouse,
-    PARTY_TYPES.survivingSpouse,
   ].includes(partyType);
 
   return { contactPrimary, contactSecondary };

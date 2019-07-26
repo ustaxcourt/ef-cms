@@ -150,12 +150,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.survivingSpouse:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Surviving Spouse',
-          nameLabel: 'Name',
-        };
-        contactSecondary = {
-          header: 'Tell Us About Your Deceased Spouse',
-          nameLabel: "Spouse's Name",
+          nameLabel: 'Name of Deceased Spouse',
+          secondaryNameLabel: 'Name of Surviving Spouse',
         };
         break;
       case PARTY_TYPES.transferee:
@@ -307,12 +305,10 @@ export const contactsHelper = get => {
         break;
       case PARTY_TYPES.survivingSpouse:
         contactPrimary = {
+          displaySecondaryName: true,
           header: 'Tell Us About the Surviving Spouse',
-          nameLabel: 'Name',
-        };
-        contactSecondary = {
-          header: 'Tell Us About the Deceased Spouse',
-          nameLabel: "Spouse's Name",
+          nameLabel: 'Name of Deceased Spouse',
+          secondaryNameLabel: 'Name of Surviving Spouse',
         };
         break;
       case PARTY_TYPES.transferee:
