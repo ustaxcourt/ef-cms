@@ -96,6 +96,7 @@ import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
+import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
@@ -303,6 +304,7 @@ export const presenter = {
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
+    selectDocumentForScanSequence,
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
