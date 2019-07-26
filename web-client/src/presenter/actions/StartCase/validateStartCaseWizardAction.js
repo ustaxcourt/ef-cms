@@ -15,20 +15,18 @@ export const validateStartCaseWizardAction = ({
   get,
   path,
 }) => {
-  const petition = get(state.petition);
-
-  const form = omit(
+  const petition = omit(
     {
       ...get(state.form),
     },
-    ['year', 'month', 'day', 'trialCities'],
+    'trialCities',
   );
 
   const errors = applicationContext
     .getUseCases()
     .validateStartCaseWizardInteractor({
       applicationContext,
-      petition: { ...petition, ...form },
+      petition,
     });
 
   if (!errors) {

@@ -11,18 +11,16 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validatePetitionAction = ({ applicationContext, get, path }) => {
-  const petition = get(state.petition);
-
   const form = omit(
     {
       ...get(state.form),
     },
-    ['year', 'month', 'day', 'trialCities'],
+    'trialCities',
   );
 
   const errors = applicationContext.getUseCases().validatePetitionInteractor({
     applicationContext,
-    petition: { ...petition, ...form },
+    petition: form,
   });
 
   if (!errors) {

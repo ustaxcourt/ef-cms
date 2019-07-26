@@ -1,9 +1,9 @@
 import { CaseTypeSelect } from './CaseTypeSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
+import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from '../limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -13,11 +13,9 @@ export const StartCaseStep2 = connect(
     completeStartCaseWizardStepSequence:
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
+    form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     startCaseHelper: state.startCaseHelper,
-    updateHasIrsNoticeFormValueSequence:
-      sequences.updateHasIrsNoticeFormValueSequence,
-    updatePetitionValueSequence: sequences.updatePetitionValueSequence,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
@@ -27,10 +25,10 @@ export const StartCaseStep2 = connect(
     caseTypeDescriptionHelper,
     completeStartCaseWizardStepSequence,
     constants,
+    form,
     formCancelToggleCancelSequence,
     startCaseHelper,
-    updateHasIrsNoticeFormValueSequence,
-    updatePetitionValueSequence,
+    updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
   }) => {
@@ -59,6 +57,7 @@ export const StartCaseStep2 = connect(
                     (startCaseHelper.showPetitionFileValid ? 'validated' : '')
                   }
                   htmlFor="petition-file"
+                  id="petition-file-label"
                 >
                   Upload Your Petition{' '}
                   <span className="success-message">
@@ -69,26 +68,12 @@ export const StartCaseStep2 = connect(
                   File must be in PDF format (.pdf). Max file size{' '}
                   {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
-                <input
-                  accept=".pdf"
-                  aria-describedby="petition-hint"
-                  className="usa-input"
+                <StateDrivenFileInput
+                  aria-describedby="petition-file-label"
                   id="petition-file"
                   name="petitionFile"
-                  type="file"
-                  onChange={e => {
-                    limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                      updatePetitionValueSequence({
-                        key: e.target.name,
-                        value: e.target.files[0],
-                      });
-                      updatePetitionValueSequence({
-                        key: `${e.target.name}Size`,
-                        value: e.target.files[0].size,
-                      });
-                      validateStartCaseWizardSequence();
-                    });
-                  }}
+                  updateFormValueSequence="updateStartCaseFormValueSequence"
+                  validationSequence="validateStartCaseWizardSequence"
                 />
                 <Text
                   bind="validationErrors.petitionFile"
@@ -117,19 +102,17 @@ export const StartCaseStep2 = connect(
                 {startCaseHelper.noticeLegend}
               </legend>
               <div className="usa-form-group">
-                {['Yes', 'No'].map((hasIrsNotice, idx) => (
-                  <div
-                    className="usa-radio usa-radio__inline"
-                    key={hasIrsNotice}
-                  >
+                {['Yes', 'No'].map((option, idx) => (
+                  <div className="usa-radio usa-radio__inline" key={option}>
                     <input
+                      checked={form.hasIrsNotice === (option === 'Yes')}
                       className="usa-radio__input"
-                      id={`hasIrsNotice-${hasIrsNotice}`}
+                      id={`hasIrsNotice-${option}`}
                       name="hasIrsNotice"
                       type="radio"
-                      value={hasIrsNotice === 'Yes'}
+                      value={option === 'Yes'}
                       onChange={e => {
-                        updateHasIrsNoticeFormValueSequence({
+                        updateStartCaseFormValueSequence({
                           key: e.target.name,
                           value: e.target.value === 'true',
                         });
@@ -138,10 +121,10 @@ export const StartCaseStep2 = connect(
                     />
                     <label
                       className="usa-radio__label"
-                      htmlFor={`hasIrsNotice-${hasIrsNotice}`}
+                      htmlFor={`hasIrsNotice-${option}`}
                       id={`hasIrsNotice-${idx}`}
                     >
-                      {hasIrsNotice}
+                      {option}
                     </label>
                   </div>
                 ))}
@@ -158,6 +141,7 @@ export const StartCaseStep2 = connect(
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
                 legend="Type of Notice / Case"
                 validation="validateStartCaseWizardSequence"
+                value={form.caseType}
                 onChange="updateFormValueSequence"
               />
             )}
@@ -168,6 +152,7 @@ export const StartCaseStep2 = connect(
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
                 validation="validateStartCaseWizardSequence"
+                value={form.caseType}
                 onChange="updateFormValueSequence"
               />
             )}
