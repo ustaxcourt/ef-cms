@@ -1,6 +1,6 @@
 export default (test, fakeFile) => {
   return it('Petitions clerk creates a new case', async () => {
-    await test.runSequence('gotoStartCaseSequence');
+    await test.runSequence('gotoStartCaseWizardSequence');
     await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('alertError.title')).toEqual(

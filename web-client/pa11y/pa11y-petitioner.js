@@ -1,7 +1,7 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=taxpayer&path=/',
 
-  'http://localhost:1234/mock-login?token=taxpayer&path=/before-starting-a-case',
+  /*'http://localhost:1234/mock-login?token=taxpayer&path=/before-starting-a-case',
 
   'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case',
   {
@@ -299,7 +299,7 @@ module.exports = [
     notes: 'expose hidden elements on start-a-case for No notice',
     url:
       'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-no-notice',
-  },
+  },*/
 
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19',
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document',

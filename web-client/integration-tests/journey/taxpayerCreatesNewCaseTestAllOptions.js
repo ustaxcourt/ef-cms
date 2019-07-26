@@ -259,7 +259,7 @@ export default (test, fakeFile, overrides = {}) => {
       value: 'A business',
     });
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });

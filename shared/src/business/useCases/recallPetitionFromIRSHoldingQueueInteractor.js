@@ -56,7 +56,8 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
 
   const petitionDocument = caseEntity.documents.find(
     document =>
-      document.documentType === Document.initialDocumentTypes.petitionFile,
+      document.documentType ===
+      Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 
   const initializeCaseWorkItem = petitionDocument.workItems.find(

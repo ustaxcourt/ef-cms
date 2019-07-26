@@ -1,5 +1,3 @@
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
-import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -14,18 +12,14 @@ export const StartCaseStep1 = connect(
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
-    submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     validationErrors: state.validationErrors,
   },
   ({
     completeStartCaseWizardStepSequence,
     constants,
     formCancelToggleCancelSequence,
-    showModal,
     startCaseHelper,
-    submitFilePetitionSequence,
     validationErrors,
   }) => {
     return (
@@ -109,10 +103,6 @@ export const StartCaseStep1 = connect(
             Cancel
           </button>
         </div>
-        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
-        )}
       </>
     );
   },
