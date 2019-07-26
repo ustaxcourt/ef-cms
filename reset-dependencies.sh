@@ -1,19 +1,19 @@
 #!/bin/bash
 
-pushd shared
+cd shared || exit
 rm -rf node_modules
 rm package-lock.json
 npm i
-popd
+cd .. || exit
 
-pushd web-api
+cd web-api || exit
 rm -rf node_modules
 rm package-lock.json
 npm i
-popd
+cd .. || exit
 
-pushd web-client
+cd web-client || exit
 rm -rf node_modules
 rm package-lock.json
 npm i
-popd
+cd .. || exit

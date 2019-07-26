@@ -10,12 +10,12 @@ node web-api/start-s3rver &
 S3RVER_PID=$!
 
 echo "seeding s3"
-pushd web-api/storage
+cd web-api/storage || exit
 # clobber S3 and re-init from fixtures
 rm -rf s3/noop-documents-local-us-east-1
 mkdir -p s3/noop-documents-local-us-east-1
 cp -R fixtures/s3/ s3/noop-documents-local-us-east-1
-popd
+cd ../.. || exit
 
 echo "creating dynamo tables"
 node web-api/create-dynamo-tables.js
