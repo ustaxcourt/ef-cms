@@ -11,6 +11,7 @@ const {
  */
 function Scan({ applicationContext, rawScan }) {
   Object.assign(this, rawScan, {
+    applicationContext,
     batches: rawScan.batches || [],
     createdAt: rawScan.createdAt || new Date().toISOString(),
     scanId: rawScan.scanId || applicationContext.getUniqueId(),
