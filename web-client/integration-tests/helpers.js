@@ -273,6 +273,8 @@ exports.forwardWorkItem = async (test, to, workItemId, message) => {
 };
 
 exports.uploadPetition = async (test, overrides = {}) => {
+  await test.runSequence('gotoStartCaseWizardSequence');
+
   test.setState('form', {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
@@ -290,29 +292,13 @@ exports.uploadPetition = async (test, overrides = {}) => {
     filingType: 'Myself',
     hasIrsNotice: false,
     partyType: 'Petitioner',
+    petitionFile: fakeFile,
+    petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
     procedureType: overrides.procedureType || 'Regular',
-    signature: true,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'petitionFile',
-    value: fakeFile,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'petitionFileSize',
-    value: 1,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'stinFile',
-    value: fakeFile,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'stinFileSize',
-    value: 1,
+    stinFile: fakeFile,
+    stinFileSize: 1,
+    wizardStep: '4',
   });
 
   await test.runSequence('submitFilePetitionSequence');

@@ -85,22 +85,22 @@ async function createCase(test) {
     signature: true,
   });
 
-  await test.runSequence('updatePetitionValueSequence', {
+  await test.runSequence('updateStartCaseFormValueSequence', {
     key: 'petitionFile',
     value: fakeFile,
   });
 
-  await test.runSequence('updatePetitionValueSequence', {
+  await test.runSequence('updateStartCaseFormValueSequence', {
     key: 'petitionFileSize',
     value: 1,
   });
 
-  await test.runSequence('updatePetitionValueSequence', {
+  await test.runSequence('updateStartCaseFormValueSequence', {
     key: 'stinFile',
     value: fakeFile,
   });
 
-  await test.runSequence('updatePetitionValueSequence', {
+  await test.runSequence('updateStartCaseFormValueSequence', {
     key: 'stinFileSize',
     value: 1,
   });
