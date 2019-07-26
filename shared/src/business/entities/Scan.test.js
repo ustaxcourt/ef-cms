@@ -43,4 +43,17 @@ describe('Scan entity', () => {
 
     expect(scan.batches).toHaveLength(0);
   });
+
+  describe('Validation', () => {
+    it('invalid number of batches', () => {
+      const scan = new Scan({
+        applicationContext,
+        rawScan: {},
+      });
+
+      expect(scan.getFormattedValidationErrors()).toMatchObject({
+        batches: 'At least one batch is required',
+      });
+    });
+  });
 });
