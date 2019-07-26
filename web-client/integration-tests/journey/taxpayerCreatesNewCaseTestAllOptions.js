@@ -464,7 +464,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showSecondaryContact).toBeFalsy();
 
-    // custodian party type primary/secondary contact
+    // custodian party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -494,9 +494,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // minor party type primary/secondary contact
+    // minor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -527,7 +527,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
     // legally incompetent person party type primary/secondary contact
     await test.runSequence('updateStartCaseFormValueSequence', {

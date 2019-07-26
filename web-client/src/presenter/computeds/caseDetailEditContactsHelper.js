@@ -91,14 +91,10 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
     case PARTY_TYPES.nextFriendForMinor:
       contacts = {
         contactPrimary: {
+          displaySecondaryName: true,
           header: 'Next Friend Information',
-          nameLabel: 'Name of Next Friend',
-        },
-        contactSecondary: {
-          displayInCareOf: true,
-          displayPhone: true,
-          header: 'Minor Information',
           nameLabel: 'Name of Minor',
+          secondaryNameLabel: 'Name of Next Friend',
         },
       };
       break;

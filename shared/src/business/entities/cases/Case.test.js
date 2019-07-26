@@ -355,15 +355,14 @@ describe('Case entity', () => {
     });
 
     it('party type Minor', () => {
-      const caseTitle = Case.getCaseCaption({
+      const mockCase = {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        contactSecondary: {
-          name: 'Test Taxpayer 2',
-        },
-      });
+      };
+      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer 2, Minor, Test Taxpayer, Next Friend, Petitioner',
+        'Test Taxpayer, Minor, Test Taxpayer 2, Next Friend, Petitioner',
       );
     });
 
