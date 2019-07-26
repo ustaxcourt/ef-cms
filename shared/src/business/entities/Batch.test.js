@@ -1,4 +1,3 @@
-const sinon = require('sinon');
 const { Batch } = require('./Batch');
 
 describe('Batch entity', () => {
