@@ -66,6 +66,8 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
+  const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
@@ -79,6 +81,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationPublic: isExternalUser,
+    showCaseNameForPrimary,
     showCreateOrderButton,
     showDirectDownloadLink: directDocumentLinkDesired,
     showDocumentDetailLink: !directDocumentLinkDesired,
