@@ -7,7 +7,7 @@ import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
-import { Scan } from '../ustc-ui/Scan/Scan';
+import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
@@ -37,15 +37,12 @@ export const StartCaseInternal = connect(
   },
   ({
     caseTypes,
-    completeScanSequence,
     constants,
     form,
     formCancelToggleCancelSequence,
-    scanHelper,
     showModal,
     startCaseHelper,
     startCaseInternalHelper,
-    startScanSequence,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
@@ -128,33 +125,6 @@ export const StartCaseInternal = connect(
                       className="usa-error-message"
                     />
                   </div>
-
-                  {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
-                    <Scan
-                      onDoneClicked={() =>
-                        completeScanSequence({
-                          onComplete: file => {
-                            limitFileSize(
-                              file,
-                              constants.MAX_FILE_SIZE_MB,
-                              () => {
-                                updateFormValueSequence({
-                                  key: 'petitionFile',
-                                  value: file,
-                                });
-                                updateFormValueSequence({
-                                  key: 'petitionFileSize',
-                                  value: file.size,
-                                });
-                                validatePetitionFromPaperSequence();
-                              },
-                            );
-                          },
-                        })
-                      }
-                      onScanClicked={() => startScanSequence()}
-                    />
-                  )}
 
                   <div
                     className={`usa-form-group ${
@@ -515,6 +485,9 @@ export const StartCaseInternal = connect(
                     Cancel
                   </button>
                 </div>
+              </div>
+              <div className="grid-col-7">
+                <ScanBatchPreviewer documentType="Petition!!" />
               </div>
             </div>
           </form>
