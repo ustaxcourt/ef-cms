@@ -25,7 +25,10 @@ export const gotoStartCaseWizardSequence = [
   setProcedureTypesAction,
   getUserRoleAction,
   {
-    docketclerk: [setCurrentPageAction('StartCaseInternal')],
+    docketclerk: [
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     petitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
@@ -33,7 +36,10 @@ export const gotoStartCaseWizardSequence = [
       set(state.form.wizardStep, '1'),
       setCurrentPageAction('StartCaseWizard'),
     ],
-    petitionsclerk: [setCurrentPageAction('StartCaseInternal')],
+    petitionsclerk: [
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     practitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
