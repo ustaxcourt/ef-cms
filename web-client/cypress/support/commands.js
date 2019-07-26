@@ -65,9 +65,9 @@ Cypress.Commands.add('showsErrorMessage', (shows = true) => {
 
 Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   if (shows) {
-    cy.get('.usa-alert-success').should('exist');
+    cy.get('.usa-alert--success').should('exist');
   } else {
-    cy.get('.usa-alert-success').should('not.exist');
+    cy.get('.usa-alert--success').should('not.exist');
   }
 });
 
