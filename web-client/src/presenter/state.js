@@ -28,6 +28,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
@@ -45,6 +46,7 @@ export const state = {
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
+  batches: [],
   betaBar: {
     isVisible: true,
   },
@@ -63,6 +65,7 @@ export const state = {
   contactsHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',
+  currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
   docketRecordIndex: 0,
@@ -74,6 +77,7 @@ export const state = {
   documentHelper,
   documentId: null,
   documentSigningHelper,
+  documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
@@ -113,6 +117,7 @@ export const state = {
   previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
+  scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},
   screenMetadata: {},
@@ -120,6 +125,7 @@ export const state = {
   sectionInboxCount: 0,
   selectDocumentSelectHelper,
   selectDocumentTypeHelper,
+  selectedBatchIndex: 0,
   selectedWorkItems: [],
   sessionMetadata: {},
   showAppTimeoutModalHelper,
