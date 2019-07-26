@@ -1,2 +1,3 @@
 #!/bin/bash -e
-find . -regex '.*\.sh' | grep -v 'node_modules' | xargs shellcheck
+
+find . -type f -name '*.sh' ! -path '*node_modules*' -exec shellcheck {} \;
