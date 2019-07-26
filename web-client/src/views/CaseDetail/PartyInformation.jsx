@@ -28,7 +28,10 @@ export const PartyInformation = connect(
                 </p>
                 <div>
                   <address aria-labelledby={'primary-label'}>
-                    {addressDisplay(caseDetail.contactPrimary)}
+                    {addressDisplay(
+                      caseDetail.contactPrimary,
+                      caseHelper.showCaseNameForPrimary && caseDetail.caseName,
+                    )}
                   </address>
 
                   {caseHelper.showEditContactButton && (
@@ -117,11 +120,11 @@ export const PartyInformation = connect(
       </div>
     );
 
-    const addressDisplay = contact => {
+    const addressDisplay = (contact, nameOverride) => {
       return (
         <React.Fragment>
           <p className="margin-top-0">
-            {contact.name}
+            {nameOverride || contact.name}
             {contact.inCareOf && (
               <span>
                 <br />
