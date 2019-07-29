@@ -4,7 +4,7 @@
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the passed in props
- * @returns {object}
+ * @returns {object} the pdfUrl
  */
 export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
