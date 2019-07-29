@@ -20,28 +20,34 @@ presenter.providers.applicationContext = {
 global.alert = () => null;
 
 describe('rescanBatchAction', () => {
-  it('rescans the batch based on the props.batchIndex passed in', async () => {
+  it('rescans the batch based on the state.batchIndexToRescan and state.documentSelectedForScan and replaces that batch with the return from startScanSession', async () => {
     const result = await runAction(rescanBatchAction, {
       modules: {
         presenter,
       },
       props: {
-        batchIndex: 1,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
       state: {
-        batches: [
-          { index: 0, pages: [{ a: 1 }, { b: 2 }] },
-          { index: 1, pages: [{ c: 3 }, { d: 4 }] },
-        ],
+        batchIndexToRescan: 1,
+        batches: {
+          petition: [
+            { index: 0, pages: [{ a: 1 }, { b: 2 }] },
+            { index: 1, pages: [{ c: 3 }, { d: 4 }] },
+          ],
+        },
+        documentSelectedForScan: 'petition',
         isScanning: false,
       },
     });
 
     expect(result.state.isScanning).toBeTruthy();
     expect(mockStartScanSession).toHaveBeenCalled();
-    expect(result.state.batches[1].pages).toEqual([{ e: 5 }, { f: 6 }]);
+    expect(result.state.batches.petition[1].pages).toEqual([
+      { e: 5 },
+      { f: 6 },
+    ]);
   });
 
   it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {

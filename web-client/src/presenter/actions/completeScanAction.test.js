@@ -3,7 +3,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 const mockCompleteScanSession = jest.fn();
-const mockGeneratePDFFromPNGData = jest.fn();
+const mockGeneratePDFFromJPGData = jest.fn();
 const mockOnComplete = jest.fn();
 
 // Mocking File
@@ -24,8 +24,8 @@ presenter.providers.applicationContext = {
     },
   }),
   getUseCases: () => ({
-    generatePDFFromPNGDataInteractor: () => {
-      return mockGeneratePDFFromPNGData();
+    generatePDFFromJPGDataInteractor: () => {
+      return mockGeneratePDFFromJPGData();
     },
   }),
 };
@@ -40,13 +40,16 @@ describe('completeScanAction', () => {
         onComplete: mockOnComplete,
       },
       state: {
-        batches: [{ pages: [] }],
+        batches: {
+          petition: [{ pages: [] }],
+        },
+        documentSelectedForScan: 'petition',
         isScanning: true,
       },
     });
 
     // expect(mockCompleteScanSession).toHaveBeenCalled();
-    expect(mockGeneratePDFFromPNGData).toHaveBeenCalled();
+    expect(mockGeneratePDFFromJPGData).toHaveBeenCalled();
     expect(mockOnComplete).toHaveBeenCalled();
     expect(result.state.isScanning).toEqual(false);
   });

@@ -28,12 +28,13 @@ export const startScanAction = async ({
     const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
     });
-    const batches = get(state.batches);
+    const documentSelectedForScan = get(state.documentSelectedForScan);
+    const batches = get(state.batches[documentSelectedForScan]) || [];
     const nextIndex = batches.length
       ? Math.max(...batches.map(b => b.index)) + 1
       : 0;
 
-    store.set(state.batches, [
+    store.set(state.batches[documentSelectedForScan], [
       ...batches,
       ...[
         {
