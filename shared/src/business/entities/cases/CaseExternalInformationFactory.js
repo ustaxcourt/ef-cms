@@ -23,7 +23,6 @@ function CaseExternalInformationFactory(rawCase) {
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.irsNoticeDate = rawCase.irsNoticeDate;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -36,15 +35,17 @@ function CaseExternalInformationFactory(rawCase) {
   this.stinFileSize = rawCase.stinFileSize;
   this.wizardStep = rawCase.wizardStep;
 
-  const contacts = ContactFactory.createContacts({
-    contactInfo: {
-      primary: rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
-    },
-    partyType: rawCase.partyType,
-  });
-  this.contactPrimary = contacts.primary;
-  this.contactSecondary = contacts.secondary;
+  if (+this.wizardStep >= 3) {
+    const contacts = ContactFactory.createContacts({
+      contactInfo: {
+        primary: rawCase.contactPrimary,
+        secondary: rawCase.contactSecondary,
+      },
+      partyType: rawCase.partyType,
+    });
+    this.contactPrimary = contacts.primary;
+    this.contactSecondary = contacts.secondary;
+  }
 }
 
 CaseExternalInformationFactory.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
@@ -57,7 +58,7 @@ const atWizardStep = (stepNum, schemaObj) => {
   }
 
   const generatedSchema = {};
-  Object.keys(schemaObj).map(key => {
+  Object.keys(schemaObj).forEach(key => {
     generatedSchema[key] = joi.when('wizardStep', {
       is: joi.only(stepNumArray),
       otherwise: joi.optional().allow(null),

@@ -141,6 +141,23 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
     });
 
+    it('should be valid if all step 1 and step 2 params are present, but a partyType and invalid contactPrimary are present', () => {
+      const caseExternal = new CaseExternalInformationFactory({
+        caseType: 'Deficiency',
+        contactPrimary: {
+          name: 'Something',
+        },
+        hasIrsNotice: true,
+        partyType: 'Myself',
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: 1,
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 1,
+        wizardStep: '2',
+      });
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+    });
+
     describe('petition file size', () => {
       it('should inform you if petition file size is greater than 500MB', () => {
         const caseExternal = new CaseExternalInformationFactory({

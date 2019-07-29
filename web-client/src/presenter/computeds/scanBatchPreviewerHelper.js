@@ -4,7 +4,7 @@ export const scanBatchPreviewerHelper = get => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
   const batches = get(state.batches);
   const selectedBatch = batches.length
-    ? batches[selectedBatchIndex]
+    ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
   const currentPageIndex = get(state.currentPageIndex);
   const documentUploadMode = get(state.documentUploadMode);
@@ -33,7 +33,9 @@ export const scanBatchPreviewerHelper = get => {
     batches,
     currentPage: currentPageIndex,
     scannerSource: get(state.scanner.scannerSourceName),
-    selectedBatch: batches.length ? batches[selectedBatchIndex] : {},
+    selectedBatch: batches.length
+      ? batches.find(b => b.index === selectedBatchIndex)
+      : {},
     selectedPageImage: selectPageImage,
     // sources: get(state.scanner.sources),
     showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',

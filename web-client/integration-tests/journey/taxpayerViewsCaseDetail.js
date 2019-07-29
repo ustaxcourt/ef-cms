@@ -27,6 +27,12 @@ export default (test, overrides = {}) => {
       `${test.docketNumber}${docketNumberSuffix}`,
     );
     expect(caseDetail.documents.length).toEqual(2);
+
+    //verify that event codes were added to initial documents/docket entries
+    expect(caseDetail.documents[0].eventCode).toEqual('P');
+    expect(caseDetail.documents[1].eventCode).toEqual('STIN');
+    expect(caseDetail.docketRecord[1].eventCode).toEqual('RQT');
+
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
 
     const helper = runCompute(caseDetailHelper, {

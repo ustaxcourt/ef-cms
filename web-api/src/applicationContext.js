@@ -122,8 +122,8 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
-  generatePDFFromPNGDataInteractor,
-} = require('../../shared/src/business/useCases/generatePDFFromPNGDataInteractor');
+  generatePDFFromJPGDataInteractor,
+} = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
@@ -562,7 +562,7 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
-        generatePDFFromPNGDataInteractor,
+        generatePDFFromJPGDataInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,

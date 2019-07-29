@@ -28,8 +28,8 @@ const DWObject = {
       return blob;
     };
 
-    scanBuffer.push(b64toBlob(image1, 'image/png'));
-    scanBuffer.push(b64toBlob(image2, 'image/png'));
+    scanBuffer.push(b64toBlob(image1, 'image/jpeg'));
+    scanBuffer.push(b64toBlob(image2, 'image/jpeg'));
     DWObject.HowManyImagesInBuffer += 2;
   },
   CloseSource: () => null,
@@ -51,37 +51,8 @@ const DWObject = {
 
 exports.getScannerInterface = () => {
   const completeScanSession = async () => {
-    const count = DWObject.HowManyImagesInBuffer;
-    const promises = [];
-    const response = { error: null, scannedBuffer: null };
-    for (let index = 0; index < count; index++) {
-      promises.push(
-        new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob([index], null, resolve, reject);
-        }),
-      );
-    }
-
-    return await Promise.all(promises)
-      .then(async blobs => {
-        const blobBuffers = [];
-
-        for (let blob of blobs) {
-          blobBuffers.push(
-            new Uint8Array(await new Response(blob).arrayBuffer()),
-          );
-        }
-        response.scannedBuffer = blobBuffers;
-        return response;
-      })
-      .catch(err => {
-        response.error = err;
-        return response;
-      })
-      .finally(() => {
-        DWObject.RemoveAllImages();
-        DWObject.CloseSource();
-      });
+    DWObject.RemoveAllImages();
+    DWObject.CloseSource();
   };
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;

@@ -51,7 +51,7 @@ import { filePetitionInteractor } from '../../shared/src/business/useCases/fileP
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
-import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
+import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
@@ -174,7 +174,7 @@ const allUseCases = {
   forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocumentTitleInteractor,
-  generatePDFFromPNGDataInteractor,
+  generatePDFFromJPGDataInteractor,
   generateSignedDocumentInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -248,6 +248,9 @@ const allUseCases = {
 tryCatchDecorator(allUseCases);
 
 const applicationContext = {
+  convertBlobToUInt8Array: async blob => {
+    return new Uint8Array(await new Response(blob).arrayBuffer());
+  },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
   },
@@ -283,7 +286,6 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
     ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,

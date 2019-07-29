@@ -75,15 +75,30 @@ const practitionerAssociationDocumentTypes = [
  * documentTypes
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
  */
-Document.initialDocumentTypes = {
-  ownershipDisclosure: 'Ownership Disclosure Statement',
-  petitionFile: 'Petition',
-  requestForPlaceOfTrial: 'Request for Place of Trial',
-  stin: 'Statement of Taxpayer Identification',
+Document.INITIAL_DOCUMENT_TYPES = {
+  ownershipDisclosure: {
+    documentType: 'Ownership Disclosure Statement',
+    eventCode: 'ODS',
+  },
+  petition: {
+    documentType: 'Petition',
+    eventCode: 'P',
+  },
+  requestForPlaceOfTrial: {
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
+  },
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+  },
 };
 
-Document.signedDocumentTypes = {
-  signedStipulatedDecision: 'Stipulated Decision',
+Document.SIGNED_DOCUMENT_TYPES = {
+  signedStipulatedDecision: {
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+  },
 };
 
 Document.getDocumentTypes = () => {
@@ -93,9 +108,14 @@ Document.getDocumentTypes = () => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
-  const signedTypes = Object.values(Document.signedDocumentTypes);
+  const initialTypes = Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(
+    t => Document.INITIAL_DOCUMENT_TYPES[t].documentType,
+  );
+  const signedTypes = Object.keys(Document.SIGNED_DOCUMENT_TYPES).map(
+    t => Document.SIGNED_DOCUMENT_TYPES[t].documentType,
+  );
   const documentTypes = [
-    ...Object.values(Document.initialDocumentTypes),
+    ...initialTypes,
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
     ...orderDocTypes,
@@ -199,6 +219,12 @@ Document.prototype.generateFiledBy = function(caseDetail) {
       caseDetail.contactPrimary
     ) {
       filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+    } else if (
+      this.partySecondary &&
+      !this.partyPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
     } else if (
       this.partyPrimary &&
       this.partySecondary &&

@@ -84,7 +84,7 @@ export default (test, fakeFile) => {
       postalCode: '23-skidoo',
     });
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });
@@ -95,7 +95,7 @@ export default (test, fakeFile) => {
     expect(result.showHasIrsNoticeOptions).toBeFalsy();
     expect(result.showNotHasIrsNoticeOptions).toBeTruthy();
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });

@@ -8,7 +8,9 @@ window['EnumDWT_ImageType'] = { IT_PNG: 1 };
 const mockSources = ['Test Source 1', 'Test Source 2'];
 const mockScanCount = 1;
 
-const mockAcquireImage = jest.fn();
+let onPostAllTransfersCb = null;
+
+const mockAcquireImage = jest.fn(() => onPostAllTransfersCb());
 const mockCloseSource = jest.fn();
 const mockOpenSource = jest.fn();
 const mockRemoveAllImages = jest.fn();
@@ -33,12 +35,16 @@ const DWObject = {
   HowManyImagesInBuffer: mockScanCount,
   IfDisableSourceAfterAcquire: false,
   OpenSource: mockOpenSource,
+  RegisterEvent: (event, cb) => {
+    onPostAllTransfersCb = cb;
+  },
   RemoveAllImages: mockRemoveAllImages,
   SelectSourceByIndex: idx => {
     DWObject.DataSource = idx;
     return true;
   },
   SourceCount: mockSources.length,
+  UnregisterEvent: () => null,
 };
 
 const Dynamsoft = {
@@ -119,7 +125,10 @@ describe('getScannerInterface', () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
     expect(scannerAPI).toHaveProperty('startScanSession');
-    await scannerAPI.startScanSession();
+    const applicationContext = {
+      convertBlobToUInt8Array: () => new Uint8Array([]),
+    };
+    await scannerAPI.startScanSession({ applicationContext });
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
     expect(mockAcquireImage).toHaveBeenCalled();
