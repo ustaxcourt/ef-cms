@@ -17,4 +17,5 @@ export const selectDocumentForScanAction = ({ get, props, store }) => {
   store.set(state.currentPageIndex, 0);
   store.set(state.selectedBatchIndex, batches.length ? batches[0].index : 0);
   store.set(state.documentSelectedForScan, documentSelectedForScan);
+  store.set(state.documentUploadMode, 'scan');
 };

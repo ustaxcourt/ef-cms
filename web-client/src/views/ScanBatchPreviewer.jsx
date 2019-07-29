@@ -128,8 +128,19 @@ export const ScanBatchPreviewer = connect(
           <PdfPreview />
           <button
             className="usa-button usa-button--outline red-warning"
-            onClick={() => {
-              // TODO: sequence TBD
+            onClick={e => {
+              e.preventDefault();
+              updateFormValueSequence({
+                key: documentType,
+                value: null,
+              });
+              updateFormValueSequence({
+                key: `${documentType}Size`,
+                value: null,
+              });
+              setDocumentUploadModeSequence({
+                documentUploadMode: 'scan',
+              });
             }}
           >
             <FontAwesomeIcon icon={['fas', 'times-circle']} />
@@ -240,7 +251,8 @@ export const ScanBatchPreviewer = connect(
             <button
               className="usa-button usa-button--unstyled margin-bottom-2"
               style={{ textDecoration: 'none' }}
-              onClick={() => {
+              onClick={e => {
+                e.preventDefault();
                 startScanSequence();
               }}
             >
