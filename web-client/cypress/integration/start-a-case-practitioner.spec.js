@@ -6,7 +6,7 @@ const {
 
 const { fillInAndSubmitForm } = require('../support/pages/start-a-case');
 
-describe('Assign a work item ', () => {
+describe('Start a case as a practitioner ', () => {
   before(() => {
     cy.seed();
   });

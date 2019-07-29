@@ -1,17 +1,17 @@
-const pdflib = require('pdf-lib');
-const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = pdflib;
+const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
 
 /**
- * generatePDFFromPNGDataInteractor
+ * takes an array of JPG images (each a bytearray) and combines
+ * them into one PDF file
  *
- * @param imgData // Array of Uint8Array containing img data
+ * @param {Array} imgData array of bytearrays
+ * @return {Uint8Array} bytearray of PDF
  */
-
-exports.generatePDFFromPNGDataInteractor = imgData => {
+exports.generatePDFFromJPGs = imgData => {
   const pdfDoc = PDFDocumentFactory.create();
 
   const addImageToPage = img => {
-    const [imgRef, imgDim] = pdfDoc.embedPNG(img);
+    const [imgRef, imgDim] = pdfDoc.embedJPG(img);
     const page = pdfDoc
       .createPage([imgDim.width, imgDim.height])
       .addImageObject('imgObj', imgRef);
