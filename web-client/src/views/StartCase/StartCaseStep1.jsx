@@ -1,5 +1,4 @@
-import { FileUploadErrorModal } from '../FileUploadErrorModal';
-import { FileUploadStatusModal } from '../FileUploadStatusModal';
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -14,25 +13,27 @@ export const StartCaseStep1 = connect(
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
-    submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     validationErrors: state.validationErrors,
   },
   ({
     completeStartCaseWizardStepSequence,
     constants,
     formCancelToggleCancelSequence,
-    showModal,
     startCaseHelper,
-    submitFilePetitionSequence,
     validationErrors,
   }) => {
     return (
       <>
-        <h1 className="margin-bottom-2" id="start-case-header" tabIndex="-1">
-          1. Provide Statement of Identity
-        </h1>
+        <Focus>
+          <h1
+            className="focusable margin-bottom-2"
+            id="start-case-header"
+            tabIndex="-1"
+          >
+            1. Provide Statement of Identity
+          </h1>
+        </Focus>
         <Hint>
           The Statement of Taxpayer Identification is the only document that
           should include personal information (such as Social Security Numbers,
@@ -109,10 +110,6 @@ export const StartCaseStep1 = connect(
             Cancel
           </button>
         </div>
-        {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
-        {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitFilePetitionSequence} />
-        )}
       </>
     );
   },

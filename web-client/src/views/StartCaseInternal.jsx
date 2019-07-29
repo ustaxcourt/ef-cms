@@ -1,13 +1,14 @@
 import { BigHeader } from './BigHeader';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
+import { DocumentSelect } from '../ustc-ui/DocumentSelect/DocumentSelect';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
-import { Scan } from '../ustc-ui/Scan/Scan';
+import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
@@ -20,6 +21,8 @@ export const StartCaseInternal = connect(
     caseTypes: state.caseTypes,
     completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
+    documentSelectedForScan: state.documentSelectedForScan,
+    documentSelectedHelper: state.documentSelectedHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     scanHelper: state.scanHelper,
@@ -37,15 +40,14 @@ export const StartCaseInternal = connect(
   },
   ({
     caseTypes,
-    completeScanSequence,
     constants,
+    documentSelectedForScan,
+    documentSelectedHelper,
     form,
     formCancelToggleCancelSequence,
-    scanHelper,
     showModal,
     startCaseHelper,
     startCaseInternalHelper,
-    startScanSequence,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
@@ -70,186 +72,37 @@ export const StartCaseInternal = connect(
             )}
             <ErrorNotification />
             <div className="grid-row grid-gap">
-              <div className="grid-col-5">
+              <div className="grid-col-12">
                 <h1>Case Information</h1>
                 <p className="required-statement margin-top-0 margin-bottom-4">
                   All fields required unless otherwise noted
                 </p>
+              </div>
 
+              <div className="grid-col-5">
+                <DocumentSelect
+                  options={[
+                    {
+                      name: 'Petition',
+                      required: true,
+                      value: 'petitionFile',
+                    },
+                    {
+                      name: 'Statement of Taxpayer Identification',
+                      value: 'stinFile',
+                    },
+                    {
+                      name: 'Ownership Discloser Statement',
+                      value: 'ownershipDisclosureFile',
+                    },
+                    {
+                      name: 'Request for Place of Trial',
+                      value: 'requestForPlaceOfTrialFile',
+                    },
+                  ]}
+                  title="Petition"
+                />
                 <div className="blue-container document-detail-one-third">
-                  <div
-                    className={`usa-form-group ${
-                      validationErrors.petitionFile
-                        ? 'usa-form-group--error'
-                        : ''
-                    }`}
-                  >
-                    <label
-                      className={
-                        'usa-label ustc-upload-petition ' +
-                        (startCaseHelper.showPetitionFileValid
-                          ? 'validated'
-                          : '')
-                      }
-                      htmlFor="petition-file"
-                    >
-                      Upload Your Petition{' '}
-                      <span className="success-message margin-left-2px">
-                        <FontAwesomeIcon icon="check-circle" size="sm" />
-                      </span>
-                    </label>
-                    <input
-                      accept=".pdf"
-                      aria-describedby="petition-hint"
-                      className="usa-input"
-                      id="petition-file"
-                      name="petitionFile"
-                      type="file"
-                      onChange={e => {
-                        limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.files[0],
-                          });
-                          updateFormValueSequence({
-                            key: `${e.target.name}Size`,
-                            value: e.target.files[0].size,
-                          });
-                          validatePetitionFromPaperSequence();
-                        });
-                      }}
-                    />
-                    <Text
-                      bind="validationErrors.petitionFile"
-                      className="usa-error-message"
-                    />
-                    <Text
-                      bind="validationErrors.petitionFileSize"
-                      className="usa-error-message"
-                    />
-                  </div>
-
-                  {scanHelper.hasScanFeature && scanHelper.scanFeatureEnabled && (
-                    <Scan
-                      onDoneClicked={() =>
-                        completeScanSequence({
-                          onComplete: file => {
-                            limitFileSize(
-                              file,
-                              constants.MAX_FILE_SIZE_MB,
-                              () => {
-                                updateFormValueSequence({
-                                  key: 'petitionFile',
-                                  value: file,
-                                });
-                                updateFormValueSequence({
-                                  key: 'petitionFileSize',
-                                  value: file.size,
-                                });
-                                validatePetitionFromPaperSequence();
-                              },
-                            );
-                          },
-                        })
-                      }
-                      onScanClicked={() => startScanSequence()}
-                    />
-                  )}
-
-                  <div
-                    className={`usa-form-group ${
-                      validationErrors.stinFileSize
-                        ? 'usa-form-group--error'
-                        : ''
-                    }`}
-                  >
-                    <label
-                      className={
-                        'usa-label ustc-upload-stin ' +
-                        (startCaseHelper.showStinFileValid ? 'validated' : '')
-                      }
-                      htmlFor="stin-file"
-                    >
-                      Upload Your Statement of Taxpayer Identification{' '}
-                      <span className="usa-hint">(optional)</span>
-                      <span className="success-message margin-left-2px">
-                        <FontAwesomeIcon icon="check-circle" size="sm" />
-                      </span>
-                    </label>
-                    <input
-                      accept=".pdf"
-                      className="usa-input"
-                      id="stin-file"
-                      name="stinFile"
-                      type="file"
-                      onChange={e => {
-                        limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.files[0],
-                          });
-                          updateFormValueSequence({
-                            key: `${e.target.name}Size`,
-                            value: e.target.files[0].size,
-                          });
-                          validatePetitionFromPaperSequence();
-                        });
-                      }}
-                    />
-                    <Text
-                      bind="validationErrors.stinFileSize"
-                      className="usa-error-message"
-                    />
-                  </div>
-
-                  <div
-                    className={`usa-form-group ${
-                      validationErrors.requestForPlaceOfTrialFileSize
-                        ? 'usa-form-group--error'
-                        : ''
-                    }`}
-                  >
-                    <label
-                      className={
-                        'usa-label ustc-upload-rpt ' +
-                        (startCaseHelper.showRequestForPlaceOfTrialFileValid
-                          ? 'validated'
-                          : '')
-                      }
-                      htmlFor="rpt-file"
-                    >
-                      Upload Your Request for Place of Trial{' '}
-                      <span className="usa-hint">(optional)</span>
-                      <span className="success-message margin-left-2px">
-                        <FontAwesomeIcon icon="check-circle" size="sm" />
-                      </span>
-                    </label>
-                    <input
-                      accept=".pdf"
-                      className="usa-input"
-                      id="rpt-file"
-                      name="requestForPlaceOfTrialFile"
-                      type="file"
-                      onChange={e => {
-                        limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.files[0],
-                          });
-                          updateFormValueSequence({
-                            key: `${e.target.name}Size`,
-                            value: e.target.files[0].size,
-                          });
-                          validatePetitionFromPaperSequence();
-                        });
-                      }}
-                    />
-                    <Text
-                      bind="validationErrors.requestForPlaceOfTrialFileSize"
-                      className="usa-error-message"
-                    />
-                  </div>
-
                   <div
                     className={`usa-form-group ${
                       validationErrors.receivedAt ? 'usa-form-group--error' : ''
@@ -515,6 +368,16 @@ export const StartCaseInternal = connect(
                     Cancel
                   </button>
                 </div>
+              </div>
+              <div className="grid-col-7">
+                {documentSelectedForScan && (
+                  <ScanBatchPreviewer
+                    documentType={documentSelectedForScan}
+                    documentTypeName={
+                      documentSelectedHelper.documentSelectedForScanName
+                    }
+                  />
+                )}
               </div>
             </div>
           </form>

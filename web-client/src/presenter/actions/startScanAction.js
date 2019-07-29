@@ -8,8 +8,14 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.path
  *
  */
-export const startScanAction = async ({ applicationContext, props, store }) => {
+export const startScanAction = async ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
   store.set(state.isScanning, true);
+  store.set(state.submitting, true);
 
   const scanner = applicationContext.getScanner();
 
@@ -19,7 +25,23 @@ export const startScanAction = async ({ applicationContext, props, store }) => {
       props.scannerSourceName
   ) {
     scanner.setSourceByIndex(props.scannerSourceIndex);
-    scanner.startScanSession();
+    const { scannedBuffer: pages } = await scanner.startScanSession({
+      applicationContext,
+    });
+    const batches = get(state.batches);
+    const nextIndex = batches.length
+      ? Math.max(...batches.map(b => b.index)) + 1
+      : 0;
+
+    store.set(state.batches, [
+      ...batches,
+      ...[
+        {
+          index: nextIndex,
+          pages,
+        },
+      ],
+    ]);
     store.set(state.submitting, false);
   } else {
     await applicationContext.getUseCases().removeItemInteractor({

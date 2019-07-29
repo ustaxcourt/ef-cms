@@ -41,12 +41,6 @@ export const ContactSecondary = connect(
           <h4>{contactsHelper.contactSecondary.header}</h4>
         )}
         <div className="blue-container contact-group">
-          <Country
-            bind={bind}
-            type="contactSecondary"
-            onBlur={onBlur}
-            onChange={onChange}
-          />
           <div
             className={
               'usa-form-group ' +
@@ -130,6 +124,12 @@ export const ContactSecondary = connect(
               />
             </div>
           )}
+          <Country
+            bind={bind}
+            type="contactSecondary"
+            onBlur={onBlur}
+            onChange={onChange}
+          />
           {data.contactSecondary.countryType ===
             constants.COUNTRY_TYPES.DOMESTIC && (
             <Address

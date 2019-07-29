@@ -2,7 +2,9 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { startScanAction } from './startScanAction';
 
-const mockStartScanSession = jest.fn();
+const mockStartScanSession = jest.fn(() => ({
+  scannedBuffer: [],
+}));
 const mockRemoveItemInteractor = jest.fn();
 
 presenter.providers.applicationContext = {
@@ -28,6 +30,7 @@ describe('startScanAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
+        batches: [],
         isScanning: false,
       },
     });

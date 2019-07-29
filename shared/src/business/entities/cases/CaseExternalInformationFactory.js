@@ -57,7 +57,7 @@ const atWizardStep = (stepNum, schemaObj) => {
   }
 
   const generatedSchema = {};
-  Object.keys(schemaObj).map(key => {
+  Object.keys(schemaObj).forEach(key => {
     generatedSchema[key] = joi.when('wizardStep', {
       is: joi.only(stepNumArray),
       otherwise: joi.optional().allow(null),
