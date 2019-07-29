@@ -1,5 +1,3 @@
-//const { pdfStyles } = require('../../tools/pdfStyles');
-
 /**
  * generateDocketRecordPdfInteractor
  *
