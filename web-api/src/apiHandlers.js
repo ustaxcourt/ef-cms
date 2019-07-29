@@ -3,6 +3,7 @@ module.exports = {
     .handler,
   createCourtIssuedOrderPdfFromHtmlLambda: require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda')
     .handler,
+  generateDocketRecordPdfLambda: require('./generateDocketRecordPdfLambda').handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,

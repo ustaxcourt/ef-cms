@@ -32,6 +32,7 @@ import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCa
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createCoverSheetInteractor } from '../../shared/src/proxies/documents/createCoverSheetProxy';
+import { createDocketRecordPdfInteractor } from '../../shared/src/proxies/createDocketRecordPdfProxy';
 import {
   createISODateString,
   formatDateString,
@@ -160,6 +161,7 @@ const allUseCases = {
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createCoverSheetInteractor,
+  createDocketRecordPdfInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
@@ -308,6 +310,7 @@ const applicationContext = {
     CaseExternal,
     CaseExternalInformationFactory,
     CaseInternal,
+    ContactFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
