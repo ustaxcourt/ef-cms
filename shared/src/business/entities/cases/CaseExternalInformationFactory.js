@@ -23,7 +23,6 @@ function CaseExternalInformationFactory(rawCase) {
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.irsNoticeDate = rawCase.irsNoticeDate;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
