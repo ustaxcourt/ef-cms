@@ -124,7 +124,7 @@ export const PartyInformation = connect(
       </div>
     );
 
-    const addressDisplay = (contact, { hideEmail, nameOverride }) => {
+    const addressDisplay = (contact, { hideEmail, nameOverride } = {}) => {
       return (
         <React.Fragment>
           <p className="margin-top-0">
