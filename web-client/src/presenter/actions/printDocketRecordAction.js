@@ -209,9 +209,9 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     return output;
   };
 
-  const docketRecordTemplate = replaceTemplate();
+  const docketRecordHtml = replaceTemplate();
   return {
     docketNumber: caseDetail.docketNumberWithSuffix,
-    docketRecordTemplate,
+    docketRecordHtml,
   };
 };

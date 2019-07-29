@@ -256,7 +256,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-
   generateDocketRecordPdfLambda:
     runtime: nodejs8.10
     handler: src/apiHandlers.generateDocketRecordPdfLambda
