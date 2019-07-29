@@ -12,6 +12,7 @@ import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryC
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
+import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
@@ -74,6 +75,7 @@ import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceM
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
+import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
@@ -87,6 +89,7 @@ import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSe
 import { printViewSequence } from './sequences/printViewSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
+import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -95,6 +98,7 @@ import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
+import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
@@ -190,7 +194,6 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
-import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
@@ -218,6 +221,7 @@ export const presenter = {
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
     chooseModalWizardStepSequence,
+    chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
@@ -280,6 +284,7 @@ export const presenter = {
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
+    openConfirmRescanBatchModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
@@ -293,6 +298,7 @@ export const presenter = {
     printViewSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
+    removeBatchSequence,
     removeYearAmountSequence,
     rescanBatchSequence,
     reviewExternalDocumentInformationSequence,
@@ -301,6 +307,7 @@ export const presenter = {
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
+    selectDocumentForScanSequence,
     selectDocumentSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
@@ -394,7 +401,6 @@ export const presenter = {
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
     validateSelectDocumentTypeSequence,
-    validateStartCaseSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionSequence,
     viewDocumentSequence,

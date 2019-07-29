@@ -1,5 +1,6 @@
 import { CaseDifferenceExplained } from '../CaseDifferenceExplained';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
@@ -40,7 +41,11 @@ export const StartCaseStep4 = connect(
   }) => {
     return (
       <>
-        <h1 className="margin-top-4">4. How do you want this case handled?</h1>
+        <Focus>
+          <h1 className="focusable margin-top-4" tabIndex="-1">
+            4. How do you want this case handled?
+          </h1>
+        </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
           All fields required unless otherwise noted
         </p>

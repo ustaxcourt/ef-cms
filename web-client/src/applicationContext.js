@@ -50,7 +50,7 @@ import { filePetitionInteractor } from '../../shared/src/business/useCases/fileP
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
-import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
+import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
@@ -172,7 +172,7 @@ const allUseCases = {
   forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocumentTitleInteractor,
-  generatePDFFromPNGDataInteractor,
+  generatePDFFromJPGDataInteractor,
   generateSignedDocumentInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
