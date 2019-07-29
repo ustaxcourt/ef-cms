@@ -53,7 +53,6 @@
       "Action": [
         "apigateway:DELETE",
         "apigateway:UpdateRestApiPolicy",
-        "apigateway:UpdateStage",
         "apigateway:PATCH",
         "apigateway:GET",
         "apigateway:PUT",
