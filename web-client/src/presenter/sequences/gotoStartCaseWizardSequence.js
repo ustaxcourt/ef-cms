@@ -6,12 +6,12 @@ import { getFilingTypesAction } from '../actions/getFilingTypesAction';
 import { getProcedureTypesAction } from '../actions/getProcedureTypesAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
+import { props, state } from 'cerebral';
 import { set } from 'cerebral/factories';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setFilingTypesAction } from '../actions/setFilingTypesAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
-import { state } from 'cerebral';
 
 export const gotoStartCaseWizardSequence = [
   clearAlertsAction,
@@ -32,8 +32,8 @@ export const gotoStartCaseWizardSequence = [
     petitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
-      set(state.wizardStep, 'StartCaseStep1'),
-      set(state.form.wizardStep, '1'),
+      set(state.wizardStep, props.wizardStep),
+      set(state.form.wizardStep, props.step),
       setCurrentPageAction('StartCaseWizard'),
     ],
     petitionsclerk: [
@@ -43,8 +43,8 @@ export const gotoStartCaseWizardSequence = [
     practitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
-      set(state.wizardStep, 'StartCaseStep1'),
-      set(state.form.wizardStep, '1'),
+      set(state.wizardStep, props.wizardStep),
+      set(state.form.wizardStep, props.step),
       setCurrentPageAction('StartCaseWizard'),
     ],
   },
