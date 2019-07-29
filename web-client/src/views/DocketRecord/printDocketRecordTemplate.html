@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Docket Record</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+      body {
+        margin-top: 80px;
+        font-size: 10px;
+      }
+      h1 {
+        font-size: 24px;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 20px;
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        border-spacing: 0;
+        -webkit-border-horizontal-spacing: 0px;
+        -webkit-border-vertical-spacing: 0px;
+        border: 1px solid #ccc;
+      }
+
+      th,
+      td {
+        padding: 12px 8px;
+        text-align: left;
+        border-bottom: 1px solid #ccc;
+      }
+
+      th {
+        background-color: #f0f0f0;
+      }
+
+      .court-header {
+        margin-bottom: 80px;
+      }
+
+      .case-information #caption-postfix {
+        float: left;
+      }
+
+      .case-information #docket-number {
+        float: right;
+      }
+
+      .party-info {
+        border: 1px solid #ccc;
+        padding: 0px 20px 20px 20px;
+        margin: 30px 0;
+      }
+
+      .party-info-content {
+        display: flex;
+        align-items: stretch;
+      }
+
+      .party-details {
+        flex: 1;
+      }
+
+      .clear {
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="court-header">
+        <h1>United States Tax Court</h1>
+        <h2>Docket Record</h2>
+      </div>
+
+      <div class="case-information">
+        <p id="caption">{{caption}}</p>
+        <div>
+          <p id="caption-postfix">{{captionPostfix}}</p>
+          <p id="docket-number">Docket Number: {{docketNumber}}</p>
+          <div class="clear"></div>
+        </div>
+      </div>
+
+      <div class="party-info">
+        <h3>Party Information</h3>
+        <hr />
+        <div class="party-info-content">
+          {{partyInfo}}
+        </div>
+      </div>
+      <div class="docket-record">{{docketRecord}}</div>
+    </div>
+  </body>
+</html>
