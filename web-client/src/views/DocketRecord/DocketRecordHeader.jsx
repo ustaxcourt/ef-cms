@@ -45,7 +45,7 @@ export const DocketRecordHeader = connect(
             </div>
             <div className="tablet:grid-col-2 text-align-right">
               <button
-                className="usa-button usa-button--unstyled margin-top-1 margin-right-1"
+                className="usa-button usa-button--unstyled margin-top-1 margin-right-2"
                 onClick={() => {
                   updateSessionMetadataSequence({
                     key: `docketRecordSort.${caseDetail.caseId}`,

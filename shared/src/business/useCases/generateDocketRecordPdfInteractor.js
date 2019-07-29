@@ -33,14 +33,14 @@ exports.generateDocketRecordPdfInteractor = async ({
       <html>
         <head>
         </head>
-        <body>
-          <div style="font-size: 10px; width: 100%; margin: 20px 62px 20px 62px;">
+        <body style="margin: 0px;">
+          <div style="font-size: 10px; width: 100%; margin: 20px 40px;">
             <div style="float: right">
+              Docket Number: ${docketNumber}
+            </div>
+            <div style="font-size: 10px; float: left">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
-            </div>
-            <div style="float: left">
-              Docket Number: ${docketNumber}
             </div>
           </div>
         </body>
@@ -50,9 +50,8 @@ exports.generateDocketRecordPdfInteractor = async ({
     const footerTemplate = `
       <!doctype html>
       <html>
-        <body>
-          <div style="font-size: 10px; width: 100%; margin: 20px 62px 20px 62px;">
-          </div>
+        <body style="margin: 0px;>
+          <div></div>
         </body>
       </html>
     `;
@@ -60,12 +59,13 @@ exports.generateDocketRecordPdfInteractor = async ({
     result = await page.pdf({
       displayHeaderFooter: true,
       footerTemplate,
-      format: 'letter',
+      format: 'Letter',
       headerTemplate,
       margin: {
         bottom: '200px',
         top: '100px',
       },
+      printBackground: true,
     });
   } catch (error) {
     applicationContext.logger.error(error);

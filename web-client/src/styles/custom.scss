@@ -1336,3 +1336,9 @@ nav.usa-nav {
 .margin-bottom-30px {
   margin-bottom: 30px;
 }
+
+.print-docket-record {
+  #pdf-preview-iframe {
+    height: 900px;
+  }
+}
