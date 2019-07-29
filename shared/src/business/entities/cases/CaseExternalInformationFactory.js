@@ -35,15 +35,17 @@ function CaseExternalInformationFactory(rawCase) {
   this.stinFileSize = rawCase.stinFileSize;
   this.wizardStep = rawCase.wizardStep;
 
-  const contacts = ContactFactory.createContacts({
-    contactInfo: {
-      primary: rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
-    },
-    partyType: rawCase.partyType,
-  });
-  this.contactPrimary = contacts.primary;
-  this.contactSecondary = contacts.secondary;
+  if (+this.wizardStep >= 3) {
+    const contacts = ContactFactory.createContacts({
+      contactInfo: {
+        primary: rawCase.contactPrimary,
+        secondary: rawCase.contactSecondary,
+      },
+      partyType: rawCase.partyType,
+    });
+    this.contactPrimary = contacts.primary;
+    this.contactSecondary = contacts.secondary;
+  }
 }
 
 CaseExternalInformationFactory.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;

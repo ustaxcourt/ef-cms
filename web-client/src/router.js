@@ -274,7 +274,8 @@ const router = {
       checkLoggedIn(step => {
         document.title = `File a petition ${pageTitleSuffix}`;
         if (app.getState('currentPage') === 'StartCaseWizard') {
-          app.getSequence('chooseWizardStepSequence')({
+          app.getSequence('chooseStartCaseWizardStepSequence')({
+            step: `${step}`,
             value: `StartCaseStep${step}`,
           });
         } else {
