@@ -377,7 +377,7 @@ export const ScanBatchPreviewer = connect(
               id={`${documentType}-file`}
               name={documentType}
               type="file"
-              onChange={() => {
+              onChange={e => {
                 limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -429,7 +429,6 @@ export const ScanBatchPreviewer = connect(
                     className="usa-button usa-button--unstyled"
                     style={{ color: 'white' }}
                     onClick={() => {
-                      e.preventDefault();
                       openChangeScannerSourceModalSequence();
                     }}
                   >
