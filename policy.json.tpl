@@ -53,6 +53,7 @@
       "Action": [
         "apigateway:DELETE",
         "apigateway:UpdateRestApiPolicy",
+        "apigateway:UpdateStage",
         "apigateway:PATCH",
         "apigateway:GET",
         "apigateway:PUT",
@@ -94,6 +95,7 @@
         "logs:*",
         "events:*",
         "sns:*",
+        "ses:*",
         "s3:*",
         "cloudformation:*",
         "cloudwatch:*",
@@ -150,7 +152,7 @@
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-documents-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-users-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_*",
+        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_*"
       ]
     }
   ]
