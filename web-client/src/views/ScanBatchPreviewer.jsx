@@ -139,7 +139,7 @@ export const ScanBatchPreviewer = connect(
               confirmLabel="OK"
               title="You Have Unfinished Scans"
               onCancelSequence="clearModalSequence"
-              onConfirmSequence="changeBatchAndStartScanSequence"
+              onConfirmSequence="clearModalSequence"
             >
               If you continue, your unfinished scans will be lost.
             </ConfirmModal>

@@ -5,8 +5,9 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the scanner API
- * @param {Function} providers.props the cerebral props object used for getting the props.path
- * @param {Function} providers.store the cerebral store used for setting state.path
+ * @param {Function} providers.get the cerebral get function getting state
+ * @param {object} providers.props the cerebral props object used for getting the props.path
+ * @param {objecg} providers.store the cerebral store used for setting state.path
  * @returns {Promise} async action
  */
 export const completeScanAction = async ({
@@ -15,9 +16,6 @@ export const completeScanAction = async ({
   props,
   store,
 }) => {
-  // const scanner = applicationContext.getScanner();
-  // console.log('completing');
-  // const { error, scannedBuffer } = await scanner.completeScanSession();
   store.set(state.submitting, true);
 
   // wait a bit so that the spinner shows up because generatePDFFromPNGDataInteractor blocks the browser

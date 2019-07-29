@@ -1,5 +1,3 @@
-import { areSelectedDocumentsMatchingAction } from '../actions/areSelectedDocumentsMatchingAction';
-import { changeToNewScanBatchAction } from '../actions/changeToNewScanBatchAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCachedScannerSourceAction } from '../actions/getCachedScannerSourceAction';
 import { getScannerSourcesAction } from '../actions/getScannerSourcesAction';
@@ -12,21 +10,15 @@ import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
 export const startScanSequence = [
   clearModalAction,
-  areSelectedDocumentsMatchingAction,
+  setFormSubmittingAction,
+  waitForSpinnerAction,
+  getCachedScannerSourceAction,
   {
-    no: [set(state.showModal, 'UnfinishedScansModal')],
-    yes: [
-      setFormSubmittingAction,
-      waitForSpinnerAction,
-      getCachedScannerSourceAction,
-      {
-        selectSource: [
-          getScannerSourcesAction,
-          set(state.showModal, 'SelectScannerSourceModal'),
-        ],
-        success: [startScanAction],
-      },
-      unsetFormSubmittingAction,
+    selectSource: [
+      getScannerSourcesAction,
+      set(state.showModal, 'SelectScannerSourceModal'),
     ],
+    success: [startScanAction],
   },
+  unsetFormSubmittingAction,
 ];
