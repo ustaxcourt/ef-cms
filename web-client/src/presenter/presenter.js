@@ -192,7 +192,6 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
-import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
@@ -398,7 +397,6 @@ export const presenter = {
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
     validateSelectDocumentTypeSequence,
-    validateStartCaseSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionSequence,
     viewDocumentSequence,
