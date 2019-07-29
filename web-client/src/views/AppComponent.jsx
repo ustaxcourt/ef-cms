@@ -4,7 +4,6 @@ import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
-import { CaseDetailInternalPrint } from './CaseDetailInternalPrint';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './DashboardDocketClerk';
 import { DashboardPetitioner } from './DashboardPetitioner';
@@ -23,6 +22,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCase } from './StartCase';
@@ -44,7 +44,6 @@ const pages = {
   BeforeYouFileADocument,
   CaseDetail,
   CaseDetailInternal,
-  CaseDetailInternalPrint,
   CreateOrder,
   DashboardDocketClerk,
   DashboardPetitioner,
@@ -61,6 +60,7 @@ const pages = {
   LogIn,
   PDFSigner,
   PrimaryContactEdit,
+  PrintableDocketRecord,
   RequestAccessWizard,
   SelectDocumentType,
   StartCase,

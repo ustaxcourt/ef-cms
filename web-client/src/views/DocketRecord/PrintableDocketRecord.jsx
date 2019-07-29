@@ -3,9 +3,9 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
+import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
-export const CaseDetailInternalPrint = connect(
+export const PrintableDocketRecord = connect(
   {
     caseDetail: state.formattedCaseDetail,
     gotoCaseDetail: sequences.gotoCaseDetailSequence,
