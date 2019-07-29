@@ -40,7 +40,10 @@ describe('completeScanAction', () => {
         onComplete: mockOnComplete,
       },
       state: {
-        batches: [],
+        batches: {
+          petition: [],
+        },
+        documentSelectedForScan: 'petition',
         isScanning: true,
       },
     });
