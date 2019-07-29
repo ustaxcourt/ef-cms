@@ -7,7 +7,7 @@
 exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   docketNumber,
-  pdfFile,
+  docketRecordHtml,
 }) => {
   let browser = null;
   let result = null;
@@ -24,7 +24,7 @@ exports.generateDocketRecordPdfInteractor = async ({
 
     let page = await browser.newPage();
 
-    await page.setContent(pdfFile);
+    await page.setContent(docketRecordHtml);
 
     const headerTemplate = `
       <!doctype html>
