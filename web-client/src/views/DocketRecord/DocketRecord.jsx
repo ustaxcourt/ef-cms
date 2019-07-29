@@ -40,7 +40,7 @@ export const DocketRecord = connect(
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
-              <th aria-hidden="true" className="icon-column hide-print" />
+              <th aria-hidden="true" className="icon-column" />
               <th>Filings and Proceedings</th>
               <th>Filed By</th>
               <th>Action</th>
@@ -61,7 +61,7 @@ export const DocketRecord = connect(
                   </td>
                   <td
                     aria-hidden="true"
-                    className="filing-type-icon hide-on-mobile hide-print"
+                    className="filing-type-icon hide-on-mobile"
                   >
                     {document && document.isPaper && (
                       <FontAwesomeIcon icon={['fas', 'file-alt']} />
