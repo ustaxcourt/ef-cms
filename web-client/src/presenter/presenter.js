@@ -85,6 +85,7 @@ import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequ
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
+import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printViewSequence } from './sequences/printViewSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
@@ -292,6 +293,7 @@ export const presenter = {
     openSelectDocumentWizardOverlaySequence,
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
+    printDocketRecordSequence,
     printViewSequence,
     redirectToLoginSequence,
     refreshCaseSequence,

@@ -7,14 +7,14 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
-    printView: sequences.printViewSequence,
+    printDocketRecord: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
     caseDetail,
     helper,
-    printView,
+    printDocketRecord,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
@@ -51,9 +51,7 @@ export const DocketRecordHeader = connect(
                     key: `docketRecordSort.${caseDetail.caseId}`,
                     value: 'byDate',
                   });
-                  printView({
-                    printView: 'CaseDetailInternalPrint',
-                  });
+                  printDocketRecord();
                 }}
               >
                 <FontAwesomeIcon icon="print" size="sm" />
