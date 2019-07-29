@@ -10,6 +10,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the state.selectedWorkItems
  * @returns {undefined} doesn't return anything
  */
-export const selectDocumentForScanAction = ({ props, store }) => {
-  store.set(state.documentSelectedForScan, props.documentType);
+export const changeToNewScanBatchAction = ({ get, store }) => {
+  const documentSelectedForScan = get(state.documentSelectedForScan);
+  store.set(state.batches[documentSelectedForScan], []);
+  store.set(state.selectedBatchIndex, 0);
+  store.set(state.currentPageIndex, 0);
+  store.set(state.currentDocumentScanBatch, documentSelectedForScan);
 };

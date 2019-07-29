@@ -21,9 +21,10 @@ export const rescanBatchAction = async ({
     const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
     });
-    const batches = get(state.batches);
+    const documentSelectedForScan = get(state.documentSelectedForScan);
+    const batches = get(state.batches[documentSelectedForScan]);
     batches.find(b => b.index === batchIndex).pages = pages;
-    store.set(state.batches, batches);
+    store.set(state.batches[documentSelectedForScan], batches);
     store.set(state.submitting, false);
   } else {
     await applicationContext.getUseCases().removeItemInteractor({

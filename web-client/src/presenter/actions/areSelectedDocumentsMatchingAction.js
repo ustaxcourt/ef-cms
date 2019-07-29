@@ -10,6 +10,11 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the state.selectedWorkItems
  * @returns {undefined} doesn't return anything
  */
-export const selectDocumentForScanAction = ({ props, store }) => {
-  store.set(state.documentSelectedForScan, props.documentType);
+export const areSelectedDocumentsMatchingAction = ({ get, path }) => {
+  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const currentDocumentScanBatch = get(state.currentDocumentScanBatch);
+  console.log(documentSelectedForScan, currentDocumentScanBatch);
+  return documentSelectedForScan === currentDocumentScanBatch
+    ? path.yes()
+    : path.no();
 };
