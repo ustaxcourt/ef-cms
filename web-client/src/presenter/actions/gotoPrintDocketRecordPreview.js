@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
 export const gotoPrintDocketRecordPreview = ({ store }) => {
-  store.set(state.currentPage, 'CaseDetailInternalPrint');
+  store.set(state.currentPage, 'PrintableDocketRecord');
 };
