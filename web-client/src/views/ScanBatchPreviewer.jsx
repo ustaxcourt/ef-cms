@@ -1,3 +1,4 @@
+import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from '../ustc-ui/Scan/SelectScannerSourceModal';
@@ -9,17 +10,21 @@ import React, { useEffect } from 'react';
 
 export const ScanBatchPreviewer = connect(
   {
+    clearModalSequence: sequences.clearModalSequence,
     completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
+    openConfirmRescanBatchModalSequence:
+      sequences.openConfirmRescanBatchModalSequence,
     removeBatchSequence: sequences.removeBatchSequence,
-    rescanBatchSequence: sequences.rescanBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
+    selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
+    showModal: state.showModal,
     startScanSequence: sequences.startScanSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePetitionFromPaperSequence:
@@ -32,13 +37,15 @@ export const ScanBatchPreviewer = connect(
     documentType,
     documentTypeName,
     openChangeScannerSourceModalSequence,
+    openConfirmRescanBatchModalSequence,
     removeBatchSequence,
-    rescanBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
+    selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
+    showModal,
     startScanSequence,
     updateFormValueSequence,
     validatePetitionFromPaperSequence,
@@ -114,54 +121,107 @@ export const ScanBatchPreviewer = connect(
     const renderScan = () => {
       return (
         <>
+          {showModal === 'ConfirmRescanBatchModal' && (
+            <ConfirmModal
+              cancelLabel="No, cancel"
+              confirmLabel="Yes, rescan"
+              title={`Rescan Batch ${selectedBatchIndex + 1}`}
+              onCancelSequence="clearModalSequence"
+              onConfirmSequence="rescanBatchSequence"
+            >
+              Are you sure you want to rescan batch {selectedBatchIndex + 1}?
+            </ConfirmModal>
+          )}
+
+          {showModal === 'UnfinishedScansModal' && (
+            <ConfirmModal
+              cancelLabel="Cancel"
+              confirmLabel="OK"
+              title="You Have Unfinished Scans"
+              onCancelSequence="clearModalSequence"
+              onConfirmSequence="clearModalSequence"
+            >
+              If you continue, your unfinished scans will be lost.
+            </ConfirmModal>
+          )}
+
+          {showModal === 'EmptyHopperModal' && (
+            <ConfirmModal
+              cancelLabel="Cancel"
+              confirmLabel="Scan"
+              title="The Hopper is Empty"
+              onCancelSequence="clearModalSequence"
+              onConfirmSequence="startScanSequence"
+            >
+              Please load the hopper to scan your batch.
+            </ConfirmModal>
+          )}
+
           {scanBatchPreviewerHelper.showScannerSourceModal && (
             <SelectScannerSourceModal />
           )}
           <h5>Scanned Documents</h5>
-          {scanBatchPreviewerHelper.batches.map(batch => (
-            <div className="batch margin-bottom-2" key={batch.index}>
-              <button
-                className="usa-button usa-button--unstyled"
-                onClick={e => {
-                  e.preventDefault();
-                  setSelectedBatchIndexSequence({
-                    selectedBatchIndex: batch.index,
-                  });
-                }}
-              >
-                Batch {batch.index + 1}
-              </button>
-              <span>{batch.pages.length} pages</span>
-              <button
-                className="usa-button usa-button--unstyled"
-                onClick={e => {
-                  e.preventDefault();
-                  rescanBatchSequence({
-                    batchIndex: batch.index,
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['fas', 'redo-alt']} />
-                Rescan
-              </button>
-              <button
-                className="usa-button usa-button--unstyled"
-                onClick={e => {
-                  e.preventDefault();
-                  removeBatchSequence({
-                    batchIndex: batch.index,
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['fas', 'times-circle']} />
-                Remove
-              </button>
-            </div>
-          ))}
+          {scanBatchPreviewerHelper.batches.length > 0 && (
+            <table style={{ width: '70%' }}>
+              <tbody>
+                {scanBatchPreviewerHelper.batches.map(batch => (
+                  <tr key={batch.index}>
+                    <td>
+                      <button
+                        className="usa-button usa-button--unstyled"
+                        onClick={e => {
+                          e.preventDefault();
+                          setSelectedBatchIndexSequence({
+                            selectedBatchIndex: batch.index,
+                          });
+                        }}
+                      >
+                        Batch {batch.index + 1}
+                      </button>
+                    </td>
+                    <td>
+                      <span>{batch.pages.length} pages</span>
+                    </td>
+                    <td>
+                      <button
+                        className="usa-button usa-button--unstyled"
+                        style={{ textDecoration: 'none' }}
+                        onClick={e => {
+                          e.preventDefault();
+                          openConfirmRescanBatchModalSequence({
+                            batchIndexToRescan: batch.index,
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon icon={['fas', 'redo-alt']} />
+                        Rescan
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="usa-button usa-button--unstyled"
+                        style={{ color: '#B51D09', textDecoration: 'none' }}
+                        onClick={e => {
+                          e.preventDefault();
+                          removeBatchSequence({
+                            batchIndex: batch.index,
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon icon={['fas', 'times-circle']} />
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
 
           {scanBatchPreviewerHelper.scannerSource && (
             <button
               className="usa-button usa-button--unstyled margin-bottom-2"
+              style={{ textDecoration: 'none' }}
               onClick={e => {
                 e.preventDefault();
                 startScanSequence();
@@ -362,7 +422,7 @@ export const ScanBatchPreviewer = connect(
             </div>
           </div>
         </div>
-        <div style={{ border: '1px solid #AAA', padding: '10px' }}>
+        <div style={{ border: '1px solid #AAA', padding: '20px' }}>
           {renderModeRadios()}
           {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
           {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}

@@ -54,8 +54,22 @@ export const updatePartyTypeAction = async ({ get, props, store }) => {
     store.set(state.form.otherType, 'A minor or legally incompetent person');
     partyType = props.value;
   }
-  if (partyType) {
-    store.set(state.form.partyType, partyType);
+
+  if (
+    [
+      'filingType',
+      'isSpouseDeceased',
+      'otherType',
+      'businessType',
+      'estateType',
+      'minorIncompetentType',
+    ].includes(props.key)
+  ) {
+    if (partyType) {
+      store.set(state.form.partyType, partyType);
+    } else {
+      store.unset(state.form.partyType);
+    }
 
     const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
@@ -74,6 +88,7 @@ export const updatePartyTypeAction = async ({ get, props, store }) => {
         {},
     );
   }
+
   if (get(state.form.filingType) !== 'A business') {
     // clear the ownership disclosure file and business type
     store.unset(state.form.ownershipDisclosureFile);

@@ -120,7 +120,7 @@ exports.getScannerInterface = () => {
             new Promise((resolve, reject) => {
               DWObject.ConvertToBlob(
                 [index],
-                window['EnumDWT_ImageType'].IT_PNG,
+                window['EnumDWT_ImageType'].IT_JPG,
                 resolve,
                 reject,
               );
