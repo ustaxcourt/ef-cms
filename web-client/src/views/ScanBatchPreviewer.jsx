@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from '../ustc-ui/Scan/SelectScannerSourceModal';
 import { Text } from '../ustc-ui/Text/Text';
@@ -114,6 +115,23 @@ export const ScanBatchPreviewer = connect(
       );
     };
 
+    const renderIframePreview = () => {
+      return (
+        <>
+          <PdfPreview />
+          <button
+            className="usa-button usa-button--outline red-warning"
+            onClick={() => {
+              console.log('Delete Me');
+            }}
+          >
+            <FontAwesomeIcon icon={['fas', 'times-circle']} />
+            Delete PDF
+          </button>
+        </>
+      );
+    };
+
     const renderScan = () => {
       return (
         <>
@@ -211,6 +229,9 @@ export const ScanBatchPreviewer = connect(
                         selectDocumentForPreviewSequence({
                           documentType,
                           file,
+                        });
+                        setDocumentUploadModeSequence({
+                          documentUploadMode: 'preview',
                         });
                       });
                     },
@@ -370,9 +391,12 @@ export const ScanBatchPreviewer = connect(
           </div>
         </div>
         <div style={{ border: '1px solid #AAA', padding: '10px' }}>
-          {renderModeRadios()}
+          {scanBatchPreviewerHelper.uploadMode !== 'preview' &&
+            renderModeRadios()}
           {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
           {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
+          {scanBatchPreviewerHelper.uploadMode === 'preview' &&
+            renderIframePreview()}
         </div>
       </>
     );

@@ -35,7 +35,9 @@ export const completeScanAction = async ({
     .getUseCases()
     .generatePDFFromPNGDataInteractor(scannedBuffer);
 
-  const pdfFile = new File([pdfBlob], 'myfile.pdf');
+  const pdfFile = new File([pdfBlob], 'myfile.pdf', {
+    type: 'application/pdf',
+  });
 
   props.onComplete(pdfFile);
   store.set(state.submitting, false);
