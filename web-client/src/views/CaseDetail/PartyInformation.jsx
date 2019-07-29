@@ -24,14 +24,16 @@ export const PartyInformation = connect(
             {caseDetail.contactPrimary && (
               <React.Fragment>
                 <p className="label" id={'primary-label'}>
-                  Primary Contact
+                  Petitioner
                 </p>
                 <div>
                   <address aria-labelledby={'primary-label'}>
-                    {addressDisplay(
-                      caseDetail.contactPrimary,
-                      caseHelper.showCaseNameForPrimary && caseDetail.caseName,
-                    )}
+                    {addressDisplay(caseDetail.contactPrimary, {
+                      hideEmail: true,
+                      nameOverride:
+                        caseHelper.showCaseNameForPrimary &&
+                        caseDetail.caseName,
+                    })}
                   </address>
 
                   {caseHelper.showEditContactButton && (
@@ -52,12 +54,14 @@ export const PartyInformation = connect(
               caseDetail.contactSecondary.name && (
                 <React.Fragment>
                   <p className="label" id={'secondary-label'}>
-                    Secondary Contact
+                    Petitioner
                   </p>
                   <div>
                     <address aria-labelledby={'secondary-label'}>
                       {caseDetail.contactSecondary.name &&
-                        addressDisplay(caseDetail.contactSecondary)}
+                        addressDisplay(caseDetail.contactSecondary, {
+                          hideEmail: true,
+                        })}
                     </address>
                     {caseHelper.showEditContactButton && (
                       <button
@@ -120,7 +124,7 @@ export const PartyInformation = connect(
       </div>
     );
 
-    const addressDisplay = (contact, nameOverride) => {
+    const addressDisplay = (contact, { hideEmail, nameOverride }) => {
       return (
         <React.Fragment>
           <p className="margin-top-0">
@@ -132,8 +136,6 @@ export const PartyInformation = connect(
               </span>
             )}
           </p>
-
-          {contact.title && <p>{contact.title}</p>}
           <p>
             <span className="address-line">{contact.address1}</span>
             <span className="address-line">{contact.address2}</span>
@@ -150,7 +152,7 @@ export const PartyInformation = connect(
             </span>
           </p>
           {contact.phone && <p>{contact.phone}</p>}
-          {contact.email && <p>{contact.email}</p>}
+          {contact.email && !hideEmail && <p>{contact.email}</p>}
         </React.Fragment>
       );
     };
