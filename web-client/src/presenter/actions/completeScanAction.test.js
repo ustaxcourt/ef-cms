@@ -40,7 +40,7 @@ describe('completeScanAction', () => {
         onComplete: mockOnComplete,
       },
       state: {
-        batches: [],
+        batches: [{ pages: [] }],
         isScanning: true,
       },
     });
