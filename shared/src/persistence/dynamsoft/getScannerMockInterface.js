@@ -28,8 +28,8 @@ const DWObject = {
       return blob;
     };
 
-    scanBuffer.push(b64toBlob(image1, 'image/png'));
-    scanBuffer.push(b64toBlob(image2, 'image/png'));
+    scanBuffer.push(b64toBlob(image1, 'image/jpeg'));
+    scanBuffer.push(b64toBlob(image2, 'image/jpeg'));
     DWObject.HowManyImagesInBuffer += 2;
   },
   CloseSource: () => null,

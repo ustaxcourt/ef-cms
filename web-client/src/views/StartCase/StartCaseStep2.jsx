@@ -37,8 +37,7 @@ export const StartCaseStep2 = connect(
       <>
         <Focus>
           <h1 className="focusable margin-top-5" tabIndex="-1">
-            {' '}
-            2. Tell Us About Your Petition{' '}
+            2. Tell Us About Your Petition
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">

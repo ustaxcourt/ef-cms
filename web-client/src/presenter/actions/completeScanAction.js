@@ -20,7 +20,7 @@ export const completeScanAction = async ({
   // const { error, scannedBuffer } = await scanner.completeScanSession();
   store.set(state.submitting, true);
 
-  // wait a bit so that the spinner shows up because generatePDFFromPNGDataInteractor blocks the browser
+  // wait a bit so that the spinner shows up because generatePDFFromJPGDataInteractor blocks the browser
   await new Promise(resolve => setTimeout(resolve, 100));
 
   const batches = get(state.batches);
@@ -33,7 +33,7 @@ export const completeScanAction = async ({
   // this blocks the browser
   const pdfBlob = await applicationContext
     .getUseCases()
-    .generatePDFFromPNGDataInteractor(scannedBuffer);
+    .generatePDFFromJPGDataInteractor(scannedBuffer);
 
   const pdfFile = new File([pdfBlob], 'myfile.pdf');
 

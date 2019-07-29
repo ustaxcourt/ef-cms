@@ -12,6 +12,7 @@ import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryC
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
+import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
@@ -192,7 +193,6 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
-import { validateStartCaseSequence } from './sequences/validateStartCaseSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
@@ -220,6 +220,7 @@ export const presenter = {
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
     chooseModalWizardStepSequence,
+    chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
     clearDocumentSequence,
@@ -398,7 +399,6 @@ export const presenter = {
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
     validateSelectDocumentTypeSequence,
-    validateStartCaseSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionSequence,
     viewDocumentSequence,
