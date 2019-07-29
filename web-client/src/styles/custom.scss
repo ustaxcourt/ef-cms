@@ -119,6 +119,28 @@ select[disabled] {
   background-color: color($theme-color-base-lightest);
 }
 
+.document-select-header {
+  &.grid-container {
+    margin-bottom: 5px;
+  }
+
+  border-left: 5px solid color($theme-color-primary-darker);
+  background-color: color($theme-color-base-lightest);
+}
+
+.document-select-option {
+  &:last-child {
+    border-bottom: 1px solid color($theme-color-base-lightest);
+  }
+
+  &.error {
+    border-left: 5px solid color($theme-color-secondary); 
+  }
+
+  border: 1px solid color($theme-color-base-lightest);
+  border-bottom: 0;
+}
+
 .completed-card {
   margin-bottom: 20px;
   color: color($theme-color-base-darkest);

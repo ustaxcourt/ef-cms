@@ -15,6 +15,7 @@ import { contactsHelper } from './computeds/contactsHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
+import { documentSelectedHelper } from './computeds/documentSelectedHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
@@ -46,6 +47,7 @@ export const state = {
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
+  batchIndexToRescan: null,
   batches: [],
   betaBar: {
     isVisible: true,
@@ -76,6 +78,8 @@ export const state = {
   documentDetailHelper,
   documentHelper,
   documentId: null,
+  documentSelectedForScan: null,
+  documentSelectedHelper,
   documentSigningHelper,
   documentUploadMode: 'scan',
   extractedDocument,

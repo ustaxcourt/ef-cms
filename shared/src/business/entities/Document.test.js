@@ -111,6 +111,31 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Petr. Bob');
     });
 
+    it('should generate correct filedBy string for only partySecondary', () => {
+      const document = new Document({
+        attachments: false,
+        category: 'Petition',
+        certificateOfService: false,
+        createdAt: '2019-04-19T17:29:13.120Z',
+        documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+        documentTitle: 'Amended Petition',
+        documentType: 'Amended Petition',
+        eventCode: 'PAP',
+        exhibits: false,
+        hasSupportingDocuments: true,
+        objections: 'No',
+        partyPrimary: false,
+        partySecondary: true,
+        relationship: 'primaryDocument',
+        scenario: 'Standard',
+        supportingDocument:
+          'Unsworn Declaration under Penalty of Perjury in Support',
+        supportingDocumentFreeText: 'Test',
+      });
+      document.generateFiledBy(caseDetail);
+      expect(document.filedBy).toEqual('Petr. Bill');
+    });
+
     it('should generate correct filedBy string for partyPrimary and partyRespondent', () => {
       const document = new Document({
         attachments: false,

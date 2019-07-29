@@ -31,6 +31,7 @@ describe('startScanAction', () => {
       },
       state: {
         batches: [],
+        documentSelectedForScan: 'petition',
         isScanning: false,
       },
     });

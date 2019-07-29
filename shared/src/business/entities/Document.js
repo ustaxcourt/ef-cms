@@ -222,6 +222,12 @@ Document.prototype.generateFiledBy = function(caseDetail) {
     ) {
       filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
     } else if (
+      this.partySecondary &&
+      !this.partyPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
+    } else if (
       this.partyPrimary &&
       this.partySecondary &&
       caseDetail.contactPrimary &&
