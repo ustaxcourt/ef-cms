@@ -47,6 +47,7 @@ export const state = {
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
+  batchIndexToRescan: null,
   batches: [],
   betaBar: {
     isVisible: true,

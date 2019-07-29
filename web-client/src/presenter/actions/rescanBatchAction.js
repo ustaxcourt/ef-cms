@@ -8,7 +8,7 @@ export const rescanBatchAction = async ({
 }) => {
   store.set(state.isScanning, true);
   store.set(state.submitting, true);
-  const { batchIndex } = props;
+  const batchIndex = get(state.batchIndexToRescan);
 
   const scanner = applicationContext.getScanner();
 
