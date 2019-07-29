@@ -17,6 +17,8 @@ export const ScanBatchPreviewer = connect(
     rescanBatchSequence: sequences.rescanBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
+    selectDocumentForPreviewSequence:
+      sequences.selectDocumentForPreviewSequence,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
@@ -36,6 +38,7 @@ export const ScanBatchPreviewer = connect(
     rescanBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
+    selectDocumentForPreviewSequence,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
@@ -205,6 +208,10 @@ export const ScanBatchPreviewer = connect(
                           value: file.size,
                         });
                         validatePetitionFromPaperSequence();
+                        selectDocumentForPreviewSequence({
+                          documentType,
+                          file,
+                        });
                       });
                     },
                   });
