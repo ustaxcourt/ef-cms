@@ -7,6 +7,8 @@ import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecor
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
+ * @param {object} providers.store the cerebral store object
+ * @returns {object} the docket number and stringified docketRecordHtml
  */
 export const printDocketRecordAction = ({ applicationContext, get }) => {
   const { ContactFactory } = applicationContext.getEntityConstructors();

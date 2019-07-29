@@ -3,7 +3,7 @@
  *
  * @param applicationContext
  * @param docketNumber
- * @param pdfFile
+ * @param docketRecordHtml
  * @returns {Promise<*>}
  */
 exports.createDocketRecordPdfInteractor = ({

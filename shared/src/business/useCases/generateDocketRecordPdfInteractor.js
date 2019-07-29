@@ -1,7 +1,7 @@
 /**
  * generateDocketRecordPdfInteractor
  *
- * @param pdfData {Uint8Array}
+ * @param docketRecordHtml {string}
  * @param coverSheetData
  */
 exports.generateDocketRecordPdfInteractor = async ({
