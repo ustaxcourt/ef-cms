@@ -133,6 +133,30 @@ export const ScanBatchPreviewer = connect(
             </ConfirmModal>
           )}
 
+          {showModal === 'UnfinishedScansModal' && (
+            <ConfirmModal
+              cancelLabel="Cancel"
+              confirmLabel="OK"
+              title="You Have Unfinished Scans"
+              onCancelSequence="clearModalSequence"
+              onConfirmSequence="changeBatchAndStartScanSequence"
+            >
+              If you continue, your unfinished scans will be lost.
+            </ConfirmModal>
+          )}
+
+          {showModal === 'EmptyHopperModal' && (
+            <ConfirmModal
+              cancelLabel="Cancel"
+              confirmLabel="Scan"
+              title="The Hopper is Empty"
+              onCancelSequence="clearModalSequence"
+              onConfirmSequence="startScanSequence"
+            >
+              Please load the hopper to scan your batch.
+            </ConfirmModal>
+          )}
+
           {scanBatchPreviewerHelper.showScannerSourceModal && (
             <SelectScannerSourceModal />
           )}

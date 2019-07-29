@@ -10,23 +10,18 @@ import { state } from 'cerebral';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
-export const startScanSequence = [
+export const changeBatchAndStartScanSequence = [
   clearModalAction,
-  areSelectedDocumentsMatchingAction,
+  changeToNewScanBatchAction,
+  setFormSubmittingAction,
+  waitForSpinnerAction,
+  getCachedScannerSourceAction,
   {
-    no: [set(state.showModal, 'UnfinishedScansModal')],
-    yes: [
-      setFormSubmittingAction,
-      waitForSpinnerAction,
-      getCachedScannerSourceAction,
-      {
-        selectSource: [
-          getScannerSourcesAction,
-          set(state.showModal, 'SelectScannerSourceModal'),
-        ],
-        success: [startScanAction],
-      },
-      unsetFormSubmittingAction,
+    selectSource: [
+      getScannerSourcesAction,
+      set(state.showModal, 'SelectScannerSourceModal'),
     ],
+    success: [startScanAction],
   },
+  unsetFormSubmittingAction,
 ];

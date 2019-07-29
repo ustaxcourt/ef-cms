@@ -11,6 +11,7 @@ import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
+import { changeBatchAndStartScanSequence } from './sequences/changeBatchAndStartScanSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
@@ -220,6 +221,7 @@ export const presenter = {
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
+    changeBatchAndStartScanSequence,
     chooseModalWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
