@@ -1,11 +1,11 @@
-const { generatePDFFromPNGs } = require('../../utilities/generatePDFFromPNGs');
+const { generatePDFFromJPGs } = require('../../utilities/generatePDFFromJPGs');
 
 /**
- * generatePDFFromPNGDataInteractor
+ * generatePDFFromJPGDataInteractor
  *
  * @param imgData // Array of Uint8Array containing img data
  */
 
-exports.generatePDFFromPNGDataInteractor = imgData => {
-  return generatePDFFromPNGs(imgData);
+exports.generatePDFFromJPGDataInteractor = imgData => {
+  return generatePDFFromJPGs(imgData);
 };
