@@ -7,17 +7,9 @@ import React from 'react';
 export const DocumentSelect = connect(
   {
     documentSelectedForScan: state.documentSelectedForScan,
-    documentSelectedHelper: state.documentSelectedHelper,
-    previewDocument: sequences.selectDocumentForPreviewSequence,
     selectDocument: sequences.selectDocumentForScanSequence,
   },
-  ({
-    documentSelectedForScan,
-    documentSelectedHelper,
-    options,
-    previewDocument,
-    selectDocument,
-  }) => {
+  ({ documentSelectedForScan, options, selectDocument }) => {
     return (
       <div className="grid-container padding-x-0 margin-bottom-1">
         {options.map(({ name, required, value }) => (
@@ -40,34 +32,18 @@ export const DocumentSelect = connect(
             </div>
             {documentSelectedForScan !== value && (
               <div className="grid-col-2 padding-top-2">
-                {!documentSelectedHelper.documentSelectedForPreview && (
-                  <button
-                    aria-label={`add ${name} file`}
-                    className="usa-button usa-button--unstyled text-no-underline"
-                    type="button"
-                    onClick={() => {
-                      selectDocument({ documentType: value });
-                    }}
-                  >
-                    <span>
-                      <FontAwesomeIcon icon="plus-circle" size="sm" /> Add
-                    </span>
-                  </button>
-                )}
-                {documentSelectedHelper.documentSelectedForPreview && (
-                  <button
-                    aria-label={`preview ${name} file`}
-                    className="usa-button usa-button--unstyled text-no-underline"
-                    type="button"
-                    onClick={() => {
-                      previewDocument({ documentType: value });
-                    }}
-                  >
-                    <span>
-                      <FontAwesomeIcon icon="file" size="sm" /> Preview
-                    </span>
-                  </button>
-                )}
+                <button
+                  aria-label={`add ${name} file`}
+                  className="usa-button usa-button--unstyled text-no-underline"
+                  type="button"
+                  onClick={() => {
+                    selectDocument({ documentType: value });
+                  }}
+                >
+                  <span>
+                    <FontAwesomeIcon icon="plus-circle" size="sm" /> Add
+                  </span>
+                </button>
               </div>
             )}
           </div>

@@ -8,6 +8,10 @@ class PdfPreviewComponent extends React.Component {
     super(props);
   }
 
+  componentWillUpdate() {
+    this.releaseURL();
+  }
+
   componentWillUnmount() {
     this.releaseURL();
   }

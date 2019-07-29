@@ -370,9 +370,6 @@ export const StartCaseInternal = connect(
                 </div>
               </div>
               <div className="grid-col-7">
-                {documentSelectedHelper.documentSelectedForPreview && (
-                  <iframe srcDoc="<html><body>Hello, <b>world</b>.</body></html>"></iframe>
-                )}
                 {documentSelectedForScan && (
                   <ScanBatchPreviewer
                     documentType={documentSelectedForScan}
