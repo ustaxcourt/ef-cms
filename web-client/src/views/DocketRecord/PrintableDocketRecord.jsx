@@ -36,7 +36,7 @@ export const PrintableDocketRecord = connect(
             }}
           >
             <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-            Back to case
+            Back to Case
           </button>
           <PdfPreview />
         </div>
