@@ -1,4 +1,3 @@
-import { changeToNewScanBatchAction } from '../actions/changeToNewScanBatchAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
@@ -28,7 +27,6 @@ export const gotoStartCaseWizardSequence = [
   {
     docketclerk: [
       set(state.documentSelectedForScan, 'petitionFile'),
-      changeToNewScanBatchAction,
       setCurrentPageAction('StartCaseInternal'),
     ],
     petitioner: [
@@ -40,7 +38,6 @@ export const gotoStartCaseWizardSequence = [
     ],
     petitionsclerk: [
       set(state.documentSelectedForScan, 'petitionFile'),
-      changeToNewScanBatchAction,
       setCurrentPageAction('StartCaseInternal'),
     ],
     practitioner: [
