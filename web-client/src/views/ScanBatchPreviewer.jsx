@@ -129,7 +129,7 @@ export const ScanBatchPreviewer = connect(
           <button
             className="usa-button usa-button--outline red-warning"
             onClick={() => {
-              console.log('Delete Me');
+              // TODO: sequence TBD
             }}
           >
             <FontAwesomeIcon icon={['fas', 'times-circle']} />
@@ -190,8 +190,7 @@ export const ScanBatchPreviewer = connect(
                     <td>
                       <button
                         className="usa-button usa-button--unstyled"
-                        onClick={e => {
-                          e.preventDefault();
+                        onClick={() => {
                           setSelectedBatchIndexSequence({
                             selectedBatchIndex: batch.index,
                           });
@@ -207,8 +206,7 @@ export const ScanBatchPreviewer = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         style={{ textDecoration: 'none' }}
-                        onClick={e => {
-                          e.preventDefault();
+                        onClick={() => {
                           openConfirmRescanBatchModalSequence({
                             batchIndexToRescan: batch.index,
                           });
@@ -222,8 +220,7 @@ export const ScanBatchPreviewer = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         style={{ color: '#B51D09', textDecoration: 'none' }}
-                        onClick={e => {
-                          e.preventDefault();
+                        onClick={() => {
                           removeBatchSequence({
                             batchIndex: batch.index,
                           });
@@ -243,8 +240,7 @@ export const ScanBatchPreviewer = connect(
             <button
               className="usa-button usa-button--unstyled margin-bottom-2"
               style={{ textDecoration: 'none' }}
-              onClick={e => {
-                e.preventDefault();
+              onClick={() => {
                 startScanSequence();
               }}
             >
@@ -256,8 +252,7 @@ export const ScanBatchPreviewer = connect(
           {!scanBatchPreviewerHelper.scannerSource && (
             <button
               className="usa-button usa-button--unstyled margin-bottom-2"
-              onClick={e => {
-                e.preventDefault();
+              onClick={() => {
                 openChangeScannerSourceModalSequence();
               }}
             >
@@ -272,8 +267,7 @@ export const ScanBatchPreviewer = connect(
               <button
                 className="usa-button"
                 type="button"
-                onClick={e => {
-                  e.preventDefault();
+                onClick={() => {
                   completeScanSequence({
                     onComplete: file => {
                       limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
@@ -322,28 +316,24 @@ export const ScanBatchPreviewer = connect(
                         scanBatchPreviewerHelper.totalPages - 1
                       }
                       totalPages={scanBatchPreviewerHelper.totalPages}
-                      onFirstPage={e => {
-                        e.preventDefault();
+                      onFirstPage={() => {
                         setCurrentPageIndexSequence({
                           currentPageIndex: 0,
                         });
                       }}
-                      onLastPage={e => {
-                        e.preventDefault();
+                      onLastPage={() => {
                         setCurrentPageIndexSequence({
                           currentPageIndex:
                             scanBatchPreviewerHelper.totalPages - 1,
                         });
                       }}
-                      onNextPage={e => {
-                        e.preventDefault();
+                      onNextPage={() => {
                         setCurrentPageIndexSequence({
                           currentPageIndex:
                             scanBatchPreviewerHelper.currentPage + 1,
                         });
                       }}
-                      onPreviousPage={e => {
-                        e.preventDefault();
+                      onPreviousPage={() => {
                         setCurrentPageIndexSequence({
                           currentPageIndex:
                             scanBatchPreviewerHelper.currentPage - 1,
@@ -387,7 +377,7 @@ export const ScanBatchPreviewer = connect(
               id={`${documentType}-file`}
               name={documentType}
               type="file"
-              onChange={e => {
+              onChange={() => {
                 limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -438,7 +428,7 @@ export const ScanBatchPreviewer = connect(
                   <button
                     className="usa-button usa-button--unstyled"
                     style={{ color: 'white' }}
-                    onClick={e => {
+                    onClick={() => {
                       e.preventDefault();
                       openChangeScannerSourceModalSequence();
                     }}
