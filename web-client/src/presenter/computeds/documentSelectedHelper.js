@@ -1,14 +1,22 @@
 import { state } from 'cerebral';
 
 export const documentSelectedHelper = get => {
-  const documentSelectedForScan = get(state.documentSelectedForScan);
+  const documentSelectedForScanName = getDocumentSelectedScanName(
+    get(state.documentSelectedForScan),
+  );
+  const documentSelectedForPreview =
+    documentSelectedForScanName == get(state.documentSelectedForPreview);
 
+  return {
+    documentSelectedForPreview,
+    documentSelectedForScanName,
+  };
+};
+
+const getDocumentSelectedScanName = documentSelectedForScan => {
   let documentSelectedForScanName;
 
   switch (documentSelectedForScan) {
-    default:
-      documentSelectedForScanName = 'Petition';
-      break;
     case 'requestForPlaceOfTrialFile':
       documentSelectedForScanName = 'Request of Place for Trial';
       break;
@@ -18,9 +26,9 @@ export const documentSelectedHelper = get => {
     case 'ownershipDisclosureFile':
       documentSelectedForScanName = 'Ownership Discloser Statement';
       break;
+    default:
+      documentSelectedForScanName = 'Petition';
+      break;
   }
-
-  return {
-    documentSelectedForScanName,
-  };
+  return documentSelectedForScanName;
 };
