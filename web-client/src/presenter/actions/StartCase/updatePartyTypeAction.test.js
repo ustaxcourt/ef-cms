@@ -108,6 +108,22 @@ describe('updatePartyTypeAction', () => {
     expect(state.form.partyType).toEqual('Any Value');
   });
 
+  it('unsets the partyType when key is "filingType" and value is not "Myself"', async () => {
+    const { state } = await runAction(
+      updatePartyTypeAction,
+      getFixtures(
+        {
+          key: 'filingType',
+          value: 'A business',
+        },
+        {
+          partyType: 'Petitioner',
+        },
+      ),
+    );
+    expect(state.form.partyType).toBeUndefined();
+  });
+
   it('sets the partyType to the props.value passed in when the key is "estateType" and set form.otherType to "An estate or trust"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,

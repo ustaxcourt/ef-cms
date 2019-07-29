@@ -8,14 +8,18 @@ describe('selectDocumentForScanAction', () => {
         documentType: 'stinFile',
       },
       state: {
-        batches: [1, 2, 3, 4],
+        batches: { petition: [1, 2, 3, 4] },
         currentPageIndex: 2,
+        documentSelectedForScan: 'petition',
         selectedBatchIndex: 3,
       },
     });
 
     expect(result.state.documentSelectedForScan).toEqual('stinFile');
-    expect(result.state.batches).toHaveLength(0);
+    expect(result.state.batches).toEqual({
+      petition: [1, 2, 3, 4],
+      stinFile: [],
+    });
     expect(result.state.currentPageIndex).toEqual(0);
     expect(result.state.selectedBatchIndex).toEqual(0);
   });
