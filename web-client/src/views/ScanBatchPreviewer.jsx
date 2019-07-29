@@ -2,6 +2,7 @@ import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from '../ustc-ui/Scan/SelectScannerSourceModal';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
@@ -23,6 +24,7 @@ export const ScanBatchPreviewer = connect(
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+    selectDocument: sequences.selectDocumentForScanSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     showModal: state.showModal,
     startScanSequence: sequences.startScanSequence,
@@ -35,12 +37,12 @@ export const ScanBatchPreviewer = connect(
     completeScanSequence,
     constants,
     documentType,
-    documentTypeName,
     openChangeScannerSourceModalSequence,
     openConfirmRescanBatchModalSequence,
     removeBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
+    selectDocument,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
@@ -398,8 +400,12 @@ export const ScanBatchPreviewer = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                <h3 style={{ marginBottom: '0px' }}>Add {documentTypeName}</h3>
+                <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
+              <Tabs asSwitch>
+                <Tab tabName="Petition">Petition</Tab>
+                <Tab tabName="STIN">STIN</Tab>
+              </Tabs>
               {scanBatchPreviewerHelper.uploadMode === 'scan' && (
                 <div className="grid-col-4 text-right">
                   <span className="margin-right-1">
