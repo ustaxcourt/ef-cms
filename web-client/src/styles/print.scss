@@ -7,6 +7,8 @@
   }
 }
 .print-view {
+  font-size: 10px;
+
   * {
     -webkit-transition: none !important;
     transition: none !important;
@@ -26,8 +28,12 @@
 
   table td, table th {
     padding: 8px;
+    font-size: 10px !important;
     &.hide-on-mobile {
       display: table-cell !important;
+    }
+    &.hide-print {
+      display: none !important;
     }
   }
 
@@ -47,6 +53,18 @@
     [class*='grid-col'] {
       width: auto !important;
     }
+
+    h3 {
+      font-size: 11px;
+    }
+
+    p {
+      font-size: 10px;
+    }
+
+    div.grid-row>div {
+      padding-right:25px;
+    }
   }
 
   .docket-record-header {
@@ -55,6 +73,14 @@
 }
 
 @media print {
+  @page {
+    margin: 0;
+  }
+
+  body {
+    margin: 20px;
+  }
+
   .hide-print {
     display: none !important;
   }
@@ -85,6 +111,11 @@
     .usa-logo {
       width: 100px;
       height: auto;
+      margin: 0;
+    }
+
+    h3 {
+      font-weight: normal;
     }
   }
 

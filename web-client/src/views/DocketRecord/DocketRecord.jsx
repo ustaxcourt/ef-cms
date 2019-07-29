@@ -40,7 +40,7 @@ export const DocketRecord = connect(
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
-              <th aria-hidden="true" className="icon-column" />
+              <th aria-hidden="true" className="icon-column hide-print" />
               <th>Filings and Proceedings</th>
               <th>Filed By</th>
               <th>Action</th>
@@ -57,11 +57,11 @@ export const DocketRecord = connect(
                     <span className="no-wrap">{record.createdAtFormatted}</span>
                   </td>
                   <td className="center-column hide-on-mobile">
-                    {document && document.eventCode}
+                    {record.eventCode || (document && document.eventCode)}
                   </td>
                   <td
                     aria-hidden="true"
-                    className="filing-type-icon hide-on-mobile"
+                    className="filing-type-icon hide-on-mobile hide-print"
                   >
                     {document && document.isPaper && (
                       <FontAwesomeIcon icon={['fas', 'file-alt']} />

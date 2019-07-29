@@ -1,6 +1,6 @@
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 
 export const ProcedureType = connect(
@@ -8,7 +8,6 @@ export const ProcedureType = connect(
     legend: props.legend,
     onChange: props.onChange,
     procedureTypes: state.procedureTypes,
-    validateStartCaseSequence: sequences.validateStartCaseSequence,
     validationErrors: state.validationErrors,
     value: props.value,
   },

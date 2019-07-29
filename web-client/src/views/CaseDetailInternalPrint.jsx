@@ -23,12 +23,10 @@ export const CaseDetailInternalPrint = connect(
                   </div>
                 </div>
                 <div className="grid-col-8">
-                  <h1 className="margin-bottom-0 text-align-center margin-top-1">
+                  <h2 className="margin-bottom-0 text-align-center margin-top-4">
                     United States Tax Court
-                  </h1>
-                  <h2 className="margin-top-neg-3 text-align-center">
-                    Docket Record
                   </h2>
+                  <h3 className="text-align-center">Docket Record</h3>
                 </div>
                 <div className="grid-col-2" />
               </div>

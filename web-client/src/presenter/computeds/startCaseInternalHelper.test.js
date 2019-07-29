@@ -15,7 +15,7 @@ describe('case detail edit computed', () => {
     expect(result.partyTypes).toBeDefined();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is conservator', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is conservator', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -27,7 +27,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is corporation', () => {
@@ -45,7 +45,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is custodian', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is custodian', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -57,7 +57,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is donor', () => {
@@ -75,7 +75,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is estate', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is estate', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -87,7 +87,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is estateWithoutExecutor', () => {
@@ -105,7 +105,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is guardian', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is guardian', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -117,10 +117,10 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is nextFriendForIncompetentPerson', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is nextFriendForIncompetentPerson', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -132,10 +132,10 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is nextFriendForMinor', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is nextFriendForMinor', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -147,10 +147,10 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is partnershipAsTaxMattersPartner', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is partnershipAsTaxMattersPartner', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -162,10 +162,10 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is partnershipBBA', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is partnershipBBA', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -177,10 +177,10 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is partnershipOtherThanTaxMatters', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is partnershipOtherThanTaxMatters', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -192,7 +192,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is petitioner', () => {
@@ -240,7 +240,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeTruthy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is survivingSpouse', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is survivingSpouse', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -252,7 +252,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showPrimaryContact true, showSecondaryContact false when the partyType is transferee', () => {
@@ -270,7 +270,7 @@ describe('case detail edit computed', () => {
     expect(result.showSecondaryContact).toBeFalsy();
   });
 
-  it('sets showPrimaryContact true, showSecondaryContact true when the partyType is trust', () => {
+  it('sets showPrimaryContact true, showSecondaryContact false when the partyType is trust', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         constants: {
@@ -282,7 +282,7 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
   });
 
   it('sets showOwnershipDisclosureStatement true if partyType is corporation', () => {

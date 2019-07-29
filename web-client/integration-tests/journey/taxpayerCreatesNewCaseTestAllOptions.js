@@ -214,7 +214,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
-    // Partnership tax matters party type primary/secondary contact
+    // Partnership tax matters party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -227,14 +227,14 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'businessType',
-      value: 'Partnership (as the tax matters partner)',
+      value: 'Partnership (as the Tax Matters Partner)',
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
     expect(result.showOwnershipDisclosure).toBeTruthy();
 
     await test.runSequence('submitFilePetitionSequence');
@@ -253,13 +253,13 @@ export default (test, fakeFile, overrides = {}) => {
       'Ownership Disclosure Statement is required.',
     );
 
-    // Partnership other than tax matters party type primary/secondary contact
+    // Partnership other than tax matters party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
     });
 
-    await test.runSequence('updateHasIrsNoticeFormValueSequence', {
+    await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });
@@ -278,9 +278,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // Partnership BBA party type primary/secondary contact
+    // Partnership BBA party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'A business',
@@ -300,9 +300,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // Estate with executor party type primary/secondary contact
+    // Estate with executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -334,7 +334,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
     // Estate without executor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -368,7 +368,7 @@ export default (test, fakeFile, overrides = {}) => {
     });
     expect(result.showPrimaryContact).toBeTruthy();
 
-    // trust and trustee party type primary/secondary contact
+    // trust and trustee party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -398,9 +398,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // conservator party type primary/secondary contact
+    // conservator party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -430,9 +430,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // guardian party type primary/secondary contact
+    // guardian party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -462,9 +462,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // custodian party type primary/secondary contact
+    // custodian party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -494,9 +494,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // minor party type primary/secondary contact
+    // minor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -527,9 +527,9 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
-    // legally incompetent person party type primary/secondary contact
+    // legally incompetent person party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -560,7 +560,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
 
     // donor party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -605,7 +605,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(result.showPrimaryContact).toBeTruthy();
     expect(test.getState('form.partyType')).toEqual('Transferee');
 
-    // surviving spouse party type primary/secondary contact
+    // surviving spouse party type primary contact
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
       value: 'Other',
@@ -625,7 +625,7 @@ export default (test, fakeFile, overrides = {}) => {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
-    expect(result.showSecondaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeFalsy();
     expect(test.getState('form.partyType')).toEqual('Surviving Spouse');
 
     await test.runSequence('submitFilePetitionSequence');
@@ -635,53 +635,17 @@ export default (test, fakeFile, overrides = {}) => {
     );
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.name',
-      value: 'Test Person',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.address1',
-      value: '123 Abc Ln',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.address2',
-      value: 'Apt 2',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.city',
-      value: 'Cityville',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.state',
-      value: 'CA',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.postalCode',
-      value: '12345',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.email',
-      value: 'test@example.com',
-    });
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactSecondary.phone',
-      value: '1234567890',
-    });
-
-    expect(test.getState('form.contactSecondary')).toEqual({
-      address1: '123 Abc Ln',
-      address2: 'Apt 2',
-      city: 'Cityville',
-      countryType: 'domestic',
-      email: 'test@example.com',
-      name: 'Test Person',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
+      key: 'day',
+      value: '01',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'Test Person',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.secondaryName',
+      value: 'Test Person 2',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
@@ -720,6 +684,7 @@ export default (test, fakeFile, overrides = {}) => {
       name: 'Test Person',
       phone: '1234567890',
       postalCode: '12345',
+      secondaryName: 'Test Person 2',
       state: 'CA',
     });
 
@@ -759,11 +724,13 @@ export default (test, fakeFile, overrides = {}) => {
       name: 'Test Person',
       phone: '1234567890',
       postalCode: '12345',
+      secondaryName: 'Test Person 2',
       state: 'CA',
     });
 
     await test.runSequence('submitFilePetitionSequence');
 
+    expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('alertError')).toEqual(null);
 
     expect(test.getState('alertSuccess')).toEqual({

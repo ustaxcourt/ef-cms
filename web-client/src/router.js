@@ -263,23 +263,16 @@ const router = {
       }
     });
     route(
-      '/before-starting-a-case',
+      '/before-filing-a-petition',
       checkLoggedIn(() => {
-        document.title = `Before you start a case ${pageTitleSuffix}`;
+        document.title = `Before you file a petition ${pageTitleSuffix}`;
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
     );
     route(
-      '/start-a-case',
-      checkLoggedIn(() => {
-        document.title = `Start a case ${pageTitleSuffix}`;
-        app.getSequence('gotoStartCaseSequence')();
-      }),
-    );
-    route(
-      '/start-a-case-wizard/step-*',
+      '/file-a-petition/step-*',
       checkLoggedIn(step => {
-        document.title = `Start a case ${pageTitleSuffix}`;
+        document.title = `File a petition ${pageTitleSuffix}`;
         if (app.getState('currentPage') === 'StartCaseWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: `StartCaseStep${step}`,
@@ -287,15 +280,28 @@ const router = {
         } else {
           switch (step) {
             case '1':
-              app.getSequence('gotoStartCaseWizardSequence')();
-
+              app.getSequence('gotoStartCaseWizardSequence')({
+                step,
+                wizardStep: `StartCaseStep${step}`,
+              });
               break;
             default:
               app.getSequence('navigateToPathSequence')({
-                path: '/start-a-case-wizard/step-1',
+                path: '/file-a-petition/step-1',
               });
           }
         }
+      }),
+    );
+
+    route(
+      '/file-a-petition-pa11y/step-*',
+      checkLoggedIn(step => {
+        document.title = `File a petition ${pageTitleSuffix}`;
+        app.getSequence('gotoStartCaseWizardSequence')({
+          step,
+          wizardStep: `StartCaseStep${step}`,
+        });
       }),
     );
 

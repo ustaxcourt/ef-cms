@@ -77,11 +77,13 @@ describe('createCase integration test', () => {
         },
         {
           description: 'Request for Place of Trial at Aberdeen, South Dakota',
+          eventCode: 'RQT',
         },
       ],
       documents: [
         {
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Rick Petitioner',
           workItems: [
             {
@@ -111,6 +113,7 @@ describe('createCase integration test', () => {
         },
         {
           documentType: 'Statement of Taxpayer Identification',
+          eventCode: 'STIN',
           filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
@@ -152,6 +155,7 @@ describe('createCase integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
+          eventCode: 'P',
           filedBy: 'Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],

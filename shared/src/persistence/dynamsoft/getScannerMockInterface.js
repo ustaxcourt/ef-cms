@@ -42,43 +42,17 @@ const DWObject = {
   ErrorString: null,
   HowManyImagesInBuffer: 0,
   OpenSource: () => null,
-  RemoveAllImages: () => (scanBuffer = []),
+  RemoveAllImages: () => {
+    scanBuffer = [];
+    DWObject.HowManyImagesInBuffer = 0;
+  },
   SelectSourceByIndex: () => null,
 };
 
 exports.getScannerInterface = () => {
   const completeScanSession = async () => {
-    const count = DWObject.HowManyImagesInBuffer;
-    const promises = [];
-    const response = { error: null, scannedBuffer: null };
-    for (let index = 0; index < count; index++) {
-      promises.push(
-        new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob([index], null, resolve, reject);
-        }),
-      );
-    }
-
-    return await Promise.all(promises)
-      .then(async blobs => {
-        const blobBuffers = [];
-
-        for (let blob of blobs) {
-          blobBuffers.push(
-            new Uint8Array(await new Response(blob).arrayBuffer()),
-          );
-        }
-        response.scannedBuffer = blobBuffers;
-        return response;
-      })
-      .catch(err => {
-        response.error = err;
-        return response;
-      })
-      .finally(() => {
-        DWObject.RemoveAllImages();
-        DWObject.CloseSource();
-      });
+    DWObject.RemoveAllImages();
+    DWObject.CloseSource();
   };
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;
@@ -130,6 +104,35 @@ exports.getScannerInterface = () => {
     DWObject.IfDisableSourceAfterAcquire = true;
     DWObject.OpenSource();
     DWObject.AcquireImage();
+
+    const count = DWObject.HowManyImagesInBuffer;
+    const promises = [];
+    const response = { error: null, scannedBuffer: null };
+    for (let index = 0; index < count; index++) {
+      promises.push(
+        new Promise((resolve, reject) => {
+          DWObject.ConvertToBlob([index], null, resolve, reject);
+        }),
+      );
+    }
+
+    return Promise.all(promises)
+      .then(async blobs => {
+        const blobBuffers = [];
+
+        for (let blob of blobs) {
+          blobBuffers.push(
+            new Uint8Array(await new Response(blob).arrayBuffer()),
+          );
+        }
+        response.scannedBuffer = blobBuffers;
+        DWObject.RemoveAllImages();
+        return response;
+      })
+      .catch(err => {
+        response.error = err;
+        return response;
+      });
   };
 
   return {

@@ -16,7 +16,7 @@ export const WorkQueueActionButtons = connect(
           <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
             <a
               className="usa-button"
-              href="/start-a-case"
+              href="/file-a-petition/step-1"
               id="init-file-petition"
             >
               <FontAwesomeIcon icon="plus-circle" size="1x" />

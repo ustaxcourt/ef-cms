@@ -1,4 +1,5 @@
 import { CaseTypeSelect } from './CaseTypeSelect';
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
@@ -34,7 +35,12 @@ export const StartCaseStep2 = connect(
   }) => {
     return (
       <>
-        <h1 className="margin-top-5"> 2. Tell Us About Your Petition </h1>
+        <Focus>
+          <h1 className="focusable margin-top-5" tabIndex="-1">
+            {' '}
+            2. Tell Us About Your Petition{' '}
+          </h1>
+        </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
           All fields required unless otherwise noted
         </p>
@@ -98,13 +104,14 @@ export const StartCaseStep2 = connect(
               }
               id="irs-notice-radios"
             >
-              <legend className="usa-legend">
+              <legend className="usa-legend" id="notice-legend">
                 {startCaseHelper.noticeLegend}
               </legend>
               <div className="usa-form-group">
                 {['Yes', 'No'].map((option, idx) => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
+                      aria-describedby="notice-legend"
                       checked={form.hasIrsNotice === (option === 'Yes')}
                       className="usa-radio__input"
                       id={`hasIrsNotice-${option}`}
