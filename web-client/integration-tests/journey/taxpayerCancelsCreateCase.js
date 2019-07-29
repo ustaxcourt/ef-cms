@@ -1,6 +1,9 @@
 export default test => {
   it('taxpayer navigates to create case and cancels', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await test.runSequence('gotoStartCaseWizardSequence', {
+      step: '1',
+      wizardStep: 'StartCaseStep1',
+    });
     expect(test.getState('showModal')).toBeFalsy();
     expect(test.getState('form')).toEqual({
       contactPrimary: {},
