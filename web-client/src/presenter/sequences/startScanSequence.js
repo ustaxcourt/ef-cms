@@ -9,12 +9,12 @@ import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction'
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
 export const startScanSequence = [
+  clearModalAction,
   setFormSubmittingAction,
   waitForSpinnerAction,
   getCachedScannerSourceAction,
   {
     selectSource: [
-      clearModalAction,
       getScannerSourcesAction,
       set(state.showModal, 'SelectScannerSourceModal'),
     ],
