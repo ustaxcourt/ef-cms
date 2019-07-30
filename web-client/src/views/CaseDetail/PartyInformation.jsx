@@ -15,7 +15,7 @@ export const PartyInformation = connect(
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          <div className="tablet:grid-col-2 hide-print">
+          <div className="tablet:grid-col-2">
             <p className="label">Party Type</p>
             <p>{caseDetail.partyType || 'My Party Type'}</p>
           </div>
