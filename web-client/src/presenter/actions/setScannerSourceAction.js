@@ -33,6 +33,7 @@ export const setScannerSourceAction = async ({
 
     // This may not be necessary
     store.set(state.scanner.scannerSourceName, props.scannerSourceName);
+    store.set(state.scanner.scannerSourceIndex, props.scannerSourceIndex);
   } else {
     // you didn't pick a scanner source
   }
