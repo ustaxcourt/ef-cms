@@ -102,6 +102,7 @@ import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
+import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveDocumentSequence } from './sequences/serveDocumentSequence';
@@ -313,6 +314,7 @@ export const presenter = {
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
     selectDocumentSequence,
+    selectScannerSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     serveDocumentSequence,
