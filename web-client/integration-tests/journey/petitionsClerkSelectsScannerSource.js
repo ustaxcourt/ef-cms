@@ -1,11 +1,8 @@
-export default test => {
+export default (test, { scannerSourceIndex, scannerSourceName }) => {
   return it('Petitions clerk selects a scanner', async () => {
     await test.runSequence('openChangeScannerSourceModalSequence');
 
     expect(test.getState('showModal')).toEqual('SelectScannerSourceModal');
-
-    const scannerSourceIndex = 0;
-    const scannerSourceName = 'scanner A';
 
     await test.runSequence('updateModalValueSequence', {
       key: 'scanner',
