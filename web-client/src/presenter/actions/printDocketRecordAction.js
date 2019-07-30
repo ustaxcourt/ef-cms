@@ -13,17 +13,17 @@ import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecor
 export const printDocketRecordAction = ({ applicationContext, get }) => {
   const { ContactFactory } = applicationContext.getEntityConstructors();
   const caseDetail = get(state.formattedCaseDetail);
-  const helper = get(state.caseDetailHelper);
+  const caseDetailHelper = get(state.caseDetailHelper);
 
   const ifTextContent = (content, contentDisplay) => {
-    if (content && content !== '' && content !== undefined) {
+    if (content && content !== '' && content != undefined) {
       return contentDisplay;
     } else {
       return '';
     }
   };
 
-  const getPartyInfoContent = (caseDetail, helper) => {
+  const getPartyInfoContent = (detail, helper) => {
     let partyInfoContent = '';
 
     const getAddress = contact => {
@@ -73,11 +73,11 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
       contactSecondary,
       practitioners,
       respondents,
-    } = caseDetail;
+    } = detail;
     // contactPrimary
-    if (caseDetail.contactPrimary) {
+    if (detail.contactPrimary) {
       const name = helper.showCaseNameForPrimary
-        ? caseDetail.caseName
+        ? detail.caseName
         : contactPrimary.name;
 
       partyInfoContent += '<div class="party-details"><h4>Primary Contact</h4>';
@@ -133,10 +133,10 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     return partyInfoContent;
   };
 
-  const getDocketRecordContent = caseDetail => {
+  const getDocketRecordContent = detail => {
     let docketRecordContent =
       '<table><thead><tr><th>No.</th><th>Date</th><th>Event</th><th>Filings and Proceedings</th><th>Filed By</th><th>Action</th><th>Served</th><th>Parties</th></thead>';
-    caseDetail.docketRecordWithDocument.map(({ document, index, record }) => {
+    detail.docketRecordWithDocument.map(({ document, index, record }) => {
       let documentEventCode = '';
       let documentFiledBy = '';
       let documentDateServed = '';
@@ -192,7 +192,10 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     // caption
     output = output.replace(/{{caption}}/g, caseDetail.caseCaption);
     // captionPostfix
-    output = output.replace(/{{captionPostfix}}/g, helper.caseCaptionPostfix);
+    output = output.replace(
+      /{{captionPostfix}}/g,
+      caseDetailHelper.caseCaptionPostfix,
+    );
     // docketNumber
     output = output.replace(
       /{{docketNumber}}/g,
@@ -201,12 +204,12 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     // partyInfo
     output = output.replace(
       /{{partyInfo}}/g,
-      getPartyInfoContent(caseDetail, helper),
+      getPartyInfoContent(caseDetail, caseDetailHelper),
     );
     // docketRecord
     output = output.replace(
       /{{docketRecord}}/g,
-      getDocketRecordContent(caseDetail, helper),
+      getDocketRecordContent(caseDetail),
     );
     return output;
   };
