@@ -1,0 +1,12 @@
+import { state } from 'cerebral';
+
+/**
+ * prime modal state for selecting a scanner
+ *
+ * @param {object} providers the providers object
+ * @param {Function} providers.store the cerebral store used for setting state.scanner.sources
+ * @param {Function} providers.get the cerebral get function
+ */
+export const primeScannerSelectModalAction = ({ get, store }) => {
+  store.set(state.modal.scanner, get(state.scanner.scannerSourceName));
+};
