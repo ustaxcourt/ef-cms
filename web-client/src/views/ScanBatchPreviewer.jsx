@@ -24,7 +24,6 @@ export const ScanBatchPreviewer = connect(
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
-    selectDocument: sequences.selectDocumentForScanSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     showModal: state.showModal,
     startScanSequence: sequences.startScanSequence,
@@ -42,7 +41,6 @@ export const ScanBatchPreviewer = connect(
     removeBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
-    selectDocument,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
@@ -402,10 +400,6 @@ export const ScanBatchPreviewer = connect(
               <div className="grid-col-8">
                 <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
-              <Tabs asSwitch>
-                <Tab tabName="Petition">Petition</Tab>
-                <Tab tabName="STIN">STIN</Tab>
-              </Tabs>
               {scanBatchPreviewerHelper.uploadMode === 'scan' && (
                 <div className="grid-col-4 text-right">
                   <span className="margin-right-1">
@@ -429,6 +423,18 @@ export const ScanBatchPreviewer = connect(
           </div>
         </div>
         <div style={{ border: '1px solid #AAA', padding: '20px' }}>
+          <Tabs
+            bind="documentSelectedForScan"
+            className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
+          >
+            <Tab tabName="petitionFile" title="Petition" />
+            <Tab tabName="stinFile" title="STIN" />
+            <Tab
+              tabName="requestForPlaceOfTrialFile"
+              title="Request for Place of Trial"
+            />
+            <Tab tabName="ownershipDisclosureFile" title="ODS" />
+          </Tabs>
           {renderModeRadios()}
           {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
           {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}

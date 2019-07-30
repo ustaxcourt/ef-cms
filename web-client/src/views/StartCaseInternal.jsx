@@ -1,7 +1,6 @@
 import { BigHeader } from './BigHeader';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
-import { DocumentSelect } from '../ustc-ui/DocumentSelect/DocumentSelect';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
@@ -22,7 +21,6 @@ export const StartCaseInternal = connect(
     completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     documentSelectedForScan: state.documentSelectedForScan,
-    documentSelectedHelper: state.documentSelectedHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     scanHelper: state.scanHelper,
@@ -42,7 +40,6 @@ export const StartCaseInternal = connect(
     caseTypes,
     constants,
     documentSelectedForScan,
-    documentSelectedHelper,
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -80,28 +77,6 @@ export const StartCaseInternal = connect(
               </div>
 
               <div className="grid-col-5">
-                <DocumentSelect
-                  options={[
-                    {
-                      name: 'Petition',
-                      required: true,
-                      value: 'petitionFile',
-                    },
-                    {
-                      name: 'Statement of Taxpayer Identification',
-                      value: 'stinFile',
-                    },
-                    {
-                      name: 'Ownership Discloser Statement',
-                      value: 'ownershipDisclosureFile',
-                    },
-                    {
-                      name: 'Request for Place of Trial',
-                      value: 'requestForPlaceOfTrialFile',
-                    },
-                  ]}
-                  title="Petition"
-                />
                 <div className="blue-container document-detail-one-third">
                   <div
                     className={`usa-form-group ${
@@ -370,14 +345,7 @@ export const StartCaseInternal = connect(
                 </div>
               </div>
               <div className="grid-col-7">
-                {documentSelectedForScan && (
-                  <ScanBatchPreviewer
-                    documentType={documentSelectedForScan}
-                    documentTypeName={
-                      documentSelectedHelper.documentSelectedForScanName
-                    }
-                  />
-                )}
+                <ScanBatchPreviewer documentType={documentSelectedForScan} />
               </div>
             </div>
           </form>
