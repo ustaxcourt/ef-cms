@@ -8,6 +8,7 @@ import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
+import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSelectsScannerSource from './journey/petitionsClerkSelectsScannerSource';
@@ -50,10 +51,25 @@ fakeFile.name = 'fakeFile.pdf';
 test = CerebralTest(presenter);
 
 describe('Case from Paper Document Scan journey', () => {
+  let scannerSourceIndex = 0;
+  let scannerSourceName = 'scanner A';
+
   beforeEach(() => {
     jest.setTimeout(30000);
+    global.alert = () => null;
     global.window = {
       localStorage: {
+        getItem: key => {
+          if (key === 'scannerSourceIndex') {
+            return `"${scannerSourceIndex}"`;
+          }
+
+          if (key === 'scannerSourceName') {
+            return `"${scannerSourceName}"`;
+          }
+
+          return null;
+        },
         removeItem: () => null,
         setItem: () => null,
       },
@@ -67,11 +83,15 @@ describe('Case from Paper Document Scan journey', () => {
     });
   });
 
-  // setup
   petitionsClerkLogIn(test);
   petitionsClerkViewsCreateNewCase(test);
   petitionsClerkViewsScanView(test);
-
-  // first use flow (select scanner)
-  petitionsClerkSelectsScannerSource(test);
+  petitionsClerkSelectsScannerSource(test, {
+    scannerSourceIndex,
+    scannerSourceName,
+  });
+  petitionsClerkAddsScannedBatch(test, {
+    scannerSourceIndex,
+    scannerSourceName,
+  });
 });
