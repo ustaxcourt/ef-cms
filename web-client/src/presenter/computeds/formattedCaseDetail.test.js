@@ -12,6 +12,19 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 describe('formattedCaseDetail', () => {
+  it('does not error and returns expected empty values on empty caseDetail', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail: {},
+      },
+    });
+    expect(result).toEqual({
+      caseDeadlines: [],
+      docketRecordSort: undefined,
+      docketRecordWithDocument: [],
+    });
+  });
+
   describe('formatYearAmounts', () => {
     it('does not return 2018 when a blank string is passed in', () => {
       const caseDetail = {
@@ -246,7 +259,7 @@ describe('formattedCaseDetail', () => {
     );
   });
 
-  it('formats docket record document data strings correctly', () => {
+  it('formats docket record document data strings and descriptions correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {
@@ -350,6 +363,7 @@ describe('formattedCaseDetail', () => {
           supportingDocumentFreeText: 'Rachael',
         },
         {
+          additionalInfo: 'Additional Info',
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -378,18 +392,36 @@ describe('formattedCaseDetail', () => {
         caseDetailErrors: {},
       },
     });
-    expect(
-      result.docketRecordWithDocument[0].record.filingsAndProceedings,
-    ).toEqual('(No Objection)');
-    expect(
-      result.docketRecordWithDocument[1].record.filingsAndProceedings,
-    ).toEqual('(Exhibit(s))');
-    expect(
-      result.docketRecordWithDocument[2].record.filingsAndProceedings,
-    ).toEqual('(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)');
-    expect(
-      result.docketRecordWithDocument[3].record.filingsAndProceedings,
-    ).toEqual('(Lodged)');
+    expect(result.docketRecordWithDocument).toMatchObject([
+      {
+        record: {
+          description: 'Amended Petition',
+          filingsAndProceedings: '(No Objection)',
+        },
+      },
+      {
+        record: {
+          description:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          filingsAndProceedings: '(Exhibit(s))',
+        },
+      },
+      {
+        record: {
+          description:
+            'Motion for Leave to File Computation for Entry of Decision',
+          filingsAndProceedings:
+            '(C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        },
+      },
+      {
+        record: {
+          description:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
+          filingsAndProceedings: '(Lodged)',
+        },
+      },
+    ]);
   });
 
   describe('sorts docket records', () => {
@@ -804,12 +836,23 @@ describe('formattedCaseDetail', () => {
 });
 
 describe('formatDocument', () => {
-  it('should format the sersvedAt date', () => {
+  it('should format the servedAt date', () => {
     const results = formatDocument(applicationContext, {
       servedAt: '2019-03-27T21:53:00.297Z',
     });
     expect(results).toMatchObject({
       servedAtFormatted: '03/27/19 05:53 pm',
+    });
+  });
+
+  it('should set the servedPartiesCode to `B` if status is served, servedAt date exists, and servedParties is an array', () => {
+    const results = formatDocument(applicationContext, {
+      servedAt: '2019-03-27T21:53:00.297Z',
+      servedParties: ['someone', 'someone else'],
+      status: 'served',
+    });
+    expect(results).toMatchObject({
+      servedPartiesCode: 'B',
     });
   });
 });
