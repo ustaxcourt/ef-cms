@@ -25,25 +25,32 @@ export const startScanAction = async ({
       props.scannerSourceName
   ) {
     scanner.setSourceByIndex(props.scannerSourceIndex);
-    const { scannedBuffer: pages } = await scanner.startScanSession({
-      applicationContext,
-    });
-    const documentSelectedForScan = get(state.documentSelectedForScan);
-    const batches = get(state.batches[documentSelectedForScan]) || [];
-    const nextIndex = batches.length
-      ? Math.max(...batches.map(b => b.index)) + 1
-      : 0;
+    try {
+      const { scannedBuffer: pages } = await scanner.startScanSession({
+        applicationContext,
+      });
+      const documentSelectedForScan = get(state.documentSelectedForScan);
+      const batches = get(state.batches[documentSelectedForScan]) || [];
+      const nextIndex = batches.length
+        ? Math.max(...batches.map(b => b.index)) + 1
+        : 0;
 
-    store.set(state.batches[documentSelectedForScan], [
-      ...batches,
-      ...[
-        {
-          index: nextIndex,
-          pages,
-        },
-      ],
-    ]);
-    store.set(state.submitting, false);
+      store.set(state.batches[documentSelectedForScan], [
+        ...batches,
+        ...[
+          {
+            index: nextIndex,
+            pages,
+          },
+        ],
+      ]);
+      store.set(state.submitting, false);
+    } catch (err) {
+      if (err.message.indexOf('no images in buffer') === 0) {
+        store.set(state.showModal, 'EmptyHopperModal');
+      }
+      store.set(state.isScanning, false);
+    }
   } else {
     await applicationContext.getUseCases().removeItemInteractor({
       applicationContext,
