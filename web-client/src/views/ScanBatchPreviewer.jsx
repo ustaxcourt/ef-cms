@@ -393,6 +393,13 @@ export const ScanBatchPreviewer = connect(
                     value: e.target.files[0].size,
                   });
                   validatePetitionFromPaperSequence();
+                  selectDocumentForPreviewSequence({
+                    documentType,
+                    file: e.target.files[0],
+                  });
+                  setDocumentUploadModeSequence({
+                    documentUploadMode: 'preview',
+                  });
                 });
               }}
             />
