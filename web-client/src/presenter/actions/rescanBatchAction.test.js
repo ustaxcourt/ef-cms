@@ -2,7 +2,7 @@ import { presenter } from '../presenter';
 import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';
 
-const mockStartScanSession = jest.fn(() => ({
+let mockStartScanSession = jest.fn(() => ({
   scannedBuffer: [{ e: 5 }, { f: 6 }],
 }));
 const mockRemoveItemInteractor = jest.fn();
@@ -61,5 +61,30 @@ describe('rescanBatchAction', () => {
     });
 
     expect(mockRemoveItemInteractor).toHaveBeenCalled();
+  });
+
+  it('opens the hopper empty modal if an hopper empty error is thrown', async () => {
+    mockStartScanSession = jest.fn(() => {
+      throw new Error('no images in buffer');
+    });
+
+    const result = await runAction(rescanBatchAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        scannerSourceIndex: 0,
+        scannerSourceName: 'scanner',
+      },
+      state: {
+        batches: [],
+        documentSelectedForScan: 'petition',
+        isScanning: false,
+      },
+    });
+
+    expect(result.state.isScanning).toBeFalsy();
+    expect(mockStartScanSession).toHaveBeenCalled();
+    expect(result.state.showModal).toEqual('EmptyHopperModal');
   });
 });

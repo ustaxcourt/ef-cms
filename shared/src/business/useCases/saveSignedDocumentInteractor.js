@@ -42,6 +42,7 @@ exports.saveSignedDocumentInteractor = async ({
       Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
     filedBy: originalDocumentEntity.filedBy,
     isPaper: false,
+    processingStatus: 'complete',
     userId: user.userId,
   });
 
