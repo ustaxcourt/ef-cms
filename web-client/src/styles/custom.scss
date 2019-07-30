@@ -1370,6 +1370,22 @@ nav.usa-nav {
   }
 }
 
+.ustc-ui-tabs.container-tabs {
+  &.document-select {
+    li {
+      border-bottom: 0;
+
+      &.active {
+        border-bottom: 0;
+      }
+
+      &:last-child {
+        border-right: 1px solid color($theme-color-base-lighter);
+      }
+    }
+  }
+}
+
 .pdf-preview-controls {
   [data-icon='caret-left'],
   [data-icon='caret-right'] {
