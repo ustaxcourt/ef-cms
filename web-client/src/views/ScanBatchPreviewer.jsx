@@ -1,4 +1,3 @@
-// import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
@@ -9,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
@@ -30,6 +30,7 @@ export const ScanBatchPreviewer = connect(
     scannerStartupSequence: sequences.scannerStartupSequence,
     selectDocumentForPreviewSequence:
       sequences.selectDocumentForPreviewSequence,
+    selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
@@ -46,13 +47,13 @@ export const ScanBatchPreviewer = connect(
     completeScanSequence,
     constants,
     documentType,
-    documentTypeName,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
     selectDocumentForPreviewSequence,
+    selectDocumentForScanSequence,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
@@ -263,49 +264,16 @@ export const ScanBatchPreviewer = connect(
 
           {scanBatchPreviewerHelper.selectedPageImage && (
             <>
-              <button
-                className="usa-button"
-                type="button"
-                onClick={e => {
-                  e.preventDefault();
-                  completeScanSequence({
-                    onComplete: file => {
-                      limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
-                        updateFormValueSequence({
-                          key: documentType,
-                          value: file,
-                        });
-                        updateFormValueSequence({
-                          key: `${documentType}Size`,
-                          value: file.size,
-                        });
-                        validatePetitionFromPaperSequence();
-                        selectDocumentForPreviewSequence({
-                          documentType,
-                          file,
-                        });
-                        setDocumentUploadModeSequence({
-                          documentUploadMode: 'preview',
-                        });
-                      });
-                    },
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                Create PDF
-              </button>
-              <hr />
               <div className="grid-container padding-x-0">
                 <div className="grid-row grid-gap">
                   <div className="grid-col-6">
-                    <h4>
+                    <h4 className="margin-bottom-0 margin-top-2">
                       Scan Preview: Batch{' '}
                       {scanBatchPreviewerHelper.selectedBatch.index + 1}
                     </h4>
                   </div>
 
-                  <div className="grid-col-6 text-right">
+                  <div className="grid-col-6 text-right margin-bottom-2">
                     <PreviewControls
                       currentPage={scanBatchPreviewerHelper.currentPage + 1}
                       disableLeftButtons={
@@ -360,6 +328,39 @@ export const ScanBatchPreviewer = connect(
                   }}
                 />
               </div>
+
+              <button
+                className="usa-button margin-top-4"
+                type="button"
+                onClick={e => {
+                  e.preventDefault();
+                  completeScanSequence({
+                    onComplete: file => {
+                      limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                        updateFormValueSequence({
+                          key: documentType,
+                          value: file,
+                        });
+                        updateFormValueSequence({
+                          key: `${documentType}Size`,
+                          value: file.size,
+                        });
+                        validatePetitionFromPaperSequence();
+                        selectDocumentForPreviewSequence({
+                          documentType,
+                          file,
+                        });
+                        setDocumentUploadModeSequence({
+                          documentUploadMode: 'preview',
+                        });
+                      });
+                    },
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                Create PDF
+              </button>
             </>
           )}
         </>
@@ -420,7 +421,7 @@ export const ScanBatchPreviewer = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                <h3 style={{ marginBottom: '0px' }}>Add {documentTypeName}</h3>
+                <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
               {scanBatchPreviewerHelper.uploadMode === 'scan' && (
                 <div className="grid-col-4 text-right">
@@ -445,6 +446,21 @@ export const ScanBatchPreviewer = connect(
           </div>
         </div>
         <div style={{ border: '1px solid #AAA', padding: '20px' }}>
+          <Tabs
+            bind="documentSelectedForScan"
+            className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
+            onSelect={() => {
+              selectDocumentForScanSequence();
+            }}
+          >
+            <Tab tabName="petitionFile" title="Petition" />
+            <Tab tabName="stinFile" title="STIN" />
+            <Tab
+              tabName="requestForPlaceOfTrialFile"
+              title="Request for Place of Trial"
+            />
+            <Tab tabName="ownershipDisclosureFile" title="ODS" />
+          </Tabs>
           {scanBatchPreviewerHelper.uploadMode !== 'preview' &&
             renderModeRadios()}
           {scanBatchPreviewerHelper.uploadMode === 'preview' &&

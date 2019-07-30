@@ -28,7 +28,7 @@ export const rescanBatchAction = async ({
       store.set(state.batches[documentSelectedForScan], batches);
       store.set(state.submitting, false);
     } catch (err) {
-      if (err.message.indexOf('no images in buffer') === 0) {
+      if (err.message.includes('no images in buffer')) {
         store.set(state.showModal, 'EmptyHopperModal');
       }
       store.set(state.isScanning, false);
