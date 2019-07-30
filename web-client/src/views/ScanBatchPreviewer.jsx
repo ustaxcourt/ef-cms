@@ -1,8 +1,14 @@
-import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
+// import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
+import {
+  ConfirmRescanBatchModal,
+  DeleteBatchModal,
+  EmptyHopperModal,
+  UnfinishedScansModal,
+} from './ScanBatchPreviewer/ScanBatchModals';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
-import { SelectScannerSourceModal } from '../ustc-ui/Scan/SelectScannerSourceModal';
+import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
@@ -16,9 +22,10 @@ export const ScanBatchPreviewer = connect(
     constants: state.constants,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
+    openConfirmDeleteBatchModalSequence:
+      sequences.openConfirmDeleteBatchModalSequence,
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
-    removeBatchSequence: sequences.removeBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
     selectDocumentForPreviewSequence:
@@ -26,6 +33,7 @@ export const ScanBatchPreviewer = connect(
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     showModal: state.showModal,
     startScanSequence: sequences.startScanSequence,
@@ -40,8 +48,8 @@ export const ScanBatchPreviewer = connect(
     documentType,
     documentTypeName,
     openChangeScannerSourceModalSequence,
+    openConfirmDeleteBatchModalSequence,
     openConfirmRescanBatchModalSequence,
-    removeBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
     selectDocumentForPreviewSequence,
@@ -154,40 +162,15 @@ export const ScanBatchPreviewer = connect(
       return (
         <>
           {showModal === 'ConfirmRescanBatchModal' && (
-            <ConfirmModal
-              cancelLabel="No, cancel"
-              confirmLabel="Yes, rescan"
-              title={`Rescan Batch ${selectedBatchIndex + 1}`}
-              onCancelSequence="clearModalSequence"
-              onConfirmSequence="rescanBatchSequence"
-            >
-              Are you sure you want to rescan batch {selectedBatchIndex + 1}?
-            </ConfirmModal>
+            <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
+          )}
+          {showModal === 'DeleteBatchModal' && (
+            <DeleteBatchModal batchIndex={selectedBatchIndex} />
           )}
 
-          {showModal === 'UnfinishedScansModal' && (
-            <ConfirmModal
-              cancelLabel="Cancel"
-              confirmLabel="OK"
-              title="You Have Unfinished Scans"
-              onCancelSequence="clearModalSequence"
-              onConfirmSequence="clearModalSequence"
-            >
-              If you continue, your unfinished scans will be lost.
-            </ConfirmModal>
-          )}
+          {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
 
-          {showModal === 'EmptyHopperModal' && (
-            <ConfirmModal
-              cancelLabel="Cancel"
-              confirmLabel="Scan"
-              title="The Hopper is Empty"
-              onCancelSequence="clearModalSequence"
-              onConfirmSequence="startScanSequence"
-            >
-              Please load the hopper to scan your batch.
-            </ConfirmModal>
-          )}
+          {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
 
           {scanBatchPreviewerHelper.showScannerSourceModal && (
             <SelectScannerSourceModal />
@@ -235,8 +218,8 @@ export const ScanBatchPreviewer = connect(
                         style={{ color: '#B51D09', textDecoration: 'none' }}
                         onClick={e => {
                           e.preventDefault();
-                          removeBatchSequence({
-                            batchIndex: batch.index,
+                          openConfirmDeleteBatchModalSequence({
+                            batchIndexToDelete: batch.index,
                           });
                         }}
                       >

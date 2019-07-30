@@ -116,8 +116,8 @@ ConfirmModalComponent.propTypes = {
 
 export const ConfirmModal = connect(
   {
-    onCancel: sequences[props.onCancelSequence],
-    onConfirm: sequences[props.onConfirmSequence],
+    onCancel: props.onCancel || sequences[props.onCancelSequence],
+    onConfirm: props.onConfirm || sequences[props.onConfirmSequence],
   },
   ConfirmModalComponent,
 );
