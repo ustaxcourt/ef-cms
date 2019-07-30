@@ -80,4 +80,26 @@ describe('fileUploadStatusHelper', () => {
 
     expect(result.statusMessage).toEqual('4 Hours 21 Minutes Left');
   });
+
+  it('returns status message of `Just Finishing Up` if percentComplete is 100', () => {
+    const result = runCompute(fileUploadStatusHelper, {
+      state: {
+        isUploading: true,
+        percentComplete: 100,
+      },
+    });
+
+    expect(result.statusMessage).toEqual('Just Finishing Up');
+  });
+
+  it('returns status message of `All Done!` if isUploading is false', () => {
+    const result = runCompute(fileUploadStatusHelper, {
+      state: {
+        isUploading: false,
+        percentComplete: 100,
+      },
+    });
+
+    expect(result.statusMessage).toEqual('All Done!');
+  });
 });

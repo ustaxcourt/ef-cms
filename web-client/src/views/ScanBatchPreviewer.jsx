@@ -280,49 +280,16 @@ export const ScanBatchPreviewer = connect(
 
           {scanBatchPreviewerHelper.selectedPageImage && (
             <>
-              <button
-                className="usa-button"
-                type="button"
-                onClick={e => {
-                  e.preventDefault();
-                  completeScanSequence({
-                    onComplete: file => {
-                      limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
-                        updateFormValueSequence({
-                          key: documentType,
-                          value: file,
-                        });
-                        updateFormValueSequence({
-                          key: `${documentType}Size`,
-                          value: file.size,
-                        });
-                        validatePetitionFromPaperSequence();
-                        selectDocumentForPreviewSequence({
-                          documentType,
-                          file,
-                        });
-                        setDocumentUploadModeSequence({
-                          documentUploadMode: 'preview',
-                        });
-                      });
-                    },
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                Create PDF
-              </button>
-              <hr />
               <div className="grid-container padding-x-0">
                 <div className="grid-row grid-gap">
                   <div className="grid-col-6">
-                    <h4>
+                    <h4 className="margin-bottom-0 margin-top-2">
                       Scan Preview: Batch{' '}
                       {scanBatchPreviewerHelper.selectedBatch.index + 1}
                     </h4>
                   </div>
 
-                  <div className="grid-col-6 text-right">
+                  <div className="grid-col-6 text-right margin-bottom-2">
                     <PreviewControls
                       currentPage={scanBatchPreviewerHelper.currentPage + 1}
                       disableLeftButtons={
@@ -377,6 +344,39 @@ export const ScanBatchPreviewer = connect(
                   }}
                 />
               </div>
+
+              <button
+                className="usa-button margin-top-4"
+                type="button"
+                onClick={e => {
+                  e.preventDefault();
+                  completeScanSequence({
+                    onComplete: file => {
+                      limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                        updateFormValueSequence({
+                          key: documentType,
+                          value: file,
+                        });
+                        updateFormValueSequence({
+                          key: `${documentType}Size`,
+                          value: file.size,
+                        });
+                        validatePetitionFromPaperSequence();
+                        selectDocumentForPreviewSequence({
+                          documentType,
+                          file,
+                        });
+                        setDocumentUploadModeSequence({
+                          documentUploadMode: 'preview',
+                        });
+                      });
+                    },
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+                Create PDF
+              </button>
             </>
           )}
         </>
