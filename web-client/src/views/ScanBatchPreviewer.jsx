@@ -164,7 +164,7 @@ export const ScanBatchPreviewer = connect(
           {showModal === 'ConfirmRescanBatchModal' && (
             <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
           )}
-          {showModal === 'DeleteBatchModal' && (
+          {showModal === 'ConfirmDeleteBatchModal' && (
             <DeleteBatchModal batchIndex={selectedBatchIndex} />
           )}
 
