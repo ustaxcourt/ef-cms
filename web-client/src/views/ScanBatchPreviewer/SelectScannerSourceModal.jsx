@@ -29,7 +29,7 @@ export const SelectScannerSourceModal = connect(
             <input
               aria-describedby="scanner-select-legend"
               aria-labelledby={`scanner-select-${index}`}
-              checked={source === modal.scanner}
+              checked={source === modal.scanner && index === modal.index}
               className="usa-radio__input"
               data-type={source}
               id={`scanner-id-${index}`}
