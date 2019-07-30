@@ -79,7 +79,7 @@ export const ScanBatchPreviewer = connect(
             </legend>
             <div className="usa-radio usa-radio__inline">
               <input
-                aria-describedby="upload-mode"
+                aria-describedby="scan-mode-radios-legend"
                 aria-labelledby="upload-mode-scan"
                 checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
                 className="usa-radio__input"
@@ -104,7 +104,7 @@ export const ScanBatchPreviewer = connect(
 
             <div className="usa-radio usa-radio__inline">
               <input
-                aria-describedby="upload-mode"
+                aria-describedby="scan-mode-radios-legend"
                 aria-labelledby="upload-mode-upload"
                 checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
                 className="usa-radio__input"
