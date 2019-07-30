@@ -119,6 +119,9 @@ const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
+  generateDocketRecordPdfInteractor,
+} = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
+const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
@@ -558,6 +561,7 @@ module.exports = (appContextUser = {}) => {
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
+        generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,

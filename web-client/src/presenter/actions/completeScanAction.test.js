@@ -41,7 +41,7 @@ describe('completeScanAction', () => {
       },
       state: {
         batches: {
-          petition: [],
+          petition: [{ pages: [] }],
         },
         documentSelectedForScan: 'petition',
         isScanning: true,
