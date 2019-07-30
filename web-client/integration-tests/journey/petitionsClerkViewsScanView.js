@@ -1,9 +1,5 @@
 export default test => {
-  return it('verifies that the petition document tab is selected', async () => {
-    await test.runSequence('navigateToPathSequence', {
-      path: '/file-a-petition/step-1',
-    });
-
+  return it('Petitions clerk views the Petition tab selected by default', async () => {
     expect(test.getState('documentSelectedForScan')).toEqual('petitionFile');
   });
 };

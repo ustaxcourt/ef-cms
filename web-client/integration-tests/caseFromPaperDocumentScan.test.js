@@ -3,18 +3,23 @@ import { CerebralTest } from 'cerebral/test';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { applicationContext } from '../src/applicationContext';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSelectsScannerSource from './journey/petitionsClerkSelectsScannerSource';
+import petitionsClerkViewsCreateNewCase from './journey/petitionsClerkViewsCreateNewCase';
 import petitionsClerkViewsScanView from './journey/petitionsClerkViewsScanView';
 
 let test;
 global.FormData = FormData;
 global.Blob = () => {};
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = Object.assign(applicationContext, {
+  getScanner: getScannerInterface,
+});
 presenter.providers.router = {
   externalRoute: () => {},
   route: async url => {
@@ -64,6 +69,9 @@ describe('Case from Paper Document Scan journey', () => {
 
   // setup
   petitionsClerkLogIn(test);
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkViewsCreateNewCase(test);
   petitionsClerkViewsScanView(test);
+
+  // first use flow (select scanner)
+  petitionsClerkSelectsScannerSource(test);
 });
