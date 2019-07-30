@@ -1369,3 +1369,19 @@ nav.usa-nav {
     height: 900px;
   }
 }
+
+.ustc-ui-tabs.container-tabs {
+  &.document-select {
+    li {
+      border-bottom: 0;
+
+      &.active {
+        border-bottom: 0;
+      }
+
+      &:last-child {
+        border-right: 1px solid color($theme-color-base-lighter);
+      }
+    }
+  }
+}
