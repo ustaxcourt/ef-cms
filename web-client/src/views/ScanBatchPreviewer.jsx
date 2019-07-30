@@ -78,66 +78,54 @@ export const ScanBatchPreviewer = connect(
           <legend className="usa-legend with-hint" id="scan-mode-radios-legend">
             File Upload
           </legend>
-          <div
-            className={`usa-form-group ${
-              validationErrors[documentType] ? 'usa-form-group--error' : ''
-            }`}
-          >
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="upload-mode"
-                aria-labelledby="upload-mode-scan"
-                checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
-                className="usa-radio__input"
-                id="scanMode"
-                name="uploadMode"
-                type="radio"
-                value="scan"
-                onChange={() =>
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'scan',
-                  })
-                }
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="scanMode"
-                id="upload-mode-scan"
-              >
-                Scan
-              </label>
-            </div>
+          <div className="usa-radio usa-radio__inline">
+            <input
+              aria-describedby="upload-mode"
+              aria-labelledby="upload-mode-scan"
+              checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
+              className="usa-radio__input"
+              id="scanMode"
+              name="uploadMode"
+              type="radio"
+              value="scan"
+              onChange={() =>
+                setDocumentUploadModeSequence({
+                  documentUploadMode: 'scan',
+                })
+              }
+            />
+            <label
+              className="usa-radio__label"
+              htmlFor="scanMode"
+              id="upload-mode-scan"
+            >
+              Scan
+            </label>
+          </div>
 
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="upload-mode"
-                aria-labelledby="upload-mode-upload"
-                checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
-                className="usa-radio__input"
-                id="uploadMode"
-                name="uploadMode"
-                type="radio"
-                value="upload"
-                onChange={() =>
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'upload',
-                  })
-                }
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="uploadMode"
-                id="upload-mode-upload"
-              >
-                Upload
-              </label>
-            </div>
-
-            {validationErrors[documentType] && (
-              <div className="usa-error-message">
-                Upload or scan a petition.
-              </div>
-            )}
+          <div className="usa-radio usa-radio__inline">
+            <input
+              aria-describedby="upload-mode"
+              aria-labelledby="upload-mode-upload"
+              checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
+              className="usa-radio__input"
+              id="uploadMode"
+              name="uploadMode"
+              type="radio"
+              value="upload"
+              onChange={() =>
+                setDocumentUploadModeSequence({
+                  documentUploadMode: 'upload',
+                })
+              }
+            />
+            <label
+              className="usa-radio__label"
+              htmlFor="uploadMode"
+              id="upload-mode-upload"
+            >
+              Upload
+            </label>
           </div>
         </fieldset>
       );
