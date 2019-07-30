@@ -33,7 +33,7 @@ export const DocumentSelect = connect(
             {documentSelectedForScan !== value && (
               <div className="grid-col-2 padding-top-2">
                 <button
-                  aria-controls={`add ${name} file`}
+                  aria-label={`add ${name} file`}
                   className="usa-button usa-button--unstyled text-no-underline"
                   type="button"
                   onClick={e => {

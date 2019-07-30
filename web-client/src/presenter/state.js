@@ -78,6 +78,7 @@ export const state = {
   documentDetailHelper,
   documentHelper,
   documentId: null,
+  documentSelectedForPreview: null,
   documentSelectedForScan: null,
   documentSelectedHelper,
   documentSigningHelper,
