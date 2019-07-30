@@ -15,7 +15,7 @@ export const PreviewControls = connect(
     totalPages,
   }) => {
     return (
-      <div className="margin-bottom-3">
+      <div className="pdf-preview-controls">
         <button
           className={
             'usa-button usa-button--unstyled' +
