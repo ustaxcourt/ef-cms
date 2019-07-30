@@ -20,7 +20,6 @@ export const SelectScannerSourceModal = connect(
       onCancelSequence="clearModalSequence"
       onConfirmSequence="selectScannerSequence"
     >
-      <h3>Scanner(s) Found </h3>
       <legend className="usa-legend" id="scanner-select-legend">
         Scanner(s) Found
       </legend>
