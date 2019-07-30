@@ -191,7 +191,7 @@ export const ScanBatchPreviewer = connect(
           )}
           <h5>Scanned Documents</h5>
           {scanBatchPreviewerHelper.batches.length > 0 && (
-            <table style={{ width: '70%' }}>
+            <table>
               <tbody>
                 {scanBatchPreviewerHelper.batches.map(batch => (
                   <tr key={batch.index}>
@@ -213,8 +213,7 @@ export const ScanBatchPreviewer = connect(
                     </td>
                     <td>
                       <button
-                        className="usa-button usa-button--unstyled"
-                        style={{ textDecoration: 'none' }}
+                        className="usa-button usa-button--unstyled no-underline"
                         onClick={e => {
                           e.preventDefault();
                           openConfirmRescanBatchModalSequence({
@@ -228,8 +227,7 @@ export const ScanBatchPreviewer = connect(
                     </td>
                     <td>
                       <button
-                        className="usa-button usa-button--unstyled"
-                        style={{ color: '#B51D09', textDecoration: 'none' }}
+                        className="usa-button usa-button--unstyled no-underline red-warning float-right"
                         onClick={e => {
                           e.preventDefault();
                           openConfirmDeleteBatchModalSequence({
@@ -249,8 +247,7 @@ export const ScanBatchPreviewer = connect(
 
           {scanBatchPreviewerHelper.scannerSource && (
             <button
-              className="usa-button usa-button--unstyled margin-bottom-2"
-              style={{ textDecoration: 'none' }}
+              className="usa-button usa-button--unstyled margin-bottom-2 no-underline"
               onClick={e => {
                 e.preventDefault();
                 startScanSequence();
