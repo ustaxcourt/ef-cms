@@ -7,14 +7,14 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
-    printView: sequences.printViewSequence,
+    printDocketRecord: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
     caseDetail,
     helper,
-    printView,
+    printDocketRecord,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
@@ -22,7 +22,7 @@ export const DocketRecordHeader = connect(
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row">
-            <div className="tablet:grid-col-8">
+            <div className="tablet:grid-col-10">
               {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button"
@@ -42,22 +42,18 @@ export const DocketRecordHeader = connect(
                   <FontAwesomeIcon icon="file" size="1x" /> File a Document
                 </a>
               )}
-            </div>
-            <div className="tablet:grid-col-2 text-align-right">
               <button
-                className="usa-button usa-button--unstyled margin-top-1 margin-right-1"
+                className="usa-button usa-button--unstyled margin-top-1 margin-left-2"
                 onClick={() => {
                   updateSessionMetadataSequence({
                     key: `docketRecordSort.${caseDetail.caseId}`,
                     value: 'byDate',
                   });
-                  printView({
-                    printView: 'CaseDetailInternalPrint',
-                  });
+                  printDocketRecord();
                 }}
               >
                 <FontAwesomeIcon icon="print" size="sm" />
-                Print
+                Printable Docket Record
               </button>
             </div>
             <div className="tablet:grid-col-2">

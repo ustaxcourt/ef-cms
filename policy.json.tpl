@@ -94,6 +94,8 @@
         "logs:*",
         "events:*",
         "sns:*",
+        "elasticloadbalancing:*",
+        "ec2:*",
         "ses:*",
         "s3:*",
         "cloudformation:*",
