@@ -1,7 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { primeScannerSourceAction } from '../actions/primeScannerSourceAction';
 import { setScannerSourceAction } from '../actions/setScannerSourceAction';
-import { clearModalStateAction } from '../actions/clearModalStateAction';
 
 export const selectScannerSequence = [
   primeScannerSourceAction,
