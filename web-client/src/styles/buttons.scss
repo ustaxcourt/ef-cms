@@ -1,6 +1,8 @@
 .usa-button {
   &.red-warning {
-    box-shadow: 0 0 0 2px color($theme-color-secondary-dark);
+    &:not(.usa-button--unstyled) {
+      box-shadow: 0 0 0 2px color($theme-color-secondary-dark);
+    }
     color: color($theme-color-secondary-dark);
   }
 
