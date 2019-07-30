@@ -201,7 +201,8 @@ export const ScanBatchPreviewer = connect(
                     <td>
                       <button
                         className="usa-button usa-button--unstyled"
-                        onClick={() => {
+                        onClick={e => {
+                          e.preventDefault();
                           setSelectedBatchIndexSequence({
                             selectedBatchIndex: batch.index,
                           });
@@ -217,7 +218,8 @@ export const ScanBatchPreviewer = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         style={{ textDecoration: 'none' }}
-                        onClick={() => {
+                        onClick={e => {
+                          e.preventDefault();
                           openConfirmRescanBatchModalSequence({
                             batchIndexToRescan: batch.index,
                           });
@@ -231,7 +233,8 @@ export const ScanBatchPreviewer = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         style={{ color: '#B51D09', textDecoration: 'none' }}
-                        onClick={() => {
+                        onClick={e => {
+                          e.preventDefault();
                           removeBatchSequence({
                             batchIndex: batch.index,
                           });
@@ -264,7 +267,8 @@ export const ScanBatchPreviewer = connect(
           {!scanBatchPreviewerHelper.scannerSource && (
             <button
               className="usa-button usa-button--unstyled margin-bottom-2"
-              onClick={() => {
+              onClick={e => {
+                e.preventDefault();
                 openChangeScannerSourceModalSequence();
               }}
             >
@@ -279,7 +283,8 @@ export const ScanBatchPreviewer = connect(
               <button
                 className="usa-button"
                 type="button"
-                onClick={() => {
+                onClick={e => {
+                  e.preventDefault();
                   completeScanSequence({
                     onComplete: file => {
                       limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
@@ -328,24 +333,28 @@ export const ScanBatchPreviewer = connect(
                         scanBatchPreviewerHelper.totalPages - 1
                       }
                       totalPages={scanBatchPreviewerHelper.totalPages}
-                      onFirstPage={() => {
+                      onFirstPage={e => {
+                        e.preventDefault();
                         setCurrentPageIndexSequence({
                           currentPageIndex: 0,
                         });
                       }}
-                      onLastPage={() => {
+                      onLastPage={e => {
+                        e.preventDefault();
                         setCurrentPageIndexSequence({
                           currentPageIndex:
                             scanBatchPreviewerHelper.totalPages - 1,
                         });
                       }}
-                      onNextPage={() => {
+                      onNextPage={e => {
+                        e.preventDefault();
                         setCurrentPageIndexSequence({
                           currentPageIndex:
                             scanBatchPreviewerHelper.currentPage + 1,
                         });
                       }}
-                      onPreviousPage={() => {
+                      onPreviousPage={e => {
+                        e.preventDefault();
                         setCurrentPageIndexSequence({
                           currentPageIndex:
                             scanBatchPreviewerHelper.currentPage - 1,
@@ -440,7 +449,8 @@ export const ScanBatchPreviewer = connect(
                   <button
                     className="usa-button usa-button--unstyled"
                     style={{ color: 'white' }}
-                    onClick={() => {
+                    onClick={e => {
+                      e.preventDefault();
                       openChangeScannerSourceModalSequence();
                     }}
                   >
