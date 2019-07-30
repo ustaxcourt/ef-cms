@@ -36,7 +36,8 @@ export const DocumentSelect = connect(
                   aria-label={`add ${name} file`}
                   className="usa-button usa-button--unstyled text-no-underline"
                   type="button"
-                  onClick={() => {
+                  onClick={e => {
+                    e.preventDefault();
                     selectDocument({ documentType: value });
                   }}
                 >
