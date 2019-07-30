@@ -1,9 +1,9 @@
 import { presenter } from '../presenter';
+import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';
-import { startScanAction } from './startScanAction';
 
 const mockStartScanSession = jest.fn(() => ({
-  scannedBuffer: [],
+  scannedBuffer: [{ e: 5 }, { f: 6 }],
 }));
 const mockRemoveItemInteractor = jest.fn();
 
@@ -19,9 +19,9 @@ presenter.providers.applicationContext = {
 };
 global.alert = () => null;
 
-describe('startScanAction', () => {
-  it('tells the TWAIN library to begin image aquisition', async () => {
-    const result = await runAction(startScanAction, {
+describe('rescanBatchAction', () => {
+  it('rescans the batch based on the state.batchIndexToRescan and state.documentSelectedForScan and replaces that batch with the return from startScanSession', async () => {
+    const result = await runAction(rescanBatchAction, {
       modules: {
         presenter,
       },
@@ -30,7 +30,13 @@ describe('startScanAction', () => {
         scannerSourceName: 'scanner',
       },
       state: {
-        batches: [],
+        batchIndexToRescan: 1,
+        batches: {
+          petition: [
+            { index: 0, pages: [{ a: 1 }, { b: 2 }] },
+            { index: 1, pages: [{ c: 3 }, { d: 4 }] },
+          ],
+        },
         documentSelectedForScan: 'petition',
         isScanning: false,
       },
@@ -38,10 +44,14 @@ describe('startScanAction', () => {
 
     expect(result.state.isScanning).toBeTruthy();
     expect(mockStartScanSession).toHaveBeenCalled();
+    expect(result.state.batches.petition[1].pages).toEqual([
+      { e: 5 },
+      { f: 6 },
+    ]);
   });
 
   it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {
-    await runAction(startScanAction, {
+    await runAction(rescanBatchAction, {
       modules: {
         presenter,
       },
