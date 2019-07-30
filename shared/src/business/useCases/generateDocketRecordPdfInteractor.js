@@ -32,11 +32,11 @@ exports.generateDocketRecordPdfInteractor = async ({
         <head>
         </head>
         <body style="margin: 0px;">
-          <div style="font-size: 10px; width: 100%; margin: 20px 40px;">
+          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 20px 40px;">
             <div style="float: right">
               Docket Number: ${docketNumber}
             </div>
-            <div style="font-size: 10px; float: left">
+            <div style="font-size: 8px; font-family: sans-serif; float: left;">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
             </div>

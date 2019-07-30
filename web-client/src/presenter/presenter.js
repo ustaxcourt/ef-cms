@@ -87,7 +87,6 @@ import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectD
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
-import { printViewSequence } from './sequences/printViewSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -99,7 +98,9 @@ import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
+import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
+import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveDocumentSequence } from './sequences/serveDocumentSequence';
@@ -296,7 +297,6 @@ export const presenter = {
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
     printDocketRecordSequence,
-    printViewSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,
@@ -308,7 +308,9 @@ export const presenter = {
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
+    selectDocumentForPreviewSequence,
     selectDocumentSequence,
+    selectScannerSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
     serveDocumentSequence,

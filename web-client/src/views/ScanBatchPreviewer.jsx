@@ -1,5 +1,6 @@
 import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from '../ustc-ui/Scan/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -21,6 +22,8 @@ export const ScanBatchPreviewer = connect(
     removeBatchSequence: sequences.removeBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
+    selectDocumentForPreviewSequence:
+      sequences.selectDocumentForPreviewSequence,
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
@@ -41,6 +44,7 @@ export const ScanBatchPreviewer = connect(
     removeBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
+    selectDocumentForPreviewSequence,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
@@ -115,6 +119,34 @@ export const ScanBatchPreviewer = connect(
             </label>
           </div>
         </fieldset>
+      );
+    };
+
+    const renderIframePreview = () => {
+      return (
+        <>
+          <PdfPreview />
+          <button
+            className="usa-button usa-button--outline red-warning"
+            onClick={e => {
+              e.preventDefault();
+              updateFormValueSequence({
+                key: documentType,
+                value: null,
+              });
+              updateFormValueSequence({
+                key: `${documentType}Size`,
+                value: null,
+              });
+              setDocumentUploadModeSequence({
+                documentUploadMode: 'scan',
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={['fas', 'times-circle']} />
+            Delete PDF
+          </button>
+        </>
       );
     };
 
@@ -265,6 +297,13 @@ export const ScanBatchPreviewer = connect(
                           value: file.size,
                         });
                         validatePetitionFromPaperSequence();
+                        selectDocumentForPreviewSequence({
+                          documentType,
+                          file,
+                        });
+                        setDocumentUploadModeSequence({
+                          documentUploadMode: 'preview',
+                        });
                       });
                     },
                   });
@@ -435,7 +474,10 @@ export const ScanBatchPreviewer = connect(
             />
             <Tab tabName="ownershipDisclosureFile" title="ODS" />
           </Tabs>
-          {renderModeRadios()}
+          {scanBatchPreviewerHelper.uploadMode !== 'preview' &&
+            renderModeRadios()}
+          {scanBatchPreviewerHelper.uploadMode === 'preview' &&
+            renderIframePreview()}
           {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
           {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
         </div>
