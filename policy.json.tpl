@@ -94,6 +94,7 @@
         "logs:*",
         "events:*",
         "sns:*",
+        "ec2:*",
         "ses:*",
         "s3:*",
         "cloudformation:*",
