@@ -6,7 +6,7 @@ const {
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';

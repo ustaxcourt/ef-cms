@@ -2,7 +2,7 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/TrialSession');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const ELIGIBLE_CASES_BUFFER = 50;
