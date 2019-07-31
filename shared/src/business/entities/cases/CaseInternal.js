@@ -42,7 +42,9 @@ function CaseInternal(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseInternal.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
+CaseInternal.errorToMessageMap = Object.assign(Case.COMMON_ERROR_MESSAGES, {
+  petitionFile: 'Upload or scan a petition.',
+});
 
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),

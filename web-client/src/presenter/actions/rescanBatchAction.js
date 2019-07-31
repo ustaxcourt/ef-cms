@@ -18,14 +18,21 @@ export const rescanBatchAction = async ({
       props.scannerSourceName
   ) {
     scanner.setSourceByIndex(props.scannerSourceIndex);
-    const { scannedBuffer: pages } = await scanner.startScanSession({
-      applicationContext,
-    });
-    const documentSelectedForScan = get(state.documentSelectedForScan);
-    const batches = get(state.batches[documentSelectedForScan]);
-    batches.find(b => b.index === batchIndex).pages = pages;
-    store.set(state.batches[documentSelectedForScan], batches);
-    store.set(state.submitting, false);
+    try {
+      const { scannedBuffer: pages } = await scanner.startScanSession({
+        applicationContext,
+      });
+      const documentSelectedForScan = get(state.documentSelectedForScan);
+      const batches = get(state.batches[documentSelectedForScan]);
+      batches.find(b => b.index === batchIndex).pages = pages;
+      store.set(state.batches[documentSelectedForScan], batches);
+      store.set(state.submitting, false);
+    } catch (err) {
+      if (err.message.includes('no images in buffer')) {
+        store.set(state.showModal, 'EmptyHopperModal');
+      }
+      store.set(state.isScanning, false);
+    }
   } else {
     await applicationContext.getUseCases().removeItemInteractor({
       applicationContext,

@@ -7,22 +7,30 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
-    printView: sequences.printViewSequence,
+    pdfPreviewUrl: state.pdfPreviewUrl,
+    printDocketRecord: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
     caseDetail,
     helper,
-    printView,
+    printDocketRecord,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
+    const openDocketRecordPrintPreview = (options = {}) => {
+      updateSessionMetadataSequence({
+        key: `docketRecordSort.${caseDetail.caseId}`,
+        value: 'byDate',
+      });
+      printDocketRecord(options);
+    };
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row">
-            <div className="tablet:grid-col-8">
+            <div className="tablet:grid-col-10">
               {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button"
@@ -42,22 +50,28 @@ export const DocketRecordHeader = connect(
                   <FontAwesomeIcon icon="file" size="1x" /> File a Document
                 </a>
               )}
-            </div>
-            <div className="tablet:grid-col-2 text-align-right">
               <button
-                className="usa-button usa-button--unstyled margin-top-1 margin-right-1"
+                aria-hidden="true"
+                className="show-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
                 onClick={() => {
-                  updateSessionMetadataSequence({
-                    key: `docketRecordSort.${caseDetail.caseId}`,
-                    value: 'byDate',
-                  });
-                  printView({
-                    printView: 'CaseDetailInternalPrint',
+                  openDocketRecordPrintPreview({
+                    openNewTab: true,
+                    openNewView: false,
                   });
                 }}
               >
                 <FontAwesomeIcon icon="print" size="sm" />
-                Print
+                Printable Docket Record
+              </button>
+              <button
+                aria-label="printable docket record"
+                className="hide-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                onClick={() => {
+                  openDocketRecordPrintPreview();
+                }}
+              >
+                <FontAwesomeIcon icon="print" size="sm" />
+                Printable Docket Record
               </button>
             </div>
             <div className="tablet:grid-col-2">
