@@ -4,7 +4,7 @@ export default test => {
     const batches = test.getState(`batches.${selectedDocumentType}`);
 
     await test.runSequence('openConfirmDeleteBatchModalSequence', {
-      batchIndexToDelete: batches[0],
+      batchIndexToDelete: 0,
     });
 
     await test.runSequence('removeBatchSequence');
