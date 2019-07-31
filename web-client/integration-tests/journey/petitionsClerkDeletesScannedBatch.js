@@ -9,6 +9,6 @@ export default test => {
 
     await test.runSequence('removeBatchSequence');
 
-    expect(test.getState(`batches.${selectedDocumentType}`)).toHaveLength(0);
+    expect(batches).toHaveLength(0);
   });
 };
