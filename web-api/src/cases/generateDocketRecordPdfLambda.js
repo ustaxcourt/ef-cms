@@ -62,6 +62,7 @@ exports.handler = event =>
           docketRecordHtml,
         });
       applicationContext.logger.info('User', user);
+      applicationContext.logger.info('Docket Number', docketNumber);
       return result;
     } catch (e) {
       applicationContext.logger.error(e);

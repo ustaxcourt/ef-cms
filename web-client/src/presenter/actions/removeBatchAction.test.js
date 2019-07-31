@@ -4,10 +4,9 @@ import { runAction } from 'cerebral/test';
 describe('removeBatchAction', () => {
   it('should set the batchIndex to 0 if the last item was deleted', async () => {
     const { state } = await runAction(removeBatchAction, {
-      props: {
-        batchIndex: 5,
-      },
+      props: {},
       state: {
+        batchIndexToDelete: 5,
         batches: {
           petition: [
             {
@@ -29,6 +28,7 @@ describe('removeBatchAction', () => {
         selectedBatchIndex: 4,
       },
       state: {
+        batchIndexToDelete: 4,
         batches: {
           petition: [
             {
@@ -54,10 +54,9 @@ describe('removeBatchAction', () => {
 
   it('should not change the batch index if deleting a batch not selected', async () => {
     const { state } = await runAction(removeBatchAction, {
-      props: {
-        batchIndex: 2,
-      },
+      props: {},
       state: {
+        batchIndex: 2,
         batches: {
           petition: [
             {
