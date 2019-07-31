@@ -30,6 +30,7 @@ joiValidationDecorator(
     barnumber: joi.string().optional(),
     email: joi.string().optional(),
     name: joi.string().optional(),
+    phone: joi.string().optional(),
     token: joi.string().optional(),
     userId: joi.string().required(),
   }),
