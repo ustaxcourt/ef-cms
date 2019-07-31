@@ -2,6 +2,7 @@ const { chunk } = require('lodash');
 
 /**
  * PUT for dynamodb aws-sdk client
+ *
  * @param item
  * @returns {*}
  */
@@ -55,6 +56,7 @@ exports.update = params => {
 
 /**
  * updateConsistent
+ *
  * @param params
  * @returns {*}
  */
@@ -75,6 +77,7 @@ exports.updateConsistent = params => {
 
 /**
  * get
+ *
  * @param params
  * @returns {*}
  */
@@ -98,6 +101,7 @@ exports.get = params => {
 
 /**
  * GET for aws-sdk dynamodb client
+ *
  * @param params
  */
 exports.query = params => {
@@ -118,6 +122,7 @@ exports.query = params => {
 
 /**
  * BATCH GET for aws-sdk dynamodb client
+ *
  * @param params
  */
 exports.batchGet = async ({ applicationContext, keys }) => {

@@ -1,5 +1,6 @@
 /**
  * validateCaseAssociationRequestInteractor
+ *
  * @param applicationContext
  * @param caseAssociationRequest
  * @returns {object}

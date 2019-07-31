@@ -1,5 +1,6 @@
 /**
  * validateTrialSessionInteractor
+ *
  * @param applicationContext
  * @param trialSession
  * @returns {object}

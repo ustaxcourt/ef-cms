@@ -2,6 +2,7 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 /**
  * validatePrimaryContactInteractor
+ *
  * @param caseDetail
  * @returns {*}
  */

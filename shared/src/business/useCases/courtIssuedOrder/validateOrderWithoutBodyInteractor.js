@@ -1,5 +1,6 @@
 /**
  * validateOrderWithoutBodyInteractor
+ *
  * @param applicationContext
  * @param orderMetadata
  * @returns {object} errors (null if no errors)
