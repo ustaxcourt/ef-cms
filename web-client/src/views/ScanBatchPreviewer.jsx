@@ -2,6 +2,7 @@ import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
   EmptyHopperModal,
+  ScanErrorModal,
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -185,6 +186,8 @@ export const ScanBatchPreviewer = connect(
           {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
 
           {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
+
+          {showModal === 'ScanErrorModal' && <ScanErrorModal />}
 
           {scanBatchPreviewerHelper.showScannerSourceModal && (
             <SelectScannerSourceModal />
