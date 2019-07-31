@@ -24,3 +24,11 @@ variable "cloudfront_max_ttl" {
 variable "dynamsoft_s3_zip_path" {
   type = "string"
 }
+
+variable "dynamsoft_url" {
+  type = "string"
+}
+
+variable "dynamsoft_product_keys" {
+  type = "string"
+}

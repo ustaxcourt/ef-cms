@@ -21,6 +21,8 @@ data "template_file" "setup_dynamsoft" {
 
   vars {
     dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
+    dynamsoft_url = "${var.dynamsoft_url}"
+    dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
   }
 }
 
