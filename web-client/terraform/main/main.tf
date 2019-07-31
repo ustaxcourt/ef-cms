@@ -30,7 +30,6 @@ data "aws_route53_zone" "zone" {
   name = "${var.dns_domain}."
 }
 
-
 module "dynamsoft_us_east" {
   source = "../dynamsoft"
 
@@ -41,10 +40,10 @@ module "dynamsoft_us_east" {
   }
   ami = "ami-0a313d6098716f372"
   availability_zones = ["us-east-1a"]
-  git_access_token = "${var.git_access_token}"
-  product_keys = "${var.product_keys}"
-  dynamsoft_zip_name = "${var.dynamsoft_zip_name}"
-  dynamsoft_repo = "${var.dynamsoft_repo}"
+  dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
+  ec2_profile_name = "${aws_iam_instance_profile.dynamsoft_profile.name}"
+  dynamsoft_url = "${var.dynamsoft_url}"
+  dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
 }
 
 module "dynamsoft_us_west" {
@@ -57,10 +56,10 @@ module "dynamsoft_us_west" {
   }
   ami = "ami-06397100adf427136"
   availability_zones = ["us-west-1a"]
-  git_access_token = "${var.git_access_token}"
-  product_keys = "${var.product_keys}"
-  dynamsoft_zip_name = "${var.dynamsoft_zip_name}"
-  dynamsoft_repo = "${var.dynamsoft_repo}"
+  dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
+  ec2_profile_name = "${aws_iam_instance_profile.dynamsoft_profile.name}"
+  dynamsoft_url = "${var.dynamsoft_url}"
+  dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
 }
 
 
