@@ -21,3 +21,11 @@ variable "dynamsoft_s3_zip_path" {
 variable "ec2_profile_name" {
   type = "string"
 }
+
+variable "dynamsoft_url" {
+  type = "string"
+}
+
+variable "dynamsoft_product_keys" {
+  type = "string"
+}

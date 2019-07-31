@@ -42,6 +42,8 @@ module "dynamsoft_us_east" {
   availability_zones = ["us-east-1a"]
   dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
   ec2_profile_name = "${aws_iam_instance_profile.dynamsoft_profile.name}"
+  dynamsoft_url = "${var.dynamsoft_url}"
+  dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
 }
 
 module "dynamsoft_us_west" {
@@ -56,6 +58,8 @@ module "dynamsoft_us_west" {
   availability_zones = ["us-west-1a"]
   dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
   ec2_profile_name = "${aws_iam_instance_profile.dynamsoft_profile.name}"
+  dynamsoft_url = "${var.dynamsoft_url}"
+  dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
 }
 
 
