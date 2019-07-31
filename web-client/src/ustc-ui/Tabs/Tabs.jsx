@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { camelCase } from 'lodash';
 import { connect } from '@cerebral/react';
 import { decorateWithPostCallback } from '../utils/useCerebralState';
@@ -46,7 +47,7 @@ export function TabsComponent({
   setTab = decorateWithPostCallback(setTab, onSelect);
 
   const renderTab = child => {
-    const { id, tabName, title } = child.props;
+    const { icon, iconColor, id, showIcon, tabName, title } = child.props;
 
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
@@ -70,7 +71,10 @@ export function TabsComponent({
           type="button"
           onClick={() => setTab(tabName)}
         >
-          <span>{title}</span>
+          <span>{title}</span>{' '}
+          {showIcon && (
+            <FontAwesomeIcon color={iconColor || null} icon={icon} />
+          )}
         </button>
       </li>
     );
