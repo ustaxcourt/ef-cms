@@ -7,7 +7,9 @@ export default (test, { scannerSourceIndex, scannerSourceName }) => {
 
     const selectedDocumentType = test.getState('documentSelectedForScan');
 
-    expect(test.getState(`batches.${selectedDocumentType}`)).toHaveLength(1);
+    expect(
+      test.getState(`batches.${selectedDocumentType}`).length,
+    ).toBeGreaterThan(0);
     expect(Object.keys(test.getState('batches'))).toEqual([
       selectedDocumentType,
     ]);

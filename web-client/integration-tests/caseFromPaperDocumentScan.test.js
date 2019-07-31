@@ -10,6 +10,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
 import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSelectsScannerSource from './journey/petitionsClerkSelectsScannerSource';
@@ -96,4 +97,14 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkDeletesScannedBatch(test);
+  petitionsClerkAddsScannedBatch(test, {
+    scannerSourceIndex,
+    scannerSourceName,
+  });
+  petitionsClerkAddsScannedBatch(test, {
+    scannerSourceIndex,
+    scannerSourceName,
+  });
+  petitionsClerkDeletesMultipleScannedBatches(test, { numBatches: 2 });
+  // petitionsClerkCreatesNewCase(test, fakeFile);
 });
