@@ -28,10 +28,10 @@ export SKIP_SANITIZE=true
 export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=noop
 export AWS_SECRET_ACCESS_KEY=noop
-export SLS_DEPLOYMENT_BUCKET=noop 
+export SLS_DEPLOYMENT_BUCKET=noop
 
 # set common arguments used by sls below (appearing as "$@")
-set -- --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop 
+set -- --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop
 
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &

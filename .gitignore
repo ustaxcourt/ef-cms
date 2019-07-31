@@ -15,11 +15,11 @@ parcel-debug-*
 policy.json
 puppeteer_lambda_layer.tar.gz
 shared/coverage
-storage/s3/*
 web-api/runtimes/clamav/bin
 web-api/runtimes/clamav/lib
 web-api/runtimes/ghostscript/bin
 web-api/runtimes/ghostscript/lib
+web-api/storage/s3/*
 web-client/.cache/
 web-client/coverage-integration/*
 web-client/coverage-unit/*
