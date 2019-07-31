@@ -16,7 +16,7 @@ export default (test, fakeFile) => {
     );
 
     expect(test.getState('validationErrors.petitionFile')).toEqual(
-      'The Petition file was not selected.',
+      'Upload or scan a petition.',
     );
 
     await test.runSequence('updateFormValueSequence', {

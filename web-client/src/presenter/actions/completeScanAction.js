@@ -34,9 +34,15 @@ export const completeScanAction = async ({
     .getUseCases()
     .generatePDFFromJPGDataInteractor(scannedBuffer);
 
-  const pdfFile = new File([pdfBlob], 'myfile.pdf');
+  const pdfFile = new File([pdfBlob], 'myfile.pdf', {
+    type: 'application/pdf',
+  });
+
+  const scans = get(state.batches);
+  delete scans[documentSelectedForScan];
 
   props.onComplete(pdfFile);
+  store.set(state.batches, scans);
   store.set(state.submitting, false);
   store.set(state.isScanning, false);
 };
