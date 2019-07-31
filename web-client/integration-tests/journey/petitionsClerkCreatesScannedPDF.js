@@ -2,7 +2,7 @@ import { limitFileSize } from '../../src/views/limitFileSize.js';
 import { setBatchPages } from '../helpers';
 
 export default test => {
-  return it('Petitions clerk creates and deletes a PDF from added batches', async () => {
+  return it('Petitions clerk creates a PDF from added batches', async () => {
     const selectedDocumentType = test.getState('documentSelectedForScan');
     const constants = test.getState('constants');
 
@@ -26,21 +26,6 @@ export default test => {
     expect(test.getState(`form.${selectedDocumentType}Size`)).toBeGreaterThan(
       0,
     );
-
-    // delete pdf
-    test.runSequence('updateFormValueSequence', {
-      key: selectedDocumentType,
-      value: null,
-    });
-    test.runSequence('updateFormValueSequence', {
-      key: `${selectedDocumentType}Size`,
-      value: null,
-    });
-    test.runSequence('setDocumentUploadModeSequence', {
-      documentUploadMode: 'scan',
-    });
-
-    expect(test.getState(`form.${selectedDocumentType}`)).toEqual(null);
-    expect(test.getState(`form.${selectedDocumentType}Size`)).toEqual(null);
+    expect(test.getState(`form.${selectedDocumentType}`)).toBeDefined();
   });
 };

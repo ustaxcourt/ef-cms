@@ -11,8 +11,8 @@ import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import petitionsClerkAddsScannedBatch from './journey/petitionsClerkAddsScannedBatch';
-import petitionsClerkCreateAndDeletePDF from './journey/petitionsClerkCreateAndDeletePDF';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import petitionsClerkCreatesScannedPDF from './journey/petitionsClerkCreatesScannedPDF';
 import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
 import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
@@ -55,7 +55,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 const dom = new JSDOM(`<!DOCTYPE html>
 <body>
-  <input type="file">
+  <input type="file" />
 </body>`);
 
 const { window } = dom;
@@ -126,6 +126,10 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkRescansAddedBatch(test);
-  petitionsClerkCreateAndDeletePDF(test);
-  // petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkAddsScannedBatch(test, {
+    scannerSourceIndex,
+    scannerSourceName,
+  });
+  petitionsClerkCreatesScannedPDF(test);
+  petitionsClerkCreatesNewCase(test, fakeFile);
 });
