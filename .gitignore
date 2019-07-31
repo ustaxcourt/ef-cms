@@ -14,6 +14,7 @@ policy.json
 puppeteer_lambda_layer.tar.gz
 shared/coverage
 shared/node_modules
+storage/s3/*
 web-api/runtimes/clamav/bin
 web-api/runtimes/clamav/lib
 web-api/runtimes/ghostscript/bin
