@@ -13,6 +13,7 @@ exports.generateDocketRecordPdfInteractor = async ({
   let result = null;
 
   try {
+    applicationContext.logger.time('Generating Docket Record PDF');
     const chromium = applicationContext.getChromium();
 
     browser = await chromium.puppeteer.launch({
@@ -73,5 +74,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       await browser.close();
     }
   }
+  applicationContext.logger.timeEnd('Generating Docket Record PDF');
   return result;
 };

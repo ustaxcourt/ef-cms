@@ -1,8 +1,13 @@
-import { ConfirmModal } from '../ustc-ui/Modal/ConfirmModal';
+import {
+  ConfirmRescanBatchModal,
+  DeleteBatchModal,
+  EmptyHopperModal,
+  UnfinishedScansModal,
+} from './ScanBatchPreviewer/ScanBatchModals';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
-import { SelectScannerSourceModal } from '../ustc-ui/Scan/SelectScannerSourceModal';
+import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -17,16 +22,19 @@ export const ScanBatchPreviewer = connect(
     constants: state.constants,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
+    openConfirmDeleteBatchModalSequence:
+      sequences.openConfirmDeleteBatchModalSequence,
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
-    removeBatchSequence: sequences.removeBatchSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
     selectDocumentForPreviewSequence:
       sequences.selectDocumentForPreviewSequence,
+    selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+    setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
     showModal: state.showModal,
     startScanSequence: sequences.startScanSequence,
@@ -40,11 +48,12 @@ export const ScanBatchPreviewer = connect(
     constants,
     documentType,
     openChangeScannerSourceModalSequence,
+    openConfirmDeleteBatchModalSequence,
     openConfirmRescanBatchModalSequence,
-    removeBatchSequence,
     scanBatchPreviewerHelper,
     scannerStartupSequence,
     selectDocumentForPreviewSequence,
+    selectDocumentForScanSequence,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentUploadModeSequence,
@@ -61,64 +70,77 @@ export const ScanBatchPreviewer = connect(
 
     const renderModeRadios = () => {
       return (
-        <fieldset
-          aria-label="scan mode selection"
-          className="usa-fieldset margin-bottom-3 margin-top-2"
-          id="scan-mode-radios"
+        <div
+          className={`usa-form-group ${
+            validationErrors[documentType] ? 'usa-form-group--error' : ''
+          }`}
         >
-          <legend className="usa-legend with-hint" id="scan-mode-radios-legend">
-            File Upload
-          </legend>
-          <div className="usa-radio usa-radio__inline">
-            <input
-              aria-describedby="upload-mode"
-              aria-labelledby="upload-mode-scan"
-              checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
-              className="usa-radio__input"
-              id="scanMode"
-              name="uploadMode"
-              type="radio"
-              value="scan"
-              onChange={() =>
-                setDocumentUploadModeSequence({
-                  documentUploadMode: 'scan',
-                })
-              }
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor="scanMode"
-              id="upload-mode-scan"
+          <fieldset
+            aria-label="scan mode selection"
+            className="usa-fieldset margin-bottom-3 margin-top-2"
+            id="scan-mode-radios"
+          >
+            <legend
+              className="usa-legend with-hint"
+              id="scan-mode-radios-legend"
             >
-              Scan
-            </label>
-          </div>
+              How do you want to add this document?
+            </legend>
+            <div className="usa-radio usa-radio__inline">
+              <input
+                aria-describedby="scan-mode-radios-legend"
+                aria-labelledby="upload-mode-scan"
+                checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
+                className="usa-radio__input"
+                id="scanMode"
+                name="uploadMode"
+                type="radio"
+                value="scan"
+                onChange={() =>
+                  setDocumentUploadModeSequence({
+                    documentUploadMode: 'scan',
+                  })
+                }
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor="scanMode"
+                id="upload-mode-scan"
+              >
+                Scan
+              </label>
+            </div>
 
-          <div className="usa-radio usa-radio__inline">
-            <input
-              aria-describedby="upload-mode"
-              aria-labelledby="upload-mode-upload"
-              checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
-              className="usa-radio__input"
-              id="uploadMode"
-              name="uploadMode"
-              type="radio"
-              value="upload"
-              onChange={() =>
-                setDocumentUploadModeSequence({
-                  documentUploadMode: 'upload',
-                })
-              }
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor="uploadMode"
-              id="upload-mode-upload"
-            >
-              Upload
-            </label>
-          </div>
-        </fieldset>
+            <div className="usa-radio usa-radio__inline">
+              <input
+                aria-describedby="scan-mode-radios-legend"
+                aria-labelledby="upload-mode-upload"
+                checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
+                className="usa-radio__input"
+                id="uploadMode"
+                name="uploadMode"
+                type="radio"
+                value="upload"
+                onChange={() =>
+                  setDocumentUploadModeSequence({
+                    documentUploadMode: 'upload',
+                  })
+                }
+              />
+              <label
+                className="usa-radio__label"
+                htmlFor="uploadMode"
+                id="upload-mode-upload"
+              >
+                Upload
+              </label>
+            </div>
+          </fieldset>
+          <Text
+            bind={`validationErrors.${documentType}`}
+            className="usa-error-message"
+          />
+        </div>
       );
     };
 
@@ -154,47 +176,22 @@ export const ScanBatchPreviewer = connect(
       return (
         <>
           {showModal === 'ConfirmRescanBatchModal' && (
-            <ConfirmModal
-              cancelLabel="No, cancel"
-              confirmLabel="Yes, rescan"
-              title={`Rescan Batch ${selectedBatchIndex + 1}`}
-              onCancelSequence="clearModalSequence"
-              onConfirmSequence="rescanBatchSequence"
-            >
-              Are you sure you want to rescan batch {selectedBatchIndex + 1}?
-            </ConfirmModal>
+            <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
+          )}
+          {showModal === 'ConfirmDeleteBatchModal' && (
+            <DeleteBatchModal batchIndex={selectedBatchIndex} />
           )}
 
-          {showModal === 'UnfinishedScansModal' && (
-            <ConfirmModal
-              cancelLabel="Cancel"
-              confirmLabel="OK"
-              title="You Have Unfinished Scans"
-              onCancelSequence="clearModalSequence"
-              onConfirmSequence="clearModalSequence"
-            >
-              If you continue, your unfinished scans will be lost.
-            </ConfirmModal>
-          )}
+          {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
 
-          {showModal === 'EmptyHopperModal' && (
-            <ConfirmModal
-              cancelLabel="Cancel"
-              confirmLabel="Scan"
-              title="The Hopper is Empty"
-              onCancelSequence="clearModalSequence"
-              onConfirmSequence="startScanSequence"
-            >
-              Please load the hopper to scan your batch.
-            </ConfirmModal>
-          )}
+          {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
 
           {scanBatchPreviewerHelper.showScannerSourceModal && (
             <SelectScannerSourceModal />
           )}
           <h5>Scanned Documents</h5>
           {scanBatchPreviewerHelper.batches.length > 0 && (
-            <table style={{ width: '70%' }}>
+            <table>
               <tbody>
                 {scanBatchPreviewerHelper.batches.map(batch => (
                   <tr key={batch.index}>
@@ -216,8 +213,7 @@ export const ScanBatchPreviewer = connect(
                     </td>
                     <td>
                       <button
-                        className="usa-button usa-button--unstyled"
-                        style={{ textDecoration: 'none' }}
+                        className="usa-button usa-button--unstyled no-underline"
                         onClick={e => {
                           e.preventDefault();
                           openConfirmRescanBatchModalSequence({
@@ -231,12 +227,11 @@ export const ScanBatchPreviewer = connect(
                     </td>
                     <td>
                       <button
-                        className="usa-button usa-button--unstyled"
-                        style={{ color: '#B51D09', textDecoration: 'none' }}
+                        className="usa-button usa-button--unstyled no-underline red-warning float-right"
                         onClick={e => {
                           e.preventDefault();
-                          removeBatchSequence({
-                            batchIndex: batch.index,
+                          openConfirmDeleteBatchModalSequence({
+                            batchIndexToDelete: batch.index,
                           });
                         }}
                       >
@@ -252,8 +247,7 @@ export const ScanBatchPreviewer = connect(
 
           {scanBatchPreviewerHelper.scannerSource && (
             <button
-              className="usa-button usa-button--unstyled margin-bottom-2"
-              style={{ textDecoration: 'none' }}
+              className="usa-button usa-button--unstyled margin-bottom-2 no-underline"
               onClick={e => {
                 e.preventDefault();
                 startScanSequence();
@@ -386,11 +380,7 @@ export const ScanBatchPreviewer = connect(
     const renderUpload = () => {
       return (
         <div className="document-detail-one-third">
-          <div
-            className={`usa-form-group ${
-              validationErrors[documentType] ? 'usa-form-group--error' : ''
-            }`}
-          >
+          <div className="usa-form-group">
             <input
               accept=".pdf"
               aria-describedby={`${documentType}-hint`}
@@ -409,16 +399,15 @@ export const ScanBatchPreviewer = connect(
                     value: e.target.files[0].size,
                   });
                   validatePetitionFromPaperSequence();
+                  selectDocumentForPreviewSequence({
+                    documentType,
+                    file: e.target.files[0],
+                  });
+                  setDocumentUploadModeSequence({
+                    documentUploadMode: 'preview',
+                  });
                 });
               }}
-            />
-            <Text
-              bind={`validationErrors.${documentType}`}
-              className="usa-error-message"
-            />
-            <Text
-              bind={`validationErrors.${documentType}Size`}
-              className="usa-error-message"
             />
           </div>
         </div>
@@ -465,6 +454,9 @@ export const ScanBatchPreviewer = connect(
           <Tabs
             bind="documentSelectedForScan"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
+            onSelect={() => {
+              selectDocumentForScanSequence();
+            }}
           >
             <Tab tabName="petitionFile" title="Petition" />
             <Tab tabName="stinFile" title="STIN" />
