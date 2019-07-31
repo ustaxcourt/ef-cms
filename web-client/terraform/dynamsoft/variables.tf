@@ -14,18 +14,10 @@ variable "availability_zones" {
   type = "list"
 }
 
-variable "git_access_token" {
+variable "dynamsoft_s3_zip_path" {
   type = "string"
 }
 
-variable "product_keys" {
-  type = "string"
-}
-
-variable "dynamsoft_zip_name" {
-  type = "string"
-}
-
-variable "dynamsoft_repo" {
+variable "ec2_profile_name" {
   type = "string"
 }

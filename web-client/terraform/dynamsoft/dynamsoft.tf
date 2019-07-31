@@ -12,16 +12,15 @@ resource "aws_instance" "dynamsoft" {
   }
 
   user_data = "${data.template_file.setup_dynamsoft.rendered}"
+
+  iam_instance_profile = "${var.ec2_profile_name}"
 }
 
 data "template_file" "setup_dynamsoft" {
   template = "${file("setup_dynamsoft.sh")}"
 
   vars {
-    git_access_token = "${var.git_access_token}"
-    product_keys = "${var.product_keys}"
-    dynamsoft_zip_name = "${var.dynamsoft_zip_name}"
-    dynamsoft_repo = "${var.dynamsoft_repo}"
+    dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
   }
 }
 
