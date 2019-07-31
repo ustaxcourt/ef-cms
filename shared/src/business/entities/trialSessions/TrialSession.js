@@ -2,7 +2,7 @@ const joi = require('joi-browser');
 const uuid = require('uuid');
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -111,7 +111,7 @@ TrialSession.validationName = 'TrialSession';
 /**
  * constructor
  *
- * @param rawSession
+ * @param {object} rawSession the raw session data
  * @constructor
  */
 function TrialSession(rawSession) {
@@ -207,7 +207,6 @@ joiValidationDecorator(
     startDate: joi
       .date()
       .iso()
-      .min('now')
       .required(),
     startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
     state: joi.string().optional(),
@@ -251,8 +250,8 @@ joiValidationDecorator(
 
 /**
  *
- * @param {string} swingSessionId
- * @returns {TrialSession}
+ * @param {string} swingSessionId the id of the swing session to associate with the session
+ * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.setAsSwingSession = function(swingSessionId) {
   this.swingSessionId = swingSessionId;
@@ -283,7 +282,7 @@ TrialSession.prototype.generateSortKeyPrefix = function() {
 /**
  * set as calendared
  *
- * @returns {TrialSession}
+ * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.setAsCalendared = function() {
   this.isCalendared = true;
@@ -293,8 +292,8 @@ TrialSession.prototype.setAsCalendared = function() {
 /**
  * add case to calendar
  *
- * @param {object} caseEntity
- * @returns {TrialSession}
+ * @param {object} caseEntity the case entity to add to the calendar
+ * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
   const { caseId } = caseEntity;
