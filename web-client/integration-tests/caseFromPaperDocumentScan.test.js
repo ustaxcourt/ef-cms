@@ -3,7 +3,7 @@ import { CerebralTest } from 'cerebral/test';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { JSDOM } from 'jsdom';
 import { MAX_FILE_SIZE_MB } from '../../shared/src/persistence/s3/getUploadPolicy';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
