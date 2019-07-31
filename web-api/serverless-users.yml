@@ -193,7 +193,7 @@ resources:
 
 functions:
   getInternalUsers:
-    handler: src/usersHandlers.getInternalUsersLambda
+    handler: web-api/src/usersHandlers.getInternalUsersLambda
     events:
       - http:
           path: /internal
@@ -205,7 +205,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createUser:
-    handler: src/usersHandlers.createUserLambda
+    handler: web-api/src/usersHandlers.createUserLambda
     events:
       - http:
           path: /
@@ -217,7 +217,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCasesByUser:
-    handler: src/usersHandlers.getCasesByUserLambda
+    handler: web-api/src/usersHandlers.getCasesByUserLambda
     events:
       - http:
           path: /{userId}/cases
@@ -229,7 +229,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   verifyCaseForUser:
-    handler: src/usersHandlers.verifyCaseForUserLambda
+    handler: web-api/src/usersHandlers.verifyCaseForUserLambda
     events:
       - http:
           path: /{userId}/case/{caseId}
@@ -241,7 +241,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   verifyPendingCaseForUser:
-    handler: src/usersHandlers.verifyPendingCaseForUserLambda
+    handler: web-api/src/usersHandlers.verifyPendingCaseForUserLambda
     events:
       - http:
           path: /{userId}/case/{caseId}/pending
@@ -253,7 +253,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   practitionerCaseAssociation:
-    handler: src/usersHandlers.practitionerCaseAssociationLambda
+    handler: web-api/src/usersHandlers.practitionerCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}
@@ -265,7 +265,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   practitionerPendingCaseAssociation:
-    handler: src/usersHandlers.practitionerPendingCaseAssociationLambda
+    handler: web-api/src/usersHandlers.practitionerPendingCaseAssociationLambda
     events:
       - http:
           path: /{userId}/case/{caseId}/pending
@@ -277,7 +277,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getInboxMessagesForUser:
-    handler: src/usersHandlers.getInboxMessagesForUserLambda
+    handler: web-api/src/usersHandlers.getInboxMessagesForUserLambda
     events:
       - http:
           path: /{userId}/messages/inbox
@@ -289,7 +289,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getSentMessagesForUser:
-    handler: src/usersHandlers.getSentMessagesForUserLambda
+    handler: web-api/src/usersHandlers.getSentMessagesForUserLambda
     events:
       - http:
           path: /{userId}/messages/sent
@@ -301,7 +301,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForUser:
-    handler: src/usersHandlers.getDocumentQCInboxForUserLambda
+    handler: web-api/src/usersHandlers.getDocumentQCInboxForUserLambda
     events:
       - http:
           path: /{userId}/document-qc/inbox
@@ -313,7 +313,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCBatchedForUser:
-    handler: src/usersHandlers.getDocumentQCBatchedForUserLambda
+    handler: web-api/src/usersHandlers.getDocumentQCBatchedForUserLambda
     events:
       - http:
           path: /{userId}/document-qc/batched
@@ -325,7 +325,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForUser:
-    handler: src/usersHandlers.getDocumentQCServedForUserLambda
+    handler: web-api/src/usersHandlers.getDocumentQCServedForUserLambda
     events:
       - http:
           path: /{userId}/document-qc/served

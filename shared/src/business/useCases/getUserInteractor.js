@@ -2,6 +2,7 @@ const { User } = require('../entities/User');
 
 /**
  * getUserInteractor
+ *
  * @param user
  * @returns {User}
  */

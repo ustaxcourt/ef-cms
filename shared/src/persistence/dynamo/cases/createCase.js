@@ -11,6 +11,7 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 /**
  * createCase
+ *
  * @param caseToCreate
  * @param applicationContext
  * @returns {*}
