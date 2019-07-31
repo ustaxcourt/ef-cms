@@ -13,6 +13,7 @@ import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase
 import petitionsClerkDeletesMultipleScannedBatches from './journey/petitionsClerkDeletesMultipleScannedBatches';
 import petitionsClerkDeletesScannedBatch from './journey/petitionsClerkDeletesScannedBatch';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkRescansAddedBatch from './journey/petitionsClerkRescansAddedBatch';
 import petitionsClerkSelectsScannerSource from './journey/petitionsClerkSelectsScannerSource';
 import petitionsClerkViewsCreateNewCase from './journey/petitionsClerkViewsCreateNewCase';
 import petitionsClerkViewsScanView from './journey/petitionsClerkViewsScanView';
@@ -106,5 +107,10 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkDeletesMultipleScannedBatches(test, { numBatches: 2 });
+  petitionsClerkAddsScannedBatch(test, {
+    scannerSourceIndex,
+    scannerSourceName,
+  });
+  petitionsClerkRescansAddedBatch(test);
   // petitionsClerkCreatesNewCase(test, fakeFile);
 });
