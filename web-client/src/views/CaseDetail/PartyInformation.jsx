@@ -15,71 +15,59 @@ export const PartyInformation = connect(
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          <div className="tablet:grid-col-2">
-            <p className="label">Party Type</p>
-            <p>{caseDetail.partyType || 'My Party Type'}</p>
-          </div>
-
-          <div className="tablet:grid-col-2">
+          <div className="tablet:grid-col-3">
             {caseDetail.contactPrimary && (
-              <React.Fragment>
-                <p className="label" id={'primary-label'}>
-                  Petitioner
-                </p>
-                <div>
-                  <address aria-labelledby={'primary-label'}>
-                    {addressDisplay(caseDetail.contactPrimary, {
+              <div>
+                <address aria-labelledby={'primary-label'}>
+                  {addressDisplay(caseDetail.contactPrimary, {
+                    hideEmail: true,
+                    nameOverride:
+                      caseHelper.showCaseNameForPrimary && caseDetail.caseName,
+                  })}
+                </address>
+
+                {caseHelper.showEditContactButton && (
+                  <a
+                    href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
+                  >
+                    <FontAwesomeIcon icon="edit" size="sm" />
+                    Edit
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="tablet:grid-col-3">
+            {caseDetail.contactSecondary && caseDetail.contactSecondary.name && (
+              <div>
+                <address aria-labelledby={'secondary-label'}>
+                  {caseDetail.contactSecondary.name &&
+                    addressDisplay(caseDetail.contactSecondary, {
                       hideEmail: true,
-                      nameOverride:
-                        caseHelper.showCaseNameForPrimary &&
-                        caseDetail.caseName,
                     })}
-                  </address>
-
-                  {caseHelper.showEditContactButton && (
-                    <a
-                      href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
-                    >
-                      <FontAwesomeIcon icon="edit" size="sm" />
-                      Edit
-                    </a>
-                  )}
-                </div>
-              </React.Fragment>
-            )}{' '}
+                </address>
+                {caseHelper.showEditContactButton && (
+                  <button
+                    className="usa-button usa-button--unstyled"
+                    onClick={() => editSecondaryContact()}
+                  >
+                    <FontAwesomeIcon icon="question-circle" size="sm" />
+                    Why can’t I edit this?
+                  </button>
+                )}
+              </div>
+            )}
           </div>
+        </div>
+      </div>
+    );
 
-          <div className="tablet:grid-col-2">
-            {caseDetail.contactSecondary &&
-              caseDetail.contactSecondary.name && (
-                <React.Fragment>
-                  <p className="label" id={'secondary-label'}>
-                    Petitioner
-                  </p>
-                  <div>
-                    <address aria-labelledby={'secondary-label'}>
-                      {caseDetail.contactSecondary.name &&
-                        addressDisplay(caseDetail.contactSecondary, {
-                          hideEmail: true,
-                        })}
-                    </address>
-                    {caseHelper.showEditContactButton && (
-                      <button
-                        className="usa-button usa-button--unstyled"
-                        onClick={() => editSecondaryContact()}
-                      >
-                        <FontAwesomeIcon icon="question-circle" size="sm" />
-                        Why can’t I edit this?
-                      </button>
-                    )}
-                  </div>
-                </React.Fragment>
-              )}{' '}
-          </div>
-
+    const practitionerPartyInformation = () => (
+      <div className="grid-container padding-x-0">
+        <div className="grid-row">
           {caseDetail.practitioners &&
             caseDetail.practitioners.map((practitioner, index) => (
-              <div className="tablet:grid-col-2" key={index}>
+              <div className="tablet:grid-col-3" key={index}>
                 {index === 0 && (
                   <p className="label" id={'practitioner-label'}>
                     Petitioner Counsel
@@ -98,10 +86,16 @@ export const PartyInformation = connect(
                 </div>
               </div>
             ))}
+        </div>
+      </div>
+    );
 
+    const respondentPartyInformation = () => (
+      <div className="grid-container padding-x-0">
+        <div className="grid-row">
           {caseDetail.respondents &&
             caseDetail.respondents.map((respondent, index) => (
-              <div className="tablet:grid-col-2" key={index}>
+              <div className="tablet:grid-col-3" key={index}>
                 {index === 0 && (
                   <p className="label" id={'respondent-label'}>
                     Respondent Information
@@ -156,19 +150,43 @@ export const PartyInformation = connect(
         </React.Fragment>
       );
     };
+
     return (
-      <div className="subsection party-information">
-        <div className="card">
-          <div className="content-wrapper">
-            <h3 className="underlined">Party Information</h3>
-            {mainPartyInformation()}
+      <>
+        <div className="subsection party-information">
+          <div className="card">
+            <div className="content-wrapper">
+              <h3 className="underlined">
+                {caseDetail.partyType || 'My Party Type'}
+              </h3>
+              {mainPartyInformation()}
+            </div>
           </div>
         </div>
-
+        <div className="subsection party-information">
+          {caseDetail.practitioners && (
+            <div className="card">
+              <div className="content-wrapper">
+                <h3 className="underlined">Petitioner Counsel</h3>
+                {practitionerPartyInformation()}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="subsection party-information">
+          {caseDetail.respondents && (
+            <div className="card">
+              <div className="content-wrapper">
+                <h3 className="underlined">Respondent Counsel</h3>
+                {practitionerPartyInformation()}
+              </div>
+            </div>
+          )}
+        </div>
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
-      </div>
+      </>
     );
   },
 );
