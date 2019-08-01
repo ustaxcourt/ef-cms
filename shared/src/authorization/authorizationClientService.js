@@ -70,6 +70,7 @@ const AUTHORIZATION_MAP = {
 
 /**
  * Checks user permissions for an action
+ *
  * @param user
  * @param action
  * @param owner

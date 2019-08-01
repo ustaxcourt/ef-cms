@@ -2,11 +2,12 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/TrialSession');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * setTrialSessionAsSwingSessionInteractor
+ *
  * @param trialSessionId
  * @param swingSessionId
  * @param applicationContext

@@ -1,5 +1,6 @@
 /**
  * validateDocketEntryInteractor
+ *
  * @param applicationContext
  * @param entryMetadata
  * @returns {object} errors (null if no errors)

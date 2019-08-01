@@ -6,6 +6,7 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
  * getCaseByDocketNumber
+ *
  * @param docketNumber
  * @param applicationContext
  * @returns {*}
