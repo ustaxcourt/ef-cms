@@ -2,6 +2,7 @@ const { get } = require('../requests');
 
 /**
  * getInboxMessagesForSectionInteractor
+ *
  * @param applicationContext
  * @returns {Promise<*>}
  */

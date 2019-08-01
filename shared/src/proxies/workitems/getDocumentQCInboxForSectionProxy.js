@@ -2,6 +2,7 @@ const { get } = require('../requests');
 
 /**
  * getDocumentQCInboxForSectionInteractor
+ *
  * @param applicationContext
  * @returns {Promise<*>}
  */

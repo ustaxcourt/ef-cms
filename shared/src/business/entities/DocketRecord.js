@@ -5,6 +5,7 @@ const {
 
 /**
  * DocketRecord constructor
+ *
  * @param rawDocketRecord
  * @constructor
  */

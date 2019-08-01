@@ -2,11 +2,12 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/TrialSession');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * createTrialSessionInteractor
+ *
  * @param trialSession
  * @param applicationContext
  * @returns {*|Promise<*>}

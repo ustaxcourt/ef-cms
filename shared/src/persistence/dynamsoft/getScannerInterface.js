@@ -111,6 +111,12 @@ exports.getScannerInterface = () => {
 
   const startScanSession = ({ applicationContext }) => {
     return new Promise((resolve, reject) => {
+      let isScannerStuck = true;
+
+      const onPostTransfer = () => {
+        isScannerStuck = false;
+      };
+
       const onScanFinished = () => {
         const count = DWObject.HowManyImagesInBuffer;
         if (count === 0) reject(new Error('no images in buffer'));
@@ -148,13 +154,41 @@ exports.getScannerInterface = () => {
           })
           .finally(() => {
             DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+            DWObject.UnregisterEvent('OnPostTransfer', onPostTransfer);
+            clearTimeout(stuckTimeout);
           });
       };
 
+      // called after a single page in the hopper is scanned successfully
+      DWObject.RegisterEvent('OnPostTransfer', onPostTransfer);
+
+      // called when ALL pages are finished
       DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
-      DWObject.IfDisableSourceAfterAcquire = true;
+
       DWObject.OpenSource();
-      DWObject.AcquireImage();
+      DWObject.IfDisableSourceAfterAcquire = true;
+      DWObject.IfShowUI = false;
+      DWObject.Resolution = 300;
+      DWObject.IfDuplexEnabled = false;
+      DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
+      DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
+
+      const stuckTimeout = setTimeout(() => {
+        if (isScannerStuck) {
+          // when after 10 seconds we receive no scanned pages, show the generic error modal
+          DWObject.UnregisterEvent('OnPostTransfer', onPostTransfer);
+          DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+          reject(new Error('scanner process got stuck at some point'));
+        }
+      }, 10000);
+
+      DWObject.AcquireImage(null, null, e => {
+        // if any error occurs, reject (which will show the generic error modal)
+        DWObject.UnregisterEvent('OnPostTransfer', onPostTransfer);
+        DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+        clearTimeout(stuckTimeout);
+        reject(e);
+      });
     });
   };
 

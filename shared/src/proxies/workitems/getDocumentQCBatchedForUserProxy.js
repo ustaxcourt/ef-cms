@@ -2,6 +2,7 @@ const { get } = require('../requests');
 
 /**
  * getDocumentQCBatchedForUserInteractor
+ *
  * @param applicationContext
  * @returns {Promise<*>}
  */

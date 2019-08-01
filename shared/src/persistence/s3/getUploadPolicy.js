@@ -3,6 +3,7 @@ exports.MAX_FILE_SIZE_BYTES = exports.MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -
 
 /**
  * getUploadPolicy
+ *
  * @param applicationContext
  * @returns {Promise<any>}
  */

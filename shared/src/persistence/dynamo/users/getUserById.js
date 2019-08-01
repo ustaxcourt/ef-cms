@@ -34,6 +34,7 @@ exports.userMap = {
   practitioner: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
+    barnumber: '12345',
     'custom:role': 'practitioner',
     email: 'practitioner@example.com',
     name: 'Test Practitioner',
@@ -44,6 +45,7 @@ exports.userMap = {
   practitioner1: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
+    barnumber: '54321',
     'custom:role': 'practitioner',
     email: 'practitioner1@example.com',
     name: 'Test Practitioner1',
@@ -51,9 +53,43 @@ exports.userMap = {
     section: 'practitioner',
     userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
   },
+  practitioner2: {
+    addressLine1: '234 South Street',
+    addressLine2: 'Denver, CO 87493',
+    barnumber: '11111',
+    'custom:role': 'practitioner',
+    email: 'practitioner2@example.com',
+    name: 'Lilah Gilbert',
+    role: 'practitioner',
+    section: 'practitioner',
+    userId: '8e4959cd-3e13-4bf6-95bf-a276cc63b9e1',
+  },
+  practitioner3: {
+    addressLine1: '87676 West Street',
+    addressLine2: 'Nashville, TN 37055',
+    barnumber: '22222',
+    'custom:role': 'practitioner',
+    email: 'practitioner3@example.com',
+    name: 'Clark Stark',
+    role: 'practitioner',
+    section: 'practitioner',
+    userId: '9f25dc2c-764a-435c-86dd-323e53634537',
+  },
+  practitioner4: {
+    addressLine1: '135 Bob Street',
+    addressLine2: 'Oakland, CA 91839',
+    barnumber: '33333',
+    'custom:role': 'practitioner',
+    email: 'practitioner4@example.com',
+    name: 'Alden Rivas',
+    role: 'practitioner',
+    section: 'practitioner',
+    userId: '29e9b4d1-63bc-4f66-b230-59a3a9ae44eb',
+  },
   respondent: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
+    barnumber: '67890',
     'custom:role': 'respondent',
     email: 'respondent@example.com',
     name: 'Test Respondent',
@@ -64,12 +100,46 @@ exports.userMap = {
   respondent1: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
+    barnumber: '09876',
     'custom:role': 'respondent',
     email: 'respondent1@example.com',
     name: 'Test Respondent1',
     role: 'respondent',
     section: 'respondent',
     userId: '5fb6e815-b5d3-459b-b08b-49c61f0fce5e',
+  },
+  respondent2: {
+    addressLine1: '3983 Feathers Hooves Drive',
+    addressLine2: 'Hicksville, NY 11612',
+    barnumber: '77777',
+    'custom:role': 'respondent',
+    email: 'respondent2@example.com',
+    name: 'Nero West',
+    role: 'respondent',
+    section: 'respondent',
+    userId: '2d9a7229-7d5a-459f-84ad-754504a9f10f',
+  },
+  respondent3: {
+    addressLine1: '4248 Bailey Drive',
+    addressLine2: 'Shellsburg, IA 52332',
+    barnumber: '88888',
+    'custom:role': 'respondent',
+    email: 'respondent3@example.com',
+    name: 'Stuart Morrison',
+    role: 'respondent',
+    section: 'respondent',
+    userId: '5c43a30d-9c3d-41be-ad13-3b6d7cef54fc',
+  },
+  respondent4: {
+    addressLine1: '3202 Elk Avenue',
+    addressLine2: 'Hanover, MI 49241',
+    barnumber: '99999',
+    'custom:role': 'respondent',
+    email: 'respondent4@example.com',
+    name: 'Jaquelyn Lane',
+    role: 'respondent',
+    section: 'respondent',
+    userId: '726c38b1-1432-49b3-9383-77a998c0ba4f',
   },
   seniorattorney: {
     'custom:role': 'seniorattorney',
@@ -93,6 +163,7 @@ const client = require('../../dynamodbClientService');
 
 /**
  * getUserById
+ *
  * @param userId
  * @returns {*}
  */
