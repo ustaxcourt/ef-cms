@@ -253,7 +253,7 @@ const applicationContext = {
     return new Uint8Array(await new Response(blob).arrayBuffer());
   },
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:3000';
+    return process.env.API_URL || 'http://192.168.1.3:3000';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
   getChiefJudgeNameForSigning: () => 'Maurice B. Foley',
@@ -262,16 +262,16 @@ const applicationContext = {
   },
   getCognitoLoginUrl: () => {
     if (process.env.COGNITO) {
-      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
+      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//192.168.1.3:1234/log-in';
     } else {
       return (
         process.env.COGNITO_LOGIN_URL ||
-        'http://localhost:1234/mock-login?redirect_uri=http%3A//localhost%3A1234/log-in'
+        'http://192.168.1.3:1234/mock-login?redirect_uri=http%3A//192.168.1.3%3A1234/log-in'
       );
     }
   },
   getCognitoRedirectUrl: () => {
-    return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
+    return process.env.COGNITO_REDIRECT_URI || 'http://192.168.1.3:1234/log-in';
   },
   getCognitoTokenUrl: () => {
     return (
@@ -349,7 +349,7 @@ const applicationContext = {
     : getScannerInterface,
   getScannerResourceUri: () => {
     return (
-      process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
+      process.env.SCANNER_RESOURCE_URI || 'http://192.168.1.3:10000/Resources'
     );
   },
   getUniqueId: () => {
