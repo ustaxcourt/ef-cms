@@ -24,6 +24,9 @@ const {
   assignWorkItemsInteractor,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
+  associatePractitionerWithCaseInteractor,
+} = require('../../shared/src/business/useCases/manualAssociation/associatePractitionerWithCaseInteractor');
+const {
   associateUserWithCase,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
 const {
@@ -547,6 +550,7 @@ module.exports = (appContextUser = {}) => {
       return {
         addCoverToPDFDocumentInteractor,
         assignWorkItemsInteractor,
+        associatePractitionerWithCaseInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
