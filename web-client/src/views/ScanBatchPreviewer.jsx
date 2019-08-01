@@ -244,6 +244,7 @@ export const ScanBatchPreviewer = connect(
                           e.preventDefault();
                           openConfirmDeleteBatchModalSequence({
                             batchIndexToDelete: batch.index,
+                            batchPageCount: batch.pages.length,
                           });
                         }}
                       >
