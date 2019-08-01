@@ -305,7 +305,7 @@ export const ScanBatchPreviewer = connect(
           {scanBatchPreviewerHelper.showScannerSourceModal && (
             <SelectScannerSourceModal />
           )}
-          <h5>Scanned Documents</h5>
+          <h5>Scanned Batches</h5>
 
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 && (
