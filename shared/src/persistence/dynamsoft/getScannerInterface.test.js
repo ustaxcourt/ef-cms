@@ -35,6 +35,7 @@ const DWObject = {
   ErrorString: 'Successful!',
   GetSourceNameItems: index => mockSources[index],
   HowManyImagesInBuffer: mockScanCount,
+  IfFeederLoaded: true,
   IfDisableSourceAfterAcquire: false,
   OpenSource: mockOpenSource,
   RegisterEvent: (event, cb) => {
@@ -134,6 +135,24 @@ describe('getScannerInterface', () => {
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
     expect(mockAcquireImage).toHaveBeenCalled();
+  });
+
+  it('throws a no images in buffer exception if the hopper is empty', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject({
+      ...DWObject,
+      IfFeederLoaded: false,
+    });
+    const applicationContext = {
+      convertBlobToUInt8Array: () => new Uint8Array([]),
+    };
+    let error;
+    try {
+      await scannerAPI.startScanSession({ applicationContext });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
