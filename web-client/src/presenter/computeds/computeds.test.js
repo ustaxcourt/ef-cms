@@ -63,7 +63,7 @@ describe('formatted case details computed', () => {
     expect(result[0].irsDateFormatted).toContain('11/21/18');
   });
 
-  it('formats the respondent name to include barnumber', () => {
+  it('formats the respondent name to include barNumber', () => {
     const result = runCompute(formattedCases, {
       state: {
         cases: [
@@ -78,6 +78,6 @@ describe('formatted case details computed', () => {
         },
       },
     });
-    expect(result[0].respondents[0].formattedName).toContain('test 123');
+    expect(result[0].respondents[0].formattedName).toContain('test (123)');
   });
 });

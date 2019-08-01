@@ -70,8 +70,8 @@ export const StartCaseInternal = connect(
             <ErrorNotification />
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h1>Case Information</h1>
-                <p className="required-statement margin-top-0 margin-bottom-4">
+                <h1 className="margin-bottom-105">Case Information</h1>
+                <p className="required-statement margin-top-neg-3 margin-bottom-2">
                   All fields required unless otherwise noted
                 </p>
               </div>
@@ -330,7 +330,7 @@ export const StartCaseInternal = connect(
                     id="submit-case"
                     type="submit"
                   >
-                    Finish
+                    Create Case
                   </button>
                   <button
                     className="usa-button usa-button--unstyled ustc-button--unstyled"
