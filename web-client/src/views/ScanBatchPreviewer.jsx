@@ -147,10 +147,10 @@ export const ScanBatchPreviewer = connect(
 
     const renderIframePreview = () => {
       return (
-        <>
+        <div className="padding-top-4">
           <PdfPreview />
           <button
-            className="usa-button usa-button--outline red-warning"
+            className="margin-top-3 usa-button usa-button--outline red-warning"
             onClick={e => {
               e.preventDefault();
               updateFormValueSequence({
@@ -169,7 +169,7 @@ export const ScanBatchPreviewer = connect(
             <FontAwesomeIcon icon={['fas', 'times-circle']} />
             Delete PDF
           </button>
-        </>
+        </div>
       );
     };
 
@@ -269,7 +269,7 @@ export const ScanBatchPreviewer = connect(
                 openChangeScannerSourceModalSequence();
               }}
             >
-              Select Scanner Source
+              Select Scanner
             </button>
           )}
 
@@ -428,15 +428,14 @@ export const ScanBatchPreviewer = connect(
         >
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-8">
+              <div className="grid-col-6">
                 <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
-              {scanBatchPreviewerHelper.uploadMode === 'scan' && (
-                <div className="grid-col-4 text-right">
+              {(scanBatchPreviewerHelper.uploadMode === 'scan' ||
+                scanBatchPreviewerHelper.uploadMode === 'preview') && (
+                <div className="grid-col-6 text-right">
                   <span className="margin-right-1">
-                    Scanner:{' '}
-                    {scanBatchPreviewerHelper.scannerSource ||
-                      'No Scanner Selected'}
+                    Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                   </span>
                   <button
                     className="usa-button usa-button--unstyled"
@@ -446,7 +445,9 @@ export const ScanBatchPreviewer = connect(
                       openChangeScannerSourceModalSequence();
                     }}
                   >
-                    Change
+                    {scanBatchPreviewerHelper.scannerSource
+                      ? 'Change'
+                      : 'Select Scanner'}
                   </button>
                 </div>
               )}
