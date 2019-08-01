@@ -23,13 +23,13 @@ class AddCounselModalComponent extends ModalDialog {
       practitioner: [
         {
           addressLine2: 'Los Angeles, CA 98089',
-          barNumber: '12345',
+          barNumber: 'PT1234',
           name: 'Test Practitioner',
           userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
         },
         {
           addressLine2: 'Los Angeles, CA 98089',
-          barNumber: '54321',
+          barNumber: 'PT5432',
           name: 'Test Practitioner1',
           userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
         },
@@ -37,13 +37,13 @@ class AddCounselModalComponent extends ModalDialog {
       respondent: [
         {
           addressLine2: 'Hicksville, NY 11612',
-          barNumber: '77777',
+          barNumber: 'WN7777',
           name: 'Nero West',
           userId: '2d9a7229-7d5a-459f-84ad-754504a9f10f',
         },
         {
           addressLine2: 'Shellsburg, IA 52332',
-          barNumber: '88888',
+          barNumber: 'MS8888',
           name: 'Stuart Morrison',
           userId: '5c43a30d-9c3d-41be-ad13-3b6d7cef54fc',
         },
