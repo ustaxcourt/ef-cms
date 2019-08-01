@@ -122,6 +122,38 @@ export const PartyInformation = connect(
       </div>
     );
 
+    const counselSearch = counselType => (
+      <>
+        <div className="grid-col-3 text-right">
+          <span className="label margin-right-4 margin-top-05">
+            Add Counsel
+          </span>
+        </div>
+        <div className="grid-col-3 margin-top-neg-05">
+          <form className="usa-search">
+            <div role="search">
+              <label
+                className="usa-sr-only"
+                htmlFor={`${counselType}-search-field`}
+              >
+                Search
+              </label>
+              <input
+                className="usa-input"
+                id={`${counselType}-search-field`}
+                name={`${counselType}Search`}
+                placeholder="Enter Bar Number or Name"
+                type="search"
+              />
+              <button className="usa-button" type="submit">
+                <span className="usa-search__submit-text">Search</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </>
+    );
+
     const addressDisplay = (contact, { hideEmail, nameOverride } = {}) => {
       return (
         <React.Fragment>
@@ -167,26 +199,36 @@ export const PartyInformation = connect(
             </div>
           </div>
         </div>
-        <div className="subsection party-information">
-          {caseDetail.practitioners && (
+        {caseHelper.showPractitionerSection && (
+          <div className="subsection party-information">
             <div className="card">
               <div className="content-wrapper">
-                <h3 className="underlined">Petitioner Counsel</h3>
+                <div className="grid-row header-row">
+                  <div className="grid-col-6">
+                    <h3>Petitioner Counsel</h3>
+                  </div>
+                  {caseHelper.showAddCounsel && counselSearch('practitioner')}
+                </div>
                 {practitionerPartyInformation()}
               </div>
             </div>
-          )}
-        </div>
-        <div className="subsection party-information">
-          {caseDetail.respondents && (
+          </div>
+        )}
+        {caseHelper.showRespondentSection && (
+          <div className="subsection party-information">
             <div className="card">
               <div className="content-wrapper">
-                <h3 className="underlined">Respondent Counsel</h3>
-                {respondentPartyInformation()}
+                <div className="grid-row header-row">
+                  <div className="grid-col-6">
+                    <h3>Respondent Counsel</h3>
+                  </div>
+                  {counselSearch('respondent')}
+                </div>
+                {caseHelper.showAddCounsel && respondentPartyInformation()}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
