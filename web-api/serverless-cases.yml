@@ -458,3 +458,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  associateRespondentWithCase:
+    handler: web-api/src/casesHandlers.associateRespondentWithCaseLambda
+    events:
+      - http:
+          path: /{caseId}/associate-respondent
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
