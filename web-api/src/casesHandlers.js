@@ -1,5 +1,7 @@
 module.exports = {
   addCoversheetLambda: require('./documents/addCoversheetLambda').handler,
+  associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
+    .handler,
   createCaseDeadlineLambda: require('./caseDeadline/createCaseDeadlineLambda')
     .handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')

@@ -12,6 +12,7 @@ exports.TRIAL_SESSIONS = 'trialSessions';
 exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
 exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
+exports.ASSOCIATE_USER_WITH_CASE = 'ASSOCIATE_USER_WITH_CASE';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -28,6 +29,7 @@ const AUTHORIZATION_MAP = {
     exports.TRIAL_SESSIONS,
     exports.CASE_DEADLINE,
     exports.SERVE_DOCUMENT,
+    exports.ASSOCIATE_USER_WITH_CASE,
   ],
   petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
   petitionsclerk: [
@@ -43,6 +45,7 @@ const AUTHORIZATION_MAP = {
     exports.TRIAL_SESSIONS,
     exports.CREATE_COURT_ISSUED_ORDER,
     exports.CASE_DEADLINE,
+    exports.ASSOCIATE_USER_WITH_CASE,
   ],
 
   practitioner: [
@@ -64,6 +67,7 @@ const AUTHORIZATION_MAP = {
     exports.GET_READ_MESSAGES,
     exports.GET_USERS_IN_SECTION,
     exports.TRIAL_SESSIONS,
+    exports.ASSOCIATE_USER_WITH_CASE,
   ],
   taxpayer: [exports.PETITION],
 };
