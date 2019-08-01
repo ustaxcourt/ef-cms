@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { camelCase } from 'lodash';
 import { connect } from '@cerebral/react';
 import { decorateWithPostCallback } from '../utils/useCerebralState';
@@ -8,6 +7,14 @@ import { useCerebralStateFactory } from '../utils/useCerebralState';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
+
+let FontAwesomeIcon;
+
+if (process.env.NODE_ENV === 'test') {
+  FontAwesomeIcon = () => <i className="fa" />;
+} else {
+  ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
+}
 
 /**
  * Tab
