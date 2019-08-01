@@ -78,6 +78,6 @@ describe('formatted case details computed', () => {
         },
       },
     });
-    expect(result[0].respondents[0].formattedName).toContain('test 123');
+    expect(result[0].respondents[0].formattedName).toContain('test (123)');
   });
 });
