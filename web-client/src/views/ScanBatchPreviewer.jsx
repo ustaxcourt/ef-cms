@@ -289,23 +289,6 @@ export const ScanBatchPreviewer = connect(
     const renderScan = () => {
       return (
         <>
-          {showModal === 'ConfirmRescanBatchModal' && (
-            <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
-          )}
-          {showModal === 'ConfirmDeleteBatchModal' && (
-            <DeleteBatchModal batchIndex={selectedBatchIndex} />
-          )}
-
-          {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
-
-          {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
-
-          {showModal === 'ScanErrorModal' && <ScanErrorModal />}
-
-          {scanBatchPreviewerHelper.showScannerSourceModal && (
-            <SelectScannerSourceModal />
-          )}
-
           <h5>Scanned Batches</h5>
 
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
@@ -440,6 +423,23 @@ export const ScanBatchPreviewer = connect(
 
     return (
       <>
+        {showModal === 'ConfirmRescanBatchModal' && (
+          <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
+        )}
+        {showModal === 'ConfirmDeleteBatchModal' && (
+          <DeleteBatchModal batchIndex={selectedBatchIndex} />
+        )}
+
+        {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
+
+        {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
+
+        {showModal === 'ScanErrorModal' && <ScanErrorModal />}
+
+        {showModal === 'SelectScannerSourceModal' && (
+          <SelectScannerSourceModal />
+        )}
+
         <div
           style={{
             backgroundColor: '#162e51',
