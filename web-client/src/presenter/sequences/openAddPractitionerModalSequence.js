@@ -1,11 +1,10 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
-import { props, state } from 'cerebral';
 import { set } from 'cerebral/factories';
+import { state } from 'cerebral';
 
-export const openAddCounselModalSequence = [
+export const openAddPractitionerModalSequence = [
   clearFormAction,
   clearAlertsAction,
-  set(state.form.counselType, props.counselType),
-  set(state.showModal, 'AddCounselModal'),
+  set(state.showModal, 'AddPractitionerModal'),
 ];
