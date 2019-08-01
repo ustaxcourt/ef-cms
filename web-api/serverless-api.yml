@@ -258,7 +258,7 @@ functions:
 
   generateDocketRecordPdfLambda:
     runtime: nodejs8.10
-    handler: src/apiHandlers.generateDocketRecordPdfLambda
+    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008

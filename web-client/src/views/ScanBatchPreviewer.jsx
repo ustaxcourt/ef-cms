@@ -28,6 +28,7 @@ export const ScanBatchPreviewer = connect(
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
+    scanHelper: state.scanHelper,
     scannerStartupSequence: sequences.scannerStartupSequence,
     selectDocumentForPreviewSequence:
       sequences.selectDocumentForPreviewSequence,
@@ -52,6 +53,7 @@ export const ScanBatchPreviewer = connect(
     openConfirmDeleteBatchModalSequence,
     openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper,
+    scanHelper,
     scannerStartupSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
@@ -438,7 +440,7 @@ export const ScanBatchPreviewer = connect(
                     Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                   </span>
                   <button
-                    className="usa-button usa-button--unstyled"
+                    className="usa-button usa-button--unstyled change-scanner-button"
                     style={{ color: 'white' }}
                     onClick={e => {
                       e.preventDefault();
@@ -454,7 +456,7 @@ export const ScanBatchPreviewer = connect(
             </div>
           </div>
         </div>
-        <div style={{ border: '1px solid #AAA', padding: '20px' }}>
+        <div className="document-select-container">
           <Tabs
             bind="documentSelectedForScan"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
@@ -462,13 +464,34 @@ export const ScanBatchPreviewer = connect(
               selectDocumentForScanSequence();
             }}
           >
-            <Tab tabName="petitionFile" title="Petition" />
-            <Tab tabName="stinFile" title="STIN" />
             <Tab
+              icon={['fas', 'check-circle']}
+              iconColor="green"
+              showIcon={scanHelper.petitionFileCompleted}
+              tabName="petitionFile"
+              title="Petition"
+            />
+            <Tab
+              icon={['fas', 'check-circle']}
+              iconColor="green"
+              showIcon={scanHelper.stinFileCompleted}
+              tabName="stinFile"
+              title="STIN"
+            />
+            <Tab
+              icon={['fas', 'check-circle']}
+              iconColor="green"
+              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
               tabName="requestForPlaceOfTrialFile"
               title="Request for Place of Trial"
             />
-            <Tab tabName="ownershipDisclosureFile" title="ODS" />
+            <Tab
+              icon={['fas', 'check-circle']}
+              iconColor="green"
+              showIcon={scanHelper.osdFileCompleted}
+              tabName="ownershipDisclosureFile"
+              title="OSD"
+            />
           </Tabs>
           {scanBatchPreviewerHelper.uploadMode !== 'preview' &&
             renderModeRadios()}
