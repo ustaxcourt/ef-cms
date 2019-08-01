@@ -39,8 +39,6 @@ export const scanBatchPreviewerHelper = get => {
       : {},
     selectedPageImage: selectPageImage,
     showScannerSourceModal: get(state.showModal) === 'SelectScannerSourceModal',
-    showSelectedScanner:
-      documentUploadMode === 'scan' || documentUploadMode === 'preview',
     totalPages: selectedBatch.pages.length,
     uploadMode: documentUploadMode,
   };
