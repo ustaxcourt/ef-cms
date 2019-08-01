@@ -95,19 +95,17 @@ For ClamAV, macOS users can do the following:
 - `source ~/.bash_profile`
 - `freshclam` (installs virus definitions)
 
-Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the `shared` directory.
+Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 
-- `cd shared && npm i`
-- `cd ../web-client && npm i`
-- `cd ../web-api && npm i`
+- `npm i`
 
 #### Terminal A
 
-- `cd web-client && npm start`
+- `npm run start:api`
 
 #### Terminal B
 
-- `cd web-api && npm start`
+- `npm run start:client`
 
 ## Login and test users
 
