@@ -8,6 +8,7 @@ import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDo
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { associatePractitionerWithCaseSequence } from './sequences/associatePractitionerWithCaseSequence';
+import { associateRespondentWithCaseSequence } from './sequences/associateRespondentWithCaseSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
@@ -221,6 +222,7 @@ export const presenter = {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     associatePractitionerWithCaseSequence,
+    associateRespondentWithCaseSequence,
     autoSaveCaseSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
