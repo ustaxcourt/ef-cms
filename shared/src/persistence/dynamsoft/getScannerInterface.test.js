@@ -35,8 +35,8 @@ const DWObject = {
   ErrorString: 'Successful!',
   GetSourceNameItems: index => mockSources[index],
   HowManyImagesInBuffer: mockScanCount,
-  IfFeederLoaded: true,
   IfDisableSourceAfterAcquire: false,
+  IfFeederLoaded: true,
   OpenSource: mockOpenSource,
   RegisterEvent: (event, cb) => {
     onPostAllTransfersCb = cb;
