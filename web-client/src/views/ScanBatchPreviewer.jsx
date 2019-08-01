@@ -263,18 +263,6 @@ export const ScanBatchPreviewer = connect(
             </button>
           )}
 
-          {!scanBatchPreviewerHelper.scannerSource && (
-            <button
-              className="usa-button usa-button--unstyled margin-bottom-2"
-              onClick={e => {
-                e.preventDefault();
-                openChangeScannerSourceModalSequence();
-              }}
-            >
-              Select Scanner Source
-            </button>
-          )}
-
           <br />
 
           {scanBatchPreviewerHelper.selectedPageImage && (
