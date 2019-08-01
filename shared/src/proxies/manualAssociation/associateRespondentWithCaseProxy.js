@@ -1,14 +1,14 @@
 const { post } = require('../requests');
 
 /**
- * associatePractitionerWithCaseInteractorProxy
+ * associateRespondentWithCaseInteractorProxy
  *
  * @param applicationContext
  * @param caseId
  * @param userId
  * @returns {Promise<*>}
  */
-exports.associatePractitionerWithCaseInteractor = ({
+exports.associateRespondentWithCaseInteractor = ({
   applicationContext,
   caseId,
   userId,
@@ -16,6 +16,6 @@ exports.associatePractitionerWithCaseInteractor = ({
   return post({
     applicationContext,
     body: { caseId, userId },
-    endpoint: `/cases/${caseId}/associate-practitioner`,
+    endpoint: `/cases/${caseId}/associate-respondent`,
   });
 };
