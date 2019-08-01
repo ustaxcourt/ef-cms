@@ -1071,6 +1071,10 @@ nav.usa-nav {
   }
 }
 
+hr.lighter {
+  border-top: 1px solid color($theme-color-base-lighter);
+}
+
 .mobile-document-detail-tabs {
   @media only screen and (max-width: $medium-screen) {
     nav {
@@ -1419,7 +1423,29 @@ button.change-scanner-button {
 }
 
 .document-select-container {
+  height: 425px;
   border: 1px solid color($theme-color-base-lighter);
+  border-top: 0px;
   padding: 20px;
   background-color: $color-primary-alt-lightest;
+
+  .ustc-ui-tabs.container-tabs.document-select li.active {
+    border-bottom: 1px solid $color-primary-alt-lightest;
+  }
+}
+
+.bg-white {
+  background-color: white;
+
+  &:hover {
+    background-color: white;
+  }
+}
+
+.preview-container {
+  border: 1px solid color($theme-color-base-lighter);
+  padding: 20px;
+  padding-top: 0px;
+  border-top: 0px;
+  background-color: white;
 }
