@@ -330,7 +330,7 @@ export const StartCaseInternal = connect(
                     id="submit-case"
                     type="submit"
                   >
-                    Finish
+                    Create Case
                   </button>
                   <button
                     className="usa-button usa-button--unstyled ustc-button--unstyled"
