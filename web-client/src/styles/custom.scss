@@ -1402,6 +1402,9 @@ nav.usa-nav {
   .pages {
     margin-right: 10px;
     margin-left: 10px;
+    width: 126px;
+    display: inline-block;
+    text-align: center;
     font-weight: $font-semibold;
   }
 }
