@@ -2,6 +2,7 @@ const { Case } = require('../entities/cases/Case');
 
 /**
  * getCasesByUserInteractor
+ *
  * @param userId
  * @param applicationContext
  * @returns {*|Promise<*>}

@@ -6,7 +6,7 @@ module.exports = {
 };
 
 async function deleteCase(context, events, done) {
-  const caseId = context.vars.caseId;
+  const { caseId } = context.vars;
 
   const caseRecords = await client.query({
     ExpressionAttributeNames: {

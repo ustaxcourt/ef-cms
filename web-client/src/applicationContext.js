@@ -21,9 +21,10 @@ import {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } from '../../shared/src/persistence/s3/getUploadPolicy';
+import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
@@ -318,8 +319,8 @@ const applicationContext = {
     ExternalDocumentInformationFactory,
     ForwardMessage,
     InitialWorkItemMessage,
+    NewTrialSession,
     OrderWithoutBody,
-    TrialSession,
   }),
   getError: e => {
     return ErrorFactory.getError(e);

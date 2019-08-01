@@ -6,11 +6,16 @@ const { getSectionForRole } = require('./WorkQueue');
 
 /**
  * constructor
+ *
  * @param rawUser
  * @constructor
  */
 function User(rawUser) {
   this.email = rawUser.email;
+  this.addressLine1 = rawUser.addressLine1;
+  this.addressLine2 = rawUser.addressLine2;
+  this.barNumber = rawUser.barNumber;
+  this.phone = rawUser.phone;
   this.name = rawUser.name;
   this.role = rawUser.role || 'petitioner';
   this.section = getSectionForRole(this.role);
@@ -21,8 +26,12 @@ function User(rawUser) {
 joiValidationDecorator(
   User,
   joi.object().keys({
+    addressLine1: joi.string().optional(),
+    addressLine2: joi.string().optional(),
+    barNumber: joi.string().optional(),
     email: joi.string().optional(),
     name: joi.string().optional(),
+    phone: joi.string().optional(),
     token: joi.string().optional(),
     userId: joi.string().required(),
   }),

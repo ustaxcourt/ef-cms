@@ -3,6 +3,7 @@ const { pdfStyles } = require('../../../tools/pdfStyles');
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
+ *
  * @param applicationContext
  * @param htmlString
  * @returns Buffer result the pdf as a binary buffer

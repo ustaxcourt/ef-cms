@@ -1,5 +1,6 @@
 /**
  * Replaces a series of [square bracketed strings] with values
+ *
  * @param {string} template
  * @param  {...any} values
  */

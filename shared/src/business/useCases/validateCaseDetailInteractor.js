@@ -2,6 +2,7 @@ const { Case } = require('../entities/cases/Case');
 
 /**
  * validateCaseDetailInteractor
+ *
  * @param caseDetail
  * @returns {Promise<{petitionFileId}>}
  */

@@ -15,14 +15,16 @@ generate_post_data() {
   email=$1
   role=$2
   name="Test ${role}$i"
+  barNumber=$4
   cat <<EOF
 {
   "email": "$email",
   "password": "Testing1234$",
   "role": "$role",
   "name": "$name",
-  "address": "123 Main Street Los Angeles, CA 98089",
-  "barnumber": "12345-67",
+  "addressLine1": "123 Main Street",
+  "addressLine2": "Los Angeles, CA 98089",
+  "barNumber": "$barNumber",
   "phone": "111-111-1111"
 }
 EOF
@@ -50,7 +52,7 @@ createAdmin() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD'="${USTC_ADMIN_PASS}") 
+    --auth-parameters USERNAME="${email}"',PASSWORD'="${USTC_ADMIN_PASS}")
   adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 }
 
@@ -58,11 +60,12 @@ createAccount() {
   email=$1
   role=$2
   i=$3
+  barNumber=$4
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${i}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${i}" "${barNumber}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -70,7 +73,7 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"') 
+    --auth-parameters USERNAME="${email}"',PASSWORD="Testing1234$"')
 
   session=$(echo "${response}" | jq -r ".Session")
 
@@ -83,14 +86,14 @@ createAccount() {
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
       --session "${session}"
   fi
-} 
+}
 
 createManyAccounts() {
   emailPrefix=$1
   role=$1
   for i in $(seq 1 5);
   do
-    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}"
+    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "0"
   done
 }
 
@@ -100,5 +103,13 @@ createManyAccounts "petitioner"
 createManyAccounts "petitionsclerk"
 createManyAccounts "docketclerk"
 createManyAccounts "seniorattorney"
-createManyAccounts "respondent"
-createManyAccounts "practitioner"
+createAccount "practitioner1@example.com" "practitioner" "1" "12345"
+createAccount "practitioner2@example.com" "practitioner" "2" "54321"
+createAccount "practitioner3@example.com" "practitioner" "3" "11111"
+createAccount "practitioner4@example.com" "practitioner" "4" "22222"
+createAccount "practitioner5@example.com" "practitioner" "5" "33333"
+createAccount "respondent1@example.com" "respondent" "1" "67890"
+createAccount "respondent2@example.com" "respondent" "2" "09876"
+createAccount "respondent3@example.com" "respondent" "3" "77777"
+createAccount "respondent4@example.com" "respondent" "4" "88888"
+createAccount "respondent5@example.com" "respondent" "5" "99999"

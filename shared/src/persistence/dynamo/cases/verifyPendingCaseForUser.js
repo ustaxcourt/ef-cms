@@ -2,6 +2,7 @@ const client = require('../../dynamodbClientService');
 
 /**
  * verifyPendingCaseForUser
+ *
  * @param userId
  * @param caseId
  * @param applicationContext

@@ -3,6 +3,7 @@ const tmp = require('tmp');
 
 /**
  * virusScanDocument
+ *
  * @param applicationContext
  * @param documentId
  * @returns {object} errors (null if no errors)

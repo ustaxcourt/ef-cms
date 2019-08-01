@@ -148,13 +148,14 @@ Case.COMMON_ERROR_MESSAGES = {
   ],
 };
 
-Case.name = 'Case';
+Case.validationName = 'Case';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
  * Case Entity
  * Represents a Case that has already been accepted into the system.
+ *
  * @param rawCase
  * @constructor
  */
@@ -429,6 +430,7 @@ Case.getCaseCaption = function(rawCase) {
 
 /**
  * get the case caption without the ", Petitioner/s/(s)" postfix
+ *
  * @param caseCaption
  * @returns caseCaptionNames
  */
@@ -706,6 +708,7 @@ Case.prototype.updateDocument = function(updatedDocument) {
 
 /**
  * isValidCaseId
+ *
  * @param caseId
  * @returns {*|boolean}
  */
@@ -717,6 +720,7 @@ Case.isValidCaseId = caseId =>
 
 /**
  * isValidDocketNumber
+ *
  * @param docketNumber
  * @returns {*|boolean}
  */
@@ -730,6 +734,7 @@ Case.isValidDocketNumber = docketNumber => {
 
 /**
  * stripLeadingZeros
+ *
  * @param docketNumber
  * @returns {string}
  */
@@ -749,6 +754,7 @@ Case.areYearsUnique = yearAmounts => {
 
 /**
  * getFilingTypes
+ *
  * @param userRole - the role of the user logged in
  * @returns {string[]}
  */
@@ -758,6 +764,7 @@ Case.getFilingTypes = userRole => {
 
 /**
  * getWorkItems
+ *
  * @returns {WorkItem[]}
  */
 Case.prototype.getWorkItems = function() {

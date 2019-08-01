@@ -14,8 +14,11 @@ Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
+Document.validationName = 'Document';
+
 /**
  * constructor
+ *
  * @param rawDocument
  * @constructor
  */
@@ -64,8 +67,6 @@ function Document(rawDocument) {
   );
 }
 
-Document.name = 'Document';
-
 const practitionerAssociationDocumentTypes = [
   'Entry of Appearance',
   'Substitution of Counsel',
@@ -73,6 +74,7 @@ const practitionerAssociationDocumentTypes = [
 
 /**
  * documentTypes
+ *
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
  */
 Document.INITIAL_DOCUMENT_TYPES = {
