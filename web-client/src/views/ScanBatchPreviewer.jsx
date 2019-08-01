@@ -433,8 +433,7 @@ export const ScanBatchPreviewer = connect(
               <div className="grid-col-6">
                 <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
-              {(scanBatchPreviewerHelper.uploadMode === 'scan' ||
-                scanBatchPreviewerHelper.uploadMode === 'preview') && (
+              {scanBatchPreviewerHelper.showSelectedScanner && (
                 <div className="grid-col-6 text-right">
                   <span className="margin-right-1">
                     Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
