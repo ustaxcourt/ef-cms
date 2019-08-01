@@ -34,7 +34,7 @@ exports.userMap = {
   practitioner: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
-    barnumber: '12345',
+    barNumber: '12345',
     'custom:role': 'practitioner',
     email: 'practitioner@example.com',
     name: 'Test Practitioner',
@@ -45,7 +45,7 @@ exports.userMap = {
   practitioner1: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
-    barnumber: '54321',
+    barNumber: '54321',
     'custom:role': 'practitioner',
     email: 'practitioner1@example.com',
     name: 'Test Practitioner1',
@@ -56,7 +56,7 @@ exports.userMap = {
   practitioner2: {
     addressLine1: '234 South Street',
     addressLine2: 'Denver, CO 87493',
-    barnumber: '11111',
+    barNumber: '11111',
     'custom:role': 'practitioner',
     email: 'practitioner2@example.com',
     name: 'Lilah Gilbert',
@@ -67,7 +67,7 @@ exports.userMap = {
   practitioner3: {
     addressLine1: '87676 West Street',
     addressLine2: 'Nashville, TN 37055',
-    barnumber: '22222',
+    barNumber: '22222',
     'custom:role': 'practitioner',
     email: 'practitioner3@example.com',
     name: 'Clark Stark',
@@ -78,7 +78,7 @@ exports.userMap = {
   practitioner4: {
     addressLine1: '135 Bob Street',
     addressLine2: 'Oakland, CA 91839',
-    barnumber: '33333',
+    barNumber: '33333',
     'custom:role': 'practitioner',
     email: 'practitioner4@example.com',
     name: 'Alden Rivas',
@@ -89,7 +89,7 @@ exports.userMap = {
   respondent: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
-    barnumber: '67890',
+    barNumber: '67890',
     'custom:role': 'respondent',
     email: 'respondent@example.com',
     name: 'Test Respondent',
@@ -100,7 +100,7 @@ exports.userMap = {
   respondent1: {
     addressLine1: '123 Main Street',
     addressLine2: 'Los Angeles, CA 98089',
-    barnumber: '09876',
+    barNumber: '09876',
     'custom:role': 'respondent',
     email: 'respondent1@example.com',
     name: 'Test Respondent1',
@@ -111,7 +111,7 @@ exports.userMap = {
   respondent2: {
     addressLine1: '3983 Feathers Hooves Drive',
     addressLine2: 'Hicksville, NY 11612',
-    barnumber: '77777',
+    barNumber: '77777',
     'custom:role': 'respondent',
     email: 'respondent2@example.com',
     name: 'Nero West',
@@ -122,7 +122,7 @@ exports.userMap = {
   respondent3: {
     addressLine1: '4248 Bailey Drive',
     addressLine2: 'Shellsburg, IA 52332',
-    barnumber: '88888',
+    barNumber: '88888',
     'custom:role': 'respondent',
     email: 'respondent3@example.com',
     name: 'Stuart Morrison',
@@ -133,7 +133,7 @@ exports.userMap = {
   respondent4: {
     addressLine1: '3202 Elk Avenue',
     addressLine2: 'Hanover, MI 49241',
-    barnumber: '99999',
+    barNumber: '99999',
     'custom:role': 'respondent',
     email: 'respondent4@example.com',
     name: 'Jaquelyn Lane',

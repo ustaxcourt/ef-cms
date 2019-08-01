@@ -76,7 +76,7 @@
     "email": "practitioner",
     "addressLine1": "123 Main Street",
     "addressLine2": "Los Angeles, CA 98089",
-    "barnumber": "12345",
+    "barNumber": "12345",
     "phone": "111-111-1111"
   },
   {
@@ -89,7 +89,7 @@
     "email": "practitioner1",
     "addressLine1": "123 Main Street",
     "addressLine2": "Los Angeles, CA 98089",
-    "barnumber": "54321",
+    "barNumber": "54321",
     "phone": "111-111-1111"
   },
   {
@@ -102,7 +102,7 @@
     "email": "practitioner2",
     "addressLine1": "234 South Street",
     "addressLine2": "Denver, CO 87493",
-    "barnumber": "11111",
+    "barNumber": "11111",
     "phone": "222-222-2222"
   },
   {
@@ -115,7 +115,7 @@
     "email": "practitioner3",
     "addressLine1": "87676 West Street",
     "addressLine2": "Nashville, TN 37055",
-    "barnumber": "22222",
+    "barNumber": "22222",
     "phone": "333-333-3333"
   },
   {
@@ -128,7 +128,7 @@
     "email": "practitioner4",
     "addressLine1": "135 Bob Street",
     "addressLine2": "Oakland, CA 91839",
-    "barnumber": "33333",
+    "barNumber": "33333",
     "phone": "444-444-4444"
   },
   {
@@ -141,7 +141,7 @@
     "email": "respondent",
     "addressLine1": "123 Main Street",
     "addressLine2": "Los Angeles, CA 98089",
-    "barnumber": "67890",
+    "barNumber": "67890",
     "phone": "111-111-1111"
   },
   {
@@ -154,7 +154,7 @@
     "email": "respondent1",
     "addressLine1": "123 Main Street",
     "addressLine2": "Los Angeles, CA 98089",
-    "barnumber": "09876",
+    "barNumber": "09876",
     "phone": "111-111-1111"
   },
   {
@@ -167,7 +167,7 @@
     "email": "respondent2",
     "addressLine1": "3983 Feathers Hooves Drive",
     "addressLine2": "Hicksville, NY 11612",
-    "barnumber": "77777",
+    "barNumber": "77777",
     "phone": "631-719-1496"
   },
   {
@@ -180,7 +180,7 @@
     "email": "respondent3",
     "addressLine1": "4248 Bailey Drive",
     "addressLine2": "Shellsburg, IA 52332",
-    "barnumber": "88888",
+    "barNumber": "88888",
     "phone": "319-436-9050"
   },
   {
@@ -193,7 +193,7 @@
     "email": "respondent4",
     "addressLine1": "3202 Elk Avenue",
     "addressLine2": "Hanover, MI 49241",
-    "barnumber": "99999",
+    "barNumber": "99999",
     "phone": "517-563-1536"
   }
 ]

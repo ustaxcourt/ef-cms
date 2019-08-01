@@ -14,7 +14,7 @@ function User(rawUser) {
   this.email = rawUser.email;
   this.addressLine1 = rawUser.addressLine1;
   this.addressLine2 = rawUser.addressLine2;
-  this.barnumber = rawUser.barnumber;
+  this.barNumber = rawUser.barNumber;
   this.phone = rawUser.phone;
   this.name = rawUser.name;
   this.role = rawUser.role || 'petitioner';
@@ -28,7 +28,7 @@ joiValidationDecorator(
   joi.object().keys({
     addressLine1: joi.string().optional(),
     addressLine2: joi.string().optional(),
-    barnumber: joi.string().optional(),
+    barNumber: joi.string().optional(),
     email: joi.string().optional(),
     name: joi.string().optional(),
     phone: joi.string().optional(),
