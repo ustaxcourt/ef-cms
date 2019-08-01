@@ -430,32 +430,29 @@ export const ScanBatchPreviewer = connect(
         >
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
-              <div className="grid-col-8">
+              <div className="grid-col-6">
                 <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
-              {scanBatchPreviewerHelper.uploadMode === 'scan' && (
-                <div className="grid-col-4 text-right">
-                  <span className="margin-right-1">
-                    Scanner:{' '}
-                    {scanBatchPreviewerHelper.scannerSource ||
-                      'No Scanner Selected'}
-                  </span>
-                  <button
-                    className="usa-button usa-button--unstyled"
-                    style={{ color: 'white' }}
-                    onClick={e => {
-                      e.preventDefault();
-                      openChangeScannerSourceModalSequence();
-                    }}
-                  >
-                    Change
-                  </button>
-                </div>
-              )}
+              <div className="grid-col-6 text-right">
+                <span className="margin-right-1">
+                  Scanner:{' '}
+                  {scanBatchPreviewerHelper.scannerSource ||
+                    'No Scanner Selected'}
+                </span>
+                <button
+                  className="usa-button usa-button--unstyled change-scanner-button"
+                  onClick={e => {
+                    e.preventDefault();
+                    openChangeScannerSourceModalSequence();
+                  }}
+                >
+                  Change
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <div style={{ border: '1px solid #AAA', padding: '20px' }}>
+        <div className="document-select-container">
           <Tabs
             bind="documentSelectedForScan"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"

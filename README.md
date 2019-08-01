@@ -103,6 +103,10 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 
 - `npm run start:api`
 
+##### Other Start Commands
+
+- Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+
 #### Terminal B
 
 - `npm run start:client`

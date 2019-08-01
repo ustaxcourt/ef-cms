@@ -1371,12 +1371,18 @@ nav.usa-nav {
 }
 
 .ustc-ui-tabs.container-tabs {
-  &.document-select {
-    li {
-      border-bottom: 0;
+  border-bottom: 0;
+  background-color: white;
 
+  &.document-select {
+    ul {
+      border-bottom: 0;
+    }
+
+    li {
       &.active {
         border-bottom: 0;
+        background-color: $color-primary-alt-lightest;
       }
 
       &:last-child {
@@ -1398,4 +1404,19 @@ nav.usa-nav {
     margin-left: 10px;
     font-weight: $font-semibold;
   }
+}
+
+button.change-scanner-button {
+  font-weight: $font-semibold;
+  color: white;
+
+  &:hover {
+    color: $color-primary-alt;
+  }
+}
+
+.document-select-container {
+  border: 1px solid color($theme-color-base-lighter);
+  padding: 20px;
+  background-color: $color-primary-alt-lightest;
 }

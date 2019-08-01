@@ -1,3 +1,4 @@
+import { AddCounselModal } from './AddCounselModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -10,8 +11,17 @@ export const PartyInformation = connect(
     caseHelper: state.caseDetailHelper,
     constants: state.constants,
     editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
+    openAddCounselModalSequence: sequences.openAddCounselModalSequence,
+    showModal: state.showModal,
   },
-  ({ caseDetail, caseHelper, constants, editSecondaryContact }) => {
+  ({
+    caseDetail,
+    caseHelper,
+    constants,
+    editSecondaryContact,
+    openAddCounselModalSequence,
+    showModal,
+  }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
@@ -140,7 +150,13 @@ export const PartyInformation = connect(
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
-          <form className="usa-search">
+          <form
+            className="usa-search"
+            onSubmit={e => {
+              e.preventDefault();
+              openAddCounselModalSequence({ counselType });
+            }}
+          >
             <div role="search">
               <label
                 className="usa-sr-only"
@@ -242,6 +258,7 @@ export const PartyInformation = connect(
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
+        {showModal === 'AddCounselModal' && <AddCounselModal />}
       </>
     );
   },
