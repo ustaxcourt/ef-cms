@@ -36,7 +36,7 @@ export const PreviewControls = connect(
             'usa-button usa-button--unstyled' +
             (disableLeftButtons ? ' disabled' : '')
           }
-          title="pdf preview next page"
+          title="pdf preview previous page"
           onClick={onPreviousPage}
         >
           <FontAwesomeIcon
@@ -54,7 +54,7 @@ export const PreviewControls = connect(
             'usa-button usa-button--unstyled' +
             (disableRightButtons ? ' disabled' : '')
           }
-          title="pdf preview previous page"
+          title="pdf preview next page"
           onClick={onNextPage}
         >
           <FontAwesomeIcon
