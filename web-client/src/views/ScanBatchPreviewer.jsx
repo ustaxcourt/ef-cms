@@ -1,6 +1,7 @@
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
+  DeletePDFModal,
   EmptyHopperModal,
   ScanErrorModal,
   UnfinishedScansModal,
@@ -25,6 +26,8 @@ export const ScanBatchPreviewer = connect(
       sequences.openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence:
       sequences.openConfirmDeleteBatchModalSequence,
+    openConfirmDeletePDFModalSequence:
+      sequences.openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
@@ -51,6 +54,7 @@ export const ScanBatchPreviewer = connect(
     documentType,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
+    openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper,
     scanHelper,
@@ -149,29 +153,22 @@ export const ScanBatchPreviewer = connect(
 
     const renderIframePreview = () => {
       return (
-        <div className="padding-top-4">
-          <PdfPreview />
-          <button
-            className="margin-top-3 usa-button usa-button--outline red-warning"
-            onClick={e => {
-              e.preventDefault();
-              updateFormValueSequence({
-                key: documentType,
-                value: null,
-              });
-              updateFormValueSequence({
-                key: `${documentType}Size`,
-                value: null,
-              });
-              setDocumentUploadModeSequence({
-                documentUploadMode: 'scan',
-              });
-            }}
-          >
-            <FontAwesomeIcon icon={['fas', 'times-circle']} />
-            Delete PDF
-          </button>
-        </div>
+        <>
+          {showModal === 'ConfirmDeletePDFModal' && <DeletePDFModal />}
+          <div className="padding-top-4">
+            <PdfPreview />
+            <button
+              className="margin-top-3 usa-button usa-button--outline red-warning"
+              onClick={e => {
+                e.preventDefault();
+                openConfirmDeletePDFModalSequence();
+              }}
+            >
+              <FontAwesomeIcon icon={['fas', 'times-circle']} />
+              Delete PDF
+            </button>
+          </div>
+        </>
       );
     };
 

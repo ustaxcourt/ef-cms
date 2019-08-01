@@ -80,6 +80,7 @@ import { openChangeScannerSourceModalSequence } from './sequences/openChangeScan
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCompleteSelectDocumentTypeModalSequence';
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
+import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
@@ -95,6 +96,7 @@ import { printDocketRecordSequence } from './sequences/printDocketRecordSequence
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
+import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeYearAmountSequence } from './sequences/removeYearAmountSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -296,6 +298,7 @@ export const presenter = {
     openCleanModalSequence,
     openCompleteSelectDocumentTypeModalSequence,
     openConfirmDeleteBatchModalSequence,
+    openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateMessageModalSequence,
@@ -311,6 +314,7 @@ export const presenter = {
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,
+    removeScannedPdfSequence,
     removeYearAmountSequence,
     rescanBatchSequence,
     reviewExternalDocumentInformationSequence,

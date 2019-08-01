@@ -56,6 +56,22 @@ export const DeleteBatchModal = connect(
     );
   },
 );
+export const DeletePDFModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        cancelLabel="No, cancel"
+        confirmLabel="Yes, delete"
+        title="Are you sure you want to delete this PDF?"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="removeScannedPdfSequence"
+      >
+        <p>This action cannot be undone.</p>
+      </ConfirmModal>
+    );
+  },
+);
 export const ScanErrorModal = connect(
   {},
   () => {
