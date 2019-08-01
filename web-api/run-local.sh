@@ -10,18 +10,10 @@ node web-api/start-s3rver &
 S3RVER_PID=$!
 
 echo "seeding s3"
-cd web-api/storage || exit
-# clobber S3 and re-init from fixtures
-rm -rf s3/noop-documents-local-us-east-1
-mkdir -p s3/noop-documents-local-us-east-1
-cp -R fixtures/s3/ s3/noop-documents-local-us-east-1
-cd ../.. || exit
+npm run seed:s3
 
-echo "creating dynamo tables"
-node web-api/create-dynamo-tables.js
-
-echo "seeding dynamo"
-node web-api/seed-dynamo.js
+echo "creating & seeding dynamo tables"
+npm run seed:db 
 
 # these exported values expire when script terminates
 export SKIP_SANITIZE=true
