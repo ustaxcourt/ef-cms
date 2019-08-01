@@ -3,7 +3,7 @@ const {
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TrialSession } = require('../../entities/TrialSession');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 /**
  * getTrialSessionDetailsInteractor

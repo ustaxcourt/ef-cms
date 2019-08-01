@@ -1,6 +1,6 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
@@ -54,6 +54,9 @@ const waitForRouter = () => {
   });
 };
 
+/**
+ *
+ */
 async function loginAs(user) {
   await test.runSequence('updateFormValueSequence', {
     key: 'name',
@@ -62,6 +65,9 @@ async function loginAs(user) {
   await test.runSequence('submitLoginSequence');
 }
 
+/**
+ *
+ */
 async function createCase(test) {
   test.setState('form', {
     caseType: 'CDP (Lien/Levy)',
@@ -109,16 +115,25 @@ async function createCase(test) {
   return await waitForRouter();
 }
 
+/**
+ *
+ */
 function findByDocumentType(test, documentType) {
   return test
     .getState('caseDetail')
     .documents.find(d => d.documentType === documentType);
 }
 
+/**
+ *
+ */
 function getDocketNumber(test) {
   return test.getState('caseDetail').docketNumber;
 }
 
+/**
+ *
+ */
 function createWorkItem(test) {
   test.setState('form', {
     assigneeId: DOCKET_CLERK_1_ID,
@@ -129,6 +144,9 @@ function createWorkItem(test) {
   return test.runSequence('createWorkItemSequence');
 }
 
+/**
+ *
+ */
 async function findWorkItemInWorkQueue({
   box,
   docketNumber,

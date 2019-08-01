@@ -16,12 +16,12 @@ describe('TrialSession entity', () => {
       expect(trialSession.isValid()).toBeTruthy();
     });
 
-    it('creates an invalid trial session with startDate in the past', () => {
+    it('creates a valid trial session with startDate in the past', () => {
       const trialSession = new TrialSession({
         ...VALID_TRIAL_SESSION,
         startDate: '2000-03-01T00:00:00.000Z',
       });
-      expect(trialSession.isValid()).toBeFalsy();
+      expect(trialSession.isValid()).toBeTruthy();
     });
 
     it('creates an invalid trial session with invalid sessionType', () => {
