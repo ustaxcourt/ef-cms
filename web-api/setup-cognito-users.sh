@@ -15,7 +15,7 @@ generate_post_data() {
   email=$1
   role=$2
   name="Test ${role}$i"
-  barnumber=$4
+  barNumber=$4
   cat <<EOF
 {
   "email": "$email",
@@ -24,7 +24,7 @@ generate_post_data() {
   "name": "$name",
   "addressLine1": "123 Main Street",
   "addressLine2": "Los Angeles, CA 98089",
-  "barnumber": "$barnumber",
+  "barNumber": "$barNumber",
   "phone": "111-111-1111"
 }
 EOF
@@ -60,12 +60,12 @@ createAccount() {
   email=$1
   role=$2
   i=$3
-  barnumber=$4
+  barNumber=$4
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${i}" "${barnumber}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${i}" "${barNumber}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -93,7 +93,7 @@ createManyAccounts() {
   role=$1
   for i in $(seq 1 5);
   do
-    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}"
+    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "0"
   done
 }
 

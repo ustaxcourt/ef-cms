@@ -75,12 +75,17 @@ export const PartyInformation = connect(
               >
                 <address aria-labelledby={'practitioner-label'}>
                   {practitioner.name &&
-                    addressDisplay({
-                      ...practitioner,
-                      address1: practitioner.addressLine1,
-                      address2: practitioner.addressLine2,
-                      address3: practitioner.addressLine3,
-                    })}
+                    addressDisplay(
+                      {
+                        ...practitioner,
+                        address1: practitioner.addressLine1,
+                        address2: practitioner.addressLine2,
+                        address3: practitioner.addressLine3,
+                      },
+                      {
+                        nameOverride: practitioner.formattedName,
+                      },
+                    )}
                 </address>
                 <p className="label representing-label margin-top-2">
                   Representing
@@ -109,12 +114,17 @@ export const PartyInformation = connect(
               >
                 <address aria-labelledby={'respondent-label'}>
                   {respondent.name &&
-                    addressDisplay({
-                      ...respondent,
-                      address1: respondent.addressLine1,
-                      address2: respondent.addressLine2,
-                      address3: respondent.addressLine3,
-                    })}
+                    addressDisplay(
+                      {
+                        ...respondent,
+                        address1: respondent.addressLine1,
+                        address2: respondent.addressLine2,
+                        address3: respondent.addressLine3,
+                      },
+                      {
+                        nameOverride: respondent.formattedName,
+                      },
+                    )}
                 </address>
               </div>
             ))}

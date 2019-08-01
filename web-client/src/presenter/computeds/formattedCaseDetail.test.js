@@ -674,7 +674,7 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('practitioner mapping', () => {
-    it('should add barnumber into formatted name if available', () => {
+    it('should add barNumber into formatted name if available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
@@ -688,7 +688,7 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.practitioner.formattedName).toEqual('Jackie Chan (9999)');
     });
-    it('should not add barnumber into formatted name if not available', () => {
+    it('should not add barNumber into formatted name if not available', () => {
       const caseDetail = {
         caseCaption: 'Sisqo, Petitioner',
         petitioners: [{ name: 'bob' }],
