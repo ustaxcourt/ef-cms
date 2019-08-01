@@ -5,6 +5,8 @@ const jsdom = new JSDOM('');
 global.window = jsdom.window;
 
 window['EnumDWT_ImageType'] = { IT_PNG: 1 };
+window['EnumDWT_PixelType'] = { TWPT_RGB: 1 };
+window['EnumDWT_CapSupportedSizes'] = { TWSS_A4: 1 };
 const mockSources = ['Test Source 1', 'Test Source 2'];
 const mockScanCount = 1;
 

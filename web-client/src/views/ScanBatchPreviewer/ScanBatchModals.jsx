@@ -52,6 +52,21 @@ export const DeleteBatchModal = connect(
     );
   },
 );
+export const ScanErrorModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        noCancel
+        confirmLabel="OK"
+        title="An error occured while scanning"
+        onConfirmSequence="clearModalSequence"
+      >
+        Please try again or contact your IT Administrator.
+      </ConfirmModal>
+    );
+  },
+);
 export const UnfinishedScansModal = connect(
   {},
   () => (
