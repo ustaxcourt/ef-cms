@@ -1423,7 +1423,7 @@ button.change-scanner-button {
 }
 
 .document-select-container {
-  height: 425px;
+  min-height: 425px;
   border: 1px solid color($theme-color-base-lighter);
   border-top: 0px;
   padding: 20px;

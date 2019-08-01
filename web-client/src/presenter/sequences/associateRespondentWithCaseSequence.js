@@ -1,4 +1,4 @@
-import { associatePractitionerWithCaseAction } from '../actions/ManualAssociation/associatePractitionerWithCaseAction';
+import { associateRespondentWithCaseAction } from '../actions/ManualAssociation/associateRespondentWithCaseAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -6,8 +6,8 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 
-export const associatePractitionerWithCaseSequence = [
-  associatePractitionerWithCaseAction,
+export const associateRespondentWithCaseSequence = [
+  associateRespondentWithCaseAction,
   {
     success: [
       setAlertSuccessAction,

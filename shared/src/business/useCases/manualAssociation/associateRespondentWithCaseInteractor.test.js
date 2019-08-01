@@ -1,7 +1,7 @@
 const sinon = require('sinon');
 const {
-  associatePractitionerWithCaseInteractor,
-} = require('./associatePractitionerWithCaseInteractor');
+  associateRespondentWithCaseInteractor,
+} = require('./associateRespondentWithCaseInteractor');
 
 describe('associateRespondentWithCaseInteractor', () => {
   let applicationContext;
@@ -34,7 +34,7 @@ describe('associateRespondentWithCaseInteractor', () => {
           verifyCaseForUser: async () => true,
         }),
       };
-      await associatePractitionerWithCaseInteractor({
+      await associateRespondentWithCaseInteractor({
         applicationContext,
         caseId: caseRecord.caseId,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -45,7 +45,7 @@ describe('associateRespondentWithCaseInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('should add mapping for a practitioner', async () => {
+  it('should add mapping for a respondent', async () => {
     let updateCaseSpy = sinon.spy();
 
     applicationContext = {
@@ -62,7 +62,7 @@ describe('associateRespondentWithCaseInteractor', () => {
         getCaseByCaseId: async () => caseRecord,
         getUserById: async () => ({
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: 'respondent',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
@@ -70,7 +70,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       }),
     };
 
-    await associatePractitionerWithCaseInteractor({
+    await associateRespondentWithCaseInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

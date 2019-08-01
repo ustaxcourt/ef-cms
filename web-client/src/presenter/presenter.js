@@ -8,6 +8,7 @@ import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDo
 import { appendNewYearAmountSequence } from './sequences/appendNewYearAmountSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { associatePractitionerWithCaseSequence } from './sequences/associatePractitionerWithCaseSequence';
+import { associateRespondentWithCaseSequence } from './sequences/associateRespondentWithCaseSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
@@ -71,7 +72,8 @@ import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
-import { openAddCounselModalSequence } from './sequences/openAddCounselModalSequence';
+import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
+import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
@@ -222,6 +224,7 @@ export const presenter = {
     appendNewYearAmountSequence,
     assignSelectedWorkItemsSequence,
     associatePractitionerWithCaseSequence,
+    associateRespondentWithCaseSequence,
     autoSaveCaseSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
@@ -285,7 +288,8 @@ export const presenter = {
     loginWithTokenSequence,
     navigateToPathSequence,
     notFoundErrorSequence,
-    openAddCounselModalSequence,
+    openAddPractitionerModalSequence,
+    openAddRespondentModalSequence,
     openCaseCaptionModalSequence,
     openCaseDifferenceModalSequence,
     openChangeScannerSourceModalSequence,
