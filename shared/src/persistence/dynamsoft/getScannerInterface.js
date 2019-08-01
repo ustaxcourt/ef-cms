@@ -155,14 +155,15 @@ exports.getScannerInterface = () => {
           .finally(() => {
             DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
             DWObject.UnregisterEvent('OnPostTransfer', onPostTransfer);
+            clearTimeout(stuckTimeout);
           });
       };
 
-      // called when ALL pages are finished
-      DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
-
       // called after a single page in the hopper is scanned successfully
       DWObject.RegisterEvent('OnPostTransfer', onPostTransfer);
+
+      // called when ALL pages are finished
+      DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
 
       DWObject.OpenSource();
       DWObject.IfDisableSourceAfterAcquire = true;
