@@ -8,6 +8,14 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+let FontAwesomeIcon;
+
+if (process.env.NODE_ENV === 'test') {
+  FontAwesomeIcon = () => <i className="fa" />;
+} else {
+  ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
+}
+
 /**
  * Tab
  */
@@ -46,7 +54,7 @@ export function TabsComponent({
   setTab = decorateWithPostCallback(setTab, onSelect);
 
   const renderTab = child => {
-    const { id, tabName, title } = child.props;
+    const { icon, iconColor, id, showIcon, tabName, title } = child.props;
 
     const isActiveTab = tabName === activeKey;
     const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
@@ -70,7 +78,10 @@ export function TabsComponent({
           type="button"
           onClick={() => setTab(tabName)}
         >
-          <span>{title}</span>
+          <span>{title}</span>{' '}
+          {showIcon && (
+            <FontAwesomeIcon color={iconColor || null} icon={icon} />
+          )}
         </button>
       </li>
     );
