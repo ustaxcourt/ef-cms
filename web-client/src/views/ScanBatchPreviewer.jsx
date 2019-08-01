@@ -292,7 +292,7 @@ export const ScanBatchPreviewer = connect(
           <h5>Scanned Batches</h5>
 
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
-            {scanBatchPreviewerHelper.batches.length > 0 && (
+            {scanBatchPreviewerHelper.batches.length > 0 ? (
               <table className="batches-table">
                 <tbody>
                   {scanBatchPreviewerHelper.batches.map(batch => (
@@ -345,6 +345,8 @@ export const ScanBatchPreviewer = connect(
                   ))}
                 </tbody>
               </table>
+            ) : (
+              <div>None</div>
             )}
           </div>
 
