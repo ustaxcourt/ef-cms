@@ -1,4 +1,5 @@
-import { AddCounselModal } from './AddCounselModal';
+import { AddPractitionerModal } from './AddPractitionerModal';
+import { AddRespondentModal } from './AddRespondentModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -11,7 +12,9 @@ export const PartyInformation = connect(
     caseHelper: state.caseDetailHelper,
     constants: state.constants,
     editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
-    openAddCounselModalSequence: sequences.openAddCounselModalSequence,
+    openAddPractitionerModalSequence:
+      sequences.openAddPractitionerModalSequence,
+    openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
     showModal: state.showModal,
   },
   ({
@@ -19,7 +22,8 @@ export const PartyInformation = connect(
     caseHelper,
     constants,
     editSecondaryContact,
-    openAddCounselModalSequence,
+    openAddPractitionerModalSequence,
+    openAddRespondentModalSequence,
     showModal,
   }) => {
     const mainPartyInformation = () => (
@@ -154,7 +158,11 @@ export const PartyInformation = connect(
             className="usa-search"
             onSubmit={e => {
               e.preventDefault();
-              openAddCounselModalSequence({ counselType });
+              if (counselType === 'practitioner') {
+                openAddPractitionerModalSequence();
+              } else if (counselType === 'respondent') {
+                openAddRespondentModalSequence();
+              }
             }}
           >
             <div role="search">
@@ -258,7 +266,8 @@ export const PartyInformation = connect(
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
-        {showModal === 'AddCounselModal' && <AddCounselModal />}
+        {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}
+        {showModal === 'AddRespondentModal' && <AddRespondentModal />}
       </>
     );
   },
