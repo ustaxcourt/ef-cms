@@ -39,7 +39,7 @@ describe('associateRespondentToCase', () => {
     expect(updateCaseSpy.called).toEqual(false);
   });
 
-  it('should add mapping for a practitioner', async () => {
+  it('should add mapping for a respondent', async () => {
     let associateUserWithCaseSpy = sinon.spy();
     let verifyCaseForUserSpy = sinon.stub().returns(false);
     let updateCaseSpy = sinon.spy();
