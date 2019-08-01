@@ -288,7 +288,7 @@ label.validated::after {
 
 .document-detail-one-third {
   max-height: 890px;
-  overflow-y: scroll;
+  overflow-y: auto;
   .phone-input {
     margin-bottom: 20px;
     clear: both;
