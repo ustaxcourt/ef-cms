@@ -149,10 +149,10 @@ export const ScanBatchPreviewer = connect(
 
     const renderIframePreview = () => {
       return (
-        <>
+        <div className="padding-top-4">
           <PdfPreview />
           <button
-            className="usa-button usa-button--outline red-warning"
+            className="margin-top-3 usa-button usa-button--outline red-warning"
             onClick={e => {
               e.preventDefault();
               updateFormValueSequence({
@@ -171,7 +171,7 @@ export const ScanBatchPreviewer = connect(
             <FontAwesomeIcon icon={['fas', 'times-circle']} />
             Delete PDF
           </button>
-        </>
+        </div>
       );
     };
 
@@ -202,6 +202,9 @@ export const ScanBatchPreviewer = connect(
                   <tr key={batch.index}>
                     <td>
                       <button
+                        aria-label={`batch ${batch.index + 1} -- ${
+                          batch.pages.length
+                        } pages total`}
                         className="usa-button usa-button--unstyled"
                         onClick={e => {
                           e.preventDefault();
@@ -218,6 +221,7 @@ export const ScanBatchPreviewer = connect(
                     </td>
                     <td>
                       <button
+                        aria-label={`rescan batch ${batch.index + 1}`}
                         className="usa-button usa-button--unstyled no-underline"
                         onClick={e => {
                           e.preventDefault();
@@ -232,6 +236,9 @@ export const ScanBatchPreviewer = connect(
                     </td>
                     <td>
                       <button
+                        aria-label={`remove batch ${batch.index + 1} - with ${
+                          batch.pages.length
+                        } total pages`}
                         className="usa-button usa-button--unstyled no-underline red-warning float-right"
                         onClick={e => {
                           e.preventDefault();
@@ -439,22 +446,26 @@ export const ScanBatchPreviewer = connect(
               <div className="grid-col-6">
                 <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
-              <div className="grid-col-6 text-right">
-                <span className="margin-right-1">
-                  Scanner:{' '}
-                  {scanBatchPreviewerHelper.scannerSource ||
-                    'No Scanner Selected'}
-                </span>
-                <button
-                  className="usa-button usa-button--unstyled change-scanner-button"
-                  onClick={e => {
-                    e.preventDefault();
-                    openChangeScannerSourceModalSequence();
-                  }}
-                >
-                  Change
-                </button>
-              </div>
+              {scanBatchPreviewerHelper.showSelectedScanner && (
+                <div className="grid-col-6 text-right">
+                  <span className="margin-right-1">
+                    Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
+                  </span>
+                  <button
+                    aria-label="change scanner source"
+                    className="usa-button usa-button--unstyled change-scanner-button"
+                    style={{ color: 'white' }}
+                    onClick={e => {
+                      e.preventDefault();
+                      openChangeScannerSourceModalSequence();
+                    }}
+                  >
+                    {scanBatchPreviewerHelper.scannerSource
+                      ? 'Change'
+                      : 'Select Scanner'}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
