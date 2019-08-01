@@ -79,6 +79,9 @@ select {
     background-color: color($theme-color-base-lighter);
     color: color($theme-color-base-light);
   }
+
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .usa-checkbox__label,
