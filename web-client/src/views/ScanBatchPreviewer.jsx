@@ -452,10 +452,7 @@ export const ScanBatchPreviewer = connect(
             </div>
           </div>
         </div>
-        <div
-          style={{ border: '1px solid #AAA', padding: '20px' }}
-          className="document-select-container"
-        >
+        <div className="document-select-container">
           <Tabs
             bind="documentSelectedForScan"
             className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
