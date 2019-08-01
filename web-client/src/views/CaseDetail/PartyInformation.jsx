@@ -67,23 +67,29 @@ export const PartyInformation = connect(
         <div className="grid-row">
           {caseDetail.practitioners &&
             caseDetail.practitioners.map((practitioner, index) => (
-              <div className="tablet:grid-col-3" key={index}>
-                {index === 0 && (
-                  <p className="label" id={'practitioner-label'}>
-                    Petitioner Counsel
-                  </p>
+              <div
+                className={`tablet:grid-col-3 ${
+                  index > 3 ? 'margin-top-3' : ''
+                }`}
+                key={index}
+              >
+                <address aria-labelledby={'practitioner-label'}>
+                  {practitioner.name &&
+                    addressDisplay({
+                      ...practitioner,
+                      address1: practitioner.addressLine1,
+                      address2: practitioner.addressLine2,
+                      address3: practitioner.addressLine3,
+                    })}
+                </address>
+                <p className="label representing-label margin-top-2">
+                  Representing
+                </p>
+                {/*TODO*/}
+                <p>{caseDetail.contactPrimary.name}</p>
+                {caseDetail.contactSecondary && (
+                  <p>{caseDetail.contactSecondary.name}</p>
                 )}
-                <div>
-                  <address aria-labelledby={'practitioner-label'}>
-                    {practitioner.name &&
-                      addressDisplay({
-                        ...practitioner,
-                        address1: practitioner.addressLine1,
-                        address2: practitioner.addressLine2,
-                        address3: practitioner.addressLine3,
-                      })}
-                  </address>
-                </div>
               </div>
             ))}
         </div>
@@ -95,23 +101,21 @@ export const PartyInformation = connect(
         <div className="grid-row">
           {caseDetail.respondents &&
             caseDetail.respondents.map((respondent, index) => (
-              <div className="tablet:grid-col-3" key={index}>
-                {index === 0 && (
-                  <p className="label" id={'respondent-label'}>
-                    Respondent Information
-                  </p>
-                )}
-                <div>
-                  <address aria-labelledby={'respondent-label'}>
-                    {respondent.name &&
-                      addressDisplay({
-                        ...respondent,
-                        address1: respondent.addressLine1,
-                        address2: respondent.addressLine2,
-                        address3: respondent.addressLine3,
-                      })}
-                  </address>
-                </div>
+              <div
+                className={`tablet:grid-col-3 ${
+                  index > 3 ? 'margin-top-3' : ''
+                }`}
+                key={index}
+              >
+                <address aria-labelledby={'respondent-label'}>
+                  {respondent.name &&
+                    addressDisplay({
+                      ...respondent,
+                      address1: respondent.addressLine1,
+                      address2: respondent.addressLine2,
+                      address3: respondent.addressLine3,
+                    })}
+                </address>
               </div>
             ))}
         </div>
@@ -178,7 +182,7 @@ export const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <h3 className="underlined">Respondent Counsel</h3>
-                {practitionerPartyInformation()}
+                {respondentPartyInformation()}
               </div>
             </div>
           )}

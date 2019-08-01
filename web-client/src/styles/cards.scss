@@ -100,6 +100,14 @@
 .party-information {
   font-size: 17px;
 
+  p {
+    margin-bottom: 10px;
+
+    &.representing-label {
+      margin-top: 20px;
+    }
+  }
+
   @media only screen and (max-width: $medium-screen) {
     .card {
       border: none;
