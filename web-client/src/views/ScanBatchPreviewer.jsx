@@ -270,18 +270,6 @@ export const ScanBatchPreviewer = connect(
             </button>
           )}
 
-          {!scanBatchPreviewerHelper.scannerSource && (
-            <button
-              className="usa-button usa-button--unstyled margin-bottom-2"
-              onClick={e => {
-                e.preventDefault();
-                openChangeScannerSourceModalSequence();
-              }}
-            >
-              Select Scanner
-            </button>
-          )}
-
           <br />
 
           {scanBatchPreviewerHelper.selectedPageImage && (
@@ -392,7 +380,25 @@ export const ScanBatchPreviewer = connect(
     const renderUpload = () => {
       return (
         <div className="document-detail-one-third">
-          <div className="usa-form-group">
+          <div
+            className={`usa-form-group ${
+              validationErrors.stinFile ? 'usa-form-group--error' : ''
+            }`}
+          >
+            <label
+              className={'usa-label ustc-upload-stin with-hint '}
+              htmlFor={`${documentType}-file`}
+              id={`${documentType}-label`}
+            >
+              Upload Your File{' '}
+              <span className="success-message">
+                <FontAwesomeIcon icon="check-circle" size="1x" />
+              </span>
+            </label>
+            <span className="usa-hint">
+              File must be in PDF format (.pdf). Max file size{' '}
+              {constants.MAX_FILE_SIZE_MB}MB.
+            </span>
             <input
               accept=".pdf"
               aria-describedby={`${documentType}-hint`}
