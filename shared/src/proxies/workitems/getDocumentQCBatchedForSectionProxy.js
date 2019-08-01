@@ -2,6 +2,7 @@ const { get } = require('../requests');
 
 /**
  * getDocumentQCBatchedForSectionInteractor
+ *
  * @param applicationContext
  * @returns {Promise<*>}
  */

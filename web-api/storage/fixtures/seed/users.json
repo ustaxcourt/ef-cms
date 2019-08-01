@@ -74,8 +74,9 @@
     "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "practitioner",
-    "address": "123 Main Street Los Angeles, CA 98089",
-    "barnumber": "12345-67",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Los Angeles, CA 98089",
+    "barNumber": "12345",
     "phone": "111-111-1111"
   },
   {
@@ -86,9 +87,49 @@
     "pk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "email": "practitioner1",
-    "address": "123 Main Street Los Angeles, CA 98089",
-    "barnumber": "12345-67",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Los Angeles, CA 98089",
+    "barNumber": "54321",
     "phone": "111-111-1111"
+  },
+  {
+    "role": "practitioner",
+    "sk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
+    "name": "Lilah Gilbert",
+    "section": "practitioner",
+    "pk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
+    "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
+    "email": "practitioner2",
+    "addressLine1": "234 South Street",
+    "addressLine2": "Denver, CO 87493",
+    "barNumber": "11111",
+    "phone": "222-222-2222"
+  },
+  {
+    "role": "practitioner",
+    "sk": "9f25dc2c-764a-435c-86dd-323e53634537",
+    "name": "Clark Stark",
+    "section": "practitioner",
+    "pk": "9f25dc2c-764a-435c-86dd-323e53634537",
+    "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
+    "email": "practitioner3",
+    "addressLine1": "87676 West Street",
+    "addressLine2": "Nashville, TN 37055",
+    "barNumber": "22222",
+    "phone": "333-333-3333"
+  },
+  {
+    "role": "practitioner",
+    "sk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "name": "Alden Rivas",
+    "section": "practitioner",
+    "pk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "email": "practitioner4",
+    "addressLine1": "135 Bob Street",
+    "addressLine2": "Oakland, CA 91839",
+    "barNumber": "33333",
+    "phone": "444-444-4444"
   },
   {
     "role": "respondent",
@@ -98,8 +139,9 @@
     "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "respondent",
-    "address": "123 Main Street Los Angeles, CA 98089",
-    "barnumber": "12345-67",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Los Angeles, CA 98089",
+    "barNumber": "67890",
     "phone": "111-111-1111"
   },
   {
@@ -110,8 +152,48 @@
     "pk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "email": "respondent1",
-    "address": "123 Main Street Los Angeles, CA 98089",
-    "barnumber": "12345-67",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Los Angeles, CA 98089",
+    "barNumber": "09876",
     "phone": "111-111-1111"
+  },
+  {
+    "role": "respondent",
+    "sk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
+    "name": "Nero West",
+    "section": "respondent",
+    "pk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
+    "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
+    "email": "respondent2",
+    "addressLine1": "3983 Feathers Hooves Drive",
+    "addressLine2": "Hicksville, NY 11612",
+    "barNumber": "77777",
+    "phone": "631-719-1496"
+  },
+  {
+    "role": "respondent",
+    "sk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
+    "name": "Stuart Morrison",
+    "section": "respondent",
+    "pk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
+    "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
+    "email": "respondent3",
+    "addressLine1": "4248 Bailey Drive",
+    "addressLine2": "Shellsburg, IA 52332",
+    "barNumber": "88888",
+    "phone": "319-436-9050"
+  },
+  {
+    "role": "respondent",
+    "sk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
+    "name": "Jaquelyn Lane",
+    "section": "respondent",
+    "pk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
+    "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
+    "email": "respondent4",
+    "addressLine1": "3202 Elk Avenue",
+    "addressLine2": "Hanover, MI 49241",
+    "barNumber": "99999",
+    "phone": "517-563-1536"
   }
 ]

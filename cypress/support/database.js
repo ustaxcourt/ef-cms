@@ -5,37 +5,35 @@ AWS.config.accessKeyId = 'noop';
 AWS.config.secretAccessKey = 'noop';
 AWS.config.region = 'us-east-1';
 
-const data = require('../../../web-api/storage/fixtures/seed');
+const data = require('../../web-api/storage/fixtures/seed');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',
 });
 
-async function deleteItem(item) {
-  return documentClient
-    .delete({
-      Key: {
-        pk: item.pk,
-        sk: item.sk,
-      },
-      TableName: 'efcms-local',
-    })
-    .promise();
-}
+const deleteItem = item => {
+  return documentClient.delete({
+    Key: {
+      pk: item.pk,
+      sk: item.sk,
+    },
+    TableName: 'efcms-local',
+  });
+};
 
-async function clearDatabase() {
+const clearDatabase = async () => {
   const { Items: items } = await documentClient
     .scan({
       TableName: 'efcms-local',
     })
     .promise();
 
-  await Promise.all(items.map(item => deleteItem(item)));
-}
+  await Promise.all(items.map(deleteItem));
+};
 
-async function seedDatabase() {
-  await Promise.all(
+const seedDatabase = () => {
+  return Promise.all(
     data.map(item =>
       documentClient
         .put({
@@ -45,7 +43,7 @@ async function seedDatabase() {
         .promise(),
     ),
   );
-}
+};
 
 export const reseedDatabase = async () => {
   await clearDatabase();

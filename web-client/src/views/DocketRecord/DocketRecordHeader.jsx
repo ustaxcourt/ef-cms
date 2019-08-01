@@ -7,6 +7,7 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
+    pdfPreviewUrl: state.pdfPreviewUrl,
     printDocketRecord: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
@@ -18,6 +19,13 @@ export const DocketRecordHeader = connect(
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
+    const openDocketRecordPrintPreview = (options = {}) => {
+      updateSessionMetadataSequence({
+        key: `docketRecordSort.${caseDetail.caseId}`,
+        value: 'byDate',
+      });
+      printDocketRecord(options);
+    };
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
@@ -43,13 +51,23 @@ export const DocketRecordHeader = connect(
                 </a>
               )}
               <button
-                className="usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                aria-hidden="true"
+                className="show-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
                 onClick={() => {
-                  updateSessionMetadataSequence({
-                    key: `docketRecordSort.${caseDetail.caseId}`,
-                    value: 'byDate',
+                  openDocketRecordPrintPreview({
+                    openNewTab: true,
+                    openNewView: false,
                   });
-                  printDocketRecord();
+                }}
+              >
+                <FontAwesomeIcon icon="print" size="sm" />
+                Printable Docket Record
+              </button>
+              <button
+                aria-label="printable docket record"
+                className="hide-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                onClick={() => {
+                  openDocketRecordPrintPreview();
                 }}
               >
                 <FontAwesomeIcon icon="print" size="sm" />

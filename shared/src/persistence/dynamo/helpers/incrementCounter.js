@@ -2,6 +2,7 @@ const client = require('../../dynamodbClientService');
 
 /**
  * incrementCounter
+ *
  * @param applicationContext
  * @returns {*}
  */

@@ -125,7 +125,7 @@ exports.joiValidationDecorator = function(
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
       throw new Error(
-        `The ${entityConstructor.name ||
+        `The ${entityConstructor.validationName ||
           ''} entity was invalid ${this.getValidationError()}`,
       );
     }

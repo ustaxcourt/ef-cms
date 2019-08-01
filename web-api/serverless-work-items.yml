@@ -193,7 +193,7 @@ resources:
 
 functions:
   assignWorkItems:
-    handler: src/workItemsHandlers.assignWorkItemsLambda
+    handler: web-api/src/workItemsHandlers.assignWorkItemsLambda
     events:
       - http:
           path: /
@@ -205,7 +205,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getWorkItem:
-    handler: src/workItemsHandlers.getWorkItemLambda
+    handler: web-api/src/workItemsHandlers.getWorkItemLambda
     events:
       - http:
           path: /{workItemId}
@@ -217,7 +217,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   forwardWorkItem:
-    handler: src/workItemsHandlers.forwardWorkItemLambda
+    handler: web-api/src/workItemsHandlers.forwardWorkItemLambda
     events:
       - http:
           path: /{workItemId}/assignee
@@ -229,7 +229,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   completeWorkItem:
-    handler: src/workItemsHandlers.completeWorkItemLambda
+    handler: web-api/src/workItemsHandlers.completeWorkItemLambda
     events:
       - http:
           path: /{workItemId}/complete
@@ -241,7 +241,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setWorkItemAsRead:
-    handler: src/workItemsHandlers.setWorkItemAsReadLambda
+    handler: web-api/src/workItemsHandlers.setWorkItemAsReadLambda
     events:
       - http:
           path: /{workItemId}/read

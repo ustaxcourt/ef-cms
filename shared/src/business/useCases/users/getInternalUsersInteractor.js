@@ -7,6 +7,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getInternalUsersInteractor
+ *
  * @param sectionType
  * @returns {Promise<User[]>}
  */

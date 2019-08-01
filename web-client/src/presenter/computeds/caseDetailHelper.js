@@ -74,6 +74,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,
     showActionRequired,
+    showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
@@ -96,9 +97,15 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
     showPendingAccessToCaseButton,
+    showPractitionerSection:
+      !isExternalUser ||
+      (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',
     showRequestAccessToCaseButton,
+    showRespondentSection:
+      !isExternalUser ||
+      (caseDetail.respondents && !!caseDetail.respondents.length),
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
     userHasAccessToCase,
   };
