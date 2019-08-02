@@ -20,11 +20,6 @@ const mockRemoveAllImages = jest.fn();
 const applicationContext = {
   convertBlobToUInt8Array: () => new Uint8Array([]),
   getScannerResourceUri: () => 'abc',
-  logger: {
-    info: () => null,
-    time: () => null,
-    timeEnd: () => null,
-  },
 };
 
 const DWObject = {
