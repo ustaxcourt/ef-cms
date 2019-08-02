@@ -158,6 +158,7 @@ exports.getScannerInterface = () => {
       DWObject.IfDisableSourceAfterAcquire = true;
       DWObject.IfShowUI = false;
       DWObject.Resolution = 300;
+      DWObject.IfFeederEnabled = true;
       DWObject.IfDuplexEnabled = false;
       DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
       DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
