@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+const { get } = require('../requests');
 
 /**
  * getRespondentsBySearchKeyProxy
@@ -11,9 +11,8 @@ exports.getRespondentsBySearchKeyInteractor = ({
   applicationContext,
   searchKey,
 }) => {
-  return post({
+  return get({
     applicationContext,
-    body: { searchKey },
-    endpoint: '/users/respondents/search',
+    endpoint: `/users/respondents/search?searchKey=${searchKey}`,
   });
 };

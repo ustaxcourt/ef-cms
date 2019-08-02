@@ -15,11 +15,12 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
+      const { searchKey } = event.queryStringParameters;
       const results = await applicationContext
         .getUseCases()
         .getRespondentsBySearchKeyInteractor({
           applicationContext,
-          searchKey: JSON.parse(event.body),
+          searchKey,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

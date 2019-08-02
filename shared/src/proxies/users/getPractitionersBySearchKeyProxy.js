@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+const { get } = require('../requests');
 
 /**
  * getPractitionersBySearchKeyProxy
@@ -11,9 +11,8 @@ exports.getPractitionersBySearchKeyInteractor = ({
   applicationContext,
   searchKey,
 }) => {
-  return post({
+  return get({
     applicationContext,
-    body: { searchKey },
-    endpoint: '/users/practitioners/search',
+    endpoint: `/users/practitioners/search?searchKey=${searchKey}`,
   });
 };
