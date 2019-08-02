@@ -151,6 +151,7 @@ export const ScanBatchPreviewer = connect(
           </div>
 
           <button
+            aria-label="create pdf"
             className="usa-button margin-top-4"
             type="button"
             onClick={e => {
@@ -296,6 +297,9 @@ export const ScanBatchPreviewer = connect(
                     <tr key={batch.index}>
                       <td>
                         <button
+                          aria-label={`batch ${batch.index + 1} -- ${
+                            batch.pages.length
+                          } pages total`}
                           className="usa-button usa-button--unstyled"
                           onClick={e => {
                             e.preventDefault();
@@ -312,6 +316,7 @@ export const ScanBatchPreviewer = connect(
                       </td>
                       <td>
                         <button
+                          aria-label={`rescan batch ${batch.index + 1}`}
                           className="usa-button usa-button--unstyled no-underline"
                           onClick={e => {
                             e.preventDefault();
@@ -326,6 +331,9 @@ export const ScanBatchPreviewer = connect(
                       </td>
                       <td>
                         <button
+                          aria-label={`delete batch ${batch.index + 1} - with ${
+                            batch.pages.length
+                          } total pages`}
                           className="usa-button usa-button--unstyled no-underline red-warning float-right"
                           onClick={e => {
                             e.preventDefault();
@@ -457,6 +465,9 @@ export const ScanBatchPreviewer = connect(
                   Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                 </span>
                 <button
+                  aria-label={`${
+                    scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
+                  } scanner source`}
                   className="usa-button usa-button--unstyled change-scanner-button"
                   style={{ color: 'white' }}
                   onClick={e => {
