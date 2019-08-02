@@ -142,7 +142,7 @@
     "lint": "run-p lint:api lint:css lint:js",
     "print:success": "./wait-until.sh http://localhost:1234 && echo 'Build successful. You can access the site at http://localhost:1234'",
     "seed:db": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js",
-    "seed:s3": "rm -rf ./web-api/storage/s3/noop-documents-local-us-east-1 && cp -R ./web-api/storage/fixtures/s3/ ./web-api/storage/s3/noop-documents-local-us-east-1",
+    "seed:s3": "export S3_DIR=./web-api/storage/s3/noop-documents-local-us-east-1 && rm -rf \"${S3_DIR}\" && mkdir -p \"${S3_DIR}\" && cp -R ./web-api/storage/fixtures/s3/ \"${S3_DIR}\"",
     "seed": "run-p seed:db seed:s3",
     "start:api": "./run-local.sh",
     "start:client:cypress": "CYPRESS=true npm run start:client",
