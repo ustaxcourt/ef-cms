@@ -1,19 +1,19 @@
 #!/bin/bash
 echo "killing dynamo if already running"
-pgrep -f DynamoDBLocal | xargs kill
+pkill -f DynamoDBLocal
 
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
 
-node web-api/start-s3rver &
+node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
 echo "seeding s3"
 npm run seed:s3
 
 echo "creating & seeding dynamo tables"
-npm run seed:db 
+npm run seed:db
 
 # these exported values expire when script terminates
 export SKIP_SANITIZE=true
