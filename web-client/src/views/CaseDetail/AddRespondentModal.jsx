@@ -12,22 +12,6 @@ class AddRespondentModalComponent extends ModalDialog {
       confirmLabel: 'Add to Case',
       title: 'Add Respondent Counsel',
     };
-
-    //hardcoded for now until the counsel search is built
-    this.counselMatches = [
-      {
-        addressLine2: 'Hicksville, NY 11612',
-        barNumber: 'WN7777',
-        name: 'Nero West',
-        userId: '2d9a7229-7d5a-459f-84ad-754504a9f10f',
-      },
-      {
-        addressLine2: 'Shellsburg, IA 52332',
-        barNumber: 'MS8888',
-        name: 'Stuart Morrison',
-        userId: '5c43a30d-9c3d-41be-ad13-3b6d7cef54fc',
-      },
-    ];
   }
 
   renderBody() {
@@ -39,19 +23,20 @@ class AddRespondentModalComponent extends ModalDialog {
               Counsel Match(es) Found
             </legend>
 
-            {this.counselMatches && this.counselMatches.length === 1 && (
-              <span>
-                {this.counselMatches[0].name} (
-                {this.counselMatches[0].barNumber}
-                )
-                <br />
-                {this.counselMatches[0].addressLine2}
-              </span>
-            )}
+            {this.props.modal.respondentMatches &&
+              this.props.modal.respondentMatches.length === 1 && (
+                <span>
+                  {this.props.modal.respondentMatches[0].name} (
+                  {this.props.modal.respondentMatches[0].barNumber}
+                  )
+                  <br />
+                  {this.props.modal.respondentMatches[0].addressLine2}
+                </span>
+              )}
 
-            {this.counselMatches &&
-              this.counselMatches.length > 1 &&
-              this.counselMatches.map((counsel, idx) => (
+            {this.props.modal.respondentMatches &&
+              this.props.modal.respondentMatches.length > 1 &&
+              this.props.modal.respondentMatches.map((counsel, idx) => (
                 <div className="usa-radio" key={idx}>
                   <input
                     aria-describedby="counsel-matches-legend"

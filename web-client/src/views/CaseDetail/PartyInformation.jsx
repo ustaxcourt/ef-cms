@@ -16,6 +16,7 @@ export const PartyInformation = connect(
       sequences.openAddPractitionerModalSequence,
     openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
     showModal: state.showModal,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
     caseDetail,
@@ -25,6 +26,7 @@ export const PartyInformation = connect(
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
     showModal,
+    updateFormValueSequence,
   }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
@@ -146,7 +148,7 @@ export const PartyInformation = connect(
       </div>
     );
 
-    const counselSearch = counselType => (
+    const practitionerSearch = () => (
       <>
         <div className="grid-col-3 text-right">
           <span className="label margin-right-4 margin-top-05">
@@ -158,26 +160,72 @@ export const PartyInformation = connect(
             className="usa-search"
             onSubmit={e => {
               e.preventDefault();
-              if (counselType === 'practitioner') {
-                openAddPractitionerModalSequence();
-              } else if (counselType === 'respondent') {
-                openAddRespondentModalSequence();
-              }
+              openAddPractitionerModalSequence();
             }}
           >
             <div role="search">
               <label
                 className="usa-sr-only"
-                htmlFor={`${counselType}-search-field`}
+                htmlFor={'practitioner-search-field'}
               >
                 Search
               </label>
               <input
                 className="usa-input"
-                id={`${counselType}-search-field`}
-                name={`${counselType}Search`}
+                id={'practitioner-search-field'}
+                name={'practitionerSearch'}
                 placeholder="Enter Bar Number or Name"
                 type="search"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+              <button className="usa-button" type="submit">
+                <span className="usa-search__submit-text">Search</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </>
+    );
+
+    const respondentSearch = () => (
+      <>
+        <div className="grid-col-3 text-right">
+          <span className="label margin-right-4 margin-top-05">
+            Add Counsel
+          </span>
+        </div>
+        <div className="grid-col-3 margin-top-neg-05">
+          <form
+            className="usa-search"
+            onSubmit={e => {
+              e.preventDefault();
+              openAddRespondentModalSequence();
+            }}
+          >
+            <div role="search">
+              <label
+                className="usa-sr-only"
+                htmlFor={'respondent-search-field'}
+              >
+                Search
+              </label>
+              <input
+                className="usa-input"
+                id={'respondent-search-field'}
+                name={'respondentSearch'}
+                placeholder="Enter Bar Number or Name"
+                type="search"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
               />
               <button className="usa-button" type="submit">
                 <span className="usa-search__submit-text">Search</span>
@@ -241,7 +289,7 @@ export const PartyInformation = connect(
                   <div className="grid-col-6">
                     <h3>Petitioner Counsel</h3>
                   </div>
-                  {caseHelper.showAddCounsel && counselSearch('practitioner')}
+                  {caseHelper.showAddCounsel && practitionerSearch()}
                 </div>
                 {practitionerPartyInformation()}
               </div>
@@ -256,9 +304,9 @@ export const PartyInformation = connect(
                   <div className="grid-col-6">
                     <h3>Respondent Counsel</h3>
                   </div>
-                  {counselSearch('respondent')}
+                  {caseHelper.showAddCounsel && respondentSearch()}
                 </div>
-                {caseHelper.showAddCounsel && respondentPartyInformation()}
+                {respondentPartyInformation()}
               </div>
             </div>
           </div>
