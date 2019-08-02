@@ -1,6 +1,7 @@
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
+  DeletePDFModal,
   EmptyHopperModal,
   ScanErrorModal,
   UnfinishedScansModal,
@@ -14,7 +15,7 @@ import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const ScanBatchPreviewer = connect(
   {
@@ -25,6 +26,8 @@ export const ScanBatchPreviewer = connect(
       sequences.openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence:
       sequences.openConfirmDeleteBatchModalSequence,
+    openConfirmDeletePDFModalSequence:
+      sequences.openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence:
       sequences.openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
@@ -51,6 +54,7 @@ export const ScanBatchPreviewer = connect(
     documentType,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
+    openConfirmDeletePDFModalSequence,
     openConfirmRescanBatchModalSequence,
     scanBatchPreviewerHelper,
     scanHelper,
@@ -70,6 +74,117 @@ export const ScanBatchPreviewer = connect(
     useEffect(() => {
       scannerStartupSequence();
     }, []);
+
+    const batchWrapperRef = useRef(null);
+
+    useEffect(() => {
+      if (batchWrapperRef.current)
+        batchWrapperRef.current.scrollTop =
+          batchWrapperRef.current.scrollHeight;
+    }, [scanBatchPreviewerHelper.batches]);
+
+    const renderPreviewSection = () => {
+      return (
+        <>
+          <div className="grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">
+                <h4 className="margin-bottom-0 margin-top-2">
+                  Scan Preview: Batch{' '}
+                  {scanBatchPreviewerHelper.selectedBatch.index + 1}
+                </h4>
+              </div>
+
+              <div className="grid-col-6 text-right margin-bottom-2">
+                <PreviewControls
+                  currentPage={scanBatchPreviewerHelper.currentPage + 1}
+                  disableLeftButtons={
+                    scanBatchPreviewerHelper.currentPage === 0
+                  }
+                  disableRightButtons={
+                    scanBatchPreviewerHelper.currentPage ===
+                    scanBatchPreviewerHelper.totalPages - 1
+                  }
+                  totalPages={scanBatchPreviewerHelper.totalPages}
+                  onFirstPage={e => {
+                    e.preventDefault();
+                    setCurrentPageIndexSequence({
+                      currentPageIndex: 0,
+                    });
+                  }}
+                  onLastPage={e => {
+                    e.preventDefault();
+                    setCurrentPageIndexSequence({
+                      currentPageIndex: scanBatchPreviewerHelper.totalPages - 1,
+                    });
+                  }}
+                  onNextPage={e => {
+                    e.preventDefault();
+                    setCurrentPageIndexSequence({
+                      currentPageIndex:
+                        scanBatchPreviewerHelper.currentPage + 1,
+                    });
+                  }}
+                  onPreviousPage={e => {
+                    e.preventDefault();
+                    setCurrentPageIndexSequence({
+                      currentPageIndex:
+                        scanBatchPreviewerHelper.currentPage - 1,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#999' }}>
+            <img
+              src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
+              style={{
+                display: 'block',
+                margin: '0 auto',
+                paddingBottom: '10px',
+                paddingTop: '10px',
+                width: '50%',
+              }}
+            />
+          </div>
+
+          <button
+            className="usa-button margin-top-4"
+            type="button"
+            onClick={e => {
+              e.preventDefault();
+              completeScanSequence({
+                onComplete: file => {
+                  limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                    updateFormValueSequence({
+                      key: documentType,
+                      value: file,
+                    });
+                    updateFormValueSequence({
+                      key: `${documentType}Size`,
+                      value: file.size,
+                    });
+                    validatePetitionFromPaperSequence();
+                    selectDocumentForPreviewSequence({
+                      documentType,
+                      file,
+                    });
+                    setDocumentUploadModeSequence({
+                      documentUploadMode: 'preview',
+                    });
+                  });
+                },
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
+            Create PDF
+          </button>
+        </>
+      );
+    };
 
     const renderModeRadios = () => {
       return (
@@ -149,117 +264,95 @@ export const ScanBatchPreviewer = connect(
 
     const renderIframePreview = () => {
       return (
-        <div className="padding-top-4">
-          <PdfPreview />
-          <button
-            className="margin-top-3 usa-button usa-button--outline red-warning"
-            onClick={e => {
-              e.preventDefault();
-              updateFormValueSequence({
-                key: documentType,
-                value: null,
-              });
-              updateFormValueSequence({
-                key: `${documentType}Size`,
-                value: null,
-              });
-              setDocumentUploadModeSequence({
-                documentUploadMode: 'scan',
-              });
-            }}
-          >
-            <FontAwesomeIcon icon={['fas', 'times-circle']} />
-            Delete PDF
-          </button>
-        </div>
+        <>
+          {showModal === 'ConfirmDeletePDFModal' && <DeletePDFModal />}
+          <div className="padding-top-4">
+            <PdfPreview />
+            <button
+              className="margin-top-3 usa-button usa-button--outline red-warning bg-white"
+              onClick={e => {
+                e.preventDefault();
+                openConfirmDeletePDFModalSequence();
+              }}
+            >
+              <FontAwesomeIcon icon={['fas', 'times-circle']} />
+              Delete PDF
+            </button>
+          </div>
+        </>
       );
     };
 
     const renderScan = () => {
       return (
         <>
-          {showModal === 'ConfirmRescanBatchModal' && (
-            <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
-          )}
-          {showModal === 'ConfirmDeleteBatchModal' && (
-            <DeleteBatchModal batchIndex={selectedBatchIndex} />
-          )}
+          <h5>Scanned Batches</h5>
 
-          {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
+          <div className="batches-table-wrapper" ref={batchWrapperRef}>
+            {scanBatchPreviewerHelper.batches.length > 0 ? (
+              <table className="batches-table">
+                <tbody>
+                  {scanBatchPreviewerHelper.batches.map(batch => (
+                    <tr key={batch.index}>
+                      <td>
+                        <button
+                          className="usa-button usa-button--unstyled"
+                          onClick={e => {
+                            e.preventDefault();
+                            setSelectedBatchIndexSequence({
+                              selectedBatchIndex: batch.index,
+                            });
+                          }}
+                        >
+                          Batch {batch.index + 1}
+                        </button>
+                      </td>
+                      <td>
+                        <span>{batch.pages.length} pages</span>
+                      </td>
+                      <td>
+                        <button
+                          className="usa-button usa-button--unstyled no-underline"
+                          onClick={e => {
+                            e.preventDefault();
+                            openConfirmRescanBatchModalSequence({
+                              batchIndexToRescan: batch.index,
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon icon={['fas', 'redo-alt']} />
+                          Rescan
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="usa-button usa-button--unstyled no-underline red-warning float-right"
+                          onClick={e => {
+                            e.preventDefault();
+                            openConfirmDeleteBatchModalSequence({
+                              batchIndexToDelete: batch.index,
+                              batchPageCount: batch.pages.length,
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon icon={['fas', 'times-circle']} />
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div>None</div>
+            )}
+          </div>
 
-          {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
-
-          {showModal === 'ScanErrorModal' && <ScanErrorModal />}
-
-          {scanBatchPreviewerHelper.showScannerSourceModal && (
-            <SelectScannerSourceModal />
-          )}
-          <h5>Scanned Documents</h5>
-          {scanBatchPreviewerHelper.batches.length > 0 && (
-            <table>
-              <tbody>
-                {scanBatchPreviewerHelper.batches.map(batch => (
-                  <tr key={batch.index}>
-                    <td>
-                      <button
-                        aria-label={`batch ${batch.index + 1} -- ${
-                          batch.pages.length
-                        } pages total`}
-                        className="usa-button usa-button--unstyled"
-                        onClick={e => {
-                          e.preventDefault();
-                          setSelectedBatchIndexSequence({
-                            selectedBatchIndex: batch.index,
-                          });
-                        }}
-                      >
-                        Batch {batch.index + 1}
-                      </button>
-                    </td>
-                    <td>
-                      <span>{batch.pages.length} pages</span>
-                    </td>
-                    <td>
-                      <button
-                        aria-label={`rescan batch ${batch.index + 1}`}
-                        className="usa-button usa-button--unstyled no-underline"
-                        onClick={e => {
-                          e.preventDefault();
-                          openConfirmRescanBatchModalSequence({
-                            batchIndexToRescan: batch.index,
-                          });
-                        }}
-                      >
-                        <FontAwesomeIcon icon={['fas', 'redo-alt']} />
-                        Rescan
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        aria-label={`remove batch ${batch.index + 1} - with ${
-                          batch.pages.length
-                        } total pages`}
-                        className="usa-button usa-button--unstyled no-underline red-warning float-right"
-                        onClick={e => {
-                          e.preventDefault();
-                          openConfirmDeleteBatchModalSequence({
-                            batchIndexToDelete: batch.index,
-                          });
-                        }}
-                      >
-                        <FontAwesomeIcon icon={['fas', 'times-circle']} />
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+          <hr className="lighter" />
 
           {scanBatchPreviewerHelper.scannerSource && (
             <button
-              className="usa-button usa-button--unstyled margin-bottom-2 no-underline"
+              className="usa-button usa-button--unstyled no-underline"
               onClick={e => {
                 e.preventDefault();
                 startScanSequence();
@@ -269,122 +362,6 @@ export const ScanBatchPreviewer = connect(
               Add Batch
             </button>
           )}
-
-          {!scanBatchPreviewerHelper.scannerSource && (
-            <button
-              className="usa-button usa-button--unstyled margin-bottom-2"
-              onClick={e => {
-                e.preventDefault();
-                openChangeScannerSourceModalSequence();
-              }}
-            >
-              Select Scanner
-            </button>
-          )}
-
-          <br />
-
-          {scanBatchPreviewerHelper.selectedPageImage && (
-            <>
-              <div className="grid-container padding-x-0">
-                <div className="grid-row grid-gap">
-                  <div className="grid-col-6">
-                    <h4 className="margin-bottom-0 margin-top-2">
-                      Scan Preview: Batch{' '}
-                      {scanBatchPreviewerHelper.selectedBatch.index + 1}
-                    </h4>
-                  </div>
-
-                  <div className="grid-col-6 text-right margin-bottom-2">
-                    <PreviewControls
-                      currentPage={scanBatchPreviewerHelper.currentPage + 1}
-                      disableLeftButtons={
-                        scanBatchPreviewerHelper.currentPage === 0
-                      }
-                      disableRightButtons={
-                        scanBatchPreviewerHelper.currentPage ===
-                        scanBatchPreviewerHelper.totalPages - 1
-                      }
-                      totalPages={scanBatchPreviewerHelper.totalPages}
-                      onFirstPage={e => {
-                        e.preventDefault();
-                        setCurrentPageIndexSequence({
-                          currentPageIndex: 0,
-                        });
-                      }}
-                      onLastPage={e => {
-                        e.preventDefault();
-                        setCurrentPageIndexSequence({
-                          currentPageIndex:
-                            scanBatchPreviewerHelper.totalPages - 1,
-                        });
-                      }}
-                      onNextPage={e => {
-                        e.preventDefault();
-                        setCurrentPageIndexSequence({
-                          currentPageIndex:
-                            scanBatchPreviewerHelper.currentPage + 1,
-                        });
-                      }}
-                      onPreviousPage={e => {
-                        e.preventDefault();
-                        setCurrentPageIndexSequence({
-                          currentPageIndex:
-                            scanBatchPreviewerHelper.currentPage - 1,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ backgroundColor: '#999' }}>
-                <img
-                  src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
-                  style={{
-                    display: 'block',
-                    margin: '0 auto',
-                    paddingBottom: '10px',
-                    paddingTop: '10px',
-                    width: '50%',
-                  }}
-                />
-              </div>
-
-              <button
-                className="usa-button margin-top-4"
-                type="button"
-                onClick={e => {
-                  e.preventDefault();
-                  completeScanSequence({
-                    onComplete: file => {
-                      limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
-                        updateFormValueSequence({
-                          key: documentType,
-                          value: file,
-                        });
-                        updateFormValueSequence({
-                          key: `${documentType}Size`,
-                          value: file.size,
-                        });
-                        validatePetitionFromPaperSequence();
-                        selectDocumentForPreviewSequence({
-                          documentType,
-                          file,
-                        });
-                        setDocumentUploadModeSequence({
-                          documentUploadMode: 'preview',
-                        });
-                      });
-                    },
-                  });
-                }}
-              >
-                <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-                Create PDF
-              </button>
-            </>
-          )}
         </>
       );
     };
@@ -392,7 +369,25 @@ export const ScanBatchPreviewer = connect(
     const renderUpload = () => {
       return (
         <div className="document-detail-one-third">
-          <div className="usa-form-group">
+          <div
+            className={`usa-form-group ${
+              validationErrors.stinFile ? 'usa-form-group--error' : ''
+            }`}
+          >
+            <label
+              className={'usa-label ustc-upload-stin with-hint '}
+              htmlFor={`${documentType}-file`}
+              id={`${documentType}-label`}
+            >
+              Upload Your File{' '}
+              <span className="success-message">
+                <FontAwesomeIcon icon="check-circle" size="1x" />
+              </span>
+            </label>
+            <span className="usa-hint">
+              File must be in PDF format (.pdf). Max file size{' '}
+              {constants.MAX_FILE_SIZE_MB}MB.
+            </span>
             <input
               accept=".pdf"
               aria-describedby={`${documentType}-hint`}
@@ -428,6 +423,23 @@ export const ScanBatchPreviewer = connect(
 
     return (
       <>
+        {showModal === 'ConfirmRescanBatchModal' && (
+          <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
+        )}
+        {showModal === 'ConfirmDeleteBatchModal' && (
+          <DeleteBatchModal batchIndex={selectedBatchIndex} />
+        )}
+
+        {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
+
+        {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
+
+        {showModal === 'ScanErrorModal' && <ScanErrorModal />}
+
+        {showModal === 'SelectScannerSourceModal' && (
+          <SelectScannerSourceModal />
+        )}
+
         <div
           style={{
             backgroundColor: '#162e51',
@@ -440,29 +452,27 @@ export const ScanBatchPreviewer = connect(
               <div className="grid-col-6">
                 <h3 className="margin-bottom-0">Add Document(s)</h3>
               </div>
-              {scanBatchPreviewerHelper.showSelectedScanner && (
-                <div className="grid-col-6 text-right">
-                  <span className="margin-right-1">
-                    Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
-                  </span>
-                  <button
-                    aria-label="change scanner source"
-                    className="usa-button usa-button--unstyled change-scanner-button"
-                    style={{ color: 'white' }}
-                    onClick={e => {
-                      e.preventDefault();
-                      openChangeScannerSourceModalSequence();
-                    }}
-                  >
-                    {scanBatchPreviewerHelper.scannerSource
-                      ? 'Change'
-                      : 'Select Scanner'}
-                  </button>
-                </div>
-              )}
+              <div className="grid-col-6 text-right">
+                <span className="margin-right-1">
+                  Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
+                </span>
+                <button
+                  className="usa-button usa-button--unstyled change-scanner-button"
+                  style={{ color: 'white' }}
+                  onClick={e => {
+                    e.preventDefault();
+                    openChangeScannerSourceModalSequence();
+                  }}
+                >
+                  {scanBatchPreviewerHelper.scannerSource
+                    ? 'Change'
+                    : 'Select Scanner'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
+
         <div className="document-select-container">
           <Tabs
             bind="documentSelectedForScan"
@@ -500,13 +510,22 @@ export const ScanBatchPreviewer = connect(
               title="OSD"
             />
           </Tabs>
+
           {scanBatchPreviewerHelper.uploadMode !== 'preview' &&
             renderModeRadios()}
+
+          {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
+
+          {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
+
           {scanBatchPreviewerHelper.uploadMode === 'preview' &&
             renderIframePreview()}
-          {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
-          {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
         </div>
+
+        {scanBatchPreviewerHelper.uploadMode === 'scan' &&
+          scanBatchPreviewerHelper.selectedPageImage && (
+            <div className="preview-container">{renderPreviewSection()}</div>
+          )}
       </>
     );
   },

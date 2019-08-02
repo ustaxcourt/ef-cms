@@ -11,7 +11,7 @@ import classNames from 'classnames';
 let FontAwesomeIcon;
 
 if (process.env.NODE_ENV === 'test') {
-  FontAwesomeIcon = function faiMock() {
+  FontAwesomeIcon = function FontAwesomeIcon() {
     return <i className="fa" />;
   };
 } else {
