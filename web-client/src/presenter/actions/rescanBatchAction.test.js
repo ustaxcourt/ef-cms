@@ -76,7 +76,7 @@ describe('rescanBatchAction', () => {
       throw new Error('no images in buffer');
     });
 
-    const result = await runAction(rescanBatchAction, {
+    await runAction(rescanBatchAction, {
       modules: {
         presenter,
       },
