@@ -1,7 +1,6 @@
 import { presenter } from '../presenter';
 import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 let mockStartScanSession = jest.fn(() => ({
   scannedBuffer: [{ e: 5 }, { f: 6 }],
@@ -19,10 +18,11 @@ presenter.providers.applicationContext = {
   }),
 };
 
-const successStub = sinon.stub();
+const successStub = jest.fn();
+const errorStub = jest.fn();
 
 presenter.providers.path = {
-  error: () => null,
+  error: errorStub,
   success: successStub,
 };
 global.alert = () => null;
@@ -50,7 +50,7 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeTruthy();
+    expect(result.state.isScanning).toBeFalsy();
     expect(mockStartScanSession).toHaveBeenCalled();
     expect(result.state.batches.petition[1].pages).toEqual([
       { e: 5 },
@@ -71,7 +71,7 @@ describe('rescanBatchAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('opens the hopper empty modal if an hopper empty error is thrown', async () => {
+  it('should call path of error on errors', async () => {
     mockStartScanSession = jest.fn(() => {
       throw new Error('no images in buffer');
     });
@@ -91,8 +91,6 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeFalsy();
-    expect(mockStartScanSession).toHaveBeenCalled();
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
+    expect(errorStub).toHaveBeenCalled();
   });
 });
