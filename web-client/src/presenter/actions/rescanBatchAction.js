@@ -22,6 +22,7 @@ export const rescanBatchAction = async ({
     batches.find(b => b.index === batchIndex).pages = pages;
     store.set(state.batches[documentSelectedForScan], batches);
     store.set(state.submitting, false);
+    store.set(state.isScanning, false);
     return path.success();
   } catch (err) {
     return path.error({ error: err });
