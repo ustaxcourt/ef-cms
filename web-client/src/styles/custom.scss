@@ -1404,12 +1404,12 @@ hr.lighter {
   }
 
   .pages {
+    display: inline-block;
+    width: 126px;
     margin-right: 10px;
     margin-left: 10px;
-    width: 126px;
-    display: inline-block;
-    text-align: center;
     font-weight: $font-semibold;
+    text-align: center;
   }
 }
 
@@ -1424,10 +1424,9 @@ button.change-scanner-button {
 
 .document-select-container {
   min-height: 425px;
-  border: 1px solid color($theme-color-base-lighter);
-  border-top: 0px;
   padding: 20px;
   border: 1px solid color($theme-color-base-lighter);
+  border-top: 0px;
   background-color: $color-primary-alt-lightest;
 
   .ustc-ui-tabs.container-tabs.document-select li.active {
@@ -1444,9 +1443,9 @@ button.change-scanner-button {
 }
 
 .preview-container {
-  border: 1px solid color($theme-color-base-lighter);
   padding: 20px;
   padding-top: 0px;
+  border: 1px solid color($theme-color-base-lighter);
   border-top: 0px;
   background-color: white;
 }
