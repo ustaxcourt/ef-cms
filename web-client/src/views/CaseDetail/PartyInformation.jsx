@@ -39,7 +39,6 @@ export const PartyInformation = connect(
               <div>
                 <address aria-labelledby={'primary-label'}>
                   {addressDisplay(caseDetail.contactPrimary, {
-                    hideEmail: true,
                     nameOverride:
                       caseHelper.showCaseNameForPrimary && caseDetail.caseName,
                   })}
@@ -61,9 +60,7 @@ export const PartyInformation = connect(
               <div>
                 <address aria-labelledby={'secondary-label'}>
                   {caseDetail.contactSecondary.name &&
-                    addressDisplay(caseDetail.contactSecondary, {
-                      hideEmail: true,
-                    })}
+                    addressDisplay(caseDetail.contactSecondary, {})}
                 </address>
                 {caseHelper.showEditContactButton && (
                   <button
@@ -102,7 +99,6 @@ export const PartyInformation = connect(
                         address3: practitioner.addressLine3,
                       },
                       {
-                        hideEmail: true,
                         nameOverride: practitioner.formattedName,
                       },
                     )}
@@ -142,7 +138,6 @@ export const PartyInformation = connect(
                         address3: respondent.addressLine3,
                       },
                       {
-                        hideEmail: true,
                         nameOverride: respondent.formattedName,
                       },
                     )}
@@ -275,7 +270,7 @@ export const PartyInformation = connect(
       </>
     );
 
-    const addressDisplay = (contact, { hideEmail, nameOverride } = {}) => {
+    const addressDisplay = (contact, { nameOverride } = {}) => {
       return (
         <React.Fragment>
           <p className="margin-top-0">
@@ -303,7 +298,6 @@ export const PartyInformation = connect(
             </span>
           </p>
           {contact.phone && <p>{contact.phone}</p>}
-          {contact.email && !hideEmail && <p>{contact.email}</p>}
         </React.Fragment>
       );
     };
