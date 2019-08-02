@@ -26,12 +26,8 @@ exports.getScannerInterface = () => {
   };
 
   const loadDynamsoft = ({ applicationContext }) => {
-    applicationContext.logger.time('Loading DynamSoft scanner library');
-
     if (!dynamsoftLoader) {
-      applicationContext.logger.info('DynamSoft State:', 'not loaded');
       dynamsoftLoader = new Promise(resolve => {
-        applicationContext.logger.time('DynamSoft script injection');
         const dynanScriptClass = 'dynam-scanner-injection';
 
         // Create a script element to inject into the header
@@ -55,8 +51,7 @@ exports.getScannerInterface = () => {
                 'dwtcontrolContainer',
               );
               if (!DWObject) return;
-              applicationContext.logger.timeEnd('DynamSoft script injection');
-              applicationContext.logger.info('DynamSoft State:', 'ready');
+
               clearInterval(interval);
               resolve(dynanScriptClass);
             }, 100);
@@ -72,11 +67,6 @@ exports.getScannerInterface = () => {
         // Get the scanner resources URI based on applicationContext
         const scannerResourceUri = applicationContext.getScannerResourceUri();
 
-        applicationContext.logger.info(
-          'DynamSoft Scanner Resource URI:',
-          scannerResourceUri,
-        );
-
         initiateScript.src = `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`;
         configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
 
@@ -85,7 +75,7 @@ exports.getScannerInterface = () => {
         document.getElementsByTagName('head')[0].appendChild(configScript);
       });
     }
-    applicationContext.logger.timeEnd('Loading DynamSoft scanner library');
+
     return dynamsoftLoader;
   };
 
