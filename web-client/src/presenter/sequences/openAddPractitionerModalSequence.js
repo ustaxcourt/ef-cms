@@ -1,10 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearFormAction } from '../actions/clearFormAction';
+import { getPractitionersBySearchKeyAction } from '../actions/ManualAssociation/getPractitionersBySearchKeyAction';
 import { set } from 'cerebral/factories';
+import { setPractitionersAction } from '../actions/ManualAssociation/setPractitionersAction';
 import { state } from 'cerebral';
 
 export const openAddPractitionerModalSequence = [
-  clearFormAction,
   clearAlertsAction,
+  getPractitionersBySearchKeyAction,
+  setPractitionersAction,
   set(state.showModal, 'AddPractitionerModal'),
 ];
