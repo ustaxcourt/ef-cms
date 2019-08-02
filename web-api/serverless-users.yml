@@ -335,3 +335,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getPractitionersBySearchKey:
+    handler: web-api/src/usersHandlers.getPractitionersBySearchKeyLambda
+    events:
+      - http:
+          path: /practitioners
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getRespondentsBySearchKey:
+    handler: web-api/src/usersHandlers.getRespondentsBySearchKeyLambda
+    events:
+      - http:
+          path: /respondents
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
