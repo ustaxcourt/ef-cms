@@ -11,7 +11,9 @@ import classNames from 'classnames';
 let FontAwesomeIcon;
 
 if (process.env.NODE_ENV === 'test') {
-  FontAwesomeIcon = () => <i className="fa" />;
+  FontAwesomeIcon = function FontAwesomeIcon() {
+    return <i className="fa" />;
+  };
 } else {
   ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
 }
