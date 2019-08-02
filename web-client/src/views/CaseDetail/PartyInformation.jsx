@@ -102,6 +102,7 @@ export const PartyInformation = connect(
                         address3: practitioner.addressLine3,
                       },
                       {
+                        hideEmail: true,
                         nameOverride: practitioner.formattedName,
                       },
                     )}
@@ -141,6 +142,7 @@ export const PartyInformation = connect(
                         address3: respondent.addressLine3,
                       },
                       {
+                        hideEmail: true,
                         nameOverride: respondent.formattedName,
                       },
                     )}
