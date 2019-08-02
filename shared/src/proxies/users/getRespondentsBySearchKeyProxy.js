@@ -14,6 +14,6 @@ exports.getRespondentsBySearchKeyInteractor = ({
   return post({
     applicationContext,
     body: { searchKey },
-    endpoint: '/users/respondents',
+    endpoint: '/users/respondents/search',
   });
 };

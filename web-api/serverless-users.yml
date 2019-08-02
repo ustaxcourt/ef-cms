@@ -340,7 +340,7 @@ functions:
     handler: web-api/src/usersHandlers.getPractitionersBySearchKeyLambda
     events:
       - http:
-          path: /practitioners
+          path: /practitioners/search
           method: post
           cors: true
           authorizer:
@@ -352,7 +352,7 @@ functions:
     handler: web-api/src/usersHandlers.getRespondentsBySearchKeyLambda
     events:
       - http:
-          path: /respondents
+          path: /respondents/search
           method: post
           cors: true
           authorizer:
