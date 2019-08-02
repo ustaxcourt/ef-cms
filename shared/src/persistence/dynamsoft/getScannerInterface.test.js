@@ -17,6 +17,16 @@ const mockCloseSource = jest.fn();
 const mockOpenSource = jest.fn();
 const mockRemoveAllImages = jest.fn();
 
+const applicationContext = {
+  convertBlobToUInt8Array: () => new Uint8Array([]),
+  getScannerResourceUri: () => 'abc',
+  logger: {
+    info: () => null,
+    time: () => null,
+    timeEnd: () => null,
+  },
+};
+
 const DWObject = {
   AcquireImage: mockAcquireImage,
   CloseSource: mockCloseSource,
@@ -35,8 +45,8 @@ const DWObject = {
   ErrorString: 'Successful!',
   GetSourceNameItems: index => mockSources[index],
   HowManyImagesInBuffer: mockScanCount,
-  IfFeederLoaded: true,
   IfDisableSourceAfterAcquire: false,
+  IfFeederLoaded: true,
   OpenSource: mockOpenSource,
   RegisterEvent: (event, cb) => {
     onPostAllTransfersCb = cb;
@@ -128,9 +138,7 @@ describe('getScannerInterface', () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
     expect(scannerAPI).toHaveProperty('startScanSession');
-    const applicationContext = {
-      convertBlobToUInt8Array: () => new Uint8Array([]),
-    };
+
     await scannerAPI.startScanSession({ applicationContext });
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
@@ -143,9 +151,7 @@ describe('getScannerInterface', () => {
       ...DWObject,
       IfFeederLoaded: false,
     });
-    const applicationContext = {
-      convertBlobToUInt8Array: () => new Uint8Array([]),
-    };
+
     let error;
     try {
       await scannerAPI.startScanSession({ applicationContext });
@@ -183,17 +189,13 @@ describe('getScannerInterface', () => {
     // global.window.document = ;
     const scannerAPI = getScannerInterface();
     let script = await scannerAPI.loadDynamsoft({
-      applicationContext: {
-        getScannerResourceUri: () => 'abc',
-      },
+      applicationContext,
     });
     expect(script).toEqual('dynam-scanner-injection');
 
     // try to load it again to verify it doesn't attempt to download the scripts again
     script = await scannerAPI.loadDynamsoft({
-      applicationContext: {
-        getScannerResourceUri: () => 'abc',
-      },
+      applicationContext,
     });
     expect(script).toEqual('dynam-scanner-injection');
     expect(calls).toEqual(2);
