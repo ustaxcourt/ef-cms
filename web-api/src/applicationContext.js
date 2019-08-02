@@ -227,6 +227,12 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getPractitionersBySearchKeyInteractor,
+} = require('../../shared/src/business/useCases/users/getPractitionersBySearchKeyInteractor');
+const {
+  getRespondentsBySearchKeyInteractor,
+} = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
+const {
   getSentMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
 const {
@@ -259,6 +265,9 @@ const {
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
+const {
+  getUsersBySearchKey,
+} = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
   getUsersInSection,
 } = require('../../shared/src/persistence/dynamo/users/getUsersInSection');
@@ -512,6 +521,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessions,
         getUploadPolicy,
         getUserById,
+        getUsersBySearchKey,
         getUsersInSection,
         getWorkItemById,
         incrementCounter,
@@ -586,6 +596,8 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getNotificationsInteractor,
+        getPractitionersBySearchKeyInteractor,
+        getRespondentsBySearchKeyInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
         getTrialSessionDetailsInteractor,
