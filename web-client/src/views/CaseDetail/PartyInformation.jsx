@@ -2,6 +2,7 @@ import { AddPractitionerModal } from './AddPractitionerModal';
 import { AddRespondentModal } from './AddRespondentModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -17,6 +18,7 @@ export const PartyInformation = connect(
     openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
     showModal: state.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
   ({
     caseDetail,
@@ -27,6 +29,7 @@ export const PartyInformation = connect(
     openAddRespondentModalSequence,
     showModal,
     updateFormValueSequence,
+    validationErrors,
   }) => {
     const mainPartyInformation = () => (
       <div className="grid-container padding-x-0">
@@ -156,38 +159,55 @@ export const PartyInformation = connect(
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
-          <form
-            className="usa-search"
-            onSubmit={e => {
-              e.preventDefault();
-              openAddPractitionerModalSequence();
-            }}
+          <div
+            className={`usa-form-group ${
+              validationErrors.practitionerSearchError
+                ? 'usa-form-group--error margin-bottom-2'
+                : 'margin-bottom-0'
+            }`}
           >
-            <div role="search">
-              <label
-                className="usa-sr-only"
-                htmlFor={'practitioner-search-field'}
-              >
-                Search
-              </label>
-              <input
-                className="usa-input"
-                id={'practitioner-search-field'}
-                name={'practitionerSearch'}
-                placeholder="Enter Bar Number or Name"
-                type="search"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
+            <form
+              className="usa-search"
+              onSubmit={e => {
+                e.preventDefault();
+                openAddPractitionerModalSequence();
+              }}
+            >
+              <div role="search">
+                <label
+                  className="usa-sr-only"
+                  htmlFor={'practitioner-search-field'}
+                >
+                  Search
+                </label>
+                <input
+                  className={`usa-input margin-bottom-0 
+                    ${
+                      validationErrors.practitionerSearchError
+                        ? 'usa-input--error'
+                        : ''
+                    }`}
+                  id={'practitioner-search-field'}
+                  name={'practitionerSearch'}
+                  placeholder="Enter Bar Number or Name"
+                  type="search"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <button className="usa-button" type="submit">
+                  <span className="usa-search__submit-text">Search</span>
+                </button>
+              </div>
+              <Text
+                bind="validationErrors.practitionerSearchError"
+                className="usa-error-message"
               />
-              <button className="usa-button" type="submit">
-                <span className="usa-search__submit-text">Search</span>
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </>
     );
@@ -200,38 +220,55 @@ export const PartyInformation = connect(
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
-          <form
-            className="usa-search"
-            onSubmit={e => {
-              e.preventDefault();
-              openAddRespondentModalSequence();
-            }}
+          <div
+            className={`usa-form-group ${
+              validationErrors.respondentSearchError
+                ? 'usa-form-group--error margin-bottom-2'
+                : 'margin-bottom-0'
+            }`}
           >
-            <div role="search">
-              <label
-                className="usa-sr-only"
-                htmlFor={'respondent-search-field'}
-              >
-                Search
-              </label>
-              <input
-                className="usa-input"
-                id={'respondent-search-field'}
-                name={'respondentSearch'}
-                placeholder="Enter Bar Number or Name"
-                type="search"
-                onChange={e => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
+            <form
+              className="usa-search"
+              onSubmit={e => {
+                e.preventDefault();
+                openAddRespondentModalSequence();
+              }}
+            >
+              <div role="search">
+                <label
+                  className="usa-sr-only"
+                  htmlFor={'respondent-search-field'}
+                >
+                  Search
+                </label>
+                <input
+                  className={`usa-input margin-bottom-0 
+                  ${
+                    validationErrors.respondentSearchError
+                      ? 'usa-input--error'
+                      : ''
+                  }`}
+                  id={'respondent-search-field'}
+                  name={'respondentSearch'}
+                  placeholder="Enter Bar Number or Name"
+                  type="search"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <button className="usa-button" type="submit">
+                  <span className="usa-search__submit-text">Search</span>
+                </button>
+              </div>
+              <Text
+                bind="validationErrors.respondentSearchError"
+                className="usa-error-message"
               />
-              <button className="usa-button" type="submit">
-                <span className="usa-search__submit-text">Search</span>
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </>
     );

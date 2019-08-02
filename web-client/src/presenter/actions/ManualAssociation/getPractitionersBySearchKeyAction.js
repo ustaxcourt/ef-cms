@@ -9,6 +9,7 @@ import { state } from 'cerebral';
 export const getPractitionersBySearchKeyAction = async ({
   applicationContext,
   get,
+  path,
 }) => {
   const searchKey = get(state.form.practitionerSearch);
 
@@ -16,5 +17,16 @@ export const getPractitionersBySearchKeyAction = async ({
     .getUseCases()
     .getPractitionersBySearchKeyInteractor({ applicationContext, searchKey });
 
-  return { practitioners };
+  if (practitioners.length) {
+    return path.success({
+      practitioners,
+    });
+  } else {
+    return path.error({
+      errors: {
+        practitionerSearchError:
+          'No matching counsel was found. Check your information and try again.',
+      },
+    });
+  }
 };
