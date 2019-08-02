@@ -23,7 +23,13 @@ export AWS_SECRET_ACCESS_KEY=noop
 export SLS_DEPLOYMENT_BUCKET=noop
 
 # set common arguments used by sls below (appearing as "$@")
-set -- --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop
+set -- \
+  --accountId noop \
+  --domain noop \
+  --efcmsTableName=efcms-local \
+  --noTimeout \
+  --region us-east-1 \
+  --stage local
 
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &
@@ -41,7 +47,7 @@ echo "starting trial session service"
 npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
 
 echo "starting proxy"
-node web-api/proxy.js
+node ./web-api/proxy.js
 
 pkill -P $DYNAMO_PID
 kill $S3RVER_PID
