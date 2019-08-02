@@ -16,16 +16,18 @@ ACCOUNT_ID=$(aws sts get-caller-identity --query "Account")
 ACCOUNT_ID="${ACCOUNT_ID%\"}"
 ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
-find ./src -type f -exec chmod -R ugo+r {} ";"
+find ./web-api/src -type f -exec chmod -R ugo+r {} ";"
 
-npm run "${build}" --prefix=../
-cp "src/${handler}" /tmp
-cp ../dist/* src
+npm run "${build}"
+cp "./web-api/src/${handler}" /tmp
+cp ./dist/${handler} web-api/src
+
+ls -la web-api/src
 
 SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
-SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ../node_modules/.bin/sls create_domain \
+SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls create_domain \
   --accountId "${ACCOUNT_ID}" \
-  --config "${config}" \
+  --config "./web-api/${config}" \
   --domain "${EFCMS_DOMAIN}" \
   --efcmsTableName="efcms-${slsStage}" \
   --region "${region}" \
@@ -33,9 +35,9 @@ SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ../node_modules/.bin/sls create
   --userPoolId "${USER_POOL_ID}" \
   --verbose
 
-ENVIRONMENT="${slsStage}" SLS_DEBUG="*" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ../node_modules/.bin/sls deploy \
+ENVIRONMENT="${slsStage}" SLS_DEBUG="*" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_BUCKET}" ./node_modules/.bin/sls deploy \
   --accountId "${ACCOUNT_ID}" \
-  --config "${config}" \
+  --config "./web-api/${config}" \
   --domain "${EFCMS_DOMAIN}"  \
   --efcmsTableName="efcms-${slsStage}" \
   --region "${region}" \
@@ -43,6 +45,6 @@ ENVIRONMENT="${slsStage}" SLS_DEBUG="*" SLS_DEPLOYMENT_BUCKET="${SLS_DEPLOYMENT_
   --userPoolId "${USER_POOL_ID}" \
   --verbose
 
-./configure-custom-api-access-logging.sh "${slsStage}" ./config-custom-access-logs.json "${region}"
+./web-api/configure-custom-api-access-logging.sh "${slsStage}" ./web-api/config-custom-access-logs.json "${region}"
 
 cp "/tmp/${handler}" src
