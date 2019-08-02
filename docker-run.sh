@@ -1,6 +1,5 @@
 #!/bin/bash -e
 docker build -t efcms -f Dockerfile .
-say "Docker container build completed."
 docker run -t -i \
   -e AWS_ACCESS_KEY_ID=noop \
   -e AWS_SECRET_ACCESS_KEY=noop \
