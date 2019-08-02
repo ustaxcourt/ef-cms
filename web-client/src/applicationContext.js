@@ -76,7 +76,9 @@ import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getIn
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
+import { getPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPractitionersBySearchKeyProxy';
 import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
+import { getRespondentsBySearchKeyInteractor } from '../../shared/src/proxies/users/getRespondentsBySearchKeyProxy';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerInterface';
 import { getScannerInterface as getScannerMockInterfaceInteractor } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
@@ -199,7 +201,9 @@ const allUseCases = {
   getInternalUsersInteractor,
   getItemInteractor,
   getNotificationsInteractor,
+  getPractitionersBySearchKeyInteractor,
   getProcedureTypesInteractor,
+  getRespondentsBySearchKeyInteractor,
   getSentMessagesForSectionInteractor,
   getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,

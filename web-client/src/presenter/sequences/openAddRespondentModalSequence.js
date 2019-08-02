@@ -1,10 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearFormAction } from '../actions/clearFormAction';
+import { getRespondentsBySearchKeyAction } from '../actions/ManualAssociation/getRespondentsBySearchKeyAction';
 import { set } from 'cerebral/factories';
+import { setRespondentsAction } from '../actions/ManualAssociation/setRespondentsAction';
 import { state } from 'cerebral';
 
 export const openAddRespondentModalSequence = [
-  clearFormAction,
   clearAlertsAction,
+  getRespondentsBySearchKeyAction,
+  setRespondentsAction,
   set(state.showModal, 'AddRespondentModal'),
 ];
