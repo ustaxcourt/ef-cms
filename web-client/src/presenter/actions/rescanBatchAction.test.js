@@ -17,6 +17,14 @@ presenter.providers.applicationContext = {
     removeItemInteractor: mockRemoveItemInteractor,
   }),
 };
+
+const successStub = jest.fn();
+const errorStub = jest.fn();
+
+presenter.providers.path = {
+  error: errorStub,
+  success: successStub,
+};
 global.alert = () => null;
 
 describe('rescanBatchAction', () => {
@@ -42,7 +50,7 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeTruthy();
+    expect(result.state.isScanning).toBeFalsy();
     expect(mockStartScanSession).toHaveBeenCalled();
     expect(result.state.batches.petition[1].pages).toEqual([
       { e: 5 },
@@ -50,7 +58,7 @@ describe('rescanBatchAction', () => {
     ]);
   });
 
-  it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {
+  it('success path is called', async () => {
     await runAction(rescanBatchAction, {
       modules: {
         presenter,
@@ -60,10 +68,10 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(mockRemoveItemInteractor).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
-  it('opens the hopper empty modal if an hopper empty error is thrown', async () => {
+  it('should call path of error on errors', async () => {
     mockStartScanSession = jest.fn(() => {
       throw new Error('no images in buffer');
     });
@@ -83,8 +91,6 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeFalsy();
-    expect(mockStartScanSession).toHaveBeenCalled();
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
+    expect(errorStub).toHaveBeenCalled();
   });
 });

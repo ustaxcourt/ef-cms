@@ -14,6 +14,8 @@ export const removeScannedPdfAction = async ({ get, store }) => {
 
   store.set(state.form[documentSelectedForScan], null);
   store.set(state.form[`${documentSelectedForScan}Size`], null);
+  store.set(state.currentPageIndex, 0);
+  store.set(state.selectedBatchIndex, 0);
 
   return {
     documentUploadMode: 'scan',

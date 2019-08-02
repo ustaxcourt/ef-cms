@@ -9,17 +9,33 @@ import { state } from 'cerebral';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
+import { handleInvalidScannerSourceAction } from '../actions/handleInvalidScannerSourceAction';
+import { handleScanErrorAction } from '../actions/handleScanErrorAction';
+import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
+
 export const rescanBatchSequence = [
   clearModalAction,
   setFormSubmittingAction,
   waitForSpinnerAction,
   getCachedScannerSourceAction,
   {
-    selectSource: [
+    sourceInCache: [
+      validateScannerSourceAction,
+      {
+        invalid: [handleInvalidScannerSourceAction],
+        valid: [
+          rescanBatchAction,
+          {
+            error: [handleScanErrorAction],
+            success: [],
+          },
+        ],
+      },
+    ],
+    sourceNotInCache: [
       getScannerSourcesAction,
       set(state.showModal, 'SelectScannerSourceModal'),
     ],
-    success: [rescanBatchAction],
   },
   unsetFormSubmittingAction,
 ];
