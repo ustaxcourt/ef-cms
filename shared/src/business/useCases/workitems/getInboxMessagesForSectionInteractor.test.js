@@ -11,7 +11,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxyaper',
+      sentBy: 'taxpayer',
     },
     messages: [],
     section: 'docket',
