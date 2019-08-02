@@ -10,6 +10,10 @@ module.exports = {
   getInboxMessagesForUserLambda: require('./workitems/getInboxMessagesForUserLambda')
     .handler,
   getInternalUsersLambda: require('./users/getInternalUsersLambda').handler,
+  getPractitionersBySearchKeyLambda: require('./users/getPractitionersBySearchKeyLambda')
+    .handler,
+  getRespondentsBySearchKeyLambda: require('./users/getRespondentsBySearchKeyLambda')
+    .handler,
   getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda')
     .handler,
   practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
