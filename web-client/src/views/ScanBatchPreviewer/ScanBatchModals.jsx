@@ -37,8 +37,9 @@ export const ConfirmRescanBatchModal = connect(
 export const DeleteBatchModal = connect(
   {
     batchIndex: state.batchIndexToDelete,
+    pageCount: state.batchToDeletePageCount,
   },
-  ({ batchIndex }) => {
+  ({ batchIndex, pageCount }) => {
     return (
       <ConfirmModal
         cancelLabel="No, cancel"
@@ -47,7 +48,26 @@ export const DeleteBatchModal = connect(
         onCancelSequence="clearModalSequence"
         onConfirmSequence="removeBatchSequence"
       >
-        <p>Are you sure you want to delete Batch {batchIndex + 1}?</p>
+        <p>
+          This will delete {pageCount} {pageCount === 1 ? 'page' : 'pages'} from
+          your document.
+        </p>
+      </ConfirmModal>
+    );
+  },
+);
+export const DeletePDFModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        cancelLabel="No, cancel"
+        confirmLabel="Yes, delete"
+        title="Are you sure you want to delete this PDF?"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="removeScannedPdfSequence"
+      >
+        <p>This action cannot be undone.</p>
       </ConfirmModal>
     );
   },
