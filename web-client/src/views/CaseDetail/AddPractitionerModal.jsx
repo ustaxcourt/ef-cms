@@ -12,22 +12,6 @@ class AddPractitionerModalComponent extends ModalDialog {
       confirmLabel: 'Add to Case',
       title: 'Add Petitioner Counsel',
     };
-
-    //hardcoded for now until the counsel search is built
-    this.counselMatches = [
-      {
-        addressLine2: 'Los Angeles, CA 98089',
-        barNumber: 'PT1234',
-        name: 'Test Practitioner',
-        userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      {
-        addressLine2: 'Los Angeles, CA 98089',
-        barNumber: 'PT5432',
-        name: 'Test Practitioner1',
-        userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-      },
-    ];
   }
 
   renderBody() {
@@ -39,19 +23,20 @@ class AddPractitionerModalComponent extends ModalDialog {
               Counsel Match(es) Found
             </legend>
 
-            {this.counselMatches && this.counselMatches.length === 1 && (
-              <span>
-                {this.counselMatches[0].name} (
-                {this.counselMatches[0].barNumber}
-                )
-                <br />
-                {this.counselMatches[0].addressLine2}
-              </span>
-            )}
+            {this.props.modal.practitionerMatches &&
+              this.props.modal.practitionerMatches.length === 1 && (
+                <span>
+                  {this.props.modal.practitionerMatches[0].name} (
+                  {this.props.modal.practitionerMatches[0].barNumber}
+                  )
+                  <br />
+                  {this.props.modal.practitionerMatches[0].addressLine2}
+                </span>
+              )}
 
-            {this.counselMatches &&
-              this.counselMatches.length > 1 &&
-              this.counselMatches.map((counsel, idx) => (
+            {this.props.modal.practitionerMatches &&
+              this.props.modal.practitionerMatches.length > 1 &&
+              this.props.modal.practitionerMatches.map((counsel, idx) => (
                 <div className="usa-radio" key={idx}>
                   <input
                     aria-describedby="counsel-matches-legend"
