@@ -1,6 +1,7 @@
 import { presenter } from '../presenter';
 import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';
+import sinon from 'sinon';
 
 let mockStartScanSession = jest.fn(() => ({
   scannedBuffer: [{ e: 5 }, { f: 6 }],
@@ -16,6 +17,13 @@ presenter.providers.applicationContext = {
   getUseCases: () => ({
     removeItemInteractor: mockRemoveItemInteractor,
   }),
+};
+
+const successStub = sinon.stub();
+
+presenter.providers.path = {
+  error: () => null,
+  success: successStub,
 };
 global.alert = () => null;
 
@@ -50,7 +58,7 @@ describe('rescanBatchAction', () => {
     ]);
   });
 
-  it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {
+  it('success path is called', async () => {
     await runAction(rescanBatchAction, {
       modules: {
         presenter,
@@ -60,7 +68,7 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(mockRemoveItemInteractor).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('opens the hopper empty modal if an hopper empty error is thrown', async () => {
