@@ -3,11 +3,11 @@
 BRANCH=$1
 
 if  [[ $BRANCH == 'develop' ]] ; then 
-  echo 'dev'
+  echo "${DYNAMSOFT_PRODUCT_KEYS_DEV}"
 elif [[ $BRANCH == 'staging' ]] ; then
-  echo 'stg'
+  echo "${DYNAMSOFT_PRODUCT_KEYS_STG}"
 elif [[ $BRANCH == 'master' ]] ; then
-  echo 'prod'
+  echo "${DYNAMSOFT_PRODUCT_KEYS_PROD}"
 else
   exit 1;
 fi
