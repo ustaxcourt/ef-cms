@@ -45,6 +45,8 @@ export const rescanBatchAction = async ({
       key: 'scannerSourceName',
     });
     store.set(state.isScanning, false);
-    alert('there was an issue with the cached source; please scan again');
+    store.set(state.showModal, 'ScanErrorModal');
+    store.set(state.scanner.scannerSourceName, null);
+    store.set(state.scanner.scannerSourceIndex, null);
   }
 };

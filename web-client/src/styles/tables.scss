@@ -21,6 +21,22 @@ table,
   }
 }
 
+.batches-table-wrapper {
+  height: 160px;
+  overflow-y: auto;
+  // border-bottom: 1px solid color($theme-color-base-lighter);
+
+  .batches-table {
+    tr {
+
+      td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+  }
+}
+
 .ustc-table /* TODO - eliminate work-queue rule? */ {
   th {
     border: 0;
