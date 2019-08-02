@@ -6,7 +6,12 @@ import sinon from 'sinon';
 let getRespondentsBySearchKeyInteractorStub;
 
 describe('getRespondentsBySearchKeyAction', () => {
+  let successStub, errorStub;
+
   beforeEach(() => {
+    successStub = sinon.stub();
+    errorStub = sinon.stub();
+
     getRespondentsBySearchKeyInteractorStub = sinon.stub().resolves([
       {
         name: 'Test Respondent',
@@ -19,9 +24,14 @@ describe('getRespondentsBySearchKeyAction', () => {
         getRespondentsBySearchKeyInteractor: getRespondentsBySearchKeyInteractorStub,
       }),
     };
+
+    presenter.providers.path = {
+      error: errorStub,
+      success: successStub,
+    };
   });
 
-  it('call the use case to get the matching respondents', async () => {
+  it('calls the use case to get the matching respondents and calls the success path if respondents are returned', async () => {
     await runAction(getRespondentsBySearchKeyAction, {
       modules: {
         presenter,
@@ -32,5 +42,24 @@ describe('getRespondentsBySearchKeyAction', () => {
     expect(
       getRespondentsBySearchKeyInteractorStub.getCall(0).args[0].searchKey,
     ).toEqual('Test Respondent');
+    expect(successStub.calledOnce).toEqual(true);
+    expect(errorStub.calledOnce).toEqual(false);
+  });
+
+  it('calls the use case to get the matching respondents and calls the error path if no respondents are returned', async () => {
+    getRespondentsBySearchKeyInteractorStub = sinon.stub().resolves([]);
+
+    await runAction(getRespondentsBySearchKeyAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: { respondentSearch: 'Test Respondent2' } },
+    });
+    expect(getRespondentsBySearchKeyInteractorStub.calledOnce).toEqual(true);
+    expect(
+      getRespondentsBySearchKeyInteractorStub.getCall(0).args[0].searchKey,
+    ).toEqual('Test Respondent2');
+    expect(successStub.calledOnce).toEqual(false);
+    expect(errorStub.calledOnce).toEqual(true);
   });
 });
