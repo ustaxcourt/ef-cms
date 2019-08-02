@@ -6,6 +6,7 @@ const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * constructor
+ *
  * @param rawBatch
  * @constructor
  */

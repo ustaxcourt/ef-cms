@@ -1,5 +1,6 @@
 /**
  * validateStartCaseWizardInteractor
+ *
  * @param petition
  * @param applicationContext
  * @returns {object}
