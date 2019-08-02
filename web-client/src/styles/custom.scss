@@ -1414,8 +1414,8 @@ hr.lighter {
 }
 
 button.change-scanner-button {
-  font-weight: $font-semibold;
   color: white;
+  font-weight: $font-semibold;
 
   &:hover {
     color: $color-primary-alt;
@@ -1427,6 +1427,7 @@ button.change-scanner-button {
   border: 1px solid color($theme-color-base-lighter);
   border-top: 0px;
   padding: 20px;
+  border: 1px solid color($theme-color-base-lighter);
   background-color: $color-primary-alt-lightest;
 
   .ustc-ui-tabs.container-tabs.document-select li.active {
