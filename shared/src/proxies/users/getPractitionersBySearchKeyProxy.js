@@ -14,6 +14,6 @@ exports.getPractitionersBySearchKeyInteractor = ({
   return post({
     applicationContext,
     body: { searchKey },
-    endpoint: '/users/practitioners',
+    endpoint: '/users/practitioners/search',
   });
 };
