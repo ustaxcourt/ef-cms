@@ -292,6 +292,8 @@ button {
 
 .practitioner-matches,
 .respondent-matches {
-  overflow: scroll;
+  overflow: auto;
   max-height: 200px;
+  padding: 6px;
+  margin: -6px;
 }
