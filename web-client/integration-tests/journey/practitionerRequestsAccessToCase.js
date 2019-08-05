@@ -97,13 +97,18 @@ export default (test, fakeFile) => {
       value: true,
     });
 
+    await test.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'representingSecondary',
+      value: true,
+    });
+
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Entry of Appearance for Petr. Test Person',
+      'Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
     expect(test.getState('validationErrors')).toEqual({});
 
