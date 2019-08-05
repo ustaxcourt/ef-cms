@@ -115,6 +115,10 @@ TrialSession.validationName = 'TrialSession';
  * @constructor
  */
 function TrialSession(rawSession) {
+  this.init(rawSession);
+}
+
+TrialSession.prototype.init = function(rawSession) {
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = rawSession.caseOrder || [];
@@ -140,7 +144,7 @@ function TrialSession(rawSession) {
   this.trialClerk = rawSession.trialClerk;
   this.trialLocation = rawSession.trialLocation;
   this.trialSessionId = rawSession.trialSessionId || uuid.v4();
-}
+};
 
 TrialSession.errorToMessageMap = {
   maxCases: 'Enter the maximum number of cases allowed for this session.',
@@ -165,18 +169,10 @@ TrialSession.errorToMessageMap = {
   trialLocation: 'Trial Location is required.',
 };
 
-joiValidationDecorator(
-  TrialSession,
-  joi.object().keys({
+TrialSession.validationRules = {
+  COMMON: {
     address1: joi.string().optional(),
     address2: joi.string().optional(),
-    caseOrder: joi.array().items(
-      joi.object().keys({
-        caseId: joi.string().uuid({
-          version: ['uuidv4'],
-        }),
-      }),
-    ),
     city: joi.string().optional(),
     courtReporter: joi.string().optional(),
     courthouseName: joi.string().optional(),
@@ -241,6 +237,28 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+  },
+};
+
+joiValidationDecorator(
+  TrialSession,
+  joi.object().keys({
+    ...TrialSession.validationRules.COMMON,
+    caseOrder: joi.array().items(
+      joi.object().keys({
+        caseId: joi.string().uuid({
+          version: ['uuidv4'],
+        }),
+      }),
+    ),
+    isCalendared: joi.boolean().required(),
+    status: joi
+      .string()
+      .valid(
+        Object.keys(TrialSession.STATUS_TYPES).map(
+          key => TrialSession.STATUS_TYPES[key],
+        ),
+      ),
   }),
   function() {
     return !this.getFormattedValidationErrors();
