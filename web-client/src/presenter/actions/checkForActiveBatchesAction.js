@@ -1,4 +1,3 @@
-import { flattenDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
