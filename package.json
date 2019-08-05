@@ -120,7 +120,7 @@
     "wicg-inert": "^2.1.2"
   },
   "scripts": {
-    "build:all": "rm -rf dist/ .cache/; run-p build:api build:api:users build:api:cases build:api:documents build:api:workItems build:api:sections build:api:trialSessions build:client",
+    "build:all": "npm run clean && run-p build:api build:api:users build:api:cases build:api:documents build:api:workItems build:api:sections build:api:trialSessions build:client",
     "build:api:cases": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/casesHandlers.js",
     "build:api:documents": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/documentsHandlers.js",
     "build:api:sections": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/sectionsHandlers.js",
@@ -129,6 +129,7 @@
     "build:api:workItems": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/workItemsHandlers.js",
     "build:api": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/apiHandlers.js",
     "build:client": "USTC_ENV=prod GIT_COMMIT=$(git log --pretty=format:'%h' -n 1 2>/dev/null) parcel build --no-source-maps web-client/src/index.pug; echo jsdoc -c web-client/jsdoc.conf.json",
+    "clean":"rm -rf dist/ .cache/",
     "cypress:open": "CYPRESS=true cypress open --config watchForFileChanges=true",
     "cypress": "cypress run",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
