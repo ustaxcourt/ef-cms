@@ -5,9 +5,9 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
- * Case Deadline Entity
+ * Case Deadline entity
  *
- * @param rawProps
+ * @param {object} rawProps the raw case deadline data
  * @constructor
  */
 function CaseDeadline(rawProps) {

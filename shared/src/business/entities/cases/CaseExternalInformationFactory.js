@@ -13,7 +13,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition wizard.
  * Required fields are based on the user's current step in the wizard.
  *
- * @param rawCase
+ * @param {object} rawCase the raw case data
  * @constructor
  */
 function CaseExternalInformationFactory(rawCase) {

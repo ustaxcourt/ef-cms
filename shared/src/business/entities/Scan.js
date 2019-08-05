@@ -8,7 +8,9 @@ const { remove } = require('lodash');
 /**
  * constructor
  *
- * @param rawScan
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.rawScan the raw scan data
  * @constructor
  */
 function Scan({ applicationContext, rawScan }) {

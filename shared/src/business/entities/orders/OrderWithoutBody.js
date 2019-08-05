@@ -4,7 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
- * @param rawOrder
+ * @param {object} rawOrder the raw order data
  * @constructor
  */
 function OrderWithoutBody(rawOrder) {

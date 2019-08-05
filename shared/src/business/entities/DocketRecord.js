@@ -6,7 +6,7 @@ const {
 /**
  * DocketRecord constructor
  *
- * @param rawDocketRecord
+ * @param {object} rawDocketRecord the raw docket record data
  * @constructor
  */
 function DocketRecord(rawDocketRecord) {
