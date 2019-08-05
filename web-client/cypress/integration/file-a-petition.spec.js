@@ -39,40 +39,60 @@ describe('File a petition', function() {
 
 describe('creation form', () => {
   before(() => {
-    cy.login('taxpayer', 'start-a-case');
+    cy.login('taxpayer', 'file-a-petition/step-1');
   });
 
-  // it('has a file a petition file input', () => {
-  //   cy.get('input#petition-file').should('exist');
-  //   cy.contains('button[type="submit"]', 'Submit');
-  // });
-
-  it('shows validation checkmark when petition file is selected', () => {
-    cy.get('form')
-      .find('label[for="petition-file"]')
-      .scrollIntoView()
-      .should('not.have.class', 'validated');
-
-    // select first file
-    cy.upload_file('w3-dummy.pdf', 'form #petition-file');
-
-    cy.get('form')
-      .find('label[for="petition-file"]')
-      .should('have.class', 'validated');
+  it('has a stin file input', () => {
+    cy.get('input#stin-file').should('exist');
+    cy.contains('button#submit-case', 'Continue to Step 2 of 5');
   });
 
   it('shows validation checkmark when Statement of Taxpayer Identification Number file is selected', () => {
-    cy.get('form')
-      .find('label[for="stin-file"]')
+    cy.get('label#stin-file-label')
       .scrollIntoView()
       .should('not.have.class', 'validated');
 
     // select first file
-    cy.upload_file('w3-dummy.pdf', 'form #stin-file');
+    cy.upload_file('w3-dummy.pdf', 'input#stin-file');
 
-    cy.get('form')
-      .find('label[for="stin-file"]')
-      .should('have.class', 'validated');
+    cy.get('label#stin-file-label').should('have.class', 'validated');
+  });
+
+  it('continues to wizard step 2', () => {
+    cy.get('button#submit-case').click();
+  });
+
+  it('has a petition file input', () => {
+    cy.get('input#petition-file').should('exist');
+    cy.contains('button#submit-case', 'Continue to Step 3 of 5');
+  });
+
+  it('shows validation checkmark when Petition file is selected', () => {
+    cy.get('label#petition-file-label')
+      .scrollIntoView()
+      .should('not.have.class', 'validated');
+
+    // select first file
+    cy.upload_file('w3-dummy.pdf', 'input#petition-file');
+
+    cy.get('label#petition-file-label').should('have.class', 'validated');
+  });
+
+  it('clicks the Yes notice radio button', () => {
+    cy.get('#irs-notice-radios').scrollIntoView();
+    cy.get('#irs-notice-radios label')
+      .first()
+      .click();
+  });
+
+  it('selects the Notice of Deficiency case type', () => {
+    cy.get('#case-type')
+      .scrollIntoView()
+      .select('Notice of Deficiency');
+  });
+
+  it('continues to wizard step 3', () => {
+    cy.get('button#submit-case').click();
   });
 
   it('selects on behalf of myself', () => {
@@ -117,41 +137,13 @@ describe('creation form', () => {
       .type('1111111111');
   });
 
-  it('clicks the Yes notice radio button', () => {
-    cy.get('#irs-notice-radios').scrollIntoView();
-    cy.get('#irs-notice-radios label')
-      .first()
-      .click();
-  });
-
-  it('selects the Notice of Deficiency case type', () => {
-    cy.get('#case-type')
-      .scrollIntoView()
-      .select('Notice of Deficiency');
-  });
-
-  it('fills in the date', () => {
-    cy.get('#date-of-notice-month')
-      .scrollIntoView()
-      .type('01');
-    cy.get('#date-of-notice-day')
-      .scrollIntoView()
-      .type('19');
-    cy.get('#date-of-notice-year')
-      .scrollIntoView()
-      .type('1999');
+  it('continues to wizard step 4', () => {
+    cy.get('button#submit-case').click();
   });
 
   it('click the small radio button', () => {
     cy.get('#procedure-type-radios').scrollIntoView();
     cy.get('#procedure-type-radios label')
-      .first()
-      .click();
-  });
-
-  it('click the myself radio button', () => {
-    cy.get('#filing-type-radios').scrollIntoView();
-    cy.get('#filing-type-radios label')
       .first()
       .click();
   });
@@ -162,24 +154,10 @@ describe('creation form', () => {
       .select('Mobile, Alabama');
   });
 
-  it('tries to submit the form without clicking the signature', () => {
-    cy.get('form button#submit-case')
-      .scrollIntoView()
-      .click();
-    cy.get('.usa-alert.usa-alert--error').should('exist');
-  });
-
-  it('check the signature', () => {
-    // why do we click the label instead of the input?  Because a click() or check() on the input doesn't work for some reason.... ಠ_ಠ
-    cy.get('#signature + label')
-      .scrollIntoView()
-      .click();
-  });
-
   it('submits forms and shows a success message', () => {
     cy.server();
     cy.route('POST', '**/cases').as('postCase');
-    cy.get('form button#submit-case')
+    cy.get('button#submit-case')
       .scrollIntoView()
       .click();
     cy.wait('@postCase');

@@ -3,11 +3,36 @@ import { runCompute } from 'cerebral/test';
 import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
+import {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../shared/src/business/utilities/DateHandler';
+
+let role = 'petitionsclerk';
+
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
+  {
+    getCurrentUser: () => ({
+      role,
+      userId: 'abc',
+    }),
+    getUtilities: () => {
+      return {
+        createISODateString,
+        formatDateString,
+        prepareDateFromString,
+      };
+    },
+  },
 );
 
 describe('formatted work queue computed', () => {
+  beforeEach(() => {
+    role = 'petitionsclerk';
+  });
+
   it('formats the workitems', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
@@ -135,5 +160,175 @@ describe('formatted work queue computed', () => {
       });
       expect(result.showDocumentInfoTab).toEqual(false);
     });
+
+    it('should show the serve button when a docketclerk and the document is a Stipulated Decision and the document is not served already', () => {
+      role = 'docketclerk';
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'new',
+              },
+            ],
+          },
+          documentId: 'abc',
+        },
+      });
+      expect(result.showServeDocumentButton).toEqual(true);
+    });
+
+    it('should NOT show the serve button when user is a NOT a docketclerk', () => {
+      role = 'petitionsclerk';
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+              },
+            ],
+          },
+          documentId: 'abc',
+        },
+      });
+      expect(result.showServeDocumentButton).toEqual(false);
+    });
+
+    it('should NOT show the serve button when the document is NOT a signed stipulated decisiion', () => {
+      role = 'petitionsclerk';
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Proposed Stipulated Decision',
+              },
+            ],
+          },
+          documentId: 'abc',
+        },
+      });
+      expect(result.showServeDocumentButton).toEqual(false);
+    });
+  });
+
+  it('should NOT show the serve button when a docketclerk and the document is a Stipulated Decision and document has already been served', () => {
+    role = 'docketclerk';
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Stipulated Decision',
+              status: 'served',
+            },
+          ],
+        },
+        documentId: 'abc',
+      },
+    });
+    expect(result.showServeDocumentButton).toEqual(false);
+  });
+
+  it('should filter out completed work items with Served on IRS messages', () => {
+    role = 'seniorattorney';
+
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentType: 'Proposed Stipulated Decision',
+              processingStatus: 'pending',
+              reviewDate: '2018-11-21T20:49:28.192Z',
+              userId: 'taxpayer',
+              workItems: [
+                {
+                  caseStatus: 'New',
+                  completedAt: '2018-11-21T20:49:28.192Z',
+                  document: {
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+                {
+                  assigneeId: 'abc',
+                  caseStatus: 'New',
+                  document: {
+                    documentType: 'Proposed Stipulated Decision',
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        workQueueIsInternal: true,
+      },
+    });
+
+    expect(result.formattedDocument.workItems).toHaveLength(1);
+  });
+
+  it('default to empty array when caseDetail.documents is undefined', () => {
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: undefined,
+        },
+      },
+    });
+
+    expect(result.formattedDocument).toMatchObject({});
+  });
+
+  it("default to empty array when a document's workItems are non-existent", () => {
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              workItems: undefined,
+            },
+          ],
+        },
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      },
+    });
+
+    expect(result.formattedDocument.documentId).toEqual(
+      'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    );
   });
 });

@@ -17,8 +17,8 @@ exports.updateWorkItemCaseStatus = async ({
     applicationContext,
   });
 
-  for (let workItem of workItems) {
-    await client.update({
+  const updateStatus = workItem => {
+    return client.update({
       ExpressionAttributeNames: {
         '#caseStatus': 'caseStatus',
       },
@@ -32,5 +32,7 @@ exports.updateWorkItemCaseStatus = async ({
       UpdateExpression: `SET #caseStatus = :caseStatus`,
       applicationContext,
     });
-  }
+  };
+
+  await Promise.all(workItems.map(updateStatus));
 };

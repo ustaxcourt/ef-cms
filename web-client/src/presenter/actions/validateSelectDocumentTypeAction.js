@@ -27,10 +27,21 @@ export const validateSelectDocumentTypeAction = ({
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayOrder = [
+      'documentType',
+      'freeText',
+      'freeText2',
+      'previousDocument',
+      'serviceDate',
+      'trialLocation',
+      'ordinalValue',
+    ];
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayOrder,
       errors,
     });
   }

@@ -57,7 +57,7 @@ export const DocketRecord = connect(
                     <span className="no-wrap">{record.createdAtFormatted}</span>
                   </td>
                   <td className="center-column hide-on-mobile">
-                    {document && document.eventCode}
+                    {record.eventCode || (document && document.eventCode)}
                   </td>
                   <td
                     aria-hidden="true"
@@ -88,15 +88,12 @@ export const DocketRecord = connect(
                   <td className="hide-on-mobile">{record.action}</td>
                   <td>
                     {document && document.isStatusServed && (
-                      <span>{caseDetail.datePetitionSentToIrsMessage}</span>
-                    )}
-                    {document && helper.showDocumentStatus && (
-                      <span>{document.status}</span>
+                      <span>{document.servedAtFormatted}</span>
                     )}
                   </td>
                   <td className="center-column hide-on-mobile">
                     <span className="responsive-label">Parties</span>
-                    {record.servedParties}
+                    {document && document.servedPartiesCode}
                   </td>
                 </tr>
               ),

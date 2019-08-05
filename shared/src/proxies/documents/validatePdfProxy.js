@@ -10,6 +10,6 @@ const { post } = require('../requests');
 exports.validatePdfInteractor = ({ applicationContext, documentId }) => {
   return post({
     applicationContext,
-    endpoint: `/api/documents/${documentId}/validate`,
+    endpoint: `/documents/${documentId}/validate`,
   });
 };

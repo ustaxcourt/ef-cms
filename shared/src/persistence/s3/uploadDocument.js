@@ -1,7 +1,7 @@
 const getUploadPolicy = async ({ applicationContext }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/api/documents/upload-policy`, {
+    .get(`${applicationContext.getBaseUrl()}/documents/upload-policy`, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },

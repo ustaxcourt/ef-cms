@@ -1,6 +1,17 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/',
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/start-a-case',
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1',
+  {
+    actions: [
+      'wait for #party-type to be visible',
+      'set field #party-type to Surviving Spouse',
+      'check field #party-type',
+      'wait for #secondary-name to be visible',
+    ],
+    notes: 'checks a11y of Create Case with inputs revealed',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=reveal-file-a-petition-inputs',
+  },
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19',
   {
     actions: [

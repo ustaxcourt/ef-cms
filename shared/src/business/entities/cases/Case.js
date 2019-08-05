@@ -12,11 +12,13 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
 const { formatDateString } = require('../../utilities/DateHandler');
+const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { YearAmount } = require('../YearAmount');
 
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
+  closed: 'Closed',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   new: 'New',
@@ -70,6 +72,81 @@ Case.ANSWER_DOCUMENT_CODES = [
   'ASAP',
   'AATT',
 ];
+
+Case.COMMON_ERROR_MESSAGES = {
+  caseCaption: 'Case Caption is required.',
+  caseType: 'Case Type is required.',
+  docketNumber: 'Docket number is required.',
+  documents: 'At least one valid document is required.',
+  filingType: 'Filing Type is required.',
+  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
+  irsNoticeDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'The IRS notice date is in the future. Please enter a valid date.',
+    },
+    'Please enter a valid IRS notice date.',
+  ],
+  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Ownership Disclosure Statement file size is empty.',
+  ],
+  partyType: 'Party Type is required.',
+  payGovDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'The Fee Payment date is in the future. Please enter a valid date.',
+    },
+    'Please enter a valid Fee Payment date.',
+  ],
+  payGovId: 'Fee Payment Id must be in a valid format',
+  petitionFile: 'The Petition file was not selected.',
+  petitionFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Petition file size is empty.',
+  ],
+  preferredTrialCity: 'Preferred Trial City is required.',
+  procedureType: 'Procedure Type is required.',
+  receivedAt: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'The Date Received is in the future. Please enter a valid date.',
+    },
+    'Please enter a valid Date Received.',
+  ],
+  requestForPlaceOfTrialFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Request for Place of Trial file size is empty.',
+  ],
+  signature: 'You must review the form before submitting.',
+  stinFile: 'Statement of Taxpayer Identification Number is required.',
+  stinFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your STIN file size is empty.',
+  ],
+  yearAmounts: [
+    {
+      contains: 'contains a duplicate',
+      message: 'Duplicate years are not allowed',
+    },
+    'A valid year and amount are required.',
+  ],
+};
 
 Case.name = 'Case';
 
@@ -282,48 +359,7 @@ joiValidationDecorator(
       DocketRecord.validateCollection(this.docketRecord)
     );
   },
-  {
-    caseType: 'Case Type is required.',
-    docketNumber: 'Docket number is required.',
-    documents: 'At least one valid document is required.',
-    filingType: 'Filing Type is required.',
-    hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-    irsNoticeDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The IRS notice date is in the future. Please enter a valid date.',
-      },
-      'Please enter a valid IRS notice date.',
-    ],
-    partyType: 'Party Type is required.',
-    payGovDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The Fee Payment date is in the future. Please enter a valid date.',
-      },
-      'Please enter a valid Fee Payment date.',
-    ],
-    payGovId: 'Fee Payment Id must be in a valid format',
-    preferredTrialCity: 'Preferred Trial City is required.',
-    procedureType: 'Procedure Type is required.',
-    receivedAt: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'The Date Received is in the future. Please enter a valid date.',
-      },
-      'Please enter a valid Date Received.',
-    ],
-    yearAmounts: [
-      {
-        contains: 'contains a duplicate',
-        message: 'Duplicate years are not allowed',
-      },
-      'A valid year and amount are required.',
-    ],
-  },
+  Case.COMMON_ERROR_MESSAGES,
 );
 
 /**
@@ -346,37 +382,37 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
       break;
     case ContactFactory.PARTY_TYPES.estate:
-      caseCaption = `Estate of ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
+      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.estateWithoutExecutor:
       caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.trust:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Trustee, Petitioner(s)`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Trustee, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Tax Matters Partner, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Tax Matters Partner, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, A Partner Other Than the Tax Matters Partner, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.partnershipBBA:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Partnership Representative, Petitioner(s)`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
       break;
     case ContactFactory.PARTY_TYPES.conservator:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Conservator, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Conservator, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.guardian:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Guardian, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Guardian, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.custodian:
-      caseCaption = `${rawCase.contactSecondary.name}, ${rawCase.contactPrimary.name}, Custodian, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Custodian, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.nextFriendForMinor:
-      caseCaption = `${rawCase.contactSecondary.name}, Minor, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Minor, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson:
-      caseCaption = `${rawCase.contactSecondary.name}, Incompetent, ${rawCase.contactPrimary.name}, Next Friend, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Incompetent, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.donor:
       caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
@@ -385,7 +421,7 @@ Case.getCaseCaption = function(rawCase) {
       caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
       break;
     case ContactFactory.PARTY_TYPES.survivingSpouse:
-      caseCaption = `${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioner`;
+      caseCaption = `${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;
@@ -443,6 +479,10 @@ Case.prototype.addDocument = function(document) {
 Case.prototype.addDocumentWithoutDocketRecord = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
+};
+
+Case.prototype.closeCase = function() {
+  this.status = Case.STATUS_TYPES.closed;
 };
 
 /**
@@ -612,6 +652,8 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
     this.addDocketRecord(
       new DocketRecord({
         description: `Request for Place of Trial at ${this.preferredTrialCity}`,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         filingDate: this.receivedAt || this.createdAt,
       }),
     );
@@ -645,6 +687,20 @@ Case.prototype.updateDocketRecord = function(
   docketRecordEntity,
 ) {
   this.docketRecord[docketRecordIndex] = docketRecordEntity;
+  return this;
+};
+
+/**
+ *
+ * @param updatedDocument
+ */
+Case.prototype.updateDocument = function(updatedDocument) {
+  this.documents.some(document => {
+    if (document.documentId === updatedDocument.documentId) {
+      Object.assign(document, updatedDocument);
+      return true;
+    }
+  });
   return this;
 };
 

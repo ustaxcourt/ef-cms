@@ -7,6 +7,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PendingMessages } from './DocumentDetail/PendingMessages';
 import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
+import { ServeConfirmModalDialog } from './ServeConfirmModalDialog';
 import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -23,6 +24,8 @@ export const DocumentDetail = connect(
     helper: state.documentDetailHelper,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    openServeConfirmModalDialogSequence:
+      sequences.openServeConfirmModalDialogSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
@@ -35,6 +38,7 @@ export const DocumentDetail = connect(
     helper,
     messageId,
     navigateToPathSequence,
+    openServeConfirmModalDialogSequence,
     setModalDialogNameSequence,
     showModal,
     token,
@@ -44,11 +48,16 @@ export const DocumentDetail = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
-          <span className="filed-by">
-            Filed {helper.formattedDocument.createdAtFormatted}
-            {helper.formattedDocument.filedBy &&
-              ` by ${helper.formattedDocument.filedBy}`}
-          </span>
+          <div className="filed-by">
+            <div className="padding-bottom-1">
+              Filed {helper.formattedDocument.createdAtFormatted}
+              {helper.formattedDocument.filedBy &&
+                ` by ${helper.formattedDocument.filedBy}`}
+            </div>
+            {helper.formattedDocument.showServedAt && (
+              <div>Served {helper.formattedDocument.servedAtFormatted}</div>
+            )}
+          </div>
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-container padding-x-0">
@@ -125,6 +134,15 @@ export const DocumentDetail = connect(
                         Serve to IRS
                       </button>
                     )}
+                  {helper.showServeDocumentButton && (
+                    <button
+                      className="usa-button serve-to-irs margin-right-0"
+                      onClick={() => openServeConfirmModalDialogSequence()}
+                    >
+                      <FontAwesomeIcon icon={['fas', 'paper-plane']} />
+                      Serve Document
+                    </button>
+                  )}
                   {caseHelper.showRecallButton &&
                     helper.formattedDocument.isPetition && (
                       <span className="recall-button-box">
@@ -162,7 +180,7 @@ export const DocumentDetail = connect(
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CYPRESS && (
                   <iframe
-                    src={`${baseUrl}/api/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
+                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
                     title={`Document type: ${helper.formattedDocument.documentType}`}
                   />
                 )}
@@ -176,6 +194,11 @@ export const DocumentDetail = connect(
         )}
         {showModal === 'CreateMessageModalDialog' && (
           <CreateMessageModalDialog />
+        )}
+        {showModal === 'ServeConfirmModalDialog' && (
+          <ServeConfirmModalDialog
+            documentType={helper.formattedDocument.documentType}
+          />
         )}
       </>
     );

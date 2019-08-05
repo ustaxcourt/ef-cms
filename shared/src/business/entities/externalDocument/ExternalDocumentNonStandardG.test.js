@@ -7,9 +7,9 @@ describe('ExternalDocumentNonStandardG', () => {
         scenario: 'Nonstandard G',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'You must select a category.',
-        documentType: 'You must select a document type.',
-        ordinalValue: 'You must select an iteration.',
+        category: 'Select a Category.',
+        documentType: 'Select a Document Type.',
+        ordinalValue: 'Select an iteration.',
       });
     });
 

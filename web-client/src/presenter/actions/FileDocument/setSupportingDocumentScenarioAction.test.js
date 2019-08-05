@@ -10,18 +10,20 @@ describe('setSupportingDocumentScenarioAction', () => {
           CATEGORY_MAP: Document.CATEGORY_MAP,
         },
         form: {
-          supportingDocumentMetadata: {
-            category: 'Motion',
-            documentType: 'Motion for Judgment on the Pleadings',
-          },
+          supportingDocuments: [
+            {
+              category: 'Motion',
+              documentType: 'Motion for Judgment on the Pleadings',
+            },
+          ],
         },
       },
     });
 
-    expect(result.state.form.supportingDocumentMetadata.scenario).toEqual(
+    expect(result.state.form.supportingDocuments[0].scenario).toEqual(
       'Standard',
     );
-    expect(result.state.form.supportingDocumentMetadata.documentTitle).toEqual(
+    expect(result.state.form.supportingDocuments[0].documentTitle).toEqual(
       'Motion for Judgment on the Pleadings',
     );
   });
@@ -33,19 +35,21 @@ describe('setSupportingDocumentScenarioAction', () => {
           CATEGORY_MAP: Document.CATEGORY_MAP,
         },
         form: {
-          secondarySupportingDocumentMetadata: {
-            category: 'Motion',
-            documentType: 'Motion for Judgment on the Pleadings',
-          },
+          secondarySupportingDocuments: [
+            {
+              category: 'Motion',
+              documentType: 'Motion for Judgment on the Pleadings',
+            },
+          ],
         },
       },
     });
 
+    expect(result.state.form.secondarySupportingDocuments[0].scenario).toEqual(
+      'Standard',
+    );
     expect(
-      result.state.form.secondarySupportingDocumentMetadata.scenario,
-    ).toEqual('Standard');
-    expect(
-      result.state.form.secondarySupportingDocumentMetadata.documentTitle,
+      result.state.form.secondarySupportingDocuments[0].documentTitle,
     ).toEqual('Motion for Judgment on the Pleadings');
   });
 });

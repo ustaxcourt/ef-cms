@@ -11,6 +11,8 @@ exports.filePetitionFromPaperInteractor = async ({
   petitionFile,
   petitionMetadata,
   petitionUploadProgress,
+  requestForPlaceOfTrialFile,
+  requestForPlaceOfTrialUploadProgress,
   stinFile,
   stinUploadProgress,
 }) => {
@@ -20,64 +22,76 @@ exports.filePetitionFromPaperInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const petitionFileId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocument({
-      applicationContext,
-      document: petitionFile,
-      onUploadProgress: petitionUploadProgress,
-    });
-
-  let ownershipDisclosureFileId;
-  if (ownershipDisclosureFile) {
-    ownershipDisclosureFileId = await applicationContext
+  /**
+   * uploads a document and then immediately processes it to scan for viruses,
+   * validate the PDF content, and sanitize the document.
+   *
+   * @param {object} document the documentFile
+   * @param {func} onUploadProgress the progressFunction
+   * @returns {Promise<string>} the documentId returned from a successful upload
+   */
+  const uploadDocumentAndMakeSafe = async (document, onUploadProgress) => {
+    const documentId = await applicationContext
       .getPersistenceGateway()
       .uploadDocument({
         applicationContext,
-        document: ownershipDisclosureFile,
-        onUploadProgress: ownershipDisclosureUploadProgress,
+        document,
+        onUploadProgress,
       });
-  }
-
-  let stinFileId;
-  if (stinFile) {
-    stinFileId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocument({
-        applicationContext,
-        document: stinFile,
-        onUploadProgress: stinUploadProgress,
-      });
-  }
-
-  const documentIds = [
-    ownershipDisclosureFileId,
-    petitionFileId,
-    stinFileId,
-  ].filter(documentId => documentId);
-
-  for (let documentId of documentIds) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
     });
-
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,
     });
-
     await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });
+    return documentId;
+  };
+
+  const petitionFileUpload = uploadDocumentAndMakeSafe(
+    petitionFile,
+    petitionUploadProgress,
+  );
+
+  let ownershipDisclosureFileUpload;
+  if (ownershipDisclosureFile) {
+    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafe(
+      ownershipDisclosureFile,
+      ownershipDisclosureUploadProgress,
+    );
   }
+
+  let stinFileUpload;
+  if (stinFile) {
+    stinFileUpload = uploadDocumentAndMakeSafe(stinFile, stinUploadProgress);
+  }
+
+  let requestForPlaceOfTrialFileUpload;
+  if (requestForPlaceOfTrialFile) {
+    requestForPlaceOfTrialFileUpload = uploadDocumentAndMakeSafe(
+      requestForPlaceOfTrialFile,
+      requestForPlaceOfTrialUploadProgress,
+    );
+  }
+
+  await Promise.all([
+    ownershipDisclosureFileUpload,
+    petitionFileUpload,
+    requestForPlaceOfTrialFileUpload,
+    stinFileUpload,
+  ]);
 
   return await applicationContext.getUseCases().createCaseFromPaperInteractor({
     applicationContext,
-    ownershipDisclosureFileId,
-    petitionFileId,
+    ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
+    petitionFileId: await petitionFileUpload,
     petitionMetadata,
-    stinFileId,
+    requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
+    stinFileId: await stinFileUpload,
   });
 };

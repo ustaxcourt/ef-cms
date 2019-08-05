@@ -1,4 +1,11 @@
 .usa-button {
+  &.red-warning {
+    &:not(.usa-button--unstyled) {
+      box-shadow: 0 0 0 2px color($theme-color-secondary-dark);
+    }
+    color: color($theme-color-secondary-dark);
+  }
+
   &:not(.usa-button--unstyled) {
     min-width: 132px;
   }
@@ -9,6 +16,9 @@
 
   .svg-inline--fa {
     margin-right: 5px;
+    &.fa-1x {
+      font-size: 14.5px;
+    }
   }
 
   &.float-right {
@@ -23,6 +33,35 @@
     svg {
       margin-left: 5px;
       color: color($theme-color-primary);
+    }
+  }
+
+  &.usa-button--unstyled {
+    padding: 2px;
+    &.no-underline {
+      text-decoration: none;
+    }
+    &:disabled {
+      color: color($theme-color-base);
+    }
+    /* little screens */
+    @media only screen and (max-width: $medium-screen) {
+      line-height: 1.4em;
+    }
+  }
+
+  &.ustc-button--unstyled {
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+  }
+
+  &.ustc-button--mobile-inline {
+    width: auto;
+  }
+
+  @media only screen and (min-width: $medium-screen) {
+    &.ustc-button--unstyled-with-left-icon {
+      width: 305px;
     }
   }
 }
@@ -65,10 +104,4 @@
 
 .button-box-container {
   margin-top: 40px;
-}
-
-#init-file-petition {
-  //float: left;
-  //text-align: left;
-  margin-right: 0;
 }

@@ -23,9 +23,9 @@ ExternalDocumentNonStandardB.prototype.getDocumentTitle = function() {
 };
 
 ExternalDocumentNonStandardB.errorToMessageMap = {
-  category: 'You must select a category.',
-  documentType: 'You must select a document type.',
-  freeText: 'You must provide a value.',
+  category: 'Select a Category.',
+  documentType: 'Select a Document Type.',
+  freeText: 'Provide an answer.',
 };
 
 ExternalDocumentNonStandardB.schema = {

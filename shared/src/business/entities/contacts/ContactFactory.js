@@ -24,11 +24,11 @@ ContactFactory.PARTY_TYPES = {
     'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
   nextFriendForMinor:
     'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-  partnershipAsTaxMattersPartner: 'Partnership (as the tax matters partner)',
+  partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
   partnershipBBA:
     'Partnership (as a partnership representative under the BBA regime)',
   partnershipOtherThanTaxMatters:
-    'Partnership (as a partner other than tax matters partner)',
+    'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',
   petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
   petitionerSpouse: 'Petitioner & Spouse',
@@ -129,10 +129,17 @@ const internationalValidationObject = {
  */
 ContactFactory.getValidationObject = ({
   countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  isPaper = false,
 }) => {
-  return countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
-    ? domesticValidationObject
-    : internationalValidationObject;
+  const baseValidationObject =
+    countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
+      ? domesticValidationObject
+      : internationalValidationObject;
+
+  if (isPaper) {
+    baseValidationObject.phone = joi.string().optional();
+  }
+  return baseValidationObject;
 };
 
 /**
@@ -157,8 +164,29 @@ ContactFactory.getErrorToMessageMap = ({
  * @param {string} partyType see the PARTY_TYPES map for a list of all valid partyTypes
  * @param {string} countryType typically either 'domestic' or 'international'
  * @param {string} contactType typically either 'primary' or 'secondary'
+ * @param {boolean} isPaper is paper case
  */
-const getContactConstructor = ({ contactType, countryType, partyType }) => {
+const getContactConstructor = ({
+  contactType,
+  countryType,
+  isPaper,
+  partyType,
+}) => {
+  const {
+    getNextFriendForIncompetentPersonContact,
+  } = require('./NextFriendForIncompetentPersonContact');
+  const {
+    getNextFriendForMinorContact,
+  } = require('./NextFriendForMinorContact');
+  const {
+    getPartnershipAsTaxMattersPartnerPrimaryContact,
+  } = require('./PartnershipAsTaxMattersPartnerContact');
+  const {
+    getPartnershipBBAPrimaryContact,
+  } = require('./PartnershipBBAContact');
+  const {
+    getPartnershipOtherThanTaxMattersPrimaryContact,
+  } = require('./PartnershipOtherThanTaxMattersContact');
   const {
     getPetitionerConservatorContact,
   } = require('./PetitionerConservatorContact');
@@ -172,9 +200,6 @@ const getContactConstructor = ({ contactType, countryType, partyType }) => {
     getPetitionerDeceasedSpouseContact,
   } = require('./PetitionerDeceasedSpouseContact');
   const {
-    getPetitionerEstateExecutorContact,
-  } = require('./PetitionerEstateExecutorContact');
-  const {
     getPetitionerEstateWithExecutorPrimaryContact,
   } = require('./PetitionerEstateWithExecutorPrimaryContact');
   const {
@@ -183,88 +208,94 @@ const getContactConstructor = ({ contactType, countryType, partyType }) => {
   const {
     getPetitionerIntermediaryContact,
   } = require('./PetitionerIntermediaryContact');
-  const {
-    getPetitionerPartnershipRepContact,
-  } = require('./PetitionerPartnershipRepContact');
-  const {
-    getPetitionerTaxpayerContact,
-  } = require('./PetitionerTaxpayerContact');
   const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
   const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
-  const { getPetitionerTrusteeContact } = require('./PetitionerTrusteeContact');
+  const { getSurvivingSpouseContact } = require('./SurvivingSpouseContact');
   return {
     [ContactFactory.PARTY_TYPES.petitioner]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
+      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.transferee]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
+      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.donor]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
+      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerDeceasedSpouseContact({ countryType }),
+      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
+      secondary: getPetitionerDeceasedSpouseContact({ countryType, isPaper }),
     }[contactType],
     [ContactFactory.PARTY_TYPES.survivingSpouse]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerDeceasedSpouseContact({ countryType }),
+      primary: getSurvivingSpouseContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.petitionerSpouse]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerSpouseContact({ countryType }),
+      primary: getPetitionerPrimaryContact({ countryType, isPaper }),
+      secondary: getPetitionerSpouseContact({ countryType, isPaper }),
     }[contactType],
     [ContactFactory.PARTY_TYPES.corporation]: {
-      primary: getPetitionerCorporationContact({ countryType }),
+      primary: getPetitionerCorporationContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.estateWithoutExecutor]: {
-      primary: getPetitionerIntermediaryContact({ countryType }),
+      primary: getPetitionerIntermediaryContact({ countryType, isPaper }),
       secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerIntermediaryContact({ countryType }),
+      primary: getPartnershipAsTaxMattersPartnerPrimaryContact({
+        countryType,
+        isPaper,
+      }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerIntermediaryContact({ countryType }),
+      primary: getPartnershipOtherThanTaxMattersPrimaryContact({
+        countryType,
+        isPaper,
+      }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.nextFriendForMinor]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerIntermediaryContact({ countryType }),
+      primary: getNextFriendForMinorContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson]: {
-      primary: getPetitionerPrimaryContact({ countryType }),
-      secondary: getPetitionerIntermediaryContact({ countryType }),
+      primary: getNextFriendForIncompetentPersonContact({
+        countryType,
+        isPaper,
+      }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.estate]: {
-      primary: getPetitionerEstateWithExecutorPrimaryContact({ countryType }),
-      secondary: getPetitionerEstateExecutorContact({ countryType }),
+      primary: getPetitionerEstateWithExecutorPrimaryContact({
+        countryType,
+        isPaper,
+      }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.partnershipBBA]: {
-      primary: getPetitionerIntermediaryContact({ countryType }),
-      secondary: getPetitionerPartnershipRepContact({ countryType }),
+      primary: getPartnershipBBAPrimaryContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.trust]: {
-      primary: getPetitionerTrustContact({ countryType }),
-      secondary: getPetitionerTrusteeContact({ countryType }),
+      primary: getPetitionerTrustContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.conservator]: {
-      primary: getPetitionerTaxpayerContact({ countryType }),
-      secondary: getPetitionerConservatorContact({ countryType }),
+      primary: getPetitionerConservatorContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.guardian]: {
-      primary: getPetitionerGuardianContact({ countryType }),
-      secondary: getPetitionerTaxpayerContact({ countryType }),
+      primary: getPetitionerGuardianContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
     [ContactFactory.PARTY_TYPES.custodian]: {
-      primary: getPetitionerCustodianContact({ countryType }),
-      secondary: getPetitionerTaxpayerContact({ countryType }),
+      primary: getPetitionerCustodianContact({ countryType, isPaper }),
+      secondary: null,
     }[contactType],
   }[partyType];
 };
@@ -277,15 +308,17 @@ const getContactConstructor = ({ contactType, countryType, partyType }) => {
  * @param {string} contactInfo object which should contain primary and secondary used for creating the contact entities
  * @returns {object} contains the primary and secondary contacts constructed
  */
-ContactFactory.createContacts = ({ contactInfo, partyType }) => {
+ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
   const primaryConstructor = getContactConstructor({
     contactType: 'primary',
     countryType: (contactInfo.primary || {}).countryType,
+    isPaper,
     partyType,
   });
   const secondaryConstructor = getContactConstructor({
     contactType: 'secondary',
     countryType: (contactInfo.secondary || {}).countryType,
+    isPaper,
     partyType,
   });
   return {
@@ -310,7 +343,7 @@ ContactFactory.createContactFactory = ({
   additionalErrorMappings,
   additionalValidation,
 }) => {
-  return ({ countryType }) => {
+  return ({ countryType, isPaper }) => {
     /**
      * creates a contact entities
      * @param {object} rawContact the options object
@@ -329,6 +362,7 @@ ContactFactory.createContactFactory = ({
         name: rawContact.name,
         phone: rawContact.phone,
         postalCode: rawContact.postalCode,
+        secondaryName: rawContact.secondaryName,
         state: rawContact.state,
         title: rawContact.title,
       });
@@ -342,7 +376,7 @@ ContactFactory.createContactFactory = ({
     joiValidationDecorator(
       GenericContactConstructor,
       joi.object().keys({
-        ...ContactFactory.getValidationObject({ countryType }),
+        ...ContactFactory.getValidationObject({ countryType, isPaper }),
         ...additionalValidation,
       }),
       undefined,

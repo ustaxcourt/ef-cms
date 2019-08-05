@@ -1,24 +1,26 @@
 module.exports = [
   'http://localhost:1234/mock-login?token=taxpayer&path=/',
-
   'http://localhost:1234/mock-login?token=taxpayer&path=/before-starting-a-case',
-
-  'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case',
+  'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-1',
   {
     actions: [
       'wait for element label#hasIrsNotice-0 to be visible',
       'click element label#hasIrsNotice-0',
       'wait for .case-type-select to be visible',
-      'wait for button.case-difference to be visible',
-      'click element button.case-difference',
-      'wait for #case-difference-container to be visible',
-      'wait for label#proc-type-0 to be visible',
-      'click element label#proc-type-0',
-      'wait for #preferred-trial-city to be visible',
     ],
-    notes: 'expose all hidden elements on start-a-case',
+    notes: 'expose hidden elements on start-a-case for Yes notice',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-yes-notice',
+  },
+  {
+    actions: [
+      'wait for element label#hasIrsNotice-1 to be visible',
+      'click element label#hasIrsNotice-1',
+      'wait for .case-type-select to be visible',
+    ],
+    notes: 'expose hidden elements on start-a-case for No notice',
+    url:
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-no-notice',
   },
   {
     actions: [
@@ -28,7 +30,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Petitioner',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner',
   },
   {
     actions: [
@@ -41,7 +43,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-deceased-spouse',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse',
   },
   {
     actions: [
@@ -62,7 +64,7 @@ module.exports = [
       "Use 'set field' and then 'check field' to trigger the onChange event on the select",
     ],
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international',
   },
   {
     actions: [
@@ -75,7 +77,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Petitioner & Spouse',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-petitioner-and-spouse',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-spouse',
   },
   {
     actions: [
@@ -87,7 +89,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Corporation',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-corporation',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-corporation',
   },
   {
     actions: [
@@ -100,7 +102,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Partnership (Tax Matters)',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-partnership-tax-matters',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-tax-matters',
   },
   {
     actions: [
@@ -113,7 +115,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Partnership (Other Than Tax Matters)',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-partnership-other',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-other',
   },
   {
     actions: [
@@ -126,7 +128,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Partnership (BBA)',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-partnership-bba',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-bba',
   },
   {
     actions: [
@@ -141,7 +143,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Estate With Executor',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-estate-with-executor',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-with-executor',
   },
   {
     actions: [
@@ -156,7 +158,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Estate Without Executor',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-estate-without-executor',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-without-executor',
   },
   {
     actions: [
@@ -170,7 +172,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Trust',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-trust',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-trust',
   },
   {
     actions: [
@@ -184,7 +186,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Conservator',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-conservator',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-conservator',
   },
   {
     actions: [
@@ -198,7 +200,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Guardian',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-guardian',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-guardian',
   },
   {
     actions: [
@@ -212,7 +214,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Custodian',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-custodian',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-custodian',
   },
   {
     actions: [
@@ -226,7 +228,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Minor',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-minor',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-minor',
   },
   {
     actions: [
@@ -241,7 +243,7 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Legally Incompetent Person',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-incompetent-person',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-incompetent-person',
   },
   {
     actions: [
@@ -253,7 +255,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Donor',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-donor',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-donor',
   },
   {
     actions: [
@@ -265,7 +267,7 @@ module.exports = [
     ],
     notes: 'expose hidden elements on start-a-case for party type Transferee',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-transferee',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-transferee',
   },
   {
     actions: [
@@ -278,60 +280,67 @@ module.exports = [
     notes:
       'expose hidden elements on start-a-case for party type Surviving Spouse',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-surviving-spouse',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-surviving-spouse',
   },
   {
     actions: [
-      'wait for element label#hasIrsNotice-0 to be visible',
-      'click element label#hasIrsNotice-0',
-      'wait for .case-type-select to be visible',
+      'wait for button.case-difference to be visible',
+      'click element button.case-difference',
+      'wait for #case-difference-container to be visible',
+      'wait for label#proc-type-0 to be visible',
+      'click element label#proc-type-0',
+      'wait for #preferred-trial-city to be visible',
     ],
-    notes: 'expose hidden elements on start-a-case for Yes notice',
+    notes: 'expose all hidden elements on start-a-case',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-yes-notice',
+      'http://localhost:1234/mock-login?token=taxpayer&path=/file-a-petition-pa11y/step-4&info=reveal-hidden-elements',
   },
-  {
-    actions: [
-      'wait for element label#hasIrsNotice-1 to be visible',
-      'click element label#hasIrsNotice-1',
-      'wait for .case-type-select to be visible',
-    ],
-    notes: 'expose hidden elements on start-a-case for No notice',
-    url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/start-a-case&info=reveal-hidden-elements-no-notice',
-  },
-
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19',
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document',
+  'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document/review',
   {
     actions: [
-      'wait for element #document-type to be visible',
-      'set field #document-type to Motion for Continuance',
-      'check field #document-type',
+      'wait for element #react-select-2-input to be visible',
+      'click #react-select-2-input',
+      'wait for element .select-react-element__menu to be visible',
+      'click #react-select-2-option-84', //Motion for Leave to File
     ],
     notes: [
-      'Check accessibility of elements after choosing a document category',
-      "Use 'set field' and then 'check field' to trigger the onChange event on the select",
+      'Check accessibility of elements after choosing a Nonstandard H document',
     ],
     url:
       'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-1',
   },
-  // {
-  //   actions: [
-  //     'wait for element #document-type to be visible',
-  //     'set field #document-type to Motion for Continuance',
-  //     'check field #document-type',
-  //     'wait for element #submit-document to be visible',
-  //     'click #submit-document',
-  //     'wait for element #primary-document to be visible',
-  //     'click element #certificate-Yes+label',
-  //     'click element #supporting-documents-Yes+label',
-  //     'wait for element fieldset.service-date to be visible',
-  //     'wait for element #supporting-document to be visible',
-  //   ],
-  //   notes: ['File a document, step 2'],
-  //   url:
-  //     'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
-  // },
+
+  {
+    actions: [
+      'wait for element #react-select-2-input to be visible',
+      'click #react-select-2-input',
+      'wait for element .select-react-element__menu to be visible',
+      'click #react-select-2-option-85', //Motion for Leave to File Out of Time
+      'wait for element #react-select-3-input to be visible',
+      'click #react-select-3-input',
+      'wait for element .select-react-element__menu to be visible',
+      'click #react-select-3-option-74', //Motion for Continuance
+      'wait for element #submit-document to be visible',
+      'click #submit-document',
+      'wait for element #primary-document to be visible',
+      'click #primaryDocument-certificateOfService-label',
+      'wait for element fieldset.service-date to be visible',
+      'wait for element #add-supporting-document-button to be visible',
+      'click element #add-supporting-document-button',
+      'wait for element #supporting-document-0-label to be visible',
+      'wait for element #secondary-document to be visible',
+      'click #secondaryDocument-certificateOfService-label',
+      'wait for element fieldset.service-date to be visible',
+      'wait for element #add-secondary-supporting-document-button to be visible',
+      'click element #add-secondary-supporting-document-button',
+      'wait for element #secondary-supporting-document-0-label to be visible',
+    ],
+    notes: ['File a document, step 2'],
+    url:
+      'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
+  },
+
   'http://localhost:1234/mock-login?token=taxpayer&path=/case-detail/101-19/contacts/primary/edit',
 ];

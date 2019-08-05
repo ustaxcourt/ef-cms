@@ -38,6 +38,7 @@ describe('CaseExternal', () => {
           address1: '1599 Pennsylvania Ave',
           city: 'Walla Walla',
           countryType: 'domestic',
+          inCareOf: 'USTC',
           name: 'Betty Crocker',
           postalCode: '78774',
           state: 'WA',

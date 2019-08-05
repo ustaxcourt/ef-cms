@@ -12,7 +12,6 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'A business',
         hasIrsNotice: false,
-        irsNoticeDate: null,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       });
@@ -24,7 +23,6 @@ describe('CaseExternal entity', () => {
       const petition = new CaseExternal({
         caseType: 'other',
         hasIrsNotice: false,
-        irsNoticeDate: null,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       });
@@ -37,7 +35,6 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'not a biz',
         hasIrsNotice: false,
-        irsNoticeDate: null,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       });
@@ -51,86 +48,11 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'A business',
         hasIrsNotice: false,
-        irsNoticeDate: null,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
         'Statement of Taxpayer Identification Number is required.',
-      );
-    });
-  });
-
-  describe('irs notice date validation', () => {
-    it('should require notice date', () => {
-      const caseExternal = new CaseExternal({
-        caseType: 'other',
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'Small',
-        signature: true,
-      });
-      expect(caseExternal.getFormattedValidationErrors().irsNoticeDate).toEqual(
-        'Notice Date is a required field.',
-      );
-    });
-
-    it('should not require notice date', () => {
-      const caseExternal = new CaseExternal({
-        caseType: 'other',
-        filingType: 'Myself',
-        hasIrsNotice: false,
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'Small',
-        signature: true,
-      });
-      expect(
-        caseExternal.getFormattedValidationErrors().irsNoticeDate,
-      ).toBeUndefined();
-    });
-
-    it('should not require case type without indicating they have a notice ', () => {
-      const caseExternal = new CaseExternal({
-        filingType: 'Myself',
-        hasIrsNotice: undefined,
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'Small',
-        signature: true,
-      });
-      expect(
-        caseExternal.getFormattedValidationErrors().caseType,
-      ).toBeUndefined();
-    });
-
-    it('should inform you if notice date is in the future', () => {
-      const caseExternal = new CaseExternal({
-        caseType: 'other',
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '3009-10-13',
-        partyType:
-          'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'Small',
-        signature: true,
-      });
-      expect(caseExternal.getFormattedValidationErrors().irsNoticeDate).toEqual(
-        'Notice Date is in the future. Please enter a valid date.',
       );
     });
   });
@@ -141,14 +63,12 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
@@ -162,14 +82,12 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: {},
         petitionFileSize: 0,
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
@@ -181,12 +99,10 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
@@ -198,13 +114,11 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         petitionFile: new File([], 'testPetitionFile.pdf'),
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
@@ -218,12 +132,10 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
         stinFile: new File([], 'test.pdf'),
         stinFileSize: MAX_FILE_SIZE_BYTES + 5,
       });
@@ -237,12 +149,10 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
         stinFile: new File([], 'test.pdf'),
         stinFileSize: 0,
       });
@@ -256,12 +166,10 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().stinFileSize,
@@ -273,12 +181,10 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
         stinFile: new File([], 'testStinFile.pdf'),
       });
       expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
@@ -293,14 +199,12 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         ownershipDisclosureFile: new File([], 'odsFile.pdf'),
         ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
@@ -314,14 +218,12 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         ownershipDisclosureFile: new File([], 'test.pdf'),
         ownershipDisclosureFileSize: 0,
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
@@ -333,12 +235,10 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
@@ -350,13 +250,11 @@ describe('CaseExternal entity', () => {
         caseType: 'other',
         filingType: 'Myself',
         hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13',
         ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
         partyType:
           'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',
-        signature: true,
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,

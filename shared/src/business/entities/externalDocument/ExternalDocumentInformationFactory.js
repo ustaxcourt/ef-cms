@@ -1,11 +1,21 @@
 const joi = require('joi-browser');
 const {
+  addPropertyHelper,
+  makeRequiredHelper,
+} = require('./externalDocumentHelpers');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const {
+  SecondaryDocumentInformationFactory,
+} = require('./SecondaryDocumentInformationFactory');
+const {
+  SupportingDocumentInformationFactory,
+} = require('./SupportingDocumentInformationFactory');
 const { includes } = require('lodash');
 
 /**
@@ -26,7 +36,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       certificateOfServiceDate: rawProps.certificateOfServiceDate,
       documentType: rawProps.documentType,
       eventCode: rawProps.eventCode,
-      exhibits: rawProps.exhibits,
       freeText: rawProps.freeText,
       hasSecondarySupportingDocuments: rawProps.hasSecondarySupportingDocuments,
       hasSupportingDocuments: rawProps.hasSupportingDocuments,
@@ -36,23 +45,40 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       partyPrimary: rawProps.partyPrimary,
       partyRespondent: rawProps.partyRespondent,
       partySecondary: rawProps.partySecondary,
+      practitioner: rawProps.practitioner,
       previousDocument: rawProps.previousDocument,
       primaryDocumentFile: rawProps.primaryDocumentFile,
+      secondaryDocument: rawProps.secondaryDocument,
       secondaryDocumentFile: rawProps.secondaryDocumentFile,
-      secondarySupportingDocument: rawProps.secondarySupportingDocument,
-      secondarySupportingDocumentFile: rawProps.secondarySupportingDocumentFile,
-      secondarySupportingDocumentFreeText:
-        rawProps.secondarySupportingDocumentFreeText,
-      supportingDocument: rawProps.supportingDocument,
-      supportingDocumentFile: rawProps.supportingDocumentFile,
-      supportingDocumentFreeText: rawProps.supportingDocumentFreeText,
+      secondarySupportingDocuments: rawProps.secondarySupportingDocuments,
+      supportingDocuments: rawProps.supportingDocuments,
     });
+
+    if (this.secondaryDocument) {
+      this.secondaryDocument = SecondaryDocumentInformationFactory.get({
+        ...this.secondaryDocument,
+        secondaryDocumentFile: this.secondaryDocumentFile,
+      });
+    }
+
+    if (this.supportingDocuments) {
+      this.supportingDocuments = this.supportingDocuments.map(item => {
+        return SupportingDocumentInformationFactory.get(item);
+      });
+    }
+
+    if (this.secondarySupportingDocuments) {
+      this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
+        item => {
+          return SupportingDocumentInformationFactory.get(item);
+        },
+      );
+    }
   };
 
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
-    exhibits: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi
@@ -70,10 +96,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .max('now'),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: joi.string(),
-    partyPractitioner: joi.boolean(),
     partyPrimary: joi.boolean(),
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
+    practitioner: joi.array(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
       .number()
@@ -81,24 +107,8 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .min(1)
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
-    secondarySupportingDocument: joi.string(),
-    secondarySupportingDocumentFile: joi.object(),
-    secondarySupportingDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-    secondarySupportingDocumentFreeText: joi.string(),
-    supportingDocument: joi.string(),
-    supportingDocumentFile: joi.object(),
-    supportingDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-    supportingDocumentFreeText: joi.string(),
+    secondarySupportingDocuments: joi.array().optional(),
+    supportingDocuments: joi.array().optional(),
   };
 
   let errorToMessageMap = {
@@ -110,18 +120,17 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         message:
           'Certificate of Service date is in the future. Please enter a valid date.',
       },
-      'Enter a Certificate of Service Date.',
+      'Enter date for Certificate of Service.',
     ],
-    exhibits: 'Enter selection for Exhibits.',
     hasSecondarySupportingDocuments:
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
-    partyPractitioner: 'Select a party.',
-    partyPrimary: 'Select a party.',
-    partyRespondent: 'Select a party.',
-    partySecondary: 'Select a party.',
-    primaryDocumentFile: 'A file was not selected.',
+    partyPrimary: 'Select a filing party.',
+    partyRespondent: 'Select a filing party.',
+    partySecondary: 'Select a filing party.',
+    practitioner: 'Select a filing party.',
+    primaryDocumentFile: 'Upload a document.',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
@@ -129,7 +138,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Primary Document file size is empty.',
     ],
-    secondaryDocumentFile: 'A file was not selected.',
+    secondaryDocumentFile: 'Upload a document.',
     secondaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
@@ -137,56 +146,27 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Secondary Document file size is empty.',
     ],
-    secondarySupportingDocument:
-      'Enter selection for Secondary Supporting Document.',
-    secondarySupportingDocumentFile: 'A file was not selected.',
-    secondarySupportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Supporting Document file size is empty.',
-    ],
-    secondarySupportingDocumentFreeText: 'Please provide a value.',
-    supportingDocument: 'Enter selection for Supporting Document.',
-    supportingDocumentFile: 'A file was not selected.',
-    supportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Document file size is empty.',
-    ],
-    supportingDocumentFreeText: 'Please provide a value.',
   };
 
   let customValidate;
 
   const addProperty = (itemName, itemSchema, itemErrorMessage) => {
-    schema[itemName] = itemSchema;
-    if (itemErrorMessage) {
-      errorToMessageMap[itemName] = itemErrorMessage;
-    }
+    addPropertyHelper({
+      errorToMessageMap,
+      itemErrorMessage,
+      itemName,
+      itemSchema,
+      schema,
+    });
   };
 
   const makeRequired = itemName => {
-    if (schemaOptionalItems[itemName]) {
-      schema[itemName] = schemaOptionalItems[itemName].required();
-    }
+    makeRequiredHelper({
+      itemName,
+      schema,
+      schemaOptionalItems,
+    });
   };
-
-  const supportingDocumentFreeTextCategories = [
-    'Affidavit in Support',
-    'Declaration in Support',
-    'Unsworn Declaration under Penalty of Perjury in Support',
-  ];
-  const supportingDocumentFileCategories = [
-    'Memorandum in Support',
-    'Brief in Support',
-    'Affidavit in Support',
-    'Declaration in Support',
-    'Unsworn Declaration under Penalty of Perjury in Support',
-  ];
 
   if (documentMetadata.certificateOfService === true) {
     makeRequired('certificateOfServiceDate');
@@ -206,28 +186,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     makeRequired('objections');
   }
 
-  if (documentMetadata.hasSupportingDocuments === true) {
-    makeRequired('supportingDocument');
-
-    if (
-      includes(
-        supportingDocumentFreeTextCategories,
-        documentMetadata.supportingDocument,
-      )
-    ) {
-      makeRequired('supportingDocumentFreeText');
-    }
-
-    if (
-      includes(
-        supportingDocumentFileCategories,
-        documentMetadata.supportingDocument,
-      )
-    ) {
-      makeRequired('supportingDocumentFile');
-    }
-  }
-
   if (documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h') {
     if (
       includes(
@@ -241,35 +199,22 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     if (documentMetadata.secondaryDocumentFile) {
       makeRequired('hasSecondarySupportingDocuments');
     }
+  }
 
-    if (documentMetadata.hasSecondarySupportingDocuments === true) {
-      makeRequired('secondarySupportingDocument');
-
-      if (
-        includes(
-          supportingDocumentFreeTextCategories,
-          documentMetadata.secondarySupportingDocument,
-        )
-      ) {
-        makeRequired('secondarySupportingDocumentFreeText');
+  let partyPractitioner = false;
+  if (Array.isArray(documentMetadata.practitioner)) {
+    documentMetadata.practitioner.forEach(practitioner => {
+      if (practitioner.partyPractitioner) {
+        partyPractitioner = true;
       }
-
-      if (
-        includes(
-          supportingDocumentFileCategories,
-          documentMetadata.secondarySupportingDocument,
-        )
-      ) {
-        makeRequired('secondarySupportingDocumentFile');
-      }
-    }
+    });
   }
 
   if (
     documentMetadata.partyPrimary !== true &&
     documentMetadata.partySecondary !== true &&
     documentMetadata.partyRespondent !== true &&
-    documentMetadata.partyPractitioner !== true
+    partyPractitioner !== true
   ) {
     addProperty(
       'partyPrimary',

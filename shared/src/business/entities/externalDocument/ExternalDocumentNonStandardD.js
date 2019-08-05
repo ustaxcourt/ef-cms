@@ -29,15 +29,15 @@ ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
 };
 
 ExternalDocumentNonStandardD.errorToMessageMap = {
-  category: 'You must select a category.',
-  documentType: 'You must select a document type.',
-  previousDocument: 'You must select a document.',
+  category: 'Select a Category.',
+  documentType: 'Select a Document Type.',
+  previousDocument: 'Select a document.',
   serviceDate: [
     {
       contains: 'must be less than or equal to',
       message: 'Service date is in the future. Please enter a valid date.',
     },
-    'You must provide a service date.',
+    'Provide a service date.',
   ],
 };
 

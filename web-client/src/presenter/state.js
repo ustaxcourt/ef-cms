@@ -26,12 +26,16 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
+import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { selectDocumentSelectHelper } from './computeds/selectDocumentSelectHelper';
 import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
+import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
+import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
@@ -42,6 +46,8 @@ export const state = {
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
+  batchIndexToRescan: null,
+  batches: [],
   betaBar: {
     isVisible: true,
   },
@@ -60,6 +66,7 @@ export const state = {
   contactsHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',
+  currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
   docketRecordIndex: 0,
@@ -70,7 +77,10 @@ export const state = {
   documentDetailHelper,
   documentHelper,
   documentId: null,
+  documentSelectedForPreview: null,
+  documentSelectedForScan: null,
   documentSigningHelper,
+  documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fileDocumentHelper,
@@ -103,10 +113,14 @@ export const state = {
     signatureApplied: false,
     signatureData: null,
   },
+  pdfPreviewModal: {},
+  pdfPreviewModalHelper,
   percentComplete: 0,
   petition: {},
+  previewPdfFile: null,
   procedureTypes: [],
   requestAccessHelper,
+  scanBatchPreviewerHelper,
   scanHelper,
   scanner: {},
   screenMetadata: {},
@@ -114,12 +128,15 @@ export const state = {
   sectionInboxCount: 0,
   selectDocumentSelectHelper,
   selectDocumentTypeHelper,
+  selectedBatchIndex: 0,
   selectedWorkItems: [],
   sessionMetadata: {},
   showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,
   startCaseHelper,
+  startCaseInternalContactsHelper,
+  startCaseInternalHelper,
   submitting: false,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
