@@ -23,6 +23,7 @@ export const rescanBatchAction = async ({
     store.set(state.batches[documentSelectedForScan], batches);
     store.set(state.submitting, false);
     store.set(state.isScanning, false);
+    store.set(state.selectedBatchIndex, batchIndex);
     return path.success();
   } catch (err) {
     return path.error({ error: err });

@@ -58,6 +58,27 @@ describe('startScanAction', () => {
     expect(presenter.providers.path.success).toHaveBeenCalled();
   });
 
+  it('expect the selectedBatchIndex to change to the last one scanned', async () => {
+    const result = await runAction(startScanAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        batches: {
+          petition: [
+            {
+              index: 5,
+            },
+          ],
+        },
+        documentSelectedForScan: 'petition',
+        isScanning: false,
+      },
+    });
+
+    expect(result.state.selectedBatchIndex).toEqual(6);
+  });
+
   it('calls the error path on errors', async () => {
     mockStartScanSession = jest.fn(() => {
       throw new Error('no images in buffer');
