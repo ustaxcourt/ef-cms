@@ -22,6 +22,11 @@ joiValidationDecorator(
   NewTrialSession,
   joi.object().keys({
     ...TrialSession.validationRules.COMMON,
+    startDate: joi
+      .date()
+      .iso()
+      .min('now')
+      .required(),
   }),
   function() {
     return !this.getFormattedValidationErrors();
