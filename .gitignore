@@ -12,7 +12,7 @@ gen.conf
 graph-generators/node_modules/
 node_modules/
 parcel-debug-*
-policy.json
+/policy.json
 puppeteer_lambda_layer.tar.gz
 shared/coverage
 web-api/runtimes/clamav/bin
