@@ -4,6 +4,7 @@ const {
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 let updatedCase;
+const { UnauthorizedError } = require('../../errors/errors');
 
 const updateCaseStub = jest.fn();
 const sendBulkTemplatedEmailStub = jest.fn();
@@ -100,7 +101,7 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
     expect(updatedCase.documents[0].servedParties).toHaveLength(3);
   });
 
-  it('throws an unathorized error when a non docketclerk role attempts to serve', async () => {
+  it('throws an unauthorized error when a non docketclerk role attempts to serve', async () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'bob',
@@ -119,6 +120,7 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
       error = err;
     }
 
-    expect(error).toBeDefined();
+    expect(error.message).toContain('Unauthorized');
+    expect(error).toBeInstanceOf(UnauthorizedError);
   });
 });
