@@ -18,7 +18,7 @@ layers:
     description: Chrome headless binary provided via chrome-aws-lambda and puppeteer-core for interaction.
     compatibleRuntimes:
       - nodejs8.10
-    path: runtimes/puppeteer
+    path: web-api/runtimes/puppeteer
     package:
       exclude:
         - puppeteer_lambda_layer.tar.gz
