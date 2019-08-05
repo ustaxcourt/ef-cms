@@ -1,3 +1,5 @@
+import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
+import { AddRespondent } from '../../shared/src/business/entities/caseAssociation/AddRespondent';
 import {
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
@@ -116,6 +118,8 @@ import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
+import { validateAddPractitioner } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
+import { validateAddRespondent } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
@@ -234,6 +238,8 @@ const allUseCases = {
   updatePrimaryContactInteractor,
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
+  validateAddPractitioner,
+  validateAddRespondent,
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
@@ -315,6 +321,8 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    AddPractitionerFactory,
+    AddRespondent,
     Case,
     CaseAssociationRequestFactory,
     CaseDeadline,
