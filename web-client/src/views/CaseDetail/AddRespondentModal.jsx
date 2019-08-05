@@ -17,6 +17,8 @@ class AddRespondentModalComponent extends ModalDialog {
   }
 
   renderBody() {
+    const { caseDetailHelper, modal, updateModalValueSequence } = this.props;
+
     return (
       <div className="ustc-add-counsel-modal">
         <div
@@ -25,31 +27,29 @@ class AddRespondentModalComponent extends ModalDialog {
             this.props.validationErrors.user && 'usa-form-group--error',
           )}
         >
-          <fieldset className="usa-fieldset margin-bottom-0">
+          <fieldset className="usa-fieldset margin-bottom-0 respondent-matches">
             <legend className="usa-legend" id="counsel-matches-legend">
-              Counsel Match(es) Found
+              {caseDetailHelper.respondentSearchResultsCount} Counsel Match(es)
+              Found
             </legend>
 
-            {this.props.modal.respondentMatches &&
-              this.props.modal.respondentMatches.length === 1 && (
-                <span>
-                  {this.props.modal.respondentMatches[0].name} (
-                  {this.props.modal.respondentMatches[0].barNumber}
-                  )
-                  <br />
-                  {this.props.modal.respondentMatches[0].addressLine2}
-                </span>
-              )}
+            {caseDetailHelper.respondentSearchResultsCount === 1 && (
+              <span>
+                {modal.respondentMatches[0].name} (
+                {modal.respondentMatches[0].barNumber}
+                )
+                <br />
+                {modal.respondentMatches[0].addressLine2}
+              </span>
+            )}
 
-            {this.props.modal.respondentMatches &&
-              this.props.modal.respondentMatches.length > 1 &&
-              this.props.modal.respondentMatches.map((counsel, idx) => (
+            {caseDetailHelper.respondentSearchResultsCount > 1 &&
+              modal.respondentMatches.map((counsel, idx) => (
                 <div className="usa-radio" key={idx}>
                   <input
                     aria-describedby="counsel-matches-legend"
                     checked={
-                      (this.props.modal.user &&
-                        this.props.modal.user.userId === counsel.userId) ||
+                      (modal.user && modal.user.userId === counsel.userId) ||
                       false
                     }
                     className="usa-radio__input"
@@ -57,7 +57,7 @@ class AddRespondentModalComponent extends ModalDialog {
                     name="user"
                     type="radio"
                     onChange={e => {
-                      this.props.updateModalValueSequence({
+                      updateModalValueSequence({
                         key: e.target.name,
                         value: counsel,
                       });
@@ -85,9 +85,8 @@ class AddRespondentModalComponent extends ModalDialog {
 export const AddRespondentModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    caseDetail: state.formattedCaseDetail,
+    caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.associateRespondentWithCaseSequence,
-    constants: state.constants,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSequence: sequences.validateAddRespondentSequence,

@@ -17,6 +17,13 @@ class AddPractitionerModalComponent extends ModalDialog {
   }
 
   renderBody() {
+    const {
+      caseDetail,
+      caseDetailHelper,
+      modal,
+      updateModalValueSequence,
+    } = this.props;
+
     return (
       <div className="ustc-add-counsel-modal">
         <div
@@ -25,31 +32,29 @@ class AddPractitionerModalComponent extends ModalDialog {
             this.props.validationErrors.user && 'usa-form-group--error',
           )}
         >
-          <fieldset className="usa-fieldset margin-bottom-0">
+          <fieldset className="usa-fieldset margin-bottom-0 practitioner-matches">
             <legend className="usa-legend" id="counsel-matches-legend">
-              Counsel Match(es) Found
+              {caseDetailHelper.practitionerSearchResultsCount} Counsel
+              Match(es) Found
             </legend>
 
-            {this.props.modal.practitionerMatches &&
-              this.props.modal.practitionerMatches.length === 1 && (
-                <span>
-                  {this.props.modal.practitionerMatches[0].name} (
-                  {this.props.modal.practitionerMatches[0].barNumber}
-                  )
-                  <br />
-                  {this.props.modal.practitionerMatches[0].addressLine2}
-                </span>
-              )}
+            {caseDetailHelper.practitionerSearchResultsCount === 1 && (
+              <span>
+                {modal.practitionerMatches[0].name} (
+                {modal.practitionerMatches[0].barNumber}
+                )
+                <br />
+                {modal.practitionerMatches[0].addressLine2}
+              </span>
+            )}
 
-            {this.props.modal.practitionerMatches &&
-              this.props.modal.practitionerMatches.length > 1 &&
-              this.props.modal.practitionerMatches.map((counsel, idx) => (
+            {caseDetailHelper.practitionerSearchResultsCount > 1 &&
+              modal.practitionerMatches.map((counsel, idx) => (
                 <div className="usa-radio" key={idx}>
                   <input
                     aria-describedby="counsel-matches-legend"
                     checked={
-                      (this.props.modal.user &&
-                        this.props.modal.user.userId === counsel.userId) ||
+                      (modal.user && modal.user.userId === counsel.userId) ||
                       false
                     }
                     className="usa-radio__input"
@@ -57,7 +62,7 @@ class AddPractitionerModalComponent extends ModalDialog {
                     name="user"
                     type="radio"
                     onChange={e => {
-                      this.props.updateModalValueSequence({
+                      updateModalValueSequence({
                         key: e.target.name,
                         value: counsel,
                       });
@@ -93,13 +98,13 @@ class AddPractitionerModalComponent extends ModalDialog {
             <div className="usa-checkbox">
               <input
                 aria-describedby="representing-legend"
-                checked={this.props.modal.representingPrimary || false}
+                checked={modal.representingPrimary || false}
                 className="usa-checkbox__input"
                 id="party-primary"
                 name="representingPrimary"
                 type="checkbox"
                 onChange={e => {
-                  this.props.updateModalValueSequence({
+                  updateModalValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
@@ -107,35 +112,34 @@ class AddPractitionerModalComponent extends ModalDialog {
                 }}
               />
               <label className="usa-checkbox__label" htmlFor="party-primary">
-                {this.props.caseDetail.contactPrimary.name}
+                {caseDetail.contactPrimary.name}
               </label>
             </div>
-            {this.props.caseDetail.contactSecondary &&
-              this.props.caseDetail.contactSecondary.name && (
-                <div className="usa-checkbox">
-                  <input
-                    aria-describedby="representing-legend"
-                    checked={this.props.modal.representingSecondary || false}
-                    className="usa-checkbox__input"
-                    id="party-secondary"
-                    name="representingSecondary"
-                    type="checkbox"
-                    onChange={e => {
-                      this.props.updateModalValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      this.props.validateSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="party-secondary"
-                  >
-                    {this.props.caseDetail.contactSecondary.name}
-                  </label>
-                </div>
-              )}
+
+            {caseDetail.contactSecondary && caseDetail.contactSecondary.name && (
+              <div className="usa-checkbox">
+                <input
+                  aria-describedby="representing-legend"
+                  checked={modal.representingSecondary || false}
+                  className="usa-checkbox__input"
+                  id="party-secondary"
+                  name="representingSecondary"
+                  type="checkbox"
+                  onChange={e => {
+                    updateModalValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="party-secondary"
+                >
+                  {caseDetail.contactSecondary.name}
+                </label>
+              </div>
+            )}
             <Text
               bind="validationErrors.representingPrimary"
               className="usa-error-message"
@@ -151,8 +155,8 @@ export const AddPractitionerModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     caseDetail: state.formattedCaseDetail,
+    caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.associatePractitionerWithCaseSequence,
-    constants: state.constants,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSequence: sequences.validateAddPractitionerSequence,
