@@ -13,19 +13,18 @@ function SecondaryDocumentInformationFactory() {}
 
 /**
  *
- * @param documentMetadata
+ * @param {object} documentMetadata the document metadata
+ * @returns {object} the created document
  */
 SecondaryDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
-    Object.assign(this, {
-      attachments: rawProps.attachments,
-      category: rawProps.category,
-      certificateOfService: rawProps.certificateOfService,
-      certificateOfServiceDate: rawProps.certificateOfServiceDate,
-      documentType: rawProps.documentType,
-      objections: rawProps.objections,
-      secondaryDocumentFile: rawProps.secondaryDocumentFile,
-    });
+    this.attachments = rawProps.attachments;
+    this.category = rawProps.category;
+    this.certificateOfService = rawProps.certificateOfService;
+    this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
+    this.documentType = rawProps.documentType;
+    this.objections = rawProps.objections;
+    this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
   };
 
   let schema = {};

@@ -41,7 +41,7 @@ Order.ORDER_TYPES = [
 ];
 
 /**
- * @param rawOrder
+ * @param {object} rawOrder the raw order data
  * @constructor
  */
 function Order(rawOrder) {

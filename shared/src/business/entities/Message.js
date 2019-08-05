@@ -7,7 +7,7 @@ const {
 /**
  * constructor
  *
- * @param rawMessage
+ * @param {object} rawMessage the raw message data
  * @constructor
  */
 function Message(rawMessage) {

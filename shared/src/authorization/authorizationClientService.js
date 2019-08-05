@@ -75,10 +75,10 @@ const AUTHORIZATION_MAP = {
 /**
  * Checks user permissions for an action
  *
- * @param user
- * @param action
- * @param owner
- * @returns {boolean}
+ * @param {object} user the user to check for authorization
+ * @param {string} action the action to verify if the user is authorized for
+ * @param {string} owner the user id of the owner of the item to verify
+ * @returns {boolean} true if user is authorized, false otherwise
  */
 exports.isAuthorized = (user, action, owner) => {
   if (user.userId && user.userId === owner) {
