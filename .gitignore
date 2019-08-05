@@ -25,3 +25,4 @@ web-client/coverage-integration/*
 web-client/coverage-unit/*
 web-client/reports
 web-client/tests_output/
+web-client/coverage-e2e
