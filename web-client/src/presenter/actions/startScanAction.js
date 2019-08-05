@@ -39,6 +39,7 @@ export const startScanAction = async ({
       ],
     ]);
     store.set(state.submitting, false);
+    store.set(state.selectedBatchIndex, nextIndex);
     return path.success();
   } catch (err) {
     return path.error({ error: err });
