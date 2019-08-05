@@ -12,6 +12,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * CaseExternalInformationFactory Entity
  * Represents a Case that a Petitioner is attempting to add to the system via the File a Petition wizard.
  * Required fields are based on the user's current step in the wizard.
+ *
  * @param rawCase
  * @constructor
  */
