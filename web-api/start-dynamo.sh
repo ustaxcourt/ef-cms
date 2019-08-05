@@ -7,5 +7,5 @@ if [ ! -e ".dynamodb/dynamo.tar.gz" ]; then
   cd .dynamodb && tar -xvf dynamo.tar.gz && cd ..
 fi
 
-# start dyanmo
+# start dynamo
 cd .dynamodb && java -Djava.library.path=.dynamodb/DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory -sharedDb
