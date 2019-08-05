@@ -145,16 +145,9 @@ provider:
 
 package:
   exclude:
-    - storage/**
-    - coverage/**
-    - terraform/**
-    - cognito/**
-    - node_modules/**
-    - .cache/**
-    - .dynamodb/**
-    - .nyc_output/**
-    - dist/**
-    - runtimes/**
+    - ./**
+  include:
+    - web-api/src/apiHandlers.js
 
   excludeDevDependencies: true
 
