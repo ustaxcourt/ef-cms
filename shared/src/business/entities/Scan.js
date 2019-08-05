@@ -7,6 +7,7 @@ const { remove } = require('lodash');
 
 /**
  * constructor
+ *
  * @param rawScan
  * @constructor
  */

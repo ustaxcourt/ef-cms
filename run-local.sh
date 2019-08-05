@@ -1,27 +1,19 @@
 #!/bin/bash
 echo "killing dynamo if already running"
-pgrep -f DynamoDBLocal | xargs kill
+pkill -f DynamoDBLocal
 
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
 
-node web-api/start-s3rver &
+node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
 echo "seeding s3"
-cd web-api/storage || exit
-# clobber S3 and re-init from fixtures
-rm -rf s3/noop-documents-local-us-east-1
-mkdir -p s3/noop-documents-local-us-east-1
-cp -R fixtures/s3/ s3/noop-documents-local-us-east-1
-cd ../.. || exit
+npm run seed:s3
 
-echo "creating dynamo tables"
-node web-api/create-dynamo-tables.js
-
-echo "seeding dynamo"
-node web-api/seed-dynamo.js
+echo "creating & seeding dynamo tables"
+npm run seed:db
 
 # these exported values expire when script terminates
 export SKIP_SANITIZE=true
@@ -31,7 +23,13 @@ export AWS_SECRET_ACCESS_KEY=noop
 export SLS_DEPLOYMENT_BUCKET=noop
 
 # set common arguments used by sls below (appearing as "$@")
-set -- --noTimeout --stage local --region us-east-1 --domain noop --efcmsTableName=efcms-local --accountId noop
+set -- \
+  --accountId noop \
+  --domain noop \
+  --efcmsTableName=efcms-local \
+  --noTimeout \
+  --region us-east-1 \
+  --stage local
 
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &
@@ -49,7 +47,7 @@ echo "starting trial session service"
 npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
 
 echo "starting proxy"
-node web-api/proxy.js
+node ./web-api/proxy.js
 
 pkill -P $DYNAMO_PID
 kill $S3RVER_PID
