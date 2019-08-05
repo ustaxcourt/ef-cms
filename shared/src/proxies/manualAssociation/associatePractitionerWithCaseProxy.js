@@ -11,11 +11,13 @@ const { post } = require('../requests');
 exports.associatePractitionerWithCaseInteractor = ({
   applicationContext,
   caseId,
+  representingPrimary,
+  representingSecondary,
   userId,
 }) => {
   return post({
     applicationContext,
-    body: { caseId, userId },
+    body: { caseId, representingPrimary, representingSecondary, userId },
     endpoint: `/cases/${caseId}/associate-practitioner`,
   });
 };

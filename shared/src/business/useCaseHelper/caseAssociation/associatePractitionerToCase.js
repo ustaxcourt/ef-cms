@@ -10,6 +10,8 @@ const { Case } = require('../../entities/cases/Case');
 exports.associatePractitionerToCase = async ({
   applicationContext,
   caseId,
+  representingPrimary,
+  representingSecondary,
   user,
 }) => {
   const isAssociated = await applicationContext
@@ -37,7 +39,11 @@ exports.associatePractitionerToCase = async ({
     const caseEntity = new Case(caseToUpdate);
 
     caseEntity.attachPractitioner({
-      user,
+      user: {
+        ...user,
+        representingPrimary,
+        representingSecondary,
+      },
     });
 
     await applicationContext.getPersistenceGateway().updateCase({

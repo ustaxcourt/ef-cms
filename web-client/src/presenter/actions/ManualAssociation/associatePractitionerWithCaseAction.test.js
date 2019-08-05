@@ -25,6 +25,8 @@ describe('associatePractitionerWithCaseAction', () => {
       state: {
         caseDetail: { caseId: 'sdsdfsd' },
         modal: {
+          representingPrimary: true,
+          representingSecondary: false,
           user: {
             userId: 'sdfsd',
           },

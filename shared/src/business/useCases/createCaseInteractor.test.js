@@ -257,5 +257,7 @@ describe('createCaseInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
+    expect(result.practitioners[0].representingPrimary).toEqual(true);
+    expect(result.practitioners[0].representingSecondary).toBeUndefined();
   });
 });
