@@ -17,7 +17,7 @@ layers:
     name: ${self:provider.stage}-clamav
     compatibleRuntimes:
       - nodejs10.x
-    path: runtimes/clamav
+    path: web-api/runtimes/clamav
     package:
       exclude:
         - clamav_lambda_layer.tar.gz

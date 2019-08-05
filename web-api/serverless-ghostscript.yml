@@ -17,7 +17,7 @@ layers:
     name: ${self:provider.stage}-ghostscript
     compatibleRuntimes:
       - nodejs10.x
-    path: runtimes/ghostscript
+    path: web-api/runtimes/ghostscript
     package:
       exclude:
         - ghostscript_lambda_layer.tar.gz
