@@ -12,8 +12,8 @@ import { state } from 'cerebral';
 export const removeScannedPdfAction = async ({ get, store }) => {
   const documentSelectedForScan = get(state.documentSelectedForScan);
 
-  store.set(state.form[documentSelectedForScan], null);
-  store.set(state.form[`${documentSelectedForScan}Size`], null);
+  store.unset(state.form[documentSelectedForScan]);
+  store.unset(state.form[`${documentSelectedForScan}Size`]);
   store.set(state.currentPageIndex, 0);
   store.set(state.selectedBatchIndex, 0);
 
