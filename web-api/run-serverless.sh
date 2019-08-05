@@ -22,8 +22,6 @@ npm run "${build}"
 cp "./web-api/src/${handler}" /tmp
 cp ./dist/${handler} web-api/src
 
-ls -la web-api/src
-
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 ./node_modules/.bin/sls create_domain \
   --accountId "${ACCOUNT_ID}" \
