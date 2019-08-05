@@ -153,7 +153,7 @@ class AddPractitionerModalComponent extends ModalDialog {
 
 export const AddPractitionerModal = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.clearModalSequence,
     caseDetail: state.formattedCaseDetail,
     caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.associatePractitionerWithCaseSequence,

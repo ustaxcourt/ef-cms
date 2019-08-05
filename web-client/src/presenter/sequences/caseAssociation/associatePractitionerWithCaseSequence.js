@@ -8,6 +8,7 @@ import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddPractitionerAction } from '../../actions/caseAssociation/validateAddPractitionerAction';
 
 export const associatePractitionerWithCaseSequence = [
@@ -17,6 +18,7 @@ export const associatePractitionerWithCaseSequence = [
     error: [setValidationErrorsAction],
     success: [
       clearAlertsAction,
+      stopShowValidationAction,
       associatePractitionerWithCaseAction,
       {
         success: [

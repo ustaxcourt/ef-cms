@@ -84,7 +84,7 @@ class AddRespondentModalComponent extends ModalDialog {
 
 export const AddRespondentModal = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
+    cancelSequence: sequences.clearModalSequence,
     caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.associateRespondentWithCaseSequence,
     modal: state.modal,
