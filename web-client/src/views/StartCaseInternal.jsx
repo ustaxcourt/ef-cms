@@ -260,49 +260,6 @@ export const StartCaseInternal = connect(
                     />
                   </div>
 
-                  {startCaseInternalHelper.showOwnershipDisclosureStatement && (
-                    <div className="usa-form-group">
-                      <label
-                        className={
-                          'usa-label ustc-upload-ods ' +
-                          (startCaseHelper.showOwnershipDisclosureValid
-                            ? 'validated'
-                            : '')
-                        }
-                        htmlFor="ownership-disclosure-file"
-                      >
-                        Upload Your Ownership Disclosure Statement{' '}
-                        <span className="usa-hint">(optional)</span>
-                        <span className="success-message margin-left-2px">
-                          <FontAwesomeIcon icon="check-circle" size="sm" />
-                        </span>
-                      </label>
-                      <input
-                        accept=".pdf"
-                        className="usa-input"
-                        id="ownership-disclosure-file"
-                        name="ownershipDisclosureFile"
-                        type="file"
-                        onChange={e => {
-                          limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.files[0],
-                            });
-                            updateFormValueSequence({
-                              key: `${e.target.name}Size`,
-                              value: e.target.files[0].size,
-                            });
-                          });
-                        }}
-                      />
-                      <Text
-                        bind="validationErrors.ownershipDisclosureFileSize"
-                        className="usa-error-message"
-                      />
-                    </div>
-                  )}
-
                   {(startCaseInternalHelper.showPrimaryContact ||
                     startCaseInternalHelper.showSecondaryContact) && (
                     <div className="subsection contacts">
