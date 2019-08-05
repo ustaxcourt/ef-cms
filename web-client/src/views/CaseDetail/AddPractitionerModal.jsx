@@ -1,7 +1,9 @@
 import { ModalDialog } from '../ModalDialog';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class AddPractitionerModalComponent extends ModalDialog {
   constructor(props) {
@@ -17,7 +19,12 @@ class AddPractitionerModalComponent extends ModalDialog {
   renderBody() {
     return (
       <div className="ustc-add-counsel-modal">
-        <div className="usa-form-group">
+        <div
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.user && 'usa-form-group--error',
+          )}
+        >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="counsel-matches-legend">
               Counsel Match(es) Found
@@ -54,6 +61,7 @@ class AddPractitionerModalComponent extends ModalDialog {
                         key: e.target.name,
                         value: counsel,
                       });
+                      this.props.validateSequence();
                     }}
                   />
                   <label
@@ -66,10 +74,18 @@ class AddPractitionerModalComponent extends ModalDialog {
                   </label>
                 </div>
               ))}
+
+            <Text bind="validationErrors.user" className="usa-error-message" />
           </fieldset>
         </div>
 
-        <div className="usa-form-group">
+        <div
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.representingPrimary &&
+              'usa-form-group--error',
+          )}
+        >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id="representing-legend">
               Who is This Counsel Representing?
@@ -87,6 +103,7 @@ class AddPractitionerModalComponent extends ModalDialog {
                     key: e.target.name,
                     value: e.target.checked,
                   });
+                  this.props.validateSequence();
                 }}
               />
               <label className="usa-checkbox__label" htmlFor="party-primary">
@@ -108,6 +125,7 @@ class AddPractitionerModalComponent extends ModalDialog {
                         key: e.target.name,
                         value: e.target.checked,
                       });
+                      this.props.validateSequence();
                     }}
                   />
                   <label
@@ -118,6 +136,10 @@ class AddPractitionerModalComponent extends ModalDialog {
                   </label>
                 </div>
               )}
+            <Text
+              bind="validationErrors.representingPrimary"
+              className="usa-error-message"
+            />
           </fieldset>
         </div>
       </div>
@@ -133,7 +155,7 @@ export const AddPractitionerModal = connect(
     constants: state.constants,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateSequence: sequences.validateAddCounselSequence, //TODO
+    validateSequence: sequences.validateAddPractitionerSequence,
     validationErrors: state.validationErrors,
   },
   AddPractitionerModalComponent,
