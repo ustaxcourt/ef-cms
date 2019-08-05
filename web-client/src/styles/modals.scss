@@ -289,3 +289,9 @@ button {
   margin-top: 20px;
   text-align: left;
 }
+
+.practitioner-matches,
+.respondent-matches {
+  overflow: scroll;
+  max-height: 200px;
+}
