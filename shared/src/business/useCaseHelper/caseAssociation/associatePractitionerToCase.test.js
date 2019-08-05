@@ -34,6 +34,8 @@ describe('associatePractitionerToCase', () => {
     await associatePractitionerToCase({
       applicationContext,
       caseId: caseRecord.caseId,
+      representingPrimary: true,
+      representingSecondary: false,
       user,
     });
 
@@ -64,6 +66,8 @@ describe('associatePractitionerToCase', () => {
     await associatePractitionerToCase({
       applicationContext,
       caseId: caseRecord.caseId,
+      representingPrimary: true,
+      representingSecondary: false,
       user,
     });
 

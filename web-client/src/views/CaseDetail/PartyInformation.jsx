@@ -106,11 +106,13 @@ export const PartyInformation = connect(
                 <p className="label representing-label margin-top-2">
                   Representing
                 </p>
-                {/*TODO*/}
-                <p>{caseDetail.contactPrimary.name}</p>
-                {caseDetail.contactSecondary && (
-                  <p>{caseDetail.contactSecondary.name}</p>
-                )}
+                {practitioner.representingPrimary &&
+                  caseDetail.contactPrimary.name}
+                {practitioner.representingPrimary &&
+                  practitioner.representingSecondary && <br />}
+                {practitioner.representingSecondary &&
+                  caseDetail.contactSecondary &&
+                  caseDetail.contactSecondary.name}
               </div>
             ))}
         </div>
