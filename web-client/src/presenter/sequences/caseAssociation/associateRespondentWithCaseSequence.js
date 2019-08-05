@@ -8,6 +8,7 @@ import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddRespondentAction } from '../../actions/caseAssociation/validateAddRespondentAction';
 
 export const associateRespondentWithCaseSequence = [
@@ -17,6 +18,7 @@ export const associateRespondentWithCaseSequence = [
     error: [setValidationErrorsAction],
     success: [
       clearAlertsAction,
+      stopShowValidationAction,
       associateRespondentWithCaseAction,
       {
         success: [
