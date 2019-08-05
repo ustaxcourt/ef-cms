@@ -38,11 +38,12 @@ export const completeScanAction = async ({
     type: 'application/pdf',
   });
 
-  const scans = get(state.batches);
-  delete scans[documentSelectedForScan];
+  if (props.onComplete(pdfFile)) {
+    const scans = get(state.batches);
+    delete scans[documentSelectedForScan];
+    store.set(state.batches, scans);
+  }
 
-  props.onComplete(pdfFile);
-  store.set(state.batches, scans);
   store.set(state.submitting, false);
   store.set(state.isScanning, false);
 };
