@@ -80,6 +80,7 @@ export const ScanErrorModal = connect(
         noCancel
         confirmLabel="OK"
         title="An error occured while scanning"
+        onCancelSequence="clearModalSequence"
         onConfirmSequence="clearModalSequence"
       >
         Please try again or contact your IT Administrator.
@@ -91,13 +92,14 @@ export const UnfinishedScansModal = connect(
   {},
   () => (
     <ConfirmModal
-      cancelLabel="Cancel"
+      noCancel
       confirmLabel="OK"
       title="You Have Unfinished Scans"
       onCancelSequence="clearModalSequence"
       onConfirmSequence="clearModalSequence"
     >
-      If you continue, your unfinished scans will be lost.
+      Please ensure your scans are completed and all PDFs have been created
+      before continuing.
     </ConfirmModal>
   ),
 );
