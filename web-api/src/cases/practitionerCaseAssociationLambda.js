@@ -19,6 +19,7 @@ exports.handler = event =>
         .submitCaseAssociationRequestInteractor({
           applicationContext,
           caseId,
+          ...JSON.parse(event.body),
           userId,
         });
       applicationContext.logger.info('User', user);
