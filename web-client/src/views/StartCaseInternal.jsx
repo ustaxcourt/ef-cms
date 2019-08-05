@@ -4,13 +4,11 @@ import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -43,7 +41,6 @@ export const StartCaseInternal = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    startCaseHelper,
     startCaseInternalHelper,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
