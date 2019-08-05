@@ -25,7 +25,7 @@ cp ./dist/${handler} web-api/src
 ls -la web-api/src
 
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
-../node_modules/.bin/sls create_domain \
+./node_modules/.bin/sls create_domain \
   --accountId "${ACCOUNT_ID}" \
   --config "./web-api/${config}" \
   --domain "${EFCMS_DOMAIN}" \
@@ -35,7 +35,7 @@ export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploy
   --userPoolId "${USER_POOL_ID}" \
   --verbose
 
-ENVIRONMENT="${slsStage}" SLS_DEBUG="*" ../node_modules/.bin/sls deploy \
+ENVIRONMENT="${slsStage}" SLS_DEBUG="*" ./node_modules/.bin/sls deploy \
   --accountId "${ACCOUNT_ID}" \
   --config "./web-api/${config}" \
   --domain "${EFCMS_DOMAIN}"  \

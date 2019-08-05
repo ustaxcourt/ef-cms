@@ -12,15 +12,15 @@ docker run \
   -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
   -v $(pwd)/web-api/.cache:/home/app/web-api/.cache \
   --rm efcms /bin/sh \
-  -c "SLS_DEBUG=* ./web-api/run-serverless-api.sh ${ENV} us-east-1"
+  -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
 
-# docker run \
-#   -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-#   -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-#   -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-#   -v $(pwd)/web-api/.cache:/home/app/web-api/.cache \
-#   --rm efcms /bin/sh \
-#   -c "cd ./web-api && SLS_DEBUG=* ./run-serverless-cases.sh ${ENV} us-east-1"
+docker run \
+  -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+  -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+  -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+  -v $(pwd)/web-api/.cache:/home/app/web-api/.cache \
+  --rm efcms /bin/sh \
+  -c "./web-api/run-serverless-cases.sh ${ENV} us-east-1"
 #
 # docker run \
 #   -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
