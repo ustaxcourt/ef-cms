@@ -2,11 +2,8 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  MAX_FILE_SIZE_BYTES,
-} = require('../../../persistence/s3/getUploadPolicy');
 const { Case } = require('./Case');
-const { ContactFactory } = require('../contacts/ContactFactory');
+const { CaseExternal } = require('./CaseExternal');
 
 /**
  * CaseExternalInformationFactory Entity
@@ -17,35 +14,11 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @constructor
  */
 function CaseExternalInformationFactory(rawCase) {
-  this.businessType = rawCase.businessType;
-  this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
-  this.countryType = rawCase.countryType;
-  this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
-  this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
-  this.partyType = rawCase.partyType;
-  this.petitionFile = rawCase.petitionFile;
-  this.petitionFileSize = rawCase.petitionFileSize;
-  this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.procedureType = rawCase.procedureType;
-  this.signature = rawCase.signature;
-  this.stinFile = rawCase.stinFile;
-  this.stinFileSize = rawCase.stinFileSize;
+  CaseExternal.prototype.init.call(this, rawCase);
   this.wizardStep = rawCase.wizardStep;
 
   if (+this.wizardStep >= 3) {
-    const contacts = ContactFactory.createContacts({
-      contactInfo: {
-        primary: rawCase.contactPrimary,
-        secondary: rawCase.contactSecondary,
-      },
-      partyType: rawCase.partyType,
-    });
-    this.contactPrimary = contacts.primary;
-    this.contactSecondary = contacts.secondary;
+    CaseExternal.prototype.initContacts.call(this, rawCase);
   }
 }
 
@@ -70,17 +43,8 @@ const atWizardStep = (stepNum, schemaObj) => {
 };
 
 const wizardStep1 = atWizardStep(1, {
-  stinFile: joi.object().required(),
-  stinFileSize: joi.when('stinFile', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-  }),
+  stinFile: CaseExternal.commonRequirements.stinFile,
+  stinFileSize: CaseExternal.commonRequirements.stinFileSize,
 });
 
 const wizardStep2 = atWizardStep(2, {
@@ -90,17 +54,8 @@ const wizardStep2 = atWizardStep(2, {
     then: joi.string().required(),
   }),
   hasIrsNotice: joi.boolean().required(),
-  petitionFile: joi.object().required(),
-  petitionFileSize: joi.when('petitionFile', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-  }),
+  petitionFile: CaseExternal.commonRequirements.petitionFile,
+  petitionFileSize: CaseExternal.commonRequirements.petitionFileSize,
 });
 
 const wizardStep3 = atWizardStep(3, {
@@ -110,21 +65,10 @@ const wizardStep3 = atWizardStep(3, {
     .allow(null),
   countryType: joi.string().optional(),
   filingType: joi.string().required(),
-  ownershipDisclosureFile: joi.object().when('filingType', {
-    is: 'A business',
-    otherwise: joi.optional().allow(null),
-    then: joi.required(),
-  }),
-  ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-  }),
+  ownershipDisclosureFile:
+    CaseExternal.commonRequirements.ownershipDisclosureFile,
+  ownershipDisclosureFileSize:
+    CaseExternal.commonRequirements.ownershipDisclosureFileSize,
   partyType: joi.string().required(),
 });
 
