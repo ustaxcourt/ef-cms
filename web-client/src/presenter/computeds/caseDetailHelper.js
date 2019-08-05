@@ -19,6 +19,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   );
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
+  const modalState = get(state.modal);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
@@ -73,6 +74,14 @@ export const caseDetailHelper = (get, applicationContext) => {
     caseDeadlines,
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,
+    practitionerSearchResultsCount:
+      modalState &&
+      modalState.practitionerMatches &&
+      modalState.practitionerMatches.length,
+    respondentSearchResultsCount:
+      modalState &&
+      modalState.respondentMatches &&
+      modalState.respondentMatches.length,
     showActionRequired,
     showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,

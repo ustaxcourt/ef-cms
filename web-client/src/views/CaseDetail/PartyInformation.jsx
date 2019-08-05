@@ -37,7 +37,7 @@ export const PartyInformation = connect(
           <div className="tablet:grid-col-3">
             {caseDetail.contactPrimary && (
               <div>
-                <address aria-labelledby={'primary-label'}>
+                <address aria-labelledby="primary-label">
                   {addressDisplay(caseDetail.contactPrimary, {
                     nameOverride:
                       caseHelper.showCaseNameForPrimary && caseDetail.caseName,
@@ -58,7 +58,7 @@ export const PartyInformation = connect(
           <div className="tablet:grid-col-3">
             {caseDetail.contactSecondary && caseDetail.contactSecondary.name && (
               <div>
-                <address aria-labelledby={'secondary-label'}>
+                <address aria-labelledby="secondary-label">
                   {caseDetail.contactSecondary.name &&
                     addressDisplay(caseDetail.contactSecondary, {})}
                 </address>
@@ -89,7 +89,7 @@ export const PartyInformation = connect(
                 }`}
                 key={index}
               >
-                <address aria-labelledby={'practitioner-label'}>
+                <address aria-labelledby="practitioner-label">
                   {practitioner.name &&
                     addressDisplay(
                       {
@@ -130,7 +130,7 @@ export const PartyInformation = connect(
                 }`}
                 key={index}
               >
-                <address aria-labelledby={'respondent-label'}>
+                <address aria-labelledby="respondent-label">
                   {respondent.name &&
                     addressDisplay(
                       {
@@ -153,7 +153,10 @@ export const PartyInformation = connect(
     const practitionerSearch = () => (
       <>
         <div className="grid-col-3 text-right">
-          <span className="label margin-right-4 margin-top-05">
+          <span
+            className="label margin-right-4 margin-top-05"
+            id="practitioner-counsel-search-description"
+          >
             Add Counsel
           </span>
         </div>
@@ -175,19 +178,20 @@ export const PartyInformation = connect(
               <div role="search">
                 <label
                   className="usa-sr-only"
-                  htmlFor={'practitioner-search-field'}
+                  htmlFor="practitioner-search-field"
                 >
                   Search
                 </label>
                 <input
+                  aria-describedby="practitioner-counsel-search-description"
                   className={`usa-input margin-bottom-0 
                     ${
                       validationErrors.practitionerSearchError
                         ? 'usa-input--error'
                         : ''
                     }`}
-                  id={'practitioner-search-field'}
-                  name={'practitionerSearch'}
+                  id="practitioner-search-field"
+                  name="practitionerSearch"
                   placeholder="Enter Bar Number or Name"
                   type="search"
                   onChange={e => {
@@ -214,7 +218,10 @@ export const PartyInformation = connect(
     const respondentSearch = () => (
       <>
         <div className="grid-col-3 text-right">
-          <span className="label margin-right-4 margin-top-05">
+          <span
+            className="label margin-right-4 margin-top-05"
+            id="respondent-counsel-search-description"
+          >
             Add Counsel
           </span>
         </div>
@@ -236,19 +243,20 @@ export const PartyInformation = connect(
               <div role="search">
                 <label
                   className="usa-sr-only"
-                  htmlFor={'respondent-search-field'}
+                  htmlFor="respondent-search-field"
                 >
                   Search
                 </label>
                 <input
+                  aria-describedby="respondent-counsel-search-description"
                   className={`usa-input margin-bottom-0 
                   ${
                     validationErrors.respondentSearchError
                       ? 'usa-input--error'
                       : ''
                   }`}
-                  id={'respondent-search-field'}
-                  name={'respondentSearch'}
+                  id="respondent-search-field"
+                  name="respondentSearch"
                   placeholder="Enter Bar Number or Name"
                   type="search"
                   onChange={e => {
@@ -309,7 +317,7 @@ export const PartyInformation = connect(
         <div className="subsection party-information">
           <div className="card">
             <div className="content-wrapper">
-              <h3 className="underlined">
+              <h3 className="underlined" id="primary-label">
                 {caseDetail.partyType || 'My Party Type'}
               </h3>
               {mainPartyInformation()}
@@ -321,7 +329,7 @@ export const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <div className="grid-row header-row">
-                  <div className="grid-col-6">
+                  <div className="grid-col-6" id="practitioner-label">
                     <h3>Petitioner Counsel</h3>
                   </div>
                   {caseHelper.showAddCounsel && practitionerSearch()}
@@ -336,7 +344,7 @@ export const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <div className="grid-row header-row">
-                  <div className="grid-col-6">
+                  <div className="grid-col-6" id="secondary-label">
                     <h3>Respondent Counsel</h3>
                   </div>
                   {caseHelper.showAddCounsel && respondentSearch()}
