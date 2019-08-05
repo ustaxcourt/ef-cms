@@ -71,6 +71,32 @@ describe('rescanBatchAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
+  it('sets the selectedBatchIndex based on the rescanned batch', async () => {
+    const result = await runAction(rescanBatchAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        scannerSourceIndex: 0,
+        scannerSourceName: 'scanner',
+      },
+      state: {
+        batchIndexToRescan: 2,
+        batches: {
+          petition: [
+            { index: 0, pages: [{ a: 1 }, { b: 2 }] },
+            { index: 2, pages: [{ c: 3 }, { d: 4 }] },
+          ],
+        },
+        documentSelectedForScan: 'petition',
+        isScanning: false,
+        selectedBatchIndex: 0,
+      },
+    });
+
+    expect(result.state.selectedBatchIndex).toEqual(2);
+  });
+
   it('should call path of error on errors', async () => {
     mockStartScanSession = jest.fn(() => {
       throw new Error('no images in buffer');
