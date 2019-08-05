@@ -4,13 +4,11 @@ import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -43,7 +41,6 @@ export const StartCaseInternal = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    startCaseHelper,
     startCaseInternalHelper,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
@@ -259,49 +256,6 @@ export const StartCaseInternal = connect(
                       className="usa-error-message"
                     />
                   </div>
-
-                  {startCaseInternalHelper.showOwnershipDisclosureStatement && (
-                    <div className="usa-form-group">
-                      <label
-                        className={
-                          'usa-label ustc-upload-ods ' +
-                          (startCaseHelper.showOwnershipDisclosureValid
-                            ? 'validated'
-                            : '')
-                        }
-                        htmlFor="ownership-disclosure-file"
-                      >
-                        Upload Your Ownership Disclosure Statement{' '}
-                        <span className="usa-hint">(optional)</span>
-                        <span className="success-message margin-left-2px">
-                          <FontAwesomeIcon icon="check-circle" size="sm" />
-                        </span>
-                      </label>
-                      <input
-                        accept=".pdf"
-                        className="usa-input"
-                        id="ownership-disclosure-file"
-                        name="ownershipDisclosureFile"
-                        type="file"
-                        onChange={e => {
-                          limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.files[0],
-                            });
-                            updateFormValueSequence({
-                              key: `${e.target.name}Size`,
-                              value: e.target.files[0].size,
-                            });
-                          });
-                        }}
-                      />
-                      <Text
-                        bind="validationErrors.ownershipDisclosureFileSize"
-                        className="usa-error-message"
-                      />
-                    </div>
-                  )}
 
                   {(startCaseInternalHelper.showPrimaryContact ||
                     startCaseInternalHelper.showSecondaryContact) && (
