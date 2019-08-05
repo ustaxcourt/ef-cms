@@ -3,9 +3,15 @@ const { Case } = require('../../entities/cases/Case');
 /**
  * associatePractitionerToCase
  *
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case
+ * @param {boolean} providers.representingPrimary true if the practitioner is
+ * representing the primary contact on the case, false otherwise
+ * @param {boolean} providers.representingSecondary true if the practitioner is
+ * representing the secondary contact on the case, false otherwise
+ * @param {object} providers.user the user object for the logged in user
+ * @returns {Promise<*>} the updated case entity
  */
 exports.associatePractitionerToCase = async ({
   applicationContext,
