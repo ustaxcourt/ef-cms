@@ -1,3 +1,5 @@
+import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
+import { AddRespondent } from '../../shared/src/business/entities/caseAssociation/AddRespondent';
 import {
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
@@ -315,6 +317,8 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserToken,
   getEntityConstructors: () => ({
+    AddPractitionerFactory,
+    AddRespondent,
     Case,
     CaseAssociationRequestFactory,
     CaseDeadline,
