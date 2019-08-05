@@ -1,7 +1,9 @@
 import { ModalDialog } from '../ModalDialog';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class AddRespondentModalComponent extends ModalDialog {
   constructor(props) {
@@ -19,7 +21,12 @@ class AddRespondentModalComponent extends ModalDialog {
 
     return (
       <div className="ustc-add-counsel-modal">
-        <div className="usa-form-group">
+        <div
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.user && 'usa-form-group--error',
+          )}
+        >
           <fieldset className="usa-fieldset margin-bottom-0 respondent-matches">
             <legend className="usa-legend" id="counsel-matches-legend">
               {caseDetailHelper.respondentSearchResultsCount} Counsel Match(es)
@@ -54,6 +61,7 @@ class AddRespondentModalComponent extends ModalDialog {
                         key: e.target.name,
                         value: counsel,
                       });
+                      this.props.validateSequence();
                     }}
                   />
                   <label
@@ -66,6 +74,7 @@ class AddRespondentModalComponent extends ModalDialog {
                   </label>
                 </div>
               ))}
+            <Text bind="validationErrors.user" className="usa-error-message" />
           </fieldset>
         </div>
       </div>
@@ -80,7 +89,7 @@ export const AddRespondentModal = connect(
     confirmSequence: sequences.associateRespondentWithCaseSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateSequence: sequences.validateAddCounselSequence, //TODO
+    validateSequence: sequences.validateAddRespondentSequence,
     validationErrors: state.validationErrors,
   },
   AddRespondentModalComponent,
