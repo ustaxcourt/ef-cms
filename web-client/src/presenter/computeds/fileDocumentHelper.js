@@ -44,7 +44,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
     validationErrors.partySecondary ||
     validationErrors.partyRespondent;
 
-  const { certificateOfServiceDate } = form;
+  let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
   if (certificateOfServiceDate) {
     certificateOfServiceDateFormatted = applicationContext
@@ -52,17 +52,41 @@ export const fileDocumentHelper = (get, applicationContext) => {
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
-  const showFilingIncludes =
-    form.certificateOfService || form.exhibits || form.attachments;
+  const secondaryDocumentCertificateOfServiceDate =
+    form.secondaryDocument && form.secondaryDocument.certificateOfServiceDate;
+  let secondaryDocumentCertificateOfServiceDateFormatted;
+  if (secondaryDocumentCertificateOfServiceDate) {
+    secondaryDocumentCertificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(secondaryDocumentCertificateOfServiceDate, 'MMDDYY');
+  }
 
-  const showFilingNotIncludes =
-    !form.certificateOfService ||
-    !form.exhibits ||
-    !form.attachments ||
-    !form.hasSupportingDocuments;
+  let showFilingIncludes = form.certificateOfService || form.attachments;
 
-  const showSecondaryFilingNotIncludes =
-    form.secondaryDocumentFile && !form.hasSecondarySupportingDocuments;
+  const showSecondaryFilingIncludes =
+    form.secondaryDocument &&
+    (form.secondaryDocument.certificateOfService ||
+      form.secondaryDocument.attachments);
+
+  const showAddSupportingDocuments =
+    !form.supportingDocumentCount || form.supportingDocumentCount < 5;
+
+  const showAddSupportingDocumentsLimitReached =
+    form.supportingDocumentCount && form.supportingDocumentCount >= 5;
+
+  const showSecondaryDocumentInclusionsForm =
+    form.documentType !== 'Motion for Leave to File' ||
+    !!form.secondaryDocumentFile;
+
+  const showAddSecondarySupportingDocuments =
+    (!form.secondarySupportingDocumentCount ||
+      form.secondarySupportingDocumentCount < 5) &&
+    (form.documentType !== 'Motion for Leave to File' ||
+      !!form.secondaryDocumentFile);
+
+  const showAddSecondarySupportingDocumentsLimitReached =
+    form.secondarySupportingDocumentCount &&
+    form.secondarySupportingDocumentCount >= 5;
 
   let exported = {
     certificateOfServiceDateFormatted,
@@ -73,52 +97,96 @@ export const fileDocumentHelper = (get, applicationContext) => {
       showObjection: objectionDocumentTypes.includes(form.documentType),
     },
     secondaryDocument: {
+      certificateOfServiceDateFormatted: secondaryDocumentCertificateOfServiceDateFormatted,
       showObjection:
         form.secondaryDocument &&
+        form.secondaryDocumentFile &&
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
     },
+    showAddSecondarySupportingDocuments,
+    showAddSecondarySupportingDocumentsLimitReached,
+    showAddSupportingDocuments,
+    showAddSupportingDocumentsLimitReached,
     showFilingIncludes,
-    showFilingNotIncludes,
     showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
+    showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
-    showSecondaryFilingNotIncludes,
+    showSecondaryFilingIncludes,
     showSecondaryParty,
-    showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
-    showSupportingDocumentValid: !!form.supportingDocumentFile,
+    showSecondarySupportingDocumentValid: !!form.supportingDocumentFile,
     supportingDocumentTypeList,
   };
 
   if (form.hasSupportingDocuments) {
-    const showSupportingDocumentFreeText =
-      form.hasSupportingDocuments &&
-      supportingDocumentFreeTextTypes.includes(form.supportingDocument);
+    const supportingDocuments = [];
 
-    const supportingDocumentTypeIsSelected =
-      form.supportingDocument && form.supportingDocument !== '';
+    (form.supportingDocuments || []).forEach(item => {
+      const showSupportingDocumentFreeText =
+        item.supportingDocument &&
+        supportingDocumentFreeTextTypes.includes(item.supportingDocument);
 
+      const supportingDocumentTypeIsSelected =
+        item.supportingDocument && item.supportingDocument !== '';
+
+      showFilingIncludes = false;
+      certificateOfServiceDateFormatted = undefined;
+      showFilingIncludes = item.certificateOfService || item.attachments;
+
+      ({ certificateOfServiceDate } = item);
+      if (certificateOfServiceDate) {
+        certificateOfServiceDateFormatted = applicationContext
+          .getUtilities()
+          .formatDateString(certificateOfServiceDate, 'MMDDYY');
+      }
+
+      supportingDocuments.push({
+        certificateOfServiceDateFormatted,
+        showFilingIncludes,
+        showSupportingDocumentFreeText,
+        showSupportingDocumentUpload: supportingDocumentTypeIsSelected,
+        showSupportingDocumentValid: !!item.supportingDocumentFile,
+      });
+    });
     exported = {
       ...exported,
-      showSupportingDocumentFreeText,
-      showSupportingDocumentUpload: supportingDocumentTypeIsSelected,
+      supportingDocuments,
     };
   }
 
   if (form.hasSecondarySupportingDocuments) {
-    const showSecondarySupportingDocumentFreeText =
-      form.hasSecondarySupportingDocuments &&
-      supportingDocumentFreeTextTypes.includes(
-        form.secondarySupportingDocument,
-      );
+    const secondarySupportingDocuments = [];
 
-    const secondarySupportingDocumentTypeIsSelected =
-      form.secondarySupportingDocument &&
-      form.secondarySupportingDocument !== '';
+    (form.secondarySupportingDocuments || []).forEach(item => {
+      const showSupportingDocumentFreeText =
+        item.supportingDocument &&
+        supportingDocumentFreeTextTypes.includes(item.supportingDocument);
 
+      const secondarySupportingDocumentTypeIsSelected =
+        item.supportingDocument && item.supportingDocument !== '';
+
+      showFilingIncludes = false;
+      certificateOfServiceDateFormatted = undefined;
+      showFilingIncludes = item.certificateOfService || item.attachments;
+
+      ({ certificateOfServiceDate } = item);
+      if (certificateOfServiceDate) {
+        certificateOfServiceDateFormatted = applicationContext
+          .getUtilities()
+          .formatDateString(certificateOfServiceDate, 'MMDDYY');
+      }
+
+      secondarySupportingDocuments.push({
+        certificateOfServiceDateFormatted,
+        showFilingIncludes,
+        showSupportingDocumentFreeText,
+        showSupportingDocumentUpload: secondarySupportingDocumentTypeIsSelected,
+        showSupportingDocumentValid: !!item.supportingDocumentFile,
+      });
+    });
     exported = {
       ...exported,
-      showSecondarySupportingDocumentFreeText,
-      showSecondarySupportingDocumentUpload: secondarySupportingDocumentTypeIsSelected,
+      secondarySupportingDocuments,
     };
   }
 

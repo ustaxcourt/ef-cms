@@ -4,8 +4,8 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
@@ -22,7 +22,6 @@ function CaseExternal(rawCase) {
   this.countryType = rawCase.countryType;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.irsNoticeDate = rawCase.irsNoticeDate;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
   this.ownershipDisclosureFileSize = rawCase.ownershipDisclosureFileSize;
   this.partyType = rawCase.partyType;
@@ -30,7 +29,6 @@ function CaseExternal(rawCase) {
   this.petitionFileSize = rawCase.petitionFileSize;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.signature = rawCase.signature;
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
 
@@ -45,46 +43,7 @@ function CaseExternal(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseExternal.errorToMessageMap = {
-  caseType: 'Case Type is a required field.',
-  filingType: 'Filing Type is a required field.',
-  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-  irsNoticeDate: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Notice Date is in the future. Please enter a valid date.',
-    },
-    'Notice Date is a required field.',
-  ],
-  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
-  ownershipDisclosureFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Ownership Disclosure Statement file size is empty.',
-  ],
-  partyType: 'Party Type is a required field.',
-  petitionFile: 'The Petition file was not selected.',
-  petitionFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your Petition file size is empty.',
-  ],
-  preferredTrialCity: 'Preferred Trial City is a required field.',
-  procedureType: 'Procedure Type is a required field.',
-  signature: 'You must review the form before submitting.',
-  stinFile: 'Statement of Taxpayer Identification Number is required.',
-  stinFileSize: [
-    {
-      contains: 'must be less than or equal to',
-      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-    },
-    'Your STIN file size is empty.',
-  ],
-};
+CaseExternal.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
 
 joiValidationDecorator(
   CaseExternal,
@@ -101,15 +60,6 @@ joiValidationDecorator(
     countryType: joi.string().optional(),
     filingType: joi.string().required(),
     hasIrsNotice: joi.boolean().required(),
-    irsNoticeDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .when('hasIrsNotice', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
     ownershipDisclosureFile: joi.object().when('filingType', {
       is: 'A business',
       otherwise: joi.optional().allow(null),
@@ -139,7 +89,6 @@ joiValidationDecorator(
     }),
     preferredTrialCity: joi.string().required(),
     procedureType: joi.string().required(),
-    signature: joi.boolean().required(),
     stinFile: joi.object().required(),
     stinFileSize: joi.when('stinFile', {
       is: joi.exist(),

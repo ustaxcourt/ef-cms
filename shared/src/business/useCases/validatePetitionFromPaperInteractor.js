@@ -11,7 +11,5 @@ exports.validatePetitionFromPaperInteractor = ({
   const errors = new (applicationContext.getEntityConstructors()).CaseInternal(
     petition,
   ).getFormattedValidationErrors();
-  if (!errors) return null;
-
-  return errors;
+  return errors || null;
 };

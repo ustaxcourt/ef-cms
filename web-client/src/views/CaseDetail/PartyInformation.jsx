@@ -1,6 +1,5 @@
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -25,11 +24,16 @@ export const PartyInformation = connect(
             {caseDetail.contactPrimary && (
               <React.Fragment>
                 <p className="label" id={'primary-label'}>
-                  Primary Contact
+                  Petitioner
                 </p>
                 <div>
                   <address aria-labelledby={'primary-label'}>
-                    {addressDisplay(caseDetail.contactPrimary)}
+                    {addressDisplay(caseDetail.contactPrimary, {
+                      hideEmail: true,
+                      nameOverride:
+                        caseHelper.showCaseNameForPrimary &&
+                        caseDetail.caseName,
+                    })}
                   </address>
 
                   {caseHelper.showEditContactButton && (
@@ -50,12 +54,14 @@ export const PartyInformation = connect(
               caseDetail.contactSecondary.name && (
                 <React.Fragment>
                   <p className="label" id={'secondary-label'}>
-                    Secondary Contact
+                    Petitioner
                   </p>
                   <div>
                     <address aria-labelledby={'secondary-label'}>
                       {caseDetail.contactSecondary.name &&
-                        addressDisplay(caseDetail.contactSecondary)}
+                        addressDisplay(caseDetail.contactSecondary, {
+                          hideEmail: true,
+                        })}
                     </address>
                     {caseHelper.showEditContactButton && (
                       <button
@@ -118,11 +124,11 @@ export const PartyInformation = connect(
       </div>
     );
 
-    const addressDisplay = contact => {
+    const addressDisplay = (contact, { hideEmail, nameOverride } = {}) => {
       return (
         <React.Fragment>
           <p className="margin-top-0">
-            {contact.name}
+            {nameOverride || contact.name}
             {contact.inCareOf && (
               <span>
                 <br />
@@ -130,8 +136,6 @@ export const PartyInformation = connect(
               </span>
             )}
           </p>
-
-          {contact.title && <p>{contact.title}</p>}
           <p>
             <span className="address-line">{contact.address1}</span>
             <span className="address-line">{contact.address2}</span>
@@ -148,24 +152,18 @@ export const PartyInformation = connect(
             </span>
           </p>
           {contact.phone && <p>{contact.phone}</p>}
-          {contact.email && <p>{contact.email}</p>}
+          {contact.email && !hideEmail && <p>{contact.email}</p>}
         </React.Fragment>
       );
     };
     return (
       <div className="subsection party-information">
-        <NonMobile>
-          <div className="card">
-            <div className="content-wrapper">
-              <h3 className="underlined">Party Information</h3>
-              {mainPartyInformation()}
-            </div>
+        <div className="card">
+          <div className="content-wrapper">
+            <h3 className="underlined">Party Information</h3>
+            {mainPartyInformation()}
           </div>
-        </NonMobile>
-        <Mobile>
-          <h3>Party Information</h3>
-          {mainPartyInformation()}
-        </Mobile>
+        </div>
 
         {caseHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />

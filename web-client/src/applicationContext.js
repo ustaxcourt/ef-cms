@@ -1,36 +1,27 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
-import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
-import { Document } from '../../shared/src/business/entities/Document';
-import { Order } from '../../shared/src/business/entities/orders/Order';
-import {
-  createISODateString,
-  formatDateString,
-  isStringISOFormatted,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
-import axios from 'axios';
-import uuidv4 from 'uuid/v4';
-const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
-const {
-  MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
-} = require('../../shared/src/persistence/s3/getUploadPolicy');
-const { uploadPdf } = require('../../shared/src/persistence/s3/uploadPdf');
 import {
   CHAMBERS_SECTION,
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
+import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
+import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { Document } from '../../shared/src/business/entities/Document';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
+import {
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+} from '../../shared/src/persistence/s3/getUploadPolicy';
+import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { TrialSession } from '../../shared/src/business/entities/TrialSession';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -41,25 +32,33 @@ import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCa
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import { createCoverSheetInteractor } from '../../shared/src/proxies/documents/createCoverSheetProxy';
-import { createDocumentInteractor } from '../../shared/src/proxies/documents/createDocumentProxy';
+import { createDocketRecordPdfInteractor } from '../../shared/src/proxies/createDocketRecordPdfProxy';
+import {
+  createISODateString,
+  formatDateString,
+  isStringISOFormatted,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { downloadDocumentFileInteractor } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
+import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
-import { generatePDFFromPNGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromPNGDataInteractor';
+import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
 import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
@@ -70,12 +69,13 @@ import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/prox
 import { getFilingTypesInteractor } from '../../shared/src/business/useCases/getFilingTypesInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
-import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsesProxy';
+import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
-import { getScannerInterface } from '../../shared/src/business/useCases/getScannerInterfaceInteractor';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerInterface';
+import { getScannerInterface as getScannerMockInterfaceInteractor } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -92,6 +92,7 @@ import { removeItemInteractor } from '../../shared/src/business/useCases/removeI
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
 import { setCaseToReadyForTrialInteractor } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
@@ -106,8 +107,10 @@ import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
+import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
+import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
@@ -121,14 +124,14 @@ import { validatePdfInteractor } from '../../shared/src/proxies/documents/valida
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
+import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
-
-const {
-  uploadDocument,
-} = require('../../shared/src/persistence/s3/uploadDocument');
+import axios from 'axios';
+import pdfjsLib from 'pdfjs-dist';
+import uuidv4 from 'uuid/v4';
 
 const MINUTES = 60 * 1000;
 
@@ -158,19 +161,20 @@ const allUseCases = {
   createCaseInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createCoverSheetInteractor,
-  createDocumentInteractor,
+  createDocketRecordPdfInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
   downloadDocumentFileInteractor,
   fileCourtIssuedOrderInteractor,
+  fileDocketEntryInteractor,
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,
   filePetitionInteractor,
   forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
   generateDocumentTitleInteractor,
-  generatePDFFromPNGDataInteractor,
+  generatePDFFromJPGDataInteractor,
   generateSignedDocumentInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -206,6 +210,7 @@ const allUseCases = {
   sanitizePdfInteractor: args =>
     process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
   sendPetitionToIRSHoldingQueueInteractor,
+  serveSignedStipDecisionInteractor,
   setCaseToReadyForTrialInteractor,
   setItemInteractor,
   setTrialSessionAsSwingSessionInteractor,
@@ -233,6 +238,7 @@ const allUseCases = {
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
   validatePrimaryContactInteractor,
+  validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   verifyCaseForUserInteractor,
   verifyPendingCaseForUserInteractor,
@@ -242,6 +248,9 @@ const allUseCases = {
 tryCatchDecorator(allUseCases);
 
 const applicationContext = {
+  convertBlobToUInt8Array: async blob => {
+    return new Uint8Array(await new Response(blob).arrayBuffer());
+  },
   getBaseUrl: () => {
     return process.env.API_URL || 'http://localhost:3000';
   },
@@ -277,7 +286,6 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
     ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
@@ -302,7 +310,9 @@ const applicationContext = {
     CaseAssociationRequestFactory,
     CaseDeadline,
     CaseExternal,
+    CaseExternalInformationFactory,
     CaseInternal,
+    ContactFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
@@ -314,7 +324,12 @@ const applicationContext = {
   getError: e => {
     return ErrorFactory.getError(e);
   },
+  getFileReader: () => FileReader,
   getHttpClient: () => axios,
+  getPdfJs: () => {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+    return pdfjsLib;
+  },
   getPdfStyles: () => {
     return pdfStyles;
   },
@@ -328,7 +343,9 @@ const applicationContext = {
       uploadPdf,
     };
   },
-  getScanner: getScannerInterface,
+  getScanner: process.env.NO_SCANNER
+    ? getScannerMockInterfaceInteractor
+    : getScannerInterface,
   getScannerResourceUri: () => {
     return (
       process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'

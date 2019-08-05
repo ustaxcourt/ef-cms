@@ -39,10 +39,12 @@ import {
   faLaptop,
   faLink,
   faListUl,
+  faPaperPlane,
   faPaperclip,
   faPlusCircle,
   faPrint,
   faQuestionCircle,
+  faRedoAlt,
   faSearch,
   faShareSquare,
   faShieldAlt,
@@ -50,6 +52,8 @@ import {
   faSlash,
   faSort,
   faSpinner,
+  faStepBackward,
+  faStepForward,
   faSync,
   faTimesCircle,
   faTrash,
@@ -68,6 +72,13 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
+    const scannerSourceName = await applicationContext
+      .getUseCases()
+      .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+    presenter.state.scanner = {
+      scannerSourceName,
+    };
+
     const user =
       (await applicationContext
         .getUseCases()
@@ -110,6 +121,8 @@ const app = {
       faCheckCircleRegular,
       faClipboardList,
       faClock,
+      faStepForward,
+      faStepBackward,
       faClockSolid,
       faClone,
       faCloudUploadAlt,
@@ -131,6 +144,8 @@ const app = {
       faLink,
       faListUl,
       faPaperclip,
+      faRedoAlt,
+      faPaperPlane,
       faPlusCircle,
       faPrint,
       faQuestionCircle,

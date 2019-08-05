@@ -1,10 +1,12 @@
 /* eslint-disable security/detect-object-injection, security/detect-child-process */
-const AWSXRay = require('aws-xray-sdk');
+// const AWSXRay = require('aws-xray-sdk');
+//
+// const AWS =
+//   process.env.NODE_ENV === 'production'
+//     ? AWSXRay.captureAWS(require('aws-sdk'))
+//     : require('aws-sdk');
 
-const AWS =
-  process.env.NODE_ENV === 'production'
-    ? AWSXRay.captureAWS(require('aws-sdk'))
-    : require('aws-sdk');
+const AWS = require('aws-sdk');
 
 // ^ must come first --------------------
 
@@ -31,8 +33,8 @@ const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
 const {
-  CaseInternalIncomplete,
-} = require('../../shared/src/business/entities/cases/CaseInternalIncomplete');
+  CaseInternal,
+} = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -63,9 +65,6 @@ const {
 const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
-const {
-  createDocumentInteractor,
-} = require('../../shared/src/business/useCases/createDocumentInteractor');
 const {
   createISODateString,
   formatDateString,
@@ -111,14 +110,20 @@ const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
+  fileDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/fileDocketEntryInteractor');
+const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
-  generatePDFFromPNGDataInteractor,
-} = require('../../shared/src/business/useCases/generatePDFFromPNGDataInteractor');
+  generateDocketRecordPdfInteractor,
+} = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
+const {
+  generatePDFFromJPGDataInteractor,
+} = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
@@ -298,8 +303,14 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  sendBulkTemplatedEmail,
+} = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
+const {
+  serveSignedStipDecisionInteractor,
+} = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
 const {
   setCaseToReadyForTrialInteractor,
 } = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
@@ -381,7 +392,7 @@ const {
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 
-const { DynamoDB, S3 } = AWS;
+const { DynamoDB, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
@@ -405,6 +416,7 @@ const setCurrentUser = newUser => {
 
 let dynamoClientCache = {};
 let s3Cache;
+let sesCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -424,6 +436,9 @@ module.exports = (appContextUser = {}) => {
       return chromium;
     },
     getCurrentUser,
+    getDispatchers: () => ({
+      sendBulkTemplatedEmail,
+    }),
     getDocumentClient: ({ useMasterRegion = false } = {}) => {
       const type = useMasterRegion ? 'master' : 'region';
       if (!dynamoClientCache[type]) {
@@ -441,9 +456,15 @@ module.exports = (appContextUser = {}) => {
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },
+    getEmailClient: () => {
+      if (!sesCache) {
+        sesCache = new SES();
+      }
+      return sesCache;
+    },
     getEntityConstructors: () => ({
       CaseExternal: CaseExternalIncomplete,
-      CaseInternal: CaseInternalIncomplete,
+      CaseInternal: CaseInternal,
     }),
     getPersistenceGateway: () => {
       return {
@@ -532,15 +553,16 @@ module.exports = (appContextUser = {}) => {
         createCaseFromPaperInteractor,
         createCaseInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
-        createDocumentInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         fileCourtIssuedOrderInteractor,
+        fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
-        generatePDFFromPNGDataInteractor,
+        generateDocketRecordPdfInteractor,
+        generatePDFFromJPGDataInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
@@ -569,6 +591,7 @@ module.exports = (appContextUser = {}) => {
           process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
+        serveSignedStipDecisionInteractor,
         setCaseToReadyForTrialInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,

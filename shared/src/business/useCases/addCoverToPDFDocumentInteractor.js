@@ -43,10 +43,10 @@ exports.addCoverToPDFDocumentInteractor = async ({
   const { isPaper } = documentEntity;
 
   const dateServedFormatted =
-    (caseEntity.irsSendDate &&
+    (documentEntity.servedAt &&
       applicationContext
         .getUtilities()
-        .formatDateString(caseEntity.irsSendDate, 'MMDDYYYY')) ||
+        .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
     '';
 
   let dateReceivedFormatted;

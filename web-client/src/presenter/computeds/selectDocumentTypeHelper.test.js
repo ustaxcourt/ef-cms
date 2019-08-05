@@ -36,14 +36,14 @@ const state = {
 };
 
 describe('selectDocumentTypeHelper', () => {
-  it('should return an empty object if no case detail is available', async () => {
+  it('should return an empty object if no case detail is available', () => {
     const result = runCompute(selectDocumentTypeHelper, {
       state: {},
     });
     expect(result).toEqual({});
   });
 
-  it('should return an empty "primary" object if a matching category is not found', async () => {
+  it('should return an empty "primary" object if a matching category is not found', () => {
     state.form = {
       category: 'Bananas',
       documentType: 'Foster',
@@ -54,7 +54,7 @@ describe('selectDocumentTypeHelper', () => {
     expect(result.primary).toEqual({});
   });
 
-  it('should return correct data for Standard document scenario', async () => {
+  it('should return correct data for Standard document scenario', () => {
     state.form = {
       category: 'Answer (filed by respondent only)',
       documentType: 'Answer',
@@ -69,7 +69,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard A document scenario', async () => {
+  it('should return correct data for Nonstandard A document scenario', () => {
     state.form = {
       category: 'Notice',
       documentType: 'Notice of Objection',
@@ -90,7 +90,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard B document scenario', async () => {
+  it('should return correct data for Nonstandard B document scenario', () => {
     state.form = {
       category: 'Statement',
       documentType: 'Statement',
@@ -107,7 +107,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard C document scenario', async () => {
+  it('should return correct data for Nonstandard C document scenario', () => {
     state.form = {
       category: 'Supporting Document',
       documentType: 'Affidavit in Support',
@@ -131,7 +131,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard D document scenario', async () => {
+  it('should return correct data for Nonstandard D document scenario', () => {
     state.form = {
       category: 'Miscellaneous',
       documentType: 'Certificate of Service',
@@ -155,7 +155,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard E document scenario', async () => {
+  it('should return correct data for Nonstandard E document scenario', () => {
     state.form = {
       category: 'Motion',
       documentType:
@@ -173,7 +173,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard F document scenario', async () => {
+  it('should return correct data for Nonstandard F document scenario', () => {
     state.form = {
       category: 'Supplement',
       documentType: 'Supplement',
@@ -195,7 +195,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard G document scenario', async () => {
+  it('should return correct data for Nonstandard G document scenario', () => {
     state.form = {
       category: 'Answer (filed by respondent only)',
       documentType: 'Amendment to Answer',
@@ -211,7 +211,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard H document scenario', async () => {
+  it('should return correct data for Nonstandard H document scenario', () => {
     state.form = {
       category: 'Motion',
       documentType: 'Motion for Leave to File',
@@ -228,7 +228,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard I document scenario', async () => {
+  it('should return correct data for Nonstandard I document scenario', () => {
     state.form = {
       category: 'Miscellaneous',
       documentType: 'Amendment [anything]',
@@ -246,7 +246,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for Nonstandard J document scenario', async () => {
+  it('should return correct data for Nonstandard J document scenario', () => {
     state.form = {
       category: 'Decision',
       documentType: 'Stipulated Decision Entered',
@@ -265,7 +265,7 @@ describe('selectDocumentTypeHelper', () => {
     });
   });
 
-  it('should return correct data for a secondary document', async () => {
+  it('should return correct data for a secondary document', () => {
     state.form = {
       category: 'Motion',
       documentType: 'Motion for Leave to File',
@@ -281,7 +281,7 @@ describe('selectDocumentTypeHelper', () => {
     expect(result.secondary.showNonstandardForm).toBeFalsy();
   });
 
-  it('should return correct data for a secondary document with no category or documentType selected', async () => {
+  it('should return correct data for a secondary document with no category or documentType selected', () => {
     state.form = {
       category: 'Motion',
       documentType: 'Motion for Leave to File',

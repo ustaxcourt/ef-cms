@@ -42,13 +42,14 @@ exports.setTrialSessionCalendarInteractor = async ({
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  for (let caseRecord of eligibleCases) {
+  const setTrialSessionCalendar = async caseRecord => {
     const { caseId } = caseRecord;
     const caseEntity = new Case(caseRecord);
 
     caseEntity.setAsCalendared(trialSessionEntity);
     trialSessionEntity.addCaseToCalendar(caseEntity);
 
+    // must these occur sequentially, or can they be parallel?
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
       caseToUpdate: caseEntity.validate().toRawObject(),
@@ -60,7 +61,9 @@ exports.setTrialSessionCalendarInteractor = async ({
         applicationContext,
         caseId,
       });
-  }
+  };
+
+  await Promise.all(eligibleCases.map(setTrialSessionCalendar));
 
   trialSessionEntity.setAsCalendared();
 

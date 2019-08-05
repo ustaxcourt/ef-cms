@@ -1,5 +1,3 @@
-import { SecondaryDocumentType } from './SecondaryDocumentType';
-import { SecondaryDocumentTypeReadOnly } from './SecondaryDocumentTypeReadOnly';
 import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
@@ -14,7 +12,6 @@ export const NonstandardForm = connect(
     helper: state[props.helper],
     level: props.level,
     namespace: props.namespace,
-    screenMetadata: state.screenMetadata,
     trialCitiesHelper: state.trialCitiesHelper,
     updateSequence: sequences[props.updateSequence],
     validateSequence: sequences[props.validateSequence],
@@ -26,7 +23,6 @@ export const NonstandardForm = connect(
     helper,
     level,
     namespace,
-    screenMetadata,
     trialCitiesHelper,
     updateSequence,
     validateSequence,
@@ -360,16 +356,6 @@ export const NonstandardForm = connect(
             </fieldset>
           </div>
         )}
-
-        {helper[level].showSecondaryDocumentSelect &&
-          !screenMetadata.isSecondaryDocumentTypeSelected && (
-            <SecondaryDocumentType />
-          )}
-
-        {helper[level].showSecondaryDocumentSelect &&
-          screenMetadata.isSecondaryDocumentTypeSelected && (
-            <SecondaryDocumentTypeReadOnly />
-          )}
       </div>
     );
   },

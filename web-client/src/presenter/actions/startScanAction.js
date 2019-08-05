@@ -8,8 +8,14 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.path
  *
  */
-export const startScanAction = async ({ applicationContext, props, store }) => {
+export const startScanAction = async ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
   store.set(state.isScanning, true);
+  store.set(state.submitting, true);
 
   const scanner = applicationContext.getScanner();
 
@@ -19,8 +25,32 @@ export const startScanAction = async ({ applicationContext, props, store }) => {
       props.scannerSourceName
   ) {
     scanner.setSourceByIndex(props.scannerSourceIndex);
-    scanner.startScanSession();
-    store.set(state.submitting, false);
+    try {
+      const { scannedBuffer: pages } = await scanner.startScanSession({
+        applicationContext,
+      });
+      const documentSelectedForScan = get(state.documentSelectedForScan);
+      const batches = get(state.batches[documentSelectedForScan]) || [];
+      const nextIndex = batches.length
+        ? Math.max(...batches.map(b => b.index)) + 1
+        : 0;
+
+      store.set(state.batches[documentSelectedForScan], [
+        ...batches,
+        ...[
+          {
+            index: nextIndex,
+            pages,
+          },
+        ],
+      ]);
+      store.set(state.submitting, false);
+    } catch (err) {
+      if (err.message.includes('no images in buffer')) {
+        store.set(state.showModal, 'EmptyHopperModal');
+      }
+      store.set(state.isScanning, false);
+    }
   } else {
     await applicationContext.getUseCases().removeItemInteractor({
       applicationContext,
