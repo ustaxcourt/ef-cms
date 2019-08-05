@@ -22,7 +22,7 @@ describe('sendBulkTemplatedEmail', () => {
       applicationContext,
       destinations: [
         {
-          email: 'test.email@gmail.com',
+          email: 'test.email@example.com',
           templateData: {
             name: 'Guy Fieri',
             welcomeMessage: 'Welcome to Flavortown',
@@ -37,7 +37,7 @@ describe('sendBulkTemplatedEmail', () => {
       Destinations: [
         {
           Destination: {
-            ToAddresses: ['test.email@gmail.com'],
+            ToAddresses: ['test.email@example.com'],
           },
           ReplacementTemplateData: JSON.stringify({
             name: 'Guy Fieri',
