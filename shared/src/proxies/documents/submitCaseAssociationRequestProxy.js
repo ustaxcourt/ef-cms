@@ -10,10 +10,16 @@ const { put } = require('../requests');
 exports.submitCaseAssociationRequestInteractor = ({
   applicationContext,
   caseId,
+  representingPrimary,
+  representingSecondary,
 }) => {
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
+    body: {
+      representingPrimary,
+      representingSecondary,
+    },
     endpoint: `/users/${user.userId}/case/${caseId}`,
   });
 };

@@ -73,6 +73,8 @@ describe('associateRespondentWithCaseInteractor', () => {
     await associatePractitionerWithCaseInteractor({
       applicationContext,
       caseId: caseRecord.caseId,
+      representingPrimary: true,
+      representingSecondary: false,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

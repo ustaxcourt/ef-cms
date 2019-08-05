@@ -105,20 +105,28 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
       partyInfoContent +=
         '<div class="party-info"><div class="party-info-header">Petitioner Counsel</div><div class="party-info-content">';
       practitioners.map(practitioner => {
-        if (practitioner.name) {
+        if (practitioner.formattedName) {
           partyInfoContent += '<div class="party-details">';
-          partyInfoContent += '<p>' + practitioner.name + '</p>';
+          partyInfoContent += '<p>' + practitioner.formattedName + '</p>';
           partyInfoContent += getAddress({
             ...practitioner,
             address1: practitioner.addressLine1,
             address2: practitioner.addressLine2,
             address3: practitioner.addressLine3,
           });
-          //TODO
           partyInfoContent += '<p><strong>Representing</strong><br/>';
-          partyInfoContent += detail.contactPrimary.name;
-          if (detail.contactSecondary && detail.contactSecondary.name) {
-            partyInfoContent += '<br/>' + detail.contactSecondary.name;
+          if (practitioner.representingPrimary) {
+            partyInfoContent += detail.contactPrimary.name;
+            if (practitioner.representingSecondary) {
+              partyInfoContent += '<br/>';
+            }
+          }
+          if (
+            practitioner.representingSecondary &&
+            detail.contactSecondary &&
+            detail.contactSecondary.name
+          ) {
+            partyInfoContent += detail.contactSecondary.name;
           }
           partyInfoContent += '</p></div>';
         }
