@@ -510,4 +510,70 @@ describe('case detail computed', () => {
     });
     expect(result.showRespondentSection).toEqual(false);
   });
+
+  it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { practitionerMatches: [{ name: '1' }, { name: '2' }] },
+      },
+    });
+    expect(result.practitionerSearchResultsCount).toEqual(2);
+  });
+
+  it('should set practitionerSearchResultsCount to 0 if the state.modal.practitionerMatches is an empty array', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { practitionerMatches: [] },
+      },
+    });
+    expect(result.practitionerSearchResultsCount).toEqual(0);
+  });
+
+  it('should not set practitionerSearchResultsCount if state.modal is an empty object', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.practitionerSearchResultsCount).toBeUndefined();
+  });
+
+  it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { respondentMatches: [{ name: '1' }, { name: '2' }] },
+      },
+    });
+    expect(result.respondentSearchResultsCount).toEqual(2);
+  });
+
+  it('should set respondentSearchResultsCount to 0 if the state.modal.respondentMatches is an empty array', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { respondentMatches: [] },
+      },
+    });
+    expect(result.respondentSearchResultsCount).toEqual(0);
+  });
+
+  it('should not set respondentSearchResultsCount if state.modal is an empty object', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.respondentSearchResultsCount).toBeUndefined();
+  });
 });
