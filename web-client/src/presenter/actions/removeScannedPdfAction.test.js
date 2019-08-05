@@ -13,8 +13,8 @@ describe('removeScannedPdfAction', () => {
         },
       },
     });
-    expect(state.form.petition).toEqual(null);
-    expect(state.form.petitionSize).toEqual(null);
+    expect(state.form.petition).toBeUndefined();
+    expect(state.form.petitionSize).toBeUndefined();
   });
 
   it('should return the documentUploadMode', async () => {
