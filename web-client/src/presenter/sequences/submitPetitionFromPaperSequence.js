@@ -1,3 +1,4 @@
+import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
@@ -15,27 +16,33 @@ import { state } from 'cerebral';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
 
 export const submitPetitionFromPaperSequence = [
-  clearAlertsAction,
-  set(state.showValidation, true),
-  computeFormDateAction,
-  validatePetitionFromPaperAction,
+  checkForActiveBatchesAction,
   {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
-    ],
-    success: [
-      set(state.showValidation, false),
-      openFileUploadStatusModalAction,
-      createCaseFromPaperAction,
+    hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
+    noActiveBatches: [
+      clearAlertsAction,
+      set(state.showValidation, true),
+      computeFormDateAction,
+      validatePetitionFromPaperAction,
       {
-        error: [openFileUploadErrorModal],
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
         success: [
-          setCaseAction,
-          setPetitionIdAction,
-          closeFileUploadStatusModalAction,
-          ...gotoDocumentDetailSequence,
+          set(state.showValidation, false),
+          openFileUploadStatusModalAction,
+          createCaseFromPaperAction,
+          {
+            error: [openFileUploadErrorModal],
+            success: [
+              setCaseAction,
+              setPetitionIdAction,
+              closeFileUploadStatusModalAction,
+              ...gotoDocumentDetailSequence,
+            ],
+          },
         ],
       },
     ],
