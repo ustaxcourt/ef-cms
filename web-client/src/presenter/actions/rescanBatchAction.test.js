@@ -50,7 +50,7 @@ describe('rescanBatchAction', () => {
     ]);
   });
 
-  it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {
+  it('tells the TWAIN library to begin image acquisition with no scanning device set', async () => {
     await runAction(rescanBatchAction, {
       modules: {
         presenter,
