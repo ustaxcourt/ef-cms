@@ -523,9 +523,9 @@ export const ScanBatchPreviewer = connect(
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.osdFileCompleted}
+              showIcon={scanHelper.odsFileCompleted}
               tabName="ownershipDisclosureFile"
-              title="OSD"
+              title="ODS"
             />
           </Tabs>
 

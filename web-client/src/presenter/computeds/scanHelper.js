@@ -9,7 +9,7 @@ export const scanHelper = get => {
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
   const petitionFileCompleted = !!get(state.form.petitionFile);
-  const osdFileCompleted = !!get(state.form.ownershipDisclosureFile);
+  const odsFileCompleted = !!get(state.form.ownershipDisclosureFile);
   const stinFileCompleted = !!get(state.form.stinFile);
   const requestForPlaceOfTrialFileCompleted = !!get(
     state.form.requestForPlaceOfTrialFile,
@@ -18,7 +18,7 @@ export const scanHelper = get => {
   return {
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(user && user.role && internalRoles.includes(user.role)),
-    osdFileCompleted,
+    odsFileCompleted,
     petitionFileCompleted,
     requestForPlaceOfTrialFileCompleted,
     scanFeatureEnabled,
