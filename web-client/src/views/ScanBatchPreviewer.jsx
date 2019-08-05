@@ -158,7 +158,7 @@ export const ScanBatchPreviewer = connect(
               e.preventDefault();
               completeScanSequence({
                 onComplete: file => {
-                  limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                  return limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
                     updateFormValueSequence({
                       key: documentType,
                       value: file,
@@ -287,7 +287,7 @@ export const ScanBatchPreviewer = connect(
     const renderScan = () => {
       return (
         <>
-          <h5>Scanned Batches</h5>
+          <h5 className="header-scanned-batches">Scanned Batches</h5>
 
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 ? (
