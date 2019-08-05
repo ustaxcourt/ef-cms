@@ -158,7 +158,7 @@ export const ScanBatchPreviewer = connect(
               e.preventDefault();
               completeScanSequence({
                 onComplete: file => {
-                  limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+                  return limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
                     updateFormValueSequence({
                       key: documentType,
                       value: file,
