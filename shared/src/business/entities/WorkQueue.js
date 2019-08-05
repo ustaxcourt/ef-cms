@@ -90,8 +90,8 @@ exports.CHAMBERS_SECTIONS = sortBy([
 
 /**
  *
- * @param role
- * @returns {string}
+ * @param {string} role the user role
+ * @returns {string} the section for the role
  */
 exports.getSectionForRole = role => {
   if (role === 'docketclerk') {

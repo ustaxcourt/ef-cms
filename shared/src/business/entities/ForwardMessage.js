@@ -5,7 +5,7 @@ const {
 
 /**
  *
- * @param rawMessage
+ * @param {object} rawMessage the raw message data
  * @constructor
  */
 function ForwardMessage(rawMessage) {
