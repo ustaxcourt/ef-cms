@@ -32,13 +32,19 @@ export default (test, fakeFile) => {
     // Petitioner party type primary contact with international address
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
-      value: 'Individual petitioner',
+      value: 'Petitioner and spouse',
+    });
+
+    await test.runSequence('updateStartCaseFormValueSequence', {
+      key: 'isSpouseDeceased',
+      value: 'No',
     });
 
     result = runCompute(startCaseHelper, {
       state: test.getState(),
     });
     expect(result.showPrimaryContact).toBeTruthy();
+    expect(result.showSecondaryContact).toBeTruthy();
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.countryType',
@@ -65,10 +71,6 @@ export default (test, fakeFile) => {
       value: '23-skidoo',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
-      value: 'test@example.com',
-    });
-    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
@@ -78,8 +80,46 @@ export default (test, fakeFile) => {
       city: 'Cityville',
       country: 'Switzerland',
       countryType: 'international',
-      email: 'test@example.com',
       name: 'Test Person',
+      phone: '1234567890',
+      postalCode: '23-skidoo',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.countryType',
+      value: 'international',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.country',
+      value: 'Switzerland',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.name',
+      value: 'Test Spouse',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.address1',
+      value: '123 Abc Ln',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.city',
+      value: 'Cityville',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.postalCode',
+      value: '23-skidoo',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactSecondary.phone',
+      value: '1234567890',
+    });
+
+    expect(test.getState('form.contactSecondary')).toEqual({
+      address1: '123 Abc Ln',
+      city: 'Cityville',
+      country: 'Switzerland',
+      countryType: 'international',
+      name: 'Test Spouse',
       phone: '1234567890',
       postalCode: '23-skidoo',
     });
