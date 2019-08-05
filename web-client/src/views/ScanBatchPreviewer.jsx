@@ -296,20 +296,27 @@ export const ScanBatchPreviewer = connect(
                   {scanBatchPreviewerHelper.batches.map(batch => (
                     <tr key={batch.index}>
                       <td>
-                        <button
-                          aria-label={`batch ${batch.index + 1} -- ${
-                            batch.pages.length
-                          } pages total`}
-                          className="usa-button usa-button--unstyled"
-                          onClick={e => {
-                            e.preventDefault();
-                            setSelectedBatchIndexSequence({
-                              selectedBatchIndex: batch.index,
-                            });
-                          }}
-                        >
-                          Batch {batch.index + 1}
-                        </button>
+                        {selectedBatchIndex !== batch.index && (
+                          <button
+                            aria-label={`batch ${batch.index + 1} -- ${
+                              batch.pages.length
+                            } pages total`}
+                            className="usa-button usa-button--unstyled"
+                            onClick={e => {
+                              e.preventDefault();
+                              setSelectedBatchIndexSequence({
+                                selectedBatchIndex: batch.index,
+                              });
+                            }}
+                          >
+                            Batch {batch.index + 1}
+                          </button>
+                        )}
+                        {selectedBatchIndex === batch.index && (
+                          <span className="batch-index">
+                            Batch {batch.index + 1}
+                          </span>
+                        )}
                       </td>
                       <td>
                         <span>{batch.pages.length} pages</span>
