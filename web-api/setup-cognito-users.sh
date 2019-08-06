@@ -99,6 +99,7 @@ createManyAccounts() {
 
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
+createManyAccounts "judge"
 createManyAccounts "petitioner"
 createManyAccounts "petitionsclerk"
 createManyAccounts "docketclerk"

@@ -27,6 +27,46 @@
   },
 
   {
+    "pk": "judge|user",
+    "sk": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "judge",
+    "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "name": "Test Judge",
+    "section": "judge",
+    "pk": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "email": "judge"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad01-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "judge",
+    "sk": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "name": "Test Judge1",
+    "section": "judge",
+    "pk": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "email": "judge1"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad02-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "judge",
+    "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "name": "Test Judge2",
+    "section": "judge",
+    "pk": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "email": "judge2"
+  },
+
+  {
     "pk": "seniorattorney|user",
     "sk": "6805d1ab-18d0-43ec-bafb-654e83405416"
   },
