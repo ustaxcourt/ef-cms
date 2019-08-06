@@ -11,8 +11,6 @@ import { updateFormValueSequence } from './updateFormValueSequence';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
 
-//documentType, file, documentUploadMode
-
 export const generatePdfFromScanSessionSequence = [
   generatePdfFromScanSessionAction,
   validateFileSizeAction,
