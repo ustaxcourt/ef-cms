@@ -288,9 +288,6 @@ export const ScanBatchPreviewer = connect(
       return (
         <>
           <h5 className="header-scanned-batches">Scanned Batches</h5>
-          <span className="usa-hint">
-            Completed PDF file size max {constants.MAX_FILE_SIZE_MB}MB.
-          </span>
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 ? (
               <table className="batches-table">
