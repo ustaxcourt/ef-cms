@@ -12,8 +12,11 @@ const { flattenDeep } = require('lodash');
 /**
  * addCoverToPDFDocumentInteractor
  *
- * @param pdfData {Uint8Array}
- * @param coverSheetData
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the case id
+ * @param {string} providers.documentId the document id
+ * @returns {Uint8Array} the new pdf data
  */
 exports.addCoverToPDFDocumentInteractor = async ({
   applicationContext,

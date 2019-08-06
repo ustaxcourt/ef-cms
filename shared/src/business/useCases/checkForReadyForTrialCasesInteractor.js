@@ -1,8 +1,8 @@
 const { Case } = require('../entities/cases/Case');
 
 /**
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  */
 exports.checkForReadyForTrialCasesInteractor = async ({
   applicationContext,

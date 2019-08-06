@@ -1,8 +1,11 @@
 /**
  * generateDocketRecordPdfInteractor
  *
- * @param docketRecordHtml {string}
- * @param coverSheetData
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.docketNumber the docket number of the case
+ * @param {string} providers.docketRecordHtml the html content for the pdf
+ * @returns {Buffer} the pdf as a binary buffer
  */
 exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
