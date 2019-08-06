@@ -10,6 +10,45 @@ export const UpcomingTrialSessions = connect(
   ({ formattedTrialSessions }) => {
     return (
       <React.Fragment>
+        <div className="grid-row margin-bottom-3">
+          <div className="grid-col-7">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-2 padding-top-05">
+                <h3>Filter by</h3>
+              </div>
+              <div className="grid-col-3">
+                <select
+                  className="usa-select"
+                  id="preferred-trial-city"
+                  name="preferredTrialCity"
+                >
+                  <option value="docketRecord">Docket Record</option>
+                  <option value="caseInfo">Case Information</option>
+                </select>
+              </div>
+              <div className="grid-col-3">
+                <select
+                  className="usa-select"
+                  id="preferred-trial-city"
+                  name="preferredTrialCity"
+                >
+                  <option value="docketRecord">Docket Record</option>
+                  <option value="caseInfo">Case Information</option>
+                </select>
+              </div>
+              <div className="grid-col-3">
+                <select
+                  className="usa-select"
+                  id="preferred-trial-city"
+                  name="preferredTrialCity"
+                >
+                  <option value="docketRecord">Docket Record</option>
+                  <option value="caseInfo">Case Information</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
         <table
           aria-label="upcoming trial sessions"
           className="usa-table ustc-table trial-sessions subsection"
@@ -18,9 +57,9 @@ export const UpcomingTrialSessions = connect(
           <thead>
             <tr>
               <th>Date</th>
-              <th>Type</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Location</th>
+              <th>Type</th>
               <th>Judge</th>
               <th aria-label="Number of cases">No. of Cases</th>
             </tr>
@@ -40,7 +79,6 @@ export const UpcomingTrialSessions = connect(
                 <tbody key={idx}>
                   <tr className="trial-sessions-row">
                     <td>{item.formattedStartDate}</td>
-                    <td>{item.sessionType}</td>
                     <td aria-hidden="true">
                       {item.swingSession && (
                         <FontAwesomeIcon
@@ -55,6 +93,7 @@ export const UpcomingTrialSessions = connect(
                         {item.trialLocation}
                       </a>
                     </td>
+                    <td>{item.sessionType}</td>
                     <td>{item.judge}</td>
                     <td>{item.maxCases}</td>
                   </tr>
