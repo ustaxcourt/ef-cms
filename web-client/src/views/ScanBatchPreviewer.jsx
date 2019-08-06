@@ -19,7 +19,6 @@ import React, { useEffect, useRef } from 'react';
 export const ScanBatchPreviewer = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
-    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     generatePdfFromScanSessionSequence:
       sequences.generatePdfFromScanSessionSequence,

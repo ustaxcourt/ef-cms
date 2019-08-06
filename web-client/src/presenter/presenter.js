@@ -30,7 +30,6 @@ import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAn
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
-import { completeScanSequence } from './sequences/completeScanSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
@@ -252,7 +251,6 @@ export const presenter = {
     closeModalAndReturnToTrialSessionsSequence,
     completeDocumentSelectSequence,
     completeDocumentSigningSequence,
-    completeScanSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
     convertHtml2PdfSequence,
