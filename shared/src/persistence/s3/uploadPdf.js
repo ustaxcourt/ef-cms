@@ -1,9 +1,12 @@
 /**
  * uploadPdf
  *
- * @param policy
- * @param file
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.file the file to upload
+ * @param {Function} providers.onUploadProgress the upload progress function
+ * @param {object} providers.policy the upload policy
+ * @returns {string} the document id
  */
 exports.uploadPdf = async ({
   applicationContext,
