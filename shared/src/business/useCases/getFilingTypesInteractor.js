@@ -7,8 +7,9 @@ const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  *
- * @param userId
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {Array<string>} the filing type options based on user role
  */
 exports.getFilingTypesInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
