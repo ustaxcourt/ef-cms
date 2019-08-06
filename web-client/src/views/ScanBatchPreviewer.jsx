@@ -288,7 +288,6 @@ export const ScanBatchPreviewer = connect(
       return (
         <>
           <h5 className="header-scanned-batches">Scanned Batches</h5>
-
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 ? (
               <table className="batches-table">
@@ -518,16 +517,16 @@ export const ScanBatchPreviewer = connect(
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.odsFileCompleted}
-              tabName="ownershipDisclosureFile"
-              title="ODS"
+              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
+              tabName="requestForPlaceOfTrialFile"
+              title="Request for Place of Trial"
             />
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
-              tabName="requestForPlaceOfTrialFile"
-              title="Request for Place of Trial"
+              showIcon={scanHelper.odsFileCompleted}
+              tabName="ownershipDisclosureFile"
+              title="ODS"
             />
           </Tabs>
 
