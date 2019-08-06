@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the scanner API
  * @param {Function} providers.store the cerebral store used for setting state.path
+ * @returns {object} the path to execute
  *
  */
 export const startScanAction = async ({
