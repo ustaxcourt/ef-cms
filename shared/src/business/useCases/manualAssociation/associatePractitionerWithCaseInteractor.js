@@ -13,6 +13,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
  * @param {string} params.caseId the case id
+ * @param {boolean} params.representingPrimary whether the practitioner is
+ * representing the primary contact
+ * @param {boolean} params.representingSecondary whether the practitioner is
+ * representing the secondary contact
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
