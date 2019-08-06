@@ -46,6 +46,7 @@ import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSe
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
+import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
@@ -119,6 +120,7 @@ import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTri
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
+import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
@@ -266,6 +268,7 @@ export const presenter = {
     editSelectedSecondaryDocumentSequence,
     fetchUserNotificationsSequence,
     formCancelToggleCancelSequence,
+    generatePdfFromScanSessionSequence,
     getUsersInSectionSequence,
     gotoAddDocketEntrySequence,
     gotoAddTrialSessionSequence,
@@ -338,6 +341,7 @@ export const presenter = {
     setCaseToReadyForTrialSequence,
     setCurrentPageIndexSequence,
     setDocumentDetailTabSequence,
+    setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
     setFocusedWorkItemSequence,
     setFormSubmittingSequence,
