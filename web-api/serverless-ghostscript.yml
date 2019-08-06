@@ -7,9 +7,9 @@ custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   prune:
-    - automatic: true
-    - includeLayers: true
-    - number: 3
+    automatic: true
+    includeLayers: true
+    number: 3
 
 provider:
   name: aws
