@@ -13,10 +13,12 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
- * @param documentMetadata
- * @param documentIds
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Array<string>} providers.documentIds the document ids for the primary, supporting,
+ * secondary, and secondary supporting documents
+ * @param {object} providers.documentMetadata the metadata for all the documents
+ * @returns {object} the updated case after the documents have been added
  */
 exports.fileExternalDocumentInteractor = async ({
   applicationContext,
