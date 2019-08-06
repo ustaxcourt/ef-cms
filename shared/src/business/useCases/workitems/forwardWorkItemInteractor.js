@@ -10,11 +10,12 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
- * @param workItemId
- * @param assigneeId
- * @param message
- * @param applicationContext
- * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.assigneeId the id of the user to assign the work item to
+ * @param {string} providers.message the message to send to the user when assigning the work item
+ * @param {string} providers.workItemId the id of the work item to assign
+ * @returns {object} the updated work item
  */
 exports.forwardWorkItemInteractor = async ({
   applicationContext,

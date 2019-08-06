@@ -6,8 +6,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
- * @param applicationContext
- * @returns {Promise<*|*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.userId the user to get the sent messages
+ * @returns {object} the messages in the user sent box
  */
 exports.getSentMessagesForUserInteractor = async ({
   applicationContext,

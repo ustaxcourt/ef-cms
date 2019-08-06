@@ -1,8 +1,9 @@
 /**
  *
- * @param documentId
- * @param applicationContext
- * @returns {Promise<any>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.documentId the document id to get
+ * @returns {Promise<any>} the promise of the call to the storage client
  */
 exports.getDownloadPolicyUrl = ({ applicationContext, documentId }) => {
   return new Promise((resolve, reject) => {

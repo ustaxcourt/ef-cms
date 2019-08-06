@@ -14,10 +14,11 @@
  *   myCustomVar2: 'undefined'
  * }
  *
- * @param {object} applicationContext application context
- * @param {object} defaultTemplateData default values correlated with templateData matching the format described above
- * @param {Array} destinations array of destinations matching the format described above
- * @param {string} templateName name of the SES template
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext application context
+ * @param {object} providers.defaultTemplateData default values correlated with templateData matching the format described above
+ * @param {Array} providers.destinations array of destinations matching the format described above
+ * @param {string} providers.templateName name of the SES template
  * @returns {void}
  */
 exports.sendBulkTemplatedEmail = async ({
