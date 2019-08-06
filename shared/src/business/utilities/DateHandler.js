@@ -27,7 +27,7 @@ module.exports.prepareDateFromString = prepareDateFromString;
 
 /**
  * @param {string} dateString a date string to be sent to persistence
- * @param {string} inputFormat
+ * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
 module.exports.createISODateString = (dateString, inputFormat) => {
