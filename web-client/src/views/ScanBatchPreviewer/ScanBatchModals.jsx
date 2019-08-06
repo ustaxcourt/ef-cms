@@ -10,7 +10,7 @@ export const EmptyHopperModal = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Scan"
-        title="The Hopper is empty"
+        title="The hopper is empty"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="startScanSequence"
       >
