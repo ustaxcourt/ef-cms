@@ -3,9 +3,11 @@ const { Case } = require('../../entities/cases/Case');
 /**
  * associateRespondentToCase
  *
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case
+ * @param {object} providers.user the user object for the logged in user
+ * @returns {Promise<*>} the updated case entity
  */
 exports.associateRespondentToCase = async ({
   applicationContext,

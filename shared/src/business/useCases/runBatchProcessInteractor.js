@@ -14,11 +14,9 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * runBatchProcessInteractor
  *
- * @param caseId
- * @param caseToUpdate
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {object} the processed cases as zip files
  */
 exports.runBatchProcessInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
