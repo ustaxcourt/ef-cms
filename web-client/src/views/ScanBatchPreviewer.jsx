@@ -406,7 +406,7 @@ export const ScanBatchPreviewer = connect(
             <input
               accept=".pdf"
               aria-describedby={`${documentType}-hint`}
-              className="usa-input "
+              className="usa-input"
               id={`${documentType}-file`}
               name={documentType}
               type="file"
