@@ -1,0 +1,37 @@
+import { connect } from '@cerebral/react';
+import { decorateWithPostCallback } from '../utils/useCerebralState';
+import { props, sequences, state } from 'cerebral';
+import { useCerebralStateFactory } from '../utils/useCerebralState';
+import React, { useState } from 'react';
+import classNames from 'classnames';
+
+export const BindedSelect = connect(
+  {
+    bind: props.bind,
+    simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
+    value: state[props.bind],
+  },
+  ({ bind, children, className, id, onChange, simpleSetter, value }) => {
+    let activeOption, setSelect;
+
+    if (bind) {
+      const useCerebralState = useCerebralStateFactory(simpleSetter, value);
+      [activeOption, setSelect] = useCerebralState(bind);
+    } else {
+      [activeOption, setSelect] = useState();
+    }
+
+    setSelect = decorateWithPostCallback(setSelect, onChange);
+
+    return (
+      <select
+        className={classNames('usa-select', className)}
+        id={id}
+        value={activeOption || ''}
+        onChange={e => setSelect(e.target.value)}
+      >
+        {children}
+      </select>
+    );
+  },
+);
