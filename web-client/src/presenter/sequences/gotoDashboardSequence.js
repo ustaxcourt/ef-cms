@@ -28,7 +28,14 @@ const goToDashboard = [
         ],
       ]),
     ],
-    judge: [setCurrentPageAction('DashboardJudge')],
+    judge: [
+      () => {
+        return { x: 'TODO MAYBE?' };
+      },
+      // set(state.workQueueToDisplay.box, 'inbox'),
+      ...chooseWorkQueueSequence,
+      setCurrentPageAction('DashboardJudge'),
+    ],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,
