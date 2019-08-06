@@ -9,9 +9,9 @@ const {
 /**
  * createCaseDeadline
  *
- * @param caseDeadline
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseDeadline the case deadline data
  */
 exports.createCaseDeadline = async ({ applicationContext, caseDeadline }) => {
   const caseDeadlineId = `case-deadline-${caseDeadline.caseDeadlineId}`;
