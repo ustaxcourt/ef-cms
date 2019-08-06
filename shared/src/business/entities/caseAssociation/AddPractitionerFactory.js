@@ -27,20 +27,18 @@ AddPractitionerFactory.get = metadata => {
   };
 
   let schema = {
-    representingPrimary: joi.boolean(),
-    representingSecondary: joi.boolean(),
     user: joi.object().required(),
   };
 
   let schemaOptionalItems = {
-    representingPrimary: joi.boolean(),
+    representingPrimary: joi.boolean().invalid(false),
     representingSecondary: joi.boolean(),
   };
 
   let errorToMessageMap = {
     representingPrimary: 'Select a represented party.',
     representingSecondary: 'Select a represented party.',
-    user: 'Select a  practitioner.',
+    user: 'Select a practitioner.',
   };
 
   let customValidate;
