@@ -16,6 +16,6 @@ describe('validateAddPractitioner', () => {
       counsel: {},
     });
 
-    expect(Object.keys(errors)).toEqual(['representingPrimary', 'user']);
+    expect(Object.keys(errors)).toEqual(['user', 'representingPrimary']);
   });
 });
