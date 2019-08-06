@@ -63,7 +63,6 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
           ? ifTextContent(contact.country, contact.country)
           : '';
       content += ifTextContent(contact.phone, '<p>' + contact.phone + '</p>');
-      content += ifTextContent(contact.email, '<p>' + contact.email + '</p>');
 
       return content;
     };

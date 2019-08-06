@@ -1,11 +1,12 @@
 import { state } from 'cerebral';
 
 /**
- * starts scanning documents based on current data source
+ * handles scanner errors passed via props
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting the scanner API
- * @param {Function} providers.store the cerebral store used for setting state.path
+ * @param {object} providers.props the cerebral props object used for getting the props.error
+ * @param {Function} providers.store the cerebral store used for setting error / scanner state
+ * @returns {void}
  *
  */
 export const handleScanErrorAction = async ({ props, store }) => {

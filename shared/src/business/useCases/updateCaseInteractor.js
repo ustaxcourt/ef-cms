@@ -13,11 +13,11 @@ const { isEmpty } = require('lodash');
 /**
  * updateCaseInteractor
  *
- * @param caseId
- * @param caseToUpdate
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to update
+ * @param {object} providers.caseToUpdate the updated case data
+ * @returns {object} the updated case data
  */
 exports.updateCaseInteractor = async ({
   applicationContext,

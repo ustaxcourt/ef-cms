@@ -7,9 +7,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getInboxMessagesForUserInteractor
  *
- * @param userId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.userId the user to get the inbox messages
+ * @returns {object} the messages in the user inbox
  */
 exports.getInboxMessagesForUserInteractor = async ({
   applicationContext,

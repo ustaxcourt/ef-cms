@@ -9,8 +9,10 @@ const { Case } = require('../../entities/cases/Case');
 
 /**
  *
- * @param applicationContext
- * @returns {Promise<*|*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.section the section to get the document qc
+ * @returns {object} the work items in the section document batched inbox
  */
 exports.getDocumentQCBatchedForSectionInteractor = async ({
   applicationContext,
