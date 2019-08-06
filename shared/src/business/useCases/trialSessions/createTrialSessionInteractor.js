@@ -8,9 +8,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * createTrialSessionInteractor
  *
- * @param trialSession
- * @param applicationContext
- * @returns {*|Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.trialSession the trial session data
+ * @returns {object} the created trial session
  */
 exports.createTrialSessionInteractor = async ({
   applicationContext,

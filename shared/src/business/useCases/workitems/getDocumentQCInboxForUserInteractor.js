@@ -7,9 +7,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getDocumentQCInboxForUserInteractor
  *
- * @param section
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.userId the user to get the document qc
+ * @returns {object} the work items in the user document inbox
  */
 exports.getDocumentQCInboxForUserInteractor = async ({
   applicationContext,

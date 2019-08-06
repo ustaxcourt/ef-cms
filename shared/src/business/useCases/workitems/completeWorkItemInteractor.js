@@ -9,11 +9,11 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  * completeWorkItemInteractor
  *
- * @param workItemId
- * @param message
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.completedMessage the message for completing the work item
+ * @param {string} providers.workItemId the id of the work item to complete
+ * @returns {object} the completed work item
  */
 exports.completeWorkItemInteractor = async ({
   applicationContext,

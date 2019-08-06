@@ -7,9 +7,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getCalendaredCasesForTrialSessionInteractor
  *
- * @param applicationContext
- * @param trialSessionId
- * @returns {*|Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.trialSessionId the id of the trial session to get the calendared cases
+ * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
  */
 exports.getCalendaredCasesForTrialSessionInteractor = async ({
   applicationContext,
