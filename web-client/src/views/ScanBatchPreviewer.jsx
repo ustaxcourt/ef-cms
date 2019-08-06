@@ -518,16 +518,16 @@ export const ScanBatchPreviewer = connect(
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.odsFileCompleted}
-              tabName="ownershipDisclosureFile"
-              title="ODS"
+              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
+              tabName="requestForPlaceOfTrialFile"
+              title="Request for Place of Trial"
             />
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
-              tabName="requestForPlaceOfTrialFile"
-              title="Request for Place of Trial"
+              showIcon={scanHelper.odsFileCompleted}
+              tabName="ownershipDisclosureFile"
+              title="ODS"
             />
           </Tabs>
 
