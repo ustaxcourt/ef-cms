@@ -200,7 +200,7 @@ export const ScanBatchPreviewer = connect(
             id="scan-mode-radios"
           >
             <legend
-              className="usa-legend with-hint"
+              className="usa-legend with-hint margin-bottom-2"
               id="scan-mode-radios-legend"
             >
               How do you want to add this document?
@@ -465,9 +465,11 @@ export const ScanBatchPreviewer = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <h3 className="margin-bottom-0">Add Document(s)</h3>
+                <h3 className="margin-bottom-0 margin-left-105">
+                  Add Document(s)
+                </h3>
               </div>
-              <div className="grid-col-6 text-right">
+              <div className="grid-col-6 text-right margin-top-2px padding-right-4">
                 <span className="margin-right-1">
                   Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                 </span>
@@ -516,16 +518,16 @@ export const ScanBatchPreviewer = connect(
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
-              tabName="requestForPlaceOfTrialFile"
-              title="Request for Place of Trial"
+              showIcon={scanHelper.odsFileCompleted}
+              tabName="ownershipDisclosureFile"
+              title="ODS"
             />
             <Tab
               icon={['fas', 'check-circle']}
               iconColor="green"
-              showIcon={scanHelper.odsFileCompleted}
-              tabName="ownershipDisclosureFile"
-              title="ODS"
+              showIcon={scanHelper.requestForPlaceOfTrialFileCompleted}
+              tabName="requestForPlaceOfTrialFile"
+              title="Request for Place of Trial"
             />
           </Tabs>
 
