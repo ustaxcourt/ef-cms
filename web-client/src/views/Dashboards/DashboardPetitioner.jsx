@@ -1,13 +1,13 @@
-import { BigHeader } from './BigHeader';
-import { CaseListPetitioner } from './CaseListPetitioner';
-import { ErrorNotification } from './ErrorNotification';
+import { BigHeader } from '../BigHeader';
+import { CaseListPetitioner } from '../CaseListPetitioner';
+import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SuccessNotification } from './SuccessNotification';
-import { WhatToExpect } from './WhatToExpect';
+import { SuccessNotification } from '../SuccessNotification';
+import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import howToPrepareYourDocuments from '../pdfs/how-to-prepare-your-documents.pdf';
+import howToPrepareYourDocuments from '../../pdfs/how-to-prepare-your-documents.pdf';
 
 export const DashboardPetitioner = connect(
   { helper: state.dashboardExternalHelper, user: state.user },
