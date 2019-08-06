@@ -8,8 +8,10 @@ import React from 'react';
 export const UpcomingTrialSessions = connect(
   {
     formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
+    trialCities: state.constants.TRIAL_CITIES,
+    trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
   },
-  ({ formattedTrialSessions }) => {
+  ({ formattedTrialSessions, trialCities, trialSessionTypes }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
@@ -21,22 +23,33 @@ export const UpcomingTrialSessions = connect(
               <div className="grid-col-3">
                 <BindedSelect bind="screenMetadata.trialSessionFilters.sessionType">
                   <option value="">-Session Type-</option>
-                  <option value="docketRecord">Docket Record</option>
-                  <option value="caseInfo">Case Information</option>
+                  {trialSessionTypes.map(sessionType => (
+                    <option key={sessionType} value={sessionType}>
+                      {sessionType}
+                    </option>
+                  ))}
                 </BindedSelect>
               </div>
               <div className="grid-col-3">
                 <BindedSelect bind="screenMetadata.trialSessionFilters.trialLocation">
                   <option value="">-Location-</option>
-                  <option value="docketRecord">Docket Record</option>
-                  <option value="caseInfo">Case Information</option>
+                  {trialCities.ALL.map(trialCity => {
+                    const trialLocation = `${trialCity.city}, ${trialCity.state}`;
+                    return (
+                      <option key={trialLocation} value={trialLocation}>
+                        {trialLocation}
+                      </option>
+                    );
+                  })}
                 </BindedSelect>
               </div>
               <div className="grid-col-3">
                 <BindedSelect bind="screenMetadata.trialSessionFilters.judge">
                   <option value="">-Judge-</option>
-                  <option value="docketRecord">Docket Record</option>
-                  <option value="caseInfo">Case Information</option>
+                  <option value="Judge Judy">Judge Judy</option>
+                  <option value="Judge Smith">Judge Smith</option>
+                  <option value="Judge Dredd">Judge Dredd</option>
+                  <option value="Judge Arnold">Judge Arnold</option>
                 </BindedSelect>
               </div>
             </div>
