@@ -27,7 +27,7 @@ class AddRespondentModalComponent extends ModalDialog {
             this.props.validationErrors.user && 'usa-form-group--error',
           )}
         >
-          <fieldset className="usa-fieldset margin-bottom-0 respondent-matches">
+          <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="counsel-matches-legend">
               {caseDetailHelper.respondentSearchResultsCount} Counsel Match(es)
               Found
@@ -42,38 +42,39 @@ class AddRespondentModalComponent extends ModalDialog {
                 {modal.respondentMatches[0].addressLine2}
               </span>
             )}
-
-            {caseDetailHelper.respondentSearchResultsCount > 1 &&
-              modal.respondentMatches.map((counsel, idx) => (
-                <div className="usa-radio" key={idx}>
-                  <input
-                    aria-describedby="counsel-matches-legend"
-                    checked={
-                      (modal.user && modal.user.userId === counsel.userId) ||
-                      false
-                    }
-                    className="usa-radio__input"
-                    id={`counsel-${idx}`}
-                    name="user"
-                    type="radio"
-                    onChange={e => {
-                      updateModalValueSequence({
-                        key: e.target.name,
-                        value: counsel,
-                      });
-                      this.props.validateSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-radio__label"
-                    htmlFor={`counsel-${idx}`}
-                  >
-                    {counsel.name} ({counsel.barNumber})
-                    <br />
-                    {counsel.addressLine2}
-                  </label>
-                </div>
-              ))}
+            <div className="respondent-matches">
+              {caseDetailHelper.respondentSearchResultsCount > 1 &&
+                modal.respondentMatches.map((counsel, idx) => (
+                  <div className="usa-radio" key={idx}>
+                    <input
+                      aria-describedby="counsel-matches-legend"
+                      checked={
+                        (modal.user && modal.user.userId === counsel.userId) ||
+                        false
+                      }
+                      className="usa-radio__input"
+                      id={`counsel-${idx}`}
+                      name="user"
+                      type="radio"
+                      onChange={e => {
+                        updateModalValueSequence({
+                          key: e.target.name,
+                          value: counsel,
+                        });
+                        this.props.validateSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      htmlFor={`counsel-${idx}`}
+                    >
+                      {counsel.name} ({counsel.barNumber})
+                      <br />
+                      {counsel.addressLine2}
+                    </label>
+                  </div>
+                ))}
+            </div>
             <Text bind="validationErrors.user" className="usa-error-message" />
           </fieldset>
         </div>
