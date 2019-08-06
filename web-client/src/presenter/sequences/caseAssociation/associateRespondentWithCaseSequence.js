@@ -1,5 +1,6 @@
 import { associateRespondentWithCaseAction } from '../../actions/ManualAssociation/associateRespondentWithCaseAction';
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
+import { clearFormAction } from '../../actions/clearFormAction';
 import { clearModalAction } from '../../actions/clearModalAction';
 import { clearModalStateAction } from '../../actions/clearModalStateAction';
 import { getCaseAction } from '../../actions/getCaseAction';
@@ -25,6 +26,7 @@ export const associateRespondentWithCaseSequence = [
           setAlertSuccessAction,
           clearModalAction,
           clearModalStateAction,
+          clearFormAction,
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
