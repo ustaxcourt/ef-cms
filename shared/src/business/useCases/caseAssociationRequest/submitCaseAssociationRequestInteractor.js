@@ -9,10 +9,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * submitCaseAssociationRequestInteractor
  *
- * @param params
- * @param params.caseId
- * @param params.applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the case id
+ * @param {string} providers.representingPrimary true if the user is representing
+ * the primary contact on the case, false otherwise
+ * @param {string} providers.representingSecondary true if the user is representing
+ * the secondary contact on the case, false otherwise
+ * @returns {Promise<*>} the promise of the case assocation request
  */
 exports.submitCaseAssociationRequestInteractor = async ({
   applicationContext,

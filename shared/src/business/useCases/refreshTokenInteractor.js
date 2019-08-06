@@ -3,10 +3,10 @@ const qs = require('qs');
 /**
  * Refresh the Cognito token
  *
- * @param user
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.refreshToken the refresh token
+ * @returns {object} the token
  */
 exports.refreshTokenInteractor = async ({
   applicationContext,
