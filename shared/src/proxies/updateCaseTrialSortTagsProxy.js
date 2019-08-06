@@ -3,9 +3,10 @@ const { put } = require('./requests');
 /**
  * updateCaseTrialSortTagsInteractor
  *
- * @param applicationContext
- * @param caseId
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to update the case trial sort tags
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.updateCaseTrialSortTagsInteractor = ({
   applicationContext,
