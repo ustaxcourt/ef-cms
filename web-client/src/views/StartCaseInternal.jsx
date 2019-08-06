@@ -16,7 +16,6 @@ import classNames from 'classnames';
 export const StartCaseInternal = connect(
   {
     caseTypes: state.caseTypes,
-    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     documentSelectedForScan: state.documentSelectedForScan,
     form: state.form,
