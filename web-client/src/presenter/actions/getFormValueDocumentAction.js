@@ -2,7 +2,7 @@
  * gets the document key, value pair based on props
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral store used for getting the props.workItemId
+ * @param {object} providers.props the cerebral store used for getting the props.documentType and props.file
  * @returns {object} object containing the documentType and file
  */
 export const getFormValueDocumentAction = ({ props }) => {
