@@ -15,6 +15,31 @@ exports.userMap = {
     section: 'docket',
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
   },
+
+  judge: {
+    'custom:role': 'judge',
+    email: 'judge',
+    name: 'Test Judge',
+    role: 'judge',
+    section: 'judge',
+    userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+  },
+  judge1: {
+    'custom:role': 'judge',
+    email: 'judge1',
+    name: 'Test Judge1',
+    role: 'judge',
+    section: 'judge',
+    userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+  },
+  judge2: {
+    'custom:role': 'judge',
+    email: 'judge2',
+    name: 'Test Judge2',
+    role: 'judge',
+    section: 'judge',
+    userId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+  },
   petitionsclerk: {
     'custom:role': 'petitionsclerk',
     email: 'petitionsclerk@example.com',
