@@ -70,7 +70,14 @@ describe('Case from Paper Document Scan journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.alert = () => null;
+    global.URL = {
+      createObjectURL: () => {
+        return fakeData;
+      },
+      revokeObjectURL: () => null,
+    };
     global.window = {
+      URL: global.URL,
       localStorage: {
         getItem: key => {
           if (key === 'scannerSourceIndex') {
