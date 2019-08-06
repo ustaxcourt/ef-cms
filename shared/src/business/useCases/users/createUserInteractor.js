@@ -7,10 +7,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * createUserInteractor
  *
- * @param petition
- * @param documents
- * @param applicationContext
- * @returns {Promise<*|{caseId}>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.user the user data
+ * @returns {Promise} the promise of the createUser call
  */
 exports.createUserInteractor = async ({ applicationContext, user }) => {
   const requestUser = applicationContext.getCurrentUser();
