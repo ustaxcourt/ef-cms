@@ -6,7 +6,7 @@ describe('AddPractitioner', () => {
       const entity = AddPractitionerFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
         representingPrimary: 'Select a represented party.',
-        user: 'Select a  practitioner.',
+        user: 'Select a practitioner.',
       });
     });
 
@@ -16,6 +16,16 @@ describe('AddPractitioner', () => {
         user: { userId: 'abc' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should not be valid if representingPrimary is false and representingSecondary is not present', () => {
+      const entity = AddPractitionerFactory.get({
+        representingPrimary: false,
+        user: { userId: 'abc' },
+      });
+      expect(entity.getFormattedValidationErrors()).toEqual({
+        representingPrimary: 'Select a represented party.',
+      });
     });
   });
 });
