@@ -1,4 +1,6 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -11,40 +13,31 @@ export const UpcomingTrialSessions = connect(
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
-          <div className="grid-col-7">
+          <div className="tablet:grid-col-7">
             <div className="grid-row grid-gap">
-              <div className="grid-col-2 padding-top-05">
+              <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
                 <h3>Filter by</h3>
               </div>
               <div className="grid-col-3">
-                <select
-                  className="usa-select"
-                  id="preferred-trial-city"
-                  name="preferredTrialCity"
-                >
+                <BindedSelect bind="screenMetadata.trialSessionFilters.sessionType">
+                  <option value="">-Session Type-</option>
                   <option value="docketRecord">Docket Record</option>
                   <option value="caseInfo">Case Information</option>
-                </select>
+                </BindedSelect>
               </div>
               <div className="grid-col-3">
-                <select
-                  className="usa-select"
-                  id="preferred-trial-city"
-                  name="preferredTrialCity"
-                >
+                <BindedSelect bind="screenMetadata.trialSessionFilters.trialLocation">
+                  <option value="">-Location-</option>
                   <option value="docketRecord">Docket Record</option>
                   <option value="caseInfo">Case Information</option>
-                </select>
+                </BindedSelect>
               </div>
               <div className="grid-col-3">
-                <select
-                  className="usa-select"
-                  id="preferred-trial-city"
-                  name="preferredTrialCity"
-                >
+                <BindedSelect bind="screenMetadata.trialSessionFilters.judge">
+                  <option value="">-Judge-</option>
                   <option value="docketRecord">Docket Record</option>
                   <option value="caseInfo">Case Information</option>
-                </select>
+                </BindedSelect>
               </div>
             </div>
           </div>
