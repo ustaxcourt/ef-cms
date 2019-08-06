@@ -6,9 +6,10 @@ const {
 /**
  * updateCaseTrialSortMappingRecords
  *
- * @param case
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to update the mapping records
+ * @param {object} providers.caseSortTags the hybrid and nonHybrid sort tags
  */
 exports.updateCaseTrialSortMappingRecords = async ({
   applicationContext,
