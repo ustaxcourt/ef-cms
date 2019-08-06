@@ -184,7 +184,7 @@ export const PartyInformation = connect(
                 </label>
                 <input
                   aria-describedby="practitioner-counsel-search-description"
-                  className={`usa-input margin-bottom-0 
+                  className={`usa-input margin-bottom-0
                     ${
                       validationErrors.practitionerSearchError
                         ? 'usa-input--error'
@@ -192,7 +192,7 @@ export const PartyInformation = connect(
                     }`}
                   id="practitioner-search-field"
                   name="practitionerSearch"
-                  placeholder="Enter Bar Number or Name"
+                  placeholder="Enter Bar No. or Name"
                   type="search"
                   onChange={e => {
                     updateFormValueSequence({
@@ -249,7 +249,7 @@ export const PartyInformation = connect(
                 </label>
                 <input
                   aria-describedby="respondent-counsel-search-description"
-                  className={`usa-input margin-bottom-0 
+                  className={`usa-input margin-bottom-0
                   ${
                     validationErrors.respondentSearchError
                       ? 'usa-input--error'
@@ -257,7 +257,7 @@ export const PartyInformation = connect(
                   }`}
                   id="respondent-search-field"
                   name="respondentSearch"
-                  placeholder="Enter Bar Number or Name"
+                  placeholder="Enter Bar No. or Name"
                   type="search"
                   onChange={e => {
                     updateFormValueSequence({
