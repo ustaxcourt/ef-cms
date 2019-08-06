@@ -10,7 +10,7 @@ export default test => {
 
     await test.runSequence('completeScanSequence', {
       onComplete: file => {
-        limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
+        return limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
           test.runSequence('updateFormValueSequence', {
             key: selectedDocumentType,
             value: file,

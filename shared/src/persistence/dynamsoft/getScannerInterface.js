@@ -159,8 +159,9 @@ exports.getScannerInterface = () => {
 
       DWObject.OpenSource();
       DWObject.IfDisableSourceAfterAcquire = true;
-      DWObject.IfShowIndicator = false;
       DWObject.IfShowUI = false;
+      DWObject.IfShowIndicator = false;
+      DWObject.IfShowProgressBar = false;
       DWObject.Resolution = 300;
       DWObject.IfFeederEnabled = true;
       DWObject.IfDuplexEnabled = false;
