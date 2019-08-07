@@ -37,16 +37,17 @@ joiValidationDecorator(
   }),
 );
 
+User.ROLES = {
+  EXTERNAL: ['petitioner', 'practitioner', 'respondent'],
+  INTERNAL: ['docketclerk', 'judge', 'petitionsclerk', 'seniorattorney'],
+};
+
 User.prototype.isExternalUser = function() {
-  return (
-    this.role === 'petitioner' ||
-    this.role === 'practitioner' ||
-    this.role === 'respondent'
-  );
+  return User.ROLES.EXTERNAL.includes(this.role);
 };
 
 User.prototype.isInternalUser = function() {
-  return !this.isExternalUser();
+  return User.ROLES.INTERNAL.includes(this.role);
 };
 
 module.exports = { User };

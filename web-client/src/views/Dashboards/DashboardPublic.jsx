@@ -1,5 +1,5 @@
-import { ErrorNotification } from './ErrorNotification';
-import { SuccessNotification } from './SuccessNotification';
+import { ErrorNotification } from '../ErrorNotification';
+import { SuccessNotification } from '../SuccessNotification';
 import React from 'react';
 
 export const DashboardPublic = () => (

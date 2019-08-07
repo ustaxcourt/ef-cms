@@ -5,12 +5,13 @@ import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
-import { DashboardDocketClerk } from './DashboardDocketClerk';
-import { DashboardPetitioner } from './DashboardPetitioner';
-import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
-import { DashboardPractitioner } from './DashboardPractitioner';
-import { DashboardRespondent } from './DashboardRespondent';
-import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
+import { DashboardDocketClerk } from './Dashboards/DashboardDocketClerk';
+import { DashboardJudge } from './Dashboards/DashboardJudge';
+import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
+import { DashboardPetitionsClerk } from './Dashboards/DashboardPetitionsClerk';
+import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
+import { DashboardRespondent } from './Dashboards/DashboardRespondent';
+import { DashboardSeniorAttorney } from './Dashboards/DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
@@ -45,6 +46,7 @@ const pages = {
   CaseDetailInternal,
   CreateOrder,
   DashboardDocketClerk,
+  DashboardJudge,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPractitioner,
