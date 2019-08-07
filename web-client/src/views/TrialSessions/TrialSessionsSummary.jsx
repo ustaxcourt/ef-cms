@@ -24,7 +24,7 @@ export const TrialSessionsSummary = connect(
               <th>
                 <a
                   className="usa-button usa-button--unstyled"
-                  href={`/trial-sessions?judge=${user.userId}`}
+                  href={`/trial-sessions?judge[userId]=${user.userId}`}
                 >
                   View All
                 </a>
