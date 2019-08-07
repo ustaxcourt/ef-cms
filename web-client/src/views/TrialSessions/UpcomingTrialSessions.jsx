@@ -1,5 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { JudgeOptions } from './JudgeOptions';
+import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -7,10 +9,9 @@ import React from 'react';
 export const UpcomingTrialSessions = connect(
   {
     formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
-    trialCities: state.constants.TRIAL_CITIES,
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
   },
-  ({ formattedTrialSessions, trialCities, trialSessionTypes }) => {
+  ({ formattedTrialSessions, trialSessionTypes }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
@@ -38,14 +39,7 @@ export const UpcomingTrialSessions = connect(
                   name="trialLocation"
                 >
                   <option value="">-Location-</option>
-                  {trialCities.ALL.map(trialCity => {
-                    const trialLocation = `${trialCity.city}, ${trialCity.state}`;
-                    return (
-                      <option key={trialLocation} value={trialLocation}>
-                        {trialLocation}
-                      </option>
-                    );
-                  })}
+                  <TrialCityOptions />
                 </BindedSelect>
               </div>
               <div className="grid-col-3">
@@ -54,10 +48,7 @@ export const UpcomingTrialSessions = connect(
                   name="judge"
                 >
                   <option value="">-Judge-</option>
-                  <option value="Judge Judy">Judge Judy</option>
-                  <option value="Judge Smith">Judge Smith</option>
-                  <option value="Judge Dredd">Judge Dredd</option>
-                  <option value="Judge Arnold">Judge Arnold</option>
+                  <JudgeOptions />
                 </BindedSelect>
               </div>
             </div>
