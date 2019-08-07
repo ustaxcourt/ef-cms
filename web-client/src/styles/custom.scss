@@ -15,6 +15,12 @@ hr {
   margin: 20px 0;
 }
 
+.grid-row {
+  &.underlined {
+    border-bottom: 1px solid color($theme-color-base-lighter);
+  }
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -1433,7 +1439,6 @@ button.change-scanner-button {
     border-bottom: 1px solid $color-primary-alt-lightest;
   }
 }
-
 
 .batch-index {
   margin-left: 2px;
