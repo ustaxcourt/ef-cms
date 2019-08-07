@@ -2,12 +2,17 @@ import { state } from 'cerebral';
 
 export const headerHelper = get => {
   const user = get(state.user);
-  const currentPage = get(state.currentPage);
+  const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueIsInternal);
 
   const isUserInternal = user => {
-    const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
+    const internalRoles = [
+      'docketclerk',
+      'judge',
+      'petitionsclerk',
+      'seniorattorney',
+    ];
     return user && user.role && internalRoles.includes(user.role);
   };
   const isUserExternal = user => {
@@ -19,26 +24,20 @@ export const headerHelper = get => {
     return user && user.role && !externalRoles.includes(user.role);
   };
 
+  const isTrialSessions = currentPage.startsWith('TrialSessions');
+  const isTrialSessionDetails = currentPage.startsWith('TrialSessionDetail');
+  const isDashboard = currentPage.startsWith('Dashboard');
+
   return {
     defaultQCBoxPath: isOtherUser(user)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
-    pageIsDocumentQC:
-      currentPage &&
-      currentPage.includes('Dashboard') &&
-      !workQueueIsInternal &&
-      (!currentPage || !currentPage.includes('TrialSessions')),
-    pageIsMessages:
-      currentPage &&
-      currentPage.includes('Dashboard') &&
-      workQueueIsInternal &&
-      (!currentPage || !currentPage.includes('TrialSessions')),
-    pageIsMyCases:
-      currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
+    pageIsDocumentQC: isDashboard && !workQueueIsInternal && !isTrialSessions,
+    pageIsMessages: isDashboard && workQueueIsInternal && !isTrialSessions,
+    pageIsMyCases: isDashboard && isUserExternal(user),
     pageIsTrialSessions:
       currentPage &&
-      (currentPage.includes('TrialSessions') ||
-        currentPage.includes('TrialSessionDetail')) &&
+      (isTrialSessions || isTrialSessionDetails) &&
       isUserInternal(user),
     showDocumentQC: isUserInternal(user),
     showMessages: isUserInternal(user),

@@ -22,6 +22,7 @@ const compareCasesByDocketNumber = (a, b) => {
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const result = get(state.trialSession);
+  if (!result) return undefined;
 
   result.formattedEligibleCases = (
     get(state.trialSession.eligibleCases) || []
