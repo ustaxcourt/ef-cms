@@ -5,6 +5,9 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  MAX_FILE_SIZE_BYTES,
+} = require('../../../persistence/s3/getUploadPolicy');
 const { includes, omit } = require('lodash');
 
 /**
@@ -56,8 +59,13 @@ function DocketEntryFactory(rawProps) {
     exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
-    primaryDocumentFile: joi.object(),
-    primaryDocumentFileSize: joi.number().optional(),
+    primaryDocumentFile: joi.object().required(),
+    primaryDocumentFileSize: joi
+      .number()
+      .required()
+      .min(1)
+      .max(MAX_FILE_SIZE_BYTES)
+      .integer(),
   };
 
   let schemaOptionalItems = {
