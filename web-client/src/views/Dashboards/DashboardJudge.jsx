@@ -11,7 +11,7 @@ export const DashboardJudge = connect(
   { user: state.user },
   ({ user }) => (
     <>
-      <BigHeader text={`Welcome, Judge ${user.name}`} />
+      <BigHeader text={`Welcome, ${user.name}`} />
       <section className="usa-section grid-container">
         <SuccessNotification />
         <ErrorNotification />

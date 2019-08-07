@@ -22,9 +22,6 @@ export const RecentMessagesInbox = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Received</th>
-              <th aria-label="Status Icon" className="padding-right-0">
-                &nbsp;
-              </th>
               <th>Document</th>
             </tr>
           </thead>
