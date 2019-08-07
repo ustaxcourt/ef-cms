@@ -3,7 +3,7 @@ const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
+const { IRS_BATCH_SYSTEM_SECTION, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
 const { orderBy } = require('lodash');
 
@@ -163,17 +163,17 @@ WorkItem.prototype.getLatestMessageEntity = function() {
 WorkItem.prototype.assignToUser = function({
   assigneeId,
   assigneeName,
-  role,
+  section,
   sentBy,
+  sentBySection,
   sentByUserId,
-  sentByUserRole,
 }) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
-    section: getSectionForRole(role),
+    section,
     sentBy,
-    sentBySection: getSectionForRole(sentByUserRole),
+    sentBySection,
     sentByUserId,
   });
   return this;
@@ -193,15 +193,15 @@ WorkItem.prototype.setStatus = function(status) {
 WorkItem.prototype.assignToIRSBatchSystem = function({
   name,
   userId,
-  userRole,
+  userSection,
 }) {
   this.assignToUser({
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
-    role: 'irsBatchSystem',
+    section: IRS_BATCH_SYSTEM_SECTION,
     sentBy: name,
+    sentBySection: userSection,
     sentByUserId: userId,
-    sentByUserRole: userRole,
   });
   this.addMessage(
     new Message({
@@ -232,10 +232,10 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    role: user.role,
+    section: user.section,
     sentBy: user.name,
+    sentBySection: user.section,
     sentByUserId: user.userId,
-    sentByUserRole: user.role,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(message);

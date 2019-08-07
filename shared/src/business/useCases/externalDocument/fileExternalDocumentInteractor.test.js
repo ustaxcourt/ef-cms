@@ -40,6 +40,7 @@ describe('fileExternalDocumentInteractor', () => {
           return {
             name: 'Olivia Jade',
             role: 'seniorattorney',
+            section: 'seniorattorney',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -75,6 +76,7 @@ describe('fileExternalDocumentInteractor', () => {
           return new User({
             name: 'Olivia Jade',
             role: 'respondent',
+            section: 'respondent',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           });
         },
@@ -114,6 +116,7 @@ describe('fileExternalDocumentInteractor', () => {
           return {
             name: 'Olivia Jade',
             role: 'docketclerk',
+            section: 'docket',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },

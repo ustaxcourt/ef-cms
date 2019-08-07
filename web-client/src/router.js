@@ -245,10 +245,11 @@ const router = {
       }),
     );
     route(
-      '/trial-sessions',
+      '/trial-sessions..',
       checkLoggedIn(() => {
+        var query = route.query();
         document.title = `Trial sessions ${pageTitleSuffix}`;
-        app.getSequence('gotoTrialSessionsSequence')();
+        app.getSequence('gotoTrialSessionsSequence')({ query });
       }),
     );
     route('/idle-logout', () => {

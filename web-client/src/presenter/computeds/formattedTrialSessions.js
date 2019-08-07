@@ -1,4 +1,4 @@
-import { find, orderBy } from 'lodash';
+import { filter, find, identity, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -18,7 +18,14 @@ export const sessionSorter = sessionList => {
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
-  const sessions = orderBy(get(state.trialSessions), 'startDate');
+  const orderedSessions = orderBy(get(state.trialSessions), 'startDate');
+
+  // filter trial sessions
+  const trialSessionFilters = pickBy(
+    get(state.screenMetadata.trialSessionFilters),
+    identity,
+  );
+  const sessions = filter(orderedSessions, trialSessionFilters);
 
   const formattedSessions = [];
   sessions.forEach(session => {

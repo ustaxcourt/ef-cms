@@ -56,10 +56,10 @@ exports.forwardWorkItemInteractor = async ({
     .assignToUser({
       assigneeId: userToForwardTo.userId,
       assigneeName: userToForwardTo.name,
-      role: userToForwardTo.role,
+      section: userToForwardTo.section,
       sentBy: user.name,
+      sentBySection: user.section,
       sentByUserId: user.userId,
-      sentByUserRole: user.role,
     })
     .addMessage(newMessage);
 
