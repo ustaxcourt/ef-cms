@@ -10,7 +10,9 @@
 export const chooseNextStepAction = ({ path, props }) => {
   const { isAddAnother } = props;
   if (isAddAnother) {
-    return path.addAnotherEntry();
+    return path.addAnotherEntry({
+      documentUploadMode: 'scan',
+    });
   } else {
     return path.caseDetail();
   }
