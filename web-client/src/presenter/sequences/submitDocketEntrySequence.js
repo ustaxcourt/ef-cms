@@ -24,6 +24,8 @@ import { state } from 'cerebral';
 import { submitDocketEntryAction } from '../actions/DocketEntry/submitDocketEntryAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
@@ -62,7 +64,12 @@ export const submitDocketEntrySequence = [
                   setDocumentUploadModeAction,
                   getDocketEntryAlertSuccessAction,
                   setAlertSuccessAction,
+                  set(state.showValidation, false),
                   clearFormAction,
+                  clearScreenMetadataAction,
+                  set(state.form.lodged, false),
+                  set(state.form.practitioner, []),
+                  set(state.documentUploadMode, 'scan'),
                 ],
                 caseDetail: [
                   getDocketEntryAlertSuccessAction,
