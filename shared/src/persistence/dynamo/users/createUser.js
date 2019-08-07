@@ -3,15 +3,12 @@ const client = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
-const { getSectionForRole } = require('../../../business/entities/WorkQueue');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
-  const userSection = getSectionForRole(user.role);
-
-  if (userSection) {
+  if (user.section) {
     await client.put({
       Item: {
-        pk: `${userSection}|user`,
+        pk: `${user.section}|user`,
         sk: userId,
       },
       applicationContext,
