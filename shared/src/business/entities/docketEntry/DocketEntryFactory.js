@@ -7,6 +7,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
 const { includes, omit } = require('lodash');
 
@@ -36,6 +37,7 @@ function DocketEntryFactory(rawProps) {
     this.partySecondary = rawPropsParam.partySecondary;
     this.previousDocument = rawPropsParam.previousDocument;
     this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
+    this.primaryDocumentFileSize = rawPropsParam.primaryDocumentFileSize;
     this.secondaryDocumentFile = rawPropsParam.secondaryDocumentFile;
 
     const { secondaryDocument } = rawPropsParam;
@@ -81,7 +83,7 @@ function DocketEntryFactory(rawProps) {
       .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
-    secondaryDocumentFile: joi.object(),
+    secondaryDocumentFile: joi.object().required(),
   };
 
   let errorToMessageMap = {
@@ -111,6 +113,13 @@ function DocketEntryFactory(rawProps) {
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
     primaryDocumentFile: 'A file was not selected.',
+    primaryDocumentFileSize: [
+      {
+        contains: 'must be less than or equal to',
+        message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'Your document file size is empty.',
+    ],
     secondaryDocumentFile: 'A file was not selected.',
   };
 

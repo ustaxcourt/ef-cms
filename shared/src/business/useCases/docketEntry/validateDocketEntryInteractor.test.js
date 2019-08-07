@@ -22,6 +22,7 @@ describe('validateDocketEntryInteractor', () => {
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
       primaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFileSize: 'Your document file size is empty.',
     });
   });
 
@@ -42,6 +43,7 @@ describe('validateDocketEntryInteractor', () => {
         ordinalValue: 'First',
         partyPrimary: true,
         primaryDocumentFile: {},
+        primaryDocumentFileSize: 1,
         scenario: 'Nonstandard G',
       },
     });
