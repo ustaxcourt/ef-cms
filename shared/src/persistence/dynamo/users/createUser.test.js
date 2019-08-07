@@ -26,6 +26,7 @@ describe('createUser', () => {
     const petitionsclerkUser = {
       name: 'Test Petitionsclerk',
       role: 'petitionsclerk',
+      section: 'petitions',
     };
     await createUserRecords({
       applicationContext,
@@ -55,6 +56,7 @@ describe('createUser', () => {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
       role: 'practitioner',
+      section: 'practitioner',
     };
     await createUserRecords({
       applicationContext,
@@ -64,20 +66,27 @@ describe('createUser', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
+        pk: 'practitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(1).args[0]).toMatchObject({
+      Item: {
         pk: userId,
         sk: userId,
         ...practitionerUser,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
         pk: 'Test Practitioner|practitioner',
         sk: userId,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(2).args[0]).toMatchObject({
+    expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
         pk: 'PT1234|practitioner',
         sk: userId,
@@ -91,6 +100,7 @@ describe('createUser', () => {
       barNumber: '0',
       name: 'Test Practitioner',
       role: 'practitioner',
+      section: 'practitioner',
     };
     await createUserRecords({
       applicationContext,
@@ -100,12 +110,19 @@ describe('createUser', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
+        pk: 'practitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(1).args[0]).toMatchObject({
+      Item: {
         pk: userId,
         sk: userId,
         ...practitionerUser,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(1)).toEqual(null);
+    expect(putStub.getCall(2)).toEqual(null);
   });
 });
