@@ -9,7 +9,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 
-const gotoAddDocketEntry = [
+export const gotoAddDocketEntry = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
   clearAlertsAction,
