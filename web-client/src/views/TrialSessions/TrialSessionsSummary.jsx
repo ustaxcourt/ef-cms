@@ -35,7 +35,7 @@ export const TrialSessionsSummary = connect(
           ))}
           <thead>
             <tr>
-              <th colSpan="2">Recent Trial Sessions</th>
+              <th colSpan="3">Recent Trial Sessions</th>
               <th>
                 <button className="usa-button--unstyled">View All</button>
               </th>

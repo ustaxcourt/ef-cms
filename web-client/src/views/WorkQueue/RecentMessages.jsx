@@ -6,7 +6,9 @@ export const RecentMessages = () => {
   return (
     <Tabs>
       <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-        <button className="usa-button--unstyled">View All Messages</button>
+        <button className="usa-button--unstyled margin-top-2">
+          View All Messages
+        </button>
       </div>
       <Tab
         id="recent-messages-tab"
