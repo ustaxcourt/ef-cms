@@ -2,6 +2,7 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
@@ -24,8 +25,6 @@ import { state } from 'cerebral';
 import { submitDocketEntryAction } from '../actions/DocketEntry/submitDocketEntryAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
-import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
