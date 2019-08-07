@@ -1,3 +1,4 @@
+import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { chooseNextStepAction } from '../actions/DocketEntry/chooseNextStepAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
@@ -15,7 +16,6 @@ import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
@@ -25,48 +25,50 @@ import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExt
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const submitDocketEntrySequence = [
-  clearAlertsAction,
-  set(state.showValidation, true),
-  computeFormDateAction,
-  computeSecondaryFormDateAction,
-  computeCertificateOfServiceFormDateAction,
-  computeDateReceivedAction,
-  validateDocketEntryAction,
+  checkForActiveBatchesAction,
   {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
-    ],
-    success: [
-      generateTitleAction,
-      set(state.showValidation, false),
+    hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
+    noActiveBatches: [
       clearAlertsAction,
-      openFileUploadStatusModalAction,
-      uploadExternalDocumentsAction,
+      set(state.showValidation, true),
+      computeFormDateAction,
+      computeSecondaryFormDateAction,
+      computeCertificateOfServiceFormDateAction,
+      computeDateReceivedAction,
+      validateDocketEntryAction,
       {
-        error: [openFileUploadErrorModal],
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
+        ],
         success: [
-          submitDocketEntryAction,
-          stashWizardDataAction,
-          setCaseAction,
-          closeFileUploadStatusModalAction,
-          chooseNextStepAction,
+          generateTitleAction,
+          set(state.showValidation, false),
+          clearAlertsAction,
+          openFileUploadStatusModalAction,
+          uploadExternalDocumentsAction,
           {
-            caseDetail: [
-              getDocketEntryAlertSuccessAction,
-              setAlertSuccessAction,
-              set(state.saveAlertsForNavigation, true),
-              navigateToCaseDetailAction,
-            ],
-            supportingDocument: [
-              set(state.screenMetadata.supporting, true),
-              getDocketEntryAlertSuccessAction,
-              setAlertSuccessAction,
-              clearFormAction,
-              set(state.wizardStep, 'SupportingDocumentForm'),
-              setCurrentPageAction('Interstitial', { force: true }),
-              setCurrentPageAction('AddDocketEntry'),
+            error: [openFileUploadErrorModal],
+            success: [
+              submitDocketEntryAction,
+              stashWizardDataAction,
+              setCaseAction,
+              closeFileUploadStatusModalAction,
+              chooseNextStepAction,
+              {
+                addAnotherEntry: [
+                  getDocketEntryAlertSuccessAction,
+                  setAlertSuccessAction,
+                  clearFormAction,
+                ],
+                caseDetail: [
+                  getDocketEntryAlertSuccessAction,
+                  setAlertSuccessAction,
+                  set(state.saveAlertsForNavigation, true),
+                  navigateToCaseDetailAction,
+                ],
+              },
             ],
           },
         ],

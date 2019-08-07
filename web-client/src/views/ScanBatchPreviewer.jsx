@@ -70,6 +70,7 @@ export const ScanBatchPreviewer = connect(
     setSelectedBatchIndexSequence,
     showModal,
     startScanSequence,
+    title,
     validationErrors,
   }) => {
     useEffect(() => {
@@ -463,9 +464,7 @@ export const ScanBatchPreviewer = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <h3 className="margin-bottom-0 margin-left-105">
-                  Add Document(s)
-                </h3>
+                <h3 className="margin-bottom-0 margin-left-105">{title}</h3>
               </div>
               <div className="grid-col-6 text-right margin-top-2px padding-right-4">
                 <span className="margin-right-1">
@@ -520,4 +519,5 @@ ScanBatchPreviewer.propTypes = {
       title: PropTypes.string.isRequired,
     }),
   ),
+  title: PropTypes.string.isRequired,
 };

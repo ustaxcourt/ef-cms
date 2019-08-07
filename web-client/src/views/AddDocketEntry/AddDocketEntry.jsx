@@ -5,8 +5,6 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
-import { SupportingDocumentForm } from './SupportingDocumentForm';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,56 +12,30 @@ import React from 'react';
 export const AddDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
-    screenMetadata: state.screenMetadata,
     showModal: state.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
-  ({
-    caseDetail,
-    screenMetadata,
-    showModal,
-    submitDocketEntrySequence,
-    updateScreenMetadataSequence,
-  }) => {
+  ({ caseDetail, showModal, submitDocketEntrySequence }) => {
     return (
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
+          <SuccessNotification />
+          <ErrorNotification />
           <div className="grid-row grid-gap">
             <div className="grid-col-12">
               <h1 className="margin-bottom-105">Add Docket Entry</h1>
-              {/* <p className="required-statement margin-top-neg-3 margin-bottom-2">
-                All fields required unless otherwise noted
-                </p> */}
             </div>
 
             <div className="grid-col-5">
               <section className="usa-section DocumentDetail">
-                <SuccessNotification />
-                <ErrorNotification />
-                <Tabs
-                  asSwitch
-                  bind="wizardStep"
-                  defaultActiveTab="PrimaryDocumentForm"
-                >
-                  <Tab tabName="PrimaryDocumentForm">
-                    <PrimaryDocumentForm />
-                  </Tab>
-                  <Tab tabName="SupportingDocumentForm">
-                    <SupportingDocumentForm />
-                  </Tab>
-                </Tabs>
+                <PrimaryDocumentForm />
                 <div className="button-box-container">
                   <button
                     className="usa-button"
                     id="save-and-finish"
                     type="submit"
                     onClick={() => {
-                      updateScreenMetadataSequence({
-                        key: 'supportingDocument',
-                        value: false,
-                      });
                       submitDocketEntrySequence();
                     }}
                   >
@@ -74,16 +46,10 @@ export const AddDocketEntry = connect(
                     id="save-and-add-supporting"
                     type="button"
                     onClick={() => {
-                      updateScreenMetadataSequence({
-                        key: 'supportingDocument',
-                        value: true,
-                      });
-                      submitDocketEntrySequence();
+                      submitDocketEntrySequence({ isAddAnother: true });
                     }}
                   >
-                    {screenMetadata.supporting &&
-                      'Add Another Supporting Document(s)'}
-                    {!screenMetadata.supporting && 'Add Supporting Document(s)'}
+                    Add Another Entry
                   </button>
                   <a
                     href={`/case-detail/${caseDetail.docketNumber}`}
@@ -95,7 +61,10 @@ export const AddDocketEntry = connect(
               </section>
             </div>
             <div className="grid-col-7">
-              <ScanBatchPreviewer documentType="primaryDocumentFile" />
+              <ScanBatchPreviewer
+                documentType="primaryDocumentFile"
+                title="Add Document"
+              />
             </div>
           </div>
         </section>
