@@ -210,23 +210,6 @@ describe('fileDocumentHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('does not show practitioner option under Parties Filing if caseDetail contains undefined or empty practitioners array', () => {
-    let result = runCompute(fileDocumentHelper, { state });
-    expect(result.showPractitionerParty).toBeFalsy();
-
-    state.caseDetail.practitioners = [];
-    result = runCompute(fileDocumentHelper, { state });
-    expect(result.showPractitionerParty).toBeFalsy();
-  });
-
-  it('shows practitioner option under Parties Filing if caseDetail contains practitioners', () => {
-    state.caseDetail.practitioners = [
-      { name: 'Test Practitioner', role: 'practitioner' },
-    ];
-    const result = runCompute(fileDocumentHelper, { state });
-    expect(result.showPractitionerParty).toBeTruthy();
-  });
-
   describe('supporting documents', () => {
     beforeEach(() => {
       state.form.hasSupportingDocuments = true;

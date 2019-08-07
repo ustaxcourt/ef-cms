@@ -354,17 +354,9 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary, partyRespondent, partyPractitioner] to be selected', () => {
+    it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
       expect(errors().partyPrimary).toEqual('Select a filing party.');
       baseDoc.partyRespondent = true;
-      expect(errors().partyPrimary).toEqual(undefined);
-    });
-
-    it('correctly validates practitioner array for partyPractitioner', () => {
-      expect(errors().partyPrimary).toEqual('Select a filing party.');
-      baseDoc.practitioner = [
-        { name: 'Test Practitioner', partyPractitioner: true },
-      ];
       expect(errors().partyPrimary).toEqual(undefined);
     });
   });
