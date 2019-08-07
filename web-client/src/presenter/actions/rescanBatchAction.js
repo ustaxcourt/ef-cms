@@ -36,6 +36,7 @@ export const rescanBatchAction = async ({
     store.set(state.submitting, false);
     store.set(state.isScanning, false);
     store.set(state.selectedBatchIndex, batchIndex);
+    store.set(state.currentPageIndex, 0);
     return path.success();
   } catch (err) {
     return path.error({ error: err });

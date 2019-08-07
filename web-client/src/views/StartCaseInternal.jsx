@@ -16,7 +16,6 @@ import classNames from 'classnames';
 export const StartCaseInternal = connect(
   {
     caseTypes: state.caseTypes,
-    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     documentSelectedForScan: state.documentSelectedForScan,
     form: state.form,
@@ -187,7 +186,9 @@ export const StartCaseInternal = connect(
                         });
                       }}
                     />
-                    <p>{constants.CASE_CAPTION_POSTFIX}</p>
+                    <p className="margin-top-1">
+                      {constants.CASE_CAPTION_POSTFIX}
+                    </p>
                     <Text
                       bind="validationErrors.caseCaption"
                       className="usa-error-message"

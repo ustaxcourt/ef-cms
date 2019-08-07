@@ -317,6 +317,7 @@ const applicationContext = {
       55 * MINUTES, // 55 minutes
     STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+    TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
   }),
   getCurrentUser,
   getCurrentUserToken,
