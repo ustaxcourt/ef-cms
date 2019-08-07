@@ -1,8 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';

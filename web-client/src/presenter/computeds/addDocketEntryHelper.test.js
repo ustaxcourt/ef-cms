@@ -118,15 +118,6 @@ describe('addDocketEntryHelper', () => {
     expect(result.showRespondentParty).toBe(true);
   });
 
-  it('does not show practitioner option under Parties Filing if practitioners on case is an empty array', () => {
-    state.caseDetail.practitioners = [];
-    const result = runCompute(addDocketEntryHelper, { state });
-  });
-
-  it('does not show practitioner option under Parties Filing if practitioners on case is not defined', () => {
-    const result = runCompute(addDocketEntryHelper, { state });
-  });
-
   it('shows single practitioner under Parties Filing if they are associated with the case', () => {
     state.caseDetail.practitioners = [{ name: 'Test Practitioner' }];
     const result = runCompute(addDocketEntryHelper, { state });
