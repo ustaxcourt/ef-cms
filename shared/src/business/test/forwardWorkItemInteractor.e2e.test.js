@@ -67,6 +67,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       return new User({
         name: 'richard',
         role: 'petitionsclerk',
+        section: 'petitions',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -132,6 +133,7 @@ describe('forwardWorkItemInteractor integration test', () => {
       return new User({
         name: 'bob',
         role: 'docketclerk',
+        section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
