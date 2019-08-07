@@ -82,6 +82,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         user || {
           name: 'richard',
           role: 'petitioner',
+          section: 'petitions',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
       );

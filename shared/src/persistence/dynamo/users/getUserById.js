@@ -16,30 +16,47 @@ exports.userMap = {
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
   },
 
-  judge: {
+  judgeArmen: {
     'custom:role': 'judge',
-    email: 'judge',
-    name: 'Test Judge',
+    email: 'judgeArmen',
+    name: 'Judge Armen',
     role: 'judge',
-    section: 'judge',
+    section: 'armensChambers',
     userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
   },
-  judge1: {
+  judgeAshford: {
     'custom:role': 'judge',
-    email: 'judge1',
-    name: 'Test Judge1',
+    email: 'judgeAshford',
+    name: 'Judge Ashford',
     role: 'judge',
-    section: 'judge',
+    section: 'ashfordsChambers',
     userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
   },
-  judge2: {
+  judgeBuch: {
     'custom:role': 'judge',
-    email: 'judge2',
-    name: 'Test Judge2',
+    email: 'judgeBuch',
+    name: 'Judge Buch',
     role: 'judge',
-    section: 'judge',
+    section: 'buchsChambers',
     userId: 'dabbad02-18d0-43ec-bafb-654e83405416',
   },
+  judgeCarluzzo: {
+    'custom:role': 'judge',
+    email: 'judgeCarluzzo',
+    name: 'Judge Carluzzo',
+    role: 'judge',
+    section: 'carluzzosChambers',
+    userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
+  },
+  judgeCohen: {
+    'custom:role': 'judge',
+    email: 'judgeCohen',
+    name: 'Judge Cohen',
+    role: 'judge',
+    section: 'cohensChambers',
+    userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+  },
+
   petitionsclerk: {
     'custom:role': 'petitionsclerk',
     email: 'petitionsclerk@example.com',

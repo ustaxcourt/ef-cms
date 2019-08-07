@@ -27,17 +27,34 @@
   },
 
   {
+    "role": "judge",
+    "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Armen",
+    "section": "armensChambers",
+    "pk": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
+    "email": "judgeArmen"
+  },
+  {
+    "pk": "armensChambers|user",
+    "sk": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
     "pk": "judge|user",
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
     "role": "judge",
-    "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "name": "Test Judge",
-    "section": "judge",
-    "pk": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judge"
+    "sk": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Ashford",
+    "section": "ashfordsChambers",
+    "pk": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
+    "email": "judgeAshford"
+  },
+  {
+    "pk": "ashfordsChambers|user",
+    "sk": "dabbad01-18d0-43ec-bafb-654e83405416"
   },
   {
     "pk": "judge|user",
@@ -45,12 +62,16 @@
   },
   {
     "role": "judge",
-    "sk": "dabbad01-18d0-43ec-bafb-654e83405416",
-    "name": "Test Judge1",
-    "section": "judge",
-    "pk": "dabbad01-18d0-43ec-bafb-654e83405416",
-    "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
-    "email": "judge1"
+    "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Buch",
+    "section": "buchsChambers",
+    "pk": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "email": "judgeBuch"
+  },
+  {
+    "pk": "buchsChambers|user",
+    "sk": "dabbad02-18d0-43ec-bafb-654e83405416"
   },
   {
     "pk": "judge|user",
@@ -58,12 +79,37 @@
   },
   {
     "role": "judge",
-    "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
-    "name": "Test Judge2",
-    "section": "judge",
-    "pk": "dabbad02-18d0-43ec-bafb-654e83405416",
-    "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
-    "email": "judge2"
+    "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Carluzzo",
+    "section": "carluzzosChambers",
+    "pk": "dabbad03-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
+    "email": "judgeCarluzzo"
+  },
+  {
+    "pk": "carluzzosChambers|user",
+    "sk": "dabbad03-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad03-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "judge",
+    "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Cohen",
+    "section": "cohensChambers",
+    "pk": "dabbad04-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
+    "email": "judgeCohen"
+  },
+  {
+    "pk": "cohensChambers|user",
+    "sk": "dabbad04-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad04-18d0-43ec-bafb-654e83405416"
   },
 
   {

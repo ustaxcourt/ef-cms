@@ -72,7 +72,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             </label>
             <select
               className="usa-select"
-              id={'chambers'}
+              id="chambers"
               name="chambers"
               onChange={e => {
                 this.props.updateMessageValueSequence({
