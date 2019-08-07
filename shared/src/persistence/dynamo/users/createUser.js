@@ -13,6 +13,16 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
       },
       applicationContext,
     });
+
+    if (user.role === 'judge') {
+      await client.put({
+        Item: {
+          pk: 'judge|user',
+          sk: userId,
+        },
+        applicationContext,
+      });
+    }
   }
 
   await client.put({
