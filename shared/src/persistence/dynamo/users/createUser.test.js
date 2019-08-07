@@ -51,6 +51,42 @@ describe('createUser', () => {
     });
   });
 
+  it('attempts to persist a judge user with a section mapping record for the chambers and the judge', async () => {
+    const judgeUser = {
+      name: 'Judge Adam',
+      role: 'judge',
+      section: 'adamsChambers',
+    };
+    await createUserRecords({
+      applicationContext,
+      user: judgeUser,
+      userId,
+    });
+
+    expect(putStub.getCall(0).args[0]).toMatchObject({
+      Item: {
+        pk: 'adamsChambers|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(1).args[0]).toMatchObject({
+      Item: {
+        pk: 'judge|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(2).args[0]).toMatchObject({
+      Item: {
+        pk: userId,
+        sk: userId,
+        ...judgeUser,
+      },
+      TableName: 'efcms-dev',
+    });
+  });
+
   it('attempts to persist a practitioner user with name and barNumber mapping records', async () => {
     const practitionerUser = {
       barNumber: 'PT1234',
