@@ -1,6 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { JudgeOptions } from './JudgeOptions';
 import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -9,9 +8,10 @@ import React from 'react';
 export const UpcomingTrialSessions = connect(
   {
     formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
+    judgeUsers: state.users,
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
   },
-  ({ formattedTrialSessions, trialSessionTypes }) => {
+  ({ formattedTrialSessions, judgeUsers, trialSessionTypes }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
@@ -44,11 +44,15 @@ export const UpcomingTrialSessions = connect(
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  bind="screenMetadata.trialSessionFilters.judge"
+                  bind="screenMetadata.trialSessionFilters.judge.userId"
                   name="judge"
                 >
                   <option value="">-Judge-</option>
-                  <JudgeOptions />
+                  {judgeUsers.map((judge, idx) => (
+                    <option key={idx} value={judge.userId}>
+                      {judge.name}
+                    </option>
+                  ))}
                 </BindedSelect>
               </div>
             </div>
@@ -99,7 +103,7 @@ export const UpcomingTrialSessions = connect(
                       </a>
                     </td>
                     <td>{item.sessionType}</td>
-                    <td>{item.judge}</td>
+                    <td>{item.judge && item.judge.name}</td>
                     <td>{item.maxCases}</td>
                   </tr>
                 </tbody>
