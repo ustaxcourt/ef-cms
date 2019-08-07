@@ -182,7 +182,7 @@ TrialSession.validationRules = {
       .optional(),
     irsCalendarAdministrator: joi.string().optional(),
     isCalendared: joi.boolean().required(),
-    judge: joi.string().optional(),
+    judge: joi.object().optional(),
     maxCases: joi
       .number()
       .greater(0)
