@@ -46,7 +46,10 @@ export const AddDocketEntry = connect(
                     id="save-and-add-supporting"
                     type="button"
                     onClick={() => {
-                      submitDocketEntrySequence({ isAddAnother: true, docketNumber: caseDetail.docketNumber });
+                      submitDocketEntrySequence({
+                        docketNumber: caseDetail.docketNumber,
+                        isAddAnother: true,
+                      });
                     }}
                   >
                     Add Another Entry
