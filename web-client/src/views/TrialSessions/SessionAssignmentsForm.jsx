@@ -1,4 +1,3 @@
-import { JudgeOptions } from './JudgeOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -6,10 +5,11 @@ import React from 'react';
 export const SessionAssignmentsForm = connect(
   {
     form: state.form,
+    judgeUsers: state.users,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
-  ({ form, updateTrialSessionFormDataSequence }) => {
+  ({ form, judgeUsers, updateTrialSessionFormDataSequence }) => {
     return (
       <>
         <h2 className="margin-top-4">Session Assignments</h2>
@@ -32,7 +32,11 @@ export const SessionAssignmentsForm = connect(
               }}
             >
               <option value="">- Select -</option>
-              <JudgeOptions />
+              {judgeUsers.map((judge, idx) => (
+                <option key={idx} value={judge}>
+                  {judge.name}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -46,7 +46,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     hour = +hour - 12;
   }
   result.formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
-  result.formattedJudge = result.judge || 'Not assigned';
+  result.formattedJudge = (result.judge && result.judge.name) || 'Not assigned';
   result.formattedTrialClerk = result.trialClerk || 'Not assigned';
   result.formattedCourtReporter = result.courtReporter || 'Not assigned';
   result.formattedIrsCalendarAdministrator =
