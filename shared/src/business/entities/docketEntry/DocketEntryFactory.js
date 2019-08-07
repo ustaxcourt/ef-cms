@@ -56,7 +56,8 @@ function DocketEntryFactory(rawProps) {
     exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
-    primaryDocumentFile: joi.object().required(),
+    primaryDocumentFile: joi.object(),
+    primaryDocumentFileSize: joi.number().optional(),
   };
 
   let schemaOptionalItems = {
@@ -72,7 +73,7 @@ function DocketEntryFactory(rawProps) {
       .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
-    secondaryDocumentFile: joi.object().required(),
+    secondaryDocumentFile: joi.object(),
   };
 
   let errorToMessageMap = {

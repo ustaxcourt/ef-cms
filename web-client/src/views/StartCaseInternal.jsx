@@ -320,6 +320,7 @@ export const StartCaseInternal = connect(
                     },
                   ]}
                   documentType={documentSelectedForScan}
+                  title="Add Document(s)"
                 />
               </div>
             </div>
