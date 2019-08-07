@@ -30,7 +30,6 @@ describe('addDocketEntryHelper', () => {
 
     const expected = {
       showObjection: false,
-      showPractitionerParty: false,
       showPrimaryDocumentValid: false,
       showSecondaryDocumentValid: false,
       showSecondaryParty: false,
@@ -122,18 +121,15 @@ describe('addDocketEntryHelper', () => {
   it('does not show practitioner option under Parties Filing if practitioners on case is an empty array', () => {
     state.caseDetail.practitioners = [];
     const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeFalsy();
   });
 
   it('does not show practitioner option under Parties Filing if practitioners on case is not defined', () => {
     const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeFalsy();
   });
 
   it('shows single practitioner under Parties Filing if they are associated with the case', () => {
     state.caseDetail.practitioners = [{ name: 'Test Practitioner' }];
     const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeTruthy();
     expect(result.practitionerNames).toEqual(['Test Practitioner']);
   });
 
@@ -143,7 +139,6 @@ describe('addDocketEntryHelper', () => {
       { name: 'Test Practitioner1' },
     ];
     const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeTruthy();
     expect(result.practitionerNames).toEqual([
       'Test Practitioner',
       'Test Practitioner1',

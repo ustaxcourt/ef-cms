@@ -33,43 +33,7 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h1>Add Docket Entry</h1>
         <div className="blue-container docket-entry-form">
-          <div
-            className={`usa-form-group ${
-              validationErrors.primaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            }`}
-          >
-            <label
-              className={
-                'usa-label ustc-upload ' +
-                (addDocketEntryHelper.showPrimaryDocumentValid
-                  ? 'validated'
-                  : '')
-              }
-              htmlFor="primary-document"
-              id="primary-document-label"
-            >
-              Add Document{' '}
-              <span className="success-message">
-                <FontAwesomeIcon icon="check-circle" size="sm" />
-              </span>
-            </label>
-            <StateDrivenFileInput
-              aria-describedby="primary-document-label"
-              id="primary-document"
-              name="primaryDocumentFile"
-              updateFormValueSequence="updateDocketEntryFormValueSequence"
-              validationSequence="validateDocketEntrySequence"
-            />
-            <Text
-              bind="validationErrors.primaryDocumentFile"
-              className="usa-error-message"
-            />
-          </div>
-
           <div
             className={`usa-form-group ${
               validationErrors.lodged ? 'usa-form-group--error' : ''
@@ -421,42 +385,6 @@ export const PrimaryDocumentForm = connect(
               <legend className="usa-legend">
                 Who Is Filing This Document?
               </legend>
-              {addDocketEntryHelper.showPractitionerParty &&
-                addDocketEntryHelper.practitionerNames.map(
-                  (practitionerName, idx) => {
-                    return (
-                      <div className="usa-checkbox" key={idx}>
-                        <input
-                          checked={
-                            (form.practitioner[idx] &&
-                              form.practitioner[idx].partyPractitioner) ||
-                            false
-                          }
-                          className="usa-checkbox__input"
-                          id={`party-practitioner-${idx}`}
-                          name={`practitioner.${idx}`}
-                          type="checkbox"
-                          onChange={e => {
-                            updateDocketEntryFormValueSequence({
-                              key: e.target.name,
-                              value: {
-                                name: practitionerName,
-                                partyPractitioner: e.target.checked,
-                              },
-                            });
-                            validateDocketEntrySequence();
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor={`party-practitioner-${idx}`}
-                        >
-                          Counsel {practitionerName}
-                        </label>
-                      </div>
-                    );
-                  },
-                )}
               <div className="usa-checkbox">
                 <input
                   checked={form.partyPrimary || false}
