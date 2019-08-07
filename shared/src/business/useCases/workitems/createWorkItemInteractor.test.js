@@ -16,6 +16,7 @@ describe('createWorkItem', () => {
     getCurrentUser: () => ({
       name: 'Tax Payer',
       role: 'petitioner',
+      section: 'petitions',
       userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
     }),
     getPersistenceGateway: () => ({
@@ -24,6 +25,7 @@ describe('createWorkItem', () => {
       getUserById: () => ({
         name: 'docketclerk',
         role: 'docketclerk',
+        section: 'docket',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
       updateCase: updateCaseStub,
@@ -53,6 +55,7 @@ describe('createWorkItem', () => {
       getCurrentUser: () => ({
         name: 'Docketclerk',
         role: 'docketclerk',
+        section: 'docket',
         userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     });
@@ -96,6 +99,7 @@ describe('createWorkItem', () => {
       getCurrentUser: () => ({
         name: 'Docketclerk',
         role: 'docketclerk',
+        section: 'docket',
         userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     });
