@@ -16,6 +16,7 @@ import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
@@ -58,6 +59,7 @@ export const submitDocketEntrySequence = [
               chooseNextStepAction,
               {
                 addAnotherEntry: [
+                  setDocumentUploadModeAction,
                   getDocketEntryAlertSuccessAction,
                   setAlertSuccessAction,
                   clearFormAction,
