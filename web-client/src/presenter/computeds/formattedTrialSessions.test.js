@@ -75,6 +75,16 @@ describe('formattedTrialSessions', () => {
     );
   });
 
+  it('filter trial sessions', () => {
+    const result = runCompute(formattedTrialSessions, {
+      state: {
+        screenMetadata: { trialSessionFilters: { judge: 'Something' } },
+        trialSessions: TRIAL_SESSIONS_LIST,
+      },
+    });
+    expect(result.formattedSessions.length).toBe(0);
+  });
+
   it('shows swing session option only if matching term and term year is found', () => {
     const trialSessions = [
       {
