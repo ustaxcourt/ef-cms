@@ -25,25 +25,6 @@ export const Inclusions = connect(
           <legend className="usa-legend">Inclusions</legend>
           <div className="usa-checkbox">
             <input
-              checked={form.exhibits || false}
-              className="usa-checkbox__input"
-              id="exhibits"
-              name="exhibits"
-              type="checkbox"
-              onChange={e => {
-                updateDocketEntryFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                validateDocketEntrySequence();
-              }}
-            />
-            <label className="usa-checkbox__label" htmlFor="exhibits">
-              Exhibit(s)
-            </label>
-          </div>
-          <div className="usa-checkbox">
-            <input
               checked={form.attachments || false}
               className="usa-checkbox__input"
               id="attachments"
