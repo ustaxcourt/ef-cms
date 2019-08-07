@@ -1,6 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,7 +20,10 @@ export const UpcomingTrialSessions = connect(
                 <h3>Filter by</h3>
               </div>
               <div className="grid-col-3">
-                <BindedSelect bind="screenMetadata.trialSessionFilters.sessionType">
+                <BindedSelect
+                  bind="screenMetadata.trialSessionFilters.sessionType"
+                  name="sessionType"
+                >
                   <option value="">-Session Type-</option>
                   {trialSessionTypes.map(sessionType => (
                     <option key={sessionType} value={sessionType}>
@@ -31,7 +33,10 @@ export const UpcomingTrialSessions = connect(
                 </BindedSelect>
               </div>
               <div className="grid-col-3">
-                <BindedSelect bind="screenMetadata.trialSessionFilters.trialLocation">
+                <BindedSelect
+                  bind="screenMetadata.trialSessionFilters.trialLocation"
+                  name="trialLocation"
+                >
                   <option value="">-Location-</option>
                   {trialCities.ALL.map(trialCity => {
                     const trialLocation = `${trialCity.city}, ${trialCity.state}`;
@@ -44,7 +49,10 @@ export const UpcomingTrialSessions = connect(
                 </BindedSelect>
               </div>
               <div className="grid-col-3">
-                <BindedSelect bind="screenMetadata.trialSessionFilters.judge">
+                <BindedSelect
+                  bind="screenMetadata.trialSessionFilters.judge"
+                  name="judge"
+                >
                   <option value="">-Judge-</option>
                   <option value="Judge Judy">Judge Judy</option>
                   <option value="Judge Smith">Judge Smith</option>
