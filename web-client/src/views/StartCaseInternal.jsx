@@ -186,7 +186,9 @@ export const StartCaseInternal = connect(
                         });
                       }}
                     />
-                    <p>{constants.CASE_CAPTION_POSTFIX}</p>
+                    <p className="margin-top-1">
+                      {constants.CASE_CAPTION_POSTFIX}
+                    </p>
                     <Text
                       bind="validationErrors.caseCaption"
                       className="usa-error-message"
