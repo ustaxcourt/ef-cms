@@ -6,8 +6,9 @@ export const TrialSessionsSummary = connect(
   {
     recentTrialSessions: state.formattedTrialSessions.formattedSessions,
     upcomingTrialSessions: state.formattedTrialSessions.formattedSessions,
+    user: state.user,
   },
-  ({ recentTrialSessions, upcomingTrialSessions }) => {
+  ({ recentTrialSessions, upcomingTrialSessions, user }) => {
     return (
       <React.Fragment>
         <table
@@ -19,7 +20,12 @@ export const TrialSessionsSummary = connect(
             <tr>
               <th colSpan="3">Upcoming Trial Sessions</th>
               <th>
-                <button className="usa-button--unstyled">View All</button>
+                <a
+                  className="usa-button usa-button--unstyled"
+                  href={`/trial-sessions?judge=${user.userId}`}
+                >
+                  View All
+                </a>
               </th>
             </tr>
           </thead>
