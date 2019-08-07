@@ -11,6 +11,7 @@ import {
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
   getCurrentUser: () => ({
     role: 'petitionsclerk',
+    section: 'petitions',
     userId: 'abc',
   }),
   getUtilities: () => {
