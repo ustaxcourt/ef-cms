@@ -500,8 +500,6 @@ export const PrimaryDocumentForm = connect(
             </div>
           )}
         </div>
-
-        {form.secondaryDocument && <SecondaryDocumentForm />}
       </React.Fragment>
     );
   },
