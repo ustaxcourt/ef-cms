@@ -155,20 +155,10 @@ function DocketEntryFactory(rawProps) {
     addToSchema('secondaryDocumentFile');
   }
 
-  let partyPractitioner = false;
-  if (Array.isArray(rawProps.practitioner)) {
-    rawProps.practitioner.forEach(practitioner => {
-      if (practitioner.partyPractitioner) {
-        partyPractitioner = true;
-      }
-    });
-  }
-
   if (
     rawProps.partyPrimary !== true &&
     rawProps.partySecondary !== true &&
-    rawProps.partyRespondent !== true &&
-    partyPractitioner !== true
+    rawProps.partyRespondent !== true
   ) {
     addToSchema('partyPrimary');
   }
