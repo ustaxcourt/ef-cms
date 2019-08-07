@@ -3,9 +3,10 @@ const { get } = require('../requests');
 /**
  * getCaseDeadlinesForCaseInteractor
  *
- * @param applicationContext
- * @param getCaseDeadlinesForCase
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to get deadlines for
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.getCaseDeadlinesForCaseInteractor = ({
   applicationContext,

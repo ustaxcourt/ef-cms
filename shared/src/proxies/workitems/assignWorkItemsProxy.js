@@ -3,9 +3,12 @@ const { put } = require('../requests');
 /**
  * getWorkItem
  *
- * @param userId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.assigneeId the id of the user to assign the work item to
+ * @param {string} providers.assigneeName the name of the user to assign the work item to
+ * @param {string} providers.workItemId the id of the work item to assign
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.assignWorkItemsInteractor = ({
   applicationContext,

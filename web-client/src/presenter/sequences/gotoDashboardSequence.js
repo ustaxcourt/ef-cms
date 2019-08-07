@@ -28,6 +28,7 @@ const goToDashboard = [
         ],
       ]),
     ],
+    judge: [setCurrentPageAction('DashboardJudge')],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,
