@@ -30,7 +30,6 @@ import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAn
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
-import { completeScanSequence } from './sequences/completeScanSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
@@ -46,6 +45,7 @@ import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSe
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
+import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
@@ -119,6 +119,7 @@ import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTri
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
+import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
@@ -250,7 +251,6 @@ export const presenter = {
     closeModalAndReturnToTrialSessionsSequence,
     completeDocumentSelectSequence,
     completeDocumentSigningSequence,
-    completeScanSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
     convertHtml2PdfSequence,
@@ -266,6 +266,7 @@ export const presenter = {
     editSelectedSecondaryDocumentSequence,
     fetchUserNotificationsSequence,
     formCancelToggleCancelSequence,
+    generatePdfFromScanSessionSequence,
     getUsersInSectionSequence,
     gotoAddDocketEntrySequence,
     gotoAddTrialSessionSequence,
@@ -338,6 +339,7 @@ export const presenter = {
     setCaseToReadyForTrialSequence,
     setCurrentPageIndexSequence,
     setDocumentDetailTabSequence,
+    setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
     setFocusedWorkItemSequence,
     setFormSubmittingSequence,

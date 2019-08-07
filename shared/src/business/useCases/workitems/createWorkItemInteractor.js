@@ -76,10 +76,10 @@ exports.createWorkItemInteractor = async ({
     .assignToUser({
       assigneeId,
       assigneeName: userToAssignTo.name,
-      role: userToAssignTo.role,
+      section: userToAssignTo.section,
       sentBy: user.name,
+      sentBySection: user.section,
       sentByUserId: user.userId,
-      sentByUserRole: user.role,
     })
     .addMessage(newMessage);
 

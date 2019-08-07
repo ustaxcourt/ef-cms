@@ -94,7 +94,7 @@ export const UnfinishedScansModal = connect(
     <ConfirmModal
       noCancel
       confirmLabel="OK"
-      title="You Have Unfinished Scans"
+      title="You have unfinished scans"
       onCancelSequence="clearModalSequence"
       onConfirmSequence="clearModalSequence"
     >
