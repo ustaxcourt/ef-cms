@@ -4,8 +4,10 @@ import React from 'react';
 
 export const TrialSessionsSummary = connect(
   {
-    recentTrialSessions: state.formattedTrialSessions.formattedSessions,
-    upcomingTrialSessions: state.formattedTrialSessions.formattedSessions,
+    recentTrialSessions:
+      state.formattedDashboardTrialSessions.formattedSessions,
+    upcomingTrialSessions:
+      state.formattedDashboardTrialSessions.formattedSessions,
     user: state.user,
   },
   ({ recentTrialSessions, upcomingTrialSessions, user }) => {
@@ -33,8 +35,8 @@ export const TrialSessionsSummary = connect(
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan="3">{trialDate.dateFormatted}</td>
-                  <td colSpan="3">{trialDate.locationFormatted}</td>
+                  <td colSpan="3">{trialDate.formattedStartDate}</td>
+                  <td colSpan="3">{trialDate.trialLocation}</td>
                 </tr>
               </tbody>
             </React.Fragment>
@@ -51,8 +53,8 @@ export const TrialSessionsSummary = connect(
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan="3">{trialDate.dateFormatted}</td>
-                  <td colSpan="3">{trialDate.locationFormatted}</td>
+                  <td colSpan="3">{trialDate.formattedStartDate}</td>
+                  <td colSpan="3">{trialDate.trialLocation}</td>
                 </tr>
               </tbody>
             </React.Fragment>
