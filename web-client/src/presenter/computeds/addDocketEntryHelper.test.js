@@ -118,24 +118,6 @@ describe('addDocketEntryHelper', () => {
     expect(result.showRespondentParty).toBe(true);
   });
 
-  it('shows single practitioner under Parties Filing if they are associated with the case', () => {
-    state.caseDetail.practitioners = [{ name: 'Test Practitioner' }];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.practitionerNames).toEqual(['Test Practitioner']);
-  });
-
-  it('shows multiple practitioners under Parties Filing if they are associated with the case', () => {
-    state.caseDetail.practitioners = [
-      { name: 'Test Practitioner' },
-      { name: 'Test Practitioner1' },
-    ];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.practitionerNames).toEqual([
-      'Test Practitioner',
-      'Test Practitioner1',
-    ]);
-  });
-
   it("shows should show inclusions when previous document isn't secondary", () => {
     state.form.previousDocument = 'Statement of Taxpayer Identification';
     state.screenMetadata = {
