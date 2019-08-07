@@ -7,7 +7,6 @@ import React from 'react';
 export const LocationInformationForm = connect(
   {
     form: state.form,
-    trialCitiesHelper: state.trialCitiesHelper,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -15,7 +14,6 @@ export const LocationInformationForm = connect(
   },
   ({
     form,
-    trialCitiesHelper,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
