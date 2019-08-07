@@ -107,6 +107,11 @@ export const UpcomingTrialSessions = connect(
             </React.Fragment>
           ))}
         </table>
+        {formattedTrialSessions.length === 0 && (
+          <p className="text-align-center margin-3 maxw-full">
+            There are no trial sessions available.
+          </p>
+        )}
       </React.Fragment>
     );
   },
