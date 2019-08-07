@@ -13,6 +13,7 @@ export const PartyInformation = connect(
     caseHelper: state.caseDetailHelper,
     constants: state.constants,
     editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
+    form: state.form,
     openAddPractitionerModalSequence:
       sequences.openAddPractitionerModalSequence,
     openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
@@ -25,6 +26,7 @@ export const PartyInformation = connect(
     caseHelper,
     constants,
     editSecondaryContact,
+    form,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
     showModal,
@@ -184,7 +186,7 @@ export const PartyInformation = connect(
                 </label>
                 <input
                   aria-describedby="practitioner-counsel-search-description"
-                  className={`usa-input margin-bottom-0 
+                  className={`usa-input margin-bottom-0
                     ${
                       validationErrors.practitionerSearchError
                         ? 'usa-input--error'
@@ -192,8 +194,9 @@ export const PartyInformation = connect(
                     }`}
                   id="practitioner-search-field"
                   name="practitionerSearch"
-                  placeholder="Enter Bar Number or Name"
+                  placeholder="Enter Bar No. or Name"
                   type="search"
+                  value={form.practitionerSearch || ''}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -249,7 +252,7 @@ export const PartyInformation = connect(
                 </label>
                 <input
                   aria-describedby="respondent-counsel-search-description"
-                  className={`usa-input margin-bottom-0 
+                  className={`usa-input margin-bottom-0
                   ${
                     validationErrors.respondentSearchError
                       ? 'usa-input--error'
@@ -257,8 +260,9 @@ export const PartyInformation = connect(
                   }`}
                   id="respondent-search-field"
                   name="respondentSearch"
-                  placeholder="Enter Bar Number or Name"
+                  placeholder="Enter Bar No. or Name"
                   type="search"
+                  value={form.respondentSearch || ''}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,

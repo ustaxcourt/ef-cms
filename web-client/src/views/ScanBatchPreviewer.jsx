@@ -13,15 +13,15 @@ import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSour
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export const ScanBatchPreviewer = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
-    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
+    generatePdfFromScanSessionSequence:
+      sequences.generatePdfFromScanSessionSequence,
     openChangeScannerSourceModalSequence:
       sequences.openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence:
@@ -38,6 +38,7 @@ export const ScanBatchPreviewer = connect(
     selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
     selectedBatchIndex: state.selectedBatchIndex,
     setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
+    setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
     setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
@@ -49,9 +50,9 @@ export const ScanBatchPreviewer = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    completeScanSequence,
     constants,
     documentType,
+    generatePdfFromScanSessionSequence,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
@@ -59,16 +60,14 @@ export const ScanBatchPreviewer = connect(
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
-    selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
+    setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
     showModal,
     startScanSequence,
-    updateFormValueSequence,
-    validatePetitionFromPaperSequence,
     validationErrors,
   }) => {
     useEffect(() => {
@@ -156,27 +155,9 @@ export const ScanBatchPreviewer = connect(
             type="button"
             onClick={e => {
               e.preventDefault();
-              completeScanSequence({
-                onComplete: file => {
-                  return limitFileSize(file, constants.MAX_FILE_SIZE_MB, () => {
-                    updateFormValueSequence({
-                      key: documentType,
-                      value: file,
-                    });
-                    updateFormValueSequence({
-                      key: `${documentType}Size`,
-                      value: file.size,
-                    });
-                    validatePetitionFromPaperSequence();
-                    selectDocumentForPreviewSequence({
-                      documentType,
-                      file,
-                    });
-                    setDocumentUploadModeSequence({
-                      documentUploadMode: 'preview',
-                    });
-                  });
-                },
+              generatePdfFromScanSessionSequence({
+                documentType,
+                documentUploadMode: 'preview',
               });
             }}
           >
@@ -200,7 +181,7 @@ export const ScanBatchPreviewer = connect(
             id="scan-mode-radios"
           >
             <legend
-              className="usa-legend with-hint"
+              className="usa-legend with-hint margin-bottom-2"
               id="scan-mode-radios-legend"
             >
               How do you want to add this document?
@@ -288,7 +269,6 @@ export const ScanBatchPreviewer = connect(
       return (
         <>
           <h5 className="header-scanned-batches">Scanned Batches</h5>
-
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 ? (
               <table className="batches-table">
@@ -411,23 +391,12 @@ export const ScanBatchPreviewer = connect(
               name={documentType}
               type="file"
               onChange={e => {
-                limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                  updateFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.files[0],
-                  });
-                  updateFormValueSequence({
-                    key: `${e.target.name}Size`,
-                    value: e.target.files[0].size,
-                  });
-                  validatePetitionFromPaperSequence();
-                  selectDocumentForPreviewSequence({
-                    documentType,
-                    file: e.target.files[0],
-                  });
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'preview',
-                  });
+                e.preventDefault();
+                const file = e.target.files[0];
+                setDocumentForUploadSequence({
+                  documentType,
+                  documentUploadMode: 'preview',
+                  file,
                 });
               }}
             />
@@ -465,9 +434,11 @@ export const ScanBatchPreviewer = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                <h3 className="margin-bottom-0">Add Document(s)</h3>
+                <h3 className="margin-bottom-0 margin-left-105">
+                  Add Document(s)
+                </h3>
               </div>
-              <div className="grid-col-6 text-right">
+              <div className="grid-col-6 text-right margin-top-2px padding-right-4">
                 <span className="margin-right-1">
                   Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                 </span>
@@ -475,7 +446,7 @@ export const ScanBatchPreviewer = connect(
                   aria-label={`${
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
-                  className="usa-button usa-button--unstyled change-scanner-button"
+                  className="usa-button usa-button--unstyled change-scanner-button margin-right-3"
                   style={{ color: 'white' }}
                   onClick={e => {
                     e.preventDefault();

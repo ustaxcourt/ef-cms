@@ -2,9 +2,9 @@ const { get } = require('./requests');
 
 /**
  *
- * @param applicationContext
- * @param userId
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.getCasesByUserInteractor = ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();

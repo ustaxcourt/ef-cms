@@ -4,7 +4,7 @@ const { joiValidationDecorator } = require('./JoiValidationDecorator');
 /**
  * fake entity constructor
  *
- * @param raw {object}
+ * @param {object} raw raw entity
  */
 function MockEntity1(raw) {
   Object.assign(this, raw);
