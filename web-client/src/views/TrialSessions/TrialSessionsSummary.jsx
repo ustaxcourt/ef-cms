@@ -12,7 +12,7 @@ export const TrialSessionsSummary = connect(
   },
   ({ recentTrialSessions, upcomingTrialSessions, user }) => {
     return (
-      <div className="card">
+      <div aria-label="trial sessions" className="card" id="sessions-summary">
         <div className="grid-container content-wrapper gray">
           <div className="grid-row underlined">
             <div className="grid-col-8">
