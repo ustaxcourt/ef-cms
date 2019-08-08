@@ -58,7 +58,7 @@ export const submitDocketEntryAction = async ({
     .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
-      documentId:
+      primaryDocumentFileId:
         primaryDocumentFileId || applicationContext.getUniqueId(),
     });
 
