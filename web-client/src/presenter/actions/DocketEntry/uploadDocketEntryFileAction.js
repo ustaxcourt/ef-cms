@@ -14,7 +14,6 @@ export const uploadDocketEntryFileAction = async ({
   path,
   store,
 }) => {
-
   const { primaryDocumentFile } = get(state.form);
 
   const progressFunctions = setupPercentDone(
@@ -31,12 +30,8 @@ export const uploadDocketEntryFileAction = async ({
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
-        documentFiles: [
-          primaryDocumentFile,
-        ],
-        onUploadProgresses: [
-          progressFunctions.primary,
-        ],
+        documentFiles: [primaryDocumentFile],
+        onUploadProgresses: [progressFunctions.primary],
       });
 
     return path.success({
