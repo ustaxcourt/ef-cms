@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -7,10 +8,10 @@ import React from 'react';
 export const UpcomingTrialSessions = connect(
   {
     formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
-    trialCities: state.constants.TRIAL_CITIES,
+    judgeUsers: state.users,
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
   },
-  ({ formattedTrialSessions, trialCities, trialSessionTypes }) => {
+  ({ formattedTrialSessions, judgeUsers, trialSessionTypes }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
@@ -38,26 +39,20 @@ export const UpcomingTrialSessions = connect(
                   name="trialLocation"
                 >
                   <option value="">-Location-</option>
-                  {trialCities.ALL.map(trialCity => {
-                    const trialLocation = `${trialCity.city}, ${trialCity.state}`;
-                    return (
-                      <option key={trialLocation} value={trialLocation}>
-                        {trialLocation}
-                      </option>
-                    );
-                  })}
+                  <TrialCityOptions />
                 </BindedSelect>
               </div>
               <div className="grid-col-3">
                 <BindedSelect
-                  bind="screenMetadata.trialSessionFilters.judge"
+                  bind="screenMetadata.trialSessionFilters.judge.userId"
                   name="judge"
                 >
                   <option value="">-Judge-</option>
-                  <option value="Judge Judy">Judge Judy</option>
-                  <option value="Judge Smith">Judge Smith</option>
-                  <option value="Judge Dredd">Judge Dredd</option>
-                  <option value="Judge Arnold">Judge Arnold</option>
+                  {judgeUsers.map((judge, idx) => (
+                    <option key={idx} value={judge.userId}>
+                      {judge.name}
+                    </option>
+                  ))}
                 </BindedSelect>
               </div>
             </div>
@@ -108,7 +103,7 @@ export const UpcomingTrialSessions = connect(
                       </a>
                     </td>
                     <td>{item.sessionType}</td>
-                    <td>{item.judge}</td>
+                    <td>{item.judge && item.judge.name}</td>
                     <td>{item.maxCases}</td>
                   </tr>
                 </tbody>
@@ -116,6 +111,11 @@ export const UpcomingTrialSessions = connect(
             </React.Fragment>
           ))}
         </table>
+        {formattedTrialSessions.length === 0 && (
+          <p className="text-align-center margin-3 maxw-full">
+            There are no trial sessions available.
+          </p>
+        )}
       </React.Fragment>
     );
   },
