@@ -9,7 +9,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 
-const gotoAddDocketEntry = [
+export const gotoAddDocketEntry = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
   clearAlertsAction,
@@ -20,6 +20,7 @@ const gotoAddDocketEntry = [
   set(state.form.lodged, false),
   set(state.form.practitioner, []),
   set(state.wizardStep, 'PrimaryDocumentForm'),
+  set(state.documentUploadMode, 'scan'),
   setCurrentPageAction('AddDocketEntry'),
 ];
 

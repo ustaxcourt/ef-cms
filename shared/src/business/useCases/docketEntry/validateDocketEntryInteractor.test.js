@@ -42,6 +42,7 @@ describe('validateDocketEntryInteractor', () => {
         ordinalValue: 'First',
         partyPrimary: true,
         primaryDocumentFile: {},
+        primaryDocumentFileSize: 1,
         scenario: 'Nonstandard G',
       },
     });
