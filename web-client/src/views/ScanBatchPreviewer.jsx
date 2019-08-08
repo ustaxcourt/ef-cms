@@ -172,6 +172,10 @@ export const ScanBatchPreviewer = connect(
     };
 
     const renderModeRadios = () => {
+      const headerMargin =
+        (documentTabs && documentTabs.length) > 0
+          ? 'margin-top-2'
+          : 'margin-top-0';
       return (
         <div
           className={`usa-form-group ${
@@ -180,7 +184,7 @@ export const ScanBatchPreviewer = connect(
         >
           <fieldset
             aria-label="scan mode selection"
-            className="usa-fieldset margin-bottom-3 margin-top-2"
+            className={`usa-fieldset margin-bottom-3 ${headerMargin}`}
             id="scan-mode-radios"
           >
             <legend
