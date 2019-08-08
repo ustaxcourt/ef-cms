@@ -45,14 +45,14 @@ describe('Create a work item ', () => {
   it('creates a sent message in the petitionsclerk sent queue with yolo', () => {
     navigateToDashboard('petitionsclerk');
     viewMyOutbox();
-    getTableRows().should('have.length', 1);
+    getTableRows().should('have.length', 2);
     getWorkItemContaining('104-19').click();
     getWorkItemContaining('yolo').should('exist');
   });
 
   it('creates a section sent message in the petitions section', () => {
     viewSectionOutbox();
-    getTableRows().should('have.length', 1);
+    getTableRows().should('have.length', 2);
     getWorkItemContaining('104-19').click();
     getWorkItemContaining('yolo').should('exist');
   });

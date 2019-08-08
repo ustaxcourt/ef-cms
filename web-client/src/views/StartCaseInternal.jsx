@@ -300,7 +300,28 @@ export const StartCaseInternal = connect(
                 </div>
               </div>
               <div className="grid-col-7">
-                <ScanBatchPreviewer documentType={documentSelectedForScan} />
+                <ScanBatchPreviewer
+                  documentTabs={[
+                    {
+                      documentType: 'petitionFile',
+                      title: 'Petition',
+                    },
+                    {
+                      documentType: 'stinFile',
+                      title: 'STIN',
+                    },
+                    {
+                      documentType: 'requestForPlaceOfTrialFile',
+                      title: 'Request for Place of Trial',
+                    },
+                    {
+                      documentType: 'ownershipDisclosureFile',
+                      title: 'ODS',
+                    },
+                  ]}
+                  documentType={documentSelectedForScan}
+                  title="Add Document(s)"
+                />
               </div>
             </div>
           </form>
