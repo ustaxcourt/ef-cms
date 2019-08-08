@@ -21,20 +21,28 @@ exports.uploadExternalDocumentsInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  documentFiles = documentFiles || [];
-  const documentIds = new Array(documentFiles.length);
-  for (let i = 0; i < documentFiles.length; i++) {
-    if (documentFiles[i]) {
-      const documentId = await applicationContext
-        .getPersistenceGateway()
-        .uploadDocument({
-          applicationContext,
-          document: documentFiles[i],
-          onUploadProgress: onUploadProgresses[i],
-        });
-      documentIds[i] = documentId;
+  /**
+   * produces a promise even if document is not defined
+   * @param {object} document the document to be uploaded
+   * @param {number} idx the index of the document and progress function
+   *
+   * @returns {Promise<number|undefined>} resolving to undefined if no document, otherwise the uploaded documentId
+   */
+  const uploadDocument = (document, idx) => {
+    if (!document) {
+      return Promise.resolve(undefined);
     }
-  }
+    return applicationContext.getPersistenceGateway().uploadDocument({
+      applicationContext,
+      document,
+      onUploadProgress: onUploadProgresses[idx],
+    });
+  };
+
+  documentFiles = documentFiles || [];
+
+  // will produce a possibly sparse array
+  const documentIds = await Promise.all(documentFiles.map(uploadDocument));
 
   return documentIds;
 };

@@ -2,8 +2,9 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { SecondarySupportingDocumentForm } from './SecondarySupportingDocumentForm';
-import { SupportingDocumentForm } from './SupportingDocumentForm';
+import { SecondarySupportingDocuments } from './SecondarySupportingDocuments';
+import { SupportingDocuments } from './SupportingDocuments';
+import { WhatCanIIncludeModalOverlay } from './WhatCanIIncludeModalOverlay';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,11 +15,13 @@ export const FileDocument = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
+    showModal: state.showModal,
   },
   ({
     form,
     formCancelToggleCancelSequence,
     reviewExternalDocumentInformationSequence,
+    showModal,
   }) => {
     return (
       <React.Fragment>
@@ -37,11 +40,12 @@ export const FileDocument = connect(
 
         <PrimaryDocumentForm />
 
-        <SupportingDocumentForm />
+        <SupportingDocuments />
 
         {form.secondaryDocument.documentTitle && (
           <>
-            <SecondaryDocumentForm /> <SecondarySupportingDocumentForm />
+            <SecondaryDocumentForm />
+            <SecondarySupportingDocuments />
           </>
         )}
 
@@ -49,7 +53,7 @@ export const FileDocument = connect(
 
         <div className="button-box-container margin-top-4">
           <button
-            className="usa-button margin-right-205"
+            className="usa-button margin-right-205 margin-bottom-1"
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -59,7 +63,14 @@ export const FileDocument = connect(
             Review Filing
           </button>
           <button
-            className="usa-button usa-button--outline"
+            className="usa-button usa-button--outline margin-bottom-1"
+            type="button"
+            onClick={() => history.back()}
+          >
+            Back
+          </button>
+          <button
+            className="usa-button usa-button--unstyled ustc-button--unstyled"
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
@@ -68,6 +79,10 @@ export const FileDocument = connect(
             Cancel
           </button>
         </div>
+
+        {showModal === 'WhatCanIIncludeModalOverlay' && (
+          <WhatCanIIncludeModalOverlay />
+        )}
       </React.Fragment>
     );
   },

@@ -51,11 +51,11 @@ describe('fileExternalDocumentInteractor', () => {
       };
       await fileExternalDocumentInteractor({
         applicationContext,
+        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
@@ -86,11 +86,11 @@ describe('fileExternalDocumentInteractor', () => {
       };
       await fileExternalDocumentInteractor({
         applicationContext,
+        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
@@ -126,12 +126,12 @@ describe('fileExternalDocumentInteractor', () => {
       };
       await fileExternalDocumentInteractor({
         applicationContext,
+        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
           documentType: 'Memorandum in Support',
           isPaper: true,
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;

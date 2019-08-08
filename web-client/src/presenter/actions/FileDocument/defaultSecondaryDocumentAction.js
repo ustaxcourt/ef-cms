@@ -12,5 +12,12 @@ export const defaultSecondaryDocumentAction = ({ get, store }) => {
 
   if (!secondaryDocument) {
     store.set(state.form.secondaryDocument, {});
+  } else {
+    if (!secondaryDocument.attachments) {
+      store.set(state.form.secondaryDocument.attachments, false);
+    }
+    if (!secondaryDocument.certificateOfService) {
+      store.set(state.form.secondaryDocument.certificateOfService, false);
+    }
   }
 };

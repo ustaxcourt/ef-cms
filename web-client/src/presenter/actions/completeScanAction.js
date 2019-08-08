@@ -5,28 +5,44 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the scanner API
- * @param {Function} providers.props the cerebral props object used for getting the props.path
- * @param {Function} providers.store the cerebral store used for setting state.path
+ * @param {Function} providers.get the cerebral get function getting state
+ * @param {object} providers.props the cerebral props object used for getting the props.path
+ * @param {objecg} providers.store the cerebral store used for setting state.path
  * @returns {Promise} async action
  */
 export const completeScanAction = async ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
-  const scanner = applicationContext.getScanner();
-  const { error, scannedBuffer } = await scanner.completeScanSession();
+  store.set(state.submitting, true);
 
-  if (error) {
-    // let's handle the error
-  } else {
-    const pdfBlob = await applicationContext
-      .getUseCases()
-      .generatePDFFromPNGDataInteractor(scannedBuffer);
+  // wait a bit so that the spinner shows up because generatePDFFromJPGDataInteractor blocks the browser
+  await new Promise(resolve => setTimeout(resolve, 100));
+  const documentSelectedForScan = get(state.documentSelectedForScan);
 
-    const pdfFile = new File([pdfBlob], 'myfile.pdf');
+  const batches = get(state.batches[documentSelectedForScan]);
 
-    props.onComplete(pdfFile);
-    store.set(state.isScanning, false);
-  }
+  const scannedBuffer = [];
+  batches.forEach(batch =>
+    batch.pages.forEach(page => scannedBuffer.push(page)),
+  );
+
+  // this blocks the browser
+  const pdfBlob = await applicationContext
+    .getUseCases()
+    .generatePDFFromJPGDataInteractor(scannedBuffer);
+
+  const pdfFile = new File([pdfBlob], 'myfile.pdf', {
+    type: 'application/pdf',
+  });
+
+  const scans = get(state.batches);
+  delete scans[documentSelectedForScan];
+
+  props.onComplete(pdfFile);
+  store.set(state.batches, scans);
+  store.set(state.submitting, false);
+  store.set(state.isScanning, false);
 };

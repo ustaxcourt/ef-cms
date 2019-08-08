@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { isEmpty, negate, omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -38,10 +38,10 @@ export const submitCaseAssociationRequestAction = async ({
   };
 
   const documentIds = [primaryDocumentFileId, supportingDocumentFileId].filter(
-    documentId => documentId,
+    negate(isEmpty),
   );
 
-  for (let documentId of documentIds) {
+  const makePdfSafe = async documentId => {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
@@ -56,11 +56,12 @@ export const submitCaseAssociationRequestAction = async ({
       applicationContext,
       documentId,
     });
-  }
+  };
+  await Promise.all(documentIds.map(makePdfSafe));
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .fileExternalDocumentInteractor({
+    .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
       primaryDocumentFileId,
@@ -95,15 +96,17 @@ export const submitCaseAssociationRequestAction = async ({
       });
   }
 
-  for (let document of caseDetail.documents) {
-    if (document.processingStatus === 'pending') {
-      await applicationContext.getUseCases().createCoverSheetInteractor({
-        applicationContext,
-        caseId: caseDetail.caseId,
-        documentId: document.documentId,
-      });
-    }
-  }
+  const pendingDocuments = caseDetail.documents.filter(
+    document => document.processingStatus === 'pending',
+  );
+  const createCoverSheetInteractor = document => {
+    return applicationContext.getUseCases().createCoverSheetInteractor({
+      applicationContext,
+      caseId: caseDetail.caseId,
+      documentId: document.documentId,
+    });
+  };
+  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
 
   return {
     caseDetail,

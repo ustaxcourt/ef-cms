@@ -22,10 +22,11 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
-import { StartCase } from './StartCase';
 import { StartCaseInternal } from './StartCaseInternal';
+import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessions } from './TrialSessions/TrialSessions';
@@ -58,10 +59,11 @@ const pages = {
   LogIn,
   PDFSigner,
   PrimaryContactEdit,
+  PrintableDocketRecord,
   RequestAccessWizard,
   SelectDocumentType,
-  StartCase,
   StartCaseInternal,
+  StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
   TrialSessions,

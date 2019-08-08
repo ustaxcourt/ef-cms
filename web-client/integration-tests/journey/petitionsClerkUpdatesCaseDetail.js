@@ -1,8 +1,10 @@
 import { runCompute } from 'cerebral/test';
 
-import { caseDetailHelper } from '../../src/presenter/computeds/caseDetailHelper';
+import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {

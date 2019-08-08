@@ -71,7 +71,6 @@
       }
     },
 
-
     "/cases/{caseId}/contact-primary": {
       "parameters": [
         {
@@ -246,7 +245,7 @@
         }
       }
     },
-    "/cases/{caseId}/documents": {
+    "/cases/{caseId}/external-document": {
       "parameters": [
         {
           "name": "caseId",
@@ -257,8 +256,60 @@
       ],
       "post": {
         "tags": ["documents"],
-        "summary": "create a new document inside of a case",
-        "description": "Create a new document and attaches it to a case.  It will also create a generic work item.\n",
+        "summary": "file a new external document on a case",
+        "description": "Creates a new external document and attaches it to a case. It will also create a work item.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/docket-entry": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["documents"],
+        "summary": "file a new docket entry on a case",
+        "description": "Creates a new docket entry/document and attaches it to a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -2009,6 +2060,64 @@
         }
       }
     },
+    "/cases/{caseId}/documents/{documentId}/serve": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["documents"],
+        "summary": "serves the document which will send out emails",
+        "description": "serves the document which will send out emails.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/cases/{caseId}/documents/{documentId}/sign": {
       "parameters": [
         {
@@ -2479,6 +2588,46 @@
         }
       }
     },
+    "/docket-record-pdf": {
+      "post": {
+        "summary": "generate a printable pdf of the docket record",
+        "description": "creates a printable pdf with the provided docket record html template.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/cases/{caseId}/case-deadline": {
       "parameters": [
         {
@@ -2654,25 +2803,13 @@
           "type": "string",
           "description": "date document created"
         },
-        "validated": {
-          "type": "boolean",
-          "description": "if the document has been validated"
-        },
         "documentType": {
           "type": "string",
           "description": "type of this document"
         },
-        "reviewDate": {
-          "type": "string",
-          "description": "the date the user reviewed the document"
-        },
         "filedBy": {
           "type": "boolean",
           "description": "the user name who filed the document"
-        },
-        "reviewUser": {
-          "type": "string",
-          "description": "the user who reviewed the document"
         },
         "documentId": {
           "type": "string",
@@ -2681,10 +2818,6 @@
         "userId": {
           "type": "string",
           "description": "id of user who created the document"
-        },
-        "servedDate": {
-          "type": "string",
-          "description": "date document served"
         },
         "status": {
           "type": "string",

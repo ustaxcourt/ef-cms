@@ -65,4 +65,24 @@ describe('If Component', () => {
       testInstance.findByProps({ id: 'some-content' }).children[0],
     ).toEqual('Some Content');
   });
+
+  it('should not show the content if binded value is truthy and not property is present', () => {
+    const testModule = {
+      state: {
+        show: true,
+      },
+    };
+    const app = App(testModule);
+    const testRenderer = TestRenderer.create(
+      <Container app={app}>
+        <If not bind="show">
+          <div id="some-content">Some Content</div>
+        </If>
+      </Container>,
+    );
+
+    const testInstance = testRenderer.root;
+
+    expect(() => testInstance.findByProps({ id: 'some-content' })).toThrow();
+  });
 });

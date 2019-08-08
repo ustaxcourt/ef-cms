@@ -20,7 +20,7 @@ const MOCK_WORK_ITEMS = [
     document: {
       createdAt: '2018-12-27T18:06:02.968Z',
       documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-      documentType: Document.initialDocumentTypes.petitionFile,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: true,
     messages: [
@@ -50,7 +50,7 @@ const MOCK_WORK_ITEMS = [
     document: {
       createdAt: '2018-12-27T18:06:02.968Z',
       documentId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-      documentType: Document.initialDocumentTypes.petitionFile,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: false,
     messages: [

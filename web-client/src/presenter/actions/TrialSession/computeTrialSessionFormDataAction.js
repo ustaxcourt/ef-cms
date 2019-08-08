@@ -41,12 +41,12 @@ const compute24HrTime = ({ extension, hours, minutes }) => {
     return TIME_INVALID;
   }
 
-  if (extension == 'pm') {
+  if (extension === 'pm') {
     if (+hours <= 11) {
       hours = `${+hours + 12}`;
     }
-  } else if (extension == 'am') {
-    if (+hours == 12) {
+  } else if (extension === 'am') {
+    if (+hours === 12) {
       hours = '00';
     } else {
       hours = hours.padStart(2, '0');

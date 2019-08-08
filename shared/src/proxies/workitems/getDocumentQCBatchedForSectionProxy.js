@@ -11,6 +11,6 @@ exports.getDocumentQCBatchedForSectionInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/api/sections/${section}/document-qc/batched`,
+    endpoint: `/sections/${section}/document-qc/batched`,
   });
 };

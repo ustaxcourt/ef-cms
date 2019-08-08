@@ -1,10 +1,14 @@
+.cache/
 .DS_Store
 .scannerwork/
 .terraform/
 /cypress
 aws.json
+coverage/
+dist/
 gen.conf
 graph-generators/node_modules/
+node_modules/
 parcel-debug-*
 policy.json
 puppeteer_lambda_layer.tar.gz

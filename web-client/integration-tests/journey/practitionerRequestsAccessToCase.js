@@ -93,7 +93,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'representingSecondary',
+      key: 'representingPrimary',
       value: true,
     });
 

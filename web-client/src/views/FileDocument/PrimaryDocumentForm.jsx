@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InclusionsForm } from './InclusionsForm';
+import { ObjectionsForm } from './ObjectionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -60,6 +61,13 @@ export const PrimaryDocumentForm = connect(
             type="primaryDocument"
             validationBind="validationErrors"
           />
+          {fileDocumentHelper.primaryDocument.showObjection && (
+            <ObjectionsForm
+              bind="form"
+              type="primaryDocument"
+              validationBind="validationErrors"
+            />
+          )}
         </div>
       </React.Fragment>
     );

@@ -18,7 +18,7 @@ export const CaseListPetitioner = connect(
             <div className="tablet:grid-col-6 mobile:grid-col-12 text-right">
               <a
                 className="usa-button new-case tablet-full-width"
-                href="/before-starting-a-case"
+                href="/before-filing-a-petition"
                 id="init-file-petition"
               >
                 <FontAwesomeIcon icon="file" size="1x" /> File a Petition

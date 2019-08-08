@@ -12,4 +12,5 @@ module "ef-cms_apis" {
   environment = "${var.environment}"
   dns_domain  = "${var.dns_domain}"
   cognito_suffix = "${var.cognito_suffix}"
+  ses_dmarc_rua = "${var.ses_dmarc_rua}"
 }

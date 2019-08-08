@@ -2,6 +2,7 @@ import { SectionWorkQueueBatched } from './SectionWorkQueueBatched';
 import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { WorkQueueActionButtons } from './WorkQueue/WorkQueueActionButtons';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -26,6 +27,8 @@ export const SectionWorkQueue = connect(
           });
         }}
       >
+        <WorkQueueActionButtons />
+
         <Tab id="section-inbox-tab" tabName="inbox" title="Inbox">
           <div id="section-inbox-tab-content">
             <SectionWorkQueueInbox />

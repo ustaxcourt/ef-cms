@@ -24,8 +24,8 @@ describe('formattedTrialSessionDetails', () => {
     trialLocation: 'Hartford, Connecticut',
   };
 
-  it('formats trial session when all fields have values', async () => {
-    const result = await runCompute(formattedTrialSessionDetails, {
+  it('formats trial session when all fields have values', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
@@ -45,8 +45,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats trial session when address fields are empty', async () => {
-    let result = await runCompute(formattedTrialSessionDetails, {
+  it('formats trial session when address fields are empty', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
@@ -58,7 +58,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: true,
     });
 
-    result = await runCompute(formattedTrialSessionDetails, {
+    result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['city']),
@@ -70,7 +70,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: false,
     });
 
-    result = await runCompute(formattedTrialSessionDetails, {
+    result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['state']),
@@ -82,7 +82,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: false,
     });
 
-    result = await runCompute(formattedTrialSessionDetails, {
+    result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['state']),
@@ -94,7 +94,7 @@ describe('formattedTrialSessionDetails', () => {
       noLocationEntered: false,
     });
 
-    result = await runCompute(formattedTrialSessionDetails, {
+    result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, ['postalCode']),
@@ -107,8 +107,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats trial session when session assignments are empty', async () => {
-    let result = await runCompute(formattedTrialSessionDetails, {
+  it('formats trial session when session assignments are empty', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...omit(TRIAL_SESSION, [
@@ -128,8 +128,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats trial session start time', async () => {
-    let result = await runCompute(formattedTrialSessionDetails, {
+  it('formats trial session start time', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
@@ -142,8 +142,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('displays swing session area if session is a swing session', async () => {
-    let result = await runCompute(formattedTrialSessionDetails, {
+  it('displays swing session area if session is a swing session', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
@@ -158,8 +158,8 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats docket numbers with suffixes on eligible cases', async () => {
-    let result = await runCompute(formattedTrialSessionDetails, {
+  it('formats docket numbers with suffixes on eligible cases', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
@@ -176,8 +176,8 @@ describe('formattedTrialSessionDetails', () => {
     );
   });
 
-  it('sorts calendared cases by docket number', async () => {
-    let result = await runCompute(formattedTrialSessionDetails, {
+  it('sorts calendared cases by docket number', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,

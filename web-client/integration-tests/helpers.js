@@ -66,6 +66,55 @@ exports.getFormattedDocumentQCSectionOutbox = async test => {
   });
 };
 
+exports.signProposedStipulatedDecision = async (test, stipDecision) => {
+  await exports.viewDocumentDetailMessage({
+    docketNumber: stipDecision.docketNumber,
+    documentId: stipDecision.document.documentId,
+    messageId: stipDecision.currentMessage.messageId,
+    test,
+    workItemIdToMarkAsRead: stipDecision.workItemId,
+  });
+
+  await test.runSequence('gotoSignPDFDocumentSequence', {
+    docketNumber: stipDecision.docketNumber,
+    documentId: stipDecision.document.documentId,
+    pageNumber: 1,
+  });
+
+  await test.runSequence('setPDFSignatureDataSequence', {
+    signatureData: {
+      scale: 1,
+      x: 100,
+      y: 100,
+    },
+  });
+
+  test.setState('form', {
+    assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    message: 'serve this please!',
+    section: 'docket',
+  });
+
+  await test.runSequence('completeDocumentSigningSequence');
+};
+
+exports.serveDocument = async ({
+  docketNumber,
+  documentId,
+  messageId,
+  test,
+  workItemIdToMarkAsRead,
+}) => {
+  await test.runSequence('gotoDocumentDetailSequence', {
+    docketNumber,
+    documentId,
+    messageId,
+    workItemIdToMarkAsRead,
+  });
+
+  await test.runSequence('serveDocumentSequence');
+};
+
 exports.getFormattedMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -130,6 +179,10 @@ exports.assignWorkItems = async (test, to, workItems) => {
       name: 'Test Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
+    seniorattorney: {
+      name: 'Test Seniorattorney',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    },
   };
   await test.runSequence('selectAssigneeSequence', {
     assigneeId: users[to].userId,
@@ -152,7 +205,6 @@ exports.uploadExternalDecisionDocument = async test => {
     documentTitle: 'Agreed Computation for Entry of Decision',
     documentType: 'Agreed Computation for Entry of Decision',
     eventCode: 'ACED',
-    exhibits: false,
     hasSupportingDocuments: false,
     partyPrimary: true,
     primaryDocumentFile: fakeFile,
@@ -165,6 +217,29 @@ exports.uploadExternalDecisionDocument = async test => {
     supportingDocumentFile: null,
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
+  });
+  await test.runSequence('submitExternalDocumentSequence');
+};
+
+exports.uploadProposedStipulatedDecision = async test => {
+  test.setState('form', {
+    attachments: false,
+    category: 'Decision',
+    certificateOfService: false,
+    certificateOfServiceDate: null,
+    documentTitle: 'Proposed Stipulated Decision',
+    documentType: 'Proposed Stipulated Decision',
+    eventCode: 'PSDEC',
+    hasSecondarySupportingDocuments: false,
+    hasSupportingDocuments: false,
+    partyRespondent: true,
+    practitioner: [],
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 115022,
+    scenario: 'Standard',
+    searchError: false,
+    secondaryDocument: { certificateOfServiceDate: null },
+    serviceDate: 'undefined-undefined-undefined',
   });
   await test.runSequence('submitExternalDocumentSequence');
 };
@@ -198,6 +273,8 @@ exports.forwardWorkItem = async (test, to, workItemId, message) => {
 };
 
 exports.uploadPetition = async (test, overrides = {}) => {
+  await test.runSequence('gotoStartCaseWizardSequence');
+
   test.setState('form', {
     caseType: overrides.caseType || 'CDP (Lien/Levy)',
     contactPrimary: {
@@ -215,29 +292,13 @@ exports.uploadPetition = async (test, overrides = {}) => {
     filingType: 'Myself',
     hasIrsNotice: false,
     partyType: 'Petitioner',
+    petitionFile: fakeFile,
+    petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
     procedureType: overrides.procedureType || 'Regular',
-    signature: true,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'petitionFile',
-    value: fakeFile,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'petitionFileSize',
-    value: 1,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'stinFile',
-    value: fakeFile,
-  });
-
-  await test.runSequence('updatePetitionValueSequence', {
-    key: 'stinFileSize',
-    value: 1,
+    stinFile: fakeFile,
+    stinFileSize: 1,
+    wizardStep: '4',
   });
 
   await test.runSequence('submitFilePetitionSequence');
@@ -262,11 +323,19 @@ exports.loginAs = async (test, user) => {
   await exports.waitForRouter();
 };
 
-exports.setupTest = () => {
+exports.setupTest = ({ useCases = {} } = {}) => {
   let test;
   global.FormData = FormData;
   global.Blob = () => {};
   presenter.providers.applicationContext = applicationContext;
+  const originalUseCases = applicationContext.getUseCases();
+  presenter.providers.applicationContext.getUseCases = () => {
+    return {
+      ...originalUseCases,
+      ...useCases,
+    };
+  };
+
   presenter.providers.router = {
     route: async url => {
       if (url === `/case-detail/${test.docketNumber}`) {
@@ -305,6 +374,12 @@ exports.setupTest = () => {
   });
 
   return test;
+};
+
+exports.viewCaseDetail = async ({ docketNumber, test }) => {
+  await test.runSequence('gotoCaseDetailSequence', {
+    docketNumber,
+  });
 };
 
 exports.viewDocumentDetailMessage = async ({

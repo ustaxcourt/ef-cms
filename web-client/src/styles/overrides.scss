@@ -35,17 +35,6 @@
   }
 }
 
-.usa-button {
-  &.usa-button--unstyled {
-    padding: 2px;
-    &.no-underline {
-      text-decoration: none;
-    }
-    &:disabled {
-      color: color($theme-color-base);
-    }
-  }
-}
 option:first-child {
   font-weight: initial;
 }
@@ -142,6 +131,7 @@ option:first-child {
 
 .usa-error-message {
   margin: 15px 0 0 0;
+  font-size: 17px;
   line-height: 1;
 }
 

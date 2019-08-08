@@ -21,19 +21,8 @@ export const showContactsHelper = (partyType, PARTY_TYPES) => {
   ].includes(partyType);
 
   const contactSecondary = [
-    PARTY_TYPES.conservator,
-    PARTY_TYPES.custodian,
-    PARTY_TYPES.estate,
-    PARTY_TYPES.guardian,
-    PARTY_TYPES.nextFriendForIncompetentPerson,
-    PARTY_TYPES.nextFriendForMinor,
-    PARTY_TYPES.partnershipAsTaxMattersPartner,
-    PARTY_TYPES.partnershipBBA,
-    PARTY_TYPES.partnershipOtherThanTaxMatters,
     PARTY_TYPES.petitionerDeceasedSpouse,
     PARTY_TYPES.petitionerSpouse,
-    PARTY_TYPES.survivingSpouse,
-    PARTY_TYPES.trust,
   ].includes(partyType);
 
   return { contactPrimary, contactSecondary };

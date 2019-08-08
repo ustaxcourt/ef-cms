@@ -112,11 +112,12 @@ table.trial-sessions {
 }
 
 table.small-case-qualifications-table {
-  margin-bottom: 2em;
-
-  th,
-  td {
+  tr {
     border: 1px solid color($theme-color-base-light);
+
+    td:first-child {
+      font-weight: $font-semibold;
+    }
   }
 
   thead th {
@@ -420,6 +421,8 @@ table.docket-record {
 
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1px) {
+    line-height: 1.4em;
+
     .hide-on-mobile {
       display: none;
     }

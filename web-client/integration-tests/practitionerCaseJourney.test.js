@@ -79,7 +79,6 @@ describe('Practitioner requests access to case', () => {
       CATEGORIES: Document.CATEGORIES,
       CATEGORY_MAP: Document.CATEGORY_MAP,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      DOCUMENT_TYPES_MAP: Document.initialDocumentTypes,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });

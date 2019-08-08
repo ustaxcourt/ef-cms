@@ -1,8 +1,14 @@
 export default test => {
   it('taxpayer navigates to create case and cancels', async () => {
-    await test.runSequence('gotoStartCaseSequence');
+    await test.runSequence('gotoStartCaseWizardSequence', {
+      step: '1',
+      wizardStep: 'StartCaseStep1',
+    });
     expect(test.getState('showModal')).toBeFalsy();
-    expect(test.getState('form')).toEqual({ contactPrimary: {} });
+    expect(test.getState('form')).toEqual({
+      contactPrimary: {},
+      wizardStep: '1',
+    });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
@@ -15,7 +21,7 @@ export default test => {
     await test.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
     expect(test.getState('showModal')).toBeTruthy();
     await test.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
-    expect(test.getState('currentPage')).toEqual('StartCase');
+    expect(test.getState('currentPage')).toEqual('StartCaseWizard');
 
     await test.runSequence('formCancelToggleCancelSequence');
     await test.runSequence('closeModalAndReturnToDashboardSequence');

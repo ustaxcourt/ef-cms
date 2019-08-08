@@ -53,7 +53,7 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require non standard fields', () => {
-        expect(errors().ordinalValue).toEqual('You must select an iteration.');
+        expect(errors().ordinalValue).toEqual('Select an iteration.');
         rawEntity.ordinalValue = 'First';
         expect(errors().ordinalValue).toEqual(undefined);
       });
@@ -181,8 +181,8 @@ describe('DocketEntryFactory', () => {
 
           it('should validate secondary document', () => {
             expect(errors().secondaryDocument).toEqual({
-              category: 'You must select a category.',
-              documentType: 'You must select a document type.',
+              category: 'Select a Category.',
+              documentType: 'Select a Document Type.',
             });
           });
         });

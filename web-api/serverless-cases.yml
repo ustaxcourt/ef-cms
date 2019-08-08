@@ -1,6 +1,6 @@
 service: ef-cms-cases
 plugins:
-  - serverless-plugin-split-stacks
+  # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
@@ -98,6 +98,9 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
     GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
+    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
+    EFCMS_DOMAIN: ${opt:domain}
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -141,6 +144,11 @@ provider:
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
         - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
         - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
+    - Effect: 'Allow'
+      Action:
+        - 'ses:*'
+      Resource:
+        - '*'
 
 package:
   exclude:
@@ -153,7 +161,6 @@ package:
     - .dynamodb/**
     - .nyc_output/**
     - dist/**
-    - src/handlers.js.map
     - runtimes/**
 
   excludeDevDependencies: true
@@ -193,20 +200,8 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createDocument:
-    handler: src/handlers.createDocumentLambda
-    events:
-      - http:
-          path: /{caseId}/documents
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   addCoversheet:
-    handler: src/handlers.addCoversheetLambda
+    handler: src/casesHandlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
@@ -221,7 +216,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   signDocument:
-    handler: src/handlers.signDocumentLambda
+    handler: src/casesHandlers.signDocumentLambda
     events:
       - http:
           path: /{caseId}/documents/{documentId}/sign
@@ -233,7 +228,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCase:
-    handler: src/handlers.updateCaseLambda
+    handler: src/casesHandlers.updateCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -245,7 +240,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseTrialSortTags:
-    handler: src/handlers.updateCaseTrialSortTagsLambda
+    handler: src/casesHandlers.updateCaseTrialSortTagsLambda
     events:
       - http:
           path: /{caseId}/update-case-trial-sort-tags
@@ -257,7 +252,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updatePrimaryContact:
-    handler: src/handlers.updatePrimaryContactLambda
+    handler: src/casesHandlers.updatePrimaryContactLambda
     events:
       - http:
           path: /{caseId}/contact-primary
@@ -268,8 +263,20 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  serveSignedStipDecision:
+    handler: src/casesHandlers.serveSignedStipDecisionLambda
+    events:
+      - http:
+          path: /{caseId}/documents/{documentId}/serve
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   setCaseToReadyForTrial:
-    handler: src/handlers.setCaseToReadyForTrialLambda
+    handler: src/casesHandlers.setCaseToReadyForTrialLambda
     events:
       - http:
           path: /{caseId}/set-to-ready-for-trial
@@ -281,7 +288,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCase:
-    handler: src/handlers.createCaseLambda
+    handler: src/casesHandlers.createCaseLambda
     events:
       - http:
           path: /
@@ -293,7 +300,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseFromPaper:
-    handler: src/handlers.createCaseFromPaperLambda
+    handler: src/casesHandlers.createCaseFromPaperLambda
     events:
       - http:
           path: /paper
@@ -305,7 +312,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileExternalDocument:
-    handler: src/handlers.fileExternalDocumentToCaseLambda
+    handler: src/casesHandlers.fileExternalDocumentToCaseLambda
     events:
       - http:
           path: /{caseId}/external-document
@@ -316,8 +323,20 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  fileDocketEntry:
+    handler: src/casesHandlers.fileDocketEntryToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   fileCourtIssuedOrder:
-    handler: src/handlers.fileCourtIssuedOrderToCaseLambda
+    handler: src/casesHandlers.fileCourtIssuedOrderToCaseLambda
     events:
       - http:
           path: /{caseId}/court-issued-order
@@ -329,7 +348,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCase:
-    handler: src/handlers.getCaseLambda
+    handler: src/casesHandlers.getCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -345,7 +364,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sendToIRS:
-    handler: src/handlers.sendPetitionToIRSHoldingQueueLambda
+    handler: src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/send-to-irs-holding-queue
@@ -357,7 +376,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   recallFromIRS:
-    handler: src/handlers.recallPetitionFromIRSHoldingQueueLambda
+    handler: src/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
@@ -369,7 +388,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createWorkItem:
-    handler: src/handlers.createWorkItemLambda
+    handler: src/casesHandlers.createWorkItemLambda
     events:
       - http:
           path: /{caseId}/documents/{documentId}/work-items
@@ -381,7 +400,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseDeadline:
-    handler: src/handlers.createCaseDeadlineLambda
+    handler: src/casesHandlers.createCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/case-deadline
@@ -393,7 +412,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCaseDeadlinesForCase:
-    handler: src/handlers.getCaseDeadlinesForCaseLambda
+    handler: src/casesHandlers.getCaseDeadlinesForCaseLambda
     events:
       - http:
           path: /{caseId}/case-deadline
@@ -405,7 +424,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseDeadline:
-    handler: src/handlers.updateCaseDeadlineLambda
+    handler: src/casesHandlers.updateCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/case-deadline/{caseDeadlineId}
@@ -417,7 +436,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseDeadline:
-    handler: src/handlers.deleteCaseDeadlineLambda
+    handler: src/casesHandlers.deleteCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/case-deadline/{caseDeadlineId}

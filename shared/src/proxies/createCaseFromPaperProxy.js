@@ -12,6 +12,7 @@ exports.createCaseFromPaperInteractor = ({
   ownershipDisclosureFileId,
   petitionFileId,
   petitionMetadata,
+  requestForPlaceOfTrialFileId,
   stinFileId,
 }) => {
   return post({
@@ -20,6 +21,7 @@ exports.createCaseFromPaperInteractor = ({
       ownershipDisclosureFileId,
       petitionFileId,
       petitionMetadata,
+      requestForPlaceOfTrialFileId,
       stinFileId,
     },
     endpoint: '/cases/paper',

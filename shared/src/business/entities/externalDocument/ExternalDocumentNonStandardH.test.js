@@ -7,11 +7,11 @@ describe('ExternalDocumentNonStandardH', () => {
         scenario: 'Nonstandard H',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'You must select a category.',
-        documentType: 'You must select a document type.',
+        category: 'Select a Category.',
+        documentType: 'Select a Document Type.',
         secondaryDocument: {
-          category: 'You must select a category.',
-          documentType: 'You must select a document type.',
+          category: 'Select a Category.',
+          documentType: 'Select a Document Type.',
         },
       });
     });
@@ -44,9 +44,9 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(() => extDoc.validate()).toThrow();
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
-          category: 'You must select a category.',
-          documentType: 'You must select a document type.',
-          previousDocument: 'You must select a document.',
+          category: 'Select a Category.',
+          documentType: 'Select a Document Type.',
+          previousDocument: 'Select a document.',
         },
       });
     });

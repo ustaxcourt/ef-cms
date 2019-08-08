@@ -7,8 +7,8 @@ describe('ExternalDocumentStandard', () => {
         scenario: 'Standard',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'You must select a category.',
-        documentType: 'You must select a document type.',
+        category: 'Select a Category.',
+        documentType: 'Select a Document Type.',
       });
     });
 

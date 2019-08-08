@@ -60,8 +60,8 @@ describe('formattedTrialSessions', () => {
     });
   });
 
-  it('groups trial sessions into arrays according to session weeks', async () => {
-    const result = await runCompute(formattedTrialSessions, {
+  it('groups trial sessions into arrays according to session weeks', () => {
+    const result = runCompute(formattedTrialSessions, {
       state: {
         trialSessions: TRIAL_SESSIONS_LIST,
       },
@@ -75,7 +75,7 @@ describe('formattedTrialSessions', () => {
     );
   });
 
-  it('shows swing session option only if matching term and term year is found', async () => {
+  it('shows swing session option only if matching term and term year is found', () => {
     const trialSessions = [
       {
         judge: '1',
@@ -97,7 +97,7 @@ describe('formattedTrialSessions', () => {
       term: 'Winter',
       termYear: '2019',
     };
-    let result = await runCompute(formattedTrialSessions, {
+    let result = runCompute(formattedTrialSessions, {
       state: {
         form,
         trialSessions,
@@ -107,7 +107,7 @@ describe('formattedTrialSessions', () => {
     expect(result.showSwingSessionOption).toBeFalsy();
 
     form.term = 'Spring';
-    result = await runCompute(formattedTrialSessions, {
+    result = runCompute(formattedTrialSessions, {
       state: {
         form,
         trialSessions,
@@ -117,7 +117,7 @@ describe('formattedTrialSessions', () => {
     expect(result.showSwingSessionOption).toBeTruthy();
 
     form.termYear = '2011'; // similar term but not a matching year
-    result = await runCompute(formattedTrialSessions, {
+    result = runCompute(formattedTrialSessions, {
       state: {
         form,
         trialSessions,
@@ -127,7 +127,7 @@ describe('formattedTrialSessions', () => {
     expect(result.showSwingSessionOption).toBeFalsy();
   });
 
-  it('returns sessionsByTerm with only sessions in that term if form.term is set', async () => {
+  it('returns sessionsByTerm with only sessions in that term if form.term is set', () => {
     const trialSessions = [
       {
         judge: '1',
@@ -160,7 +160,7 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Seattle, WA',
       },
     ];
-    const result = await runCompute(formattedTrialSessions, {
+    const result = runCompute(formattedTrialSessions, {
       state: {
         form: {
           term: 'Winter',

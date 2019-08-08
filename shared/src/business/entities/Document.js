@@ -46,17 +46,15 @@ function Document(rawDocument) {
     processingStatus: rawDocument.processingStatus,
     receivedAt: rawDocument.receivedAt || new Date().toISOString(),
     relationship: rawDocument.relationship,
-    reviewDate: rawDocument.reviewDate,
-    reviewUser: rawDocument.reviewUser,
     scenario: rawDocument.scenario,
-    servedDate: rawDocument.servedDate,
+    servedAt: rawDocument.servedAt,
+    servedParties: rawDocument.servedParties,
     serviceDate: rawDocument.serviceDate,
     signedAt: rawDocument.signedAt,
     signedByUserId: rawDocument.signedByUserId,
     status: rawDocument.status,
     supportingDocument: rawDocument.supportingDocument,
     userId: rawDocument.userId,
-    validated: rawDocument.validated,
     workItems: rawDocument.workItems,
   });
 
@@ -77,14 +75,30 @@ const practitionerAssociationDocumentTypes = [
  * documentTypes
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
  */
-Document.initialDocumentTypes = {
-  ownershipDisclosure: 'Ownership Disclosure Statement',
-  petitionFile: 'Petition',
-  stin: 'Statement of Taxpayer Identification',
+Document.INITIAL_DOCUMENT_TYPES = {
+  ownershipDisclosure: {
+    documentType: 'Ownership Disclosure Statement',
+    eventCode: 'ODS',
+  },
+  petition: {
+    documentType: 'Petition',
+    eventCode: 'P',
+  },
+  requestForPlaceOfTrial: {
+    documentType: 'Request for Place of Trial',
+    eventCode: 'RQT',
+  },
+  stin: {
+    documentType: 'Statement of Taxpayer Identification',
+    eventCode: 'STIN',
+  },
 };
 
-Document.signedDocumentTypes = {
-  signedStipulatedDecision: 'Signed Stipulated Decision',
+Document.SIGNED_DOCUMENT_TYPES = {
+  signedStipulatedDecision: {
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+  },
 };
 
 Document.getDocumentTypes = () => {
@@ -94,9 +108,14 @@ Document.getDocumentTypes = () => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
-  const signedTypes = Object.values(Document.signedDocumentTypes);
+  const initialTypes = Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(
+    t => Document.INITIAL_DOCUMENT_TYPES[t].documentType,
+  );
+  const signedTypes = Object.keys(Document.SIGNED_DOCUMENT_TYPES).map(
+    t => Document.SIGNED_DOCUMENT_TYPES[t].documentType,
+  );
   const documentTypes = [
-    ...Object.values(Document.initialDocumentTypes),
+    ...initialTypes,
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
     ...orderDocTypes,
@@ -143,15 +162,11 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
-    reviewDate: joi
+    servedAt: joi
       .date()
       .iso()
       .optional(),
-    reviewUser: joi.string().optional(),
-    servedDate: joi
-      .date()
-      .iso()
-      .optional(),
+    servedParties: joi.array().optional(),
     signedAt: joi
       .date()
       .iso()
@@ -159,7 +174,6 @@ joiValidationDecorator(
     signedByUserId: joi.string().optional(),
     status: joi.string().optional(),
     userId: joi.string().required(),
-    validated: joi.boolean().optional(),
   }),
   function() {
     return WorkItem.validateCollection(this.workItems);
@@ -172,6 +186,14 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+Document.prototype.setAsServed = function(servedParties = null) {
+  this.status = 'served';
+  this.servedAt = new Date().toISOString();
+  if (servedParties) {
+    this.servedParties = servedParties;
+  }
 };
 
 /**
@@ -197,6 +219,12 @@ Document.prototype.generateFiledBy = function(caseDetail) {
       caseDetail.contactPrimary
     ) {
       filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+    } else if (
+      this.partySecondary &&
+      !this.partyPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
     } else if (
       this.partyPrimary &&
       this.partySecondary &&

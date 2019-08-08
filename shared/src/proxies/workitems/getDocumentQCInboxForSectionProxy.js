@@ -11,6 +11,6 @@ exports.getDocumentQCInboxForSectionInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/api/sections/${section}/document-qc/inbox`,
+    endpoint: `/sections/${section}/document-qc/inbox`,
   });
 };

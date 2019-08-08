@@ -20,6 +20,6 @@ exports.assignWorkItemsInteractor = ({
       assigneeName,
       workItemId,
     },
-    endpoint: '/api/work-items',
+    endpoint: '/work-items',
   });
 };

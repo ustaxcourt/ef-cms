@@ -36,9 +36,13 @@ exports.saveSignedDocumentInteractor = async ({
   const signedDocumentEntity = new Document({
     createdAt: applicationContext.getUtilities().createISODateString(),
     documentId: signedDocumentId,
-    documentType: Document.signedDocumentTypes.signedStipulatedDecision,
+    documentType:
+      Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+    eventCode:
+      Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
     filedBy: originalDocumentEntity.filedBy,
-    isPaper: originalDocumentEntity.isPaper,
+    isPaper: false,
+    processingStatus: 'complete',
     userId: user.userId,
   });
 

@@ -4,76 +4,112 @@ import React from 'react';
 export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
     <h2>Which case procedure should I choose?</h2>
-    <p>
-      Small cases must adhere to the following dollar limits depending on the
-      notice you received:
-    </p>
+    <h3 className="margin-bottom-4">
+      Do I qualify for a small tax case procedure?
+    </h3>
     <table
       aria-labelledby="small-case-qualifications"
-      className="usa-table responsive-table small-case-qualifications-table"
+      className="usa-table responsive-table ustc-table small-case-qualifications-table"
     >
       <thead>
         <tr>
-          <th colSpan="4">Do I qualify for a small tax case procedure?</th>
+          <th>Case Type</th>
+          <th>Dollar Limit to Qualify for Small Tax Case</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Deficiency</td>
-          <td>Collection</td>
-          <td>Spousal Relief</td>
-          <td>Worker Classification</td>
+          <td>
+            The amount of deficiency (including any additions to tax and
+            penalties) cannot exceed $50,000 for any one year.
+          </td>
         </tr>
         <tr>
+          <td>Collection (Lien/Levy)</td>
           <td>
-            <span className="responsive-label">Deficiency</span>
-            Less than $50,000 for each year
-          </td>
-          <td>
-            <span className="responsive-label">Collection</span>
-            Less than $50,000 for all years
-          </td>
-          <td>
-            <span className="responsive-label">Spousal Relief</span>
-            Less than $50,000 for all years
-          </td>
-          <td>
-            <span className="responsive-label">Worker Classification</span>
-            Less than $50,000 for any calendar quarter
+            The total amount of unpaid tax cannot exceed $50,000 for all years
+            combined.
           </td>
         </tr>
+        <tr>
+          <td>Innocent Spouse Relief</td>
+          <td>
+            The amount of spousal relief sought cannot exceed $50,000 for all
+            years combined.
+          </td>
+        </tr>
+        <tr>
+          <td>Worker Classification</td>
+          <td>
+            The amount in dispute cannot exceed $50,000 for any calendar
+            quarter.
+          </td>
+        </tr>
+        <tr>
+          <td>Interest Abatement</td>
+          <td>The amount of the abatement sought cannot exceed $50,000.</td>
+        </tr>
+        {[
+          'Partnership',
+          'Whistleblower cases',
+          'Passport cases',
+          'Declaratory Judgment cases',
+        ].map(caseType => (
+          <tr key={caseType}>
+            <td>{caseType}</td>
+            <td>Not eligible for “S” status</td>
+          </tr>
+        ))}
       </tbody>
     </table>
 
-    <h3>If You File as a Small Tax Case, You’ll Have:</h3>
+    <h3>If you file as a small tax case, you’ll have:</h3>
     <div className="small-case-features grid-container padding-x-0" role="list">
-      <div className="grid-row">
-        <div className="grid-col-3 feature" role="listitem">
-          <h4>More Location Options</h4>
-          <p>
-            Small case trials are held in 15 more locations than regular cases
-          </p>
+      <div className="grid-row grid-gap-3">
+        <div className="tablet:grid-col-3" role="listitem">
+          <div className="feature benefit">
+            <h5>
+              <FontAwesomeIcon icon="check-circle" />
+              More Trial Location Options
+            </h5>
+            <p>
+              Small case trials are held in 15 more locations than regular cases
+            </p>
+          </div>
         </div>
-        <div className="grid-col-3 feature" role="listitem">
-          <h4>Less Formal Procedures</h4>
-          <p>
-            Small case pre-trial and trial procedures are less formal than
-            regular cases
-          </p>
+        <div className="tablet:grid-col-3" role="listitem">
+          <div className="feature benefit">
+            <h5>
+              <FontAwesomeIcon icon="check-circle" />
+              Less Formal Procedures
+            </h5>
+            <p>
+              Small case pre-trial and trial procedures are less formal than
+              regular cases
+            </p>
+          </div>
         </div>
-        <div className="grid-col-3 feature" role="listitem">
-          <h4>Relaxed Evidence Rules</h4>
-          <p>Judges can consider any evidence that’s relevant</p>
+        <div className="tablet:grid-col-3" role="listitem">
+          <div className="feature benefit">
+            <h5>
+              <FontAwesomeIcon icon="check-circle" />
+              Relaxed Evidence Rules
+            </h5>
+            <p>Judges can consider any evidence that’s relevant</p>
+          </div>
         </div>
-        <div className="grid-col-3 feature warning" role="listitem">
-          <h4>
-            <FontAwesomeIcon icon="exclamation-triangle" />
-            No Appeals Process
-          </h4>
-          <p>
-            If you lose your case, or lose some issues in your case, you can’t
-            appeal the decision
-          </p>
+        <div className="tablet:grid-col-3" role="listitem">
+          <div className="feature warning">
+            <h5>
+              <FontAwesomeIcon icon="exclamation-triangle" />
+              No Appeals Process
+            </h5>
+            <p>
+              If you lose your case, or lose some issues in your case, you can’t
+              appeal the decision
+            </p>
+          </div>
         </div>
       </div>
     </div>

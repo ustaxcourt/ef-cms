@@ -1,11 +1,11 @@
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
-
 import { IndividualWorkQueueBatched } from './IndividualWorkQueueBatched';
 import { IndividualWorkQueueInbox } from './IndividualWorkQueueInbox';
 import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
+import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { WorkQueueActionButtons } from './WorkQueue/WorkQueueActionButtons';
+import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
+import React from 'react';
 
 export const IndividualWorkQueue = connect(
   {
@@ -26,6 +26,7 @@ export const IndividualWorkQueue = connect(
           });
         }}
       >
+        <WorkQueueActionButtons />
         <Tab id="individual-inbox-tab" tabName="inbox" title="Inbox">
           <div id="individual-inbox-tab-content">
             <IndividualWorkQueueInbox />

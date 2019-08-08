@@ -92,7 +92,7 @@ class DocketRecordOverlayComponent extends React.Component {
             <a
               aria-label={'View PDF'}
               className="usa-button view-pdf-button tablet-full-width"
-              href={`${baseUrl}/api/documents/${document.documentId}/document-download-url?token=${token}`}
+              href={`${baseUrl}/documents/${document.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -108,16 +108,13 @@ class DocketRecordOverlayComponent extends React.Component {
             <p className="semi-bold label margin-top-3">Served</p>
             <p className="margin-top-0">
               {document && document.isStatusServed && (
-                <span>
-                  {this.props.caseDetail.datePetitionSentToIrsMessage}
-                </span>
-              )}
-              {document && this.props.helper.showDocumentStatus && (
-                <span>{document.status}</span>
+                <span>{document.servedAtFormatted}</span>
               )}
             </p>
             <p className="semi-bold label margin-top-3">Parties</p>
-            <p className="margin-top-0">{record.servedParties}</p>
+            <p className="margin-top-0">
+              {document && document.servedPartiesCode}
+            </p>
           </div>
         </dialog>
       </FocusLock>

@@ -99,7 +99,7 @@ export const CaseDetailInternal = connect(
               {caseDetail.contactPrimary && (
                 <a
                   aria-label="View PDF"
-                  href={`${baseUrl}/api/documents/${
+                  href={`${baseUrl}/documents/${
                     caseDetail.docketNumber
                   }_${caseDetail.contactPrimary.name.replace(
                     /\s/g,

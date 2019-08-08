@@ -31,7 +31,7 @@ Code reviews are about keeping code clean and limiting technical debt. We will l
 We’re mostly going to look at new and changed code. For changed code, we’ll check the existing tests to make sure they’ve been updated if necessary. For new code, we’ll check that new tests were created.
 
 ### Does not contain secrets
-We look to ensure that new and/or changed code does not contain secrets (account names, passwords, private keys, private hostnames, service endpoints and other confidential secrets). 
+We look to ensure that new and/or changed code does not contain secrets (account names, passwords, private keys, private hostnames, service endpoints and other confidential secrets).
 
 ### All logical paths are tested
 Tests should cover all branches of logical decisions (e.g., `if / else` statements). We’ll check this by looking at a code coverage report that shows which lines were executed.
@@ -67,7 +67,7 @@ Comments in the code should describe complex bits of logic that aren’t easily 
 If code exposes a public API — whether that’s public methods on a class or HTTP endpoints in a REST service — those public methods should be documented.  We like documentation that can be extracted into some pretty markup (e.g., .NET’s XML comments, jsdoc, OAS, Swagger). We’ll check that any public-facing methods have useful documentation.
 
 ### Adherence to the project’s style guide
-The project should adopt a code style guide and code should conform. Which guide the team chooses is less important than the consistency that comes from actually using it.  We’ll check to make sure there’s a linter configured to check code style, that it passes, and that any exceptions are documented and explained in the code.
+The project should adopt a code style guide and code should conform. Which guide the team chooses is less important than the consistency that comes from actually using it. We’ll check to make sure there’s a linter configured to check code style, that it passes, and that any exceptions are documented and explained in the code.
 
 ## What we’ll do
 
@@ -87,7 +87,7 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
-- [ ] begin by deleting any existing copy of the Git repository and cloning a fresh copy, running `docker system prune` to remove any cached artifacts from any prior code review, and running `./clean-up.sh` to update Node packages
+- [ ] begin by deleting any existing copy of the Git repository and cloning a fresh copy, running `docker system prune` to remove any cached artifacts from any prior code review, and running `./reset-dependencies.sh` to update Node packages
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request

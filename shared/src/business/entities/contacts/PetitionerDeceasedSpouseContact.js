@@ -6,8 +6,11 @@ const { ContactFactory } = require('./ContactFactory');
  */
 exports.getPetitionerDeceasedSpouseContact = ContactFactory.createContactFactory(
   {
-    additionalErrorMappings: {},
+    additionalErrorMappings: {
+      inCareOf: 'In Care Of is a required field.',
+    },
     additionalValidation: {
+      inCareOf: joi.string().required(),
       phone: joi.optional().allow(null),
     },
   },

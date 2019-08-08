@@ -11,7 +11,7 @@ export default (test, message) => {
       const myInbox = await getFormattedMyInbox(test);
       const stipDecision = myInbox.find(
         item =>
-          item.document.documentType === 'Signed Stipulated Decision' &&
+          item.document.documentType === 'Stipulated Decision' &&
           (message ? item.currentMessage.message === message : true),
       );
 

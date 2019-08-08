@@ -5,22 +5,22 @@ import sinon from 'sinon';
 
 describe('submitDocketEntryAction', () => {
   let createCoverSheetStub;
-  let fileExternalDocumentStub;
+  let fileDocketEntryStub;
 
   beforeEach(() => {
     createCoverSheetStub = sinon.stub();
-    fileExternalDocumentStub = sinon.stub();
+    fileDocketEntryStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
-        fileExternalDocumentInteractor: fileExternalDocumentStub,
+        fileDocketEntryInteractor: fileDocketEntryStub,
       }),
     };
   });
 
-  it('should call fileExternalDocument', async () => {
-    fileExternalDocumentStub.returns({ documents: [] });
+  it('should call fileDocketEntry', async () => {
+    fileDocketEntryStub.returns({ documents: [] });
     await runAction(submitDocketEntryAction, {
       modules: {
         presenter,
@@ -33,6 +33,6 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(fileExternalDocumentStub.calledOnce).toEqual(true);
+    expect(fileDocketEntryStub.calledOnce).toEqual(true);
   });
 });

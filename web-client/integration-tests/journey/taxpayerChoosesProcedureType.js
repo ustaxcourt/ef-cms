@@ -3,7 +3,7 @@ import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
 
 export default (test, overrides = {}) => {
   it('taxpayer chooses the procedure types to get the trial cities', async () => {
-    await test.runSequence('gotoStartCaseSequence');
+    await test.runSequence('gotoStartCaseWizardSequence');
     let helper = runCompute(startCaseHelper, {
       state: test.getState(),
     });

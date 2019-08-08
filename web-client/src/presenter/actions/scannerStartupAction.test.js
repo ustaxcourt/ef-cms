@@ -1,8 +1,8 @@
-const { JSDOM } = require('jsdom');
-const path = require('path');
+import { JSDOM } from 'jsdom';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { scannerStartupAction } from './scannerStartupAction';
+import path from 'path';
 
 const jsdom = new JSDOM(
   '<!DOCTYPE html><html><head></head><body></body></html>',
@@ -15,6 +15,9 @@ const scannerResourcePath = path.join(
   '../../../../shared/test-assets',
 );
 presenter.providers.applicationContext = {
+  getScanner: () => ({
+    loadDynamsoft: () => 'dynam-scanner-injection',
+  }),
   getScannerResourceUri: () => scannerResourcePath,
 };
 
@@ -30,11 +33,7 @@ describe('scannerStartupAction', () => {
     });
 
     const dynamScriptClass = result.state.scanner.dynanScriptClass;
-    const scriptElements = Array.from(
-      document.getElementsByClassName(dynamScriptClass),
-    );
 
     expect(dynamScriptClass).toEqual('dynam-scanner-injection');
-    expect(scriptElements.length).toEqual(2);
   });
 });

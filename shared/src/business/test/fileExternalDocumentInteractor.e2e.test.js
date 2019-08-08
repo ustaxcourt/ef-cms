@@ -62,6 +62,12 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     await fileExternalDocumentInteractor({
       applicationContext,
+      documentIds: [
+        '12de0fac-f63c-464f-ac71-0f54fd248484',
+        '22de0fac-f63c-464f-ac71-0f54fd248484',
+        '32de0fac-f63c-464f-ac71-0f54fd248484',
+        '42de0fac-f63c-464f-ac71-0f54fd248484',
+      ],
       documentMetadata: {
         attachments: false,
         caseId,
@@ -71,7 +77,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         docketNumber: '201-19',
         documentTitle: 'Motion for Leave to File Brief in Support of Petition',
         documentType: 'Motion for Leave to File',
-        exhibits: false,
         hasSupportingDocuments: true,
         partyPrimary: true,
         scenario: 'Nonstandard H',
@@ -82,26 +87,26 @@ describe('fileExternalDocumentInteractor integration test', () => {
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
         },
-        secondarySupportingDocumentMetadata: {
-          category: 'Supporting Document',
-          documentTitle: 'Brief in Support of Amended Answer',
-          documentType: 'Brief in Support',
-          previousDocument: 'Amended Answer',
-          scenario: 'Nonstandard A',
-        },
+        secondarySupportingDocuments: [
+          {
+            category: 'Supporting Document',
+            documentTitle: 'Brief in Support of Amended Answer',
+            documentType: 'Brief in Support',
+            previousDocument: 'Amended Answer',
+            scenario: 'Nonstandard A',
+          },
+        ],
         supportingDocument: 'Brief in Support',
-        supportingDocumentMetadata: {
-          category: 'Supporting Document',
-          documentTitle: 'Brief in Support of Amended Answer',
-          documentType: 'Brief in Support',
-          previousDocument: 'Amended Answer',
-          scenario: 'Nonstandard A',
-        },
+        supportingDocuments: [
+          {
+            category: 'Supporting Document',
+            documentTitle: 'Brief in Support of Amended Answer',
+            documentType: 'Brief in Support',
+            previousDocument: 'Amended Answer',
+            scenario: 'Nonstandard A',
+          },
+        ],
       },
-      primaryDocumentFileId: '12de0fac-f63c-464f-ac71-0f54fd248484',
-      secondaryDocumentFileId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-      secondarySupportingDocumentFileId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-      supportingDocumentFileId: '22de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
     const caseAfterDocument = await getCaseInteractor({
@@ -212,7 +217,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
-          exhibits: false,
           hasSupportingDocuments: true,
           partyPrimary: true,
           scenario: 'Nonstandard H',
@@ -237,7 +241,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 documentTitle:
                   'Motion for Leave to File Brief in Support of Petition',
                 documentType: 'Motion for Leave to File',
-                exhibits: false,
                 hasSupportingDocuments: true,
                 partyPrimary: true,
                 scenario: 'Nonstandard H',
@@ -440,7 +443,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           documentTitle:
             'Motion for Leave to File Brief in Support of Petition',
           documentType: 'Motion for Leave to File',
-          exhibits: false,
           hasSupportingDocuments: true,
           partyPrimary: true,
           scenario: 'Nonstandard H',

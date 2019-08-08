@@ -14,20 +14,14 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  *
  * @param documentMetadata
- * @param primaryDocumentFileId
- * @param secondaryDocumentFileId
- * @param supportingDocumentFileId
- * @param secondarySupportingDocumentFileId
+ * @param documentIds
  * @param applicationContext
  * @returns {Promise<*>}
  */
 exports.fileExternalDocumentInteractor = async ({
   applicationContext,
+  documentIds,
   documentMetadata,
-  primaryDocumentFileId,
-  secondaryDocumentFileId,
-  secondarySupportingDocumentFileId,
-  supportingDocumentFileId,
 }) => {
   const user = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
@@ -48,8 +42,8 @@ exports.fileExternalDocumentInteractor = async ({
 
   const {
     secondaryDocument,
-    secondarySupportingDocumentMetadata,
-    supportingDocumentMetadata,
+    secondarySupportingDocuments,
+    supportingDocuments,
     ...primaryDocumentMetadata
   } = documentMetadata;
 
@@ -58,29 +52,52 @@ exports.fileExternalDocumentInteractor = async ({
     'partySecondary',
     'partyRespondent',
     'practitioner',
+    'caseId',
+    'docketNumber',
   ]);
 
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
+    secondaryDocument.eventCode = 'MISL';
   }
-  if (secondarySupportingDocumentMetadata) {
-    secondarySupportingDocumentMetadata.lodged = true;
+  if (secondarySupportingDocuments) {
+    secondarySupportingDocuments.forEach(item => {
+      item.lodged = true;
+      item.eventCode = 'MISL';
+    });
   }
 
-  [
-    [primaryDocumentFileId, primaryDocumentMetadata, 'primaryDocument'],
-    [
-      supportingDocumentFileId,
-      supportingDocumentMetadata,
-      'primarySupportingDocument',
-    ],
-    [secondaryDocumentFileId, secondaryDocument, 'secondaryDocument'],
-    [
-      secondarySupportingDocumentFileId,
-      secondarySupportingDocumentMetadata,
-      'secondarySupportingDocument',
-    ],
-  ].forEach(([documentId, metadata, relationship]) => {
+  const documentsToAdd = [
+    [documentIds.shift(), primaryDocumentMetadata, 'primaryDocument'],
+  ];
+
+  if (supportingDocuments) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
+      documentsToAdd.push([
+        documentIds.shift(),
+        supportingDocuments[i],
+        'primarySupportingDocument',
+      ]);
+    }
+  }
+
+  documentsToAdd.push([
+    documentIds.shift(),
+    secondaryDocument,
+    'secondaryDocument',
+  ]);
+
+  if (secondarySupportingDocuments) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      documentsToAdd.push([
+        documentIds.shift(),
+        secondarySupportingDocuments[i],
+        'supportingDocument',
+      ]);
+    }
+  }
+
+  documentsToAdd.forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
       const documentEntity = new Document({
         ...baseMetadata,
@@ -138,13 +155,12 @@ exports.fileExternalDocumentInteractor = async ({
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-      caseEntity.addDocketRecord(
-        new DocketRecord({
-          description: metadata.documentTitle,
-          documentId: documentEntity.documentId,
-          filingDate: documentEntity.receivedAt,
-        }),
-      );
+      const docketRecordEntity = new DocketRecord({
+        description: metadata.documentTitle,
+        documentId: documentEntity.documentId,
+        filingDate: documentEntity.receivedAt,
+      });
+      caseEntity.addDocketRecord(docketRecordEntity);
     }
   });
 
@@ -153,21 +169,27 @@ exports.fileExternalDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
+  const workItemsSaved = [];
   for (let workItem of workItems) {
     if (workItem.document.isPaper) {
-      await applicationContext
-        .getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument({
+      workItemsSaved.push(
+        applicationContext
+          .getPersistenceGateway()
+          .saveWorkItemForDocketClerkFilingExternalDocument({
+            applicationContext,
+            workItem: workItem.validate().toRawObject(),
+          }),
+      );
+    } else {
+      workItemsSaved.push(
+        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
           applicationContext,
           workItem: workItem.validate().toRawObject(),
-        });
-    } else {
-      await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
+        }),
+      );
     }
   }
+  await Promise.all(workItemsSaved);
 
   return caseEntity.toRawObject();
 };

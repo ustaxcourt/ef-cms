@@ -7,20 +7,30 @@ export const DocketRecordHeader = connect(
   {
     caseDetail: state.formattedCaseDetail,
     helper: state.caseDetailHelper,
+    pdfPreviewUrl: state.pdfPreviewUrl,
+    printDocketRecord: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
     caseDetail,
     helper,
+    printDocketRecord,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) => {
+    const openDocketRecordPrintPreview = (options = {}) => {
+      updateSessionMetadataSequence({
+        key: `docketRecordSort.${caseDetail.caseId}`,
+        value: 'byDate',
+      });
+      printDocketRecord(options);
+    };
     return (
       <React.Fragment>
-        <div className="grid-container padding-0">
+        <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row">
-            <div className="tablet:grid-col-8">
+            <div className="tablet:grid-col-10">
               {helper.showAddDocketEntryButton && (
                 <a
                   className="usa-button"
@@ -40,8 +50,31 @@ export const DocketRecordHeader = connect(
                   <FontAwesomeIcon icon="file" size="1x" /> File a Document
                 </a>
               )}
+              <button
+                aria-hidden="true"
+                className="show-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                onClick={() => {
+                  openDocketRecordPrintPreview({
+                    openNewTab: true,
+                    openNewView: false,
+                  });
+                }}
+              >
+                <FontAwesomeIcon icon="print" size="sm" />
+                Printable Docket Record
+              </button>
+              <button
+                aria-label="printable docket record"
+                className="hide-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                onClick={() => {
+                  openDocketRecordPrintPreview();
+                }}
+              >
+                <FontAwesomeIcon icon="print" size="sm" />
+                Printable Docket Record
+              </button>
             </div>
-            <div className="tablet:grid-offset-2 tablet:grid-col-2">
+            <div className="tablet:grid-col-2">
               <div className="only-large-screens">
                 <select
                   aria-label="docket record"
@@ -80,7 +113,7 @@ export const DocketRecordHeader = connect(
                 </select>
               </div>
               <div className="only-small-screens">
-                <div className="margin-top-3 margin-bottom-3">
+                <div className="margin-top-3 margin-bottom-1">
                   <button
                     aria-label="docket record sort"
                     className="usa-button usa-button--unstyled mobile-sort-docket-button"

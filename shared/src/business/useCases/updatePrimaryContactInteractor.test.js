@@ -5,6 +5,10 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
 const updateCaseStub = jest.fn();
+let persistenceGateway = {
+  getCaseByCaseId: () => MOCK_CASE,
+  updateCase: updateCaseStub,
+};
 const applicationContext = {
   environment: { stage: 'local' },
   getCurrentUser: () => {
@@ -15,10 +19,7 @@ const applicationContext = {
     });
   },
   getPersistenceGateway: () => {
-    return {
-      getCaseByCaseId: () => MOCK_CASE,
-      updateCase: updateCaseStub,
-    };
+    return persistenceGateway;
   },
   getUtilities: () => {
     return {
@@ -27,12 +28,46 @@ const applicationContext = {
   },
 };
 
-describe('Updates contactPrimary on the given case', () => {
+describe('update primary contact on a case', () => {
   it('updates contactPrimary', async () => {
     await updatePrimaryContactInteractor({
       applicationContext,
-      caseToUpdate: MOCK_CASE,
+      caseId: 'abc',
+      contactInfo: {},
     });
     expect(updateCaseStub).toHaveBeenCalled();
+  });
+
+  it('throws an error if the case was not found', async () => {
+    persistenceGateway.getCaseByCaseId = async () => null;
+    let error = null;
+    try {
+      await updatePrimaryContactInteractor({
+        applicationContext,
+        caseId: 'abc',
+        contactInfo: {},
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('Case abc was not found.');
+  });
+
+  it('throws an error if the case user id is not equal to the user making the request', async () => {
+    persistenceGateway.getCaseByCaseId = async () => ({
+      ...MOCK_CASE,
+      userId: '123',
+    });
+    let error = null;
+    try {
+      await updatePrimaryContactInteractor({
+        applicationContext,
+        caseId: 'abc',
+        contactInfo: {},
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('Unauthorized for update case contact');
   });
 });

@@ -35,7 +35,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
 
   let zips = [];
-  for (let workItem of workItemsInHoldingQueue) {
+  const processWorkItem = async workItem => {
     const caseToBatch = await applicationContext
       .getPersistenceGateway()
       .getCaseByCaseId({
@@ -69,7 +69,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
 
     const stinDocument = caseToBatch.documents.find(
-      document => document.documentType === Document.initialDocumentTypes.stin,
+      document =>
+        document.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
     );
 
     if (stinDocument) {
@@ -85,8 +87,14 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
 
     const petitionDocument = caseEntity.documents.find(
       document =>
-        document.documentType === Document.initialDocumentTypes.petitionFile,
+        document.documentType ===
+        Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
+
+    const petitionDocumentEntity = new Document(petitionDocument);
+    petitionDocumentEntity.setAsServed();
+    caseEntity.updateDocument(petitionDocumentEntity);
+
     const initializeCaseWorkItem = petitionDocument.workItems.find(
       workItem => workItem.isInitializeCase,
     );
@@ -100,29 +108,31 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       batchedByUserId,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: PETITIONS_SECTION,
-      userId: batchedByUserId,
-      workItem: initializeCaseWorkItem,
-    });
-
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-    await applicationContext.getPersistenceGateway().updateWorkItem({
-      applicationContext,
-      workItemToUpdate: initializeCaseWorkItem,
-    });
+    await Promise.all([
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+        applicationContext,
+        section: PETITIONS_SECTION,
+        userId: batchedByUserId,
+        workItem: initializeCaseWorkItem,
+      }),
+      applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+      applicationContext.getPersistenceGateway().updateWorkItem({
+        applicationContext,
+        workItemToUpdate: initializeCaseWorkItem,
+      }),
+    ]);
 
     zips = zips.concat({
       fileNames,
       s3Ids,
       zipName,
     });
-  }
+  };
+
+  await Promise.all(workItemsInHoldingQueue.map(processWorkItem));
 
   return {
     processedCases: zips,

@@ -23,6 +23,8 @@ class SuccessNotificationComponent extends React.Component {
     this.notificationRef = React.createRef();
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
+    const isTitleOnly =
+      alertSuccess && alertSuccess.title && !alertSuccess.messssage;
 
     return (
       <React.Fragment>
@@ -41,7 +43,10 @@ class SuccessNotificationComponent extends React.Component {
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
-                    <p className="heading-3 usa-alert__heading">
+                    <p
+                      className="heading-3 usa-alert__heading"
+                      style={{ paddingTop: isTitleOnly ? '6px' : '0px' }}
+                    >
                       {alertSuccess.title}
                     </p>
                     <p className="usa-alert__text">{alertSuccess.message}</p>

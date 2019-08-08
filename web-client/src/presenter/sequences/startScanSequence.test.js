@@ -5,7 +5,9 @@ let mockItems;
 const mockSources = ['Test Source 1', 'Test Source 2'];
 const mockSetItem = jest.fn();
 const mockSetSourceByName = jest.fn();
-const mockStartScanSession = jest.fn();
+const mockStartScanSession = jest.fn(() => ({
+  scannedBuffer: [],
+}));
 
 presenter.providers.applicationContext = {
   getPersistenceGateway: () => ({
@@ -34,6 +36,7 @@ describe('startScanSequence', () => {
       scannerSourceIndex: '1',
       scannerSourceName: 'Mock Scanner',
     };
+    test.setState('batches', []);
     await test.runSequence('startScanSequence', {});
 
     expect(mockStartScanSession).toHaveBeenCalled();
@@ -45,6 +48,7 @@ describe('startScanSequence', () => {
       scannerSourceIndex: null,
       scannerSourceName: '',
     };
+    test.setState('batches', []);
     await test.runSequence('startScanSequence', {});
     const scannerState = test.getState('scanner');
 

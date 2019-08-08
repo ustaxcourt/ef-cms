@@ -4,17 +4,19 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
- *
- * @param docketRecord
+ * DocketRecord constructor
+ * @param rawDocketRecord
  * @constructor
  */
 function DocketRecord(rawDocketRecord) {
   this.description = rawDocketRecord.description;
+  this.signatory = rawDocketRecord.signatory;
   this.documentId = rawDocketRecord.documentId;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
   this.status = rawDocketRecord.status;
+  this.eventCode = rawDocketRecord.eventCode;
 }
 
 joiValidationDecorator(
@@ -25,6 +27,10 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     documentId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    eventCode: joi
       .string()
       .allow(null)
       .optional(),
@@ -41,6 +47,10 @@ joiValidationDecorator(
       .number()
       .integer()
       .optional(),
+    signatory: joi
+      .string()
+      .optional()
+      .allow(null),
     status: joi
       .string()
       .allow(null)

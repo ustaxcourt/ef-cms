@@ -28,10 +28,10 @@ ExternalDocumentNonStandardF.prototype.getDocumentTitle = function() {
 };
 
 ExternalDocumentNonStandardF.errorToMessageMap = {
-  category: 'You must select a category.',
-  documentType: 'You must select a document type.',
-  ordinalValue: 'You must select an iteration.',
-  previousDocument: 'You must select a document.',
+  category: 'Select a Category.',
+  documentType: 'Select a Document Type.',
+  ordinalValue: 'Select an iteration.',
+  previousDocument: 'Select a document.',
 };
 
 ExternalDocumentNonStandardF.schema = {

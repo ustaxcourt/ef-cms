@@ -4,8 +4,8 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 
 /**
- *
- * @param yearAmount
+ * YearAmount constructor
+ * @param rawYearAmount
  * @constructor
  */
 function YearAmount(rawYearAmount) {

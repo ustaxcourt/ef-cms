@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InclusionsForm } from './InclusionsForm';
+import { ObjectionsForm } from './ObjectionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -22,6 +23,11 @@ export const SecondaryDocumentForm = connect(
             className={`usa-form-group ${
               validationErrors.secondaryDocumentFile
                 ? 'usa-form-group--error'
+                : ''
+            } ${
+              !fileDocumentHelper.showSecondaryDocumentInclusionsForm &&
+              !fileDocumentHelper.secondaryDocument.showObjection
+                ? 'margin-bottom-0'
                 : ''
             }`}
           >
@@ -61,11 +67,20 @@ export const SecondaryDocumentForm = connect(
             />
           </div>
 
-          <InclusionsForm
-            bind="form.secondaryDocument"
-            type="secondaryDocument"
-            validationBind="validationErrors.secondaryDocument"
-          />
+          {fileDocumentHelper.showSecondaryDocumentInclusionsForm && (
+            <InclusionsForm
+              bind="form.secondaryDocument"
+              type="secondaryDocument"
+              validationBind="validationErrors.secondaryDocument"
+            />
+          )}
+          {fileDocumentHelper.secondaryDocument.showObjection && (
+            <ObjectionsForm
+              bind="form.secondaryDocument"
+              type="secondaryDocument"
+              validationBind="validationErrors.secondaryDocument"
+            />
+          )}
         </div>
       </React.Fragment>
     );
