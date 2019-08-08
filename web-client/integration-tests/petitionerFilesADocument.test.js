@@ -16,6 +16,7 @@ import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
+import taxpayerViewsCaseDetailAfterFilingDocument from './journey/taxpayerViewsCaseDetailAfterFilingDocument';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 const {
   ContactFactory,
@@ -83,5 +84,6 @@ describe('Taxpayer files document', () => {
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
   taxpayerFilesDocumentForCase(test, fakeFile);
+  taxpayerViewsCaseDetailAfterFilingDocument(test);
   taxpayerSignsOut(test);
 });
