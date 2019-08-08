@@ -33,7 +33,7 @@ function Document(rawDocument) {
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
-  this.isFileAttached = rawDocument.isFileAttached;
+  this.isFileAttached = !!rawDocument.isFileAttached;
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
