@@ -133,7 +133,7 @@ describe('createUser', () => {
 
   it('does not persist mapping records for practitioner without barNumber', async () => {
     const practitionerUser = {
-      barNumber: '0',
+      barNumber: '',
       name: 'Test Practitioner',
       role: 'practitioner',
       section: 'practitioner',
