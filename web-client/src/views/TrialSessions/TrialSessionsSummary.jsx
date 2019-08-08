@@ -21,7 +21,7 @@ export const TrialSessionsSummary = connect(
             <div className="grid-col-4">
               <a
                 className="usa-link float-right"
-                href={`/trial-sessions?judge=${user.userId}`}
+                href={`/trial-sessions?judge[userId]=${user.userId}`}
               >
                 View All
               </a>
@@ -50,7 +50,7 @@ export const TrialSessionsSummary = connect(
             <div className="grid-col-4">
               <a
                 className="usa-link float-right"
-                href={`/trial-sessions?type=recent&judge=${user.userId}`}
+                href={`/trial-sessions?type=recent&judge[userId]=${user.userId}`}
               >
                 View All
               </a>
