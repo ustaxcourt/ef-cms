@@ -1,197 +1,13 @@
 [
   {
-    "docketNumberSuffix": "W",
-    "caseStatus": "New",
-    "gsi1pk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "document": {
-      "createdAt": "2019-03-01T21:40:46.415Z",
-      "documentType": "Petition",
-      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76"
-    },
-    "section": "armensChambers",
-    "workItemId": "a5925a2e-101e-4c94-a1c0-53776453552c",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "isInternal": true,
-    "createdAt": "2019-08-08T13:36:56.870Z",
-    "assigneeName": "Judge Armen",
-    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T13:36:56.870Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "1a61f88d-321a-423e-8e6e-dce79616a76e",
-        "from": "Test Petitionsclerk",
-        "to": "Judge Armen",
-        "message": "This is a test message for Judge Armen.",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
-    "pk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "docketNumber": "101-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T13:36:56.870Z"
-  },
-  {
-    "docketNumberSuffix": "W",
-    "caseStatus": "New",
-    "gsi1pk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "document": {
-      "createdAt": "2019-03-01T21:40:46.415Z",
-      "documentType": "Petition",
-      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76"
-    },
-    "section": "armensChambers",
-    "workItemId": "a5925a2e-101e-4c94-a1c0-53776453552c",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "isInternal": true,
-    "createdAt": "2019-08-08T13:36:56.870Z",
-    "assigneeName": "Judge Armen",
-    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "2019-08-08T13:36:56.870Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T13:36:56.870Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "1a61f88d-321a-423e-8e6e-dce79616a76e",
-        "from": "Test Petitionsclerk",
-        "to": "Judge Armen",
-        "message": "This is a test message for Judge Armen.",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
-    "pk": "section-outbox-petitions",
-    "docketNumber": "101-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T13:36:56.870Z"
-  },
-  {
-    "docketNumberSuffix": "W",
-    "caseStatus": "New",
-    "gsi1pk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "document": {
-      "createdAt": "2019-03-01T21:40:46.415Z",
-      "documentType": "Petition",
-      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76"
-    },
-    "section": "armensChambers",
-    "workItemId": "a5925a2e-101e-4c94-a1c0-53776453552c",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "isInternal": true,
-    "createdAt": "2019-08-08T13:36:56.870Z",
-    "assigneeName": "Judge Armen",
-    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T13:36:56.870Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "1a61f88d-321a-423e-8e6e-dce79616a76e",
-        "from": "Test Petitionsclerk",
-        "to": "Judge Armen",
-        "message": "This is a test message for Judge Armen.",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
-    "pk": "user-dabbad00-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "101-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T13:36:56.870Z"
-  },
-  {
-    "docketNumberSuffix": "W",
-    "caseStatus": "New",
-    "gsi1pk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "document": {
-      "createdAt": "2019-03-01T21:40:46.415Z",
-      "documentType": "Petition",
-      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76"
-    },
-    "section": "armensChambers",
-    "workItemId": "a5925a2e-101e-4c94-a1c0-53776453552c",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "isInternal": true,
-    "createdAt": "2019-08-08T13:36:56.870Z",
-    "assigneeName": "Judge Armen",
-    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "2019-08-08T13:36:56.870Z",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T13:36:56.870Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "1a61f88d-321a-423e-8e6e-dce79616a76e",
-        "from": "Test Petitionsclerk",
-        "to": "Judge Armen",
-        "message": "This is a test message for Judge Armen.",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
-    "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "101-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T13:36:56.870Z"
-  },
-  {
-    "docketNumberSuffix": "W",
-    "caseStatus": "New",
-    "gsi1pk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "document": {
-      "createdAt": "2019-03-01T21:40:46.415Z",
-      "documentType": "Petition",
-      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76"
-    },
-    "section": "armensChambers",
-    "workItemId": "a5925a2e-101e-4c94-a1c0-53776453552c",
-    "isInitializeCase": false,
-    "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "isInternal": true,
-    "createdAt": "2019-08-08T13:36:56.870Z",
-    "assigneeName": "Judge Armen",
-    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "workitem-a5925a2e-101e-4c94-a1c0-53776453552c",
-    "messages": [
-      {
-        "createdAt": "2019-08-08T13:36:56.870Z",
-        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-        "messageId": "1a61f88d-321a-423e-8e6e-dce79616a76e",
-        "from": "Test Petitionsclerk",
-        "to": "Judge Armen",
-        "message": "This is a test message for Judge Armen.",
-        "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-      }
-    ],
-    "pk": "section-armensChambers",
-    "docketNumber": "101-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2019-08-08T13:36:56.870Z"
-  },
-  {
-    "sk": "a5925a2e-101e-4c94-a1c0-53776453552c",
-    "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02|workItem"
-  },
-  {
     "procedureType": "Regular",
-    "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "docketNumberSuffix": "W",
     "documents": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
-        "processingStatus": "complete",
         "documentType": "Petition",
         "filedBy": "Test Petitioner",
+        "processingStatus": "complete",
         "workItems": [
           {
             "docketNumberSuffix": "W",
@@ -206,10 +22,10 @@
             },
             "section": "petitions",
             "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+            "isInternal": false,
             "isInitializeCase": true,
             "assigneeId": null,
             "sentBy": "taxpayer",
-            "isInternal": false,
             "createdAt": "2019-03-01T21:40:46.415Z",
             "assigneeName": null,
             "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
@@ -217,67 +33,33 @@
               {
                 "createdAt": "2019-03-01T21:40:46.415Z",
                 "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
-                "from": "Test Petitioner",
                 "message": "Petition filed by Brett Osborne is ready for review.",
+                "from": "Test Petitioner",
                 "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
               }
             ],
             "docketNumber": "101-19",
             "updatedAt": "2019-03-01T21:40:46.415Z"
-          },
-          {
-            "docketNumberSuffix": "W",
-            "caseStatus": "New",
-            "document": {
-              "createdAt": "2019-03-01T21:40:46.415Z",
-              "documentType": "Petition",
-              "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76"
-            },
-            "section": "armensChambers",
-            "workItemId": "a5925a2e-101e-4c94-a1c0-53776453552c",
-            "isInitializeCase": false,
-            "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
-            "sentBy": "Test Petitionsclerk",
-            "sentBySection": "petitions",
-            "isInternal": true,
-            "createdAt": "2019-08-08T13:36:56.870Z",
-            "assigneeName": "Judge Armen",
-            "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-            "messages": [
-              {
-                "createdAt": "2019-08-08T13:36:56.870Z",
-                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-                "messageId": "1a61f88d-321a-423e-8e6e-dce79616a76e",
-                "from": "Test Petitionsclerk",
-                "to": "Judge Armen",
-                "message": "This is a test message for Judge Armen.",
-                "toUserId": "dabbad00-18d0-43ec-bafb-654e83405416"
-              }
-            ],
-            "docketNumber": "101-19",
-            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-            "updatedAt": "2019-08-08T13:36:56.870Z"
           }
         ],
         "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
         "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
-        "receivedAt": "2019-08-08T13:36:56.870Z",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
       },
       {
-        "createdAt": "2019-03-05T17:34:13.491Z",
         "processingStatus": "complete",
+        "createdAt": "2019-03-05T17:34:13.491Z",
         "documentType": "Statement of Taxpayer Identification",
         "filedBy": "Test Petitioner",
         "workItems": [],
         "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8",
-        "receivedAt": "2019-08-08T13:36:56.870Z",
-        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "documentId": "b1aa4aa2-c214-424c-8870-d0049c5744d8"
       }
     ],
-    "orderForFilingFee": false,
     "partyType": "Petitioner",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "0",
     "caseType": "Whistleblower",
     "yearAmounts": [],
     "contactPrimary": {
@@ -292,41 +74,124 @@
       "countryType": "domestic",
       "email": "taxpayer"
     },
-    "createdAt": "2019-03-01T21:40:46.415Z",
-    "noticeOfAttachments": false,
-    "caseCaption": "Brett Osborne, Petitioner",
-    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "sk": "1",
-    "filingType": "Myself",
-    "orderForOds": false,
-    "orderForRatification": false,
-    "hasIrsNotice": false,
-    "initialDocketNumberSuffix": "W",
-    "docketNumberSuffix": "W",
-    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "currentVersion": "1",
-    "orderForAmendedPetition": false,
-    "orderToShowCause": false,
     "preferredTrialCity": "Birmingham, Alabama",
-    "respondents": [],
-    "practitioners": [],
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "docketRecord": [
       {
-        "description": "Petition",
-        "index": 1,
         "filingDate": "2019-03-01T21:40:46.415Z",
-        "filedBy": "Test Petitioner"
+        "description": "Petition",
+        "filedBy": "Test Petitioner",
+        "index": 1
       },
       {
-        "description": "Request for Place of Trial at Birmingham, Alabama",
         "filingDate": "2019-03-01T21:40:46.415Z",
+        "description": "Request for Place of Trial at Birmingham, Alabama",
         "index": 2
       }
     ],
-    "orderForAmendedPetitionAndFilingFee": false,
+    "sk": "0",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "caseTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialTitle": "Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "filingType": "Myself",
     "pk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "hasIrsNotice": false,
+    "petitioners": [
+      {
+        "role": "petitioner",
+        "name": "Test Petitioner",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "custom:role": "petitioner",
+        "iat": 1551476326,
+        "email": "taxpayer",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
+      }
+    ],
     "docketNumber": "101-19",
     "status": "New"
+  },
+  {
+    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+  },
+  {
+    "sk": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "101-19|case"
+  },
+  {
+    "sk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "section-petitions",
+    "docketNumberSuffix": "W",
+    "caseStatus": "New",
+    "document": {
+      "processingStatus": "complete",
+      "createdAt": "2019-03-01T21:40:46.415Z",
+      "receivedAt": "2019-03-01T21:40:46.415Z",
+      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+      "documentType": "Petition",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "isInternal": false,
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "assigneeName": null,
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+        "message": "Petition filed by Brett Osborne is ready for review.",
+        "from": "Test Petitioner",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "docketNumber": "101-19",
+    "updatedAt": "2019-03-01T21:40:46.415Z"
+  },
+  {
+    "sk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "docketNumberSuffix": "W",
+    "caseStatus": "New",
+    "document": {
+      "processingStatus": "complete",
+      "receivedAt": "2019-03-01T21:40:46.415Z",
+      "createdAt": "2019-03-01T21:40:46.415Z",
+      "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
+      "documentType": "Petition",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+      "filedBy": "Test Petitioner",
+      "workItems": []
+    },
+    "section": "petitions",
+    "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "isInternal": false,
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "taxpayer",
+    "createdAt": "2019-03-01T21:40:46.415Z",
+    "assigneeName": null,
+    "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+    "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "messages": [
+      {
+        "createdAt": "2019-03-01T21:40:46.415Z",
+        "messageId": "1aafec9c-b7b9-45e8-8850-893cca973ce7",
+        "message": "Petition filed by Brett Osborne is ready for review.",
+        "from": "Test Petitioner",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "docketNumber": "101-19",
+    "updatedAt": "2019-03-01T21:40:46.415Z"
   }
 ]
