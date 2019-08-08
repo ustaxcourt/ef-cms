@@ -21,6 +21,7 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { MessagesJudge } from './Messages/MessagesJudge';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -59,6 +60,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  MessagesJudge,
   PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
