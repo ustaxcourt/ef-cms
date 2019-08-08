@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -12,6 +13,7 @@ import { state } from 'cerebral';
 export const gotoAddDocketEntry = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
+  clearScansAction,
   clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
