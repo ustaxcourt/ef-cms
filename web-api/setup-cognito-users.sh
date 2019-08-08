@@ -14,7 +14,7 @@ CLIENT_ID="${CLIENT_ID#\"}"
 generate_post_data() {
   email=$1
   role=$2
-  name="Test ${role}$i"
+  name=${6:-Test ${role}$3}
   barNumber=$4
   section=$5
   cat <<EOF
@@ -64,11 +64,12 @@ createAccount() {
   i=$3
   barNumber=$4
   section=$5
+  name=$6
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${i}" "${barNumber}" "${section}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${i}" "${barNumber}" "${section}" "${name}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -97,7 +98,7 @@ createManyAccounts() {
   section=$2
   for i in $(seq 1 5);
   do
-    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "0" "${section}"
+    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
   done
 }
 
@@ -127,8 +128,8 @@ createAccount "respondent7@example.com" "respondent" "" "RT0000" "respondent"
 createAccount "respondent8@example.com" "respondent" "" "RT1111" "respondent"
 createAccount "respondent9@example.com" "respondent" "" "RT2222" "respondent"
 createAccount "respondent10@example.com" "respondent" "" "RT3333" "respondent"
-createAccount "judgeArmen@example.com" "judge" "" "0" "armensChambers" 
-createAccount "judgeAshford@example.com" "judge" "" "0" "ashfordsChambers" 
-createAccount "judgeBuch@example.com" "judge" "" "0" "buchsChambers"
-createAccount "judgeCarluzzo@example.com" "judge" "" "0" "carluzzosChambers"
-createAccount "judgeCohen@example.com" "judge" "" "0" "cohensChambers"
+createAccount "judgeArmen@example.com" "judge" "" "" "armensChambers" "Judge Armen"
+createAccount "judgeAshford@example.com" "judge" "" "" "ashfordsChambers" "Judge Ashford"
+createAccount "judgeBuch@example.com" "judge" "" "" "buchsChambers" "Judge Buch"
+createAccount "judgeCarluzzo@example.com" "judge" "" "" "carluzzosChambers" "Judge Carluzzo"
+createAccount "judgeCohen@example.com" "judge" "" "" "cohensChambers" "Judge Cohen"
