@@ -43,6 +43,11 @@ describe('fileDocketEntryInteractor', () => {
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: async () => caseRecord,
+          getUserById: async () => ({
+            name: 'Olivia Jade',
+            role: 'seniorattorney',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
         }),
@@ -78,6 +83,11 @@ describe('fileDocketEntryInteractor', () => {
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: async () => ({
+            name: 'Olivia Jade',
+            role: 'respondent',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
@@ -118,8 +128,15 @@ describe('fileDocketEntryInteractor', () => {
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: async () => ({
+            name: 'Olivia Jade',
+            role: 'docketclerk',
+            section: 'docket',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+
           updateCase: updateCaseSpy,
         }),
       };
