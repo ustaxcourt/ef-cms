@@ -22,7 +22,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: 'Enter date received.',
-      documentType: 'You must select a document type.',
+      documentType: 'Select a Document Type.',
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
       primaryDocumentFile: 'A file was not selected.',
@@ -72,7 +72,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
-      secondaryDocument: 'You must select a document.',
+      secondaryDocument: 'Select a document.',
       secondaryDocumentFile: 'A file was not selected.',
     });
 

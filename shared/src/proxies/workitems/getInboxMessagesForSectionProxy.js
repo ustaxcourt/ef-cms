@@ -11,6 +11,6 @@ exports.getInboxMessagesForSectionInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/api/sections/${section}/messages/inbox`,
+    endpoint: `/sections/${section}/messages/inbox`,
   });
 };

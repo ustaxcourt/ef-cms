@@ -3,8 +3,8 @@ import { runCompute } from 'cerebral/test';
 import { alertHelper } from './alertHelper';
 
 describe('alertHelper', () => {
-  it('single message error alert', async () => {
-    const result = await runCompute(alertHelper, {
+  it('single message error alert', () => {
+    const result = runCompute(alertHelper, {
       state: {
         alertError: {
           message: 'abc',
@@ -19,8 +19,8 @@ describe('alertHelper', () => {
     });
   });
 
-  it('no messages', async () => {
-    const result = await runCompute(alertHelper, {
+  it('no messages', () => {
+    const result = runCompute(alertHelper, {
       state: {
         alertError: { title: 'hello' },
       },
@@ -33,8 +33,8 @@ describe('alertHelper', () => {
     });
   });
 
-  it('alertError is undefined', async () => {
-    const result = await runCompute(alertHelper, {
+  it('alertError is undefined', () => {
+    const result = runCompute(alertHelper, {
       state: {},
     });
     expect(result).toMatchObject({

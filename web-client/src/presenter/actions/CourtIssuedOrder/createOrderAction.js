@@ -22,9 +22,12 @@ export const createOrderAction = ({ applicationContext, get }) => {
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
   const caseCaption = get(state.caseDetail.caseCaption) || '';
-  const caseCaptionNames =
-    applicationContext.getCaseCaptionNames(caseCaption) + ', ';
-  const caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
+  let caseCaptionPostfix = '';
+  if (caseCaptionNames !== caseCaption) {
+    caseCaptionNames += ', ';
+    caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  }
   const docketNumberWithSuffix = get(
     state.formattedCaseDetail.docketNumberWithSuffix,
   );

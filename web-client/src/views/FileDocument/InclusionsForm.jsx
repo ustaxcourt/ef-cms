@@ -8,6 +8,7 @@ export const InclusionsForm = connect(
   {
     data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -19,6 +20,7 @@ export const InclusionsForm = connect(
   ({
     data,
     fileDocumentHelper,
+    openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
@@ -26,7 +28,7 @@ export const InclusionsForm = connect(
     validationData,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <div
           className={`usa-form-group ${
             !fileDocumentHelper[type].showObjection &&
@@ -38,40 +40,28 @@ export const InclusionsForm = connect(
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
               Select Extra Items Included With Document
-              <button className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105">
-                <FontAwesomeIcon
-                  className="margin-right-05"
-                  icon="question-circle"
-                  size="1x"
-                />
-                What can I include with my document?
+              <button
+                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 ustc-button--unstyled-with-left-icon"
+                onClick={() =>
+                  openCleanModalSequence({
+                    value: 'WhatCanIIncludeModalOverlay',
+                  })
+                }
+              >
+                <div className="grid-row">
+                  <div className="grid-col-1">
+                    <FontAwesomeIcon
+                      className="margin-right-05"
+                      icon="question-circle"
+                      size="1x"
+                    />
+                  </div>
+                  <div className="grid-col-11">
+                    What can I include with my document?
+                  </div>
+                </div>
               </button>
             </legend>
-            <div className="usa-checkbox">
-              <input
-                checked={data.exhibits || false}
-                className="usa-checkbox__input"
-                id={`${type}-exhibits`}
-                name={`${
-                  type === 'primaryDocument' ? 'exhibits' : `${type}.exhibits`
-                }`}
-                type="checkbox"
-                onChange={e => {
-                  updateFileDocumentWizardFormValueSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateExternalDocumentInformationSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label"
-                htmlFor={`${type}-exhibits`}
-              >
-                Exhibits
-              </label>
-            </div>
-
             <div className="usa-checkbox">
               <input
                 checked={data.attachments || false}
@@ -95,7 +85,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__label"
                 htmlFor={`${type}-attachments`}
               >
-                Attachments
+                Attachment(s)
               </label>
             </div>
 
@@ -121,6 +111,7 @@ export const InclusionsForm = connect(
               <label
                 className="usa-checkbox__label"
                 htmlFor={`${type}-certificateOfService`}
+                id={`${type}-certificateOfService-label`}
               >
                 Certificate Of Service
               </label>
@@ -249,56 +240,7 @@ export const InclusionsForm = connect(
             />
           </div>
         )}
-        {fileDocumentHelper[type].showObjection && (
-          <div
-            className={`usa-form-group margin-bottom-0 ${
-              validationData && validationData.objections
-                ? 'usa-form-group--error'
-                : ''
-            }`}
-          >
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend id={`${type}-objections-legend`}>
-                Are There Any Objections to This Document?
-              </legend>
-              {['Yes', 'No', 'Unknown'].map(option => (
-                <div className="usa-radio usa-radio__inline" key={option}>
-                  <input
-                    aria-describedby={`${type}-objections-legend`}
-                    checked={data.objections === option}
-                    className="usa-radio__input"
-                    id={`${type}-objections-${option}`}
-                    name={`${
-                      type === 'primaryDocument'
-                        ? 'objections'
-                        : `${type}.objections`
-                    }`}
-                    type="radio"
-                    value={option}
-                    onChange={e => {
-                      updateFileDocumentWizardFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateExternalDocumentInformationSequence();
-                    }}
-                  />
-                  <label
-                    className="usa-radio__label"
-                    htmlFor={`${type}-objections-${option}`}
-                  >
-                    {option}
-                  </label>
-                </div>
-              ))}
-            </fieldset>
-            <Text
-              bind={`${validationBind}.objections`}
-              className="usa-error-message"
-            />
-          </div>
-        )}
-      </React.Fragment>
+      </>
     );
   },
 );

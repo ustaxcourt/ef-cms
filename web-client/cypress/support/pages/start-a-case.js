@@ -1,10 +1,24 @@
 exports.navigateTo = username => {
-  cy.login(username, '/start-a-case');
+  cy.login(username, '/file-a-petition/step-1');
 };
 
 exports.fillInAndSubmitForm = () => {
-  cy.upload_file('w3-dummy.pdf', 'form #petition-file');
-  cy.upload_file('w3-dummy.pdf', 'form #stin-file');
+  //wizard step 1
+  cy.upload_file('w3-dummy.pdf', 'input#stin-file');
+  cy.get('button#submit-case').click();
+
+  //step 2
+  cy.upload_file('w3-dummy.pdf', '#petition-file');
+  cy.get('#irs-notice-radios').scrollIntoView();
+  cy.get('#irs-notice-radios label')
+    .first()
+    .click();
+  cy.get('#case-type')
+    .scrollIntoView()
+    .select('Notice of Deficiency');
+  cy.get('button#submit-case').click();
+
+  //step 3
   cy.get('label[for="Individual petitioner"]')
     .scrollIntoView()
     .click();
@@ -26,38 +40,17 @@ exports.fillInAndSubmitForm = () => {
   cy.get('input#phone')
     .scrollIntoView()
     .type('1111111111');
-  cy.get('#irs-notice-radios').scrollIntoView();
-  cy.get('#irs-notice-radios label')
-    .first()
-    .click();
-  cy.get('#case-type')
-    .scrollIntoView()
-    .select('Notice of Deficiency');
-  cy.get('#date-of-notice-month')
-    .scrollIntoView()
-    .type('01');
-  cy.get('#date-of-notice-day')
-    .scrollIntoView()
-    .type('19');
-  cy.get('#date-of-notice-year')
-    .scrollIntoView()
-    .type('1999');
+  cy.get('button#submit-case').click();
+
+  //step 4
   cy.get('#procedure-type-radios').scrollIntoView();
   cy.get('#procedure-type-radios label')
     .first()
     .click();
-  cy.get('#filing-type-radios').scrollIntoView();
-  cy.get('#filing-type-radios label')
-    .first()
-    .click();
-
   cy.get('#preferred-trial-city')
     .scrollIntoView()
     .select('Mobile, Alabama');
-  cy.get('#signature + label')
-    .scrollIntoView()
-    .click();
-  cy.get('form button#submit-case')
+  cy.get('button#submit-case')
     .scrollIntoView()
     .click();
 };

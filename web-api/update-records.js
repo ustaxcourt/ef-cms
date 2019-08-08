@@ -12,7 +12,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   let lastKey = null;
   while (hasMoreResults) {
     hasMoreResults = false;
-    console.log('making a scan request');
 
     await documentClient
       .scan({
@@ -21,7 +20,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
       })
       .promise()
       .then(async results => {
-        console.log('results.Count', results.Count);
         hasMoreResults = !!results.LastEvaluatedKey
         lastKey = results.LastEvaluatedKey;
   

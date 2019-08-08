@@ -200,8 +200,11 @@ export const BeforeStartingCase = () => (
         </div>
       </div>
       <div className="button-box-container">
-        <a className="usa-button margin-right-205" href="/start-a-case">
-          Got It, Letʼs Start My Case
+        <a
+          className="usa-button margin-right-205 margin-bottom-4"
+          href="/file-a-petition/step-1"
+        >
+          Got It, Letʼs File My Petition
         </a>
         <a className="usa-button usa-button--outline" href="/">
           Cancel

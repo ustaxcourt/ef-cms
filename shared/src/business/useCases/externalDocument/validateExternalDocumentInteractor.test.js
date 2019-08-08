@@ -17,8 +17,8 @@ describe('validateExternalDocumentInteractor', () => {
     });
 
     expect(errors).toEqual({
-      category: 'You must select a category.',
-      documentType: 'You must select a document type.',
+      category: 'Select a Category.',
+      documentType: 'Select a Document Type.',
     });
   });
 

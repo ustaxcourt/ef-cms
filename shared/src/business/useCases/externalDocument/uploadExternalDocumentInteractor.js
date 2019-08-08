@@ -6,15 +6,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.uploadExternalDocumentInteractor = async ({
   applicationContext,
+  documentFiles,
   documentMetadata,
-  onPrimarySupportingUploadProgress,
-  onPrimaryUploadProgress,
-  onSecondarySupportUploadProgress,
-  onSecondaryUploadProgress,
-  primaryDocumentFile,
-  secondaryDocumentFile,
-  secondarySupportingDocumentFile,
-  supportingDocumentFile,
+  progressFunctions,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -22,81 +16,73 @@ exports.uploadExternalDocumentInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const primaryDocumentFileId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocument({
-      applicationContext,
-      document: primaryDocumentFile,
-      onUploadProgress: onPrimaryUploadProgress,
-    });
+  const uploadedDocumentPromises = [];
 
-  let secondaryDocumentFileId;
-  if (secondaryDocumentFile) {
-    secondaryDocumentFileId = await applicationContext
+  /**
+   * uploads a document and then immediately processes it to scan for viruses,
+   * validate the PDF content, and sanitize the document.
+   *
+   * @param {string} documentLabel the string identifying which documentFile and progressFunction
+   * @returns {Promise<string>} the documentId returned from a successful upload
+   */
+  const uploadDocumentAndMakeSafe = async documentLabel => {
+    const documentId = await applicationContext
       .getPersistenceGateway()
       .uploadDocument({
         applicationContext,
-        document: secondaryDocumentFile,
-        onUploadProgress: onSecondaryUploadProgress,
+        document: documentFiles[documentLabel],
+        onUploadProgress: progressFunctions[documentLabel],
       });
-  }
-
-  let supportingDocumentFileId;
-  if (supportingDocumentFile) {
-    supportingDocumentFileId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocument({
-        applicationContext,
-        document: supportingDocumentFile,
-        onUploadProgress: onPrimarySupportingUploadProgress,
-      });
-  }
-
-  let secondarySupportingDocumentFileId;
-  if (secondarySupportingDocumentFile) {
-    secondarySupportingDocumentFileId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocument({
-        applicationContext,
-        document: secondarySupportingDocumentFile,
-        onUploadProgress: onSecondarySupportUploadProgress,
-      });
-  }
-
-  if (user.role === 'practitioner') {
-    documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
-  }
-
-  const documentIds = [
-    primaryDocumentFileId,
-    secondaryDocumentFileId,
-    supportingDocumentFileId,
-    secondarySupportingDocumentFileId,
-  ].filter(documentId => documentId);
-
-  for (let documentId of documentIds) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
     });
-
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,
     });
-
     await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });
+    return documentId;
+  };
+
+  uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('primary'));
+
+  if (documentFiles.secondary) {
+    uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('secondary'));
   }
+
+  if (documentMetadata.hasSupportingDocuments) {
+    for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
+      uploadedDocumentPromises.push(
+        uploadDocumentAndMakeSafe(`primarySupporting${i}`),
+      );
+    }
+  }
+
+  if (documentMetadata.hasSecondarySupportingDocuments) {
+    for (
+      let i = 0;
+      i < documentMetadata.secondarySupportingDocuments.length;
+      i++
+    ) {
+      uploadedDocumentPromises.push(
+        uploadDocumentAndMakeSafe(`secondarySupporting${i}`),
+      );
+    }
+  }
+
+  if (user.role === 'practitioner' && !documentMetadata.practitioner) {
+    documentMetadata.practitioner = [{ ...user, partyPractitioner: true }];
+  }
+
+  const documentIds = await Promise.all(uploadedDocumentPromises);
 
   return await applicationContext.getUseCases().fileExternalDocumentInteractor({
     applicationContext,
+    documentIds,
     documentMetadata,
-    primaryDocumentFileId,
-    secondaryDocumentFileId,
-    secondarySupportingDocumentFileId,
-    supportingDocumentFileId,
   });
 };

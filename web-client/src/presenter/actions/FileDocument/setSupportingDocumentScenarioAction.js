@@ -11,49 +11,67 @@ import { state } from 'cerebral';
 export const setSupportingDocumentScenarioAction = ({ get, store }) => {
   const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
 
-  const supportingDocumentMetadata = get(state.form.supportingDocumentMetadata);
-  if (supportingDocumentMetadata) {
-    const { category, documentType } = supportingDocumentMetadata;
+  const supportingDocuments = get(state.form.supportingDocuments);
 
-    const categoryInformation = CATEGORY_MAP[category].find(
-      itemDocumentType => itemDocumentType.documentType === documentType,
-    );
+  if (supportingDocuments) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
+      if (
+        supportingDocuments[i] &&
+        supportingDocuments[i].category &&
+        supportingDocuments[i].documentType
+      ) {
+        const { category, documentType } = supportingDocuments[i];
 
-    store.set(
-      state.form.supportingDocumentMetadata.scenario,
-      categoryInformation.scenario,
-    );
-    store.set(
-      state.form.supportingDocumentMetadata.documentTitle,
-      categoryInformation.documentTitle,
-    );
-    store.set(
-      state.form.supportingDocumentMetadata.eventCode,
-      categoryInformation.eventCode,
-    );
+        const categoryInformation = CATEGORY_MAP[category].find(
+          itemDocumentType => itemDocumentType.documentType === documentType,
+        );
+
+        store.set(
+          state.form.supportingDocuments[i].scenario,
+          categoryInformation.scenario,
+        );
+        store.set(
+          state.form.supportingDocuments[i].documentTitle,
+          categoryInformation.documentTitle,
+        );
+        store.set(
+          state.form.supportingDocuments[i].eventCode,
+          categoryInformation.eventCode,
+        );
+      }
+    }
   }
 
-  const secondarySupportingDocumentMetadata = get(
-    state.form.secondarySupportingDocumentMetadata,
+  const secondarySupportingDocuments = get(
+    state.form.secondarySupportingDocuments,
   );
-  if (secondarySupportingDocumentMetadata) {
-    const { category, documentType } = secondarySupportingDocumentMetadata;
 
-    const secondaryCategoryInformation = CATEGORY_MAP[category].find(
-      itemDocumentType => itemDocumentType.documentType === documentType,
-    );
+  if (secondarySupportingDocuments) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      if (
+        secondarySupportingDocuments[i] &&
+        secondarySupportingDocuments[i].category &&
+        secondarySupportingDocuments[i].documentType
+      ) {
+        const { category, documentType } = secondarySupportingDocuments[i];
 
-    store.set(
-      state.form.secondarySupportingDocumentMetadata.scenario,
-      secondaryCategoryInformation.scenario,
-    );
-    store.set(
-      state.form.secondarySupportingDocumentMetadata.documentTitle,
-      secondaryCategoryInformation.documentTitle,
-    );
-    store.set(
-      state.form.secondarySupportingDocumentMetadata.eventCode,
-      secondaryCategoryInformation.eventCode,
-    );
+        const categoryInformation = CATEGORY_MAP[category].find(
+          itemDocumentType => itemDocumentType.documentType === documentType,
+        );
+
+        store.set(
+          state.form.secondarySupportingDocuments[i].scenario,
+          categoryInformation.scenario,
+        );
+        store.set(
+          state.form.secondarySupportingDocuments[i].documentTitle,
+          categoryInformation.documentTitle,
+        );
+        store.set(
+          state.form.secondarySupportingDocuments[i].eventCode,
+          categoryInformation.eventCode,
+        );
+      }
+    }
   }
 };

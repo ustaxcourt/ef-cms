@@ -1,5 +1,4 @@
 const {
-  drawImage,
   drawRectangle,
   drawText,
   PDFDocumentFactory,
@@ -42,7 +41,6 @@ exports.getPageDimensions = page => {
  * @param posX // x coordinate where the image should be placed relative to the document
  * @param posY // y coordinate where the image should be placed relative to the document
  * @param scale // Scale of the img to be placed
- * @param sigImgData // Array of Uint8Array containing signature img data
  * @returns {ByteArray}
  */
 exports.generateSignedDocumentInteractor = async ({
@@ -51,7 +49,6 @@ exports.generateSignedDocumentInteractor = async ({
   posX,
   posY,
   scale = 1,
-  sigImgData,
   sigTextData,
 }) => {
   const pdfDoc = PDFDocumentFactory.load(pdfData);
@@ -62,68 +59,54 @@ exports.generateSignedDocumentInteractor = async ({
 
   const [, pageHeight] = exports.getPageDimensions(page);
 
-  if (sigImgData) {
-    const [imgRef, imgDim] = pdfDoc.embedPNG(sigImgData);
-    page.addImageObject('imgObj', imgRef);
+  const { signatureName, signatureTitle } = sigTextData;
 
-    pageContentStream = pdfDoc.createContentStream(
-      drawImage('imgObj', {
-        height: imgDim.height * scale,
-        width: imgDim.width * scale,
-        x: posX,
-        y: pageHeight - posY,
-      }),
-    );
-  } else if (sigTextData) {
-    const { signatureName, signatureTitle } = sigTextData;
+  const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont(
+    'Helvetica-Bold',
+  );
 
-    const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont(
-      'Helvetica-Bold',
-    );
+  page.addFontDictionary('Helvetica-Bold', helveticaRef);
 
-    page.addFontDictionary('Helvetica-Bold', helveticaRef);
+  const textSize = 16 * scale;
+  const padding = 20 * scale;
+  const nameTextWidth = helveticaFont.widthOfTextAtSize(
+    signatureName,
+    textSize,
+  );
+  const titleTextWidth = helveticaFont.widthOfTextAtSize(
+    signatureTitle,
+    textSize,
+  );
+  const textHeight = helveticaFont.heightOfFontAtSize(textSize);
+  const lineHeight = textHeight / 10;
+  const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
+  const boxHeight = textHeight * 2 + padding * 2;
 
-    const textSize = 16 * scale;
-    const padding = 20 * scale;
-    const nameTextWidth = helveticaFont.widthOfTextAtSize(
-      signatureName,
-      textSize,
-    );
-    const titleTextWidth = helveticaFont.widthOfTextAtSize(
-      signatureTitle,
-      textSize,
-    );
-    const textHeight = helveticaFont.heightOfFontAtSize(textSize);
-    const lineHeight = textHeight / 10;
-    const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
-    const boxHeight = textHeight * 2 + padding * 2;
-
-    pageContentStream = pdfDoc.createContentStream(
-      drawRectangle({
-        colorRgb: [1, 1, 1],
-        height: boxHeight,
-        width: boxWidth,
-        x: posX,
-        y: pageHeight - posY - boxHeight,
-      }),
-      drawText(helveticaFont.encodeText(signatureName), {
-        font: 'Helvetica-Bold',
-        size: textSize,
-        x: posX + (boxWidth - nameTextWidth) / 2,
-        y: pageHeight - posY + boxHeight / 2 - boxHeight,
-      }),
-      drawText(helveticaFont.encodeText(signatureTitle), {
-        font: 'Helvetica-Bold',
-        size: textSize,
-        x: posX + (boxWidth - titleTextWidth) / 2,
-        y:
-          pageHeight -
-          posY +
-          (boxHeight - textHeight * 2 - lineHeight) / 2 -
-          boxHeight,
-      }),
-    );
-  }
+  pageContentStream = pdfDoc.createContentStream(
+    drawRectangle({
+      colorRgb: [1, 1, 1],
+      height: boxHeight,
+      width: boxWidth,
+      x: posX,
+      y: pageHeight - posY - boxHeight,
+    }),
+    drawText(helveticaFont.encodeText(signatureName), {
+      font: 'Helvetica-Bold',
+      size: textSize,
+      x: posX + (boxWidth - nameTextWidth) / 2,
+      y: pageHeight - posY + boxHeight / 2 - boxHeight,
+    }),
+    drawText(helveticaFont.encodeText(signatureTitle), {
+      font: 'Helvetica-Bold',
+      size: textSize,
+      x: posX + (boxWidth - titleTextWidth) / 2,
+      y:
+        pageHeight -
+        posY +
+        (boxHeight - textHeight * 2 - lineHeight) / 2 -
+        boxHeight,
+    }),
+  );
 
   page.addContentStreams(pdfDoc.register(pageContentStream));
 
