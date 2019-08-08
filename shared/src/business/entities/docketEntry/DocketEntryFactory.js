@@ -61,13 +61,17 @@ function DocketEntryFactory(rawProps) {
     exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
-    primaryDocumentFile: joi.object().required(),
-    primaryDocumentFileSize: joi
-      .number()
-      .required()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
+    primaryDocumentFile: joi.object().optional(),
+    primaryDocumentFileSize: joi.when('primaryDocumentFile', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
   };
 
   let schemaOptionalItems = {
