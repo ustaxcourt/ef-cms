@@ -25,6 +25,7 @@ import { state } from 'cerebral';
 import { submitDocketEntryAction } from '../actions/DocketEntry/submitDocketEntryAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
@@ -34,7 +35,6 @@ export const submitDocketEntrySequence = [
       clearAlertsAction,
       set(state.showValidation, true),
       computeFormDateAction,
-      computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
       validateDocketEntryAction,
@@ -49,7 +49,7 @@ export const submitDocketEntrySequence = [
           set(state.showValidation, false),
           clearAlertsAction,
           openFileUploadStatusModalAction,
-          uploadExternalDocumentsAction,
+          uploadDocketEntryFileAction,
           {
             error: [openFileUploadErrorModal],
             success: [
