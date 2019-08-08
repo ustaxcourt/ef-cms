@@ -178,6 +178,9 @@ export const PrimaryDocumentForm = connect(
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               placeholder="- Select -"
+              value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
+                ({ value }) => value === form.eventCode,
+              )}
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
@@ -238,6 +241,11 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
                 placeholder="- Select -"
+                value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
+                  ({ value }) =>
+                    form.secondaryDocument &&
+                    value === form.secondaryDocument.eventCode,
+                )}
                 onChange={(inputValue, { action, name }) => {
                   switch (action) {
                     case 'select-option':
