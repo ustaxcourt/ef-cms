@@ -23,7 +23,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
 import { state } from 'cerebral';
 import { submitDocketEntryAction } from '../actions/DocketEntry/submitDocketEntryAction';
-import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
+import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const submitDocketEntrySequence = [
@@ -49,7 +49,7 @@ export const submitDocketEntrySequence = [
           set(state.showValidation, false),
           clearAlertsAction,
           openFileUploadStatusModalAction,
-          uploadExternalDocumentsAction,
+          uploadDocketEntryFileAction,
           {
             error: [openFileUploadErrorModal],
             success: [
