@@ -12,10 +12,13 @@ describe('DocketEntryFactory', () => {
       rawEntity = {};
     });
 
-    it('should require a file', () => {
-      expect(errors().primaryDocumentFile).toEqual('A file was not selected.');
+    it('should return an error when an empty document is attached', () => {
       rawEntity.primaryDocumentFile = {};
+      rawEntity.primaryDocumentFileSize = 0;
       expect(errors().primaryDocumentFile).toEqual(undefined);
+      expect(errors().primaryDocumentFileSize).toEqual(
+        'Your document file size is empty.',
+      );
     });
 
     it('should not require a Filing Status selection', () => {

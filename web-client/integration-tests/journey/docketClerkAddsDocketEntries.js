@@ -25,8 +25,6 @@ export default (test, fakeFile) => {
       documentType: 'Select a Document Type.',
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
-      primaryDocumentFile: 'A file was not selected.',
-      primaryDocumentFileSize: 'Your document file size is empty.',
     });
 
     //primary document
@@ -46,6 +44,11 @@ export default (test, fakeFile) => {
     await test.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
+    });
+
+    await test.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'primaryDocumentFileSize',
+      value: 1,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
