@@ -16,6 +16,7 @@ describe('submitDocketEntryAction', () => {
         createCoverSheet: createCoverSheetStub,
         fileDocketEntryInteractor: fileDocketEntryStub,
       }),
+      getUniqueId: () => '123',
     };
   });
 
