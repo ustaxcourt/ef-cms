@@ -62,7 +62,7 @@ function DocketEntryFactory(rawProps) {
     exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
-    primaryDocumentFile: joi.object().optional(),
+    primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi.when('primaryDocumentFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
