@@ -15,25 +15,27 @@ export const SessionAssignmentsForm = connect(
         <h2 className="margin-top-4">Session Assignments</h2>
         <div className="blue-container">
           <div className="usa-form-group">
-            <label className="usa-label" htmlFor="judge" id="judge-label">
+            <label className="usa-label" htmlFor="judgeId" id="judge-label">
               Judge <span className="usa-hint">(optional)</span>
             </label>
             <select
               aria-describedby="judge-label"
               className="usa-select"
-              id="judge"
-              name="judge"
-              value={form.judge || ''}
+              id="judgeId"
+              name="judgeId"
+              value={form.judgeId || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
-                  value: e.target.value,
+                  value: judgeUsers.find(
+                    judge => judge.userId === e.target.value,
+                  ),
                 });
               }}
             >
               <option value="">- Select -</option>
               {judgeUsers.map((judge, idx) => (
-                <option key={idx} value={judge}>
+                <option key={idx} value={judge.userId}>
                   {judge.name}
                 </option>
               ))}
