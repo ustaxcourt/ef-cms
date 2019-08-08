@@ -249,4 +249,16 @@ describe('computeTrialSessionFormDataAction', () => {
       });
     });
   });
+
+  it('should correctly store the judge on the form', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      props: { key: 'judgeId', value: { name: 'Test Judge', userId: '123' } },
+      state: { form },
+    });
+    expect(result.state.form.judgeId).toEqual('123');
+    expect(result.state.form.judge).toEqual({
+      name: 'Test Judge',
+      userId: '123',
+    });
+  });
 });
