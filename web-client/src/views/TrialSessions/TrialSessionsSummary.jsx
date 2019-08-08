@@ -5,9 +5,9 @@ import React from 'react';
 export const TrialSessionsSummary = connect(
   {
     recentTrialSessions:
-      state.formattedDashboardTrialSessions.formattedSessions,
+      state.formattedDashboardTrialSessions.formattedRecentSessions,
     upcomingTrialSessions:
-      state.formattedDashboardTrialSessions.formattedSessions,
+      state.formattedDashboardTrialSessions.formattedUpcomingSessions,
     user: state.user,
   },
   ({ recentTrialSessions, upcomingTrialSessions, user }) => {
