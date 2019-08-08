@@ -178,12 +178,13 @@ export const DocumentDetail = connect(
                 </div>
 
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
-                {!process.env.CYPRESS && (
-                  <iframe
-                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
-                    title={`Document type: ${helper.formattedDocument.documentType}`}
-                  />
-                )}
+                {!process.env.CYPRESS &&
+                  helper.formattedDocument.isFileAttached && (
+                    <iframe
+                      src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
+                      title={`Document type: ${helper.formattedDocument.documentType}`}
+                    />
+                  )}
               </div>
             </div>
           </div>

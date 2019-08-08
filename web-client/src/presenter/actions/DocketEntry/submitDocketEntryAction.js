@@ -26,6 +26,7 @@ export const submitDocketEntryAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
+    isFileAttached: !!primaryDocumentFileId,
     isPaper: true,
     docketNumber,
     caseId,
@@ -76,13 +77,15 @@ export const submitDocketEntryAction = async ({
     .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
-      primaryDocumentFileId,
+      primaryDocumentFileId:
+        primaryDocumentFileId || applicationContext.getUniqueId(),
       secondaryDocumentFileId,
     });
 
   const pendingDocuments = caseDetail.documents.filter(
     document => document.processingStatus === 'pending',
   );
+
   const createCoverSheetInteractor = document => {
     return applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
@@ -90,7 +93,10 @@ export const submitDocketEntryAction = async ({
       documentId: document.documentId,
     });
   };
-  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
+
+  if (primaryDocumentFileId) {
+    await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
+  }
 
   return {
     caseDetail,
