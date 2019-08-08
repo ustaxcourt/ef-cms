@@ -21,6 +21,7 @@ const NavigationItems = helper => {
         >
           <a href="/">
             <FontAwesomeIcon icon="home" />
+            <span className="sr-only">Home</span>
           </a>
         </li>
       )}
