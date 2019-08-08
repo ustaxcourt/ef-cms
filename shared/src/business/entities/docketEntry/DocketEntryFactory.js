@@ -27,6 +27,7 @@ function DocketEntryFactory(rawProps) {
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
     this.exhibits = rawPropsParam.exhibits;
+    this.serviceDate = rawPropsParam.serviceDate;
     this.freeText = rawPropsParam.freeText;
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
     this.lodged = rawPropsParam.lodged;
