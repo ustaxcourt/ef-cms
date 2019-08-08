@@ -14,25 +14,25 @@ describe('formattedDashboardTrialSessions', () => {
   const TRIAL_SESSIONS_LIST = [
     {
       judge: { name: '1', userId: '1' },
-      startDate: '2019-11-25T15:00:00.000Z',
+      startDate: '2085-11-25T15:00:00.000Z',
       swingSession: true,
       trialLocation: 'Hartford, Connecticut',
     },
     {
       judge: { name: '2', userId: '1' },
-      startDate: '2019-11-25T15:00:00.000Z',
+      startDate: '2017-11-25T15:00:00.000Z',
       swingSession: true,
       trialLocation: 'Knoxville, TN',
     },
     {
       judge: { name: '3', userId: '1' },
-      startDate: '2019-11-27T15:00:00.000Z',
+      startDate: '2017-11-27T15:00:00.000Z',
       swingSession: true,
       trialLocation: 'Jacksonville, FL',
     },
     {
-      judge: { name: '4', userId: '4' },
-      startDate: '2019-11-27T15:00:00.000Z',
+      judge: { name: '4', userId: '1' },
+      startDate: '2085-11-27T15:00:00.000Z',
       swingSession: true,
       trialLocation: 'Memphis, TN',
     },
@@ -53,9 +53,9 @@ describe('formattedDashboardTrialSessions', () => {
   it('formats trial sessions correctly, formatting start date', () => {
     const result = formatSession(TRIAL_SESSIONS_LIST[2], applicationContext);
     expect(result).toMatchObject({
-      formattedStartDate: '11/27/19',
+      formattedStartDate: '11/27/17',
       judge: { name: '3', userId: '1' },
-      startDate: '2019-11-27T15:00:00.000Z',
+      startDate: '2017-11-27T15:00:00.000Z',
     });
   });
 
@@ -66,7 +66,9 @@ describe('formattedDashboardTrialSessions', () => {
         user: { userId: '1' },
       },
     });
-    expect(result.formattedSessions.length).toBe(3);
+
+    expect(result.formattedRecentSessions.length).toBe(2);
+    expect(result.formattedUpcomingSessions.length).toBe(2);
   });
 
   it('returns no trial sessions if judge userId does not match any trial sessions', () => {
@@ -76,6 +78,7 @@ describe('formattedDashboardTrialSessions', () => {
         user: { userId: '100' },
       },
     });
-    expect(result.formattedSessions.length).toBe(0);
+    expect(result.formattedRecentSessions.length).toBe(0);
+    expect(result.formattedUpcomingSessions.length).toBe(0);
   });
 });
