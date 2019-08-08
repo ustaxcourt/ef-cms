@@ -5,6 +5,10 @@ const {
 } = require('../../dynamo/helpers/createMappingRecord');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
+  if (user.barNumber === '') {
+    delete user.barNumber;
+  }
+
   if (user.section) {
     await client.put({
       Item: {
@@ -38,7 +42,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   if (
     (user.role === 'practitioner' || user.role === 'respondent') &&
     user.name &&
-    user.barNumber !== '0'
+    user.barNumber
   ) {
     await createMappingRecord({
       applicationContext,
