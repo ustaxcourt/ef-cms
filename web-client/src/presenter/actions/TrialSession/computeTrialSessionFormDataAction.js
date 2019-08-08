@@ -63,7 +63,7 @@ const compute24HrTime = ({ extension, hours, minutes }) => {
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store function
  */
-export const computeTrialSessionFormDataAction = ({ get, store }) => {
+export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   const form = get(state.form);
 
   const { term, termYear } = computeTerm({
@@ -79,4 +79,9 @@ export const computeTrialSessionFormDataAction = ({ get, store }) => {
     minutes: form.startTimeMinutes,
   });
   store.set(state.form.startTime, startTime);
+
+  if (props.key === 'judgeId') {
+    store.set(state.form.judgeId, props.value.userId);
+    store.set(state.form.judge, props.value);
+  }
 };

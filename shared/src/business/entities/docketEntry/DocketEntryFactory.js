@@ -5,6 +5,10 @@ const {
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  MAX_FILE_SIZE_BYTES,
+  MAX_FILE_SIZE_MB,
+} = require('../../../persistence/s3/getUploadPolicy');
 const { includes, omit } = require('lodash');
 
 /**
@@ -23,6 +27,7 @@ function DocketEntryFactory(rawProps) {
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
     this.exhibits = rawPropsParam.exhibits;
+    this.serviceDate = rawPropsParam.serviceDate;
     this.freeText = rawPropsParam.freeText;
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
     this.lodged = rawPropsParam.lodged;
@@ -33,6 +38,7 @@ function DocketEntryFactory(rawProps) {
     this.partySecondary = rawPropsParam.partySecondary;
     this.previousDocument = rawPropsParam.previousDocument;
     this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
+    this.primaryDocumentFileSize = rawPropsParam.primaryDocumentFileSize;
     this.secondaryDocumentFile = rawPropsParam.secondaryDocumentFile;
 
     const { secondaryDocument } = rawPropsParam;
@@ -57,6 +63,16 @@ function DocketEntryFactory(rawProps) {
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
     primaryDocumentFile: joi.object().required(),
+    primaryDocumentFileSize: joi.when('primaryDocumentFile', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    }),
   };
 
   let schemaOptionalItems = {
@@ -72,7 +88,7 @@ function DocketEntryFactory(rawProps) {
       .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
-    secondaryDocumentFile: joi.object().required(),
+    secondaryDocumentFile: joi.object().optional(),
   };
 
   let errorToMessageMap = {
@@ -102,6 +118,13 @@ function DocketEntryFactory(rawProps) {
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
     primaryDocumentFile: 'A file was not selected.',
+    primaryDocumentFileSize: [
+      {
+        contains: 'must be less than or equal to',
+        message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      },
+      'Your document file size is empty.',
+    ],
     secondaryDocumentFile: 'A file was not selected.',
   };
 

@@ -1,4 +1,4 @@
-import { isEmpty, negate, omit, pick } from 'lodash';
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -15,17 +15,20 @@ export const submitDocketEntryAction = async ({
   props,
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId, secondaryDocumentFileId } = props;
+  const { primaryDocumentFileId } = props;
+
+  const isFileAttached = !!primaryDocumentFileId;
 
   let documentMetadata = omit(
     {
       ...get(state.form),
     },
-    ['primaryDocumentFile', 'secondaryDocumentFile'],
+    ['primaryDocumentFile'],
   );
 
   documentMetadata = {
     ...documentMetadata,
+    isFileAttached,
     isPaper: true,
     docketNumber,
     caseId,
@@ -33,64 +36,39 @@ export const submitDocketEntryAction = async ({
     receivedAt: documentMetadata.dateReceived,
   };
 
-  if (documentMetadata.secondaryDocument) {
-    const COPY_PROPS = [
-      'isPaper',
-      'createdAt',
-      'lodged',
-      'partyPrimary',
-      'partySecondary',
-      'partyRespondent',
-    ];
-
-    documentMetadata.secondaryDocument = {
-      ...documentMetadata.secondaryDocument,
-      ...pick(documentMetadata, COPY_PROPS),
-    };
-  }
-
-  const documentIds = [primaryDocumentFileId, secondaryDocumentFileId].filter(
-    negate(isEmpty),
-  );
-
-  const makePdfSafe = async documentId => {
+  if (isFileAttached) {
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
-      documentId,
+      documentId: primaryDocumentFileId,
     });
 
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
-      documentId,
+      documentId: primaryDocumentFileId,
     });
 
     await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
-      documentId,
+      documentId: primaryDocumentFileId,
     });
-  };
-  await Promise.all(documentIds.map(makePdfSafe));
+  }
 
   const caseDetail = await applicationContext
     .getUseCases()
     .fileDocketEntryInteractor({
       applicationContext,
       documentMetadata,
-      primaryDocumentFileId,
-      secondaryDocumentFileId,
+      primaryDocumentFileId:
+        primaryDocumentFileId || applicationContext.getUniqueId(),
     });
 
-  const pendingDocuments = caseDetail.documents.filter(
-    document => document.processingStatus === 'pending',
-  );
-  const createCoverSheetInteractor = document => {
-    return applicationContext.getUseCases().createCoverSheetInteractor({
+  if (isFileAttached) {
+    await applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
-      documentId: document.documentId,
+      documentId: primaryDocumentFileId,
     });
-  };
-  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
+  }
 
   return {
     caseDetail,

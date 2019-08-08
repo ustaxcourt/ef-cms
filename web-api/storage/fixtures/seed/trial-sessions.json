@@ -10,6 +10,7 @@
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-11-27T05:00:00.000Z",
+    "createdAt": "2019-10-27T05:00:00.000Z",
     "startTime": "10:00",
     "term": "Fall",
     "termYear": "2019",
@@ -31,6 +32,7 @@
       "name": "Judge Carluzzo"
     },
     "startDate": "2019-11-25T05:00:00.000Z",
+    "createdAt": "2019-10-25T05:00:00.000Z",
     "startTime": "15:00",
     "term": "Fall",
     "termYear": "2019",
@@ -52,6 +54,7 @@
       "name": "Judge Buch"
     },
     "startDate": "2019-11-25T05:00:00.000Z",
+    "createdAt": "2019-10-25T05:00:00.000Z",
     "startTime": "15:00",
     "term": "Fall",
     "termYear": "2019",
@@ -71,6 +74,7 @@
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
     "startDate": "2019-11-25T05:00:00.000Z",
+    "createdAt": "2019-10-25T05:00:00.000Z",
     "startTime": "21:00",
     "term": "Fall",
     "termYear": "2019",
@@ -90,6 +94,7 @@
       "name": "Judge Carluzzo"
     },
     "startDate": "2019-12-02T05:00:00.000Z",
+    "createdAt": "2019-10-02T05:00:00.000Z",
     "startTime": "21:00",
     "term": "Fall",
     "termYear": "2019",
@@ -109,6 +114,7 @@
       "name": "Judge Cohen"
     },
     "startDate": "2019-12-02T05:00:00.000Z",
+    "createdAt": "2019-10-02T05:00:00.000Z",
     "startTime": "21:00",
     "term": "Fall",
     "termYear": "2019",
@@ -128,6 +134,7 @@
       "name": "Judge Cohen"
     },
     "startDate": "2019-12-02T05:00:00.000Z",
+    "createdAt": "2019-10-02T05:00:00.000Z",
     "startTime": "09:00",
     "term": "Fall",
     "termYear": "2019",

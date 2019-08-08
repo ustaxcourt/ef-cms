@@ -1,8 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
-import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -33,43 +30,7 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h1>Add Docket Entry</h1>
         <div className="blue-container docket-entry-form">
-          <div
-            className={`usa-form-group ${
-              validationErrors.primaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            }`}
-          >
-            <label
-              className={
-                'usa-label ustc-upload ' +
-                (addDocketEntryHelper.showPrimaryDocumentValid
-                  ? 'validated'
-                  : '')
-              }
-              htmlFor="primary-document"
-              id="primary-document-label"
-            >
-              Add Document{' '}
-              <span className="success-message">
-                <FontAwesomeIcon icon="check-circle" size="sm" />
-              </span>
-            </label>
-            <StateDrivenFileInput
-              aria-describedby="primary-document-label"
-              id="primary-document"
-              name="primaryDocumentFile"
-              updateFormValueSequence="updateDocketEntryFormValueSequence"
-              validationSequence="validateDocketEntrySequence"
-            />
-            <Text
-              bind="validationErrors.primaryDocumentFile"
-              className="usa-error-message"
-            />
-          </div>
-
           <div
             className={`usa-form-group ${
               validationErrors.lodged ? 'usa-form-group--error' : ''
@@ -217,6 +178,9 @@ export const PrimaryDocumentForm = connect(
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               placeholder="- Select -"
+              value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
+                ({ value }) => value === form.eventCode,
+              )}
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
@@ -277,6 +241,11 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
                 placeholder="- Select -"
+                value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
+                  ({ value }) =>
+                    form.secondaryDocument &&
+                    value === form.secondaryDocument.eventCode,
+                )}
                 onChange={(inputValue, { action, name }) => {
                   switch (action) {
                     case 'select-option':
@@ -538,8 +507,6 @@ export const PrimaryDocumentForm = connect(
             </div>
           )}
         </div>
-
-        {form.secondaryDocument && <SecondaryDocumentForm />}
       </React.Fragment>
     );
   },
