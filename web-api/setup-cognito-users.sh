@@ -1,4 +1,4 @@
-# #!/bin/bash -e
+#!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
 restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users'].id" --output text)
