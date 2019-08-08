@@ -1,5 +1,8 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
+const {
+  ContactFactory,
+} = require('../../shared/src/business/entities/contacts/ContactFactory');
 import { Document } from '../../shared/src/business/entities/Document';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
@@ -7,7 +10,13 @@ import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
-import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
+import docketClerkCreatesMessageToJudge from './journey/docketClerkCreatesMessageToJudge';
+import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkSignsOut from './journey/docketClerkSignsOut';
+import petitionsClerkCreatesMessageToJudge from './journey/petitionsClerkCreatesMessageToJudge';
+import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
+import taxpayerAddNewCaseToTestObj from './journey/taxpayerAddNewCaseToTestObj';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
@@ -18,9 +27,6 @@ import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
 import taxpayerViewsCaseDetailAfterFilingDocument from './journey/taxpayerViewsCaseDetailAfterFilingDocument';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 let test;
 global.FormData = FormData;
@@ -55,7 +61,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Taxpayer files document', () => {
+describe('Judge messages journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
@@ -76,7 +82,6 @@ describe('Taxpayer files document', () => {
   });
 
   taxpayerLogin(test);
-  taxpayerCancelsCreateCase(test);
   taxpayerNavigatesToCreateCase(test);
   taxpayerChoosesProcedureType(test);
   taxpayerChoosesCaseType(test);
@@ -85,5 +90,18 @@ describe('Taxpayer files document', () => {
   taxpayerViewsCaseDetail(test);
   taxpayerFilesDocumentForCase(test, fakeFile);
   taxpayerViewsCaseDetailAfterFilingDocument(test);
+  taxpayerViewsDashboard(test);
+  taxpayerAddNewCaseToTestObj(test);
   taxpayerSignsOut(test);
+
+  petitionsClerkLogIn(test);
+  petitionsClerkCreatesMessageToJudge(test, "don't forget to be awesome");
+  petitionsClerkSignsOut(test);
+
+  docketClerkLogIn(test);
+  docketClerkCreatesMessageToJudge(
+    test,
+    'karma karma karma karma karma chameleon',
+  );
+  docketClerkSignsOut(test);
 });

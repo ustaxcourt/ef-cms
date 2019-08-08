@@ -29,6 +29,18 @@ export default (test, fakeFile) => {
       key: 'documentType',
       value: 'Answer',
     });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'documentTitle',
+      value: 'Answer',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'eventCode',
+      value: 'A',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'scenario',
+      value: 'Standard',
+    });
 
     await test.runSequence('validateSelectDocumentTypeSequence');
 
@@ -59,10 +71,18 @@ export default (test, fakeFile) => {
       key: 'documentType',
       value: 'Motion for Leave to File Out of Time',
     });
-
-    await test.runSequence('selectDocumentSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'documentTitle',
+      value: 'Motion for Leave to File Out of Time [Document Name]',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'eventCode',
+      value: 'M014',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'scenario',
+      value: 'Nonstandard H',
+    });
 
     await test.runSequence('selectDocumentSequence');
 
@@ -82,10 +102,18 @@ export default (test, fakeFile) => {
       key: 'secondaryDocument.documentType',
       value: 'Statement',
     });
-
-    await test.runSequence('selectDocumentSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondaryDocument.documentTitle',
+      value: 'Statement [anything]',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondaryDocument.eventCode',
+      value: 'STAT',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondaryDocument.scenario',
+      value: 'Nonstandard B',
+    });
 
     await test.runSequence('selectDocumentSequence');
 
@@ -99,6 +127,10 @@ export default (test, fakeFile) => {
       key: 'secondaryDocument.freeText',
       value: 'Anything',
     });
+
+    await test.runSequence('selectDocumentSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('selectDocumentSequence');
 
@@ -204,6 +236,18 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'supportingDocuments.0.category',
+      value: 'Supporting Document',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'supportingDocuments.0.documentType',
+      value: 'Affidavit in Support',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'supportingDocuments.0.previousDocument',
+      value: test.getState('form.documentTitle'),
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'supportingDocuments.0.supportingDocument',
       value: 'Affidavit in Support',
     });
@@ -268,6 +312,18 @@ export default (test, fakeFile) => {
       ],
     });
 
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondarySupportingDocuments.0.category',
+      value: 'Supporting Document',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondarySupportingDocuments.0.documentType',
+      value: 'Declaration in Support',
+    });
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: 'secondarySupportingDocuments.0.previousDocument',
+      value: test.getState('form.secondaryDocument.documentTitle'),
+    });
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'secondarySupportingDocuments.0.supportingDocument',
       value: 'Declaration in Support',
