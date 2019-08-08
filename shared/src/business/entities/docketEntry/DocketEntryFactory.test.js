@@ -12,6 +12,12 @@ describe('DocketEntryFactory', () => {
       rawEntity = {};
     });
 
+    it('should require a file', () => {
+      rawEntity.primaryDocumentFile = {};
+      rawEntity.primaryDocumentFileSize = 1;
+      expect(errors().primaryDocumentFile).toEqual(undefined);
+    });
+
     it('should return an error when an empty document is attached', () => {
       rawEntity.primaryDocumentFile = {};
       rawEntity.primaryDocumentFileSize = 0;
