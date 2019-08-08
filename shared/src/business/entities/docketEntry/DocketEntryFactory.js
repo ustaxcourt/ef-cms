@@ -88,7 +88,7 @@ function DocketEntryFactory(rawProps) {
       .required(),
     partyRespondent: joi.boolean().required(),
     partySecondary: joi.boolean().required(),
-    secondaryDocumentFile: joi.object().required(),
+    secondaryDocumentFile: joi.object().optional(),
   };
 
   let errorToMessageMap = {

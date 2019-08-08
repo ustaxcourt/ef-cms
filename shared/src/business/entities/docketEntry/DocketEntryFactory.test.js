@@ -145,11 +145,7 @@ describe('DocketEntryFactory', () => {
           rawEntity.scenario = 'Nonstandard H';
         });
 
-        it('should require secondary file', () => {
-          expect(errors().secondaryDocumentFile).toEqual(
-            'A file was not selected.',
-          );
-          rawEntity.secondaryDocumentFile = {};
+        it('should not require secondary file', () => {
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 
