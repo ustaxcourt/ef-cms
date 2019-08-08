@@ -23,6 +23,7 @@ export const gotoAddDocketEntry = [
   set(state.form.practitioner, []),
   set(state.wizardStep, 'PrimaryDocumentForm'),
   set(state.documentUploadMode, 'scan'),
+  set(state.documentSelectedForScan, 'primaryDocumentFile'),
   setCurrentPageAction('AddDocketEntry'),
 ];
 
