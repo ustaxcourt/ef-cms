@@ -35,6 +35,7 @@ export const submitDocketEntrySequence = [
       clearAlertsAction,
       set(state.showValidation, true),
       computeFormDateAction,
+      computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
       computeDateReceivedAction,
       validateDocketEntryAction,
