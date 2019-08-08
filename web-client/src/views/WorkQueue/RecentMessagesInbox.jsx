@@ -25,7 +25,7 @@ export const RecentMessagesInbox = connect(
               <th>Document</th>
             </tr>
           </thead>
-          {workQueue.map((item, idx) => {
+          {workQueue.slice(0, 5).map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>
