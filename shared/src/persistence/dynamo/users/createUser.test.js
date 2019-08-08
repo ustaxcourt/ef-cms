@@ -26,6 +26,7 @@ describe('createUser', () => {
     const petitionsclerkUser = {
       name: 'Test Petitionsclerk',
       role: 'petitionsclerk',
+      section: 'petitions',
     };
     await createUserRecords({
       applicationContext,
@@ -50,11 +51,48 @@ describe('createUser', () => {
     });
   });
 
+  it('attempts to persist a judge user with a section mapping record for the chambers and the judge', async () => {
+    const judgeUser = {
+      name: 'Judge Adam',
+      role: 'judge',
+      section: 'adamsChambers',
+    };
+    await createUserRecords({
+      applicationContext,
+      user: judgeUser,
+      userId,
+    });
+
+    expect(putStub.getCall(0).args[0]).toMatchObject({
+      Item: {
+        pk: 'adamsChambers|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(1).args[0]).toMatchObject({
+      Item: {
+        pk: 'judge|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(2).args[0]).toMatchObject({
+      Item: {
+        pk: userId,
+        sk: userId,
+        ...judgeUser,
+      },
+      TableName: 'efcms-dev',
+    });
+  });
+
   it('attempts to persist a practitioner user with name and barNumber mapping records', async () => {
     const practitionerUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
       role: 'practitioner',
+      section: 'practitioner',
     };
     await createUserRecords({
       applicationContext,
@@ -64,20 +102,27 @@ describe('createUser', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
+        pk: 'practitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(1).args[0]).toMatchObject({
+      Item: {
         pk: userId,
         sk: userId,
         ...practitionerUser,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(1).args[0]).toMatchObject({
+    expect(putStub.getCall(2).args[0]).toMatchObject({
       Item: {
         pk: 'Test Practitioner|practitioner',
         sk: userId,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(2).args[0]).toMatchObject({
+    expect(putStub.getCall(3).args[0]).toMatchObject({
       Item: {
         pk: 'PT1234|practitioner',
         sk: userId,
@@ -91,6 +136,7 @@ describe('createUser', () => {
       barNumber: '0',
       name: 'Test Practitioner',
       role: 'practitioner',
+      section: 'practitioner',
     };
     await createUserRecords({
       applicationContext,
@@ -100,12 +146,19 @@ describe('createUser', () => {
 
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
+        pk: 'practitioner|user',
+        sk: userId,
+      },
+      TableName: 'efcms-dev',
+    });
+    expect(putStub.getCall(1).args[0]).toMatchObject({
+      Item: {
         pk: userId,
         sk: userId,
         ...practitionerUser,
       },
       TableName: 'efcms-dev',
     });
-    expect(putStub.getCall(1)).toEqual(null);
+    expect(putStub.getCall(2)).toEqual(null);
   });
 });

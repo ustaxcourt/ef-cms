@@ -20,6 +20,7 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
@@ -89,6 +90,7 @@ export const state = {
   form: {},
   formattedCaseDetail,
   formattedCases,
+  formattedDashboardTrialSessions,
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,

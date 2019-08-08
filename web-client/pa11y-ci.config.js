@@ -4,8 +4,10 @@ const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
 const seniorattorney = require('./pa11y/pa11y-seniorattorney');
 const petitioner = require('./pa11y/pa11y-petitioner');
+const judge = require('./pa11y/pa11y-judge');
 
 const userUrls = [
+  ...judge,
   ...petitioner,
   ...petitionsclerk,
   ...practitioner,

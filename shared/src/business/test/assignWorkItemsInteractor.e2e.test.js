@@ -23,6 +23,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       user: {
         name: 'Rick Petitioner',
         role: 'petitioner',
+        section: 'petitions',
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -64,6 +65,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       return new User({
         name: 'richard',
         role: 'petitionsclerk',
+        section: 'petitions',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

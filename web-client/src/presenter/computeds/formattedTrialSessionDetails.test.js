@@ -13,7 +13,7 @@ describe('formattedTrialSessionDetails', () => {
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
     irsCalendarAdministrator: 'Test Calendar Admin',
-    judge: 'Test Judge',
+    judge: { name: 'Test Judge' },
     postalCode: '12345',
     startDate: '2019-11-25T15:00:00.000Z',
     startTime: '10:00',

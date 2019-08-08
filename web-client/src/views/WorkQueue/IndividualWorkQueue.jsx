@@ -1,13 +1,13 @@
-import { SectionWorkQueueBatched } from './SectionWorkQueueBatched';
-import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
-import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-import { WorkQueueActionButtons } from './WorkQueue/WorkQueueActionButtons';
+import { IndividualWorkQueueBatched } from './IndividualWorkQueueBatched';
+import { IndividualWorkQueueInbox } from './IndividualWorkQueueInbox';
+import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { WorkQueueActionButtons } from './WorkQueueActionButtons';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const SectionWorkQueue = connect(
+export const IndividualWorkQueue = connect(
   {
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.workQueueToDisplay.queue,
@@ -17,7 +17,6 @@ export const SectionWorkQueue = connect(
     return (
       <Tabs
         bind="workQueueToDisplay.box"
-        className="classic-horizontal-header3 tab-border"
         onSelect={box => {
           navigateToPathSequence({
             path: workQueueHelper.getQueuePath({
@@ -28,10 +27,9 @@ export const SectionWorkQueue = connect(
         }}
       >
         <WorkQueueActionButtons />
-
-        <Tab id="section-inbox-tab" tabName="inbox" title="Inbox">
-          <div id="section-inbox-tab-content">
-            <SectionWorkQueueInbox />
+        <Tab id="individual-inbox-tab" tabName="inbox" title="Inbox">
+          <div id="individual-inbox-tab-content">
+            <IndividualWorkQueueInbox />
           </div>
         </Tab>
         {workQueueHelper.showBatchedForIRSTab && (
@@ -41,21 +39,19 @@ export const SectionWorkQueue = connect(
             title="Batched for IRS"
           >
             <div id="section-batched-for-irs-tab-content">
-              <SectionWorkQueueBatched />
+              <IndividualWorkQueueBatched />
             </div>
           </Tab>
         )}
-        {workQueueHelper.showSectionSentTab && (
-          <Tab
-            id="section-sent-tab"
-            tabName="outbox"
-            title={workQueueHelper.sentTitle}
-          >
-            <div id="section-sent-tab-content">
-              <SectionWorkQueueOutbox />
-            </div>
-          </Tab>
-        )}
+        <Tab
+          id="individual-sent-tab"
+          tabName="outbox"
+          title={workQueueHelper.sentTitle}
+        >
+          <div id="individual-sent-tab-content">
+            <IndividualWorkQueueOutbox />
+          </div>
+        </Tab>
       </Tabs>
     );
   },

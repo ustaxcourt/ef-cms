@@ -71,6 +71,7 @@ describe('completeWorkItemInteractor integration test', () => {
       return new User({
         name: 'richard',
         role: 'petitionsclerk',
+        section: 'petitions',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

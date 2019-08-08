@@ -2,6 +2,7 @@ import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -10,6 +11,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
 
@@ -28,7 +30,12 @@ const goToDashboard = [
         ],
       ]),
     ],
-    judge: [setCurrentPageAction('DashboardJudge')],
+    judge: [
+      ...chooseWorkQueueSequence,
+      getTrialSessionsAction,
+      setTrialSessionsAction,
+      setCurrentPageAction('DashboardJudge'),
+    ],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,

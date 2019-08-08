@@ -23,6 +23,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       user: {
         name: 'Rick Petitioner',
         role: 'petitioner',
+        section: 'petitions',
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -417,6 +418,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       return new User({
         name: 'bob',
         role: 'docketclerk',
+        section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

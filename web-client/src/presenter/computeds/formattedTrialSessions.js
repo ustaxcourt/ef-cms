@@ -25,6 +25,14 @@ export const formattedTrialSessions = (get, applicationContext) => {
     get(state.screenMetadata.trialSessionFilters),
     identity,
   );
+
+  const judgeFilter = get(
+    state.screenMetadata.trialSessionFilters.judge.userId,
+  );
+  if (!judgeFilter) {
+    delete trialSessionFilters.judge;
+  }
+
   const sessions = filter(orderedSessions, trialSessionFilters);
 
   const formattedSessions = [];

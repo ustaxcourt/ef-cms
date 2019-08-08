@@ -129,10 +129,10 @@ exports.fileDocketEntryInteractor = async ({
         workItem.assignToUser({
           assigneeId: user.userId,
           assigneeName: user.name,
-          role: user.role,
+          section: user.section,
           sentBy: user.name,
+          sentBySection: user.section,
           sentByUserId: user.userId,
-          sentByUserRole: user.role,
         });
       }
 

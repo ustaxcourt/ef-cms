@@ -49,7 +49,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
       workItem.assignToIRSBatchSystem({
         name: user.name,
         userId: user.userId,
-        userRole: user.role,
+        userSection: user.section,
       });
 
       await applicationContext.getPersistenceGateway().putWorkItemInOutbox({

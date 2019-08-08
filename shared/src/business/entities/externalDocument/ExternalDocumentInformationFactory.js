@@ -46,7 +46,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.partyPrimary = rawProps.partyPrimary;
     this.partyRespondent = rawProps.partyRespondent;
     this.partySecondary = rawProps.partySecondary;
-    this.practitioner = rawProps.practitioner;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
     this.secondaryDocument = rawProps.secondaryDocument;
@@ -99,7 +98,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyPrimary: joi.boolean(),
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
-    practitioner: joi.array(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
       .number()
@@ -129,7 +127,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
-    practitioner: 'Select a filing party.',
     primaryDocumentFile: 'Upload a document.',
     primaryDocumentFileSize: [
       {
@@ -201,20 +198,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  let partyPractitioner = false;
-  if (Array.isArray(documentMetadata.practitioner)) {
-    documentMetadata.practitioner.forEach(practitioner => {
-      if (practitioner.partyPractitioner) {
-        partyPractitioner = true;
-      }
-    });
-  }
-
   if (
     documentMetadata.partyPrimary !== true &&
     documentMetadata.partySecondary !== true &&
-    documentMetadata.partyRespondent !== true &&
-    partyPractitioner !== true
+    documentMetadata.partyRespondent !== true
   ) {
     addProperty(
       'partyPrimary',

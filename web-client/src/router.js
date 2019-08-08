@@ -1,3 +1,4 @@
+import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './queryStringDecoder';
 import route from 'riot-route';
 
@@ -247,7 +248,10 @@ const router = {
     route(
       '/trial-sessions..',
       checkLoggedIn(() => {
-        var query = route.query();
+        var query = {};
+        forEach(route.query(), (value, key) => {
+          set(query, key, value);
+        });
         document.title = `Trial sessions ${pageTitleSuffix}`;
         app.getSequence('gotoTrialSessionsSequence')({ query });
       }),

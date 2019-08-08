@@ -2,7 +2,6 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getSectionForRole } = require('./WorkQueue');
 
 /**
  * constructor
@@ -18,7 +17,7 @@ function User(rawUser) {
   this.phone = rawUser.phone;
   this.name = rawUser.name;
   this.role = rawUser.role || 'petitioner';
-  this.section = getSectionForRole(this.role);
+  this.section = rawUser.section;
   this.token = rawUser.token;
   this.userId = rawUser.userId;
 }

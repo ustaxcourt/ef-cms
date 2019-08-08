@@ -53,26 +53,31 @@ const SECTION_DOCUMENT_QC_OUTBOX = {
 
 const petitionsClerk1 = {
   role: 'petitionsclerk',
+  section: 'petitions',
   userId: 'p1',
 };
 
 const petitionsClerk2 = {
   role: 'petitionsclerk',
+  section: 'petitions',
   userId: 'p2',
 };
 
 const docketClerk1 = {
   role: 'docketclerk',
+  section: 'docket',
   userId: 'd1',
 };
 
 const docketClerk2 = {
   role: 'docketclerk',
+  section: 'docket',
   userId: 'd2',
 };
 
 const seniorAttorney = {
   role: 'seniorattorney',
+  section: 'seniorattorney',
   userId: 'd2',
 };
 
