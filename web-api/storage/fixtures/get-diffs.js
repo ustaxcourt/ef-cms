@@ -4,7 +4,6 @@ const USAGE = `
 Usage: node get-diffs.js path/to/efcms-before.json path/to/efcms-after.json > changes-present-in-afterfile.json
 
 Try this:
-cd web-api
 npm run dynamo:export
 mv storage/fixtures/efcms.json storage/fixtures/efcms-before.json
 
