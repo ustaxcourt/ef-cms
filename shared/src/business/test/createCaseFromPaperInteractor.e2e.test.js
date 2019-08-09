@@ -25,7 +25,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
       user: {
         name: 'Alex Petitionsclerk',
         role: 'petitionsclerk',
-        section: 'petitions',
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
