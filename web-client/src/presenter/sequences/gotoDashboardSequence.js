@@ -12,6 +12,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
@@ -32,6 +33,12 @@ const goToDashboard = [
       ]),
     ],
     judge: [
+      getBaseRouteAction,
+      {
+        dashboard: [setMessageInboxPropsAction],
+        'document-qc': [],
+        messages: [],
+      },
       ...chooseWorkQueueSequence,
       getTrialSessionsAction,
       setTrialSessionsAction,
