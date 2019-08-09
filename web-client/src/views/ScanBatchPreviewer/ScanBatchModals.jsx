@@ -48,10 +48,8 @@ export const DeleteBatchModal = connect(
         onCancelSequence="clearModalSequence"
         onConfirmSequence="removeBatchSequence"
       >
-        <p>
-          This will delete {pageCount} {pageCount === 1 ? 'page' : 'pages'} from
-          your document.
-        </p>
+        This will delete {pageCount} {pageCount === 1 ? 'page' : 'pages'} from
+        your document.
       </ConfirmModal>
     );
   },
@@ -67,7 +65,7 @@ export const DeletePDFModal = connect(
         onCancelSequence="clearModalSequence"
         onConfirmSequence="removeScannedPdfSequence"
       >
-        <p>This action cannot be undone.</p>
+        This action cannot be undone.
       </ConfirmModal>
     );
   },

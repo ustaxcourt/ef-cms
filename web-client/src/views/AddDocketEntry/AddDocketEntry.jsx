@@ -49,7 +49,7 @@ export const AddDocketEntry = connect(
                     Finish
                   </button>
                   <button
-                    className="usa-button usa-button--outline"
+                    className="usa-button usa-button--outline margin-left-1"
                     id="save-and-add-supporting"
                     type="button"
                     onClick={() => {
@@ -62,7 +62,7 @@ export const AddDocketEntry = connect(
                     Add Another Entry
                   </button>
                   <button
-                    className="usa-button usa-button--unstyled"
+                    className="usa-button usa-button--unstyled margin-left-1"
                     id="cancel-button"
                     onClick={() => {
                       formCancelToggleCancelSequence();
