@@ -231,6 +231,10 @@ export const PrimaryDocumentForm = connect(
               >
                 Which Document Is This Motion for Leave For?
               </label>
+              <span className="usa-hint">
+                Create a new docket entry after you‘ve finished the current one
+                so you can upload this document.
+              </span>
               <Select
                 aria-describedby="secondary-document-type-label"
                 className="select-react-element"
