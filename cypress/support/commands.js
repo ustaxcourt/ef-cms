@@ -76,9 +76,12 @@ Cypress.Commands.add('login', (username, route = '/') => {
   cy.visit(url);
   cy.url().should('include', route);
   cy.showsErrorMessage(false);
-  cy.wait(500);
+  cy.url().should('not.include', '/mock-login');
 });
 
+/**
+ *
+ */
 function b64toBlob(b64Data, contentType, sliceSize) {
   contentType = contentType || '';
   sliceSize = sliceSize || 512;
