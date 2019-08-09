@@ -5,6 +5,7 @@ const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_USERS } = require('../../test/mockUsers');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
 
@@ -71,6 +72,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => Promise.resolve(mockCase),
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           updateCase: ({ caseToUpdate }) =>
             Promise.resolve(new Case(caseToUpdate)),
           updateWorkItem: async () => null,
@@ -104,11 +106,15 @@ describe('Recall petition from IRS Holding Queue', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
-        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+        return new User({
+          role: 'petitionsclerk',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        });
       },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => null,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           updateCase: () => null,
           updateWorkItem: async () => null,
         };
@@ -120,7 +126,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-        userId: 'petitionsclerk',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (err) {
       error = err;
@@ -135,12 +141,17 @@ describe('Recall petition from IRS Holding Queue', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
-        return new User({ role: 'petitionsclerk', userId: 'petitionsclerk' });
+        return new User({
+          role: 'petitionsclerk',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        });
       },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () =>
             Promise.resolve(omit(mockCase, 'docketNumber')),
+
+          getUserById: ({ userId }) => MOCK_USERS[userId],
         };
       },
       getUseCases: () => ({ getCaseInteractor }),
@@ -150,7 +161,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       await recallPetitionFromIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'petitionsclerk',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (err) {
       error = err;

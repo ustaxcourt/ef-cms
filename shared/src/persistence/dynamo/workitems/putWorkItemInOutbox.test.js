@@ -3,12 +3,21 @@ const { putWorkItemInOutbox } = require('./putWorkItemInOutbox');
 
 describe('putWorkItemInOutbox', () => {
   let putStub;
+  let getStub;
 
   beforeEach(() => {
     putStub = sinon.stub().returns({
       promise: async () => ({
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    });
+    getStub = sinon.stub().returns({
+      promise: async () => ({
+        Item: {
+          section: 'docket',
+          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        },
       }),
     });
   });
@@ -23,6 +32,7 @@ describe('putWorkItemInOutbox', () => {
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       }),
       getDocumentClient: () => ({
+        get: getStub,
         put: putStub,
       }),
     };

@@ -2,6 +2,7 @@ import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
@@ -12,10 +13,16 @@ import React from 'react';
 export const AddDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
-  ({ caseDetail, showModal, submitDocketEntrySequence }) => {
+  ({
+    caseDetail,
+    formCancelToggleCancelSequence,
+    showModal,
+    submitDocketEntrySequence,
+  }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -54,13 +61,18 @@ export const AddDocketEntry = connect(
                   >
                     Add Another Entry
                   </button>
-                  <a
-                    className="margin-left-1"
-                    href={`/case-detail/${caseDetail.docketNumber}`}
+                  <button
+                    className="usa-button usa-button--unstyled margin-left-1"
                     id="cancel-button"
+                    onClick={() => {
+                      formCancelToggleCancelSequence();
+                    }}
                   >
                     Cancel
-                  </a>
+                  </button>
+                  {showModal === 'FormCancelModalDialog' && (
+                    <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+                  )}
                 </div>
               </section>
             </div>

@@ -16,6 +16,7 @@ module.exports = {
     .handler,
   getSentMessagesForUserLambda: require('./workitems/getSentMessagesForUserLambda')
     .handler,
+  getUserLambda: require('./users/getUserLambda').handler,
   practitionerCaseAssociationLambda: require('./cases/practitionerCaseAssociationLambda')
     .handler,
   practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')

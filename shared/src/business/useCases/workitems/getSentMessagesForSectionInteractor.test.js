@@ -1,6 +1,7 @@
 const {
   getSentMessagesForSectionInteractor,
 } = require('./getSentMessagesForSectionInteractor');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('getSentMessagesForSectionInteractor', () => {
   let applicationContext;
@@ -24,11 +25,12 @@ describe('getSentMessagesForSectionInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => ({
         getSentMessagesForSection: async () => null,
+        getUserById: ({ userId }) => MOCK_USERS[userId],
       }),
     };
     let error;
@@ -49,11 +51,12 @@ describe('getSentMessagesForSectionInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => ({
         getSentMessagesForSection: async () => mockWorkItem,
+        getUserById: ({ userId }) => MOCK_USERS[userId],
       }),
     };
     let error;
@@ -74,7 +77,7 @@ describe('getSentMessagesForSectionInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'petitionsclerk',
-          userId: 'petitionsclerk',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => ({
@@ -98,6 +101,7 @@ describe('getSentMessagesForSectionInteractor', () => {
             sentBy: 'docketclerk',
           },
         ],
+        getUserById: ({ userId }) => MOCK_USERS[userId],
       }),
     };
     const result = await getSentMessagesForSectionInteractor({

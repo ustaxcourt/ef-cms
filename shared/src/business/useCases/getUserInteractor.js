@@ -6,6 +6,12 @@ const { User } = require('../entities/User');
  * @param {object} user the user to get
  * @returns {User} the retrieved user
  */
-exports.getUserInteractor = async user => {
+exports.getUserInteractor = async ({ applicationContext }) => {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   return new User(user).toRawObject();
 };
