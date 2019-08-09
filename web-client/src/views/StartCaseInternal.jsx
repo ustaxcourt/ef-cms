@@ -67,7 +67,7 @@ export const StartCaseInternal = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
                 <h1 className="margin-bottom-105">Case Information</h1>
-                <p className="required-statement margin-top-neg-3 margin-bottom-2">
+                <p className="required-statement margin-top-0 margin-bottom-4">
                   All fields required unless otherwise noted
                 </p>
               </div>
