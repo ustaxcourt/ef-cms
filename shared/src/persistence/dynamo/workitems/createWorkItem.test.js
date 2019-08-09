@@ -4,6 +4,7 @@ const { createWorkItem } = require('./createWorkItem');
 describe('createWorkItem', () => {
   let applicationContext;
   let putStub;
+  let getStub;
   let getCurrentUserStub;
 
   const workItem = {
@@ -19,9 +20,16 @@ describe('createWorkItem', () => {
     putStub = sinon.stub().returns({
       promise: async () => null,
     });
+    getStub = sinon.stub().returns({
+      promise: async () => ({
+        Item: {
+          section: 'docket',
+          userId: '123',
+        },
+      }),
+    });
 
     getCurrentUserStub = sinon.stub().returns({
-      section: 'docket',
       userId: '123',
     });
 
@@ -31,6 +39,7 @@ describe('createWorkItem', () => {
       },
       getCurrentUser: getCurrentUserStub,
       getDocumentClient: () => ({
+        get: getStub,
         put: putStub,
       }),
     };

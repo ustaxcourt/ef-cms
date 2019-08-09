@@ -71,10 +71,15 @@ exports.createCaseInteractor = async ({
   petitionMetadata,
   stinFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, PETITION)) {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const { CaseExternal } = applicationContext.getEntityConstructors();
   const petitionEntity = new CaseExternal(petitionMetadata).validate();

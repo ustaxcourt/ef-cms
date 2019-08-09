@@ -361,5 +361,17 @@
   {
     "sk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "pk": "LJ9999|respondent"
+  },
+  {
+    "role": "petitioner",
+    "sk": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Petitioner",
+    "section": "petitioner",
+    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "taxpayer",
+    "addressLine1": "3202 Elk Avenue",
+    "addressLine2": "Hanover, MI 49241",
+    "phone": "517-563-1536"
   }
 ]
