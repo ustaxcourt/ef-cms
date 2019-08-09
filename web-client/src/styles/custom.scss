@@ -763,6 +763,10 @@ header.usa-header {
       &:hover {
         padding-bottom: 5px;
         border-bottom: 3px solid color($theme-color-primary);
+
+        &.ustc-nav-no-active-underline {
+          border: 0;
+        }
       }
     }
 
