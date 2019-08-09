@@ -26,7 +26,7 @@ const router = {
       '/',
       checkLoggedIn(() => {
         document.title = `Dashboard ${pageTitleSuffix}`;
-        app.getSequence('gotoDashboardSequence')();
+        app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
       }),
     );
     route(
@@ -223,7 +223,10 @@ const router = {
             error: {},
           });
         } else {
-          const routeArgs = { workQueueIsInternal: false };
+          const routeArgs = {
+            baseRoute: 'document-qc',
+            workQueueIsInternal: false,
+          };
           const pathParts = path.split('/');
 
           if (pathParts[1]) {
@@ -344,7 +347,10 @@ const router = {
             error: {},
           });
         } else {
-          const routeArgs = { workQueueIsInternal: true };
+          const routeArgs = {
+            baseRoute: 'messages',
+            workQueueIsInternal: true,
+          };
           const pathParts = path.split('/');
 
           if (pathParts[1]) {
