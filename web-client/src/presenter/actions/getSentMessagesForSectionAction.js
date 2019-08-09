@@ -7,11 +7,14 @@
 export const getSentMessagesForSectionAction = async ({
   applicationContext,
 }) => {
+  const user = applicationContext.getCurrentUser();
+
   //gets the section from the currently logged in user
   let workItems = await applicationContext
     .getUseCases()
     .getSentMessagesForSectionInteractor({
       applicationContext,
+      section: user.section,
     });
   return { workItems };
 };

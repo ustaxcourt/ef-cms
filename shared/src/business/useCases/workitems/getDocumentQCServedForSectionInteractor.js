@@ -14,24 +14,21 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getDocumentQCServedForSectionInteractor = async ({
   applicationContext,
+  section,
 }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, WORKITEM)) {
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCServedForSection({
       applicationContext,
-      section: user.section,
+      section,
     });
 
   return workItems.filter(workItem =>

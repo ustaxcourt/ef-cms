@@ -37,6 +37,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     try {
       await getDocumentQCServedForSectionInteractor({
         applicationContext,
+        section: 'docket',
       });
     } catch (e) {
       error = e;
@@ -62,6 +63,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     try {
       await getDocumentQCServedForSectionInteractor({
         applicationContext,
+        section: 'docket',
       });
     } catch (e) {
       error = e;
@@ -104,6 +106,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     };
     const result = await getDocumentQCServedForSectionInteractor({
       applicationContext,
+      section: 'docket',
     });
     expect(result).toMatchObject([
       {

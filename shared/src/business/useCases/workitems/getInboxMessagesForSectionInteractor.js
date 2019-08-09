@@ -14,22 +14,19 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getInboxMessagesForSectionInteractor = async ({
   applicationContext,
+  section,
 }) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, WORKITEM)) {
+  if (!isAuthorized(user, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getInboxMessagesForSection({
       applicationContext,
-      section: user.section,
+      section,
     });
 
   return workItems;
