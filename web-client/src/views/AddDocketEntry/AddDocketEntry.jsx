@@ -42,7 +42,7 @@ export const AddDocketEntry = connect(
                     Finish
                   </button>
                   <button
-                    className="usa-button usa-button--outline"
+                    className="usa-button usa-button--outline margin-left-1"
                     id="save-and-add-supporting"
                     type="button"
                     onClick={() => {
@@ -55,6 +55,7 @@ export const AddDocketEntry = connect(
                     Add Another Entry
                   </button>
                   <a
+                    className="margin-left-1"
                     href={`/case-detail/${caseDetail.docketNumber}`}
                     id="cancel-button"
                   >
