@@ -103,6 +103,7 @@ export const FilingsAndProceedings = connect(
             href={documentHelper({
               docketNumber: caseDetail.docketNumber,
               documentId: document.documentId,
+              shouldLinkToEdit: document.isFileAttached === false,
             })}
           >
             {document && document.isPaper && (

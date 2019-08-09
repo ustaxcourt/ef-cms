@@ -48,6 +48,17 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/edit',
+      checkLoggedIn((docketNumber, documentId) => {
+        document.title = `Document details ${pageTitleSuffix}`;
+        app.getSequence('gotoEditDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/sign',
       checkLoggedIn((docketNumber, documentId) => {
         app.getSequence('gotoSignPDFDocumentSequence')({
