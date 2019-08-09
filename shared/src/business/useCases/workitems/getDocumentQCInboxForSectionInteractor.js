@@ -17,6 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getDocumentQCInboxForSectionInteractor = async ({
   applicationContext,
+  section,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -31,7 +32,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const sectionToExcept =
-    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
+    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : section;
 
   const workItems = await applicationContext
     .getPersistenceGateway()

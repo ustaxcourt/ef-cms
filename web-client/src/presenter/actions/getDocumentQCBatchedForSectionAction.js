@@ -7,11 +7,13 @@
 export const getDocumentQCBatchedForSectionAction = async ({
   applicationContext,
 }) => {
-  //gets the section from the currently logged in user
+  const user = applicationContext.getCurrentUser();
+
   const workItems = await applicationContext
     .getUseCases()
     .getDocumentQCBatchedForSectionInteractor({
       applicationContext,
+      section: user.section,
     });
   return { workItems };
 };

@@ -423,6 +423,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
 
     const workItems = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
+      section: 'docket',
     });
 
     expect(workItems).toMatchObject([
