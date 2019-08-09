@@ -70,10 +70,15 @@ exports.createCaseFromPaperInteractor = async ({
   requestForPlaceOfTrialFileId,
   stinFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, START_PAPER_CASE)) {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const { CaseInternal } = applicationContext.getEntityConstructors();
   const petitionEntity = new CaseInternal({
