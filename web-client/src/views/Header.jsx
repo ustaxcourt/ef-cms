@@ -8,9 +8,23 @@ import seal from '../images/ustc_seal.svg';
 
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
-const NavigationItems = (helper, sequences) => {
+const NavigationItems = helper => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
+      {helper.showHomeIcon && (
+        <li
+          className={
+            helper.pageIsHome
+              ? 'usa-nav__primary-item active'
+              : 'usa-nav__primary-item'
+          }
+        >
+          <a href="/">
+            <FontAwesomeIcon icon="home" />
+            <span className="sr-only">Home</span>
+          </a>
+        </li>
+      )}
       {helper.showMessages && (
         <li
           className={
@@ -19,15 +33,7 @@ const NavigationItems = (helper, sequences) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href="/"
-            onClick={e => {
-              e.preventDefault();
-              sequences.navigateToPathSequence({
-                path: '/messages/my/inbox',
-              });
-            }}
-          >
+          <a href="/messages/my/inbox">
             Messages{' '}
             {helper.showMessagesIcon && (
               <FontAwesomeIcon
@@ -49,17 +55,7 @@ const NavigationItems = (helper, sequences) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href="/"
-            onClick={e => {
-              e.preventDefault();
-              sequences.navigateToPathSequence({
-                path: helper.defaultQCBoxPath,
-              });
-            }}
-          >
-            Document QC
-          </a>
+          <a href={helper.defaultQCBoxPath}>Document QC</a>
         </li>
       )}
       {helper.showMyCases && (
@@ -149,7 +145,7 @@ export const Header = connect(
               </a>
             </div>
           </div>
-          <div className="grid-col-6">
+          <div className="grid-col-7">
             <nav className="main-navigation" role="navigation">
               {user &&
                 NavigationItems(helper, {
@@ -157,7 +153,7 @@ export const Header = connect(
                 })}
             </nav>
           </div>
-          <div className="grid-col-5">
+          <div className="grid-col-4">
             <button
               className="usa-menu-btn"
               onClick={() => toggleMobileMenuSequence()}

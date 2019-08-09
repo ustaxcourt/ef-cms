@@ -132,7 +132,7 @@ describe('updateCase', () => {
       'receivedAt',
     ]);
     const documentToMatch = omit(MOCK_DOCUMENTS[0], 'createdAt');
-    expect(returnedDocument).toEqual(documentToMatch);
+    expect(returnedDocument).toMatchObject(documentToMatch);
   });
 
   it('should update the validated documents on a case', async () => {
