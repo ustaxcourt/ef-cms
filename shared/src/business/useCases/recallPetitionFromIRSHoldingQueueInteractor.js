@@ -36,13 +36,17 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, UPDATE_CASE)) {
     throw new UnauthorizedError(
       'Unauthorized for recall from IRS Holding Queue',
     );
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()

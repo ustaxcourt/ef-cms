@@ -23,10 +23,14 @@ exports.assignWorkItemsInteractor = async ({
   assigneeName,
   workItemId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, WORKITEM)) {
+  const authorizedUser = applicationContext.getCurrentUser();
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const fullWorkItem = await applicationContext
     .getPersistenceGateway()

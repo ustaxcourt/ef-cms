@@ -25,12 +25,16 @@ exports.fileExternalDocumentInteractor = async ({
   documentIds,
   documentMetadata,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()

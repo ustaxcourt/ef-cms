@@ -6,9 +6,9 @@
  * @param {Function} providers.props the cerebral props object used for getting the props.user
  * @returns {object} the user
  */
-export const getUserAction = async ({ applicationContext, props }) => {
+export const getUserAction = async ({ applicationContext }) => {
   const user = await applicationContext
     .getUseCases()
-    .getUserInteractor(props.user);
+    .getUserInteractor({ applicationContext });
   return { user };
 };
