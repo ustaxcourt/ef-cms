@@ -9,7 +9,8 @@ export const formatSession = (session, applicationContext) => {
 };
 
 export const formattedDashboardTrialSessions = (get, applicationContext) => {
-  const judgeFilterFn = session => session.judge.userId === userId;
+  const judgeFilterFn = session =>
+    session.judge && session.judge.userId === userId;
   const formatSessionFn = session => formatSession(session, applicationContext);
   const partitionFn = session =>
     applicationContext
