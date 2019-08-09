@@ -12,10 +12,11 @@ import React from 'react';
 export const AddDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
+    isEditing: state.isEditingDocketEntry,
     showModal: state.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
-  ({ caseDetail, showModal, submitDocketEntrySequence }) => {
+  ({ caseDetail, isEditing, showModal, submitDocketEntrySequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -24,7 +25,9 @@ export const AddDocketEntry = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap">
             <div className="grid-col-12">
-              <h1 className="margin-bottom-105">Add Docket Entry</h1>
+              <h1 className="margin-bottom-105">
+                {isEditing ? 'Edit' : 'Add'} Docket Entry
+              </h1>
             </div>
 
             <div className="grid-col-5">
