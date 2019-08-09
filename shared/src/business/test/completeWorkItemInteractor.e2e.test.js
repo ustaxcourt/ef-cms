@@ -14,7 +14,6 @@ const {
 const {
   getSentMessagesForUserInteractor,
 } = require('../useCases/workitems/getSentMessagesForUserInteractor');
-
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
@@ -71,7 +70,6 @@ describe('completeWorkItemInteractor integration test', () => {
       return new User({
         name: 'richard',
         role: 'petitionsclerk',
-        section: 'petitions',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -137,7 +135,7 @@ describe('completeWorkItemInteractor integration test', () => {
       },
       messages: [
         {
-          from: 'richard',
+          from: 'Test Petitionsclerk',
           fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           message: 'this is a test',
           to: 'Test Petitionsclerk',
