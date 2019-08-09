@@ -143,10 +143,14 @@ exports.fileDocketEntryInteractor = async ({
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
+      const docketRecordEditState =
+        documentEntity.isFileAttached === false ? documentMetadata : {};
+
       caseEntity.addDocketRecord(
         new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
+          editState: JSON.stringify(docketRecordEditState),
           filingDate: documentEntity.receivedAt,
         }),
       );
