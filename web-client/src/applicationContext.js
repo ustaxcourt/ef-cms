@@ -113,6 +113,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -235,6 +236,7 @@ const allUseCases = {
   updateCaseDeadlineInteractor,
   updateCaseInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateDocketEntryInteractor,
   updatePrimaryContactInteractor,
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
