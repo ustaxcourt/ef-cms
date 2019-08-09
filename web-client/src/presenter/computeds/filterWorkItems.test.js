@@ -26,6 +26,11 @@ const MY_DOCUMENT_QC_INBOX = {
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
+const MY_DOCUMENT_QC_IN_PROGRESS = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'inProgress', queue: 'my' },
+};
+
 const MY_DOCUMENT_QC_BATCHED = {
   workQueueIsInternal: false,
   workQueueToDisplay: { box: 'batched', queue: 'my' },
@@ -39,6 +44,11 @@ const MY_DOCUMENT_QC_OUTBOX = {
 const SECTION_DOCUMENT_QC_INBOX = {
   workQueueIsInternal: false,
   workQueueToDisplay: { box: 'inbox', queue: 'section' },
+};
+
+const SECTION_DOCUMENT_QC_IN_PROGRESS = {
+  workQueueIsInternal: false,
+  workQueueToDisplay: { box: 'inProgress', queue: 'section' },
 };
 
 const SECTION_DOCUMENT_QC_BATCHED = {
@@ -81,7 +91,7 @@ const seniorAttorney = {
   userId: 'd2',
 };
 
-const generateWorkItem = data => {
+const generateWorkItem = (data, document) => {
   const baseWorkItem = {
     assigneeId: null,
     assigneeName: null,
@@ -93,6 +103,7 @@ const generateWorkItem = data => {
       createdAt: '2018-12-27T18:05:54.164Z',
       documentId: '456',
       documentType: 'Answer',
+      ...document,
     },
     messages: [
       {
@@ -209,9 +220,12 @@ describe('filterWorkItems', () => {
   let workItemDocketSectionMessagesSent;
   let workItemDocketMyDocumentQCInbox;
   let workItemDocketSectionDocumentQCInbox;
+  let workItemDocketMyDocumentQCInProgress;
+  let workItemDocketSectionDocumentQCInProgress;
 
   let workQueueInbox;
   let workQueueBatched;
+  let workQueueInProgress;
   let workQueueOutbox;
 
   beforeEach(() => {
@@ -343,6 +357,32 @@ describe('filterWorkItems', () => {
       section: CONSTANTS.DOCKET_SECTION,
     });
 
+    workItemDocketMyDocumentQCInProgress = generateWorkItem(
+      {
+        assigneeId: docketClerk1.userId,
+        completedAt: null,
+        docketNumber: '100-18',
+        isInternal: false,
+        section: CONSTANTS.DOCKET_SECTION,
+      },
+      {
+        isFileAttached: false,
+      },
+    );
+
+    workItemDocketSectionDocumentQCInProgress = generateWorkItem(
+      {
+        assigneeId: docketClerk2.userId,
+        completedAt: null,
+        docketNumber: '100-19',
+        isInternal: false,
+        section: CONSTANTS.DOCKET_SECTION,
+      },
+      {
+        isFileAttached: false,
+      },
+    );
+
     workQueueInbox = [
       workItemPetitionsMyMessagesInbox,
       workItemPetitionsSectionMessagesInbox,
@@ -357,6 +397,13 @@ describe('filterWorkItems', () => {
     workQueueBatched = [
       workItemPetitionsMyDocumentQCBatched,
       workItemPetitionsSectionDocumentQCBatched,
+    ];
+
+    workQueueInProgress = [
+      workItemPetitionsMyMessagesInbox,
+      workItemPetitionsMyMessagesSent,
+      workItemDocketMyDocumentQCInProgress,
+      workItemDocketSectionDocumentQCInProgress,
     ];
 
     workQueueOutbox = [
@@ -667,6 +714,27 @@ describe('filterWorkItems', () => {
     expect(filtered).toMatchObject([
       workItemDocketMyDocumentQCInbox,
       workItemDocketSectionDocumentQCInbox,
+    ]);
+  });
+
+  it('Returns docket section work items for a Docket Clerk in My Document QC In Progress', () => {
+    const user = docketClerk1;
+    const filtered = workQueueInProgress.filter(
+      filterWorkItems({ ...MY_DOCUMENT_QC_IN_PROGRESS, user }),
+    );
+
+    expect(filtered).toEqual([workItemDocketMyDocumentQCInProgress]);
+  });
+
+  it('Returns docket section work items for a Docket Clerk in Section Document QC In Progress', () => {
+    const user = docketClerk1;
+    const filtered = workQueueInProgress.filter(
+      filterWorkItems({ ...SECTION_DOCUMENT_QC_IN_PROGRESS, user }),
+    );
+
+    expect(filtered).toEqual([
+      workItemDocketMyDocumentQCInProgress,
+      workItemDocketSectionDocumentQCInProgress,
     ]);
   });
 });
