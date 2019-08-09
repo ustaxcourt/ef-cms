@@ -13,21 +13,24 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getSentMessagesForSectionInteractor = async ({
   applicationContext,
-  section,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
   }
 
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getSentMessagesForSection({
       applicationContext,
-      section,
+      section: user.section,
     });
 
   return workItems;
