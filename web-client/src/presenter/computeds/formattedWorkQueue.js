@@ -163,6 +163,15 @@ export const filterWorkItems = ({
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
         },
+        inProgress: item => {
+          return (
+            item.assigneeId === user.userId &&
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === user.section &&
+            item.document.isFileAttached === false
+          );
+        },
         inbox: item => {
           return (
             item.assigneeId === user.userId &&
@@ -190,6 +199,14 @@ export const filterWorkItems = ({
             !item.isInternal &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
+          );
+        },
+        inProgress: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === user.section &&
+            item.document.isFileAttached === false
           );
         },
         inbox: item => {
