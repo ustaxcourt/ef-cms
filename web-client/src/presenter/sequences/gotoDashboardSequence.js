@@ -1,6 +1,7 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { getBaseRouteAction } from '../actions/getBaseRouteAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
@@ -34,7 +35,12 @@ const goToDashboard = [
       ...chooseWorkQueueSequence,
       getTrialSessionsAction,
       setTrialSessionsAction,
-      setCurrentPageAction('DashboardJudge'),
+      getBaseRouteAction,
+      {
+        dashboard: [setCurrentPageAction('DashboardJudge')],
+        'document-qc': [setCurrentPageAction('MessagesJudge')],
+        messages: [setCurrentPageAction('MessagesJudge')],
+      },
     ],
     petitioner: [
       getCasesByUserAction,
