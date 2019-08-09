@@ -30,12 +30,16 @@ exports.fileDocketEntryInteractor = async ({
   secondarySupportingDocumentFileId,
   supportingDocumentFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  const { caseId } = documentMetadata;
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const { caseId } = documentMetadata;
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
