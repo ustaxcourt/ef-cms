@@ -366,6 +366,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
+const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
@@ -621,6 +624,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
         validatePdfInteractor,
         verifyCaseForUserInteractor,
