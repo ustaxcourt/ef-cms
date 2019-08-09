@@ -22,7 +22,9 @@ export const Inclusions = connect(
     return (
       <div className={`usa-form-group ${marginClass}`}>
         <fieldset className={`usa-fieldset ${marginClass}`}>
-          <legend className="usa-legend">Inclusions</legend>
+          <legend className="usa-legend">
+            Inclusions <span className="usa-hint">(optional)</span>
+          </legend>
           <div className="usa-checkbox">
             <input
               checked={form.attachments || false}
