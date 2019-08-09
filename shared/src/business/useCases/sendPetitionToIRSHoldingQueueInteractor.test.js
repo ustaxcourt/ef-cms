@@ -5,6 +5,7 @@ const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_USERS } = require('../../test/mockUsers');
 const { omit } = require('lodash');
 const { User } = require('../entities/User');
 
@@ -81,9 +82,9 @@ describe('Send petition to IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          name: 'bob',
+          name: 'Petitionsclerk',
           role: 'petitionsclerk',
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
       getPersistenceGateway: () => {
@@ -91,13 +92,16 @@ describe('Send petition to IRS Holding Queue', () => {
           addWorkItemToSectionInbox: () => Promise.resolve(null),
           deleteWorkItemFromInbox: () => Promise.resolve(null),
           getCaseByCaseId: () => Promise.resolve(mockCase),
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           putWorkItemInOutbox: () => Promise.resolve(null),
           updateCase: ({ caseToUpdate }) =>
             Promise.resolve(new Case(caseToUpdate)),
           updateWorkItem: () => Promise.resolve(null),
         };
       },
-      getUseCases: () => ({ getCaseInteractor }),
+      getUseCases: () => ({
+        getCaseInteractor,
+      }),
     };
   });
 
@@ -131,14 +135,15 @@ describe('Send petition to IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          name: 'Suzie Petitionsclerk',
+          name: 'Petitionsclerk1',
           role: 'petitionsclerk',
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
       getPersistenceGateway: () => {
         return {
           getCaseByCaseId: () => null,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           updateCase: () => null,
         };
       },
@@ -149,7 +154,7 @@ describe('Send petition to IRS Holding Queue', () => {
       await sendPetitionToIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-        userId: 'petitionsclerk',
+        userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (err) {
       error = err;
@@ -165,9 +170,9 @@ describe('Send petition to IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          name: 'Suzie Petitionsclerk',
+          name: 'Petitionsclerk1',
           role: 'petitionsclerk',
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
       getPersistenceGateway: () => {
@@ -176,6 +181,7 @@ describe('Send petition to IRS Holding Queue', () => {
           deleteWorkItemFromInbox: () => Promise.resolve(null),
           getCaseByCaseId: () =>
             Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           putWorkItemInOutbox: () => Promise.resolve(null),
           updateCase: ({ caseToUpdate }) =>
             Promise.resolve(new Case(caseToUpdate)),
@@ -189,7 +195,7 @@ describe('Send petition to IRS Holding Queue', () => {
       await sendPetitionToIRSHoldingQueueInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        userId: 'petitionsclerk',
+        userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (err) {
       error = err;
