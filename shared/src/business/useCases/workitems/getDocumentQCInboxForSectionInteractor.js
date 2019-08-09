@@ -17,18 +17,21 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getDocumentQCInboxForSectionInteractor = async ({
   applicationContext,
-  section,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
   }
 
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   const sectionToExcept =
-    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : section;
+    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
 
   const workItems = await applicationContext
     .getPersistenceGateway()
