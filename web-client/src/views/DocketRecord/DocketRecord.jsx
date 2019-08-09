@@ -50,53 +50,64 @@ export const DocketRecord = connect(
           </thead>
           <tbody>
             {caseDetail.docketRecordWithDocument.map(
-              ({ document, index, record }, arrayIndex) => (
-                <tr key={index}>
-                  <td className="center-column hide-on-mobile">{index}</td>
-                  <td>
-                    <span className="no-wrap">{record.createdAtFormatted}</span>
-                  </td>
-                  <td className="center-column hide-on-mobile">
-                    {record.eventCode || (document && document.eventCode)}
-                  </td>
-                  <td
-                    aria-hidden="true"
-                    className="filing-type-icon hide-on-mobile"
-                  >
-                    {document && document.isPaper && (
-                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                    )}
-                    {document &&
-                      helper.showDirectDownloadLink &&
-                      document.processingStatus !== 'complete' && (
-                        <FontAwesomeIcon
-                          className="fa-spin spinner"
-                          icon="spinner"
-                        />
+              ({ document, index, record }, arrayIndex) => {
+                const isInProgress =
+                  document && document.isFileAttached === false;
+                return (
+                  <tr className={isInProgress ? 'in-progress' : ''} key={index}>
+                    <td className="center-column hide-on-mobile">{index}</td>
+                    <td>
+                      <span className="no-wrap">
+                        {record.createdAtFormatted}
+                      </span>
+                    </td>
+                    <td className="center-column hide-on-mobile">
+                      {record.eventCode || (document && document.eventCode)}
+                    </td>
+                    <td
+                      aria-hidden="true"
+                      className="filing-type-icon hide-on-mobile"
+                    >
+                      {document && document.isPaper && !isInProgress && (
+                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
-                  </td>
-                  <td>
-                    <FilingsAndProceedings
-                      arrayIndex={arrayIndex}
-                      document={document}
-                      record={record}
-                    />
-                  </td>
-                  <td className="hide-on-mobile">
-                    {document && document.filedBy}
-                  </td>
-                  <td className="hide-on-mobile">{record.action}</td>
-                  <td>
-                    {document && document.isStatusServed && (
-                      <span>{document.servedAtFormatted}</span>
-                    )}
-                  </td>
-                  <td className="center-column hide-on-mobile">
-                    <span className="responsive-label">Parties</span>
-                    {document && document.servedPartiesCode}
-                  </td>
-                </tr>
-              ),
+
+                      {isInProgress && (
+                        <FontAwesomeIcon icon={['fas', 'thumbtack']} />
+                      )}
+
+                      {document &&
+                        helper.showDirectDownloadLink &&
+                        document.processingStatus !== 'complete' && (
+                          <FontAwesomeIcon
+                            className="fa-spin spinner"
+                            icon="spinner"
+                          />
+                        )}
+                    </td>
+                    <td>
+                      <FilingsAndProceedings
+                        arrayIndex={arrayIndex}
+                        document={document}
+                        record={record}
+                      />
+                    </td>
+                    <td className="hide-on-mobile">
+                      {document && document.filedBy}
+                    </td>
+                    <td className="hide-on-mobile">{record.action}</td>
+                    <td>
+                      {document && document.isStatusServed && (
+                        <span>{document.servedAtFormatted}</span>
+                      )}
+                    </td>
+                    <td className="center-column hide-on-mobile">
+                      <span className="responsive-label">Parties</span>
+                      {document && document.servedPartiesCode}
+                    </td>
+                  </tr>
+                );
+              },
             )}
           </tbody>
         </table>

@@ -433,6 +433,15 @@ table.docket-record {
     tbody td {
       height: 65px;
     }
+
+    tr.in-progress {
+      td {
+        background: rgba(color($theme-color-warning-lighter), .4);
+      }
+      .fa-thumbtack {
+        color: color($theme-color-warning);
+      }
+    }
   }
 
   /* little screens */
