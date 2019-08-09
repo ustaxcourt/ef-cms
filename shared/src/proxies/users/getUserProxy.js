@@ -10,6 +10,6 @@ const { get } = require('../requests');
 exports.getUserInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: `/users`,
+    endpoint: '/users',
   });
 };
