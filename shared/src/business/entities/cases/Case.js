@@ -682,10 +682,10 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  * @param {DocketRecord} updatedDocketEntry the update docket entry data
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecordEditState = function(updatedDocketEntry) {
+Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
   this.docketRecord.some(entry => {
     if (entry.documentId === updatedDocketEntry.documentId) {
-      Object.assign(entry, { editState: updatedDocketEntry.editState });
+      Object.assign(entry, updatedDocketEntry);
       return true;
     }
   });

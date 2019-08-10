@@ -10,6 +10,9 @@ import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAc
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { getDocumentIdAction } from '../actions/getDocumentIdAction';
+import { isEditModeAction } from '../actions/DocketEntry/isEditModeAction';
+import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
@@ -22,9 +25,38 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
 import { state } from 'cerebral';
-import { submitDocketEntryAction } from '../actions/DocketEntry/submitDocketEntryAction';
+import { submitDocketEntryWithFileAction } from '../actions/DocketEntry/submitDocketEntryWithFileAction';
+import { submitDocketEntryWithoutFileAction } from '../actions/DocketEntry/submitDocketEntryWithoutFileAction';
+import { updateDocketEntryWithFileAction } from '../actions/DocketEntry/updateDocketEntryWithFileAction';
+import { updateDocketEntryWithoutFileAction } from '../actions/DocketEntry/updateDocketEntryWithoutFileAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+
+const afterEntryCreatedOrUpdated = [
+  stashWizardDataAction,
+  setCaseAction,
+  closeFileUploadStatusModalAction,
+  chooseNextStepAction,
+  {
+    addAnotherEntry: [
+      setDocumentUploadModeAction,
+      getDocketEntryAlertSuccessAction,
+      setAlertSuccessAction,
+      set(state.showValidation, false),
+      clearFormAction,
+      clearScreenMetadataAction,
+      set(state.form.lodged, false),
+      set(state.form.practitioner, []),
+      set(state.documentUploadMode, 'scan'),
+    ],
+    caseDetail: [
+      getDocketEntryAlertSuccessAction,
+      setAlertSuccessAction,
+      set(state.saveAlertsForNavigation, true),
+      navigateToCaseDetailAction,
+    ],
+  },
+];
 
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
@@ -48,33 +80,29 @@ export const submitDocketEntrySequence = [
           generateTitleAction,
           set(state.showValidation, false),
           clearAlertsAction,
-          openFileUploadStatusModalAction,
-          uploadDocketEntryFileAction,
+          isFileAttachedAction,
           {
-            error: [openFileUploadErrorModal],
-            success: [
-              submitDocketEntryAction,
-              stashWizardDataAction,
-              setCaseAction,
-              closeFileUploadStatusModalAction,
-              chooseNextStepAction,
+            no: [
+              isEditModeAction,
               {
-                addAnotherEntry: [
-                  setDocumentUploadModeAction,
-                  getDocketEntryAlertSuccessAction,
-                  setAlertSuccessAction,
-                  set(state.showValidation, false),
-                  clearFormAction,
-                  clearScreenMetadataAction,
-                  set(state.form.lodged, false),
-                  set(state.form.practitioner, []),
-                  set(state.documentUploadMode, 'scan'),
-                ],
-                caseDetail: [
-                  getDocketEntryAlertSuccessAction,
-                  setAlertSuccessAction,
-                  set(state.saveAlertsForNavigation, true),
-                  navigateToCaseDetailAction,
+                no: [submitDocketEntryWithoutFileAction],
+                yes: [updateDocketEntryWithoutFileAction],
+              },
+              ...afterEntryCreatedOrUpdated,
+            ],
+            yes: [
+              openFileUploadStatusModalAction,
+              getDocumentIdAction,
+              uploadDocketEntryFileAction,
+              {
+                error: [openFileUploadErrorModal],
+                success: [
+                  isEditModeAction,
+                  {
+                    no: [submitDocketEntryWithFileAction],
+                    yes: [updateDocketEntryWithFileAction],
+                  },
+                  ...afterEntryCreatedOrUpdated,
                 ],
               },
             ],

@@ -5,7 +5,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set } from 'cerebral/factories';
+import { set, unset } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
@@ -16,6 +16,7 @@ export const gotoAddDocketEntry = [
   clearScansAction,
   clearAlertsAction,
   clearFormAction,
+  unset(state.documentId),
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,

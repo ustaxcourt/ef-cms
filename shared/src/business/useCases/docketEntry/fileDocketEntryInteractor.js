@@ -125,10 +125,12 @@ exports.fileDocketEntryInteractor = async ({
       documentEntity.addWorkItem(workItem);
 
       if (metadata.isPaper) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
+        if (metadata.isFileAttached) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
+          });
+        }
 
         workItem.assignToUser({
           assigneeId: user.userId,
@@ -166,12 +168,19 @@ exports.fileDocketEntryInteractor = async ({
   for (let workItem of workItems) {
     if (workItem.document.isPaper) {
       workItemsSaved.push(
-        applicationContext
-          .getPersistenceGateway()
-          .saveWorkItemForDocketClerkFilingExternalDocument({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          }),
+        workItem.document.isFileAttached
+          ? applicationContext
+              .getPersistenceGateway()
+              .saveWorkItemForDocketClerkFilingExternalDocument({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              })
+          : applicationContext
+              .getPersistenceGateway()
+              .saveWorkItemForDocketEntryWithoutFile({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              }),
       );
     } else {
       workItemsSaved.push(
