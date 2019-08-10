@@ -12,7 +12,6 @@ exports.uploadDocumentInteractor = async ({
   onUploadProgress,
 }) => {
   const user = applicationContext.getCurrentUser();
-  console.log('we are here');
 
   if (
     !(

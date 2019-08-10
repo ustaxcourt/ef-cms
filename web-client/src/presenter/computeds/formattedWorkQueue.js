@@ -177,7 +177,8 @@ export const filterWorkItems = ({
             item.assigneeId === user.userId &&
             !item.completedAt &&
             !item.isInternal &&
-            item.section === user.section
+            item.section === user.section &&
+            item.document.isFileAttached !== false
           );
         },
         outbox: item => {
@@ -213,7 +214,8 @@ export const filterWorkItems = ({
           return (
             !item.completedAt &&
             !item.isInternal &&
-            item.section === docQCUserSection
+            item.section === docQCUserSection &&
+            item.document.isFileAttached !== false
           );
         },
         outbox: item => {
