@@ -47,7 +47,12 @@ exports.updateDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate);
 
+  const currentDocument = caseEntity.getDocumentById({
+    documentId: primaryDocumentFileId,
+  });
+
   const documentEntity = new Document({
+    ...currentDocument,
     ...documentMetadata,
     relationship: 'primaryDocument',
     documentId: primaryDocumentFileId,
@@ -67,9 +72,12 @@ exports.updateDocketEntryInteractor = async ({
   caseEntity.updateDocument(documentEntity);
 
   if (documentMetadata.isFileAttached) {
+    const workItemToDelete = currentDocument.workItems.find(
+      workItem => !workItem.document.isFileAttached,
+    );
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
-      workItem: workItem.validate().toRawObject(),
+      workItem: workItemToDelete,
     });
 
     const workItem = new WorkItem({

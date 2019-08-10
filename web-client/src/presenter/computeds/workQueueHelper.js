@@ -57,6 +57,7 @@ export const workQueueHelper = get => {
         !userIsOther) ||
       !isDisplayingQC,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
+    showInProgresssTab: isDisplayingQC && userIsDocketClerk,
     showInbox,
     showIndividualWorkQueue,
     showMessageContent: !isDisplayingQC,

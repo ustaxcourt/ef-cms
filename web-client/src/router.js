@@ -221,10 +221,12 @@ const router = {
           'document-qc',
           'document-qc/my',
           'document-qc/my/inbox',
+          'document-qc/my/inProgress',
           'document-qc/my/outbox',
           'document-qc/my/batched',
           'document-qc/section',
           'document-qc/section/inbox',
+          'document-qc/section/inProgress',
           'document-qc/section/outbox',
           'document-qc/section/batched',
         ];
