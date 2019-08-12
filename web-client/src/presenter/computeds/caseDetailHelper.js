@@ -94,6 +94,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseNameForPrimary,
     showCreateOrderButton,
     showDirectDownloadLink: directDocumentLinkDesired,
+    showDocketRecordInProgressState: !isExternalUser,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,

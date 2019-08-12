@@ -52,7 +52,9 @@ export const DocketRecord = connect(
             {caseDetail.docketRecordWithDocument.map(
               ({ document, index, record }, arrayIndex) => {
                 const isInProgress =
-                  document && document.isFileAttached === false;
+                  helper.showDocketRecordInProgressState &&
+                  document &&
+                  document.isFileAttached === false;
                 return (
                   <tr className={isInProgress ? 'in-progress' : ''} key={index}>
                     <td className="center-column hide-on-mobile">{index}</td>
@@ -78,6 +80,7 @@ export const DocketRecord = connect(
 
                       {document &&
                         helper.showDirectDownloadLink &&
+                        helper.showDocketRecordInProgressState &&
                         document.processingStatus !== 'complete' && (
                           <FontAwesomeIcon
                             className="fa-spin spinner"
