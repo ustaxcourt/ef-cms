@@ -1286,6 +1286,25 @@
       }
     },
     "/users": {
+      "get": {
+        "tags": ["user"],
+        "summary": "gets user data",
+        "description": "gets user data.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "post": {
         "tags": ["user"],
         "summary": "creates a user",

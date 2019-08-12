@@ -230,6 +230,10 @@ export const PrimaryDocumentForm = connect(
                 id="secondary-document-type-label"
               >
                 Which Document Is This Motion for Leave For?
+                <span className="usa-hint">
+                  You can upload the associated document by creating a new
+                  docket entry for it.
+                </span>
               </label>
               <Select
                 aria-describedby="secondary-document-type-label"
@@ -302,7 +306,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info"
               id="additional-info-label"
             >
-              Additional Info 1
+              Additional Info 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info-label"
@@ -354,7 +358,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info2"
               id="additional-info2-label"
             >
-              Additional Info 2
+              Additional Info 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info2-label"

@@ -9,7 +9,8 @@ export const formatSession = (session, applicationContext) => {
 };
 
 export const formattedDashboardTrialSessions = (get, applicationContext) => {
-  const judgeFilterFn = session => session.judge.userId === userId;
+  const judgeFilterFn = session =>
+    session.judge && session.judge.userId === userId;
   const formatSessionFn = session => formatSession(session, applicationContext);
   const partitionFn = session =>
     applicationContext
@@ -39,7 +40,7 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
   upcomingSessions = map(upcomingSessions, formatSessionFn);
 
   return {
-    formattedRecentSessions: recentSessions,
-    formattedUpcomingSessions: upcomingSessions,
+    formattedRecentSessions: recentSessions.slice(0, 5),
+    formattedUpcomingSessions: upcomingSessions.slice(0, 5),
   };
 };

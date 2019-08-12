@@ -2,6 +2,7 @@ import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
+import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
@@ -12,11 +13,18 @@ import React from 'react';
 export const AddDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
+    formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     isEditing: state.isEditingDocketEntry,
     showModal: state.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
-  ({ caseDetail, isEditing, showModal, submitDocketEntrySequence }) => {
+  ({
+    caseDetail,
+    formCancelToggleCancelSequence,
+    isEditing,
+    showModal,
+    submitDocketEntrySequence,
+  }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -45,7 +53,7 @@ export const AddDocketEntry = connect(
                     Finish
                   </button>
                   <button
-                    className="usa-button usa-button--outline"
+                    className="usa-button usa-button--outline margin-left-1"
                     id="save-and-add-supporting"
                     type="button"
                     onClick={() => {
@@ -57,12 +65,18 @@ export const AddDocketEntry = connect(
                   >
                     Add Another Entry
                   </button>
-                  <a
-                    href={`/case-detail/${caseDetail.docketNumber}`}
+                  <button
+                    className="usa-button usa-button--unstyled margin-left-1"
                     id="cancel-button"
+                    onClick={() => {
+                      formCancelToggleCancelSequence();
+                    }}
                   >
                     Cancel
-                  </a>
+                  </button>
+                  {showModal === 'FormCancelModalDialog' && (
+                    <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+                  )}
                 </div>
               </section>
             </div>

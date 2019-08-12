@@ -75,7 +75,7 @@ export class ConfirmModalComponent extends React.Component {
           <div className="button-box-container">
             {!this.noConfirm && (
               <button
-                className="usa-button"
+                className="usa-button margin-right-205"
                 type="button"
                 onClick={this.runConfirmSequence}
               >
