@@ -56,6 +56,7 @@ describe('uploadDocumentInteractor', () => {
       error = e;
     }
     expect(error).toBeDefined();
+    expect(error.message).toEqual('Unauthorized');
   });
 
   it('runs successfully with no errors with minimum data and valid user', async () => {
