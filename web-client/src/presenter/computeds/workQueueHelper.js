@@ -11,7 +11,6 @@ export const workQueueHelper = get => {
   const workQueueIsInternal = get(state.workQueueIsInternal);
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showOutbox = workQueueToDisplay.box === 'outbox';
-  const showBatched = workQueueToDisplay.box === 'batched';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
   const myUnreadCount = workQueueIsInternal

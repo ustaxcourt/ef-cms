@@ -23,9 +23,6 @@ export const IndividualWorkQueueInProgress = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
-              <th aria-label="Status Icon" className="padding-right-0">
-                &nbsp;
-              </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
@@ -53,41 +50,10 @@ export const IndividualWorkQueueInProgress = connect(
                   <td className="message-queue-row">
                     <span className="no-wrap">{item.received}</span>
                   </td>
-                  <td className="message-queue-row has-icon padding-right-0">
-                    {item.showBatchedStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
-                        aria-label="batched for IRS"
-                        className="iconStatusBatched"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
-                    {item.showRecalledStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
-                        aria-label="recalled from IRS"
-                        className="iconStatusRecalled"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
-                    {item.showUnreadStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
-                        aria-label="unread message"
-                        className="iconStatusUnread"
-                        icon={['fas', 'envelope']}
-                        size="lg"
-                      />
-                    )}
-                  </td>
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">
                       <a
-                        className={
-                          item.isRead ? 'case-link' : 'link case-link-bold'
-                        }
+                        className="case-link"
                         href={documentHelper({
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,

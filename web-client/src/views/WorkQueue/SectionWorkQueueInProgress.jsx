@@ -70,9 +70,6 @@ export const SectionWorkQueueInProgress = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Filed</th>
-              {!workQueueHelper.hideIconColumn && (
-                <th aria-label="Status Icon" className="padding-right-0" />
-              )}
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               <th>Case Status</th>
@@ -140,35 +137,6 @@ export const SectionWorkQueueInProgress = connect(
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
                 </td>
-                {!workQueueHelper.hideIconColumn && (
-                  <td className="message-queue-row has-icon padding-right-0">
-                    {item.showBatchedStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="true"
-                        className="iconStatusBatched"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
-                    {item.showRecalledStatusIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="false"
-                        aria-label="recalled from IRS"
-                        className="iconStatusRecalled"
-                        icon={['far', 'clock']}
-                        size="lg"
-                      />
-                    )}
-                    {item.showUnassignedIcon && (
-                      <FontAwesomeIcon
-                        aria-hidden="true"
-                        className="iconStatusUnassigned"
-                        icon={['fas', 'question-circle']}
-                        size="lg"
-                      />
-                    )}
-                  </td>
-                )}
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
                     <a
