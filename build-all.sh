@@ -9,6 +9,6 @@ docker run -v "$(pwd)/web-api/coverage:/home/app/web-api/coverage" --rm efcms /b
 docker run -v "$(pwd)/web-client/coverage:/home/app/web-client/coverage" --rm efcms /bin/sh -c \
   'npm run install:dynamodb && (npm run start:api &) && ./wait-until.sh http://localhost:3000/api/swagger && npm run test:client'
 docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c \
-  'npm run install:dynamodb && (npx run-p start:api start:client &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run test:pa11y'
+  'npm run install:dynamodb && (npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run test:pa11y'
 docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c \
-  'npm run install:dynamodb && (npx run-p start:api start:client:cypress &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress'
+  'npm run install:dynamodb && (npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress'
