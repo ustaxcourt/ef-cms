@@ -98,7 +98,13 @@ export const UpcomingTrialSessions = connect(
                       )}
                     </td>
                     <td>
-                      <a href={`/trial-session-detail/${item.trialSessionId}`}>
+                      <a
+                        href={
+                          item.userIsAssignedToSession
+                            ? `/trial-session-working-copy/${item.trialSessionId}`
+                            : `/trial-session-detail/${item.trialSessionId}`
+                        }
+                      >
                         {item.trialLocation}
                       </a>
                     </td>

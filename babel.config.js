@@ -1,9 +1,9 @@
 module.exports = {
+  plugins: ['babel-plugin-cerebral', 'transform-html-import-require-to-string'],
   presets: [
     [
       '@babel/preset-env',
       {
-        useBuiltIns: 'usage',
         corejs: '2',
         targets: {
           chrome: '70',
@@ -12,9 +12,9 @@ module.exports = {
           ie: '11',
           safari: '12',
         },
+        useBuiltIns: 'usage',
       },
     ],
     '@babel/preset-react',
   ],
-  plugins: ['babel-plugin-cerebral', 'transform-html-import-require-to-string'],
 };

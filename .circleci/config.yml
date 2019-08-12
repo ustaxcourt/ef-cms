@@ -18,21 +18,21 @@ jobs:
       - run:
           name: Shared - Test
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'npm run test:shared'
-      #   - run:
-      #       name: Shared - SonarQube
-      #       command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage -e "SONAR_KEY=${SHARED_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${SHARED_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd shared && ./verify-sonarqube-passed.sh'
+      - run:
+          name: Shared - SonarQube
+          command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage -e "SONAR_KEY=${SHARED_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${SHARED_SONAR_TOKEN}" -e "PROJECT_PATH=shared" --rm efcms /bin/sh -c './verify-sonarqube-passed.sh'
       - run:
           name: Web API - Test
           command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage --rm efcms /bin/sh -c 'npm run test:api'
-      #   - run:
-      #       name: Web API - SonarQube
-      #       command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-api && ./verify-sonarqube-passed.sh'
+      - run:
+          name: Web API - SonarQube
+          command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" -e "PROJECT_PATH=web-api" --rm efcms /bin/sh -c './verify-sonarqube-passed.sh'
       - run:
           name: Web Client - Test
           command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "(npm run start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && npm run test:client"
-    #   - run:
-    #       name: Web Client - SonarQube
-    #       command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-client && ./verify-sonarqube-passed.sh'
+      - run:
+          name: Web Client - SonarQube
+          command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage -e "SONAR_KEY=${UI_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${UI_SONAR_TOKEN}" -e "PROJECT_PATH=web-client" --rm efcms /bin/sh -c './verify-sonarqube-passed.sh'
 
   e2e:
     machine:
@@ -44,10 +44,10 @@ jobs:
           command: docker build -t efcms -f Dockerfile .
       - run:
           name: Pa11y
-          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api start:client > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run test:pa11y'
+          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api start:client:ci > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run test:pa11y'
       - run:
           name: Cypress
-          command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api start:client:cypress > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress'
+          command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api start:client:ci > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress'
 
   deploy:
     machine:

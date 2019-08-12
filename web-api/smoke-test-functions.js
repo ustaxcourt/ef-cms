@@ -5,6 +5,9 @@ module.exports = {
   deleteCase,
 };
 
+/**
+ *
+ */
 async function deleteCase(context, events, done) {
   const { caseId } = context.vars;
 
