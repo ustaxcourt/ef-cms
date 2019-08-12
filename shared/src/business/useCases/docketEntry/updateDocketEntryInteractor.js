@@ -2,7 +2,7 @@ const {
   FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize, omit, pick } = require('lodash');
+const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
