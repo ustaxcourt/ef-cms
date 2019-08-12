@@ -33,7 +33,7 @@ exports.getWorkItemContaining = text => {
 };
 
 exports.getTableRows = () => {
-  return cy.get('table').find('tbody');
+  return cy.get('tbody');
 };
 
 exports.getWorkItemCheckboxLabel = workItemId => {
