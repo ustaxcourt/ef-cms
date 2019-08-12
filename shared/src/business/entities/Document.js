@@ -25,6 +25,7 @@ Document.validationName = 'Document';
 function Document(rawDocument) {
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
+  this.addToCoversheet = rawDocument.addToCoversheet;
   this.attachments = rawDocument.attachments;
   this.caseId = rawDocument.caseId;
   this.category = rawDocument.category;
