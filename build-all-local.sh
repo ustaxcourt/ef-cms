@@ -11,6 +11,6 @@ npm run lint
 sh ./run-shellcheck.sh
 npx run-p test:api test:client test:shared test:pa11y
 
-echo "NOTE: to run cypress, you will need to run client with the start:client:cypress script. "
+echo "NOTE: to run cypress, you will need to run client with the start:client:ci script. "
 # With the back-end already running, try this:
-# npm run start:client:cypress && ./wait-until.sh http://localhost:1234 && npm run cypress
+# npm run start:client:ci && ./wait-until.sh http://localhost:1234 && npm run cypress
