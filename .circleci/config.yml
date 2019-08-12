@@ -24,9 +24,9 @@ jobs:
       - run:
           name: Web API - Test
           command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage --rm efcms /bin/sh -c 'npm run test:api'
-			- run:
-					name: Web API - SonarQube
-					command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" --rm efcms /bin/sh -c 'cd web-api && ./verify-sonarqube-passed.sh'
+      - run:
+          name: Web API - SonarQube
+          command: docker run -v $(pwd)/web-api/coverage:/home/app/web-api/coverage -e "SONAR_KEY=${API_SONAR_KEY}" -e "branch_name=${CIRCLE_BRANCH}" -e "SONAR_ORG=${SONAR_ORG}" -e "SONAR_TOKEN=${API_SONAR_TOKEN}" --rm efcms /bin/sh -c './verify-sonarqube-passed.sh'
       # - run:
       #     name: Web Client - Test
       #     command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "(npm run start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && npm run test:client"
