@@ -436,10 +436,17 @@ table.docket-record {
 
     tr.in-progress {
       td {
-        background: rgba(color($theme-color-warning-lighter), .4);
+        background: $color-yellow;
       }
       .fa-thumbtack {
         color: color($theme-color-warning);
+      }
+    }
+
+
+    tr.in-progress:hover {
+      td {
+        background: $color-primary-alt-lightest;
       }
     }
   }
