@@ -1470,7 +1470,7 @@ button.change-scanner-button {
   background-color: white;
 
   .preview-container--image-area {
-    background-color: #999; //why are we using a non-theme color?
+    background-color: color($theme-color-base);
 
     img {
       display: block;
