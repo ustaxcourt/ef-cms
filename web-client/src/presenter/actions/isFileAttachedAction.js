@@ -1,14 +1,12 @@
-import { get } from 'http';
-import { path, state } from 'cerebral';
+import { state } from 'cerebral';
 
 /**
- * sets a scanner source
+ * returns the yes path when a primaryDocumentFile is set, or the no path otherwise
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting the scanner API
- * @param {Function} providers.props the cerebral props object used for getting the props.scannerSourceName
- * @param {Function} providers.store the cerebral store used for setting state.scanner.scannerSourceName
- * @returns {Promise} async action
+ * @param {object} providers.get the cerebral get function used for getting state.form
+ * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of yes or no)
+ * @returns {object} the next path based on if a primaryDocumentFile is set or not
  */
 export const isFileAttachedAction = async ({ get, path }) => {
   return get(state.form.primaryDocumentFile) ? path.yes() : path.no();
