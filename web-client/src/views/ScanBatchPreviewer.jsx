@@ -139,16 +139,9 @@ export const ScanBatchPreviewer = connect(
             </div>
           </div>
 
-          <div style={{ backgroundColor: '#999' }}>
+          <div className="preview-container--image-area">
             <img
               src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
-              style={{
-                display: 'block',
-                margin: '0 auto',
-                paddingBottom: '10px',
-                paddingTop: '10px',
-                width: '50%',
-              }}
             />
           </div>
 
@@ -458,13 +451,7 @@ export const ScanBatchPreviewer = connect(
           <SelectScannerSourceModal />
         )}
 
-        <div
-          style={{
-            backgroundColor: '#162e51',
-            color: 'white',
-            padding: '10px',
-          }}
-        >
+        <div className="scanner-area-header">
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
@@ -479,7 +466,6 @@ export const ScanBatchPreviewer = connect(
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
                   className="usa-button usa-button--unstyled change-scanner-button margin-right-3"
-                  style={{ color: 'white' }}
                   onClick={e => {
                     e.preventDefault();
                     openChangeScannerSourceModalSequence();
