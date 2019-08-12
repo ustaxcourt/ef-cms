@@ -55,7 +55,7 @@ describe('external document helpers', () => {
       expect(schema.somethingElse).toEqual(joi.string().required());
     });
 
-    it('should make an optional field required', () => {
+    it('should not add an optional field to the schema as required if it does not exist in the schemaOptionalItems', () => {
       const schema = {
         something: joi.string().required(),
       };
