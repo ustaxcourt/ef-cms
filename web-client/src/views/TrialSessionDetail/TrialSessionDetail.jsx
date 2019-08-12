@@ -7,6 +7,7 @@ import { OpenCases } from './OpenCases';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -20,26 +21,7 @@ export const TrialSessionDetail = connect(
   },
   ({ formattedTrialSession, openSetCalendarModalSequence, showModal }) => (
     <>
-      <div className="big-blue-header">
-        <div className="grid-container">
-          <div className="margin-bottom-1">
-            <h1 tabIndex="-1">{formattedTrialSession.trialLocation}</h1>
-            <span
-              className={`usa-tag ${
-                !formattedTrialSession.isCalendared ? 'ustc-tag--yellow' : ''
-              }`}
-            >
-              <span aria-hidden="true">
-                {formattedTrialSession.formattedTerm}:{' '}
-                {formattedTrialSession.status}
-              </span>
-            </span>
-          </div>
-          <p className="margin-y-0" id="case-title">
-            <span>{formattedTrialSession.formattedStartDate}</span>
-          </p>
-        </div>
-      </div>
+      <TrialSessionDetailHeader />
 
       <section className="usa-section grid-container">
         <SuccessNotification />
