@@ -8,7 +8,7 @@ export const WorkingCopySessionList = connect(
   },
   ({ sessions }) => {
     return (
-      <>
+      <div className="margin-top-4">
         <table
           aria-describedby="tab-my-queue"
           className="usa-table work-queue subsection"
@@ -33,7 +33,7 @@ export const WorkingCopySessionList = connect(
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
-                <td>{item.caseCaption}</td>
+                <td>{item.caseName}</td>
                 <td>
                   {item.practitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
@@ -49,7 +49,7 @@ export const WorkingCopySessionList = connect(
             </tbody>
           ))}
         </table>
-      </>
+      </div>
     );
   },
 );
