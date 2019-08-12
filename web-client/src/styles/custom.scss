@@ -1432,6 +1432,12 @@ button.change-scanner-button {
   }
 }
 
+.scanner-area-header {
+  padding: 10px;
+  background-color: color($theme-color-primary-darker);
+  color: white;
+}
+
 .document-select-container {
   min-height: 425px;
   padding: 20px;
@@ -1462,6 +1468,18 @@ button.change-scanner-button {
   border: 1px solid color($theme-color-base-lighter);
   border-top: 0px;
   background-color: white;
+
+  .preview-container--image-area {
+    background-color: #999; //why are we using a non-theme color?
+
+    img {
+      display: block;
+      width: 50%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      margin: 0 auto;
+    }
+  }
 }
 
 .header-scanned-batches {
