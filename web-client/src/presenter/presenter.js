@@ -24,7 +24,6 @@ import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrial
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
 import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
-import { closeDocumentCategoryAccordionSequence } from './sequences/closeDocumentCategoryAccordionSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
@@ -160,7 +159,6 @@ import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleAccountMenuSequence } from './sequences/toggleAccountMenuSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
-import { toggleDocumentCategoryAccordionSequence } from './sequences/toggleDocumentCategoryAccordionSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
@@ -245,7 +243,6 @@ export const presenter = {
     clearWizardDataSequence,
     clickServeToIrsSequence,
     closeAccountMenuSequence,
-    closeDocumentCategoryAccordionSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
@@ -379,7 +376,6 @@ export const presenter = {
     toggleAccountMenuSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
-    toggleDocumentCategoryAccordionSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
