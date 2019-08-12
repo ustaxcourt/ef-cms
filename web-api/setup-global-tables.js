@@ -6,6 +6,9 @@ const dynamodb = new AWS.DynamoDB({
   region: regions[0],
 });
 
+/**
+ *
+ */
 async function processGlobalTables() {
   console.log('ProcessingGlobalTables: Start', tableName);
   try {
@@ -27,6 +30,9 @@ async function processGlobalTables() {
   console.log('ProcessGlobalTables: Done', tableName);
 }
 
+/**
+ *
+ */
 function getUnprocessedRegions(gt) {
   if (!gt.GlobalTableDescription.ReplicationGroup.length) {
     return regions;
@@ -37,6 +43,9 @@ function getUnprocessedRegions(gt) {
   return regions.filter(region => !processedRegions.includes(region));
 }
 
+/**
+ *
+ */
 async function updateGlobalTable(unprocessedRegions) {
   const params = {
     GlobalTableName: tableName,
@@ -50,6 +59,9 @@ async function updateGlobalTable(unprocessedRegions) {
   await dynamodb.updateGlobalTable(params).promise();
 }
 
+/**
+ *
+ */
 async function createGlobalTable() {
   const params = {
     GlobalTableName: tableName,
