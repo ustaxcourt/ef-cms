@@ -9,12 +9,12 @@ jobs:
       - run:
           name: Build Docker Image
           command: docker build -t efcms -f Dockerfile .
-      - run:
-          name: Lint
-          command: docker run --rm efcms /bin/sh -c 'npm run lint'
-      - run:
-          name: Shellcheck
-          command: docker run --rm efcms /bin/sh -c './run-shellcheck.sh'
+    #   - run:
+    #       name: Lint
+    #       command: docker run --rm efcms /bin/sh -c 'npm run lint'
+    #   - run:
+    #       name: Shellcheck
+    #       command: docker run --rm efcms /bin/sh -c './run-shellcheck.sh'
       - run:
           name: Shared - Test
           command: docker run -v $(pwd)/shared/coverage:/home/app/shared/coverage --rm efcms /bin/sh -c 'npm run test:shared'
