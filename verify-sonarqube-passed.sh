@@ -1,7 +1,7 @@
 #!/bin/bash -e
 FULL_URL="https://sonarcloud.io"
 branch_name=$branch_name
-OUTPUT=$(sonar-scanner -Dsonar.projectKey="${SONAR_KEY}" -Dsonar.branch.name="${branch_name}" -Dsonar.organization="${SONAR_ORG}" -Dsonar.projectBaseDir=. -Dsonar.login="${SONAR_TOKEN}" -Dsonar.host.url="${FULL_URL}")
+OUTPUT=$(sonar-scanner -Dsonar.projectKey="${SONAR_KEY}" -Dsonar.branch.name="${branch_name}" -Dsonar.organization="${SONAR_ORG}" -Dsonar.projectBaseDir="${PROJECT_PATH}" -Dproject.settings="${PROJECT_PATH}/sonar-project.properties" -Dsonar.login="${SONAR_TOKEN}" -Dsonar.host.url="${FULL_URL}")
 echo "${OUTPUT}"
 regex="(https:\/\/sonarcloud\.io\/api\/ce\/task\?id=[a-zA-Z0-9_-]+)"
 if [[ $OUTPUT =~ $regex ]] ; then
