@@ -48,6 +48,66 @@ describe('formattedDashboardTrialSessions', () => {
       swingSession: false,
       trialLocation: 'Jacksonville, FL',
     },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
+    {
+      judge: { name: '6', userId: '6' },
+      startDate: '2020-02-17T15:00:00.000Z',
+      swingSession: false,
+      trialLocation: 'Jacksonville, FL',
+    },
   ];
 
   it('formats trial sessions correctly, formatting start date', () => {
@@ -80,5 +140,16 @@ describe('formattedDashboardTrialSessions', () => {
     });
     expect(result.formattedRecentSessions.length).toBe(0);
     expect(result.formattedUpcomingSessions.length).toBe(0);
+  });
+
+  it('returns no at most 5 trial sessions for judge userId', () => {
+    const result = runCompute(formattedDashboardTrialSessions, {
+      state: {
+        trialSessions: TRIAL_SESSIONS_LIST,
+        user: { userId: '6' },
+      },
+    });
+    expect(result.formattedRecentSessions.length).toBe(0);
+    expect(result.formattedUpcomingSessions.length).toBe(5);
   });
 });
