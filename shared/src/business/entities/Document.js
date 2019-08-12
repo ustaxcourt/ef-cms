@@ -23,6 +23,8 @@ Document.validationName = 'Document';
  * @constructor
  */
 function Document(rawDocument) {
+  this.additionalInfo = rawDocument.additionalInfo;
+  this.additionalInfo2 = rawDocument.additionalInfo2;
   this.attachments = rawDocument.attachments;
   this.caseId = rawDocument.caseId;
   this.category = rawDocument.category;
