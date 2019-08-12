@@ -4,7 +4,6 @@ exports.userMap = {
     email: 'docketclerk@example.com',
     name: 'Test Docketclerk',
     role: 'docketclerk',
-    section: 'docket',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
   },
   docketclerk1: {
@@ -12,7 +11,6 @@ exports.userMap = {
     email: 'docketclerk1@example.com',
     name: 'Test Docketclerk1',
     role: 'docketclerk',
-    section: 'docket',
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
   },
 
@@ -21,7 +19,6 @@ exports.userMap = {
     email: 'judgeArmen',
     name: 'Judge Armen',
     role: 'judge',
-    section: 'armensChambers',
     userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
   },
   judgeAshford: {
@@ -29,7 +26,6 @@ exports.userMap = {
     email: 'judgeAshford',
     name: 'Judge Ashford',
     role: 'judge',
-    section: 'ashfordsChambers',
     userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
   },
   judgeBuch: {
@@ -37,7 +33,6 @@ exports.userMap = {
     email: 'judgeBuch',
     name: 'Judge Buch',
     role: 'judge',
-    section: 'buchsChambers',
     userId: 'dabbad02-18d0-43ec-bafb-654e83405416',
   },
   judgeCarluzzo: {
@@ -45,7 +40,6 @@ exports.userMap = {
     email: 'judgeCarluzzo',
     name: 'Judge Carluzzo',
     role: 'judge',
-    section: 'carluzzosChambers',
     userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
   },
   judgeCohen: {
@@ -53,7 +47,6 @@ exports.userMap = {
     email: 'judgeCohen',
     name: 'Judge Cohen',
     role: 'judge',
-    section: 'cohensChambers',
     userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
   },
 
@@ -62,7 +55,6 @@ exports.userMap = {
     email: 'petitionsclerk@example.com',
     name: 'Test Petitionsclerk',
     role: 'petitionsclerk',
-    section: 'petitions',
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
   },
   petitionsclerk1: {
@@ -70,7 +62,6 @@ exports.userMap = {
     email: 'petitionsclerk1@example.com',
     name: 'Test Petitionsclerk1',
     role: 'petitionsclerk',
-    section: 'petitions',
     userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
   },
   practitioner: {
@@ -81,7 +72,6 @@ exports.userMap = {
     email: 'practitioner@example.com',
     name: 'Test Practitioner',
     role: 'practitioner',
-    section: 'practitioner',
     userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
   },
   practitioner1: {
@@ -92,7 +82,6 @@ exports.userMap = {
     email: 'practitioner1@example.com',
     name: 'Test Practitioner1',
     role: 'practitioner',
-    section: 'practitioner',
     userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
   },
   practitioner2: {
@@ -103,7 +92,6 @@ exports.userMap = {
     email: 'practitioner2@example.com',
     name: 'Lilah Gilbert',
     role: 'practitioner',
-    section: 'practitioner',
     userId: '8e4959cd-3e13-4bf6-95bf-a276cc63b9e1',
   },
   practitioner3: {
@@ -114,7 +102,6 @@ exports.userMap = {
     email: 'practitioner3@example.com',
     name: 'Clark Stark',
     role: 'practitioner',
-    section: 'practitioner',
     userId: '9f25dc2c-764a-435c-86dd-323e53634537',
   },
   practitioner4: {
@@ -125,7 +112,6 @@ exports.userMap = {
     email: 'practitioner4@example.com',
     name: 'Alden Rivas',
     role: 'practitioner',
-    section: 'practitioner',
     userId: '29e9b4d1-63bc-4f66-b230-59a3a9ae44eb',
   },
   respondent: {
@@ -136,7 +122,6 @@ exports.userMap = {
     email: 'respondent@example.com',
     name: 'Test Respondent',
     role: 'respondent',
-    section: 'respondent',
     userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
   },
   respondent1: {
@@ -147,7 +132,6 @@ exports.userMap = {
     email: 'respondent1@example.com',
     name: 'Test Respondent1',
     role: 'respondent',
-    section: 'respondent',
     userId: '5fb6e815-b5d3-459b-b08b-49c61f0fce5e',
   },
   respondent2: {
@@ -158,7 +142,6 @@ exports.userMap = {
     email: 'respondent2@example.com',
     name: 'Nero West',
     role: 'respondent',
-    section: 'respondent',
     userId: '2d9a7229-7d5a-459f-84ad-754504a9f10f',
   },
   respondent3: {
@@ -169,7 +152,6 @@ exports.userMap = {
     email: 'respondent3@example.com',
     name: 'Stuart Morrison',
     role: 'respondent',
-    section: 'respondent',
     userId: '5c43a30d-9c3d-41be-ad13-3b6d7cef54fc',
   },
   respondent4: {
@@ -180,7 +162,6 @@ exports.userMap = {
     email: 'respondent4@example.com',
     name: 'Jaquelyn Lane',
     role: 'respondent',
-    section: 'respondent',
     userId: '726c38b1-1432-49b3-9383-77a998c0ba4f',
   },
   seniorattorney: {
@@ -188,7 +169,6 @@ exports.userMap = {
     email: 'seniorattorney@example.com',
     name: 'Test Seniorattorney',
     role: 'seniorattorney',
-    section: 'seniorattorney',
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   },
   taxpayer: {
@@ -196,7 +176,6 @@ exports.userMap = {
     email: 'taxpayer@example.com',
     name: 'Test Petitioner',
     role: 'petitioner',
-    section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
 };
