@@ -165,7 +165,7 @@ class PDFSignerComponent extends React.Component {
                       <br />
                       Chief Judge
                     </span>
-                    {!process.env.CYPRESS && (
+                    {!process.env.CI && (
                       <canvas
                         className={
                           !this.props.signatureData &&
