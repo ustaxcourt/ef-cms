@@ -109,6 +109,7 @@ exports.fileDocketEntryInteractor = async ({
           createdAt: documentEntity.createdAt,
         },
         isInternal: false,
+        isRead: user.role === 'practitioner' ? false : true,
         section: DOCKET_SECTION,
         sentBy: user.userId,
       });
