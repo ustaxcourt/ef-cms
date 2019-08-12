@@ -114,6 +114,7 @@ describe('fileDocketEntryInteractor', () => {
     let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
     let saveWorkItemForNonPaperSpy = sinon.spy();
     let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
+    let saveWorkItemForDocketEntryWithoutFileSpy = sinon.spy();
     let updateCaseSpy = sinon.spy();
     try {
       applicationContext = {
@@ -135,6 +136,7 @@ describe('fileDocketEntryInteractor', () => {
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
+          saveWorkItemForDocketEntryWithoutFile: saveWorkItemForDocketEntryWithoutFileSpy,
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
 
           updateCase: updateCaseSpy,
