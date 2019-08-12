@@ -13,6 +13,8 @@ export const setSectionInboxCountAction = ({ get, props, store }) => {
   const internal = get(state.workQueueIsInternal);
   store.set(
     state.sectionInboxCount,
-    props.workItems.filter(item => item.isInternal === internal).length,
+    props.workItems
+      .filter(item => item.isInternal === internal)
+      .filter(item => item.document.isFileAttached !== false).length,
   );
 };
