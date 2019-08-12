@@ -40,7 +40,7 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
   upcomingSessions = map(upcomingSessions, formatSessionFn);
 
   return {
-    formattedRecentSessions: recentSessions,
-    formattedUpcomingSessions: upcomingSessions,
+    formattedRecentSessions: recentSessions.slice(0, 5),
+    formattedUpcomingSessions: upcomingSessions.slice(0, 5),
   };
 };
