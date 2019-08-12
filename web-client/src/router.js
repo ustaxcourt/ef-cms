@@ -249,6 +249,15 @@ const router = {
       }),
     );
     route(
+      '/trial-session-working-copy/*',
+      checkLoggedIn(trialSessionId => {
+        document.title = `Trial Session Working Copy ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionWorkingCopySequence')({
+          trialSessionId,
+        });
+      }),
+    );
+    route(
       '/trial-sessions..',
       checkLoggedIn(() => {
         var query = {};

@@ -31,6 +31,7 @@ import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -70,6 +71,7 @@ const pages = {
   StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
+  TrialSessionWorkingCopy,
   TrialSessions,
 };
 
