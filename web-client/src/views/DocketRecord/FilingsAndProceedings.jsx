@@ -90,9 +90,14 @@ export const FilingsAndProceedings = connect(
           caseDetailHelper.showDirectDownloadLink &&
           document.processingStatus !== 'complete' && (
             <React.Fragment>
-              <span aria-label="document uploading marker" className="usa-tag">
-                <span aria-hidden="true">Uploading</span>
-              </span>
+              {caseDetailHelper.showDocketRecordInProgressState && (
+                <span
+                  aria-label="document uploading marker"
+                  className="usa-tag"
+                >
+                  <span aria-hidden="true">Uploading</span>
+                </span>
+              )}
               {record.description}
             </React.Fragment>
           )}
