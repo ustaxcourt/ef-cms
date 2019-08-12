@@ -1,14 +1,14 @@
 import { compact } from 'lodash';
 import { state } from 'cerebral';
 
-const formatCase = caseItem => {
+export const formatCase = caseItem => {
   caseItem.docketNumberWithSuffix = `${
     caseItem.docketNumber
   }${caseItem.docketNumberSuffix || ''}`;
   return caseItem;
 };
 
-const compareCasesByDocketNumber = (a, b) => {
+export const compareCasesByDocketNumber = (a, b) => {
   const [numberA, yearA] = a.docketNumber.split('-');
   const [numberB, yearB] = b.docketNumber.split('-');
 
