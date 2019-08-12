@@ -44,7 +44,7 @@ describe('Scan entity', () => {
     expect(scan.batches).toHaveLength(0);
   });
 
-  it('returns an array aggregated pages from all batches', () => {
+  it('returns an array of aggregated pages from all batches', () => {
     const scan = new Scan({
       applicationContext,
       rawScan: {},
