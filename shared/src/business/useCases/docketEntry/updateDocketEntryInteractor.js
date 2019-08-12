@@ -17,9 +17,6 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
- * @param {string} providers.secondaryDocumentFileId the id of the secondary document file (optional)
- * @param {string} providers.secondarySupportingDocumentFileId the id of the secondary supporting document file (optional)
- * @param {string} providers.supportingDocumentFileId the id of the supporting document file (optional)
  * @returns {object} the updated case after the documents are added
  */
 exports.updateDocketEntryInteractor = async ({
