@@ -10,9 +10,8 @@ export const UpcomingTrialSessions = connect(
     formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
     judgeUsers: state.users,
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
-    user: state.user,
   },
-  ({ formattedTrialSessions, judgeUsers, trialSessionTypes, user }) => {
+  ({ formattedTrialSessions, judgeUsers, trialSessionTypes }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
