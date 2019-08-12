@@ -12,24 +12,24 @@ documentClient
   })
   .promise()
   .then(async documents => {
-    console.log(`needing to clear ${documents.length} documents`)
+    console.log(`needing to clear ${documents.length} documents`);
     const chunks = chunk(documents.Items, 25);
     let ci = 1;
     for (let c of chunks) {
-      console.log(`chunk ${ci++} of ${chunks.length}`)
-      await documentClient.batchWrite({
-        RequestItems: {
-          'efcms-dev': c.map(item => (
-            {
+      console.log(`chunk ${ci++} of ${chunks.length}`);
+      await documentClient
+        .batchWrite({
+          RequestItems: {
+            'efcms-dev': c.map(item => ({
               DeleteRequest: {
-                Key: { 
+                Key: {
                   pk: item.pk,
-                  sk: item.sk 
+                  sk: item.sk,
                 },
               },
-            })
-          )
-        }
-      }).promise();
+            })),
+          },
+        })
+        .promise();
     }
   });
