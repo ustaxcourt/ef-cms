@@ -19,7 +19,7 @@ export const setDocketEntryFormForEditAction = ({ get, props, store }) => {
 
   let docketEntryFormData = {};
 
-  if (docketRecordEntry.editState) {
+  if (docketRecordEntry && docketRecordEntry.editState) {
     docketEntryFormData = JSON.parse(docketRecordEntry.editState);
   }
 

@@ -8,6 +8,7 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
+ * @returns {Promise} promise
  */
 exports.saveWorkItemForDocketEntryWithoutFile = async ({
   applicationContext,
@@ -23,22 +24,22 @@ exports.saveWorkItemForDocketEntryWithoutFile = async ({
     applicationContext,
   });
 
-  await createSectionInboxRecord({
-    applicationContext,
-    section: workItem.section,
-    workItem,
-  });
-
-  await createUserInboxRecord({
-    applicationContext,
-    userId: workItem.assigneeId,
-    workItem,
-  });
-
-  await createMappingRecord({
-    applicationContext,
-    pkId: workItem.caseId,
-    skId: workItem.workItemId,
-    type: 'workItem',
-  });
+  return Promise.all([
+    createSectionInboxRecord({
+      applicationContext,
+      section: workItem.section,
+      workItem,
+    }),
+    createUserInboxRecord({
+      applicationContext,
+      userId: workItem.assigneeId,
+      workItem,
+    }),
+    createMappingRecord({
+      applicationContext,
+      pkId: workItem.caseId,
+      skId: workItem.workItemId,
+      type: 'workItem',
+    }),
+  ]);
 };
