@@ -32,7 +32,7 @@ export const workQueueHelper = get => {
 
   return {
     assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
-    currentBoxView: showInbox ? 'inbox' : showBatched ? 'batched' : 'outbox',
+    currentBoxView: workQueueToDisplay.box,
     getQueuePath: ({ box, queue }) => {
       return `/${
         workQueueIsInternal ? 'messages' : 'document-qc'
