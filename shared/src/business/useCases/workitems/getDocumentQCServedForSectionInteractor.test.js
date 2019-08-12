@@ -1,6 +1,7 @@
 const {
   getDocumentQCServedForSectionInteractor,
 } = require('./getDocumentQCServedForSectionInteractor');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   let applicationContext;
@@ -24,11 +25,12 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => ({
         getDocumentQCServedForSection: async () => null,
+        getUserById: ({ userId }) => MOCK_USERS[userId],
       }),
     };
     let error;
@@ -49,11 +51,12 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => ({
         getDocumentQCServedForSection: async () => mockWorkItem,
+        getUserById: ({ userId }) => MOCK_USERS[userId],
       }),
     };
     let error;
@@ -73,8 +76,8 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
-          userId: 'petitionsclerk',
+          role: 'docketclerk',
+          userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => ({
@@ -98,6 +101,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
             sentBy: 'docketclerk',
           },
         ],
+        getUserById: ({ userId }) => MOCK_USERS[userId],
       }),
     };
     const result = await getDocumentQCServedForSectionInteractor({
@@ -110,6 +114,17 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         docketNumber: '101-18',
         docketNumberSuffix: 'S',
         document: { sentBy: 'taxpayer' },
+        messages: [],
+        section: 'docket',
+        sentBy: 'docketclerk',
+      },
+      {
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '101-18',
+        docketNumberSuffix: 'S',
+        document: {
+          sentBy: 'taxpayer',
+        },
         messages: [],
         section: 'irsBatchSection',
         sentBy: 'docketclerk',

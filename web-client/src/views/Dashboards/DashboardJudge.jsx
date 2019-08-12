@@ -16,10 +16,10 @@ export const DashboardJudge = connect(
         <SuccessNotification />
         <ErrorNotification />
         <div className="grid-row grid-gap">
-          <div className="grid-col-8">
+          <div className="tablet:grid-col-8">
             <RecentMessages />
           </div>
-          <div className="grid-col-4">
+          <div className="tablet:grid-col-4">
             <TrialSessionsSummary />
           </div>
         </div>

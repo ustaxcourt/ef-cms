@@ -23,7 +23,6 @@ describe('assignWorkItemsInteractor integration test', () => {
       user: {
         name: 'Rick Petitioner',
         role: 'petitioner',
-        section: 'petitions',
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -63,9 +62,8 @@ describe('assignWorkItemsInteractor integration test', () => {
 
     applicationContext.getCurrentUser = () => {
       return new User({
-        name: 'richard',
+        name: 'Test Petitionsclerk',
         role: 'petitionsclerk',
-        section: 'petitions',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -88,7 +86,7 @@ describe('assignWorkItemsInteractor integration test', () => {
     await assignWorkItemsInteractor({
       applicationContext,
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      assigneeName: 'richard',
+      assigneeName: 'Test Petitionsclerk',
       workItemId: workItem.workItemId,
     });
     inbox = await getDocumentQCInboxForUserInteractor({
@@ -98,7 +96,7 @@ describe('assignWorkItemsInteractor integration test', () => {
     expect(inbox).toMatchObject([
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'richard',
+        assigneeName: 'Test Petitionsclerk',
         caseStatus: 'New',
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
@@ -110,20 +108,20 @@ describe('assignWorkItemsInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'Rick Petitioner',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
-            to: 'richard',
+            to: 'Test Petitionsclerk',
             toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
         section: 'petitions',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -140,7 +138,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       workItems: [
         {
           assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-          assigneeName: 'richard',
+          assigneeName: 'Test Petitionsclerk',
           document: {
             documentType: 'Petition',
             filedBy: 'Rick Petitioner',
@@ -148,15 +146,15 @@ describe('assignWorkItemsInteractor integration test', () => {
           messages: [
             {
               createdAt: '2019-03-01T22:54:06.000Z',
-              from: 'Rick Petitioner',
+              from: 'Alex Petitionsclerk',
               fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               message: 'Petition filed by Rick Petitioner is ready for review.',
             },
             {
-              from: 'richard',
+              from: 'Test Petitionsclerk',
               fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
               message: 'Petition filed by Rick Petitioner is ready for review.',
-              to: 'richard',
+              to: 'Test Petitionsclerk',
               toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],

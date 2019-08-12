@@ -16,11 +16,15 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()

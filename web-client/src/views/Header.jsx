@@ -3,6 +3,7 @@ import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 import close from '../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
@@ -13,11 +14,11 @@ const NavigationItems = helper => {
     <ul className="usa-nav__primary usa-unstyled-list">
       {helper.showHomeIcon && (
         <li
-          className={
-            helper.pageIsHome
-              ? 'usa-nav__primary-item active'
-              : 'usa-nav__primary-item'
-          }
+          className={classNames(
+            'ustc-nav-no-active-underline',
+            'usa-nav__primary-item',
+            helper.pageIsHome && 'active',
+          )}
         >
           <a href="/">
             <FontAwesomeIcon icon="home" />
