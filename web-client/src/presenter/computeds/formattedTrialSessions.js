@@ -18,6 +18,7 @@ export const sessionSorter = sessionList => {
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
+  const user = get(state.user);
   const orderedSessions = orderBy(get(state.trialSessions), 'startDate');
 
   // filter trial sessions
@@ -37,7 +38,18 @@ export const formattedTrialSessions = (get, applicationContext) => {
 
   const formattedSessions = [];
   sessions.forEach(session => {
+    if (
+      session.judge &&
+      user.role === 'judge' &&
+      session.judge.userId === user.userId
+    ) {
+      session.userIsAssignedToSession = true;
+    } else {
+      session.userIsAssignedToSession = false;
+    }
+
     const formattedSession = formatSession(session, applicationContext);
+
     let match = find(formattedSessions, {
       dateFormatted: formattedSession.startOfWeek,
     });
