@@ -5,7 +5,7 @@ import React from 'react';
 export const RecentMessages = () => {
   return (
     <Tabs>
-      <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
+      <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container margin-top-3">
         <a
           className="usa-button--unstyled margin-top-2"
           href="/messages/my/inbox"
