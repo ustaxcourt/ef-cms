@@ -28,7 +28,7 @@ const applicationContext = {
   },
 };
 
-describe('updatePrimaryContactInteractor', () => {
+describe('update primary contact on a case', () => {
   it('updates contactPrimary', async () => {
     await updatePrimaryContactInteractor({
       applicationContext,
