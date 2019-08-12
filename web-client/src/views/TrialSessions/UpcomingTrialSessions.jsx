@@ -10,8 +10,9 @@ export const UpcomingTrialSessions = connect(
     formattedTrialSessions: state.formattedTrialSessions.formattedSessions,
     judgeUsers: state.users,
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
+    user: state.user,
   },
-  ({ formattedTrialSessions, judgeUsers, trialSessionTypes }) => {
+  ({ formattedTrialSessions, judgeUsers, trialSessionTypes, user }) => {
     return (
       <React.Fragment>
         <div className="grid-row margin-bottom-3">
@@ -98,7 +99,13 @@ export const UpcomingTrialSessions = connect(
                       )}
                     </td>
                     <td>
-                      <a href={`/trial-session-detail/${item.trialSessionId}`}>
+                      <a
+                        href={
+                          item.userIsAssignedToSession
+                            ? `/trial-session-working-copy/${item.trialSessionId}`
+                            : `/trial-session-detail/${item.trialSessionId}`
+                        }
+                      >
                         {item.trialLocation}
                       </a>
                     </td>
