@@ -15,21 +15,21 @@ describe('updateDocketEntryInteractor', () => {
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
-        userId: 'respondent',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
     ],
     role: 'petitioner',
-    userId: 'taxpayer',
+    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
   it('should throw an error if not authorized', async () => {
     let error;
