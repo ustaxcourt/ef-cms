@@ -21,7 +21,6 @@ describe('validateDocketEntryInteractor', () => {
       documentType: 'Select a Document Type.',
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
-      primaryDocumentFile: 'A file was not selected.',
     });
   });
 

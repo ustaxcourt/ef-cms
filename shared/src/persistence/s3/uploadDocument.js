@@ -12,17 +12,17 @@ const getUploadPolicy = async ({ applicationContext }) => {
 exports.uploadDocument = async ({
   applicationContext,
   document,
+  documentId,
   onUploadProgress,
 }) => {
   const policy = await getUploadPolicy({ applicationContext });
-  const documentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadPdf({
-      applicationContext,
-      file: document,
-      onUploadProgress,
-      policy,
-    });
+  const docId = await applicationContext.getPersistenceGateway().uploadPdf({
+    applicationContext,
+    documentId,
+    file: document,
+    onUploadProgress,
+    policy,
+  });
 
-  return documentId;
+  return docId;
 };
