@@ -54,6 +54,18 @@ CaseExternal.prototype.init = function(rawCase) {
 CaseExternal.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
+  businessType: joi
+    .string()
+    .optional()
+    .allow(null),
+  caseType: joi.when('hasIrsNotice', {
+    is: joi.exist(),
+    otherwise: joi.optional().allow(null),
+    then: joi.string().required(),
+  }),
+  countryType: joi.string().optional(),
+  filingType: joi.string().required(),
+  hasIrsNotice: joi.boolean().required(),
   ownershipDisclosureFile: joi.object().when('filingType', {
     is: 'A business',
     otherwise: joi.optional().allow(null),
@@ -69,6 +81,7 @@ CaseExternal.commonRequirements = {
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
+  partyType: joi.string().required(),
   petitionFile: joi.object().required(),
   petitionFileSize: joi.when('petitionFile', {
     is: joi.exist(),
@@ -80,6 +93,8 @@ CaseExternal.commonRequirements = {
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
   }),
+  preferredTrialCity: joi.string().required(),
+  procedureType: joi.string().required(),
   stinFile: joi.object().required(),
   stinFileSize: joi.when('stinFile', {
     is: joi.exist(),
@@ -95,31 +110,7 @@ CaseExternal.commonRequirements = {
 
 joiValidationDecorator(
   CaseExternal,
-  joi.object().keys({
-    businessType: joi
-      .string()
-      .optional()
-      .allow(null),
-    caseType: joi.when('hasIrsNotice', {
-      is: joi.exist(),
-      otherwise: joi.optional().allow(null),
-      then: joi.string().required(),
-    }),
-    countryType: joi.string().optional(),
-    filingType: joi.string().required(),
-    hasIrsNotice: joi.boolean().required(),
-    ownershipDisclosureFile:
-      CaseExternal.commonRequirements.ownershipDisclosureFile,
-    ownershipDisclosureFileSize:
-      CaseExternal.commonRequirements.ownershipDisclosureFileSize,
-    partyType: joi.string().required(),
-    petitionFile: CaseExternal.commonRequirements.petitionFile,
-    petitionFileSize: CaseExternal.commonRequirements.petitionFileSize,
-    preferredTrialCity: joi.string().required(),
-    procedureType: joi.string().required(),
-    stinFile: CaseExternal.commonRequirements.stinFile,
-    stinFileSize: CaseExternal.commonRequirements.stinFileSize,
-  }),
+  joi.object().keys(CaseExternal.commonRequirements),
   function() {
     return !this.getFormattedValidationErrors();
   },
