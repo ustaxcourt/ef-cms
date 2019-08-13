@@ -1,14 +1,25 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const WorkingCopySessionList = connect(
   {
     sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
+    sort: state.trialSessionWorkingCopy.sort,
+    sortOrder: state.trialSessionWorkingCopy.sortOrder,
+    toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
-  ({ sessions, trialStatusOptions }) => {
+  ({
+    sessions,
+    sort,
+    sortOrder,
+    toggleWorkingCopySortSequence,
+    trialStatusOptions,
+  }) => {
     return (
       <div className="margin-top-4">
         <table
@@ -18,11 +29,43 @@ export const WorkingCopySessionList = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number">
-                <span className="padding-left-2px">Docket</span>
+              <th aria-label="Docket Number" className="padding-left-2px">
+                <span
+                  className={classNames(
+                    ' margin-right-105',
+                    sort === 'docket' && 'sortActive',
+                  )}
+                  onClick={() => {
+                    toggleWorkingCopySortSequence({
+                      sort: 'docket',
+                    });
+                  }}
+                >
+                  Docket
+                </span>
+                {(sort === 'docket' && sortOrder === 'asc' && (
+                  <FontAwesomeIcon icon="caret-up" />
+                )) || <FontAwesomeIcon icon="caret-down" />}
               </th>
               <th>Case Caption</th>
-              <th>Petitioner Counsel</th>
+              <th>
+                <span
+                  className={classNames(
+                    'margin-right-105',
+                    sort === 'petitioner' && 'sortActive',
+                  )}
+                  onClick={() => {
+                    toggleWorkingCopySortSequence({
+                      sort: 'petitioner',
+                    });
+                  }}
+                >
+                  Petitioner Counsel
+                </span>
+                {(sort === 'petitioner' && sortOrder === 'asc' && (
+                  <FontAwesomeIcon icon="caret-up" />
+                )) || <FontAwesomeIcon icon="caret-down" />}
+              </th>
               <th>Respondent Counsel</th>
               <th colSpan="2">Trial Status</th>
             </tr>
