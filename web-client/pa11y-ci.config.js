@@ -16,18 +16,21 @@ const userUrls = [
   ...seniorattorney,
 ];
 
+// see https://github.com/pa11y/pa11y#command-line-interface
+
 module.exports = {
   defaults: {
     chromeLaunchConfig: {
       args: ['--no-sandbox'],
     },
-    concurrency: 5,
+    concurrency: 1,
     debug: true,
     'include-notices': true,
     'include-warnings': true,
     standard: 'WCAG2AA',
     timeout: 30000,
-    wait: 2000,
+    useIncognitoBrowserContext: true,
+    wait: 5000,
   },
   urls: [
     'http://localhost:1234/',
