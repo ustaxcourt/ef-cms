@@ -4,6 +4,7 @@ import {
   IRS_BATCH_SYSTEM_SECTION,
   SENIOR_ATTORNEY_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
+import { getFilingsAndProceedings } from './formattedCaseDetail';
 import { state } from 'cerebral';
 import _ from 'lodash';
 import moment from 'moment';
@@ -138,6 +139,10 @@ export const formatWorkItem = (
       message => message.message == 'Petition batched for IRS',
     ).createdAtTimeFormatted;
   }
+
+  result.document.filingsAndProceedings = getFilingsAndProceedings(
+    result.document,
+  );
 
   return result;
 };

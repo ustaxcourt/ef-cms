@@ -71,7 +71,8 @@ export const IndividualWorkQueueBatched = connect(
                       }}
                     >
                       {item.document.documentType}
-                    </a>
+                    </a>{' '}
+                    {item.document.filingsAndProceedings}
                   </div>
                   {workQueueHelper.showMessageContent && (
                     <div

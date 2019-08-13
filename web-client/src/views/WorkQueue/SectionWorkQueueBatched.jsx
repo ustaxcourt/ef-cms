@@ -75,7 +75,8 @@ export const SectionWorkQueueBatched = connect(
                         }}
                       >
                         {item.document.documentType}
-                      </a>
+                      </a>{' '}
+                      {item.document.filingsAndProceedings}
                     </div>
                     {workQueueHelper.showMessageContent && (
                       <div

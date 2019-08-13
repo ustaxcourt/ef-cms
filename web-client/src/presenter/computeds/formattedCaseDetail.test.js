@@ -3,6 +3,7 @@ import {
   formatDocument,
   formatYearAmounts,
   formattedCaseDetail as formattedCaseDetailComputed,
+  getFilingsAndProceedings,
 } from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -855,6 +856,23 @@ describe('formatDocument', () => {
     });
     expect(results).toMatchObject({
       servedPartiesCode: 'B',
+    });
+  });
+
+  describe('getFilingsAndProceedings', () => {
+    it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
+      const result = getFilingsAndProceedings({
+        attachments: true,
+        certificateOfService: true,
+        certificateOfServiceDateFormatted: '11/12/1999',
+        exhibits: true,
+        lodged: true,
+        objections: 'Yes',
+      });
+
+      expect(result).toEqual(
+        '(C/S 11/12/1999) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)',
+      );
     });
   });
 });
