@@ -50,7 +50,7 @@ const router = {
     route(
       '/case-detail/*/documents/*/edit',
       checkLoggedIn((docketNumber, documentId) => {
-        document.title = `Document details ${pageTitleSuffix}`;
+        document.title = `Edit Docket Record ${pageTitleSuffix}`;
         app.getSequence('gotoEditDocketEntrySequence')({
           docketNumber,
           documentId,
