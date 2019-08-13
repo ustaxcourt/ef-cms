@@ -118,5 +118,7 @@ export default (test, fakeFile, overrides = {}) => {
       message: 'You can access your case at any time from the case list below.',
       title: 'Your petition has been successfully submitted.',
     });
+
+    test.docketNumber = test.getState('cases.0.docketNumber');
   });
 };
