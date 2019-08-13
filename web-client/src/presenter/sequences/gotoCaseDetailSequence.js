@@ -24,6 +24,7 @@ export const gotoCaseDetailSequence = [
   getUserRoleAction,
   {
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
+    judge: [setCurrentPageAction('CaseDetailInternal')],
     petitioner: [
       getCaseAssociationAction,
       setCaseAssociationAction,
