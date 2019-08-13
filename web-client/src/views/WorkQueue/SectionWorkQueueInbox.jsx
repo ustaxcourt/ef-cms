@@ -183,7 +183,8 @@ export const SectionWorkQueueInbox = connect(
                       }}
                     >
                       {item.document.documentType}
-                    </a>
+                    </a>{' '}
+                    {item.document.filingsAndProceedings}
                   </div>
                   {workQueueHelper.showMessageContent && (
                     <div
