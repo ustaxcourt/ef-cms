@@ -48,33 +48,26 @@ const wizardStep1 = atWizardStep(1, {
 });
 
 const wizardStep2 = atWizardStep(2, {
-  caseType: joi.when('hasIrsNotice', {
-    is: joi.exist(),
-    otherwise: joi.optional().allow(null),
-    then: joi.string().required(),
-  }),
-  hasIrsNotice: joi.boolean().required(),
+  caseType: CaseExternal.commonRequirements.caseType,
+  hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
   petitionFile: CaseExternal.commonRequirements.petitionFile,
   petitionFileSize: CaseExternal.commonRequirements.petitionFileSize,
 });
 
 const wizardStep3 = atWizardStep(3, {
-  businessType: joi
-    .string()
-    .optional()
-    .allow(null),
-  countryType: joi.string().optional(),
-  filingType: joi.string().required(),
+  businessType: CaseExternal.commonRequirements.businessType,
+  countryType: CaseExternal.commonRequirements.countryType,
+  filingType: CaseExternal.commonRequirements.filingType,
   ownershipDisclosureFile:
     CaseExternal.commonRequirements.ownershipDisclosureFile,
   ownershipDisclosureFileSize:
     CaseExternal.commonRequirements.ownershipDisclosureFileSize,
-  partyType: joi.string().required(),
+  partyType: CaseExternal.commonRequirements.partyType,
 });
 
 const wizardStep4 = atWizardStep(4, {
-  preferredTrialCity: joi.string().required(),
-  procedureType: joi.string().required(),
+  preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
+  procedureType: CaseExternal.commonRequirements.procedureType,
 });
 
 const schema = {
