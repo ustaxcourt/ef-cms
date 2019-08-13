@@ -32,19 +32,19 @@ set -- \
   --stage local
 
 echo "starting api service"
-npx sls offline start "$@" --config web-api/serverless-api.yml &
+npx sls offline start "$@" --config web-api/serverless-api.yml > /dev/null
 echo "starting cases service"
-npx sls offline start "$@" --config web-api/serverless-cases.yml &
+npx sls offline start "$@" --config web-api/serverless-cases.yml > /dev/null
 echo "starting users service"
-npx sls offline start "$@" --config web-api/serverless-users.yml &
+npx sls offline start "$@" --config web-api/serverless-users.yml > /dev/null
 echo "starting documents service"
-npx sls offline start "$@" --config web-api/serverless-documents.yml &
+npx sls offline start "$@" --config web-api/serverless-documents.yml > /dev/null
 echo "starting work items service"
-npx sls offline start "$@" --config web-api/serverless-work-items.yml &
+npx sls offline start "$@" --config web-api/serverless-work-items.yml > /dev/null
 echo "starting sections service"
-npx sls offline start "$@" --config web-api/serverless-sections.yml &
+npx sls offline start "$@" --config web-api/serverless-sections.yml > /dev/null
 echo "starting trial session service"
-npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
+npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml > /dev/null
 
 echo "starting proxy"
 node ./web-api/proxy.js
