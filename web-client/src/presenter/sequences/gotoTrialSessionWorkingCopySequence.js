@@ -3,6 +3,8 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getEligibleCasesForTrialSessionAction } from '../actions/TrialSession/getEligibleCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
+import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence';
+import { isJudgeAssociatedWithTrialSessionAction } from '../actions/TrialSession/isJudgeAssociatedWithTrialSessionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -15,24 +17,30 @@ import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSession
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
-  clearAlertsAction,
-  clearErrorAlertsAction,
-  setTrialSessionIdAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  setDefaultWorkingCopySortAction,
-  isTrialSessionCalendaredAction,
+  isJudgeAssociatedWithTrialSessionAction,
   {
-    no: [
-      getEligibleCasesForTrialSessionAction,
-      setEligibleCasesOnTrialSessionAction,
-    ],
+    no: [...gotoTrialSessionDetailSequence],
     yes: [
-      getCalendaredCasesForTrialSessionAction,
-      setCalendaredCasesOnTrialSessionAction,
+      clearAlertsAction,
+      clearErrorAlertsAction,
+      setTrialSessionIdAction,
+      getTrialSessionDetailsAction,
+      setTrialSessionDetailsAction,
+      setDefaultWorkingCopySortAction,
+      isTrialSessionCalendaredAction,
+      {
+        no: [
+          getEligibleCasesForTrialSessionAction,
+          setEligibleCasesOnTrialSessionAction,
+        ],
+        yes: [
+          getCalendaredCasesForTrialSessionAction,
+          setCalendaredCasesOnTrialSessionAction,
+        ],
+      },
+      setCurrentPageAction('TrialSessionWorkingCopy'),
     ],
   },
-  setCurrentPageAction('TrialSessionWorkingCopy'),
 ];
 
 export const gotoTrialSessionWorkingCopySequence = [
