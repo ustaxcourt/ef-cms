@@ -48,6 +48,17 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/edit',
+      checkLoggedIn((docketNumber, documentId) => {
+        document.title = `Edit Docket Record ${pageTitleSuffix}`;
+        app.getSequence('gotoEditDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/sign',
       checkLoggedIn((docketNumber, documentId) => {
         app.getSequence('gotoSignPDFDocumentSequence')({
@@ -210,10 +221,12 @@ const router = {
           'document-qc',
           'document-qc/my',
           'document-qc/my/inbox',
+          'document-qc/my/inProgress',
           'document-qc/my/outbox',
           'document-qc/my/batched',
           'document-qc/section',
           'document-qc/section/inbox',
+          'document-qc/section/inProgress',
           'document-qc/section/outbox',
           'document-qc/section/batched',
         ];

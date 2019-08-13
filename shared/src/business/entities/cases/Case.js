@@ -679,6 +679,21 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
 
 /**
  *
+ * @param {DocketRecord} updatedDocketEntry the update docket entry data
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
+  this.docketRecord.some(entry => {
+    if (entry.documentId === updatedDocketEntry.documentId) {
+      Object.assign(entry, updatedDocketEntry);
+      return true;
+    }
+  });
+  return this;
+};
+
+/**
+ *
  * @param {number} docketRecordIndex the index of the docket record to update
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
  * @returns {Case} the updated case entity

@@ -15,9 +15,11 @@ export const submitDocketEntryAction = async ({
   props,
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
+  const documentId = get(state.documentId);
   const { primaryDocumentFileId } = props;
 
   const isFileAttached = !!primaryDocumentFileId;
+  const isEditing = get(state.isEditingDocketEntry);
 
   let documentMetadata = omit(
     {
@@ -53,20 +55,32 @@ export const submitDocketEntryAction = async ({
     });
   }
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .fileDocketEntryInteractor({
-      applicationContext,
-      documentMetadata,
-      primaryDocumentFileId:
-        primaryDocumentFileId || applicationContext.getUniqueId(),
-    });
+  let caseDetail;
+
+  if (isEditing) {
+    caseDetail = await applicationContext
+      .getUseCases()
+      .updateDocketEntryInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId: documentId,
+      });
+  } else {
+    caseDetail = await applicationContext
+      .getUseCases()
+      .fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata,
+        primaryDocumentFileId:
+          primaryDocumentFileId || applicationContext.getUniqueId(),
+      });
+  }
 
   if (isFileAttached) {
     await applicationContext.getUseCases().createCoverSheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
-      documentId: primaryDocumentFileId,
+      documentId: primaryDocumentFileId || documentId,
     });
   }
 

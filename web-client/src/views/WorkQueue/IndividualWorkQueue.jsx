@@ -1,4 +1,5 @@
 import { IndividualWorkQueueBatched } from './IndividualWorkQueueBatched';
+import { IndividualWorkQueueInProgress } from './IndividualWorkQueueInProgress';
 import { IndividualWorkQueueInbox } from './IndividualWorkQueueInbox';
 import { IndividualWorkQueueOutbox } from './IndividualWorkQueueOutbox';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -32,6 +33,17 @@ export const IndividualWorkQueue = connect(
             <IndividualWorkQueueInbox />
           </div>
         </Tab>
+        {workQueueHelper.showInProgresssTab && (
+          <Tab
+            id="section-in-progress-tab"
+            tabName="inProgress"
+            title="In Progress"
+          >
+            <div id="section-in-progress-tab-content">
+              <IndividualWorkQueueInProgress />
+            </div>
+          </Tab>
+        )}
         {workQueueHelper.showBatchedForIRSTab && (
           <Tab
             id="section-batched-for-irs-tab"

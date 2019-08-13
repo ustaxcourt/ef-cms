@@ -433,6 +433,22 @@ table.docket-record {
     tbody td {
       height: 65px;
     }
+
+    tr.in-progress {
+      td {
+        background: $color-yellow;
+      }
+      .fa-thumbtack {
+        color: color($theme-color-warning);
+      }
+    }
+
+
+    tr.in-progress:hover {
+      td {
+        background: $color-primary-alt-lightest;
+      }
+    }
   }
 
   /* little screens */

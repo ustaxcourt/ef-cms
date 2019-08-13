@@ -62,7 +62,7 @@ function DocketEntryFactory(rawProps) {
     exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
-    primaryDocumentFile: joi.object().required(),
+    primaryDocumentFile: joi.object().optional(),
     primaryDocumentFileSize: joi.when('primaryDocumentFile', {
       is: joi.exist().not(null),
       otherwise: joi.optional().allow(null),
@@ -117,7 +117,6 @@ function DocketEntryFactory(rawProps) {
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
-    primaryDocumentFile: 'A file was not selected.',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',

@@ -18,4 +18,17 @@ describe('validateAddRespondent', () => {
       Object.keys(AddRespondent.errorToMessageMap),
     );
   });
+
+  it('returns null when no errors occur', () => {
+    const errors = validateAddRespondent({
+      applicationContext: {
+        getEntityConstructors: () => ({
+          AddRespondent,
+        }),
+      },
+      counsel: { representingPrimary: true, user: {} },
+    });
+
+    expect(errors).toEqual(null);
+  });
 });

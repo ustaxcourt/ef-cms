@@ -18,6 +18,7 @@ function DocketRecord(rawDocketRecord) {
   this.index = rawDocketRecord.index;
   this.status = rawDocketRecord.status;
   this.eventCode = rawDocketRecord.eventCode;
+  this.editState = rawDocketRecord.editState;
 }
 
 joiValidationDecorator(
@@ -28,6 +29,10 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     documentId: joi
+      .string()
+      .allow(null)
+      .optional(),
+    editState: joi
       .string()
       .allow(null)
       .optional(),
