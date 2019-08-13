@@ -13,6 +13,10 @@ import FormData from 'form-data';
 import docketClerkCreatesMessageToJudge from './journey/docketClerkCreatesMessageToJudge';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
+import judgeLogIn from './journey/judgeLogIn';
+import judgeSignsOut from './journey/judgeSignsOut';
+import judgeViewsCaseDetail from './journey/judgeViewsCaseDetail';
+import judgeViewsDashboard from './journey/judgeViewsDashboard';
 import petitionsClerkCreatesMessageToJudge from './journey/petitionsClerkCreatesMessageToJudge';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
@@ -104,4 +108,9 @@ describe('Judge messages journey', () => {
     'karma karma karma karma karma chameleon',
   );
   docketClerkSignsOut(test);
+
+  judgeLogIn(test);
+  judgeViewsDashboard(test);
+  judgeViewsCaseDetail(test);
+  judgeSignsOut(test);
 });
