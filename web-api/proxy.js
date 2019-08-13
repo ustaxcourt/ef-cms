@@ -30,6 +30,7 @@ const proxyMain = async () => {
       proxy({
         headers,
         pathRewrite,
+        proxyTimeout: 30 * 1000,
         target,
       }),
     );
