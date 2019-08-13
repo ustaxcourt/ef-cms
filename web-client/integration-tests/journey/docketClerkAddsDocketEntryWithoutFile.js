@@ -1,4 +1,4 @@
-export default (test, fakeFile) => {
+export default test => {
   return it('Docketclerk adds docket entry data without a file', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -22,7 +22,6 @@ export default (test, fakeFile) => {
       documentType: 'Select a Document Type.',
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
-      primaryDocumentFile: 'A file was not selected.',
     });
 
     //primary document

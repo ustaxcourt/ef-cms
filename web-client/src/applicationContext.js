@@ -113,8 +113,10 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
+import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
@@ -235,7 +237,9 @@ const allUseCases = {
   updateCaseDeadlineInteractor,
   updateCaseInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateDocketEntryInteractor,
   updatePrimaryContactInteractor,
+  uploadDocumentInteractor,
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
   validateAddPractitioner,

@@ -17,6 +17,7 @@ import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStep
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
+import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
@@ -54,6 +55,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
+import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
@@ -237,6 +239,7 @@ export const presenter = {
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
+    clearAlertSequence,
     clearDocumentSequence,
     clearModalSequence,
     clearPdfPreviewUrlSequence,
@@ -274,6 +277,7 @@ export const presenter = {
     gotoCreateOrderSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
+    gotoEditDocketEntrySequence,
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
     gotoLoginSequence,

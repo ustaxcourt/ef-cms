@@ -18,4 +18,17 @@ describe('validateAddPractitioner', () => {
 
     expect(Object.keys(errors)).toEqual(['user', 'representingPrimary']);
   });
+
+  it('returns null when no errors occur', () => {
+    const errors = validateAddPractitioner({
+      applicationContext: {
+        getEntityConstructors: () => ({
+          AddPractitionerFactory,
+        }),
+      },
+      counsel: { representingPrimary: true, user: {} },
+    });
+
+    expect(errors).toEqual(null);
+  });
 });

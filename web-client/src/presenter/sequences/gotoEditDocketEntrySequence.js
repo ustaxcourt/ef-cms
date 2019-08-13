@@ -5,34 +5,35 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set, unset } from 'cerebral/factories';
+import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDocketEntryFormForEditAction } from '../actions/setDocketEntryFormForEditAction';
+import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { state } from 'cerebral';
 
-export const gotoAddDocketEntry = [
+export const gotoEditDocketEntry = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
   clearScansAction,
   clearAlertsAction,
   clearFormAction,
-  unset(state.documentId),
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  set(state.isEditingDocketEntry, false),
-  set(state.form.lodged, false),
-  set(state.form.practitioner, []),
+  setDocketEntryFormForEditAction,
+  setDocumentIdAction,
+  set(state.isEditingDocketEntry, true),
   set(state.wizardStep, 'PrimaryDocumentForm'),
   set(state.documentUploadMode, 'scan'),
   set(state.documentSelectedForScan, 'primaryDocumentFile'),
   setCurrentPageAction('AddDocketEntry'),
 ];
 
-export const gotoAddDocketEntrySequence = [
+export const gotoEditDocketEntrySequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddDocketEntry,
+    isLoggedIn: gotoEditDocketEntry,
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -30,6 +30,10 @@ export const chooseWorkQueueSequence = [
           getDocumentQCBatchedForUserAction,
           setWorkItemsAction,
         ],
+        documentqcmyinProgress: [
+          getDocumentQCInboxForUserAction,
+          setWorkItemsAction,
+        ],
         documentqcmyinbox: [
           getDocumentQCInboxForUserAction,
           setWorkItemsAction,
@@ -41,6 +45,11 @@ export const chooseWorkQueueSequence = [
         documentqcsectionbatched: [
           getDocumentQCBatchedForSectionAction,
           setWorkItemsAction,
+        ],
+        documentqcsectioninProgress: [
+          getDocumentQCInboxForSectionAction,
+          setWorkItemsAction,
+          setSectionInboxCountAction,
         ],
         documentqcsectioninbox: [
           getDocumentQCInboxForSectionAction,
