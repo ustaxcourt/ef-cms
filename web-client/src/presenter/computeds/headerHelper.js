@@ -7,22 +7,22 @@ export const headerHelper = get => {
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueIsInternal);
 
-  const isUserInternal = userRole => {
+  const isUserInternal = role => {
     const internalRoles = [
       'docketclerk',
       'judge',
       'petitionsclerk',
       'seniorattorney',
     ];
-    return internalRoles.includes(userRole);
+    return internalRoles.includes(role);
   };
-  const isUserExternal = userRole => {
+  const isUserExternal = role => {
     const externalRoles = ['petitioner', 'practitioner', 'respondent'];
-    return externalRoles.includes(userRole);
+    return externalRoles.includes(role);
   };
-  const isOtherUser = userRole => {
+  const isOtherUser = role => {
     const externalRoles = ['petitionsclerk', 'docketclerk'];
-    return !externalRoles.includes(userRole);
+    return !externalRoles.includes(role);
   };
 
   const isTrialSessions = currentPage.startsWith('TrialSessions');
