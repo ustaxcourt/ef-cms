@@ -1,3 +1,4 @@
+import { camelCase } from 'lodash';
 import {
   compareCasesByDocketNumber,
   formatCase,
@@ -19,8 +20,20 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     .map(formatCaseName)
     .sort(compareCasesByDocketNumber);
 
+  const trialStatusOptions = [
+    'Set for Trial',
+    'Dismissed',
+    'Continued',
+    'Rule 122',
+    'A Basis Reached',
+    'Settled',
+    'Recall',
+    'Taken Under Advisement',
+  ].map(value => ({ key: camelCase(value), value }));
+
   return {
     formattedSessions,
     title: trialSession.title || 'Birmingham, Alabama',
+    trialStatusOptions,
   };
 };

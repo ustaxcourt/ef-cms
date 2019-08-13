@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -5,8 +6,9 @@ import React from 'react';
 export const WorkingCopySessionList = connect(
   {
     sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
+    trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
-  ({ sessions }) => {
+  ({ sessions, trialStatusOptions }) => {
     return (
       <div className="margin-top-4">
         <table
@@ -44,7 +46,19 @@ export const WorkingCopySessionList = connect(
                     <div key={idx}>{respondent.name}</div>
                   ))}
                 </td>
-                <td></td>
+                <td>
+                  <BindedSelect
+                    bind={`trialSessionWorkingCopy[${item.docketNumber}].trialStatus`}
+                    name="trialStatus"
+                  >
+                    <option value="">-Trial Status-</option>
+                    {trialStatusOptions.map(({ key, value }) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </BindedSelect>
+                </td>
               </tr>
             </tbody>
           ))}
