@@ -107,17 +107,6 @@ describe('addDocketEntryHelper', () => {
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
 
-  it('does not show respondent option under Parties Filing if no respondent is associated with case', () => {
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showRespondentParty).toBe(false);
-  });
-
-  it('shows respondent option under Parties Filing if a respondent is associated with case', () => {
-    state.caseDetail.respondents = [{ name: 'Test Respondent' }];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showRespondentParty).toBe(true);
-  });
-
   it("shows should show inclusions when previous document isn't secondary", () => {
     state.form.previousDocument = 'Statement of Taxpayer Identification';
     state.screenMetadata = {
