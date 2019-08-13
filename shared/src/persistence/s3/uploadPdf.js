@@ -10,13 +10,14 @@
  */
 exports.uploadPdf = async ({
   applicationContext,
+  documentId,
   file,
   onUploadProgress,
   policy,
 }) => {
-  const documentId = applicationContext.getUniqueId();
+  const docId = documentId || applicationContext.getUniqueId();
   const formData = new FormData();
-  formData.append('key', documentId);
+  formData.append('key', docId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);
   formData.append('X-Amz-Credential', policy.fields['X-Amz-Credential']);
   formData.append('X-Amz-Date', policy.fields['X-Amz-Date']);
@@ -42,5 +43,5 @@ exports.uploadPdf = async ({
       return r;
     });
 
-  return documentId;
+  return docId;
 };

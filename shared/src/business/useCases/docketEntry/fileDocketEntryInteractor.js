@@ -109,6 +109,7 @@ exports.fileDocketEntryInteractor = async ({
           createdAt: documentEntity.createdAt,
         },
         isInternal: false,
+        isRead: user.role !== 'practitioner',
         section: DOCKET_SECTION,
         sentBy: user.userId,
       });
@@ -125,10 +126,12 @@ exports.fileDocketEntryInteractor = async ({
       documentEntity.addWorkItem(workItem);
 
       if (metadata.isPaper) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
+        if (metadata.isFileAttached) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
+          });
+        }
 
         workItem.assignToUser({
           assigneeId: user.userId,
@@ -143,10 +146,14 @@ exports.fileDocketEntryInteractor = async ({
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
+      const docketRecordEditState =
+        documentEntity.isFileAttached === false ? documentMetadata : {};
+
       caseEntity.addDocketRecord(
         new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
+          editState: JSON.stringify(docketRecordEditState),
           filingDate: documentEntity.receivedAt,
         }),
       );
@@ -162,12 +169,19 @@ exports.fileDocketEntryInteractor = async ({
   for (let workItem of workItems) {
     if (workItem.document.isPaper) {
       workItemsSaved.push(
-        applicationContext
-          .getPersistenceGateway()
-          .saveWorkItemForDocketClerkFilingExternalDocument({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          }),
+        workItem.document.isFileAttached
+          ? applicationContext
+              .getPersistenceGateway()
+              .saveWorkItemForDocketClerkFilingExternalDocument({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              })
+          : applicationContext
+              .getPersistenceGateway()
+              .saveWorkItemForDocketEntryWithoutFile({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              }),
       );
     } else {
       workItemsSaved.push(

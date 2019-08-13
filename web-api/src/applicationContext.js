@@ -312,6 +312,9 @@ const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
 const {
+  saveWorkItemForDocketEntryWithoutFile,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryWithoutFile');
+const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
 const {
@@ -365,6 +368,9 @@ const {
 const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
+const {
+  updateDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
@@ -494,6 +500,7 @@ module.exports = (appContextUser = {}) => {
         createUser,
         createWorkItem,
         deleteCaseDeadline,
+
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
@@ -529,6 +536,7 @@ module.exports = (appContextUser = {}) => {
         putWorkItemInUsersOutbox,
         saveDocument,
         saveWorkItemForDocketClerkFilingExternalDocument,
+        saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setWorkItemAsRead,
@@ -621,6 +629,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
         validatePdfInteractor,
         verifyCaseForUserInteractor,

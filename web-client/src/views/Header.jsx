@@ -9,7 +9,7 @@ import seal from '../images/ustc_seal.svg';
 
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
-const NavigationItems = helper => {
+const NavigationItems = (helper, { clearAlertSequence }) => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
       {helper.showHomeIcon && (
@@ -20,7 +20,12 @@ const NavigationItems = helper => {
             helper.pageIsHome && 'active',
           )}
         >
-          <a href="/">
+          <a
+            href="/"
+            onClick={() => {
+              clearAlertSequence();
+            }}
+          >
             <FontAwesomeIcon icon="home" />
             <span className="sr-only">Home</span>
           </a>
@@ -34,7 +39,12 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/messages/my/inbox">
+          <a
+            href="/messages/my/inbox"
+            onClick={() => {
+              clearAlertSequence();
+            }}
+          >
             Messages{' '}
             {helper.showMessagesIcon && (
               <FontAwesomeIcon
@@ -56,7 +66,14 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href={helper.defaultQCBoxPath}>Document QC</a>
+          <a
+            href={helper.defaultQCBoxPath}
+            onClick={() => {
+              clearAlertSequence();
+            }}
+          >
+            Document QC
+          </a>
         </li>
       )}
       {helper.showMyCases && (
@@ -67,7 +84,14 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/">My Cases</a>
+          <a
+            href="/"
+            onClick={() => {
+              clearAlertSequence();
+            }}
+          >
+            My Cases
+          </a>
         </li>
       )}
       {helper.showTrialSessions && (
@@ -78,7 +102,14 @@ const NavigationItems = helper => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/trial-sessions">Trial Sessions</a>
+          <a
+            href="/trial-sessions"
+            onClick={() => {
+              clearAlertSequence();
+            }}
+          >
+            Trial Sessions
+          </a>
         </li>
       )}
     </ul>
@@ -88,10 +119,10 @@ const NavigationItems = helper => {
 export const Header = connect(
   {
     betaBar: state.betaBar,
+    clearAlertSequence: sequences.clearAlertSequence,
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
-    navigateToPathSequence: sequences.navigateToPathSequence,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
@@ -99,10 +130,10 @@ export const Header = connect(
   },
   ({
     betaBar,
+    clearAlertSequence,
     helper,
     loginSequence,
     mobileMenu,
-    navigateToPathSequence,
     signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
@@ -141,7 +172,12 @@ export const Header = connect(
         >
           <div className="grid-col-1">
             <div className="usa-logo" id="extended-logo">
-              <a href="/">
+              <a
+                href="/"
+                onClick={() => {
+                  clearAlertSequence();
+                }}
+              >
                 <img alt="USTC Seal" src={seal} />
               </a>
             </div>
@@ -150,7 +186,7 @@ export const Header = connect(
             <nav className="main-navigation" role="navigation">
               {user &&
                 NavigationItems(helper, {
-                  navigateToPathSequence,
+                  clearAlertSequence,
                 })}
             </nav>
           </div>
@@ -188,7 +224,7 @@ export const Header = connect(
                         {user && user.userId && (
                           <div className="mobile-account-menu-container">
                             {NavigationItems(helper, {
-                              navigateToPathSequence,
+                              clearAlertSequence,
                             })}
                           </div>
                         )}

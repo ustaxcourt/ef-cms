@@ -12,6 +12,7 @@ export const uploadDocketEntryFileAction = async ({
   applicationContext,
   get,
   path,
+  props,
   store,
 }) => {
   const { primaryDocumentFile } = get(state.form);
@@ -24,14 +25,13 @@ export const uploadDocketEntryFileAction = async ({
   );
 
   try {
-    const [
-      primaryDocumentFileId,
-    ] = await applicationContext
+    const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor({
+      .uploadDocumentInteractor({
         applicationContext,
-        documentFiles: [primaryDocumentFile],
-        onUploadProgresses: [progressFunctions.primary],
+        documentFile: primaryDocumentFile,
+        documentId: props.documentId,
+        onUploadProgress: progressFunctions.primary,
       });
 
     return path.success({
