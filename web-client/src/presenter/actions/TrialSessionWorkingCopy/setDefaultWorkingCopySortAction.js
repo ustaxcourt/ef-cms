@@ -16,6 +16,6 @@ export const setDefaultWorkingCopySortAction = ({ get, store }) => {
   }
 
   if (!sortOrder) {
-    store.set(state.trialSessionWorkingCopy.sortOrder, 'desc');
+    store.set(state.trialSessionWorkingCopy.sortOrder, 'asc');
   }
 };

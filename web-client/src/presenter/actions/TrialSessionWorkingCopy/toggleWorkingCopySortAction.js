@@ -14,7 +14,7 @@ export const toggleWorkingCopySortAction = ({ get, props, store }) => {
   const fromSortOrder = get(state.trialSessionWorkingCopy.sortOrder);
 
   const newSort = sort;
-  let newSortOrder = 'desc';
+  let newSortOrder = 'asc';
 
   if (sort === fromSort) {
     newSortOrder = (fromSortOrder === 'desc' && 'asc') || 'desc';
