@@ -17,6 +17,9 @@ const PROXY_DESTINATIONS = {
 
 const proxyMain = async () => {
   const app = express();
+  const headers = {
+    Connection: 'keep-alive',
+  };
 
   Object.entries(PROXY_DESTINATIONS).forEach(([uri, target]) => {
     const pathRewrite = {};
@@ -25,6 +28,7 @@ const proxyMain = async () => {
     app.use(
       uri,
       proxy({
+        headers,
         pathRewrite,
         target,
       }),
