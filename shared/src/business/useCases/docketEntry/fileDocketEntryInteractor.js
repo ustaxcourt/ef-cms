@@ -65,9 +65,14 @@ exports.fileDocketEntryInteractor = async ({
     'practitioner',
   ]);
 
+  if (primaryDocumentMetadata.lodged) {
+    primaryDocumentMetadata.eventCode = 'MISL';
+  }
+
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
   }
+
   if (secondarySupportingDocumentMetadata) {
     secondarySupportingDocumentMetadata.lodged = true;
   }
