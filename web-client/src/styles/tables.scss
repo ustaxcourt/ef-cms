@@ -28,7 +28,6 @@ table,
 
   .batches-table {
     tr {
-
       td {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -215,6 +214,9 @@ table.work-queue {
     }
     &.padding-right-0 {
       padding-right: 0;
+    }
+    .sortActive {
+      border-bottom: 3px solid #005ea2;
     }
   }
 
@@ -442,7 +444,6 @@ table.docket-record {
         color: color($theme-color-warning);
       }
     }
-
 
     tr.in-progress:hover {
       td {
