@@ -27,6 +27,7 @@ set -- \
   --accountId noop \
   --domain noop \
   --efcmsTableName=efcms-local \
+  --noAuth \
   --noTimeout \
   --region us-east-1 \
   --stage local
