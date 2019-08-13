@@ -5,8 +5,16 @@ import {
 } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
+const compareCasesByPractitioner = (a, b) => {
+  const aCount = (a.practitioners.length && 1) || 0;
+  const bCount = (b.practitioners.length && 1) || 0;
+
+  return aCount - bCount;
+};
+
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const trialSession = get(state.trialSession) || {};
+  const { sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
 
   const formatCaseName = myCase => {
     myCase.caseName = applicationContext.getCaseCaptionNames(
@@ -19,6 +27,14 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     .map(formatCase)
     .map(formatCaseName)
     .sort(compareCasesByDocketNumber);
+
+  if (sort === 'practitioner') {
+    formattedSessions = formattedSessions.sort(compareCasesByPractitioner);
+  }
+
+  if (sortOrder === 'asc') {
+    formattedSessions = formattedSessions.slice().reverse();
+  }
 
   const trialStatusOptions = [
     'Set for Trial',

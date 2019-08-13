@@ -52,17 +52,17 @@ export const WorkingCopySessionList = connect(
                 <span
                   className={classNames(
                     'margin-right-105',
-                    sort === 'petitioner' && 'sortActive',
+                    sort === 'practitioner' && 'sortActive',
                   )}
                   onClick={() => {
                     toggleWorkingCopySortSequence({
-                      sort: 'petitioner',
+                      sort: 'practitioner',
                     });
                   }}
                 >
                   Petitioner Counsel
                 </span>
-                {(sort === 'petitioner' && sortOrder === 'asc' && (
+                {(sort === 'practitioner' && sortOrder === 'asc' && (
                   <FontAwesomeIcon icon="caret-up" />
                 )) || <FontAwesomeIcon icon="caret-down" />}
               </th>
