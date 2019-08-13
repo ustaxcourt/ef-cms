@@ -1,3 +1,3 @@
 export const getBaseRouteAction = ({ path, props }) => {
-  return path[props.baseRoute]();
+  return path[props.baseRoute || 'dashboard']();
 };
