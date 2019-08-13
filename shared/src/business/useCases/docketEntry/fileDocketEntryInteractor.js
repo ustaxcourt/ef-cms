@@ -71,10 +71,12 @@ exports.fileDocketEntryInteractor = async ({
 
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
+    secondaryDocument.eventCode = 'MISL';
   }
 
   if (secondarySupportingDocumentMetadata) {
     secondarySupportingDocumentMetadata.lodged = true;
+    secondarySupportingDocumentMetadata.eventCode = 'MISL';
   }
 
   [
