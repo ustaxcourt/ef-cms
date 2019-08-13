@@ -1,8 +1,5 @@
 import { omit } from 'lodash';
 import { state } from 'cerebral';
-const {
-  createISODateString,
-} = require('../../../../../shared/src/business/utilities/DateHandler');
 
 /**
  * submit a new docket entry
@@ -32,7 +29,7 @@ export const updateDocketEntryWithFileAction = async ({
     isPaper: true,
     docketNumber,
     caseId,
-    createdAt: createISODateString(),
+    createdAt: applicationContext.getUtilities().createISODateString(),
     receivedAt: documentMetadata.dateReceived,
   };
 
