@@ -10,6 +10,7 @@ export const workQueueHelper = get => {
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueIsInternal);
   const showInbox = workQueueToDisplay.box === 'inbox';
+  const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const sectionInboxCount = get(state.sectionInboxCount);
@@ -52,7 +53,7 @@ export const workQueueHelper = get => {
     showAssignedToColumn:
       (isDisplayingQC &&
         !showIndividualWorkQueue &&
-        showInbox &&
+        (showInbox || showInProgress) &&
         !userIsOther) ||
       !isDisplayingQC,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
