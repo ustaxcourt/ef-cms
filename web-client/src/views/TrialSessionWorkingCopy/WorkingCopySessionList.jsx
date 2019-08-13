@@ -43,7 +43,7 @@ export const WorkingCopySessionList = connect(
                 >
                   Docket
                 </span>
-                {(sort === 'docket' && sortOrder === 'asc' && (
+                {(sort === 'docket' && sortOrder === 'desc' && (
                   <FontAwesomeIcon icon="caret-up" />
                 )) || <FontAwesomeIcon icon="caret-down" />}
               </th>
@@ -62,7 +62,7 @@ export const WorkingCopySessionList = connect(
                 >
                   Petitioner Counsel
                 </span>
-                {(sort === 'practitioner' && sortOrder === 'asc' && (
+                {(sort === 'practitioner' && sortOrder === 'desc' && (
                   <FontAwesomeIcon icon="caret-up" />
                 )) || <FontAwesomeIcon icon="caret-down" />}
               </th>

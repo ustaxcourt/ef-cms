@@ -6,8 +6,8 @@ import {
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
-  const aCount = (a.practitioners.length && 1) || 0;
-  const bCount = (b.practitioners.length && 1) || 0;
+  const aCount = (a.practitioners && a.practitioners.length && 1) || 0;
+  const bCount = (b.practitioners && b.practitioners.length && 1) || 0;
 
   return aCount - bCount;
 };
@@ -32,7 +32,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     formattedSessions = formattedSessions.sort(compareCasesByPractitioner);
   }
 
-  if (sortOrder === 'asc') {
+  if (sortOrder === 'desc') {
     formattedSessions = formattedSessions.slice().reverse();
   }
 
