@@ -148,6 +148,7 @@
     "seed:s3": "export S3_DIR=./web-api/storage/s3/noop-documents-local-us-east-1 && rm -rf \"${S3_DIR}\" && mkdir -p \"${S3_DIR}\" && cp -R ./web-api/storage/fixtures/s3/ \"${S3_DIR}\"",
     "seed": "run-p seed:db seed:s3",
     "start:api": "./run-local.sh",
+    "start:api:ci": "CI=true ./run-local.sh",
     "start:madge": "node ./graph-generators/index.js",
     "start:client:ci": "CI=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
