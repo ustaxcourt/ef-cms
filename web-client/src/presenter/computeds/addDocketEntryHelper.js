@@ -118,9 +118,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
-  const hasRespondents =
-    caseDetail.respondents && caseDetail.respondents.length > 0;
-
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
@@ -130,7 +127,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     secondary: secondaryOptionsForCategory,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
-    showRespondentParty: !!hasRespondents,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
     showSecondaryParty,
     showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
