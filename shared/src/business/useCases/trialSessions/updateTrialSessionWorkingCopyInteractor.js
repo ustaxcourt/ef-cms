@@ -8,7 +8,7 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getTrialSessionWorkingCopyInteractor
+ * updateTrialSessionWorkingCopyInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
