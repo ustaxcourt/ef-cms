@@ -266,3 +266,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getTrialSessionWorkingCopy:
+    handler: web-api/src/trialSessionsHandlers.getTrialSessionWorkingCopyLambda
+    events:
+      - http:
+          path: /{trialSessionId}/working-copy
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
