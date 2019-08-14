@@ -90,7 +90,7 @@ export const SectionWorkQueueOutbox = connect(
                       e.stopPropagation();
                     }}
                   >
-                    {item.document.documentType}
+                    {item.document.documentTitle}
                   </a>{' '}
                   {item.document.filingsAndProceedings}
                 </div>
