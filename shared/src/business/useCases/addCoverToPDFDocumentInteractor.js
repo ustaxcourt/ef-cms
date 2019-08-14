@@ -4,6 +4,7 @@ const {
   drawText,
   PDFDocument,
   PDFDocumentWriter,
+  PDFName,
 } = require('pdf-lib');
 const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
