@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { TrialSessionWorkingCopy } from '../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { runCompute } from 'cerebral/test';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -24,7 +25,13 @@ const TRIAL_SESSION = {
 
 describe('trial session working copy computed', () => {
   it('computes defaults with no data', () => {
-    const result = runCompute(trialSessionWorkingCopyHelper, {});
+    const result = runCompute(trialSessionWorkingCopyHelper, {
+      state: {
+        constants: {
+          TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+        },
+      },
+    });
     expect(result.title).toBeDefined();
   });
 
@@ -32,6 +39,9 @@ describe('trial session working copy computed', () => {
     it('sorts calendared cases by docket number', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -60,6 +70,9 @@ describe('trial session working copy computed', () => {
     it('sorts calendared cases by docket number in descending order', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -88,6 +101,9 @@ describe('trial session working copy computed', () => {
     it('sorts calendared cases by pro-se', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
