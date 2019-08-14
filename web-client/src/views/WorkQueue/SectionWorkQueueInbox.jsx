@@ -182,7 +182,8 @@ export const SectionWorkQueueInbox = connect(
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.documentType}
+                      {console.log(item)}
+                      {item.document.documentTitle}
                     </a>{' '}
                     {item.document.filingsAndProceedings}
                   </div>

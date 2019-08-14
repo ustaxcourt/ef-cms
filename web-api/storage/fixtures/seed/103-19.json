@@ -70,6 +70,7 @@
               "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
               "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
               "documentType": "Answer",
+              "documentTitle": "Answer by Test Respondent",
               "filedBy": "Test Respondent",
               "workItems": []
             },
@@ -267,6 +268,7 @@
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
       "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "filedBy": "Test Respondent",
       "workItems": []
     },
@@ -301,6 +303,7 @@
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
       "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "filedBy": "Test Respondent",
       "workItems": []
     },
@@ -336,6 +339,7 @@
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7"
     },
     "section": "armensChambers",
@@ -372,6 +376,7 @@
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7"
     },
     "section": "armensChambers",
@@ -408,6 +413,7 @@
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7"
     },
     "section": "armensChambers",
@@ -445,6 +451,7 @@
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7"
     },
     "section": "armensChambers",
@@ -547,6 +554,7 @@
               "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7",
               "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
               "documentType": "Answer",
+              "documentTitle": "Answer by Test Respondent",
               "filedBy": "Test Respondent",
               "workItems": []
             },
@@ -576,6 +584,7 @@
             "document": {
               "createdAt": "2019-03-01T22:54:05.993Z",
               "documentType": "Answer",
+              "documentTitle": "Answer by Test Respondent",
               "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7"
             },
             "section": "armensChambers",
@@ -687,6 +696,7 @@
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "documentType": "Answer",
+      "documentTitle": "Answer by Test Respondent",
       "documentId": "f1aa4aa2-c214-424c-8870-d0049c5744d7"
     },
     "section": "armensChambers",
