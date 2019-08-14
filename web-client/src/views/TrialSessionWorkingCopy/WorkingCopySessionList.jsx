@@ -1,12 +1,25 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const WorkingCopySessionList = connect(
   {
     sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
+    sort: state.trialSessionWorkingCopy.sort,
+    sortOrder: state.trialSessionWorkingCopy.sortOrder,
+    toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
+    trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
-  ({ sessions }) => {
+  ({
+    sessions,
+    sort,
+    sortOrder,
+    toggleWorkingCopySortSequence,
+    trialStatusOptions,
+  }) => {
     return (
       <div className="margin-top-4">
         <table
@@ -16,11 +29,43 @@ export const WorkingCopySessionList = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number">
-                <span className="padding-left-2px">Docket</span>
+              <th aria-label="Docket Number" className="padding-left-2px">
+                <span
+                  className={classNames(
+                    ' margin-right-105',
+                    sort === 'docket' && 'sortActive',
+                  )}
+                  onClick={() => {
+                    toggleWorkingCopySortSequence({
+                      sort: 'docket',
+                    });
+                  }}
+                >
+                  Docket
+                </span>
+                {(sort === 'docket' && sortOrder === 'desc' && (
+                  <FontAwesomeIcon icon="caret-up" />
+                )) || <FontAwesomeIcon icon="caret-down" />}
               </th>
               <th>Case Caption</th>
-              <th>Petitioner Counsel</th>
+              <th>
+                <span
+                  className={classNames(
+                    'margin-right-105',
+                    sort === 'practitioner' && 'sortActive',
+                  )}
+                  onClick={() => {
+                    toggleWorkingCopySortSequence({
+                      sort: 'practitioner',
+                    });
+                  }}
+                >
+                  Petitioner Counsel
+                </span>
+                {(sort === 'practitioner' && sortOrder === 'desc' && (
+                  <FontAwesomeIcon icon="caret-up" />
+                )) || <FontAwesomeIcon icon="caret-down" />}
+              </th>
               <th>Respondent Counsel</th>
               <th colSpan="2">Trial Status</th>
             </tr>
@@ -44,7 +89,19 @@ export const WorkingCopySessionList = connect(
                     <div key={idx}>{respondent.name}</div>
                   ))}
                 </td>
-                <td></td>
+                <td>
+                  <BindedSelect
+                    bind={`trialSessionWorkingCopy[${item.docketNumber}].trialStatus`}
+                    name="trialStatus"
+                  >
+                    <option value="">-Trial Status-</option>
+                    {trialStatusOptions.map(({ key, value }) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </BindedSelect>
+                </td>
               </tr>
             </tbody>
           ))}
