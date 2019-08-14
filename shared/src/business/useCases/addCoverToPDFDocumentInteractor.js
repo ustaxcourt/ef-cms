@@ -175,7 +175,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
   const ustcSealBytes = new Uint8Array(coverLogo);
-  const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
+  const [pngSeal, pngSealDimensions] = pdfDoc.embedPng(ustcSealBytes);
   applicationContext.logger.timeEnd('Embed PNG');
 
   // Embed font to use for cover page generation
