@@ -2,7 +2,7 @@ const {
   drawImage,
   drawLinesOfText,
   drawText,
-  PDFDocumentFactory,
+  PDFDocument,
   PDFDocumentWriter,
 } = require('pdf-lib');
 const { Case } = require('../entities/cases/Case');
@@ -126,7 +126,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
 
   // create pdfDoc object from file data
   applicationContext.logger.time('Loading the PDF');
-  const pdfDoc = PDFDocumentFactory.load(pdfData);
+  const pdfDoc = await PDFDocument.load(pdfData);
   applicationContext.logger.time('Loading the PDF');
 
   // allow GC to clear original loaded pdf data

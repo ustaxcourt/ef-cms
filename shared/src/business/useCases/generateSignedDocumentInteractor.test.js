@@ -4,7 +4,7 @@ const {
   generateSignedDocumentInteractor,
   getPageDimensions,
 } = require('./generateSignedDocumentInteractor.js');
-const { PDFDocumentFactory } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
@@ -65,7 +65,7 @@ describe('generateSignedDocument', () => {
       newPdfData,
     );
 
-    const newPdfDoc = PDFDocumentFactory.load(newPdfData);
+    const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(newPdfDocPages.length).toEqual(1);
   });
