@@ -95,7 +95,7 @@
     "s3-zip": "^3.0.0",
     "s3rver": "github:ustaxcourt/s3rver#created_presigned_post_support",
     "sanitize-filename": "^1.6.2",
-    "serverless": "^1.49.0",
+    "serverless": "^1.50.0",
     "serverless-apigw-binary": "^0.4.4",
     "serverless-apigwy-binary": "^1.0.0",
     "serverless-domain-manager": "^3.3.0",
