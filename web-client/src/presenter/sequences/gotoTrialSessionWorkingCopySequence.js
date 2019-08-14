@@ -10,6 +10,7 @@ import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialS
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultWorkingCopySortAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopySortAction';
 import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
@@ -25,6 +26,7 @@ const gotoTrialSessionDetails = [
       setTrialSessionIdAction,
       getTrialSessionDetailsAction,
       setTrialSessionDetailsAction,
+      setDefaultWorkingCopySortAction,
       isTrialSessionCalendaredAction,
       {
         no: [
