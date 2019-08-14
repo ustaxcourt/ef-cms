@@ -87,6 +87,7 @@ import { getScannerInterface as getScannerMockInterfaceInteractor } from '../../
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
+import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
@@ -214,6 +215,7 @@ const allUseCases = {
   getSentMessagesForSectionInteractor,
   getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionWorkingCopyInteractor,
   getTrialSessionsInteractor,
   getUserInteractor,
   getUsersInSectionInteractor,
