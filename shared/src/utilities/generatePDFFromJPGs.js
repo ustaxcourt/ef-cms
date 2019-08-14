@@ -1,4 +1,4 @@
-const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
+const { drawImage, PDFDocument, PDFDocumentWriter } = require('pdf-lib');
 
 /**
  * takes an array of JPG images (each a bytearray) and combines
@@ -9,7 +9,7 @@ const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
  */
 
 exports.generatePDFFromJPGs = imgData => {
-  const pdfDoc = PDFDocumentFactory.create();
+  const pdfDoc = PDFDocument.create();
 
   const addImageToPage = img => {
     const [imgRef, imgDim] = pdfDoc.embedJPG(img);

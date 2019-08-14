@@ -1,7 +1,7 @@
 const {
   drawRectangle,
   drawText,
-  PDFDocumentFactory,
+  PDFDocument,
   PDFDocumentWriter,
 } = require('pdf-lib');
 
@@ -53,7 +53,7 @@ exports.generateSignedDocumentInteractor = async ({
   scale = 1,
   sigTextData,
 }) => {
-  const pdfDoc = PDFDocumentFactory.load(pdfData);
+  const pdfDoc = await PDFDocument.load(pdfData);
   const pages = pdfDoc.getPages();
   const page = pages[pageIndex];
 
