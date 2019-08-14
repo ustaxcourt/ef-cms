@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  TRIAL_SESSIONS,
+  TRIAL_SESSION_WORKING_COPY,
 } = require('../../../authorization/authorizationClientService');
 const {
   TrialSessionWorkingCopy,
@@ -19,7 +19,7 @@ exports.updateTrialSessionWorkingCopyInteractor = async ({
   trialSessionWorkingCopyToUpdate,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, TRIAL_SESSIONS)) {
+  if (!isAuthorized(user, TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
