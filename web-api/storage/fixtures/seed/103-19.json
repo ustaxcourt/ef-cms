@@ -16,6 +16,7 @@
               "createdAt": "2019-03-01T22:53:50.098Z",
               "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Petitioner",
               "workItems": []
@@ -498,6 +499,7 @@
               "createdAt": "2019-03-01T22:53:50.098Z",
               "documentId": "c611ee2e-a270-4dcd-a7bd-b8b9062db630",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Petitioner",
               "workItems": []
