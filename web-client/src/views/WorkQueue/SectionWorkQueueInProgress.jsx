@@ -151,7 +151,8 @@ export const SectionWorkQueueInProgress = connect(
                         e.stopPropagation();
                       }}
                     >
-                      {item.document.documentTitle}
+                      {item.document.documentTitle ||
+                        item.document.documentType}
                     </a>{' '}
                     {item.document.filingsAndProceedings}
                   </div>
