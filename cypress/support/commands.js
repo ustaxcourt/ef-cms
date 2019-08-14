@@ -63,6 +63,14 @@ Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   }
 });
 
+Cypress.Commands.add('showsSpinner', (shows = true) => {
+  if (shows) {
+    cy.get('.progress-indicator').should('exist');
+  } else {
+    cy.get('.progress-indicator').should('not.exist');
+  }
+});
+
 Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   if (shows) {
     cy.get('.usa-alert--success').should('exist');
