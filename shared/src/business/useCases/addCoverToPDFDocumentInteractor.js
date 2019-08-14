@@ -136,7 +136,8 @@ exports.addCoverToPDFDocumentInteractor = async ({
     let mediaBox;
 
     // Check for MediaBox on the page itself
-    const hasMediaBox = !!page.getMaybe('MediaBox');
+    const hasMediaBox = !!page.get(PDFName.of('MediaBox'));
+
     if (hasMediaBox) {
       mediaBox = page.index.lookup(page.get('MediaBox'));
     }
