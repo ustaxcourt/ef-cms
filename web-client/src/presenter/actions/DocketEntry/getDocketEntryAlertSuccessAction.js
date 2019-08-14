@@ -17,7 +17,8 @@ export const getDocketEntryAlertSuccessAction = ({ get, props }) => {
 
   if (isUpdatingWithFile) {
     title = 'Your document has been saved to the entry.';
-    message = 'You can view the document by clicking on the docket entry below.';
+    message =
+      'You can view the document by clicking on the docket entry below.';
   } else {
     title = 'Your entry has been added to the docket record.';
   }
