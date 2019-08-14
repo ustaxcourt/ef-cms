@@ -7,7 +7,7 @@ app.use(
   '/api',
   proxy({
     pathRewrite: {
-      '^/api': '/',
+      '^/api': '',
     },
     target: 'http://localhost:3001',
   }),
@@ -17,7 +17,7 @@ app.use(
   '/cases',
   proxy({
     pathRewrite: {
-      '^/cases': '/',
+      '^/cases': '',
     },
     target: 'http://localhost:3002',
   }),
@@ -27,7 +27,7 @@ app.use(
   '/users',
   proxy({
     pathRewrite: {
-      '^/users': '/',
+      '^/users': '',
     },
     target: 'http://localhost:3003',
   }),
@@ -37,7 +37,7 @@ app.use(
   '/documents',
   proxy({
     pathRewrite: {
-      '^/documents': '/',
+      '^/documents': '',
     },
     target: 'http://localhost:3004',
   }),
@@ -47,7 +47,7 @@ app.use(
   '/work-items',
   proxy({
     pathRewrite: {
-      '^/work-items': '/',
+      '^/work-items': '',
     },
     target: 'http://localhost:3005',
   }),
@@ -57,7 +57,7 @@ app.use(
   '/sections',
   proxy({
     pathRewrite: {
-      '^/sections': '/',
+      '^/sections': '',
     },
     target: 'http://localhost:3006',
   }),
@@ -67,7 +67,7 @@ app.use(
   '/trial-sessions',
   proxy({
     pathRewrite: {
-      '^/trial-sessions': '/',
+      '^/trial-sessions': '',
     },
     target: 'http://localhost:3007',
   }),
