@@ -46,6 +46,7 @@ describe('Create a work item ', () => {
     navigateToDashboard('petitionsclerk');
     viewMyOutbox();
     getTableRows().should('have.length', 2);
+    cy.showsSpinner(false);
     getWorkItemContaining('104-19').click();
     getWorkItemContaining('yolo').should('exist');
   });
