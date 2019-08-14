@@ -7,12 +7,12 @@ const petitioner = require('./pa11y/pa11y-petitioner');
 const judge = require('./pa11y/pa11y-judge');
 
 const userUrls = [
+  ...docketclerk,
   ...judge,
   ...petitioner,
   ...petitionsclerk,
   ...practitioner,
   ...respondent,
-  ...docketclerk,
   ...seniorattorney,
 ];
 
