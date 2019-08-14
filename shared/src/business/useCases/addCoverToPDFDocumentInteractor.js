@@ -189,7 +189,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // Generate cover page
   applicationContext.logger.time('Generate Cover Page');
   const coverPage = pdfDoc
-    .createPage(coverPageDimensions.map(dim => pageScaler(dim)))
+    .addPage(coverPageDimensions.map(dim => pageScaler(dim)))
     .addImageObject('USTCSeal', pngSeal)
     .addFontDictionary('Helvetica', helveticaRef)
     .addFontDictionary('Helvetica-Bold', helveticaBoldRef);

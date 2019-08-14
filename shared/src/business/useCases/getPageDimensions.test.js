@@ -6,7 +6,7 @@ describe('getPageDimensions', async () => {
     const width = 350;
     const height = 500;
     const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.createPage([width, height]);
+    const page = pdfDoc.addPage([width, height]);
     pdfDoc.addPage(page);
 
     expect(getPageDimensions(page)).toEqual([width, height]);
