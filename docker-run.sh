@@ -9,4 +9,5 @@ docker run -t -i \
   -p 8001:8001 \
   -p 9000:9000 \
   --rm efcms /bin/sh \
-  -c "(npm run start:api &) && (npm run dynamo:admin &) && (npm run print:success &) && npm run start:client"
+  -c "npx run-s start:api dynamo:admin print:success start:client"
+
