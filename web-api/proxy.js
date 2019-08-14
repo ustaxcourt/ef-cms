@@ -6,13 +6,13 @@ const PROXY_REACHABLE_TIMEOUT = 30 * 1000; // 30 seconds
 
 // do not include trailing slashes
 const PROXY_DESTINATIONS = {
-  '/api': 'http://0.0.0.0:3001',
-  '/cases': 'http://0.0.0.0:3002',
-  '/documents': 'http://0.0.0.0:3004',
-  '/sections': 'http://0.0.0.0:3006',
-  '/trial-sessions': 'http://0.0.0.0:3007',
-  '/users': 'http://0.0.0.0:3003',
-  '/work-items': 'http://0.0.0.0:3005',
+  '/api': 'http://localhost:3001',
+  '/cases': 'http://localhost:3002',
+  '/documents': 'http://localhost:3004',
+  '/sections': 'http://localhost:3006',
+  '/trial-sessions': 'http://localhost:3007',
+  '/users': 'http://localhost:3003',
+  '/work-items': 'http://localhost:3005',
 };
 
 const proxyMain = async () => {
@@ -37,7 +37,7 @@ const proxyMain = async () => {
     );
   });
 
-  app.listen(3000, '0.0.0.0');
+  app.listen(3000, 'localhost');
 
   const isProxyReachable = uri => {
     // hitting '/TEST/PROXY' to deliberately elicit a 404 rather than 403 which clutters authorization logs
