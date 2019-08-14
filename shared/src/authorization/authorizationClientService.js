@@ -9,6 +9,7 @@ exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
 exports.START_PAPER_CASE = 'startPaperCase';
 exports.GET_READ_MESSAGES = 'getReadMessages';
 exports.TRIAL_SESSIONS = 'trialSessions';
+exports.TRIAL_SESSION_WORKING_COPY = 'trialSessionWorkingCopy';
 exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
 exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
@@ -44,6 +45,7 @@ const AUTHORIZATION_MAP = {
     exports.PETITION,
     exports.SERVE_DOCUMENT,
     exports.START_PAPER_CASE,
+    exports.TRIAL_SESSION_WORKING_COPY,
     exports.TRIAL_SESSIONS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
