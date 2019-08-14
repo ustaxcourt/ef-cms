@@ -14,7 +14,7 @@ exports.generatePDFFromJPGs = imgData => {
   const addImageToPage = img => {
     const [imgRef, imgDim] = pdfDoc.embedJPG(img);
     const page = pdfDoc
-      .createPage([imgDim.width, imgDim.height])
+      .addPage([imgDim.width, imgDim.height])
       .addImageObject('imgObj', imgRef);
 
     const pageContentStream = pdfDoc.createContentStream(
