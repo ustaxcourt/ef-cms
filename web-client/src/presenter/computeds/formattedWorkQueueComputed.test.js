@@ -39,6 +39,7 @@ const FORMATTED_WORK_ITEM = {
   },
   docketNumber: '101-18',
   document: {
+    attachments: true,
     documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
     documentType: 'Answer',
   },
@@ -86,6 +87,7 @@ describe('formatted work queue computed', () => {
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     document: {
+      attachments: true,
       createdAt: '2018-12-27T18:05:54.164Z',
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
@@ -143,6 +145,22 @@ describe('formatted work queue computed', () => {
     expect(result[0].historyMessages[0].messageId).toEqual(
       '19eeab4c-f7d8-46bd-90da-fbfa8d6e71d1',
     );
+  });
+
+  it('attached formatted filings and proceedings to document on work item', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        selectedWorkItems: [workItem],
+        workQueue: [workItem],
+        workQueueIsInternal: true,
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
+      },
+    });
+
+    expect(result[0].document.filingsAndProceedings).toEqual('(Attachment(s))');
   });
 
   it('sets showSendTo and showComplete', () => {

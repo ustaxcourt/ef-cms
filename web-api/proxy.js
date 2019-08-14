@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 const isReachable = require('is-reachable');
 const proxy = require('http-proxy-middleware');

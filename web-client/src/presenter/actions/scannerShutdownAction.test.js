@@ -25,4 +25,18 @@ describe('scannerShutdownAction', () => {
     );
     expect(scriptElements.length).toEqual(0);
   });
+
+  it('sets the scanner init and config script load states to false', async () => {
+    const result = await runAction(scannerShutdownAction, {
+      state: {
+        scanner: {
+          configScriptLoaded: true,
+          initiateScriptLoaded: true,
+        },
+      },
+    });
+
+    expect(result.state.scanner.configScriptLoaded).toEqual(false);
+    expect(result.state.scanner.initiateScriptLoaded).toEqual(false);
+  });
 });
