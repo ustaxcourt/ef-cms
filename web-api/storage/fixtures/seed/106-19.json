@@ -60,6 +60,7 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
+      "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "seniorattorney",
@@ -439,6 +440,7 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
+      "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -487,6 +489,7 @@
               "createdAt": "2019-07-12T17:09:41.026Z",
               "processingStatus": "pending",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "filedBy": "Denise Gould",
               "workItems": [],
               "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
@@ -718,6 +721,7 @@
               "createdAt": "2019-07-12T17:09:41.026Z",
               "processingStatus": "pending",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "filedBy": "Denise Gould",
               "workItems": [],
               "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
@@ -978,6 +982,7 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
+      "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -1014,6 +1019,7 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
+      "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
@@ -1049,6 +1055,7 @@
     "gsi1pk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
+      "documentTitle": "Proposed Stipulated Decision",
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
@@ -1090,6 +1097,7 @@
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
       "documentType": "Proposed Stipulated Decision",
+      "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
