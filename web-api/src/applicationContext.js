@@ -83,6 +83,9 @@ const {
   createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
 const {
+  createTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy');
+const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
@@ -257,6 +260,12 @@ const {
   getTrialSessionsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
 const {
+  getTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionWorkingCopy');
+const {
+  getTrialSessionWorkingCopyInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor');
+const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
 const {
@@ -381,6 +390,9 @@ const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
+  updateTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -497,10 +509,10 @@ module.exports = (appContextUser = {}) => {
         createCaseDeadline,
         createCaseTrialSortMappingRecords,
         createTrialSession,
+        createTrialSessionWorkingCopy,
         createUser,
         createWorkItem,
         deleteCaseDeadline,
-
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
@@ -525,6 +537,7 @@ module.exports = (appContextUser = {}) => {
         getSentMessagesForSection,
         getSentMessagesForUser,
         getTrialSessionById,
+        getTrialSessionWorkingCopy,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
@@ -545,6 +558,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateTrialSession,
+        updateTrialSessionWorkingCopy,
         updateWorkItem,
         updateWorkItemInCase,
         uploadDocument,
@@ -609,6 +623,7 @@ module.exports = (appContextUser = {}) => {
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
         getTrialSessionDetailsInteractor,
+        getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUserInteractor,
         getUsersInSectionInteractor,
