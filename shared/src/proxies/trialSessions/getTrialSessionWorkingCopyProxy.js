@@ -1,7 +1,7 @@
 const { get } = require('../requests');
 
 /**
- * getTrialSessionsInteractor
+ * getTrialSessionWorkingCopyInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
