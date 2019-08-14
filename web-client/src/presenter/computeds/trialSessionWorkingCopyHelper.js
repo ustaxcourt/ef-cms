@@ -13,6 +13,7 @@ const compareCasesByPractitioner = (a, b) => {
 };
 
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
+  const { TRIAL_STATUS_TYPES } = get(state.constants);
   const trialSession = get(state.trialSession) || {};
   const { sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
 
@@ -36,16 +37,10 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     formattedSessions = formattedSessions.slice().reverse();
   }
 
-  const trialStatusOptions = [
-    'Set for Trial',
-    'Dismissed',
-    'Continued',
-    'Rule 122',
-    'A Basis Reached',
-    'Settled',
-    'Recall',
-    'Taken Under Advisement',
-  ].map(value => ({ key: camelCase(value), value }));
+  const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
+    key: camelCase(value),
+    value,
+  }));
 
   return {
     formattedSessions,
