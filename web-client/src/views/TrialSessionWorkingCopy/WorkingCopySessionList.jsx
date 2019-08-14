@@ -1,4 +1,3 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -7,17 +6,22 @@ import classNames from 'classnames';
 
 export const WorkingCopySessionList = connect(
   {
+    autoSaveTrialSessionWorkingCopySequence:
+      sequences.autoSaveTrialSessionWorkingCopySequence,
     sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   ({
+    autoSaveTrialSessionWorkingCopySequence,
     sessions,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
+    trialSessionWorkingCopy,
     trialStatusOptions,
   }) => {
     return (
@@ -90,9 +94,25 @@ export const WorkingCopySessionList = connect(
                   ))}
                 </td>
                 <td>
-                  <BindedSelect
-                    bind={`trialSessionWorkingCopy[${item.docketNumber}].trialStatus`}
-                    name="trialStatus"
+                  <select
+                    aria-label="trial status"
+                    className="usa-select"
+                    id={`trialSessionWorkingCopy-${item.docketNumber}`}
+                    name={`caseMetadata.${item.docketNumber}.trialStatus`}
+                    value={
+                      (trialSessionWorkingCopy.caseMetadata[
+                        item.docketNumber
+                      ] &&
+                        trialSessionWorkingCopy.caseMetadata[item.docketNumber]
+                          .trialStatus) ||
+                      ''
+                    }
+                    onChange={e => {
+                      autoSaveTrialSessionWorkingCopySequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
                   >
                     <option value="">-Trial Status-</option>
                     {trialStatusOptions.map(({ key, value }) => (
@@ -100,7 +120,7 @@ export const WorkingCopySessionList = connect(
                         {value}
                       </option>
                     ))}
-                  </BindedSelect>
+                  </select>
                 </td>
               </tr>
             </tbody>
