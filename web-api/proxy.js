@@ -29,6 +29,7 @@ const proxyMain = async () => {
       uri,
       proxy({
         headers,
+        logLevel: 'debug',
         pathRewrite,
         proxyTimeout: 30 * 1000,
         target,
