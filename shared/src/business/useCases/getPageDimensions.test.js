@@ -1,7 +1,7 @@
 const { getPageDimensions } = require('./generateSignedDocumentInteractor.js');
 const { PDFDocument } = require('pdf-lib');
 
-describe('getPageDimensions', async () => {
+describe('getPageDimensions', () => {
   it('returns the dimensions of a page', async () => {
     const width = 350;
     const height = 500;
