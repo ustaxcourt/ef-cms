@@ -440,30 +440,28 @@ export const PrimaryDocumentForm = connect(
                   </label>
                 </div>
               )}
-              {addDocketEntryHelper.showRespondentParty && (
-                <div className="usa-checkbox">
-                  <input
-                    checked={form.partyRespondent || false}
-                    className="usa-checkbox__input"
-                    id="party-respondent"
-                    name="partyRespondent"
-                    type="checkbox"
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateDocketEntrySequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="party-respondent"
-                  >
-                    Respondent
-                  </label>
-                </div>
-              )}
+              <div className="usa-checkbox">
+                <input
+                  checked={form.partyRespondent || false}
+                  className="usa-checkbox__input"
+                  id="party-respondent"
+                  name="partyRespondent"
+                  type="checkbox"
+                  onChange={e => {
+                    updateDocketEntryFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateDocketEntrySequence();
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="party-respondent"
+                >
+                  Respondent
+                </label>
+              </div>
               <Text
                 bind="addDocketEntryHelper.partyValidationError"
                 className="usa-error-message"
