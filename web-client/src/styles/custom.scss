@@ -1506,4 +1506,18 @@ button.change-scanner-button {
       font-weight: $font-semibold;
     }
   }
+
+  .working-copy-filters--content {
+    padding: 1em;
+    border: 1px solid color($theme-color-base-lightest);
+    background-color: $color-primary-alt-lightest;
+
+    .show-all-sessions {
+      border-right: 1px solid color($theme-color-base-light);
+
+      label {
+        font-weight: $font-semibold;
+      }
+    }
+  }
 }
