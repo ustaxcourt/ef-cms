@@ -101,7 +101,6 @@ export const IndividualWorkQueueInbox = connect(
                         }}
                       >
                         {item.document.documentTitle}
-                        {console.log(item)}
                       </a>{' '}
                       {item.document.filingsAndProceedings}
                     </div>
