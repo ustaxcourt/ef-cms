@@ -300,11 +300,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
     documentQc: {
       my: {
         batched: 'batchedAt',
+        inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
       },
       section: {
         batched: 'batchedAt',
+        inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
       },
