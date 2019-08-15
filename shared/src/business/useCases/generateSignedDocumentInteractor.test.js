@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const {
   generateSignedDocumentInteractor,
-  getPageDimensions,
 } = require('./generateSignedDocumentInteractor.js');
 const { PDFDocument } = require('pdf-lib');
 
@@ -12,31 +11,6 @@ const testOutputPath = path.join(__dirname, '../../../test-output/');
 const testPdfDocBytes = () => {
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 };
-
-describe('getPageDimensions', () => {
-  it('should throw an error if the pdf does not have a media box element', async () => {
-    let error;
-    try {
-      getPageDimensions({
-        Parent: {
-          ascend: cb => {
-            cb({
-              getMaybe: () => false,
-            });
-          },
-        },
-        get: () => true,
-        getMaybe: () => true,
-        index: {
-          lookup: () => null,
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toEqual('Page Tree is missing MediaBox');
-  });
-});
 
 describe('generateSignedDocument', () => {
   let testDoc;
