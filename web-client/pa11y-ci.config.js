@@ -37,6 +37,12 @@ module.exports = {
     'http://localhost:1234/mock-login',
     'http://localhost:1234/request-for-page-that-doesnt-exist',
     'http://localhost:1234/idle-logout',
+    {
+      actions: ['wait for element #ci-environment to be visible'],
+      notes: 'Confirm Pa11y is running in CI-Environment mode',
+      url:
+        'http://localhost:1234/mock-login?token=docketclerk&path=/&info=verify-ci-environment',
+    },
     ...userUrls,
   ],
 };
