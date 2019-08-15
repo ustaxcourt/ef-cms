@@ -116,7 +116,7 @@ export const FilingsAndProceedings = connect(
                 <FontAwesomeIcon icon={['fas', 'file-alt']} />
               </span>
             )}
-            {record.description}
+            {document.documentTitle || record.description}
           </a>
         )}
 
