@@ -149,6 +149,32 @@ describe('trial session working copy computed', () => {
   });
 
   describe('filtering', () => {
+    it('no cases are returned if trialSessionWorkingCopy.filters and trialSessionWorkingCopy.caseMetadata are null', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            sort: 'practitioner',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedSessions).toMatchObject([]);
+      expect(result.sessionsShownCount).toEqual(0);
+    });
+
     it('filters calendared cases by a single trial status when all trial statuses are set', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {

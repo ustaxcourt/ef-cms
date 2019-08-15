@@ -47,15 +47,15 @@ export const computeTrialSessionWorkingCopyFilterValuesAction = ({
     store.set(state.trialSessionWorkingCopy.filters.showAll, false);
   } else if (
     props.key.includes('filters') &&
-    filters.aBasisReached === true &&
-    filters.continued === true &&
-    filters.dismissed === true &&
-    filters.recall === true &&
-    filters.rule122 === true &&
-    filters.setForTrial === true &&
-    filters.settled === true &&
-    filters.statusUnassigned === true &&
-    filters.takenUnderAdvisement === true
+    filters.aBasisReached &&
+    filters.continued &&
+    filters.dismissed &&
+    filters.recall &&
+    filters.rule122 &&
+    filters.setForTrial &&
+    filters.settled &&
+    filters.statusUnassigned &&
+    filters.takenUnderAdvisement
   ) {
     store.set(state.trialSessionWorkingCopy.filters.showAll, true);
   }
