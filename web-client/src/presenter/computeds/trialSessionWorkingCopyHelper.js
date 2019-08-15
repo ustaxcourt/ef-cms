@@ -29,6 +29,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const trueFilters = Object.keys(pickBy(filters));
 
   let formattedSessions = (trialSession.calendaredCases || [])
+    .slice()
     .filter(
       calendaredCase =>
         (trueFilters.includes('statusUnassigned') &&
@@ -46,11 +47,11 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const sessionsShownCount = formattedSessions.length;
 
   if (sort === 'practitioner') {
-    formattedSessions = formattedSessions.sort(compareCasesByPractitioner);
+    formattedSessions.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    formattedSessions = formattedSessions.slice().reverse();
+    formattedSessions.reverse();
   }
 
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
