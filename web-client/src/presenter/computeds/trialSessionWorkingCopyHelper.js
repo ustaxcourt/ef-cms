@@ -15,8 +15,8 @@ const compareCasesByPractitioner = (a, b) => {
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const { TRIAL_STATUS_TYPES } = get(state.constants);
   const trialSession = get(state.trialSession) || {};
-  const { caseMetadata, filters, sort, sortOrder } =
-    get(state.trialSessionWorkingCopy) || {};
+  const { filters, sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
+  const caseMetadata = get(state.trialSessionWorkingCopy.caseMetadata) || {};
 
   const formatCaseName = myCase => {
     myCase.caseName = applicationContext.getCaseCaptionNames(
