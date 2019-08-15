@@ -78,15 +78,6 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
 
     // practitioners
     if (practitioners.length > 0) {
-      partyInfoContent += `
-        <div class="party-info">
-          <div class="party-info-header">Petitioner Counsel</div>
-          <div class="party-info-content">
-            ${getPractitioners()}
-          </div>
-        </div>
-      `;
-
       const getPractitioners = () => {
         let result = '';
 
@@ -122,6 +113,15 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
 
         return result;
       };
+
+      partyInfoContent += `
+        <div class="party-info">
+          <div class="party-info-header">Petitioner Counsel</div>
+          <div class="party-info-content">
+            ${getPractitioners()}
+          </div>
+        </div>
+      `;
     }
 
     // respondents
