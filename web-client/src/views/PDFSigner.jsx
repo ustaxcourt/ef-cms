@@ -29,6 +29,9 @@ class PDFSignerComponent extends React.Component {
   }
 
   renderPDFPage(pageNumber) {
+    if (process.env.CI) {
+      return;
+    }
     const canvas = this.canvasRef.current;
     const context = canvas.getContext('2d');
 
