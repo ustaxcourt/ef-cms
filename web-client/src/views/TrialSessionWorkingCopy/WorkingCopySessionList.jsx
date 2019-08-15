@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -8,7 +9,8 @@ export const WorkingCopySessionList = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
-    sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
+    casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
+    formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -17,7 +19,8 @@ export const WorkingCopySessionList = connect(
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
-    sessions,
+    casesShownCount,
+    formattedCases,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -26,6 +29,7 @@ export const WorkingCopySessionList = connect(
   }) => {
     return (
       <div className="margin-top-4">
+        <WorkingCopyFilterHeader />
         <table
           aria-describedby="tab-my-queue"
           className="usa-table work-queue subsection"
@@ -34,47 +38,55 @@ export const WorkingCopySessionList = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" className="padding-left-2px">
-                <span
-                  className={classNames(
-                    ' margin-right-105',
-                    sort === 'docket' && 'sortActive',
-                  )}
+                <button
+                  className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'docket',
                     });
                   }}
                 >
-                  Docket
-                </span>
-                {(sort === 'docket' && sortOrder === 'desc' && (
-                  <FontAwesomeIcon icon="caret-up" />
-                )) || <FontAwesomeIcon icon="caret-down" />}
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      sort === 'docket' && 'sortActive',
+                    )}
+                  >
+                    Docket
+                  </span>
+                  {(sort === 'docket' && sortOrder === 'desc' && (
+                    <FontAwesomeIcon icon="caret-up" />
+                  )) || <FontAwesomeIcon icon="caret-down" />}
+                </button>
               </th>
               <th>Case Caption</th>
               <th>
-                <span
-                  className={classNames(
-                    'margin-right-105',
-                    sort === 'practitioner' && 'sortActive',
-                  )}
+                <button
+                  className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'practitioner',
                     });
                   }}
                 >
-                  Petitioner Counsel
-                </span>
-                {(sort === 'practitioner' && sortOrder === 'desc' && (
-                  <FontAwesomeIcon icon="caret-up" />
-                )) || <FontAwesomeIcon icon="caret-down" />}
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      sort === 'practitioner' && 'sortActive',
+                    )}
+                  >
+                    Petitioner Counsel
+                  </span>
+                  {(sort === 'practitioner' && sortOrder === 'desc' && (
+                    <FontAwesomeIcon icon="caret-up" />
+                  )) || <FontAwesomeIcon icon="caret-down" />}
+                </button>
               </th>
               <th>Respondent Counsel</th>
               <th colSpan="2">Trial Status</th>
             </tr>
           </thead>
-          {sessions.map((item, idx) => (
+          {formattedCases.map((item, idx) => (
             <tbody key={idx}>
               <tr>
                 <td>
@@ -126,6 +138,9 @@ export const WorkingCopySessionList = connect(
             </tbody>
           ))}
         </table>
+        {casesShownCount === 0 && (
+          <p>Please select a trial status to show cases.</p>
+        )}
       </div>
     );
   },
