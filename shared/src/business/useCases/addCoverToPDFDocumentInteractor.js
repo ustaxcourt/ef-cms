@@ -1,13 +1,6 @@
-const {
-  drawImage,
-  drawLinesOfText,
-  drawText,
-  PDFDocument,
-  StandardFonts,
-} = require('pdf-lib');
 const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
-const { flattenDeep } = require('lodash');
+const { PDFDocument, StandardFonts } = require('pdf-lib');
 
 /**
  * addCoverToPDFDocumentInteractor
@@ -112,6 +105,19 @@ exports.addCoverToPDFDocumentInteractor = async ({
 
   applicationContext.logger.timeEnd('Fetching S3 File');
 
+  // create pdfDoc object from file data
+  applicationContext.logger.time('Loading the PDF');
+  const pdfDoc = await PDFDocument.load(pdfData);
+  applicationContext.logger.time('Loading the PDF');
+
+  // Embed font to use for cover page generation
+  applicationContext.logger.time('Embed Font');
+  const helveticaFont = pdfDoc.embedStandardFont(StandardFonts.Helvetica);
+  const helveticaBoldFont = pdfDoc.embedStandardFont(
+    StandardFonts.HelveticaBold,
+  );
+  applicationContext.logger.timeEnd('Embed Font');
+
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const dimensionsX = 2550;
   const dimensionsY = 3300;
@@ -119,15 +125,10 @@ exports.addCoverToPDFDocumentInteractor = async ({
   const coverPageDimensions = [dimensionsX, dimensionsY];
   const horizontalMargin = 215; // left and right margins
   const verticalMargin = 190; // top and bottom margins
-  const defaultFontName = 'Helvetica';
+  const defaultFontName = helveticaFont;
   const defaultFontSize = 48;
   const fontSizeCaption = 64;
   const fontSizeTitle = 80;
-
-  // create pdfDoc object from file data
-  applicationContext.logger.time('Loading the PDF');
-  const pdfDoc = await PDFDocument.load(pdfData);
-  applicationContext.logger.time('Loading the PDF');
 
   // allow GC to clear original loaded pdf data
   pdfData = null;
@@ -155,17 +156,10 @@ exports.addCoverToPDFDocumentInteractor = async ({
   const pngSeal = await pdfDoc.embedPng(ustcSealBytes);
   applicationContext.logger.timeEnd('Embed PNG');
 
-  // Embed font to use for cover page generation
-  applicationContext.logger.time('Embed Font');
-  const helveticaFont = pdfDoc.embedStandardFont(StandardFonts.Helvetica);
-  const helveticaBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.HelveticaBold,
-  );
-  applicationContext.logger.timeEnd('Embed Font');
-
   // Generate cover page
   applicationContext.logger.time('Generate Cover Page');
-  const coverPage = pdfDoc.addPage(
+  const coverPage = pdfDoc.insertPage(
+    0,
     coverPageDimensions.map(dim => pageScaler(dim)),
   );
   applicationContext.logger.timeEnd('Generate Cover Page');
@@ -178,13 +172,13 @@ exports.addCoverToPDFDocumentInteractor = async ({
     const coverSheetDatumValue = coverSheetData[key];
     switch (key) {
       case 'includesCertificateOfService':
-        if (coverSheetDatumValue === true) {
+        if (coverSheetDatumValue) {
           return 'Certificate of Service';
         } else {
           return '';
         }
       case 'originallyFiledElectronically':
-        if (coverSheetDatumValue === true) {
+        if (coverSheetDatumValue) {
           return 'Electronically Filed';
         } else {
           return '';
@@ -263,7 +257,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // Content areas
   const contentDateReceivedLabel = {
     content: 'Received',
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     xPos: isPaper ? 800 : 900,
     yPos: 3036,
   };
@@ -281,7 +275,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
 
   const contentDateLodgedLabel = {
     content: dateLodgedLabel,
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     xPos: 1440,
     yPos: 3036,
   };
@@ -299,7 +293,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
 
   const contentDateFiledLabel = {
     content: dateFiledLabel,
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     xPos: 1938,
     yPos: 3036,
   };
@@ -434,13 +428,13 @@ exports.addCoverToPDFDocumentInteractor = async ({
       fontObj: helveticaFont,
     },
     content: getContentByKey('dateServed'),
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     fontSize: fontSizeTitle,
     xPos: 531,
     yPos: 231,
   };
 
-  const drawContent = contentArea => {
+  const drawContent = (page, contentArea) => {
     const {
       centerTextAt,
       content,
@@ -484,54 +478,43 @@ exports.addCoverToPDFDocumentInteractor = async ({
         const contentLines = content.map((cont, idx) => {
           const newParams = setCenterPos(cont, params);
           newParams.y = params.y - params.lineHeight * idx;
-          return drawText(cont, newParams);
+          return page.drawText(cont, newParams);
         });
         return contentLines;
       } else {
-        return drawLinesOfText(content, params);
+        page.drawText(content, params);
+        return; // drawLinesOfText(content, params);
       }
     } else {
-      return drawText(content, setCenterPos(content, params));
+      return page.drawText(content, setCenterPos(content, params));
     }
   };
 
-  // This is where the magic happens. The content stream and its coords will need to be
-  // played with in order to get the desired cover page layout.
-  const coverPageContentStream = pdfDoc.createContentStream(
-    drawImage('USTCSeal', {
-      height: pageScaler(pngSeal.height / 2),
-      width: pageScaler(pngSeal.width / 2),
-      x: pageScaler(horizontalMargin),
-      y: pageScaler(translateY(verticalMargin + pngSeal.height / 2)),
-    }),
-    ...flattenDeep(
-      [
-        contentDateReceivedLabel,
-        contentDateReceived,
-        contentDateLodgedLabel,
-        contentDateLodged,
-        contentDateFiledLabel,
-        contentDateFiled,
-        contentCaseCaptionPet,
-        contentPetitionerLabel,
-        contentVLabel,
-        contentCaseCaptionResp,
-        contentRespondentLabel,
-        contentElectronicallyFiled,
-        contentDocketNumber,
-        contentDocumentTitle,
-        contentCertificateOfService,
-        contentDateServed,
-      ].map(cont => drawContent(cont)),
-    ),
-  );
+  coverPage.drawImage(pngSeal, {
+    height: pageScaler(pngSeal.height / 2),
+    width: pageScaler(pngSeal.width / 2),
+    x: pageScaler(horizontalMargin),
+    y: pageScaler(translateY(verticalMargin + pngSeal.height / 2)),
+  });
 
-  // Add the content stream to our newly created page
-  coverPage.addContentStreams(pdfDoc.register(coverPageContentStream));
-
-  // Insert cover page at position 0 (first) in the document. This is non-destructive, and
-  // pushes the original first page to page two.
-  pdfDoc.insertPage(0, coverPage);
+  [
+    contentDateReceivedLabel,
+    contentDateReceived,
+    contentDateLodgedLabel,
+    contentDateLodged,
+    contentDateFiledLabel,
+    contentDateFiled,
+    contentCaseCaptionPet,
+    contentPetitionerLabel,
+    contentVLabel,
+    contentCaseCaptionResp,
+    contentRespondentLabel,
+    contentElectronicallyFiled,
+    contentDocketNumber,
+    contentDocumentTitle,
+    contentCertificateOfService,
+    contentDateServed,
+  ].map(cont => drawContent(coverPage, cont));
 
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
