@@ -39,6 +39,10 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     .getUtilities()
     .formatDateString(result.startDate, 'MMDDYY');
 
+  result.formattedStartDateFull = applicationContext
+    .getUtilities()
+    .formatDateString(result.startDate, 'MMMM DD, YYYY');
+
   let [hour, min] = result.startTime.split(':');
   let startTimeExtension = 'am';
 
