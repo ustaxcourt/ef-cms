@@ -12,7 +12,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Array<TrialSession>} the trial session working copy returned from persistence
+ * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
+ * @returns {TrialSessionWorkingCopy} the updated trial session working copy returned from persistence
  */
 exports.updateTrialSessionWorkingCopyInteractor = async ({
   applicationContext,

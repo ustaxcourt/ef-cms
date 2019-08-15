@@ -26,15 +26,15 @@ exports.getScannerInterface = () => {
   };
 
   const loadDynamsoft = ({ applicationContext }) => {
-    if (!dynamsoftLoader) {
+    if (!process.env.CI && !dynamsoftLoader) {
       dynamsoftLoader = new Promise(resolve => {
-        const dynanScriptClass = 'dynam-scanner-injection';
+        const dynamScriptClass = 'dynam-scanner-injection';
 
         // Create a script element to inject into the header
         const initiateScript = document.createElement('script');
         initiateScript.type = 'text/javascript';
         initiateScript.async = true;
-        initiateScript.setAttribute('class', dynanScriptClass);
+        initiateScript.setAttribute('class', dynamScriptClass);
 
         // Reduce duplicating the above code
         const configScript = initiateScript.cloneNode();
@@ -53,7 +53,7 @@ exports.getScannerInterface = () => {
               if (!DWObject) return;
 
               clearInterval(interval);
-              resolve(dynanScriptClass);
+              resolve(dynamScriptClass);
             }, 100);
           }
         };
