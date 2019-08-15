@@ -74,7 +74,7 @@ exports.generateSignedDocumentInteractor = async ({
     signatureTitle,
     textSize,
   );
-  const textHeight = helveticaFont.heightOfFontAtSize(textSize);
+  const textHeight = helveticaFont.sizeAtHeight(textSize);
   const lineHeight = textHeight / 10;
   const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
   const boxHeight = textHeight * 2 + padding * 2;
