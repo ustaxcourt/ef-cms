@@ -482,8 +482,8 @@ exports.addCoverToPDFDocumentInteractor = async ({
         });
         return contentLines;
       } else {
-        page.drawText(content, params);
-        return; // drawLinesOfText(content, params);
+        if (content) page.drawText(content, params);
+        return;
       }
     } else {
       return page.drawText(content, setCenterPos(content, params));
