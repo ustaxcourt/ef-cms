@@ -215,6 +215,11 @@ table.work-queue {
     &.padding-right-0 {
       padding-right: 0;
     }
+    .sortable-header-button {
+      color: color($theme-color-base-darkest);
+      font-weight: $font-semibold;
+      text-decoration: none;
+    }
     .sortActive {
       border-bottom: 3px solid color($theme-color-primary);
     }
