@@ -9,6 +9,7 @@ export const WorkingCopySessionList = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
+    casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
@@ -18,6 +19,7 @@ export const WorkingCopySessionList = connect(
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
+    casesShownCount,
     formattedCases,
     sort,
     sortOrder,
@@ -136,6 +138,9 @@ export const WorkingCopySessionList = connect(
             </tbody>
           ))}
         </table>
+        {casesShownCount === 0 && (
+          <p>Please select a trial status to show cases.</p>
+        )}
       </div>
     );
   },
