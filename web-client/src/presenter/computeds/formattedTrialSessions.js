@@ -40,6 +40,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
   sessions.forEach(session => {
     if (
       session.judge &&
+      user &&
       user.role === 'judge' &&
       session.judge.userId === user.userId
     ) {
