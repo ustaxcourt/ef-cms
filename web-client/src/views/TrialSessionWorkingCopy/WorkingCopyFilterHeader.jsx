@@ -51,7 +51,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
+                  className="usa-checkbox__label"
                   htmlFor="filters.showAll"
                 >
                   Show All
@@ -68,8 +68,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.setForTrial'}
-                  name={'filters.setForTrial'}
+                  id="filters.setForTrial"
+                  name="filters.setForTrial"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -79,8 +79,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.setForTrial'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.setForTrial"
                 >
                   Set for Trial
                 </label>
@@ -94,8 +94,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.dismissed'}
-                  name={'filters.dismissed'}
+                  id="filters.dismissed"
+                  name="filters.dismissed"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -105,8 +105,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.dismissed'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.dismissed"
                 >
                   Dismissed
                 </label>
@@ -122,8 +122,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.continued'}
-                  name={'filters.continued'}
+                  id="filters.continued"
+                  name="filters.continued"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -133,8 +133,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.continued'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.continued"
                 >
                   Continued
                 </label>
@@ -148,8 +148,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.rule122'}
-                  name={'filters.rule122'}
+                  id="filters.rule122"
+                  name="filters.rule122"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -159,8 +159,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.rule122'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.rule122"
                 >
                   Rule 122
                 </label>
@@ -176,8 +176,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.aBasisReached'}
-                  name={'filters.aBasisReached'}
+                  id="filters.aBasisReached"
+                  name="filters.aBasisReached"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -187,8 +187,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.aBasisReached'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.aBasisReached"
                 >
                   A Basis Reached
                 </label>
@@ -202,8 +202,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.settled'}
-                  name={'filters.settled'}
+                  id="filters.settled"
+                  name="filters.settled"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -213,8 +213,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.settled'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.settled"
                 >
                   Settled
                 </label>
@@ -230,8 +230,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.recall'}
-                  name={'filters.recall'}
+                  id="filters.recall"
+                  name="filters.recall"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -240,10 +240,7 @@ export const WorkingCopyFilterHeader = connect(
                     });
                   }}
                 />
-                <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.recall'}
-                >
+                <label className="usa-checkbox__label" htmlFor="filters.recall">
                   Recall
                 </label>
               </div>
@@ -256,8 +253,8 @@ export const WorkingCopyFilterHeader = connect(
                     false
                   }
                   className="usa-checkbox__input"
-                  id={'filters.takenUnderAdvisement'}
-                  name={'filters.takenUnderAdvisement'}
+                  id="filters.takenUnderAdvisement"
+                  name="filters.takenUnderAdvisement"
                   type="checkbox"
                   onChange={e => {
                     autoSaveTrialSessionWorkingCopySequence({
@@ -267,8 +264,8 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
-                  htmlFor={'filters.takenUnderAdvisement'}
+                  className="usa-checkbox__label"
+                  htmlFor="filters.takenUnderAdvisement"
                 >
                   Taken Under Advisement
                 </label>
@@ -295,7 +292,7 @@ export const WorkingCopyFilterHeader = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label show-all-label"
+                  className="usa-checkbox__label"
                   htmlFor="filters.statusUnassigned"
                 >
                   Status unassigned
