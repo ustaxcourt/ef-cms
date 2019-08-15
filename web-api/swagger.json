@@ -325,6 +325,29 @@
           }
         ]
       },
+      "put": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "updates a current docket entry on a case",
+        "description": "Updates a docket entry/document and attaches it to a case.\n",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
