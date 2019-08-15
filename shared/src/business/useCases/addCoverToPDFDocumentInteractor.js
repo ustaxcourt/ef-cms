@@ -478,15 +478,15 @@ exports.addCoverToPDFDocumentInteractor = async ({
         const contentLines = content.map((cont, idx) => {
           const newParams = setCenterPos(cont, params);
           newParams.y = params.y - params.lineHeight * idx;
-          return page.drawText(cont, newParams);
+          return page.drawText('' + cont, newParams);
         });
         return contentLines;
       } else {
-        if (content) page.drawText(content, params);
+        page.drawText('' + content, params);
         return;
       }
     } else {
-      return page.drawText(content, setCenterPos(content, params));
+      return page.drawText('' + content, setCenterPos(content, params));
     }
   };
 
