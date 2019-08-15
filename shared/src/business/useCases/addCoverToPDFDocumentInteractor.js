@@ -3,7 +3,7 @@ const {
   drawLinesOfText,
   drawText,
   PDFDocument,
-  PDFName,
+  StandardFonts,
 } = require('pdf-lib');
 const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
@@ -133,31 +133,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
   pdfData = null;
 
   const getPageDimensions = page => {
-    let mediaBox;
-
-    // Check for MediaBox on the page itself
-    const hasMediaBox = !!page.get(PDFName.of('MediaBox'));
-
-    if (hasMediaBox) {
-      mediaBox = page.index.lookup(page.get('MediaBox'));
-    }
-
-    // Check for MediaBox on each parent node
-    page.Parent.ascend(parent => {
-      const parentHasMediaBox = !!parent.getMaybe('MediaBox');
-      if (!mediaBox && parentHasMediaBox) {
-        mediaBox = parent.index.lookup(parent.get('MediaBox'));
-      }
-    }, true);
-
-    // This should never happen in valid PDF files
-    if (!mediaBox) throw new Error('Page Tree is missing MediaBox');
-
-    // Extract and return the width and height
-    return {
-      height: mediaBox.array[3].number,
-      width: mediaBox.array[2].number,
-    };
+    return page.getSize();
   };
 
   const pageScaler = value => {
@@ -176,24 +152,22 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
   const ustcSealBytes = new Uint8Array(coverLogo);
-  const [pngSeal, pngSealDimensions] = pdfDoc.embedPng(ustcSealBytes);
+  const pngSeal = await pdfDoc.embedPng(ustcSealBytes);
   applicationContext.logger.timeEnd('Embed PNG');
 
   // Embed font to use for cover page generation
   applicationContext.logger.time('Embed Font');
-  const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont('Helvetica');
-  const [helveticaBoldRef, helveticaBoldFont] = pdfDoc.embedStandardFont(
-    'Helvetica-Bold',
+  const helveticaFont = pdfDoc.embedStandardFont(StandardFonts.Helvetica);
+  const helveticaBoldFont = pdfDoc.embedStandardFont(
+    StandardFonts.HelveticaBold,
   );
   applicationContext.logger.timeEnd('Embed Font');
 
   // Generate cover page
   applicationContext.logger.time('Generate Cover Page');
-  const coverPage = pdfDoc
-    .addPage(coverPageDimensions.map(dim => pageScaler(dim)))
-    .addImageObject('USTCSeal', pngSeal)
-    .addFontDictionary('Helvetica', helveticaRef)
-    .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
+  const coverPage = pdfDoc.addPage(
+    coverPageDimensions.map(dim => pageScaler(dim)),
+  );
   applicationContext.logger.timeEnd('Generate Cover Page');
 
   const paddedLineHeight = (fontSize = defaultFontSize) => {
@@ -238,7 +212,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     offsetMargin = 0,
   ) => {
     let totalContentHeight;
-    const textHeight = font.heightOfFontAtSize(fontSize);
+    const textHeight = font.sizeAtHeight(fontSize);
     if (Array.isArray(previousContentArea.content)) {
       // Multiple lines of text
       totalContentHeight = previousContentArea.content.length * textHeight;
@@ -301,7 +275,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDateReceivedLabel,
       helveticaBoldFont,
       defaultFontSize,
-      helveticaFont.heightOfFontAtSize(defaultFontSize),
+      helveticaFont.sizeAtHeight(defaultFontSize),
     ),
   };
 
@@ -319,7 +293,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDateLodgedLabel,
       helveticaBoldFont,
       defaultFontSize,
-      helveticaFont.heightOfFontAtSize(defaultFontSize),
+      helveticaFont.sizeAtHeight(defaultFontSize),
     ),
   };
 
@@ -337,7 +311,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDateFiledLabel,
       helveticaBoldFont,
       defaultFontSize,
-      helveticaFont.heightOfFontAtSize(defaultFontSize),
+      helveticaFont.sizeAtHeight(defaultFontSize),
     ),
   };
 
@@ -361,7 +335,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentCaseCaptionPet,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -373,7 +347,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentPetitionerLabel,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -390,7 +364,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentVLabel,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -402,7 +376,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentCaseCaptionResp,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -438,7 +412,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentRespondentLabel,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption) * 8,
+      helveticaFont.sizeAtHeight(fontSizeCaption) * 8,
     ),
   };
 
@@ -449,7 +423,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDocumentTitle,
       helveticaFont,
       fontSizeTitle,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption) * 10,
+      helveticaFont.sizeAtHeight(fontSizeCaption) * 10,
     ),
   };
 
@@ -525,10 +499,10 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // played with in order to get the desired cover page layout.
   const coverPageContentStream = pdfDoc.createContentStream(
     drawImage('USTCSeal', {
-      height: pageScaler(pngSealDimensions.height / 2),
-      width: pageScaler(pngSealDimensions.width / 2),
+      height: pageScaler(pngSeal.height / 2),
+      width: pageScaler(pngSeal.width / 2),
       x: pageScaler(horizontalMargin),
-      y: pageScaler(translateY(verticalMargin + pngSealDimensions.height / 2)),
+      y: pageScaler(translateY(verticalMargin + pngSeal.height / 2)),
     }),
     ...flattenDeep(
       [
