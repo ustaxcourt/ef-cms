@@ -7,8 +7,13 @@ export const WorkingCopyFilterHeader = connect(
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
     trialSessionWorkingCopy: state.trialSessionWorkingCopy,
+    trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
-  ({ autoSaveTrialSessionWorkingCopySequence, trialSessionWorkingCopy }) => {
+  ({
+    autoSaveTrialSessionWorkingCopySequence,
+    trialSessionWorkingCopy,
+    trialSessionWorkingCopyHelper,
+  }) => {
     return (
       <div className="working-copy-filters">
         <div className="working-copy-filters--header">
@@ -17,7 +22,9 @@ export const WorkingCopyFilterHeader = connect(
               <h3>Show Cases by Trial Status</h3>
             </div>
             <div className="grid-col-6 text-right">
-              <span>Total Shown: 333</span>
+              <span>
+                Total Shown: {trialSessionWorkingCopyHelper.sessionsShownCount}
+              </span>
             </div>
           </div>
         </div>
