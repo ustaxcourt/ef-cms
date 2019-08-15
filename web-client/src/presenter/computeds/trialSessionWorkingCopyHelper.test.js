@@ -60,7 +60,7 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
@@ -93,7 +93,7 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '102-19' },
         { docketNumber: '101-18' },
         { docketNumber: '5000-17' },
@@ -137,14 +137,14 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '101-18' },
         { docketNumber: '102-19' },
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
       ]);
-      expect(result.sessionsShownCount).toEqual(5);
+      expect(result.casesShownCount).toEqual(5);
     });
   });
 
@@ -171,8 +171,8 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([]);
-      expect(result.sessionsShownCount).toEqual(0);
+      expect(result.formattedCases).toMatchObject([]);
+      expect(result.casesShownCount).toEqual(0);
     });
 
     it('filters calendared cases by a single trial status when all trial statuses are set', () => {
@@ -204,10 +204,8 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
-        { docketNumber: '102-19' },
-      ]);
-      expect(result.sessionsShownCount).toEqual(1);
+      expect(result.formattedCases).toMatchObject([{ docketNumber: '102-19' }]);
+      expect(result.casesShownCount).toEqual(1);
 
       result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
@@ -237,12 +235,12 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
       ]);
-      expect(result.sessionsShownCount).toEqual(3);
+      expect(result.casesShownCount).toEqual(3);
     });
 
     it('filters calendared cases by multiple trial statuses when some trial statuses are not set', () => {
@@ -278,11 +276,11 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '102-19' },
       ]);
-      expect(result.sessionsShownCount).toEqual(2);
+      expect(result.casesShownCount).toEqual(2);
     });
 
     it('filters calendared cases by statusUnassigned when some trial statuses are not set', () => {
@@ -312,12 +310,12 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
         { docketNumber: '101-18' },
       ]);
-      expect(result.sessionsShownCount).toEqual(3);
+      expect(result.casesShownCount).toEqual(3);
     });
 
     it('should not return any sessions if none of the trial statuses are set and statusUnassigned is false', () => {
@@ -344,8 +342,8 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([]);
-      expect(result.sessionsShownCount).toEqual(0);
+      expect(result.formattedCases).toMatchObject([]);
+      expect(result.casesShownCount).toEqual(0);
     });
 
     it('should return all sessions if none of the trial statuses are set and statusUnassigned is true', () => {
@@ -372,14 +370,14 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
         { docketNumber: '101-18' },
         { docketNumber: '102-19' },
       ]);
-      expect(result.sessionsShownCount).toEqual(5);
+      expect(result.casesShownCount).toEqual(5);
     });
   });
 });
