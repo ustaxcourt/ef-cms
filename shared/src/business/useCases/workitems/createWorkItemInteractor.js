@@ -73,6 +73,7 @@ exports.createWorkItemInteractor = async ({
     document: {
       createdAt: document.createdAt,
       documentId: document.documentId,
+      documentTitle: document.documentTitle,
       documentType: document.documentType,
     },
     isInitializeCase: false,

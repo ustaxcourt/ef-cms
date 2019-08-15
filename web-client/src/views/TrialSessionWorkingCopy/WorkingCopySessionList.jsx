@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -26,6 +27,7 @@ export const WorkingCopySessionList = connect(
   }) => {
     return (
       <div className="margin-top-4">
+        <WorkingCopyFilterHeader />
         <table
           aria-describedby="tab-my-queue"
           className="usa-table work-queue subsection"
