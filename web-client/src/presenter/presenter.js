@@ -96,6 +96,7 @@ import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectD
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
+import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -320,6 +321,7 @@ export const presenter = {
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
     printDocketRecordSequence,
+    printTrialCalendarSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,
