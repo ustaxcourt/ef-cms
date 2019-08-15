@@ -1,9 +1,4 @@
-const {
-  drawRectangle,
-  drawText,
-  PDFDocument,
-  PDFDocumentWriter,
-} = require('pdf-lib');
+const { drawRectangle, drawText, PDFDocument } = require('pdf-lib');
 
 /**
  * @param {PDFPage} page the page to get dimensions for
@@ -112,7 +107,7 @@ exports.generateSignedDocumentInteractor = async ({
 
   page.addContentStreams(pdfDoc.register(pageContentStream));
 
-  const pdfBytes = PDFDocumentWriter.saveToBytes(pdfDoc, {
+  const pdfBytes = await pdfDoc.save({
     useObjectStreams: false,
   });
 

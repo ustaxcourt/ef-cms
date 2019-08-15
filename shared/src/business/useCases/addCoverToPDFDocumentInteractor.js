@@ -3,7 +3,6 @@ const {
   drawLinesOfText,
   drawText,
   PDFDocument,
-  PDFDocumentWriter,
   PDFName,
 } = require('pdf-lib');
 const { Case } = require('../entities/cases/Case');
@@ -563,7 +562,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // Write our pdfDoc object to byte array, ready to physically write to disk or upload
   // to file server
   applicationContext.logger.time('Saving Bytes');
-  const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc, {
+  const newPdfData = await pdfDoc.save({
     useObjectStreams: false,
   });
   applicationContext.logger.timeEnd('Saving Bytes');
