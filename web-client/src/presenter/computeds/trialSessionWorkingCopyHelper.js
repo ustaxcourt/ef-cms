@@ -28,7 +28,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
-  let formattedSessions = (trialSession.calendaredCases || [])
+  let formattedCases = (trialSession.calendaredCases || [])
     .slice()
     .filter(
       calendaredCase =>
@@ -44,14 +44,14 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     .map(formatCaseName)
     .sort(compareCasesByDocketNumber);
 
-  const sessionsShownCount = formattedSessions.length;
+  const casesShownCount = formattedCases.length;
 
   if (sort === 'practitioner') {
-    formattedSessions.sort(compareCasesByPractitioner);
+    formattedCases.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    formattedSessions.reverse();
+    formattedCases.reverse();
   }
 
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
@@ -60,8 +60,8 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   }));
 
   return {
-    formattedSessions,
-    sessionsShownCount,
+    casesShownCount,
+    formattedCases,
     title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
   };
