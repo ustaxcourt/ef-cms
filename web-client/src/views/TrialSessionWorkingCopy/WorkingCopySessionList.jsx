@@ -36,41 +36,49 @@ export const WorkingCopySessionList = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" className="padding-left-2px">
-                <span
-                  className={classNames(
-                    ' margin-right-105',
-                    sort === 'docket' && 'sortActive',
-                  )}
+                <button
+                  className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'docket',
                     });
                   }}
                 >
-                  Docket
-                </span>
-                {(sort === 'docket' && sortOrder === 'desc' && (
-                  <FontAwesomeIcon icon="caret-up" />
-                )) || <FontAwesomeIcon icon="caret-down" />}
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      sort === 'docket' && 'sortActive',
+                    )}
+                  >
+                    Docket
+                  </span>
+                  {(sort === 'docket' && sortOrder === 'desc' && (
+                    <FontAwesomeIcon icon="caret-up" />
+                  )) || <FontAwesomeIcon icon="caret-down" />}
+                </button>
               </th>
               <th>Case Caption</th>
               <th>
-                <span
-                  className={classNames(
-                    'margin-right-105',
-                    sort === 'practitioner' && 'sortActive',
-                  )}
+                <button
+                  className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'practitioner',
                     });
                   }}
                 >
-                  Petitioner Counsel
-                </span>
-                {(sort === 'practitioner' && sortOrder === 'desc' && (
-                  <FontAwesomeIcon icon="caret-up" />
-                )) || <FontAwesomeIcon icon="caret-down" />}
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      sort === 'practitioner' && 'sortActive',
+                    )}
+                  >
+                    Petitioner Counsel
+                  </span>
+                  {(sort === 'practitioner' && sortOrder === 'desc' && (
+                    <FontAwesomeIcon icon="caret-up" />
+                  )) || <FontAwesomeIcon icon="caret-down" />}
+                </button>
               </th>
               <th>Respondent Counsel</th>
               <th colSpan="2">Trial Status</th>
