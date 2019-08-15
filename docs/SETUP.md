@@ -40,7 +40,6 @@
      - `DYNAMSOFT_PRODUCT_KEYS_DEV` (the product key provided after purchasing dynamsoft)
      - `DYNAMSOFT_PRODUCT_KEYS_STG`  (the product key provided after purchasing dynamsoft)
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing dynamsoft)
-     - `DYNAMSOFT_URL` (the url to where this dynamoft dev lib is hosted, e.g. `https://dynamsoft-lib-dev.ustc-case-mgmt.flexion.us`)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full s3 path to the dynamsoft .tar.zip, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build.
