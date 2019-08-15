@@ -55,6 +55,20 @@ describe('formattedTrialSessions', () => {
     },
   ];
 
+  it('does not error if user is undefined', () => {
+    let error;
+    try {
+      runCompute(formattedTrialSessions, {
+        state: {
+          trialSessions: TRIAL_SESSIONS_LIST,
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+  });
+
   it('formats trial sessions correctly selecting startOfWeek and formatting start date', () => {
     const result = formatSession(TRIAL_SESSIONS_LIST[2], applicationContext);
     expect(result).toMatchObject({
