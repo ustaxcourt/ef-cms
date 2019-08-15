@@ -39,7 +39,7 @@ TrialSessionWorkingCopy.errorToMessageMap = {};
 
 TrialSessionWorkingCopy.validationRules = {
   caseMetadata: joi.object().optional(),
-  filters: joi.string().optional(),
+  filters: joi.object().optional(),
   sort: joi.string().optional(),
   sortOrder: joi.string().optional(),
   trialSessionId: joi
