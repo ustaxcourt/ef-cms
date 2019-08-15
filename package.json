@@ -115,7 +115,7 @@
     "swagger-cli": "^2.3.0",
     "tmp": "^0.1.0",
     "try-thread-sleep": "^2.0.0",
-    "uswds": "^2.0.2",
+    "uswds": "^2.1.0",
     "uuid": "^3.3.2",
     "webpack": "^4.39.2",
     "wicg-inert": "^2.1.2"
