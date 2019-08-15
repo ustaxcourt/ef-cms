@@ -125,6 +125,10 @@ export const FilingsAndProceedings = connect(
         {!document && record.description}
 
         <span className="filings-and-proceedings">
+          {document &&
+            document.documentTitle &&
+            document.additionalInfo &&
+            ` ${document.additionalInfo}`}
           {record.filingsAndProceedings && ` ${record.filingsAndProceedings}`}
           {document &&
             document.additionalInfo2 &&
