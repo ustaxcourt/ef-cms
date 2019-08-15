@@ -12,7 +12,8 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Array<TrialSession>} the trial session working copy returned from persistence
+ * @param {string} providers.trialSessionId id of the trial session
+ * @returns {TrialSessionWorkingCopy} the trial session working copy returned from persistence
  */
 exports.getTrialSessionWorkingCopyInteractor = async ({
   applicationContext,
