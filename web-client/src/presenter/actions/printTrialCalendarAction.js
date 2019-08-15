@@ -112,7 +112,7 @@ export const printTrialCalendarAction = ({ get }) => {
         </div>
       </div>
 
-      <h3 class="bold">Open Cases (${openCases.length})</h3>
+      <h3 class="open-cases bold">Open Cases (${openCases.length})</h3>
 
       <table>
         <thead>
