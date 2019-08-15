@@ -11,7 +11,7 @@ export const BindedTextarea = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  ({ bind, className, id, name, onChange, simpleSetter, value }) => {
+  ({ ariaLabel, bind, className, id, name, onChange, simpleSetter, value }) => {
     let textValue, setText;
 
     if (bind) {
@@ -25,7 +25,7 @@ export const BindedTextarea = connect(
 
     return (
       <textarea
-        aria-label={name}
+        aria-label={ariaLabel || name}
         className={classNames('usa-textarea', className)}
         id={id}
         name={name}
