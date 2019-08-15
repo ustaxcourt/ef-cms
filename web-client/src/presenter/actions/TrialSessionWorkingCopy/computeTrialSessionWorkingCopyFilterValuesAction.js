@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * sets state.form for the key provided if the value is not an
- * empty string; unsets the state.form for the key if the value
- * is an empty string
+ * sets state.trialSessionWorkCopy.filters based on the props.key
+ * and props.value passed in
  *
  * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.props the cerebral props object
  * @returns {void}
