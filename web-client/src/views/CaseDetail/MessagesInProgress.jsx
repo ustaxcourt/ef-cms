@@ -46,7 +46,8 @@ export const MessagesInProgress = connect(
                           documentId: workItem.document.documentId,
                         })}
                       >
-                        {workItem.document.documentType}
+                        {workItem.document.documentTitle ||
+                          workItem.document.documentType}
                       </a>
                     </p>
                     <p className="message-detail margin-y-0">
