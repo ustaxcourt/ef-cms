@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 const S3rver = require('s3rver');
 
@@ -9,4 +10,6 @@ new S3rver({
   hostname: '0.0.0.0',
   port: 9000,
   silent: false,
-}).run(() => null);
+}).run(error => {
+  console.error(error);
+});
