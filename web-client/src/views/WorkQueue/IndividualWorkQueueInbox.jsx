@@ -102,8 +102,7 @@ export const IndividualWorkQueueInbox = connect(
                       >
                         {item.document.documentTitle ||
                           item.document.documentType}
-                      </a>{' '}
-                      {item.document.filingsAndProceedings}
+                      </a>
                     </div>
                     {workQueueHelper.showMessageContent && (
                       <div
