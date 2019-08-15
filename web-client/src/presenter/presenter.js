@@ -38,6 +38,7 @@ import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
+import { deleteCaseWorkingCopyNoteSequence } from './sequences/deleteCaseWorkingCopyNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
@@ -89,6 +90,7 @@ import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseD
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
+import { openDeleteNoteConfirmModalSequence } from './sequences/openDeleteNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
@@ -263,6 +265,7 @@ export const presenter = {
     createCaseDeadlineSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
+    deleteCaseWorkingCopyNoteSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
@@ -314,6 +317,7 @@ export const presenter = {
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
+    openDeleteNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,

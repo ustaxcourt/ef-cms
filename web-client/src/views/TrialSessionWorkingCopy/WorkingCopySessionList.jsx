@@ -15,7 +15,6 @@ export const WorkingCopySessionList = connect(
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
-    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   ({
@@ -25,7 +24,6 @@ export const WorkingCopySessionList = connect(
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
-    trialSessionWorkingCopy,
     trialStatusOptions,
   }) => {
     return (
