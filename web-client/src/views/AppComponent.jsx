@@ -25,6 +25,7 @@ import { MessagesJudge } from './Messages/MessagesJudge';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
+import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCaseInternal } from './StartCaseInternal';
@@ -65,6 +66,7 @@ const pages = {
   PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
+  PrintableTrialCalendar,
   RequestAccessWizard,
   SelectDocumentType,
   StartCaseInternal,
