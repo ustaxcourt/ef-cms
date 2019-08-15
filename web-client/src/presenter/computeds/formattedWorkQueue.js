@@ -323,12 +323,44 @@ export const formattedWorkQueue = (get, applicationContext) => {
     },
   };
 
+  let sortDirections = {
+    documentQc: {
+      my: {
+        batched: 'desc',
+        inProgress: 'asc',
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+      section: {
+        batched: 'desc',
+        inProgress: 'asc',
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+    },
+    messages: {
+      my: {
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+      section: {
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+    },
+  };
+
   const sortField =
     sortFields[isInternal ? 'messages' : 'documentQc'][
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], 'desc');
+  const sortDirection =
+    sortDirections[isInternal ? 'messages' : 'documentQc'][
+      workQueueToDisplay.queue
+    ][workQueueToDisplay.box];
+
+  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
 
   return workQueue;
 };
