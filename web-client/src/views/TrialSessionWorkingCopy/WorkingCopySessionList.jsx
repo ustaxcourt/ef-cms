@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
@@ -106,24 +107,12 @@ export const WorkingCopySessionList = connect(
                   ))}
                 </td>
                 <td>
-                  <select
-                    aria-label="trial status"
-                    className="usa-select"
+                  <BindedSelect
+                    ariaLabel="trial status"
+                    bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
                     id={`trialSessionWorkingCopy-${item.docketNumber}`}
-                    name={`caseMetadata.${item.docketNumber}.trialStatus`}
-                    value={
-                      (trialSessionWorkingCopy.caseMetadata[
-                        item.docketNumber
-                      ] &&
-                        trialSessionWorkingCopy.caseMetadata[item.docketNumber]
-                          .trialStatus) ||
-                      ''
-                    }
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
+                    onChange={() => {
+                      autoSaveTrialSessionWorkingCopySequence();
                     }}
                   >
                     <option value="">-Trial Status-</option>
@@ -132,7 +121,7 @@ export const WorkingCopySessionList = connect(
                         {value}
                       </option>
                     ))}
-                  </select>
+                  </BindedSelect>
                 </td>
               </tr>
             </tbody>
