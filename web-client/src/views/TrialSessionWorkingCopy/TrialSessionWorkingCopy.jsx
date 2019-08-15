@@ -1,3 +1,4 @@
+import { AddEditNoteModal } from './AddEditNoteModal';
 import { DeleteNoteConfirmModal } from './DeleteNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
@@ -19,6 +20,7 @@ export const TrialSessionWorkingCopy = connect(
           <ErrorNotification />
           <WorkingCopySessionList />
           {showModal === 'DeleteNoteConfirmModal' && <DeleteNoteConfirmModal />}
+          {showModal === 'AddEditNoteModal' && <AddEditNoteModal />}
         </section>
       </>
     );
