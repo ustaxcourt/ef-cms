@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * sets state.form for the key provided if the value is not an
- * empty string; unsets the state.form for the key if the value
+ * sets state.trialSessionWorkingCopy for the key provided if the value is not an
+ * empty string; unsets the state.trialSessionWorkingCopy for the key if the value
  * is an empty string
  *
  * @param {object} providers the providers object
