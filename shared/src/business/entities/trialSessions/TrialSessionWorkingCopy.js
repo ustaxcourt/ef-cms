@@ -38,7 +38,16 @@ TrialSessionWorkingCopy.prototype.init = function(rawSession) {
 TrialSessionWorkingCopy.errorToMessageMap = {};
 
 TrialSessionWorkingCopy.validationRules = {
-  caseMetadata: joi.object().optional(),
+  caseMetadata: joi
+    .object()
+    .pattern(
+      /./, //keys are docket numbers
+      joi.object().keys({
+        notes: joi.string().optional(),
+        trialStatus: joi.string().optional(),
+      }),
+    )
+    .optional(),
   filters: joi.object().optional(),
   sort: joi.string().optional(),
   sortOrder: joi.string().optional(),
