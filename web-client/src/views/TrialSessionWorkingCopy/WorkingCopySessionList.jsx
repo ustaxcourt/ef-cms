@@ -9,7 +9,7 @@ export const WorkingCopySessionList = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
-    sessions: state.trialSessionWorkingCopyHelper.formattedSessions,
+    formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -18,7 +18,7 @@ export const WorkingCopySessionList = connect(
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
-    sessions,
+    formattedCases,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -84,7 +84,7 @@ export const WorkingCopySessionList = connect(
               <th colSpan="2">Trial Status</th>
             </tr>
           </thead>
-          {sessions.map((item, idx) => (
+          {formattedCases.map((item, idx) => (
             <tbody key={idx}>
               <tr>
                 <td>

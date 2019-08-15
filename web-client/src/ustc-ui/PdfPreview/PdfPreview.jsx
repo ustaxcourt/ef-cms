@@ -19,13 +19,13 @@ class PdfPreviewComponent extends React.Component {
   render() {
     if (!this.props.pdfPreviewUrl) return '';
     return (
-      <>
+      !process.env.CI && (
         <iframe
           id="pdf-preview-iframe"
           src={this.props.pdfPreviewUrl}
           title="PDF Preview"
         />
-      </>
+      )
     );
   }
 }

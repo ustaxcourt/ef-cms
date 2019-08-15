@@ -15,6 +15,9 @@ export const setPDFForSigningAction = async ({
   store,
 }) => {
   const { documentId } = props;
+  if (process.env.CI) {
+    return;
+  }
   const pdfObj = await applicationContext
     .getUseCases()
     .loadPDFForSigningInteractor({ applicationContext, documentId });
