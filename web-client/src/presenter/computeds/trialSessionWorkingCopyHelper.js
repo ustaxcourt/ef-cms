@@ -1,4 +1,4 @@
-import { camelCase } from 'lodash';
+import { camelCase, pickBy } from 'lodash';
 import {
   compareCasesByDocketNumber,
   formatCase,
@@ -15,7 +15,8 @@ const compareCasesByPractitioner = (a, b) => {
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const { TRIAL_STATUS_TYPES } = get(state.constants);
   const trialSession = get(state.trialSession) || {};
-  const { sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
+  const { filters, sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
+  const caseMetadata = get(state.trialSessionWorkingCopy.caseMetadata) || {};
 
   const formatCaseName = myCase => {
     myCase.caseName = applicationContext.getCaseCaptionNames(
@@ -24,17 +25,33 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     return myCase;
   };
 
-  let formattedSessions = (trialSession.calendaredCases || [])
+  //get an array of strings of the trial statuses that are set to true
+  const trueFilters = Object.keys(pickBy(filters));
+
+  let formattedCases = (trialSession.calendaredCases || [])
+    .slice()
+    .filter(
+      calendaredCase =>
+        (trueFilters.includes('statusUnassigned') &&
+          (!caseMetadata[calendaredCase.docketNumber] ||
+            !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
+        (caseMetadata[calendaredCase.docketNumber] &&
+          trueFilters.includes(
+            caseMetadata[calendaredCase.docketNumber].trialStatus,
+          )),
+    )
     .map(formatCase)
     .map(formatCaseName)
     .sort(compareCasesByDocketNumber);
 
+  const casesShownCount = formattedCases.length;
+
   if (sort === 'practitioner') {
-    formattedSessions = formattedSessions.sort(compareCasesByPractitioner);
+    formattedCases.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    formattedSessions = formattedSessions.slice().reverse();
+    formattedCases.reverse();
   }
 
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
@@ -43,7 +60,8 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   }));
 
   return {
-    formattedSessions,
+    casesShownCount,
+    formattedCases,
     title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
   };

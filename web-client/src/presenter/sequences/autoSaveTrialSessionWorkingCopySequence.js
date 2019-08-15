@@ -1,8 +1,9 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { computeTrialSessionWorkingCopyFilterValuesAction } from '../actions/TrialSessionWorkingCopy/computeTrialSessionWorkingCopyFilterValuesAction';
 import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
+import { updateTrialSessionWorkingCopyValueWithoutEmptyStringAction } from '../actions/TrialSessionWorkingCopy/updateTrialSessionWorkingCopyValueWithoutEmptyStringAction';
 
 export const autoSaveTrialSessionWorkingCopySequence = [
-  set(state.trialSessionWorkingCopy[props.key], props.value),
+  updateTrialSessionWorkingCopyValueWithoutEmptyStringAction,
+  computeTrialSessionWorkingCopyFilterValuesAction,
   updateTrialSessionWorkingCopyAction,
 ];
