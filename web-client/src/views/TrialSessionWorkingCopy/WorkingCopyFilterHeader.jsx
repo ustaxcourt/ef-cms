@@ -23,7 +23,7 @@ export const WorkingCopyFilterHeader = connect(
             </div>
             <div className="grid-col-6 text-right">
               <span>
-                Total Shown: {trialSessionWorkingCopyHelper.sessionsShownCount}
+                Total Shown: {trialSessionWorkingCopyHelper.casesShownCount}
               </span>
             </div>
           </div>
