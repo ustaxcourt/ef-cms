@@ -21,15 +21,15 @@ export const printTrialCalendarAction = ({ get }) => {
         ${item.docketNumberWithSuffix}
       </td>
       <td>${item.caseCaption}</td>
-      <td>
+      <td style="width: 25%;">
         ${item.practitioners
           .map(practitioner => practitioner.name)
           .join('<br>')}
       </td>
 
-      <td>${item.respondents
-        .map(respondent => respondent.name)
-        .join('<br>')}</td>
+      <td style="width: 25%;">
+        ${item.respondents.map(respondent => respondent.name).join('<br>')}
+      </td>
     </tr>`;
   };
 
@@ -54,11 +54,11 @@ export const printTrialCalendarAction = ({ get }) => {
           </div>
 
           <div class="content grid-container">
-            <div>
+            <div class="pr-1">
               <h4>Start Time</h4>
               <p>${formattedTrialSessionDetails.formattedStartTime}</p>
             </div>
-            <div>
+            <div class="pr-1">
               <h4>Location</h4>
               ${
                 formattedTrialSessionDetails.noLocationEntered
@@ -86,14 +86,14 @@ export const printTrialCalendarAction = ({ get }) => {
             Assignments
           </div>
           <div class="content grid-container">
-            <div>
+            <div class="pr-1">
               <h4>Judge</h4>
               <p class="mb-2">${formattedTrialSessionDetails.formattedJudge}</p>
 
               <h4>Court Reporter</h4>
               <p>${formattedTrialSessionDetails.formattedCourtReporter}</p>
             </div>
-            <div>
+            <div class="pr-1">
               <h4>Trial Clerk</h4>
               <p class="mb-2">${
                 formattedTrialSessionDetails.formattedTrialClerk
