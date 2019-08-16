@@ -24,6 +24,13 @@ describe('formattedTrialSessionDetails', () => {
     trialLocation: 'Hartford, Connecticut',
   };
 
+  it('returns undefined if state.trialSession is undefined', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {},
+    });
+    expect(result).toBeUndefined();
+  });
+
   it('formats trial session when all fields have values', () => {
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
@@ -170,11 +177,16 @@ describe('formattedTrialSessionDetails', () => {
               caseCaption: 'Test Person & Someone Else, Petitioners',
               docketNumberSuffix: 'W',
             },
+            {
+              ...MOCK_CASE,
+              caseCaption: undefined,
+              docketNumber: '103-19',
+            },
           ],
         },
       },
     });
-    expect(result.formattedEligibleCases.length).toEqual(2);
+    expect(result.formattedEligibleCases.length).toEqual(3);
     expect(result.formattedEligibleCases[0].docketNumberWithSuffix).toEqual(
       '101-18',
     );
@@ -187,6 +199,10 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.formattedEligibleCases[1].caseCaptionNames).toEqual(
       'Test Person & Someone Else',
     );
+    expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
+      '103-19',
+    );
+    expect(result.formattedEligibleCases[2].caseCaptionNames).toEqual('');
   });
 
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
