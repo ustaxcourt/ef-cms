@@ -53,12 +53,14 @@ describe('trial session working copy computed', () => {
             ],
           },
           trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'asc',
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
@@ -84,12 +86,14 @@ describe('trial session working copy computed', () => {
             ],
           },
           trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
             sort: 'docket',
             sortOrder: 'desc',
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '102-19' },
         { docketNumber: '101-18' },
         { docketNumber: '5000-17' },
@@ -126,18 +130,254 @@ describe('trial session working copy computed', () => {
             ],
           },
           trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
             sort: 'practitioner',
             sortOrder: 'asc',
           },
         },
       });
-      expect(result.formattedSessions).toMatchObject([
+      expect(result.formattedCases).toMatchObject([
         { docketNumber: '90-07' },
         { docketNumber: '101-18' },
         { docketNumber: '102-19' },
         { docketNumber: '500-17' },
         { docketNumber: '5000-17' },
       ]);
+      expect(result.casesShownCount).toEqual(5);
+    });
+  });
+
+  describe('filtering', () => {
+    it('no cases are returned if trialSessionWorkingCopy.filters and trialSessionWorkingCopy.caseMetadata are null', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            sort: 'practitioner',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([]);
+      expect(result.casesShownCount).toEqual(0);
+    });
+
+    it('filters calendared cases by a single trial status when all trial statuses are set', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {
+              '90-07': { trialStatus: 'dismissed' },
+              '102-19': { trialStatus: 'aBasisReached' },
+              '500-17': { trialStatus: 'dismissed' },
+              '5000-17': { trialStatus: 'dismissed' },
+            },
+            filters: { aBasisReached: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([{ docketNumber: '102-19' }]);
+      expect(result.casesShownCount).toEqual(1);
+
+      result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {
+              '90-07': { trialStatus: 'dismissed' },
+              '102-19': { trialStatus: 'aBasisReached' },
+              '500-17': { trialStatus: 'dismissed' },
+              '5000-17': { trialStatus: 'dismissed' },
+            },
+            filters: { dismissed: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([
+        { docketNumber: '90-07' },
+        { docketNumber: '500-17' },
+        { docketNumber: '5000-17' },
+      ]);
+      expect(result.casesShownCount).toEqual(3);
+    });
+
+    it('filters calendared cases by multiple trial statuses when some trial statuses are not set', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {
+              '90-07': { trialStatus: 'dismissed' },
+              '102-19': { trialStatus: 'aBasisReached' },
+              '5000-17': { trialStatus: 'recall' },
+            },
+            filters: {
+              aBasisReached: true,
+              dismissed: true,
+              recall: false,
+              statusUnassigned: false,
+            },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([
+        { docketNumber: '90-07' },
+        { docketNumber: '102-19' },
+      ]);
+      expect(result.casesShownCount).toEqual(2);
+    });
+
+    it('filters calendared cases by statusUnassigned when some trial statuses are not set', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {
+              '90-07': { trialStatus: 'dismissed' },
+              '102-19': { trialStatus: 'aBasisReached' },
+            },
+            filters: { statusUnassigned: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([
+        { docketNumber: '500-17' },
+        { docketNumber: '5000-17' },
+        { docketNumber: '101-18' },
+      ]);
+      expect(result.casesShownCount).toEqual(3);
+    });
+
+    it('should not return any sessions if none of the trial statuses are set and statusUnassigned is false', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: false },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([]);
+      expect(result.casesShownCount).toEqual(0);
+    });
+
+    it('should return all sessions if none of the trial statuses are set and statusUnassigned is true', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              { ...MOCK_CASE, docketNumber: '102-19' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '500-17' },
+              { ...MOCK_CASE, docketNumber: '90-07' },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([
+        { docketNumber: '90-07' },
+        { docketNumber: '500-17' },
+        { docketNumber: '5000-17' },
+        { docketNumber: '101-18' },
+        { docketNumber: '102-19' },
+      ]);
+      expect(result.casesShownCount).toEqual(5);
     });
   });
 });

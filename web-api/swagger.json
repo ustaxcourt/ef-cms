@@ -325,6 +325,25 @@
           }
         ]
       },
+      "put": {
+        "tags": ["documents"],
+        "summary": "updates a current docket entry on a case",
+        "description": "Updates a docket entry/document and attaches it to a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
@@ -2895,6 +2914,77 @@
           }
         }
       }
+    },
+    "/trial-sessions/{trialSessionId}/working-copy": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets the trial session working copy for a trial session for the logged in user",
+        "description": "gets the trial session working copy for a trial session for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSessionWorkingCopy"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["trialsessions"],
+        "summary": "updates the trial session working copy for a trial session for the logged in user",
+        "description": "updates the trial session working copy for a trial session for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSessionWorkingCopy"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -3185,6 +3275,32 @@
         "trialSessionId": {
           "type": "string",
           "description": "id of trial session"
+        }
+      },
+      "description": "a trial session"
+    },
+    "trialSessionWorkingCopy": {
+      "type": "object",
+      "properties": {
+        "sort": {
+          "type": "string",
+          "description": "field to sort the cases by"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "sort order"
+        },
+        "caseMetadata": {
+          "type": "object",
+          "description": "map of cases to trial statuses"
+        },
+        "filters": {
+          "type": "object",
+          "description": "trial status filters with boolean values"
+        },
+        "trialSessionId": {
+          "type": "string",
+          "description": "id of the trial session"
         }
       },
       "description": "a trial session"

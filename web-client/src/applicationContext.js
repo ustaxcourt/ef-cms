@@ -87,6 +87,7 @@ import { getScannerInterface as getScannerMockInterfaceInteractor } from '../../
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
+import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
@@ -116,6 +117,7 @@ import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
+import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
@@ -214,6 +216,7 @@ const allUseCases = {
   getSentMessagesForSectionInteractor,
   getSentMessagesForUserInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionWorkingCopyInteractor,
   getTrialSessionsInteractor,
   getUserInteractor,
   getUsersInSectionInteractor,
@@ -240,6 +243,7 @@ const allUseCases = {
   updateCaseTrialSortTagsInteractor,
   updateDocketEntryInteractor,
   updatePrimaryContactInteractor,
+  updateTrialSessionWorkingCopyInteractor,
   uploadDocumentInteractor,
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,

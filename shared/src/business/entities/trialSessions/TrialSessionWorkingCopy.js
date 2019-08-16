@@ -1,8 +1,8 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { Case } = require('../cases/Case');
 
 TrialSessionWorkingCopy.TRIAL_STATUS_TYPES = [
   'Set for Trial',
@@ -28,21 +28,28 @@ function TrialSessionWorkingCopy(rawSession) {
 }
 
 TrialSessionWorkingCopy.prototype.init = function(rawSession) {
-  this.caseMetadata = rawSession.caseMetadata;
+  this.caseMetadata = rawSession.caseMetadata || {};
   this.filters = rawSession.filters;
   this.sort = rawSession.sort;
   this.sortOrder = rawSession.sortOrder;
   this.trialSessionId = rawSession.trialSessionId;
-  this.trialSessionWorkingCopyId =
-    rawSession.trialSessionWorkingCopyId || uuid.v4();
   this.userId = rawSession.userId;
 };
 
 TrialSessionWorkingCopy.errorToMessageMap = {};
 
 TrialSessionWorkingCopy.validationRules = {
-  caseMetadata: joi.object().optional(),
-  filters: joi.string().optional(),
+  caseMetadata: joi
+    .object()
+    .pattern(
+      Case.docketNumberMatcher, //keys are docket numbers
+      joi.object().keys({
+        notes: joi.string().optional(),
+        trialStatus: joi.string().optional(),
+      }),
+    )
+    .optional(),
+  filters: joi.object().optional(),
   sort: joi.string().optional(),
   sortOrder: joi.string().optional(),
   trialSessionId: joi
@@ -51,12 +58,6 @@ TrialSessionWorkingCopy.validationRules = {
       version: ['uuidv4'],
     })
     .required(),
-  trialSessionWorkingCopyId: joi
-    .string()
-    .uuid({
-      version: ['uuidv4'],
-    })
-    .optional(),
   userId: joi
     .string()
     .uuid({

@@ -10,6 +10,7 @@ import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkI
 import { associatePractitionerWithCaseSequence } from './sequences/caseAssociation/associatePractitionerWithCaseSequence';
 import { associateRespondentWithCaseSequence } from './sequences/caseAssociation/associateRespondentWithCaseSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
+import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
@@ -95,6 +96,7 @@ import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectD
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
+import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -233,6 +235,7 @@ export const presenter = {
     associatePractitionerWithCaseSequence,
     associateRespondentWithCaseSequence,
     autoSaveCaseSequence,
+    autoSaveTrialSessionWorkingCopySequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
@@ -318,6 +321,7 @@ export const presenter = {
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
     printDocketRecordSequence,
+    printTrialCalendarSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,

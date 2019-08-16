@@ -3,7 +3,8 @@ table,
   width: 100%;
   margin: 0 0 2em 0;
 
-  tr:hover {
+  tr:hover,
+  tbody.hoverable:hover {
     background: $color-primary-alt-lightest;
     box-shadow: 5px 0 0 0 color($theme-color-primary) inset;
     transition-duration: 0.2s;
@@ -215,15 +216,19 @@ table.work-queue {
     &.padding-right-0 {
       padding-right: 0;
     }
+    .sortable-header-button {
+      color: color($theme-color-base-darkest);
+      font-weight: $font-semibold;
+      text-decoration: none;
+    }
     .sortActive {
-      border-bottom: 3px solid #005ea2;
+      border-bottom: 3px solid color($theme-color-primary);
     }
   }
 
   td {
     padding: 15px 16px;
     border: none;
-    font-size: 17px;
 
     &.padding-left-0 {
       padding-left: 0;
