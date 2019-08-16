@@ -3,7 +3,7 @@ const path = require('path');
 const {
   generatePDFFromJPGDataInteractor,
 } = require('./generatePDFFromJPGDataInteractor.js');
-const { PDFDocumentFactory } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
@@ -29,7 +29,7 @@ describe('generatePDFFromJPGDataInteractor', () => {
       newPdfData,
     );
 
-    const newPdfDoc = PDFDocumentFactory.load(newPdfData);
+    const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(newPdfDocPages.length).toEqual(2);
   });

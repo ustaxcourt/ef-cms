@@ -3,6 +3,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
+import { getJudgeNotesForCaseAction } from '../actions/CaseDetail/getJudgeNotesForCaseAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -24,7 +25,10 @@ export const gotoCaseDetailSequence = [
   getUserRoleAction,
   {
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
-    judge: [setCurrentPageAction('CaseDetailInternal')],
+    judge: [
+      getJudgeNotesForCaseAction,
+      setCurrentPageAction('CaseDetailInternal'),
+    ],
     petitioner: [
       getCaseAssociationAction,
       setCaseAssociationAction,

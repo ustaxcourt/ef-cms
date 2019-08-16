@@ -121,7 +121,7 @@ export const WorkingCopySessionList = connect(
                     Delete Note
                   </button>
                 </td>
-                <td>{item.caseName}</td>
+                <td>{item.caseCaptionNames}</td>
                 <td>
                   {item.practitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>

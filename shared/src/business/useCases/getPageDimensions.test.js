@@ -1,12 +1,12 @@
 const { getPageDimensions } = require('./generateSignedDocumentInteractor.js');
-const { PDFDocumentFactory } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 describe('getPageDimensions', () => {
-  it('returns the dimensions of a page', () => {
+  it('returns the dimensions of a page', async () => {
     const width = 350;
     const height = 500;
-    const pdfDoc = PDFDocumentFactory.create();
-    const page = pdfDoc.createPage([width, height]);
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([width, height]);
     pdfDoc.addPage(page);
 
     expect(getPageDimensions(page)).toEqual([width, height]);

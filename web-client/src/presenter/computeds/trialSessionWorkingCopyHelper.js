@@ -19,13 +19,6 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const { filters, sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
   const caseMetadata = get(state.trialSessionWorkingCopy.caseMetadata) || {};
 
-  const formatCaseName = myCase => {
-    myCase.caseName = applicationContext.getCaseCaptionNames(
-      myCase.caseCaption || '',
-    );
-    return myCase;
-  };
-
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
@@ -41,8 +34,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
             caseMetadata[calendaredCase.docketNumber].trialStatus,
           )),
     )
-    .map(formatCase)
-    .map(formatCaseName)
+    .map(caseItem => formatCase({ applicationContext, caseItem }))
     .sort(compareCasesByDocketNumber);
 
   const casesShownCount = formattedCases.length;
