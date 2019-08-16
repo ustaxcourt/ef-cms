@@ -143,5 +143,6 @@ export const printTrialCalendarAction = ({ get }) => {
   return {
     docketNumber: caseDetail.docketNumberWithSuffix,
     docketRecordHtml: output,
+    headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDateFull} ${formattedTrialSessionDetails.sessionType}`,
   };
 };
