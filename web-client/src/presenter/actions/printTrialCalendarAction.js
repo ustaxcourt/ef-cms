@@ -18,11 +18,13 @@ export const printTrialCalendarAction = ({ get }) => {
   const renderCases = item => {
     return `<tr>
       <td>
-          ${item.docketNumberWithSuffix}
+        ${item.docketNumberWithSuffix}
       </td>
       <td>${item.caseCaption}</td>
       <td>
-        ${item.practitioners.map(practitioner => `${practitioner.name}`)}
+        ${item.practitioners
+          .map(practitioner => `${practitioner.name}`)
+          .join(',')}
       </td>
       <td>${item.respondent || ''}</td>
     </tr>`;
@@ -124,7 +126,7 @@ export const printTrialCalendarAction = ({ get }) => {
           </tr>
         </thead>
         <tbody>
-          ${openCases.map(renderCases)}
+          ${openCases.map(renderCases).join('')}
         </tbody>
       </table>
     `;
