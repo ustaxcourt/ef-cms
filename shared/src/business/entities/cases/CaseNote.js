@@ -4,8 +4,9 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
+ * Case Note entity
  *
- * @param rawProps
+ * @param {object} rawProps the raw case note data
  * @constructor
  */
 function CaseNote(rawProps) {
