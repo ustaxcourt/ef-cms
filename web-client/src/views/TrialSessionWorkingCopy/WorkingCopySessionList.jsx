@@ -131,11 +131,11 @@ export const WorkingCopySessionList = connect(
                       ))}
                     </BindedSelect>
                   </td>
-                  <If
-                    not
-                    bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
-                  >
-                    <td className="no-wrap">
+                  <td className="no-wrap">
+                    <If
+                      not
+                      bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                    >
                       <button
                         className="usa-button usa-button--unstyled"
                         onClick={() => {
@@ -147,8 +147,8 @@ export const WorkingCopySessionList = connect(
                         <FontAwesomeIcon icon="plus-circle"></FontAwesomeIcon>{' '}
                         Add Note
                       </button>
-                    </td>
-                  </If>
+                    </If>
+                  </td>
                 </tr>
                 <If
                   bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
