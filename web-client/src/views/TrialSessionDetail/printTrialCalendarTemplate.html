@@ -14,13 +14,25 @@
         padding-top: 10px;
         margin-bottom: 0px;
         font-size: 24px;
-        text-align: center;
       }
 
       h2 {
         margin-top: 0px;
         font-size: 20px;
         font-weight: normal;
+      }
+
+      h3 {
+        margin-top: 0px;
+        font-size: 16px;
+        font-weight: normal;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .text-center {
         text-align: center;
       }
 
@@ -43,28 +55,35 @@
         background-color: #f0f0f0;
       }
 
+      .grid-container {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 50% 50%;
+      }
+
+      .mb-1 {
+        margin-bottom: 10px;
+      }
+
+      .mb-2 {
+        margin-bottom: 20px;
+      }
+
+      h4 {
+        margin-bottom: 5px;
+      }
+
       .court-header {
         margin-bottom: 30px;
         font-family: serif;
       }
 
-      .case-information #caption {
-        width: 40%;
-        float: left;
-      }
-
-      .case-information #docket-number {
-        width: 50%;
-        float: right;
-        text-indent: 5px;
-      }
-
-      .party-info {
+      .panel {
         border: 1px solid #ccc;
-        margin: 15px 0 30px 0;
+        margin: 15px 0 5px 0;
       }
 
-      .party-info-header {
+      .header {
         padding: 10px;
         border-bottom: 1px solid #ccc;
         background: #f0f0f0;
@@ -72,19 +91,17 @@
         font-weight: bold;
       }
 
-      .party-info-content {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: flex-start;
+      .open-cases {
+        font-size: 12px;
+      }
+
+      .content {
+        min-height: 15px;
         padding: 0 10px 10px 10px;
       }
 
-      .party-details {
-        width: 25%;
-      }
-
-      .clear {
-        clear: both;
+      .mb-4 {
+        margin-bottom: 40px;
       }
 
       .us-tax-court-seal {
@@ -107,16 +124,7 @@
   </head>
   <body>
     <div class="main">
-      <div class="court-header">
-        <div class="us-tax-court-seal"></div>
-        <h1>United States Tax Court</h1>
-        <h2>WORK IN PROGRESS</h2>
-        <div class="clear"></div>
-      </div>
-
-      <div class="case-information">
-        TODO:
-      </div>
+      {{ trialCalendar }}
     </div>
   </body>
 </html>

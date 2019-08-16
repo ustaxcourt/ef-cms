@@ -150,7 +150,7 @@ Case.COMMON_ERROR_MESSAGES = {
 
 Case.validationName = 'Case';
 
-const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
+Case.docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
  * Case Entity
@@ -261,7 +261,7 @@ joiValidationDecorator(
       .optional(),
     docketNumber: joi
       .string()
-      .regex(docketNumberMatcher)
+      .regex(Case.docketNumberMatcher)
       .required(),
     docketNumberSuffix: joi
       .string()
@@ -742,7 +742,7 @@ Case.isValidCaseId = caseId =>
 Case.isValidDocketNumber = docketNumber => {
   return (
     docketNumber &&
-    docketNumberMatcher.test(docketNumber) &&
+    Case.docketNumberMatcher.test(docketNumber) &&
     parseInt(docketNumber.split('-')[0]) > 100
   );
 };
