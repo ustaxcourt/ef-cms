@@ -3,7 +3,9 @@ export default test => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    await test.runSequence('gotoEditDocketEntry', {
+
+    await test.runSequence('gotoEditDocketEntrySequence', {
+      docketNumber: test.docketNumber,
       documentId: test.docketRecordEntry.documentId,
     });
 

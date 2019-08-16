@@ -23,6 +23,7 @@ import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSavesDocketEntry from './journey/docketClerkSavesDocketEntry';
 import docketClerkViewsEditDocketRecord from './journey/docketClerkViewsEditDocketRecord';
 import docketClerkViewsQCInProgress from './journey/docketClerkViewsQCInProgress';
+import docketClerkViewsSectionQCInProgress from './journey/docketClerkViewsSectionQCInProgress';
 
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
@@ -127,6 +128,11 @@ describe('Create Docket Entry From Scans', () => {
 
   docketClerkLogIn(test);
   docketClerkAddsDocketEntryWithoutFile(test);
+  docketClerkSavesDocketEntry(test, false);
+  docketClerkViewsQCInProgress(test, true);
+  docketClerkViewsSectionQCInProgress(test, true);
+  docketClerkViewsEditDocketRecord(test);
+
   selectScannerSource(test, {
     scannerSourceIndex,
     scannerSourceName,
@@ -139,9 +145,9 @@ describe('Create Docket Entry From Scans', () => {
     scannerSourceIndex,
     scannerSourceName,
   });
-  docketClerkSavesDocketEntry(test);
-  docketClerkViewsQCInProgress(test);
-  docketClerkViewsEditDocketRecord(test);
+
   docketClerkAddsDocketEntryFile(test, fakeFile);
-  docketClerkSavesDocketEntry(test, false);
+  docketClerkSavesDocketEntry(test, true);
+  docketClerkViewsQCInProgress(test, false);
+  docketClerkViewsSectionQCInProgress(test, false);
 });

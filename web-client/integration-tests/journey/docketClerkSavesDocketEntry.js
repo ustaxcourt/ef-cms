@@ -8,6 +8,7 @@ export default (test, isAddAnother = true) => {
     test.docketRecordEntry = test.getState('caseDetail.docketRecord').pop();
 
     expect(test.getState('wizardStep')).toEqual('PrimaryDocumentForm');
+
     if (isAddAnother) {
       expect(test.getState('documentUploadMode')).toEqual('scan');
       expect(test.getState('currentPage')).toEqual('AddDocketEntry');
@@ -19,7 +20,7 @@ export default (test, isAddAnother = true) => {
         'primaryDocumentFile',
       );
     } else {
-      expect(test.getState('documentUploadMode')).toEqual('preview');
+      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     }
   });
 };
