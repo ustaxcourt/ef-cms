@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { getJudgeNotesForCaseAction } from '../TrialSession/getJudgeNotesForCaseAction';
+import { getJudgeNotesForCaseAction } from './getJudgeNotesForCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
@@ -15,15 +15,20 @@ describe('getJudgeNotesForCaseAction', () => {
     };
   });
 
-  it('call the use case to get the trial session working copy', async () => {
+  it('call the use case to get the judge notes from the trial session working copy', async () => {
     getTrialSessionWorkingCopyStub = sinon.stub().resolves({
+      caseMetadata: {
+        '101-18': {
+          notes: 'hey!',
+        },
+      },
       sort: 'practitioner',
       sortOrder: 'desc',
       trialSessionId: '123',
       userId: '234',
     });
 
-    await runAction(getJudgeNotesForCaseAction, {
+    const result = await runAction(getJudgeNotesForCaseAction, {
       modules: {
         presenter,
       },
@@ -36,5 +41,6 @@ describe('getJudgeNotesForCaseAction', () => {
     expect(
       getTrialSessionWorkingCopyStub.getCall(0).args[0].trialSessionId,
     ).toEqual('123');
+    expect(result.state.caseDetail.judgeNotes).toEqual('hey!');
   });
 });
