@@ -1,10 +1,10 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setDeleteModalStateAction } from './setDeleteModalStateAction';
+import { setAddEditNoteModalStateAction } from './setAddEditNoteModalStateAction';
 
-describe('setDeleteModalStateAction', () => {
+describe('setAddEditNoteModalStateAction', () => {
   it('should set the modal caseId state', async () => {
-    const result = await runAction(setDeleteModalStateAction, {
+    const result = await runAction(setAddEditNoteModalStateAction, {
       modules: {
         presenter,
       },

@@ -1,3 +1,4 @@
+import { get as _get } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -10,11 +11,12 @@ import { state } from 'cerebral';
  */
 export const setAddEditNoteModalStateAction = ({ get, props, store }) => {
   const { docketNumber } = props;
-  const notes = get(
-    `state.trialSessionWorkingCopy.caseMetadata.${docketNumber}.notes`,
-  );
 
-  store;
+  const notes = _get(get(state.trialSessionWorkingCopy.caseMetadata), [
+    docketNumber,
+    'notes',
+  ]);
+
   store.set(state.modal.docketNumber, docketNumber);
   store.set(state.modal.notes, notes);
 };

@@ -25,6 +25,8 @@ describe('unsetCaseNoteFromTrialSessionWorkingCopyAction', () => {
       },
     );
 
-    expect(result.state.trialSessionWorkingCopy.caseMetadata).toEqual({});
+    expect(result.state.trialSessionWorkingCopy.caseMetadata['123']).toEqual(
+      {},
+    );
   });
 });
