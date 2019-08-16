@@ -14,9 +14,11 @@ export const updateTrialSessionWorkingCopyValueWithoutEmptyStringAction = ({
   props,
   store,
 }) => {
-  if (props.value !== '') {
-    store.set(state.trialSessionWorkingCopy[props.key], props.value);
-  } else {
-    store.unset(state.trialSessionWorkingCopy[props.key]);
+  if (props.key) {
+    if (props.value !== '') {
+      store.set(state.trialSessionWorkingCopy[props.key], props.value);
+    } else {
+      store.unset(state.trialSessionWorkingCopy[props.key]);
+    }
   }
 };
