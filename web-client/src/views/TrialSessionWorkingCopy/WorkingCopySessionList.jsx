@@ -14,7 +14,8 @@ export const WorkingCopySessionList = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
-    openAddEditNoteModalSequence: sequences.openAddEditNoteModalSequence,
+    openAddEditNoteModalFromListSequence:
+      sequences.openAddEditNoteModalFromListSequence,
     openDeleteNoteConfirmModalSequence:
       sequences.openDeleteNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
@@ -26,7 +27,7 @@ export const WorkingCopySessionList = connect(
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
-    openAddEditNoteModalSequence,
+    openAddEditNoteModalFromListSequence,
     openDeleteNoteConfirmModalSequence,
     sort,
     sortOrder,
@@ -93,8 +94,6 @@ export const WorkingCopySessionList = connect(
             </tr>
           </thead>
           {formattedCases.map((item, idx) => {
-            item.note =
-              'iPhone and iPad users can turn web pages into icons on their home screen. Such link appears as a regular iOS native application. When this happens, the device looks for a specific picture. The 57x57 resolution is convenient for non-retina iPhone with iOS6 or prior. Learn more in Apple docs.';
             return (
               <tbody className="hoverable" key={idx}>
                 <tr>
@@ -139,7 +138,7 @@ export const WorkingCopySessionList = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         onClick={() => {
-                          openAddEditNoteModalSequence({
+                          openAddEditNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
                           });
                         }}
@@ -179,7 +178,7 @@ export const WorkingCopySessionList = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         onClick={() => {
-                          openAddEditNoteModalSequence({
+                          openAddEditNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
                           });
                         }}

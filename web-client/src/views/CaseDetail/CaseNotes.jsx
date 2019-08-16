@@ -10,14 +10,15 @@ import React from 'react';
 export const CaseNotes = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    openAddEditNoteModalSequence: sequences.openAddEditNoteModalSequence,
+    openAddEditNoteModalFromDetailSequence:
+      sequences.openAddEditNoteModalFromDetailSequence,
     openDeleteNoteConfirmModalSequence:
       sequences.openDeleteNoteConfirmModalSequence,
     showModal: state.showModal,
   },
   ({
     caseDetail,
-    openAddEditNoteModalSequence,
+    openAddEditNoteModalFromDetailSequence,
     openDeleteNoteConfirmModalSequence,
     showModal,
   }) => {
@@ -36,7 +37,7 @@ export const CaseNotes = connect(
                       <button
                         className="usa-button usa-button--unstyled float-right"
                         onClick={() => {
-                          openAddEditNoteModalSequence({
+                          openAddEditNoteModalFromDetailSequence({
                             docketNumber: caseDetail.docketNumber,
                           });
                         }}
@@ -59,7 +60,7 @@ export const CaseNotes = connect(
                           <button
                             className="usa-button usa-button--unstyled"
                             onClick={() => {
-                              openAddEditNoteModalSequence({
+                              openAddEditNoteModalFromDetailSequence({
                                 docketNumber: caseDetail.docketNumber,
                               });
                             }}
