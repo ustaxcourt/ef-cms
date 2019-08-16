@@ -206,6 +206,7 @@ import { validateAddRespondentSequence } from './sequences/caseAssociation/valid
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateCaseNoteSequence } from './sequences/validateCaseNoteSequence';
 import { validateContactPrimarySequence } from './sequences/validateContactPrimarySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -433,6 +434,7 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
+    validateCaseNoteSequence,
     validateContactPrimarySequence,
     validateDocketEntrySequence,
     validateExternalDocumentInformationSequence,
