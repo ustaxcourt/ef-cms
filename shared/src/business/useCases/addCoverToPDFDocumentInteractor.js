@@ -1,6 +1,6 @@
 const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
-const { PDFDocument, StandardFonts } = require('pdf-lib');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 /**
  * addCoverToPDFDocumentInteractor
@@ -445,7 +445,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     } = contentArea;
 
     const params = {
-      colorRgb: [0, 0, 0],
+      color: rgb(0, 0, 0),
       font: fontName || defaultFontName,
       lineHeight: pageScaler(paddedLineHeight(fontSize)),
       size: pageScaler(fontSize || defaultFontSize),
