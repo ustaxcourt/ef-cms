@@ -110,4 +110,11 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=add-deadline',
   },
+
+  //this url probably needs to be moved to calendaring when those users are created
+  {
+    notes: 'checks a11y of trial session with eligible cases (not calendared)',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
+  },
 ];
