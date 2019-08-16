@@ -147,22 +147,6 @@ describe('formatted work queue computed', () => {
     );
   });
 
-  it('attached formatted filings and proceedings to document on work item', () => {
-    const result = runCompute(formattedWorkQueue, {
-      state: {
-        selectedWorkItems: [workItem],
-        workQueue: [workItem],
-        workQueueIsInternal: true,
-        workQueueToDisplay: {
-          box: 'inbox',
-          queue: 'my',
-        },
-      },
-    });
-
-    expect(result[0].document.filingsAndProceedings).toEqual('(Attachment(s))');
-  });
-
   it('sets showSendTo and showComplete', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
