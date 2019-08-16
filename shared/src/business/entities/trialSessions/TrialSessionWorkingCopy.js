@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { Case } = require('../cases/Case');
 
 TrialSessionWorkingCopy.TRIAL_STATUS_TYPES = [
   'Set for Trial',
@@ -41,7 +42,7 @@ TrialSessionWorkingCopy.validationRules = {
   caseMetadata: joi
     .object()
     .pattern(
-      /./, //keys are docket numbers
+      Case.docketNumberMatcher, //keys are docket numbers
       joi.object().keys({
         notes: joi.string().optional(),
         trialStatus: joi.string().optional(),
