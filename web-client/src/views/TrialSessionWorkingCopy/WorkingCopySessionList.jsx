@@ -106,7 +106,6 @@ export const WorkingCopySessionList = connect(
                   <td>
                     {item.respondents.map((respondent, idx) => (
                       <div key={idx}>{respondent.name}</div>
-
                     ))}
                   </td>
                   <td className="minw-30">
