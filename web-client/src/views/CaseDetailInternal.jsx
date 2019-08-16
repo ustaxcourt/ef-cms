@@ -1,6 +1,7 @@
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
+import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
 import { DeleteCaseDeadlineModalDialog } from './CaseDetail/DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from './DocketRecord/DocketRecord';
@@ -89,6 +90,11 @@ export const CaseDetailInternal = connect(
                   <PartyInformation />
                 </div>
               </Tab>
+              {caseHelper.showNotes && (
+                <Tab id="tab-case-notes" tabName="caseNotes" title="Notes">
+                  <CaseNotes />
+                </Tab>
+              )}
             </Tabs>
           </div>
         </section>
