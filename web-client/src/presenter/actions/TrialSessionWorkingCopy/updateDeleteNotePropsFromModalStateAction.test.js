@@ -9,11 +9,11 @@ describe('updateDeleteNotePropsFromModalStateAction', () => {
         presenter,
       },
       props: {},
-      state: { modal: { caseId: '123' } },
+      state: { modal: { docketNumber: '123' } },
     });
 
     expect(result.output).toEqual({
-      caseId: '123',
+      docketNumber: '123',
     });
   });
 });

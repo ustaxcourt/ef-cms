@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setDeleteModalStateAction = ({ props, store }) => {
-  const { caseId } = props;
+  const { docketNumber } = props;
 
-  store.set(state.modal.caseId, caseId);
+  store.set(state.modal.docketNumber, docketNumber);
 };

@@ -8,9 +8,9 @@ describe('setDeleteModalStateAction', () => {
       modules: {
         presenter,
       },
-      props: { caseId: '123' },
+      props: { docketNumber: '123' },
       state: {},
     });
-    expect(result.state.modal.caseId).toEqual('123');
+    expect(result.state.modal.docketNumber).toEqual('123');
   });
 });
