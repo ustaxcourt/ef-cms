@@ -1,36 +1,12 @@
-const {
-  drawRectangle,
-  drawText,
-  PDFDocumentFactory,
-  PDFDocumentWriter,
-} = require('pdf-lib');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 /**
  * @param {PDFPage} page the page to get dimensions for
  * @returns {Array} [width, height]
  */
 exports.getPageDimensions = page => {
-  let mediaBox;
-
-  const hasMediaBox = !!page.getMaybe('MediaBox');
-  if (hasMediaBox) {
-    mediaBox = page.index.lookup(page.get('MediaBox'));
-  }
-
-  page.Parent.ascend(parent => {
-    const parentHasMediaBox = !!parent.getMaybe('MediaBox');
-    if (!mediaBox && parentHasMediaBox) {
-      mediaBox = parent.index.lookup(parent.get('MediaBox'));
-    }
-  }, true);
-
-  // This should never happen in valid PDF files
-  if (!mediaBox) {
-    throw new Error('Page Tree is missing MediaBox');
-  }
-
-  // x, y
-  return [mediaBox.array[2].number, mediaBox.array[3].number];
+  const size = page.getSize();
+  return [size.width, size.height];
 };
 
 /**
@@ -53,66 +29,58 @@ exports.generateSignedDocumentInteractor = async ({
   scale = 1,
   sigTextData,
 }) => {
-  const pdfDoc = PDFDocumentFactory.load(pdfData);
+  const pdfDoc = await PDFDocument.load(pdfData);
   const pages = pdfDoc.getPages();
   const page = pages[pageIndex];
-
-  let pageContentStream;
 
   const [, pageHeight] = exports.getPageDimensions(page);
 
   const { signatureName, signatureTitle } = sigTextData;
 
-  const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont(
-    'Helvetica-Bold',
+  const helveticaBoldFont = pdfDoc.embedStandardFont(
+    StandardFonts.HelveticaBold,
   );
-
-  page.addFontDictionary('Helvetica-Bold', helveticaRef);
 
   const textSize = 16 * scale;
   const padding = 20 * scale;
-  const nameTextWidth = helveticaFont.widthOfTextAtSize(
+  const nameTextWidth = helveticaBoldFont.widthOfTextAtSize(
     signatureName,
     textSize,
   );
-  const titleTextWidth = helveticaFont.widthOfTextAtSize(
+  const titleTextWidth = helveticaBoldFont.widthOfTextAtSize(
     signatureTitle,
     textSize,
   );
-  const textHeight = helveticaFont.heightOfFontAtSize(textSize);
+  const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
   const lineHeight = textHeight / 10;
   const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
   const boxHeight = textHeight * 2 + padding * 2;
 
-  pageContentStream = pdfDoc.createContentStream(
-    drawRectangle({
-      colorRgb: [1, 1, 1],
-      height: boxHeight,
-      width: boxWidth,
-      x: posX,
-      y: pageHeight - posY - boxHeight,
-    }),
-    drawText(helveticaFont.encodeText(signatureName), {
-      font: 'Helvetica-Bold',
-      size: textSize,
-      x: posX + (boxWidth - nameTextWidth) / 2,
-      y: pageHeight - posY + boxHeight / 2 - boxHeight,
-    }),
-    drawText(helveticaFont.encodeText(signatureTitle), {
-      font: 'Helvetica-Bold',
-      size: textSize,
-      x: posX + (boxWidth - titleTextWidth) / 2,
-      y:
-        pageHeight -
-        posY +
-        (boxHeight - textHeight * 2 - lineHeight) / 2 -
-        boxHeight,
-    }),
-  );
+  page.drawRectangle({
+    color: rgb(1, 1, 1),
+    height: boxHeight,
+    width: boxWidth,
+    x: posX,
+    y: pageHeight - posY - boxHeight,
+  });
+  page.drawText(signatureName, {
+    font: helveticaBoldFont,
+    size: textSize,
+    x: posX + (boxWidth - nameTextWidth) / 2,
+    y: pageHeight - posY + boxHeight / 2 - boxHeight,
+  });
+  page.drawText(signatureTitle, {
+    font: helveticaBoldFont,
+    size: textSize,
+    x: posX + (boxWidth - titleTextWidth) / 2,
+    y:
+      pageHeight -
+      posY +
+      (boxHeight - textHeight * 2 - lineHeight) / 2 -
+      boxHeight,
+  });
 
-  page.addContentStreams(pdfDoc.register(pageContentStream));
-
-  const pdfBytes = PDFDocumentWriter.saveToBytes(pdfDoc, {
+  const pdfBytes = await pdfDoc.save({
     useObjectStreams: false,
   });
 
