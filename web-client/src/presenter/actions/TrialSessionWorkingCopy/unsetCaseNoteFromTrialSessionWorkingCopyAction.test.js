@@ -11,7 +11,7 @@ describe('unsetCaseNoteFromTrialSessionWorkingCopyAction', () => {
           presenter,
         },
         props: {
-          caseId: '123',
+          docketNumber: '123',
         },
         state: {
           trialSessionWorkingCopy: {

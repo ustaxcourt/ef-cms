@@ -103,7 +103,6 @@ export const WorkingCopySessionList = connect(
                     type="button"
                     onClick={() => {
                       openAddEditNoteModalSequence({
-                        caseId: item.docketNumber,
                         docketNumber: item.docketNumber,
                       });
                     }}
@@ -115,7 +114,6 @@ export const WorkingCopySessionList = connect(
                     type="button"
                     onClick={() => {
                       openDeleteNoteConfirmModalSequence({
-                        caseId: item.docketNumber,
                         docketNumber: item.docketNumber,
                       });
                     }}
