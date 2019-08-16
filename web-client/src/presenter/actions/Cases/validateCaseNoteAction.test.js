@@ -1,7 +1,7 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateCaseNoteAction } from './validateCaseNoteAction';
-import sinon from './node_modules/sinon';
+import sinon from 'sinon';
 
 describe('validateCaseNote', () => {
   let validateCaseNoteStub;
