@@ -380,4 +380,38 @@ describe('trial session working copy computed', () => {
       expect(result.casesShownCount).toEqual(5);
     });
   });
+
+  it('return the cases mapped by docket number', () => {
+    let result = runCompute(trialSessionWorkingCopyHelper, {
+      state: {
+        constants: {
+          TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+        },
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [
+            MOCK_CASE,
+            { ...MOCK_CASE, docketNumber: '102-19' },
+            { ...MOCK_CASE, docketNumber: '5000-17' },
+            { ...MOCK_CASE, docketNumber: '500-17' },
+            { ...MOCK_CASE, docketNumber: '90-07' },
+          ],
+        },
+        trialSessionWorkingCopy: {
+          caseMetadata: {},
+          filters: { statusUnassigned: true },
+          sort: 'docket',
+          sortOrder: 'asc',
+        },
+      },
+    });
+    expect(result.formattedCasesByDocketRecord).toMatchObject({
+      '90-07': {},
+      '101-18': {},
+      '102-19': {},
+      '500-17': {},
+      '5000-17': {},
+    });
+    expect(result.casesShownCount).toEqual(5);
+  });
 });

@@ -79,6 +79,36 @@ describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
     });
   });
 
+  it('should not update the filter when no props are passed in', async () => {
+    const result = await runAction(
+      computeTrialSessionWorkingCopyFilterValuesAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: {
+          trialSessionWorkingCopy: {
+            filters: {
+              aBasisReached: false,
+              continued: false,
+              dismissed: false,
+              recall: false,
+              showAll: false,
+            },
+          },
+        },
+      },
+    );
+    expect(result.state.trialSessionWorkingCopy.filters).toEqual({
+      aBasisReached: false,
+      continued: false,
+      dismissed: false,
+      recall: false,
+      showAll: false,
+    });
+  });
+
   it('should set showAll to false if props.key is a filter that is not showAll, and props.value is false', async () => {
     const result = await runAction(
       computeTrialSessionWorkingCopyFilterValuesAction,
