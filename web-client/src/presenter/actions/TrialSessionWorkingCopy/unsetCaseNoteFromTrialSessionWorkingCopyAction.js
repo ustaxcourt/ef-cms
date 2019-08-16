@@ -16,11 +16,7 @@ export const unsetCaseNoteFromTrialSessionWorkingCopyAction = ({
 }) => {
   const workingCopy = get(state.trialSessionWorkingCopy);
 
-  unset(get(state.trialSessionWorkingCopy), [
-    'caseMetadata',
-    props.caseId,
-    'notes',
-  ]);
+  unset(workingCopy, ['caseMetadata', props.caseId, 'notes']);
 
   store.set(state.trialSessionWorkingCopy, workingCopy);
 };
