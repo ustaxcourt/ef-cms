@@ -37,6 +37,22 @@ describe('updateTrialSessionWorkingCopyValueWithoutEmptyStringAction', () => {
     expect(state.trialSessionWorkingCopy.something).toEqual(false);
   });
 
+  it('does not set a value if no key is present', async () => {
+    const { state } = await runAction(
+      updateTrialSessionWorkingCopyValueWithoutEmptyStringAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          value: 'something',
+        },
+        state: { trialSessionWorkingCopy: {} },
+      },
+    );
+    expect(state.trialSessionWorkingCopy).toEqual({});
+  });
+
   it('removes the value for the key provided if the value is an empty string', async () => {
     const { state } = await runAction(
       updateTrialSessionWorkingCopyValueWithoutEmptyStringAction,

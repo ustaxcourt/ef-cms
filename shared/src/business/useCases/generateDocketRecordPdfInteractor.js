@@ -11,6 +11,7 @@ exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   docketNumber,
   docketRecordHtml,
+  headerHtml,
 }) => {
   let browser = null;
   let result = null;
@@ -36,13 +37,13 @@ exports.generateDocketRecordPdfInteractor = async ({
         <head>
         </head>
         <body style="margin: 0px;">
-          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 20px 40px;">
-            <div style="float: right">
-              Docket Number: ${docketNumber}
-            </div>
-            <div style="font-size: 8px; font-family: sans-serif; float: left;">
+          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
+            <div style="font-size: 8px; font-family: sans-serif; float: right;">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
+            </div>
+            <div style="float: left">
+              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
             </div>
           </div>
         </body>
@@ -65,7 +66,7 @@ exports.generateDocketRecordPdfInteractor = async ({
       headerTemplate,
       margin: {
         bottom: '200px',
-        top: '100px',
+        top: '80px',
       },
       printBackground: true,
     });

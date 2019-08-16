@@ -4,6 +4,7 @@ import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import classnames from 'classnames';
 
 export class ConfirmModalComponent extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ export class ConfirmModalComponent extends React.Component {
     this.cancelLabel = this.props.cancelLabel || 'Cancel';
     this.noConfirm = this.props.noConfirm;
     this.noCancel = this.props.noCancel;
+    this.noCloseBtn = this.props.noCloseBtn;
 
     this.runCancelSequence = this.runCancelSequence.bind(this);
     this.runConfirmSequence = this.runConfirmSequence.bind(this);
@@ -53,21 +55,29 @@ export class ConfirmModalComponent extends React.Component {
       >
         <div className="modal-header grid-container padding-x-0">
           <div className="grid-row">
-            <div className="mobile-lg:grid-col-9">
+            <div
+              className={classnames(
+                this.noCloseBtn
+                  ? 'mobile-lg:grid-col-12'
+                  : 'mobile-lg:grid-col-9',
+              )}
+            >
               <h3 className="modal-header__title" tabIndex="-1">
                 {this.title}
               </h3>
             </div>
-            <div className="mobile-lg:grid-col-3">
-              <button
-                className="text-no-underline usa-button usa-button--unstyled hide-on-mobile float-right"
-                type="button"
-                onClick={this.runCancelSequence}
-              >
-                Close{' '}
-                <FontAwesomeIcon className="margin-0" icon="times-circle" />
-              </button>
-            </div>
+            {!this.noCloseBtn && (
+              <div className="mobile-lg:grid-col-3">
+                <button
+                  className="text-no-underline usa-button usa-button--unstyled hide-on-mobile float-right"
+                  type="button"
+                  onClick={this.runCancelSequence}
+                >
+                  Close{' '}
+                  <FontAwesomeIcon className="margin-0" icon="times-circle" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
         {this.props.children}
@@ -105,6 +115,7 @@ ConfirmModalComponent.propTypes = {
   className: PropTypes.string,
   confirmLabel: PropTypes.string,
   noCancel: PropTypes.bool,
+  noCloseBtn: PropTypes.bool,
   noConfirm: PropTypes.bool,
   onCancel: PropTypes.func,
   onCancelSequence: PropTypes.string,

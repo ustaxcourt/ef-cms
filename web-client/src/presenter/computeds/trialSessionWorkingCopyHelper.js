@@ -3,6 +3,7 @@ import {
   compareCasesByDocketNumber,
   formatCase,
 } from './formattedTrialSessionDetails';
+import { makeMap } from './makeMap';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -51,9 +52,12 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     value,
   }));
 
+  const formattedCasesByDocketRecord = makeMap(formattedCases, 'docketNumber');
+
   return {
     casesShownCount,
     formattedCases,
+    formattedCasesByDocketRecord,
     title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
   };
