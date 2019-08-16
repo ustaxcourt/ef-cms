@@ -183,6 +183,7 @@ import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
+import { updateCaseWorkingCopyNoteSequence } from './sequences/updateCaseWorkingCopyNoteSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
@@ -409,6 +410,7 @@ export const presenter = {
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
+    updateCaseWorkingCopyNoteSequence,
     updateCompleteFormValueSequence,
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
