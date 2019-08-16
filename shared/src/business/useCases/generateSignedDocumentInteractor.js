@@ -1,4 +1,4 @@
-const { PDFDocument, StandardFonts } = require('pdf-lib');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 /**
  * @param {PDFPage} page the page to get dimensions for
@@ -57,7 +57,7 @@ exports.generateSignedDocumentInteractor = async ({
   const boxHeight = textHeight * 2 + padding * 2;
 
   page.drawRectangle({
-    colorRgb: [1, 1, 1],
+    color: rgb(1, 1, 1),
     height: boxHeight,
     width: boxWidth,
     x: posX,
