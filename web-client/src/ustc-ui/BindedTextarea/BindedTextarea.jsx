@@ -5,45 +5,33 @@ import { useCerebralStateFactory } from '../utils/useCerebralState';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const BindedSelect = connect(
+export const BindedTextarea = connect(
   {
     bind: props.bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  ({
-    ariaLabel,
-    bind,
-    children,
-    className,
-    id,
-    name,
-    onChange,
-    simpleSetter,
-    value,
-  }) => {
-    let activeOption, setSelect;
+  ({ ariaLabel, bind, className, id, name, onChange, simpleSetter, value }) => {
+    let textValue, setText;
 
     if (bind) {
       const useCerebralState = useCerebralStateFactory(simpleSetter, value);
-      [activeOption, setSelect] = useCerebralState(bind);
+      [textValue, setText] = useCerebralState(bind);
     } else {
-      [activeOption, setSelect] = useState();
+      [textValue, setText] = useState();
     }
 
-    setSelect = decorateWithPostCallback(setSelect, onChange);
+    setText = decorateWithPostCallback(setText, onChange);
 
     return (
-      <select
+      <textarea
         aria-label={ariaLabel || name}
-        className={classNames('usa-select', className)}
+        className={classNames('usa-textarea', className)}
         id={id}
         name={name}
-        value={activeOption || ''}
-        onChange={e => setSelect(e.target.value)}
-      >
-        {children}
-      </select>
+        value={textValue || ''}
+        onChange={e => setText(e.target.value)}
+      ></textarea>
     );
   },
 );

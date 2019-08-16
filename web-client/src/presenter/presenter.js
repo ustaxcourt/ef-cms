@@ -20,6 +20,7 @@ import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
+import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
@@ -38,6 +39,7 @@ import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
+import { deleteCaseWorkingCopyNoteSequence } from './sequences/deleteCaseWorkingCopyNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
@@ -75,6 +77,8 @@ import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openAddEditNoteModalFromDetailSequence } from './sequences/openAddEditNoteModalFromDetailSequence';
+import { openAddEditNoteModalFromListSequence } from './sequences/openAddEditNoteModalFromListSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
@@ -89,6 +93,7 @@ import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseD
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
+import { openDeleteNoteConfirmModalSequence } from './sequences/openDeleteNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
@@ -180,6 +185,7 @@ import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
+import { updateCaseWorkingCopyNoteSequence } from './sequences/updateCaseWorkingCopyNoteSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
@@ -202,6 +208,7 @@ import { validateAddRespondentSequence } from './sequences/caseAssociation/valid
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
+import { validateCaseNoteSequence } from './sequences/validateCaseNoteSequence';
 import { validateContactPrimarySequence } from './sequences/validateContactPrimarySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -245,6 +252,7 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearAlertSequence,
     clearDocumentSequence,
+    clearModalFormSequence,
     clearModalSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
@@ -263,6 +271,7 @@ export const presenter = {
     createCaseDeadlineSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
+    deleteCaseWorkingCopyNoteSequence,
     dismissAlertSequence,
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
@@ -300,6 +309,8 @@ export const presenter = {
     loginWithTokenSequence,
     navigateToPathSequence,
     notFoundErrorSequence,
+    openAddEditNoteModalFromDetailSequence,
+    openAddEditNoteModalFromListSequence,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
     openCaseCaptionModalSequence,
@@ -314,6 +325,7 @@ export const presenter = {
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
+    openDeleteNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
@@ -403,6 +415,7 @@ export const presenter = {
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
     updateCaseValueSequence,
+    updateCaseWorkingCopyNoteSequence,
     updateCompleteFormValueSequence,
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
@@ -425,6 +438,7 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
+    validateCaseNoteSequence,
     validateContactPrimarySequence,
     validateDocketEntrySequence,
     validateExternalDocumentInformationSequence,
