@@ -1,4 +1,4 @@
-import { state } from './node_modules/cerebral';
+import { state } from 'cerebral';
 
 /**
  * validate the case note
