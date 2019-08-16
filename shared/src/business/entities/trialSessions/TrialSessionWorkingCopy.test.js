@@ -7,10 +7,29 @@ const VALID_TRIAL_SESSION_WORKING_COPY = {
 
 describe('TrialSessionWorkingCopy entity', () => {
   describe('isValid', () => {
-    it('creates a valid trial session working copy', () => {
+    it('creates a valid trial session working copy with only required values', () => {
       const workingCopy = new TrialSessionWorkingCopy(
         VALID_TRIAL_SESSION_WORKING_COPY,
       );
+      expect(workingCopy.isValid()).toBeTruthy();
+    });
+
+    it('creates a valid trial session working copy with all values', () => {
+      const workingCopy = new TrialSessionWorkingCopy({
+        ...VALID_TRIAL_SESSION_WORKING_COPY,
+        filters: {
+          aBasisReached: true,
+          showAll: true,
+        },
+        caseMetadata: {
+          '101-19': {
+            notes: 'something',
+            trialStatus: 'recall',
+          },
+        },
+        sort: 'practitioner',
+        sortOrder: 'desc',
+      });
       expect(workingCopy.isValid()).toBeTruthy();
     });
 
@@ -18,6 +37,23 @@ describe('TrialSessionWorkingCopy entity', () => {
       const workingCopy = new TrialSessionWorkingCopy({
         ...VALID_TRIAL_SESSION_WORKING_COPY,
         userId: undefined,
+      });
+      expect(workingCopy.isValid()).toBeFalsy();
+    });
+
+    it('creates an invalid trial session working copy with invalid trialStatus that is not a string', () => {
+      const workingCopy = new TrialSessionWorkingCopy({
+        ...VALID_TRIAL_SESSION_WORKING_COPY,
+        filters: {
+          aBasisReached: true,
+          showAll: true,
+        },
+        caseMetadata: {
+          '101-19': {
+            notes: 'something',
+            trialStatus: 123,
+          },
+        },
       });
       expect(workingCopy.isValid()).toBeFalsy();
     });
@@ -37,7 +73,7 @@ describe('TrialSessionWorkingCopy entity', () => {
       expect(error).not.toBeDefined();
     });
 
-    it('should throw an error on invalid documents', () => {
+    it('should throw an error if invalid', () => {
       let error;
       try {
         const workingCopy = new TrialSessionWorkingCopy({});
