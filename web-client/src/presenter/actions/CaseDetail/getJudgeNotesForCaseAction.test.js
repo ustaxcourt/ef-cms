@@ -15,7 +15,35 @@ describe('getJudgeNotesForCaseAction', () => {
     };
   });
 
-  it('call the use case to get the judge notes from the trial session working copy', async () => {
+  it('does not call the use case to get the judge notes if the case does not have a trial session id', async () => {
+    getTrialSessionWorkingCopyStub = sinon.stub().resolves(null);
+
+    await runAction(getJudgeNotesForCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: { caseDetail: { ...MOCK_CASE } },
+    });
+    expect(getTrialSessionWorkingCopyStub.calledOnce).toEqual(false);
+  });
+
+  it('does not set judge notes on the case detail if a working copy is not returned', async () => {
+    getTrialSessionWorkingCopyStub = sinon.stub().resolves(null);
+
+    const result = await runAction(getJudgeNotesForCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: { caseDetail: { ...MOCK_CASE, trialSessionId: '123' } },
+    });
+    expect(getTrialSessionWorkingCopyStub.calledOnce).toEqual(true);
+    expect(
+      getTrialSessionWorkingCopyStub.getCall(0).args[0].trialSessionId,
+    ).toEqual('123');
+    expect(result.state.caseDetail.judgeNotes).toBeUndefined();
+  });
+
+  it('call the use case to get the judge notes from the trial session working copy and sets them on the case detail', async () => {
     getTrialSessionWorkingCopyStub = sinon.stub().resolves({
       caseMetadata: {
         '101-18': {
@@ -31,9 +59,6 @@ describe('getJudgeNotesForCaseAction', () => {
     const result = await runAction(getJudgeNotesForCaseAction, {
       modules: {
         presenter,
-      },
-      props: {
-        trialSessionId: '123',
       },
       state: { caseDetail: { ...MOCK_CASE, trialSessionId: '123' } },
     });
