@@ -59,9 +59,15 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     value,
   }));
 
+  let formattedCasesByDocketRecord = {};
+  formattedCases.forEach(myCase => {
+    formattedCasesByDocketRecord[myCase.docketNumber] = myCase;
+  });
+
   return {
     casesShownCount,
     formattedCases,
+    formattedCasesByDocketRecord,
     title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
   };
