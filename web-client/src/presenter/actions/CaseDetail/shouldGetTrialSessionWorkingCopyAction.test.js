@@ -23,7 +23,7 @@ describe('shouldGetTrialSessionWorkingCopyAction', () => {
       },
       state: {
         caseDetail: {
-          trailSessionId: '123',
+          trialSessionId: '123',
         },
       },
     });
