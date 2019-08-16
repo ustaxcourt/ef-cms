@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { updateDeleteNotePropsFromModalStateAction } from './updateDeleteNotePropsFromModalStateAction';
 
 describe('updateDeleteNotePropsFromModalStateAction', () => {
-  it('should set the modal caseId state', async () => {
+  it('should set the modal docketNumber state', async () => {
     const result = await runAction(updateDeleteNotePropsFromModalStateAction, {
       modules: {
         presenter,
