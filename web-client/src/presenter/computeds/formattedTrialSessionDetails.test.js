@@ -24,6 +24,13 @@ describe('formattedTrialSessionDetails', () => {
     trialLocation: 'Hartford, Connecticut',
   };
 
+  it('returns undefined if state.trialSession is undefined', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {},
+    });
+    expect(result).toBeUndefined();
+  });
+
   it('formats trial session when all fields have values', () => {
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
@@ -158,22 +165,75 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats docket numbers with suffixes on eligible cases', () => {
+  it('formats docket numbers with suffixes and case caption names without postfix on eligible cases', () => {
     let result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          eligibleCases: [MOCK_CASE, { ...MOCK_CASE, docketNumberSuffix: 'W' }],
+          eligibleCases: [
+            MOCK_CASE,
+            {
+              ...MOCK_CASE,
+              caseCaption: 'Test Person & Someone Else, Petitioners',
+              docketNumberSuffix: 'W',
+            },
+            {
+              ...MOCK_CASE,
+              caseCaption: undefined,
+              docketNumber: '103-19',
+            },
+          ],
         },
       },
     });
-    expect(result.formattedEligibleCases.length).toEqual(2);
+    expect(result.formattedEligibleCases.length).toEqual(3);
     expect(result.formattedEligibleCases[0].docketNumberWithSuffix).toEqual(
       '101-18',
+    );
+    expect(result.formattedEligibleCases[0].caseCaptionNames).toEqual(
+      'Test Taxpayer',
     );
     expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
       '101-18W',
     );
+    expect(result.formattedEligibleCases[1].caseCaptionNames).toEqual(
+      'Test Person & Someone Else',
+    );
+    expect(result.formattedEligibleCases[2].docketNumberWithSuffix).toEqual(
+      '103-19',
+    );
+    expect(result.formattedEligibleCases[2].caseCaptionNames).toEqual('');
+  });
+
+  it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
+    let result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [
+            MOCK_CASE,
+            {
+              ...MOCK_CASE,
+              caseCaption: 'Test Person & Someone Else, Petitioners',
+              docketNumberSuffix: 'W',
+              status: 'Closed',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.allCases.length).toEqual(2);
+    expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.allCases[0].caseCaptionNames).toEqual('Test Taxpayer');
+    expect(result.allCases[1].docketNumberWithSuffix).toEqual('101-18W');
+    expect(result.allCases[1].caseCaptionNames).toEqual(
+      'Test Person & Someone Else',
+    );
+
+    expect(result.openCases.length).toEqual(1);
+    expect(result.closedCases.length).toEqual(1);
+    expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.closedCases[0].docketNumberWithSuffix).toEqual('101-18W');
   });
 
   it('sorts calendared cases by docket number', () => {

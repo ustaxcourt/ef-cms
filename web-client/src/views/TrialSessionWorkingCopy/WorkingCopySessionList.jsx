@@ -97,7 +97,7 @@ export const WorkingCopySessionList = connect(
                       {item.docketNumberWithSuffix}
                     </a>
                   </td>
-                  <td>{item.caseName}</td>
+                  <td>{item.caseCaptionNames}</td>
                   <td>
                     {item.practitioners.map((practitioner, idx) => (
                       <div key={idx}>{practitioner.name}</div>
@@ -106,6 +106,7 @@ export const WorkingCopySessionList = connect(
                   <td>
                     {item.respondents.map((respondent, idx) => (
                       <div key={idx}>{respondent.name}</div>
+
                     ))}
                   </td>
                   <td className="minw-30">
