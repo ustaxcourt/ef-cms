@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
-import { getEligibleCasesForTrialSessionAction } from '../actions/TrialSession/getEligibleCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
 import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence';
@@ -12,7 +11,6 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopyValuesAction';
-import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
@@ -33,10 +31,7 @@ const gotoTrialSessionDetails = [
       setDefaultWorkingCopyValuesAction,
       isTrialSessionCalendaredAction,
       {
-        no: [
-          getEligibleCasesForTrialSessionAction,
-          setEligibleCasesOnTrialSessionAction,
-        ],
+        no: [],
         yes: [
           getCalendaredCasesForTrialSessionAction,
           setCalendaredCasesOnTrialSessionAction,

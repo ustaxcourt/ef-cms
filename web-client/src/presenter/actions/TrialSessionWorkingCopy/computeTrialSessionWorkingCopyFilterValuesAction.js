@@ -17,46 +17,48 @@ export const computeTrialSessionWorkingCopyFilterValuesAction = ({
 }) => {
   const filters = get(state.trialSessionWorkingCopy.filters);
 
-  if (props.key === 'filters.showAll' && props.value) {
-    store.set(state.trialSessionWorkingCopy.filters, {
-      aBasisReached: true,
-      continued: true,
-      dismissed: true,
-      recall: true,
-      rule122: true,
-      setForTrial: true,
-      settled: true,
-      showAll: true,
-      statusUnassigned: true,
-      takenUnderAdvisement: true,
-    });
-  } else if (props.key === 'filters.showAll') {
-    store.set(state.trialSessionWorkingCopy.filters, {
-      aBasisReached: false,
-      continued: false,
-      dismissed: false,
-      recall: false,
-      rule122: false,
-      setForTrial: false,
-      settled: false,
-      showAll: false,
-      statusUnassigned: false,
-      takenUnderAdvisement: false,
-    });
-  } else if (props.key.includes('filters') && props.value === false) {
-    store.set(state.trialSessionWorkingCopy.filters.showAll, false);
-  } else if (
-    props.key.includes('filters') &&
-    filters.aBasisReached &&
-    filters.continued &&
-    filters.dismissed &&
-    filters.recall &&
-    filters.rule122 &&
-    filters.setForTrial &&
-    filters.settled &&
-    filters.statusUnassigned &&
-    filters.takenUnderAdvisement
-  ) {
-    store.set(state.trialSessionWorkingCopy.filters.showAll, true);
+  if (props.key) {
+    if (props.key === 'filters.showAll' && props.value) {
+      store.set(state.trialSessionWorkingCopy.filters, {
+        aBasisReached: true,
+        continued: true,
+        dismissed: true,
+        recall: true,
+        rule122: true,
+        setForTrial: true,
+        settled: true,
+        showAll: true,
+        statusUnassigned: true,
+        takenUnderAdvisement: true,
+      });
+    } else if (props.key === 'filters.showAll') {
+      store.set(state.trialSessionWorkingCopy.filters, {
+        aBasisReached: false,
+        continued: false,
+        dismissed: false,
+        recall: false,
+        rule122: false,
+        setForTrial: false,
+        settled: false,
+        showAll: false,
+        statusUnassigned: false,
+        takenUnderAdvisement: false,
+      });
+    } else if (props.key.includes('filters') && props.value === false) {
+      store.set(state.trialSessionWorkingCopy.filters.showAll, false);
+    } else if (
+      props.key.includes('filters') &&
+      filters.aBasisReached &&
+      filters.continued &&
+      filters.dismissed &&
+      filters.recall &&
+      filters.rule122 &&
+      filters.setForTrial &&
+      filters.settled &&
+      filters.statusUnassigned &&
+      filters.takenUnderAdvisement
+    ) {
+      store.set(state.trialSessionWorkingCopy.filters.showAll, true);
+    }
   }
 };

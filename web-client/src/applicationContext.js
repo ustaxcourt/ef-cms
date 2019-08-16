@@ -11,6 +11,7 @@ import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
+import { CaseNote } from '../../shared/src/business/entities/cases/CaseNote';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { Document } from '../../shared/src/business/entities/Document';
@@ -128,6 +129,7 @@ import { validateAddRespondent } from '../../shared/src/business/useCases/caseAs
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateCaseNoteInteractor } from '../../shared/src/business/useCases/cases/validateCaseNoteInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
@@ -252,6 +254,7 @@ const allUseCases = {
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
+  validateCaseNoteInteractor,
   validateDocketEntryInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
@@ -340,6 +343,7 @@ const applicationContext = {
     CaseExternal,
     CaseExternalInformationFactory,
     CaseInternal,
+    CaseNote,
     ContactFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
