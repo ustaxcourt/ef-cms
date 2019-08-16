@@ -11,6 +11,7 @@ exports.createDocketRecordPdfInteractor = ({
   applicationContext,
   docketNumber,
   docketRecordHtml,
+  headerHtml,
 }) => {
   return applicationContext
     .getHttpClient()
@@ -19,6 +20,7 @@ exports.createDocketRecordPdfInteractor = ({
       {
         docketNumber,
         docketRecordHtml,
+        headerHtml,
       },
       {
         headers: {
