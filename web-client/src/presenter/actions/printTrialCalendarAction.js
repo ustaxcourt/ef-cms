@@ -24,7 +24,7 @@ export const printTrialCalendarAction = ({ get }) => {
       <td>
         ${item.practitioners
           .map(practitioner => `${practitioner.name}`)
-          .join(',')}
+          .join('<br>')}
       </td>
       <td>${item.respondent || ''}</td>
     </tr>`;
