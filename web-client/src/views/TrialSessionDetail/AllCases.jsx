@@ -36,7 +36,7 @@ export const AllCases = connect(
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
-                <td>{item.caseCaption}</td>
+                <td>{item.caseCaptionNames}</td>
                 <td aria-hidden="true">
                   {item.practitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
