@@ -28,7 +28,7 @@ export const CaseNotes = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
-                <div className="card height-full">
+                <div className="card">
                   <div className="content-wrapper">
                     <If
                       not
