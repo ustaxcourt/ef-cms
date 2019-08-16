@@ -77,7 +77,8 @@ import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
-import { openAddEditNoteModalSequence } from './sequences/openAddEditNoteModalSequence';
+import { openAddEditNoteModalFromDetailSequence } from './sequences/openAddEditNoteModalFromDetailSequence';
+import { openAddEditNoteModalFromListSequence } from './sequences/openAddEditNoteModalFromListSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
@@ -308,7 +309,8 @@ export const presenter = {
     loginWithTokenSequence,
     navigateToPathSequence,
     notFoundErrorSequence,
-    openAddEditNoteModalSequence,
+    openAddEditNoteModalFromDetailSequence,
+    openAddEditNoteModalFromListSequence,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
     openCaseCaptionModalSequence,

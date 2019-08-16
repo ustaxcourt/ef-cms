@@ -23,10 +23,7 @@ export const AddEditNoteModal = connect(
         onConfirmSequence="updateCaseWorkingCopyNoteSequence"
       >
         <h5 className="margin-bottom-4">
-          Docket {modal.docketNumber}:{' '}
-          <Text
-            bind={`trialSessionWorkingCopyHelper.formattedCasesByDocketRecord.${modal.docketNumber}.caseName`}
-          />
+          Docket {modal.docketNumber}: {modal.caseCaptionNames}
         </h5>
         <div
           className={classnames(
