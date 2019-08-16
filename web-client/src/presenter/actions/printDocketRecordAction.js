@@ -31,7 +31,6 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
         ${contact.inCareOf ? `<div>${contact.inCareOf}</div>` : ''}
         ${contact.title ? `<div>${contact.title}</div>` : ''}
         ${contact.address1 ? `<div>${contact.address1}</div>` : ''}
-        ${contact.address1 ? `<div>${contact.address1}</div>` : ''}
         ${contact.address2 ? `<div>${contact.address2}</div>` : ''}
         ${contact.address3 ? `<div>${contact.address3}</div>` : ''}
         <div>
