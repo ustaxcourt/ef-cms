@@ -60,7 +60,7 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
 
     const getContactSecondary = () => `
       <div class="party-details">
-        <p>${contactSecondary.name}</p>
+        <p>${contactSecondary.name ? contactSecondary.name : ''}</p>
         ${getAddress(contactSecondary)}
       </div>
     `;

@@ -10,7 +10,7 @@ export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const { docketNumber, docketRecordHtml } = props;
+  const { docketNumber, docketRecordHtml, headerHtml } = props;
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
@@ -18,6 +18,7 @@ export const generateDocketRecordPdfUrlAction = async ({
       applicationContext,
       docketNumber,
       docketRecordHtml,
+      headerHtml,
     });
 
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
