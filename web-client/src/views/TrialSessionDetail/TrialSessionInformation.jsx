@@ -17,19 +17,21 @@ export const TrialSessionInformation = connect(
               <h1>Session Information</h1>
             </div>
             <div className="grid-col-2">
-              <button
-                className="usa-button usa-button--unstyled float-right margin-top-2"
-                onClick={() => {
-                  printTrialCalendarSequence();
-                }}
-              >
-                <FontAwesomeIcon
-                  className="margin-right-05"
-                  icon="print"
-                  size="1x"
-                />
-                Printable Trial Calendar
-              </button>
+              {formattedTrialSession.isCalendared && (
+                <button
+                  className="usa-button usa-button--unstyled float-right margin-top-2"
+                  onClick={() => {
+                    printTrialCalendarSequence();
+                  }}
+                >
+                  <FontAwesomeIcon
+                    className="margin-right-05"
+                    icon="print"
+                    size="1x"
+                  />
+                  Printable Trial Calendar
+                </button>
+              )}
             </div>
           </div>
         </div>
