@@ -95,7 +95,7 @@ export const FilingsAndProceedings = connect(
                   aria-label="document uploading marker"
                   className="usa-tag"
                 >
-                  <span aria-hidden="true">Uploading</span>
+                  <span aria-hidden="true">Processing</span>
                 </span>
               )}
               {record.description}
