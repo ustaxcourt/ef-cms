@@ -1,5 +1,5 @@
 import { presenter } from '../../presenter';
-import { runAction } from './node_modules/cerebral/test';
+import { runAction } from 'cerebral/test';
 import { validateCaseNoteAction } from './validateCaseNoteAction';
 import sinon from './node_modules/sinon';
 
