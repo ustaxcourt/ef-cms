@@ -7,7 +7,7 @@ import React from 'react';
 
 export const AddEditNoteModal = connect(
   { modal: state.modal },
-  modal => {
+  ({ modal }) => {
     return (
       <ConfirmModal
         cancelLabel="Cancel"

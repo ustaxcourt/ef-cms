@@ -12,6 +12,9 @@ export const WorkingCopySessionList = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
+    openAddEditNoteModalSequence: sequences.openAddEditNoteModalSequence,
+    openDeleteNoteConfirmModalSequence:
+      sequences.openDeleteNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -21,6 +24,8 @@ export const WorkingCopySessionList = connect(
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
+    openAddEditNoteModalSequence,
+    openDeleteNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -92,6 +97,31 @@ export const WorkingCopySessionList = connect(
                   <a href={`/case-detail/${item.docketNumber}`}>
                     {item.docketNumberWithSuffix}
                   </a>
+
+                  <button
+                    className="usa-button usa-button--unstyled ustc-button--unstyled"
+                    type="button"
+                    onClick={() => {
+                      openAddEditNoteModalSequence({
+                        caseId: item.docketNumber,
+                        docketNumber: item.docketNumber,
+                      });
+                    }}
+                  >
+                    Add/Edit Note
+                  </button>
+                  <button
+                    className="usa-button usa-button--unstyled ustc-button--unstyled"
+                    type="button"
+                    onClick={() => {
+                      openDeleteNoteConfirmModalSequence({
+                        caseId: item.docketNumber,
+                        docketNumber: item.docketNumber,
+                      });
+                    }}
+                  >
+                    Delete Note
+                  </button>
                 </td>
                 <td>{item.caseName}</td>
                 <td>

@@ -10,7 +10,7 @@ import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(
   { showModal: state.showModal },
-  showModal => {
+  ({ showModal }) => {
     return (
       <>
         <TrialSessionDetailHeader />
