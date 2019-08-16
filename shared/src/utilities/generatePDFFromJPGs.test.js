@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { generatePDFFromJPGs } = require('./generatePDFFromJPGs');
-const { PDFDocumentFactory } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../test-output/');
@@ -21,7 +21,7 @@ describe('generatePDFFromJPGs', () => {
 
     fs.writeFileSync(testOutputPath + 'generatePDFFromJPGData.pdf', newPdfData);
 
-    const newPdfDoc = PDFDocumentFactory.load(newPdfData);
+    const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(newPdfDocPages.length).toEqual(2);
   });
