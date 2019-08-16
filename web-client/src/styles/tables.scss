@@ -11,6 +11,10 @@ table,
     transition-property: all;
   }
 
+  tr {
+    min-height: 50px;
+  }
+  
   td {
     padding: 15px 20px;
     background-color: transparent;
