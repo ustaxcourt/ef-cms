@@ -6,7 +6,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 const MOCK_WORKING_COPY = {
   caseMetadata: {
-    '101-19': 'dismissed',
+    '101-19': { trialStatus: 'dismissed' },
   },
   sort: 'practitioner',
   sortOrder: 'desc',
