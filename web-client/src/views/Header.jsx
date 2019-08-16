@@ -11,7 +11,7 @@ import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
 const NavigationItems = (helper, { clearAlertSequence }) => {
   return (
-    <ul className="usa-nav__primary usa-unstyled-list">
+    <ul className="usa-nav__primary usa-unstyled-list padding-left-0">
       {helper.showHomeIcon && (
         <li
           className={classNames(
