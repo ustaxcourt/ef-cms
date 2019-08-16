@@ -11,12 +11,13 @@ export const AddEditNoteModal = connect(
     return (
       <ConfirmModal
         cancelLabel="Cancel"
+        className="add-edit-note-modal"
         confirmLabel="Save"
         title="Add/Edit Notes"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="updateCaseWorkingCopyNoteSequence"
       >
-        <h5>
+        <h5 className="margin-bottom-4">
           Docket {modal.docketNumber}:{' '}
           <Text
             bind={`trialSessionWorkingCopyHelper.formattedCasesByDocketRecord.${modal.docketNumber}.caseName`}
