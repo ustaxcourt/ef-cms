@@ -964,6 +964,10 @@ nav.usa-nav {
         }
       }
     }
+
+    @media (min-width: units('desktop')) {
+      display: none;
+    }
   }
 
   #log-out {
