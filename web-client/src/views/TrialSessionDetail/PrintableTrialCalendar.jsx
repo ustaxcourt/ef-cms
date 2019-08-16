@@ -49,7 +49,7 @@ export const PrintableTrialCalendar = connect(
             }}
           >
             <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-            Back to Case
+            Back to Session Information
           </button>
           <PdfPreview />
         </div>
