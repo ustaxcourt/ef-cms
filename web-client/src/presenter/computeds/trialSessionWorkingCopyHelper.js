@@ -3,6 +3,7 @@ import {
   compareCasesByDocketNumber,
   formatCase,
 } from './formattedTrialSessionDetails';
+import { makeMap } from './makeMap';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -59,10 +60,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     value,
   }));
 
-  let formattedCasesByDocketRecord = {};
-  formattedCases.forEach(myCase => {
-    formattedCasesByDocketRecord[myCase.docketNumber] = myCase;
-  });
+  const formattedCasesByDocketRecord = makeMap(formattedCases, 'docketNumber');
 
   return {
     casesShownCount,
