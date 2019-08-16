@@ -57,8 +57,9 @@ export class ConfirmModalComponent extends React.Component {
           <div className="grid-row">
             <div
               className={classnames(
-                this.noCloseBtn && 'mobile-lg:grid-col-12',
-                !this.noCloseBtn && 'mobile-lg:grid-col-9',
+                this.noCloseBtn
+                  ? 'mobile-lg:grid-col-12'
+                  : 'mobile-lg:grid-col-9',
               )}
             >
               <h3 className="modal-header__title" tabIndex="-1">
