@@ -23,10 +23,13 @@ export const printTrialCalendarAction = ({ get }) => {
       <td>${item.caseCaption}</td>
       <td>
         ${item.practitioners
-          .map(practitioner => `${practitioner.name}`)
+          .map(practitioner => practitioner.name)
           .join('<br>')}
       </td>
-      <td>${item.respondent || ''}</td>
+
+      <td>${item.respondents
+        .map(respondent => respondent.name)
+        .join('<br>')}</td>
     </tr>`;
   };
 
