@@ -4,14 +4,15 @@ const sinon = require('sinon');
 const {
   addCoverToPDFDocumentInteractor,
 } = require('./addCoverToPDFDocumentInteractor.js');
-const { PDFDocumentFactory } = require('pdf-lib');
-const testAssetsPath = path.join(__dirname, '../../../test-assets/');
-const testOutputPath = path.join(__dirname, '../../../test-output/');
 const {
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } = require('../utilities/DateHandler');
+const { PDFDocument } = require('pdf-lib');
+
+const testAssetsPath = path.join(__dirname, '../../../test-assets/');
+const testOutputPath = path.join(__dirname, '../../../test-output/');
 
 const testPdfDocBytes = () => {
   // sample.pdf is a 1 page document
@@ -119,7 +120,7 @@ describe('addCoverToPDFDocumentInteractor', () => {
 
     const newPdfData = await addCoverToPDFDocumentInteractor(params);
 
-    const newPdfDoc = PDFDocumentFactory.load(newPdfData);
+    const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(saveDocumentStub.calledOnce).toBeTruthy();
     expect(newPdfDocPages.length).toEqual(2);
@@ -166,7 +167,7 @@ describe('addCoverToPDFDocumentInteractor', () => {
 
     const newPdfData = await addCoverToPDFDocumentInteractor(params);
 
-    const newPdfDoc = PDFDocumentFactory.load(newPdfData);
+    const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
     expect(saveDocumentStub.calledOnce).toBeTruthy();
     expect(newPdfDocPages.length).toEqual(2);
