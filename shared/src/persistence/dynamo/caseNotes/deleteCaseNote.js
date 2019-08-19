@@ -5,8 +5,8 @@ const client = require('../../dynamodbClientService');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseDeadlineId the id of the case deadline to delete
- * @param {string} providers.caseId the id of the case the deadline is attached to
+ * @param {string} providers.caseId the id of the case the notes are associated with
+ * @param {string} providers.userId the id of the user who owns the case notes
  * @returns {Array<Promise>} the promises for the persistence delete calls
  */
 exports.deleteCaseNote = async ({ applicationContext, caseId, userId }) => {

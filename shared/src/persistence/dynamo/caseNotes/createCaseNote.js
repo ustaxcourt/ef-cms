@@ -5,7 +5,7 @@ const { put } = require('../../dynamodbClientService');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.trialSessionWorkingCopy the trial session working copy data
+ * @param {object} providers.caseNote the case note data
  * @returns {Promise} the promise of the call to persistence
  */
 exports.createCaseNote = async ({ applicationContext, caseNote }) => {
