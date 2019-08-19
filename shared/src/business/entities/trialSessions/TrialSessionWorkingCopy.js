@@ -30,6 +30,7 @@ function TrialSessionWorkingCopy(rawSession) {
 TrialSessionWorkingCopy.prototype.init = function(rawSession) {
   this.caseMetadata = rawSession.caseMetadata || {};
   this.filters = rawSession.filters;
+  this.sessionNotes = rawSession.sessionNotes;
   this.sort = rawSession.sort;
   this.sortOrder = rawSession.sortOrder;
   this.trialSessionId = rawSession.trialSessionId;
@@ -50,6 +51,7 @@ TrialSessionWorkingCopy.validationRules = {
     )
     .optional(),
   filters: joi.object().optional(),
+  sessionNotes: joi.string().optional(),
   sort: joi.string().optional(),
   sortOrder: joi.string().optional(),
   trialSessionId: joi

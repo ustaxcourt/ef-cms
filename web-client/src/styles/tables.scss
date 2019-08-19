@@ -14,7 +14,7 @@ table,
   tr {
     min-height: 50px;
   }
-  
+
   td {
     padding: 15px 20px;
     background-color: transparent;
@@ -288,6 +288,12 @@ table.work-queue {
 
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
+
+    &.notes-row {
+      td {
+        padding-top: 0;
+      }
+    }
   }
 
   tbody:not(.action-bar) {

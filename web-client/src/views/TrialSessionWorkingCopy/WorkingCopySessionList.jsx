@@ -44,7 +44,10 @@ export const WorkingCopySessionList = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="padding-left-2px">
+              <th
+                aria-label="Docket Number"
+                className="padding-left-2px no-wrap"
+              >
                 <button
                   className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
@@ -66,8 +69,8 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </button>
               </th>
-              <th>Case Caption</th>
-              <th>
+              <th className="no-wrap">Case Caption</th>
+              <th className="no-wrap">
                 <button
                   className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
@@ -89,14 +92,16 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </button>
               </th>
-              <th>Respondent Counsel</th>
-              <th colSpan="2">Trial Status</th>
+              <th className="no-wrap">Respondent Counsel</th>
+              <th className="no-wrap" colSpan="2">
+                Trial Status
+              </th>
             </tr>
           </thead>
           {formattedCases.map((item, idx) => {
             return (
               <tbody className="hoverable" key={idx}>
-                <tr>
+                <tr className="vertical-align-middle-row">
                   <td>
                     <a href={`/case-detail/${item.docketNumber}`}>
                       {item.docketNumberWithSuffix}
@@ -136,14 +141,14 @@ export const WorkingCopySessionList = connect(
                       bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
                     >
                       <button
-                        className="usa-button usa-button--unstyled"
+                        className="usa-button usa-button--unstyled margin-top-1"
                         onClick={() => {
                           openAddEditCaseNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
                           });
                         }}
                       >
-                        <FontAwesomeIcon icon="plus-circle"></FontAwesomeIcon>{' '}
+                        <FontAwesomeIcon icon="plus-circle"></FontAwesomeIcon>
                         Add Note
                       </button>
                     </If>
@@ -152,7 +157,7 @@ export const WorkingCopySessionList = connect(
                 <If
                   bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
                 >
-                  <tr>
+                  <tr className="notes-row">
                     <td className="text-right font-body-2xs">
                       <strong>Notes:</strong>
                     </td>
