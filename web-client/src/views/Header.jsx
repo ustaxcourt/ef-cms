@@ -21,7 +21,6 @@ const NavigationItems = (helper, { navigateToPathSequence }) => {
           )}
         >
           <button
-            className="usa-button usa-button__unstyled"
             onClick={() => {
               navigateToPathSequence({
                 path: '/',
