@@ -27,6 +27,7 @@ describe('TrialSessionWorkingCopy entity', () => {
             trialStatus: 'recall',
           },
         },
+        sessionNotes: 'These are notes about a session',
         sort: 'practitioner',
         sortOrder: 'desc',
       });
