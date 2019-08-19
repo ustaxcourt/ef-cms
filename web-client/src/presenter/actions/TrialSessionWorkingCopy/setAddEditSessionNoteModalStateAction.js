@@ -1,4 +1,3 @@
-import { get as _get, find } from 'lodash';
 import { state } from 'cerebral';
 
 /**
