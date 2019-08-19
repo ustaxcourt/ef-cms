@@ -19,14 +19,14 @@
 
       h2 {
         margin-top: 0px;
-        padding-bottom: 15px;
+        /* padding-bottom: 15px; */
         font-size: 20px;
         font-weight: normal;
       }
 
       h3 {
         margin-top: 0px;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: normal;
       }
 
@@ -70,6 +70,11 @@
         grid-template-columns: 50% 50%;
       }
 
+      .grid-container-main {
+        display: grid;
+        grid-template-columns: 49% 2% 49%;
+      }
+
       .mb-1 {
         margin-bottom: 10px;
       }
@@ -111,6 +116,10 @@
       .content {
         min-height: 15px;
         padding: 0 10px 10px 10px;
+      }
+
+      .content.notes {
+        padding-top: 12px;
       }
 
       .mb-4 {
