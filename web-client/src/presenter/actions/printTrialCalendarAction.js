@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTrialCalendarTemplate.htm';
+import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTrialCalendarTemplate.html';
 
 /**
  * Prints the trial calendar
