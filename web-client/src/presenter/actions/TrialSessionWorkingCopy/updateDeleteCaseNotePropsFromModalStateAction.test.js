@@ -4,13 +4,16 @@ import { updateDeleteCaseNotePropsFromModalStateAction } from './updateDeleteCas
 
 describe('updateDeleteCaseNotePropsFromModalStateAction', () => {
   it('should set the modal docketNumber state', async () => {
-    const result = await runAction(updateDeleteCaseNotePropsFromModalStateAction, {
-      modules: {
-        presenter,
+    const result = await runAction(
+      updateDeleteCaseNotePropsFromModalStateAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {},
+        state: { modal: { docketNumber: '123' } },
       },
-      props: {},
-      state: { modal: { docketNumber: '123' } },
-    });
+    );
 
     expect(result.output).toEqual({
       docketNumber: '123',

@@ -19,7 +19,9 @@ export const TrialSessionWorkingCopy = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WorkingCopySessionList />
-          {showModal === 'DeleteCaseNoteConfirmModal' && <DeleteCaseNoteConfirmModal />}
+          {showModal === 'DeleteCaseNoteConfirmModal' && (
+            <DeleteCaseNoteConfirmModal />
+          )}
           {showModal === 'AddEditCaseNoteModal' && <AddEditCaseNoteModal />}
         </section>
       </>
