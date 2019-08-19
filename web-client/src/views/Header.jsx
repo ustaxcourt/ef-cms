@@ -9,7 +9,7 @@ import seal from '../images/ustc_seal.svg';
 
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
-const NavigationItems = (helper, { clearAlertSequence }) => {
+const NavigationItems = (helper, { navigateToPathSequence }) => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
       {helper.showHomeIcon && (
@@ -20,15 +20,16 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
             helper.pageIsHome && 'active',
           )}
         >
-          <a
-            href="/"
+          <button
             onClick={() => {
-              clearAlertSequence();
+              navigateToPathSequence({
+                path: '/',
+              });
             }}
           >
             <FontAwesomeIcon icon="home" />
             <span className="sr-only">Home</span>
-          </a>
+          </button>
         </li>
       )}
       {helper.showMessages && (
@@ -39,10 +40,13 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
+          <button
+            className="usa-button usa-button__unstyled"
             href="/messages/my/inbox"
             onClick={() => {
-              clearAlertSequence();
+              navigateToPathSequence({
+                path: '/messages/my/inbox',
+              });
             }}
           >
             Messages{' '}
@@ -55,7 +59,7 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
                 size="sm"
               />
             )}
-          </a>
+          </button>
         </li>
       )}
       {helper.showDocumentQC && (
@@ -66,14 +70,17 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href={helper.defaultQCBoxPath}
+          <button
+            className="usa-button usa-button__unstyled"
+            title="Document QC"
             onClick={() => {
-              clearAlertSequence();
+              navigateToPathSequence({
+                path: helper.defaultQCBoxPath,
+              });
             }}
           >
             Document QC
-          </a>
+          </button>
         </li>
       )}
       {helper.showMyCases && (
@@ -84,14 +91,16 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href="/"
+          <button
+            className="usa-button usa-button__unstyled"
             onClick={() => {
-              clearAlertSequence();
+              navigateToPathSequence({
+                path: '/',
+              });
             }}
           >
             My Cases
-          </a>
+          </button>
         </li>
       )}
       {helper.showTrialSessions && (
@@ -102,14 +111,16 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href="/trial-sessions"
+          <button
+            className="usa-button usa-button__unstyled"
             onClick={() => {
-              clearAlertSequence();
+              navigateToPathSequence({
+                path: '/trial-sessions',
+              });
             }}
           >
             Trial Sessions
-          </a>
+          </button>
         </li>
       )}
     </ul>
@@ -119,10 +130,10 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
 export const Header = connect(
   {
     betaBar: state.betaBar,
-    clearAlertSequence: sequences.clearAlertSequence,
     helper: state.headerHelper,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
@@ -130,10 +141,10 @@ export const Header = connect(
   },
   ({
     betaBar,
-    clearAlertSequence,
     helper,
     loginSequence,
     mobileMenu,
+    navigateToPathSequence,
     signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
@@ -172,21 +183,22 @@ export const Header = connect(
         >
           <div className="grid-col-1">
             <div className="usa-logo" id="extended-logo">
-              <a
-                href="/"
+              <button
                 onClick={() => {
-                  clearAlertSequence();
+                  navigateToPathSequence({
+                    path: '/',
+                  });
                 }}
               >
                 <img alt="USTC Seal" src={seal} />
-              </a>
+              </button>
             </div>
           </div>
           <div className="grid-col-7">
             <nav className="main-navigation" role="navigation">
               {user &&
                 NavigationItems(helper, {
-                  clearAlertSequence,
+                  navigateToPathSequence,
                 })}
             </nav>
           </div>
@@ -224,7 +236,7 @@ export const Header = connect(
                         {user && user.userId && (
                           <div className="mobile-account-menu-container">
                             {NavigationItems(helper, {
-                              clearAlertSequence,
+                              navigateToPathSequence,
                             })}
                           </div>
                         )}

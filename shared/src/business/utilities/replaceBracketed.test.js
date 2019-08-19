@@ -6,7 +6,7 @@ describe('replaceBracketed', () => {
     expect(results).toEqual('abc');
   });
 
-  it('does nothing on empty imput', () => {
+  it('does nothing on empty input', () => {
     const results = replaceBracketed('[]', false);
     expect(results).toEqual('');
   });
