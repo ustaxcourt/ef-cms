@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTrialCalendarTemplate.html';
+import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTrialCalendarTemplate.htm';
 
 /**
  * Prints the trial calendar
@@ -17,18 +17,17 @@ export const printTrialCalendarAction = ({ get }) => {
 
   const renderCases = item => {
     return `<tr>
-      <td>
+      <td class="valign-top">
         ${item.docketNumberWithSuffix}
       </td>
-      <td>${item.caseCaption}</td>
-      <td style="width: 25%;">
+      <td class="valign-top" class="line-height-13">${item.caseCaption}</td>
+      <td style="width: 25%;" class="line-height-13">
         ${item.practitioners
           .map(practitioner => practitioner.name)
-          .join('<br>')}
+          .join('<br />')}
       </td>
-
-      <td style="width: 25%;">
-        ${item.respondents.map(respondent => respondent.name).join('<br>')}
+      <td style="width: 25%;" class="line-height-13">
+        ${item.respondents.map(respondent => respondent.name).join('<br />')}
       </td>
     </tr>`;
   };
