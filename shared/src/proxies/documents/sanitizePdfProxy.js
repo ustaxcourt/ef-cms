@@ -3,9 +3,10 @@ const { post } = require('../requests');
 /**
  * sanitizePdfInteractor
  *
- * @param documentId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.documentId the id of the document to sanitize
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.sanitizePdfInteractor = ({ applicationContext, documentId }) => {
   return post({

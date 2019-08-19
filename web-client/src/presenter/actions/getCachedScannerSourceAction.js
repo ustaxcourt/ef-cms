@@ -25,11 +25,11 @@ export const getCachedScannerSourceAction = async ({
     });
 
   if (scannerSourceName) {
-    return path.success({
+    return path.sourceInCache({
       scannerSourceIndex,
       scannerSourceName,
     });
   } else {
-    return path.selectSource();
+    return path.sourceNotInCache();
   }
 };

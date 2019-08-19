@@ -1,9 +1,10 @@
 /**
  * validateCaseDeadlineInteractor
  *
- * @param applicationContext
- * @param caseDeadline
- * @returns {object}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseDeadline the case deadline data
+ * @returns {object} errors if there are any, otherwise null
  */
 exports.validateCaseDeadlineInteractor = ({
   applicationContext,

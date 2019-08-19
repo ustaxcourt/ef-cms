@@ -6,10 +6,10 @@ const qs = require('qs');
  * 5 minutes and is used for fetching the id token and refresh token
  * from Cognito.
  *
- * @param user
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.code the authorization code
+ * @returns {object} the refreshToken and token
  */
 exports.authorizeCodeInteractor = async ({ applicationContext, code }) => {
   const data = qs.stringify({

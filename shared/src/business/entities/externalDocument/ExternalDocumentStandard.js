@@ -5,15 +5,13 @@ const {
 
 /**
  *
- * @param rawProps
+ * @param {object} rawProps the raw document data
  * @constructor
  */
 function ExternalDocumentStandard(rawProps) {
-  Object.assign(this, {
-    category: rawProps.category,
-    documentTitle: rawProps.documentTitle,
-    documentType: rawProps.documentType,
-  });
+  this.category = rawProps.category;
+  this.documentTitle = rawProps.documentTitle;
+  this.documentType = rawProps.documentType;
 }
 
 ExternalDocumentStandard.prototype.getDocumentTitle = function() {

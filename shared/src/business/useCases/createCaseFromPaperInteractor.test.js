@@ -55,6 +55,12 @@ describe('createCaseFromPaperInteractor', () => {
       }),
       getPersistenceGateway: () => ({
         createCase: async () => null,
+        getUserById: () => ({
+          name: 'Test Taxpayer',
+          role: 'petitionsclerk',
+          section: 'petitions',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        }),
         saveWorkItemForPaper: async () => null,
       }),
       getUseCases: () => ({

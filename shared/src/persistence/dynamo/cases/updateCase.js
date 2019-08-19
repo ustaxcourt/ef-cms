@@ -9,11 +9,10 @@ const { saveVersionedCase } = require('./saveCase');
 /**
  * updateCase
  *
- * @param workItemId
- * @param message
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseToUpdate the case data to update
+ * @returns {Promise} the promise of the persistence calls
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const oldCase = await client.get({

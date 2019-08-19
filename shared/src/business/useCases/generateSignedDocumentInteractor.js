@@ -6,8 +6,8 @@ const {
 } = require('pdf-lib');
 
 /**
- * @param {PDFPage} page
- * @returns {Array}
+ * @param {PDFPage} page the page to get dimensions for
+ * @returns {Array} [width, height]
  */
 exports.getPageDimensions = page => {
   let mediaBox;
@@ -36,12 +36,14 @@ exports.getPageDimensions = page => {
 /**
  * generateSignedDocumentInteractor
  *
- * @param pdfData // Uint8Array containing the pdf data to modify
- * @param pageIndex // Zero based index of the page to get the signature
- * @param posX // x coordinate where the image should be placed relative to the document
- * @param posY // y coordinate where the image should be placed relative to the document
- * @param scale // Scale of the img to be placed
- * @returns {ByteArray}
+ * @param {object} providers the providers object
+ * @param {number} providers.pageIndex // Zero based index of the page to get the signature
+ * @param {Uint8Array} providers.pdfData // Uint8Array containing the pdf data to modify
+ * @param {number} providers.posX // x coordinate where the image should be placed relative to the document
+ * @param {number} providers.posY // y coordinate where the image should be placed relative to the document
+ * @param {number} providers.scale // Scale of the img to be placed
+ * @param {object} providers.sigTextData // Signature text data including the name and title
+ * @returns {ByteArray} PDF data after signature is added
  */
 exports.generateSignedDocumentInteractor = async ({
   pageIndex,

@@ -1,3 +1,4 @@
+import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './queryStringDecoder';
 import route from 'riot-route';
 
@@ -25,7 +26,7 @@ const router = {
       '/',
       checkLoggedIn(() => {
         document.title = `Dashboard ${pageTitleSuffix}`;
-        app.getSequence('gotoDashboardSequence')();
+        app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
       }),
     );
     route(
@@ -40,6 +41,17 @@ const router = {
       checkLoggedIn((docketNumber, documentId) => {
         document.title = `Document details ${pageTitleSuffix}`;
         app.getSequence('gotoDocumentDetailSequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/documents/*/edit',
+      checkLoggedIn((docketNumber, documentId) => {
+        document.title = `Edit Docket Record ${pageTitleSuffix}`;
+        app.getSequence('gotoEditDocketEntrySequence')({
           docketNumber,
           documentId,
         });
@@ -209,10 +221,12 @@ const router = {
           'document-qc',
           'document-qc/my',
           'document-qc/my/inbox',
+          'document-qc/my/inProgress',
           'document-qc/my/outbox',
           'document-qc/my/batched',
           'document-qc/section',
           'document-qc/section/inbox',
+          'document-qc/section/inProgress',
           'document-qc/section/outbox',
           'document-qc/section/batched',
         ];
@@ -222,7 +236,10 @@ const router = {
             error: {},
           });
         } else {
-          const routeArgs = { workQueueIsInternal: false };
+          const routeArgs = {
+            baseRoute: 'document-qc',
+            workQueueIsInternal: false,
+          };
           const pathParts = path.split('/');
 
           if (pathParts[1]) {
@@ -245,10 +262,23 @@ const router = {
       }),
     );
     route(
-      '/trial-sessions',
+      '/trial-session-working-copy/*',
+      checkLoggedIn(trialSessionId => {
+        document.title = `Trial Session Working Copy ${pageTitleSuffix}`;
+        app.getSequence('gotoTrialSessionWorkingCopySequence')({
+          trialSessionId,
+        });
+      }),
+    );
+    route(
+      '/trial-sessions..',
       checkLoggedIn(() => {
+        var query = {};
+        forEach(route.query(), (value, key) => {
+          set(query, key, value);
+        });
         document.title = `Trial sessions ${pageTitleSuffix}`;
-        app.getSequence('gotoTrialSessionsSequence')();
+        app.getSequence('gotoTrialSessionsSequence')({ query });
       }),
     );
     route('/idle-logout', () => {
@@ -339,7 +369,10 @@ const router = {
             error: {},
           });
         } else {
-          const routeArgs = { workQueueIsInternal: true };
+          const routeArgs = {
+            baseRoute: 'messages',
+            workQueueIsInternal: true,
+          };
           const pathParts = path.split('/');
 
           if (pathParts[1]) {

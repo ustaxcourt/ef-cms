@@ -1,5 +1,9 @@
 module.exports = {
   addCoversheetLambda: require('./documents/addCoversheetLambda').handler,
+  associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
+    .handler,
+  associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
+    .handler,
   createCaseDeadlineLambda: require('./caseDeadline/createCaseDeadlineLambda')
     .handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
@@ -30,6 +34,8 @@ module.exports = {
     .handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
+    .handler,
+  updateDocketEntryOnCaseLambda: require('./cases/updateDocketEntryOnCaseLambda')
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,

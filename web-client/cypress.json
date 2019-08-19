@@ -1,9 +1,0 @@
-{
-  "baseUrl": "http://localhost:1234",
-  "reporter": "spec",
-  "reporterOptions": {
-    "toConsole": true
-  },
-  "defaultCommandTimeout": 12000,
-  "requestTimeout": 12000
-}

@@ -4,11 +4,12 @@ const stream = require('stream');
 /**
  * zipDocuments
  *
- * @param caseId
- * @param caseToUpdate
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Array} providers.fileNames the names of the files to zip
+ * @param {Array} providers.s3Ids the s3 ids of the files to zip
+ * @param {string} providers.zipName the name of the generated zip file
+ * @returns {Promise} the created zip
  */
 exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
   return new Promise((resolve, reject) => {

@@ -12,11 +12,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * createWorkItemInteractor
  *
- * @param workItemId
- * @param message
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.assigneeId the id to assign the work item to
+ * @param {string} providers.caseId the id of the case to attach the work item to
+ * @param {string} providers.documentId the id of the document to attach the work item to
+ * @param {string} providers.message the message for creating the work item
+ * @returns {object} the created work item
  */
 exports.createWorkItemInteractor = async ({
   applicationContext,
@@ -25,11 +27,15 @@ exports.createWorkItemInteractor = async ({
   documentId,
   message,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for create workItem');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const userToAssignTo = await applicationContext
     .getPersistenceGateway()
@@ -74,10 +80,10 @@ exports.createWorkItemInteractor = async ({
     .assignToUser({
       assigneeId,
       assigneeName: userToAssignTo.name,
-      role: userToAssignTo.role,
+      section: userToAssignTo.section,
       sentBy: user.name,
+      sentBySection: user.section,
       sentByUserId: user.userId,
-      sentByUserRole: user.role,
     })
     .addMessage(newMessage);
 

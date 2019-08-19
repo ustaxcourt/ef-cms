@@ -1,8 +1,12 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import {
+  image1,
+  image2,
+} from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from 'cerebral/test';
@@ -288,10 +292,10 @@ exports.uploadPetition = async (test, overrides = {}) => {
       postalCode: '77546',
       state: 'CT',
     },
-    contactSecondary: {},
+    contactSecondary: overrides.contactSecondary || {},
     filingType: 'Myself',
     hasIrsNotice: false,
-    partyType: 'Petitioner',
+    partyType: overrides.partyType || 'Petitioner',
     petitionFile: fakeFile,
     petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
@@ -408,4 +412,30 @@ exports.waitForRouter = () => {
   return new Promise(resolve => {
     setImmediate(() => resolve(true));
   });
+};
+
+exports.base64ToUInt8Array = b64 => {
+  var binaryStr = Buffer.from(b64, 'base64').toString('binary');
+  var len = binaryStr.length;
+  var bytes = new Uint8Array(len);
+  for (var i = 0; i < len; i++) {
+    bytes[i] = binaryStr.charCodeAt(i);
+  }
+  return bytes;
+};
+
+exports.setBatchPages = ({ test }) => {
+  const selectedDocumentType = test.getState('documentSelectedForScan');
+  let batches = test.getState(`batches.${selectedDocumentType}`);
+
+  test.setState(
+    `batches.${selectedDocumentType}`,
+    batches.map(batch => ({
+      ...batch,
+      pages: [
+        exports.base64ToUInt8Array(image1),
+        exports.base64ToUInt8Array(image2),
+      ],
+    })),
+  );
 };

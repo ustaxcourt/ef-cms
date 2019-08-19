@@ -1,7 +1,15 @@
 service: ef-cms-puppeteer
+
+plugins:
+  - serverless-prune-plugin
+
 custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 3
 
 provider:
   name: aws
@@ -18,7 +26,7 @@ layers:
     description: Chrome headless binary provided via chrome-aws-lambda and puppeteer-core for interaction.
     compatibleRuntimes:
       - nodejs8.10
-    path: runtimes/puppeteer
+    path: web-api/runtimes/puppeteer
     package:
       exclude:
         - puppeteer_lambda_layer.tar.gz

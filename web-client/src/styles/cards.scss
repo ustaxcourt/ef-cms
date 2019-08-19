@@ -3,6 +3,24 @@
   margin-bottom: 20px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
+  .header-row {
+    border-bottom: 1px solid color($theme-color-base-lighter);
+    margin-bottom: 0.75em;
+
+    .usa-search {
+      input#practitioner-search-field,
+      input#respondent-search-field {
+        width: 200px;
+        height: 34px;
+      }
+
+      input#practitioner-search-field + button,
+      input#respondent-search-field + button {
+        height: 34px;
+      }
+    }
+  }
+
   &.highlight {
     border: 3px solid color($theme-color-primary);
   }
@@ -99,6 +117,14 @@
 
 .party-information {
   font-size: 17px;
+
+  p {
+    margin-bottom: 10px;
+
+    &.representing-label {
+      margin-top: 20px;
+    }
+  }
 
   @media only screen and (max-width: $medium-screen) {
     .card {

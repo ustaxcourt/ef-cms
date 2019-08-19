@@ -3,13 +3,15 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { Case } = require('./Case');
+const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');
 
 /**
  * CaseExternalIncomplete
  * Represents a Case without required documents that a Petitioner is attempting to add to the system.
  * After the Case's files have been saved, a Petition is created to include the document metadata.
- * @param rawCase
+ *
+ * @param {object} rawCase the raw case data
  * @constructor
  */
 function CaseExternalIncomplete(rawCase) {
@@ -38,21 +40,14 @@ function CaseExternalIncomplete(rawCase) {
 joiValidationDecorator(
   CaseExternalIncomplete,
   joi.object().keys({
-    businessType: joi
-      .string()
-      .optional()
-      .allow(null),
-    caseType: joi.when('hasIrsNotice', {
-      is: joi.exist(),
-      otherwise: joi.optional().allow(null),
-      then: joi.string().required(),
-    }),
-    countryType: joi.string().optional(),
-    filingType: joi.string().required(),
-    hasIrsNotice: joi.boolean().required(),
-    partyType: joi.string().required(),
-    preferredTrialCity: joi.string().required(),
-    procedureType: joi.string().required(),
+    businessType: CaseExternal.commonRequirements.businessType,
+    caseType: CaseExternal.commonRequirements.caseType,
+    countryType: CaseExternal.commonRequirements.countryType,
+    filingType: CaseExternal.commonRequirements.filingType,
+    hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
+    partyType: CaseExternal.commonRequirements.partyType,
+    preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
+    procedureType: CaseExternal.commonRequirements.procedureType,
   }),
   function() {
     return !this.getFormattedValidationErrors();

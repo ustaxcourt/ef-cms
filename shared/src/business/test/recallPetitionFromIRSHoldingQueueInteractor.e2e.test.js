@@ -65,7 +65,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
 
     applicationContext.getCurrentUser = () => {
       return new User({
-        name: 'richard',
+        name: 'Test Petitionsclerk',
         role: 'petitionsclerk',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -108,12 +108,12 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition batched for IRS',
             to: 'IRS Holding Queue',
@@ -121,7 +121,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'irsBatchSection',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -151,7 +151,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
     expect(petitionSectionInbox).toMatchObject([
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'richard',
+        assigneeName: 'Test Petitionsclerk',
         caseStatus: 'Recalled',
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
@@ -163,12 +163,12 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition batched for IRS',
             to: 'IRS Holding Queue',
@@ -178,12 +178,12 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
             from: 'IRS Holding Queue',
             fromUserId: '63784910-c1af-4476-8988-a02f92da8e09',
             message: 'Petition recalled from IRS Holding Queue',
-            to: 'richard',
+            to: 'Test Petitionsclerk',
             toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
         section: 'petitions',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -196,7 +196,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
     expect(userSectionInbox).toMatchObject([
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'richard',
+        assigneeName: 'Test Petitionsclerk',
         caseStatus: 'Recalled',
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
@@ -209,12 +209,12 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition batched for IRS',
             to: 'IRS Holding Queue',
@@ -224,12 +224,12 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
             from: 'IRS Holding Queue',
             fromUserId: '63784910-c1af-4476-8988-a02f92da8e09',
             message: 'Petition recalled from IRS Holding Queue',
-            to: 'richard',
+            to: 'Test Petitionsclerk',
             toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
         section: 'petitions',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },

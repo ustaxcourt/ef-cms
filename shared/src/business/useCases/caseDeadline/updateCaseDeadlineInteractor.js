@@ -8,9 +8,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateCaseDeadlineInteractor
  *
- * @param applicationContext
- * @param updateCaseDeadline
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseDeadline the case deadline data
+ * @returns {object} the updated case deadline
  */
 exports.updateCaseDeadlineInteractor = async ({
   applicationContext,

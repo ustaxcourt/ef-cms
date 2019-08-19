@@ -26,6 +26,7 @@ export const gotoStartCaseWizardSequence = [
   getUserRoleAction,
   {
     docketclerk: [
+      set(state.documentUploadMode, 'scan'),
       set(state.documentSelectedForScan, 'petitionFile'),
       setCurrentPageAction('StartCaseInternal'),
     ],
@@ -37,6 +38,7 @@ export const gotoStartCaseWizardSequence = [
       setCurrentPageAction('StartCaseWizard'),
     ],
     petitionsclerk: [
+      set(state.documentUploadMode, 'scan'),
       set(state.documentSelectedForScan, 'petitionFile'),
       setCurrentPageAction('StartCaseInternal'),
     ],

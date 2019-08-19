@@ -3,9 +3,10 @@ const { put } = require('../../dynamodbClientService');
 /**
  * createTrialSession
  *
- * @param trialSession
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.trialSession the trial session data
+ * @returns {Promise} the promise of the call to persistence
  */
 exports.createTrialSession = async ({ applicationContext, trialSession }) => {
   return await put({

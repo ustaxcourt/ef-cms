@@ -2,7 +2,8 @@ const joi = require('joi-browser');
 
 /**
  *
- * @param entity
+ * @param {Entity} entity the entity to convert to a raw object
+ * @returns {object} the raw object
  */
 function toRawObject(entity) {
   const keys = Object.keys(entity);
@@ -22,8 +23,8 @@ function toRawObject(entity) {
 
 /**
  *
- * @param entity
- * @returns {*}
+ * @param {Entity} entity the entity to get formatted validation errors
+ * @returns {object} errors (null if no errors)
  */
 function getFormattedValidationErrorsHelper(entity) {
   const errors = entity.getValidationErrors();
@@ -51,8 +52,8 @@ function getFormattedValidationErrorsHelper(entity) {
 
 /**
  *
- * @param entity
- * @returns {null}
+ * @param {Entity} entity the entity to get formatted validation errors
+ * @returns {object} errors (null if no errors)
  */
 function getFormattedValidationErrors(entity) {
   const keys = Object.keys(entity);
@@ -92,10 +93,10 @@ function getFormattedValidationErrors(entity) {
 
 /**
  *
- * @param entityConstructor
- * @param schema
- * @param customValidate
- * @param errorToMessageMap
+ * @param {Function} entityConstructor the entity constructor
+ * @param {object} schema the joi validation schema
+ * @param {Function} customValidate a custom validation function
+ * @param {object} errorToMessageMap the map of error fields and messages
  */
 exports.joiValidationDecorator = function(
   entityConstructor,
@@ -125,7 +126,7 @@ exports.joiValidationDecorator = function(
   entityConstructor.prototype.validate = function validate() {
     if (!this.isValid()) {
       throw new Error(
-        `The ${entityConstructor.name ||
+        `The ${entityConstructor.validationName ||
           ''} entity was invalid ${this.getValidationError()}`,
       );
     }

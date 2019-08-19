@@ -21,18 +21,14 @@ variable "cloudfront_max_ttl" {
   default = "0"
 }
 
-variable "git_access_token" {
+variable "dynamsoft_s3_zip_path" {
   type = "string"
 }
 
-variable "product_keys" {
+variable "dynamsoft_url" {
   type = "string"
 }
 
-variable "dynamsoft_zip_name" {
-  type = "string"
-}
-
-variable "dynamsoft_repo" {
+variable "dynamsoft_product_keys" {
   type = "string"
 }

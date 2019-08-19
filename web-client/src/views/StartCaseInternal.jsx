@@ -4,13 +4,11 @@ import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -18,7 +16,6 @@ import classNames from 'classnames';
 export const StartCaseInternal = connect(
   {
     caseTypes: state.caseTypes,
-    completeScanSequence: sequences.completeScanSequence,
     constants: state.constants,
     documentSelectedForScan: state.documentSelectedForScan,
     form: state.form,
@@ -43,7 +40,6 @@ export const StartCaseInternal = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    startCaseHelper,
     startCaseInternalHelper,
     submitPetitionFromPaperSequence,
     updateFormValueSequence,
@@ -70,7 +66,7 @@ export const StartCaseInternal = connect(
             <ErrorNotification />
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h1>Case Information</h1>
+                <h1 className="margin-bottom-105">Case Information</h1>
                 <p className="required-statement margin-top-0 margin-bottom-4">
                   All fields required unless otherwise noted
                 </p>
@@ -190,7 +186,9 @@ export const StartCaseInternal = connect(
                         });
                       }}
                     />
-                    <p>{constants.CASE_CAPTION_POSTFIX}</p>
+                    <p className="margin-top-1">
+                      {constants.CASE_CAPTION_POSTFIX}
+                    </p>
                     <Text
                       bind="validationErrors.caseCaption"
                       className="usa-error-message"
@@ -260,49 +258,6 @@ export const StartCaseInternal = connect(
                     />
                   </div>
 
-                  {startCaseInternalHelper.showOwnershipDisclosureStatement && (
-                    <div className="usa-form-group">
-                      <label
-                        className={
-                          'usa-label ustc-upload-ods ' +
-                          (startCaseHelper.showOwnershipDisclosureValid
-                            ? 'validated'
-                            : '')
-                        }
-                        htmlFor="ownership-disclosure-file"
-                      >
-                        Upload Your Ownership Disclosure Statement{' '}
-                        <span className="usa-hint">(optional)</span>
-                        <span className="success-message margin-left-2px">
-                          <FontAwesomeIcon icon="check-circle" size="sm" />
-                        </span>
-                      </label>
-                      <input
-                        accept=".pdf"
-                        className="usa-input"
-                        id="ownership-disclosure-file"
-                        name="ownershipDisclosureFile"
-                        type="file"
-                        onChange={e => {
-                          limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.files[0],
-                            });
-                            updateFormValueSequence({
-                              key: `${e.target.name}Size`,
-                              value: e.target.files[0].size,
-                            });
-                          });
-                        }}
-                      />
-                      <Text
-                        bind="validationErrors.ownershipDisclosureFileSize"
-                        className="usa-error-message"
-                      />
-                    </div>
-                  )}
-
                   {(startCaseInternalHelper.showPrimaryContact ||
                     startCaseInternalHelper.showSecondaryContact) && (
                     <div className="subsection contacts">
@@ -330,7 +285,7 @@ export const StartCaseInternal = connect(
                     id="submit-case"
                     type="submit"
                   >
-                    Finish
+                    Create Case
                   </button>
                   <button
                     className="usa-button usa-button--unstyled ustc-button--unstyled"
@@ -345,7 +300,28 @@ export const StartCaseInternal = connect(
                 </div>
               </div>
               <div className="grid-col-7">
-                <ScanBatchPreviewer documentType={documentSelectedForScan} />
+                <ScanBatchPreviewer
+                  documentTabs={[
+                    {
+                      documentType: 'petitionFile',
+                      title: 'Petition',
+                    },
+                    {
+                      documentType: 'stinFile',
+                      title: 'STIN',
+                    },
+                    {
+                      documentType: 'requestForPlaceOfTrialFile',
+                      title: 'Request for Place of Trial',
+                    },
+                    {
+                      documentType: 'ownershipDisclosureFile',
+                      title: 'ODS',
+                    },
+                  ]}
+                  documentType={documentSelectedForScan}
+                  title="Add Document(s)"
+                />
               </div>
             </div>
           </form>

@@ -5,12 +5,13 @@ import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
-import { DashboardDocketClerk } from './DashboardDocketClerk';
-import { DashboardPetitioner } from './DashboardPetitioner';
-import { DashboardPetitionsClerk } from './DashboardPetitionsClerk';
-import { DashboardPractitioner } from './DashboardPractitioner';
-import { DashboardRespondent } from './DashboardRespondent';
-import { DashboardSeniorAttorney } from './DashboardSeniorAttorney';
+import { DashboardDocketClerk } from './Dashboards/DashboardDocketClerk';
+import { DashboardJudge } from './Dashboards/DashboardJudge';
+import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
+import { DashboardPetitionsClerk } from './Dashboards/DashboardPetitionsClerk';
+import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
+import { DashboardRespondent } from './Dashboards/DashboardRespondent';
+import { DashboardSeniorAttorney } from './Dashboards/DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
@@ -20,6 +21,7 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
+import { MessagesJudge } from './Messages/MessagesJudge';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -29,6 +31,7 @@ import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -45,6 +48,7 @@ const pages = {
   CaseDetailInternal,
   CreateOrder,
   DashboardDocketClerk,
+  DashboardJudge,
   DashboardPetitioner,
   DashboardPetitionsClerk,
   DashboardPractitioner,
@@ -57,6 +61,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
+  MessagesJudge,
   PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
@@ -66,6 +71,7 @@ const pages = {
   StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
+  TrialSessionWorkingCopy,
   TrialSessions,
 };
 

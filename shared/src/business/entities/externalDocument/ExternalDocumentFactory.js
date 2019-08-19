@@ -38,7 +38,8 @@ function ExternalDocumentFactory() {}
 
 /**
  *
- * @param documentMetadata
+ * @param {object} documentMetadata the document metadata
+ * @returns {object} the correct entity based on the document scenario
  */
 ExternalDocumentFactory.get = documentMetadata => {
   if (documentMetadata && documentMetadata.scenario) {

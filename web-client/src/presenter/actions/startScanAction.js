@@ -6,61 +6,44 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the scanner API
  * @param {Function} providers.store the cerebral store used for setting state.path
+ * @returns {object} the path to execute
  *
  */
 export const startScanAction = async ({
   applicationContext,
   get,
+  path,
   props,
   store,
 }) => {
   store.set(state.isScanning, true);
-  store.set(state.submitting, true);
-
   const scanner = applicationContext.getScanner();
-
-  if (
-    props.scannerSourceIndex !== null &&
-    scanner.getSourceNameByIndex(props.scannerSourceIndex) ===
-      props.scannerSourceName
-  ) {
-    scanner.setSourceByIndex(props.scannerSourceIndex);
-    try {
-      const { scannedBuffer: pages } = await scanner.startScanSession({
-        applicationContext,
-      });
-      const documentSelectedForScan = get(state.documentSelectedForScan);
-      const batches = get(state.batches[documentSelectedForScan]) || [];
-      const nextIndex = batches.length
-        ? Math.max(...batches.map(b => b.index)) + 1
-        : 0;
-
-      store.set(state.batches[documentSelectedForScan], [
-        ...batches,
-        ...[
-          {
-            index: nextIndex,
-            pages,
-          },
-        ],
-      ]);
-      store.set(state.submitting, false);
-    } catch (err) {
-      if (err.message.includes('no images in buffer')) {
-        store.set(state.showModal, 'EmptyHopperModal');
-      }
-      store.set(state.isScanning, false);
-    }
-  } else {
-    await applicationContext.getUseCases().removeItemInteractor({
+  scanner.setSourceByIndex(props.scannerSourceIndex);
+  try {
+    const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
-      key: 'scannerSourceIndex',
     });
-    await applicationContext.getUseCases().removeItemInteractor({
-      applicationContext,
-      key: 'scannerSourceName',
-    });
-    store.set(state.isScanning, false);
-    alert('there was an issue with the cached source; please scan again');
+
+    const documentSelectedForScan = get(state.documentSelectedForScan);
+    const batches = get(state.batches[documentSelectedForScan]) || [];
+    const nextIndex = batches.length
+      ? Math.max(...batches.map(b => b.index)) + 1
+      : 0;
+
+    store.set(state.batches[documentSelectedForScan], [
+      ...batches,
+      ...[
+        {
+          index: nextIndex,
+          pages,
+        },
+      ],
+    ]);
+    store.set(state.submitting, false);
+    store.set(state.selectedBatchIndex, nextIndex);
+    store.set(state.currentPageIndex, 0);
+    return path.success();
+  } catch (err) {
+    return path.error({ error: err });
   }
 };

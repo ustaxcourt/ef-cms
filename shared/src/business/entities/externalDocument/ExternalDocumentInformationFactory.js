@@ -26,33 +26,32 @@ function ExternalDocumentInformationFactory() {}
 
 /**
  *
- * @param documentMetadata
+ * @param {object} documentMetadata the document metadata
+ * @returns {Function} the created entity
  */
 ExternalDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
-    Object.assign(this, {
-      attachments: rawProps.attachments,
-      certificateOfService: rawProps.certificateOfService,
-      certificateOfServiceDate: rawProps.certificateOfServiceDate,
-      documentType: rawProps.documentType,
-      eventCode: rawProps.eventCode,
-      freeText: rawProps.freeText,
-      hasSecondarySupportingDocuments: rawProps.hasSecondarySupportingDocuments,
-      hasSupportingDocuments: rawProps.hasSupportingDocuments,
-      lodged: rawProps.lodged,
-      objections: rawProps.objections,
-      ordinalValue: rawProps.ordinalValue,
-      partyPrimary: rawProps.partyPrimary,
-      partyRespondent: rawProps.partyRespondent,
-      partySecondary: rawProps.partySecondary,
-      practitioner: rawProps.practitioner,
-      previousDocument: rawProps.previousDocument,
-      primaryDocumentFile: rawProps.primaryDocumentFile,
-      secondaryDocument: rawProps.secondaryDocument,
-      secondaryDocumentFile: rawProps.secondaryDocumentFile,
-      secondarySupportingDocuments: rawProps.secondarySupportingDocuments,
-      supportingDocuments: rawProps.supportingDocuments,
-    });
+    this.attachments = rawProps.attachments;
+    this.certificateOfService = rawProps.certificateOfService;
+    this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
+    this.documentType = rawProps.documentType;
+    this.eventCode = rawProps.eventCode;
+    this.freeText = rawProps.freeText;
+    this.hasSecondarySupportingDocuments =
+      rawProps.hasSecondarySupportingDocuments;
+    this.hasSupportingDocuments = rawProps.hasSupportingDocuments;
+    this.lodged = rawProps.lodged;
+    this.objections = rawProps.objections;
+    this.ordinalValue = rawProps.ordinalValue;
+    this.partyPrimary = rawProps.partyPrimary;
+    this.partyRespondent = rawProps.partyRespondent;
+    this.partySecondary = rawProps.partySecondary;
+    this.previousDocument = rawProps.previousDocument;
+    this.primaryDocumentFile = rawProps.primaryDocumentFile;
+    this.secondaryDocument = rawProps.secondaryDocument;
+    this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
+    this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
+    this.supportingDocuments = rawProps.supportingDocuments;
 
     if (this.secondaryDocument) {
       this.secondaryDocument = SecondaryDocumentInformationFactory.get({
@@ -99,7 +98,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyPrimary: joi.boolean(),
     partyRespondent: joi.boolean(),
     partySecondary: joi.boolean(),
-    practitioner: joi.array(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
       .number()
@@ -129,7 +127,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
-    practitioner: 'Select a filing party.',
     primaryDocumentFile: 'Upload a document.',
     primaryDocumentFileSize: [
       {
@@ -201,20 +198,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     }
   }
 
-  let partyPractitioner = false;
-  if (Array.isArray(documentMetadata.practitioner)) {
-    documentMetadata.practitioner.forEach(practitioner => {
-      if (practitioner.partyPractitioner) {
-        partyPractitioner = true;
-      }
-    });
-  }
-
   if (
     documentMetadata.partyPrimary !== true &&
     documentMetadata.partySecondary !== true &&
-    documentMetadata.partyRespondent !== true &&
-    partyPractitioner !== true
+    documentMetadata.partyRespondent !== true
   ) {
     addProperty(
       'partyPrimary',

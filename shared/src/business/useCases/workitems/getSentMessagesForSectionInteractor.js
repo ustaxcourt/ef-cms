@@ -6,8 +6,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
- * @param applicationContext
- * @returns {Promise<*|*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.section the section to get the sent messages
+ * @returns {object} the messages in the section sent box
  */
 exports.getSentMessagesForSectionInteractor = async ({
   applicationContext,

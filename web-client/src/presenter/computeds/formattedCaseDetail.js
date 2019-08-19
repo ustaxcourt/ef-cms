@@ -219,23 +219,21 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
     return a.index - b.index;
   });
 
-  const formatRespondent = respondent => {
-    respondent.formattedName = `${respondent.name} ${
-      respondent.barNumber || '55555' // TODO: hard coded for now until we get that info in cognito
-    }`;
-    return respondent;
+  const formatCounsel = counsel => {
+    let formattedName = counsel.name;
+    if (counsel.barNumber) {
+      formattedName += ` (${counsel.barNumber})`;
+    }
+    counsel.formattedName = formattedName;
+    return counsel;
   };
 
   if (result.respondents) {
-    result.respondents = result.respondents.map(formatRespondent);
+    result.respondents = result.respondents.map(formatCounsel);
   }
 
-  if (result.practitioner) {
-    let formattedName = result.practitioner.name;
-    if (result.practitioner.barNumber) {
-      formattedName += ` (${result.practitioner.barNumber})`;
-    }
-    result.practitioner.formattedName = formattedName;
+  if (result.practitioners) {
+    result.practitioners = result.practitioners.map(formatCounsel);
   }
 
   result.createdAtFormatted = applicationContext

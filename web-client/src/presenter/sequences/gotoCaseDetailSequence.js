@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
@@ -12,6 +13,7 @@ import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDef
 
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
+  clearAlertsAction,
   clearScreenMetadataAction,
   setDefaultCaseDetailTabAction,
   getCaseAction,
@@ -22,6 +24,7 @@ export const gotoCaseDetailSequence = [
   getUserRoleAction,
   {
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
+    judge: [setCurrentPageAction('CaseDetailInternal')],
     petitioner: [
       getCaseAssociationAction,
       setCaseAssociationAction,

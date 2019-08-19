@@ -1,15 +1,17 @@
 const {
+  NewTrialSession,
+} = require('../../entities/trialSessions/NewTrialSession');
+const {
   validateTrialSessionInteractor,
 } = require('./validateTrialSessionInteractor');
 const { omit } = require('lodash');
-const { TrialSession } = require('../../entities/TrialSession');
 
 describe('validateTrialSessionInteractor', () => {
   it('returns the expected errors object on an empty trial session', () => {
     const errors = validateTrialSessionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
-          TrialSession,
+          NewTrialSession,
         }),
       },
       trialSession: {},
@@ -17,7 +19,7 @@ describe('validateTrialSessionInteractor', () => {
 
     expect(Object.keys(errors)).toEqual(
       Object.keys(
-        omit(TrialSession.errorToMessageMap, [
+        omit(NewTrialSession.errorToMessageMap, [
           'postalCode',
           'swingSessionId',
           'startTime',
@@ -39,7 +41,7 @@ describe('validateTrialSessionInteractor', () => {
     const errors = validateTrialSessionInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
-          TrialSession,
+          NewTrialSession,
         }),
       },
       trialSession: { ...MOCK_TRIAL },

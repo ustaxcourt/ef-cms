@@ -17,19 +17,18 @@ function SupportingDocumentInformationFactory() {}
 
 /**
  *
- * @param documentMetadata
+ * @param {object} documentMetadata the document metadata
+ * @returns {object} the created document
  */
 SupportingDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
-    Object.assign(this, {
-      attachments: rawProps.attachments,
-      certificateOfService: rawProps.certificateOfService,
-      certificateOfServiceDate: rawProps.certificateOfServiceDate,
-      supportingDocument: rawProps.supportingDocument,
-      supportingDocumentFile: rawProps.supportingDocumentFile,
-      supportingDocumentFileSize: rawProps.supportingDocumentFileSize,
-      supportingDocumentFreeText: rawProps.supportingDocumentFreeText,
-    });
+    this.attachments = rawProps.attachments;
+    this.certificateOfService = rawProps.certificateOfService;
+    this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
+    this.supportingDocument = rawProps.supportingDocument;
+    this.supportingDocumentFile = rawProps.supportingDocumentFile;
+    this.supportingDocumentFileSize = rawProps.supportingDocumentFileSize;
+    this.supportingDocumentFreeText = rawProps.supportingDocumentFreeText;
   };
 
   let schema = {

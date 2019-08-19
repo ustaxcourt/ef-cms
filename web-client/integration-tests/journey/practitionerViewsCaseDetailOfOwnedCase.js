@@ -8,5 +8,11 @@ export default test => {
     expect(test.getState('caseDetail.practitioners.0.name')).toEqual(
       'Test Practitioner',
     );
+    expect(
+      test.getState('caseDetail.practitioners.0.representingPrimary'),
+    ).toEqual(true);
+    expect(
+      test.getState('caseDetail.practitioners.0.representingSecondary'),
+    ).toEqual(true);
   });
 };

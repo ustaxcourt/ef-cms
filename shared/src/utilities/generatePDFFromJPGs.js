@@ -5,8 +5,9 @@ const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
  * them into one PDF file
  *
  * @param {Array} imgData array of bytearrays
- * @return {Uint8Array} bytearray of PDF
+ * @returns {Uint8Array} bytearray of PDF
  */
+
 exports.generatePDFFromJPGs = imgData => {
   const pdfDoc = PDFDocumentFactory.create();
 

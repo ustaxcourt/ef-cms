@@ -2,8 +2,11 @@ const client = require('../../dynamodbClientService');
 
 /**
  * incrementCounter
- * @param applicationContext
- * @returns {*}
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.key the key of the item to increment
+ * @returns {Promise} the promise of the call to persistence
  */
 exports.incrementCounter = ({ applicationContext, key }) => {
   const year = new Date().getFullYear().toString();

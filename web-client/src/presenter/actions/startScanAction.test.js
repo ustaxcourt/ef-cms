@@ -17,6 +17,12 @@ presenter.providers.applicationContext = {
     removeItemInteractor: mockRemoveItemInteractor,
   }),
 };
+
+presenter.providers.path = {
+  error: jest.fn(),
+  success: jest.fn(),
+};
+
 global.alert = () => null;
 
 describe('startScanAction', () => {
@@ -37,10 +43,9 @@ describe('startScanAction', () => {
     });
 
     expect(result.state.isScanning).toBeTruthy();
-    expect(mockStartScanSession).toHaveBeenCalled();
   });
 
-  it('tells the TWAIN library to begin image aquisition with no scanning device set', async () => {
+  it('expect the success path to be called', async () => {
     await runAction(startScanAction, {
       modules: {
         presenter,
@@ -50,15 +55,36 @@ describe('startScanAction', () => {
       },
     });
 
-    expect(mockRemoveItemInteractor).toHaveBeenCalled();
+    expect(presenter.providers.path.success).toHaveBeenCalled();
   });
 
-  it('opens the hopper empty modal if an hopper empty error is thrown', async () => {
+  it('expect the selectedBatchIndex to change to the last one scanned', async () => {
+    const result = await runAction(startScanAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        batches: {
+          petition: [
+            {
+              index: 5,
+            },
+          ],
+        },
+        documentSelectedForScan: 'petition',
+        isScanning: false,
+      },
+    });
+
+    expect(result.state.selectedBatchIndex).toEqual(6);
+  });
+
+  it('calls the error path on errors', async () => {
     mockStartScanSession = jest.fn(() => {
       throw new Error('no images in buffer');
     });
 
-    const result = await runAction(startScanAction, {
+    await runAction(startScanAction, {
       modules: {
         presenter,
       },
@@ -73,8 +99,6 @@ describe('startScanAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeFalsy();
-    expect(mockStartScanSession).toHaveBeenCalled();
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
+    expect(presenter.providers.path.error).toHaveBeenCalled();
   });
 });

@@ -109,12 +109,12 @@ describe('forwardWorkItemInteractor integration test', () => {
         assigneeName: 'Test Docketclerk',
         messages: [
           {
-            from: 'Rick Petitioner',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'yolo',
             to: 'Test Docketclerk',
@@ -122,7 +122,7 @@ describe('forwardWorkItemInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -155,12 +155,12 @@ describe('forwardWorkItemInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'Rick Petitioner',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'yolo',
             to: 'Test Docketclerk',
@@ -168,7 +168,7 @@ describe('forwardWorkItemInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -192,12 +192,12 @@ describe('forwardWorkItemInteractor integration test', () => {
           },
           messages: [
             {
-              from: 'Rick Petitioner',
+              from: 'Alex Petitionsclerk',
               fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               message: 'Petition filed by Rick Petitioner is ready for review.',
             },
             {
-              from: 'richard',
+              from: 'Test Petitionsclerk',
               fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
               message: 'yolo',
               to: 'Test Docketclerk',

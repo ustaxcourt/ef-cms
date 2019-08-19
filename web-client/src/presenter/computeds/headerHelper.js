@@ -2,53 +2,59 @@ import { state } from 'cerebral';
 
 export const headerHelper = get => {
   const user = get(state.user);
-  const currentPage = get(state.currentPage);
+  const userRole = get(state.user.role);
+  const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueIsInternal);
 
-  const isUserInternal = user => {
-    const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
-    return user && user.role && internalRoles.includes(user.role);
+  const isUserInternal = role => {
+    const internalRoles = [
+      'docketclerk',
+      'judge',
+      'petitionsclerk',
+      'seniorattorney',
+    ];
+    return internalRoles.includes(role);
   };
-  const isUserExternal = user => {
+  const isUserExternal = role => {
     const externalRoles = ['petitioner', 'practitioner', 'respondent'];
-    return user && user.role && externalRoles.includes(user.role);
+    return externalRoles.includes(role);
   };
-  const isOtherUser = user => {
+  const isOtherUser = role => {
     const externalRoles = ['petitionsclerk', 'docketclerk'];
-    return user && user.role && !externalRoles.includes(user.role);
+    return !externalRoles.includes(role);
   };
 
+  const isTrialSessions = currentPage.startsWith('TrialSessions');
+  const isTrialSessionDetails = currentPage.startsWith('TrialSessionDetail');
+  const isDashboard = currentPage.startsWith('Dashboard');
+  const pageIsMessages =
+    userRole == 'judge'
+      ? currentPage.startsWith('Messages')
+      : isDashboard && workQueueIsInternal && !isTrialSessions;
+
   return {
-    defaultQCBoxPath: isOtherUser(user)
+    defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
-    pageIsDocumentQC:
-      currentPage &&
-      currentPage.includes('Dashboard') &&
-      !workQueueIsInternal &&
-      (!currentPage || !currentPage.includes('TrialSessions')),
-    pageIsMessages:
-      currentPage &&
-      currentPage.includes('Dashboard') &&
-      workQueueIsInternal &&
-      (!currentPage || !currentPage.includes('TrialSessions')),
-    pageIsMyCases:
-      currentPage && currentPage.includes('Dashboard') && isUserExternal(user),
+    pageIsDocumentQC: isDashboard && !workQueueIsInternal && !isTrialSessions,
+    pageIsHome: isDashboard && !pageIsMessages,
+    pageIsMessages,
+    pageIsMyCases: isDashboard && isUserExternal(userRole),
     pageIsTrialSessions:
       currentPage &&
-      (currentPage.includes('TrialSessions') ||
-        currentPage.includes('TrialSessionDetail')) &&
-      isUserInternal(user),
-    showDocumentQC: isUserInternal(user),
-    showMessages: isUserInternal(user),
+      (isTrialSessions || isTrialSessionDetails) &&
+      isUserInternal(userRole),
+    showDocumentQC: isUserInternal(userRole),
+    showHomeIcon: userRole == 'judge',
+    showMessages: isUserInternal(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
-    showMyCases: isUserExternal(user),
+    showMyCases: isUserExternal(userRole),
     showSearchInHeader:
       user &&
-      user.role &&
-      user.role !== 'practitioner' &&
-      user.role !== 'respondent',
-    showTrialSessions: isUserInternal(user),
+      userRole &&
+      userRole !== 'practitioner' &&
+      userRole !== 'respondent',
+    showTrialSessions: isUserInternal(userRole),
   };
 };

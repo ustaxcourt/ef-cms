@@ -73,6 +73,8 @@ select {
 
 .usa-select {
   margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
   background-image: url('/images/arrow-both-base.svg');
   &:disabled {
     border-color: color($theme-color-base-light);
@@ -288,7 +290,7 @@ label.validated::after {
 
 .document-detail-one-third {
   max-height: 890px;
-  overflow-y: scroll;
+  overflow-y: auto;
   .phone-input {
     margin-bottom: 20px;
     clear: both;

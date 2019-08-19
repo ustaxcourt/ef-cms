@@ -1,7 +1,15 @@
 service: ef-cms-ghostscript
+
+plugins:
+  - serverless-prune-plugin
+
 custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 3
 
 provider:
   name: aws
@@ -17,7 +25,7 @@ layers:
     name: ${self:provider.stage}-ghostscript
     compatibleRuntimes:
       - nodejs10.x
-    path: runtimes/ghostscript
+    path: web-api/runtimes/ghostscript
     package:
       exclude:
         - ghostscript_lambda_layer.tar.gz

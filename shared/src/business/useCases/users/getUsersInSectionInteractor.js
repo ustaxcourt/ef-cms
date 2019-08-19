@@ -6,9 +6,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getUsersInSectionInteractor
  *
- * @param section
- * @param applicationContext
- * @returns {Promise<*|{caseId}>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.section the section to get the users
+ * @returns {Promise} the promise of the getUsersInSection call
  */
 exports.getUsersInSectionInteractor = ({ applicationContext, section }) => {
   const user = applicationContext.getCurrentUser();

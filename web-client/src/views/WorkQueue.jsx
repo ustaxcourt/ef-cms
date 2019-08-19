@@ -1,5 +1,5 @@
-import { IndividualWorkQueue } from './IndividualWorkQueue';
-import { SectionWorkQueue } from './SectionWorkQueue';
+import { IndividualWorkQueue } from './WorkQueue/IndividualWorkQueue';
+import { SectionWorkQueue } from './WorkQueue/SectionWorkQueue';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';

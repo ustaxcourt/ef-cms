@@ -6,7 +6,8 @@ const {
 
 /**
  * constructor
- * @param rawMessage
+ *
+ * @param {object} rawMessage the raw message data
  * @constructor
  */
 function Message(rawMessage) {
@@ -19,7 +20,7 @@ function Message(rawMessage) {
   this.toUserId = rawMessage.toUserId;
 }
 
-Message.name = 'Message';
+Message.validationName = 'Message';
 
 joiValidationDecorator(
   Message,

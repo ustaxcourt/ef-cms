@@ -3,16 +3,16 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('chooseNextStepAction', () => {
-  let supportingDocumentStub;
+  let addAnotherEntryStub;
   let caseDetailStub;
 
   beforeEach(() => {
-    supportingDocumentStub = jest.fn();
+    addAnotherEntryStub = jest.fn();
     caseDetailStub = jest.fn();
 
     presenter.providers.path = {
+      addAnotherEntry: addAnotherEntryStub,
       caseDetail: caseDetailStub,
-      supportingDocument: supportingDocumentStub,
     };
   });
 
@@ -21,23 +21,18 @@ describe('chooseNextStepAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        screenMetadata: {
-          supportingDocument: {},
-        },
+      props: {
+        isAddAnother: true,
       },
     });
 
-    expect(supportingDocumentStub).toHaveBeenCalled();
+    expect(addAnotherEntryStub).toHaveBeenCalled();
   });
 
   it('does not choose the next step as supporting document if it does not exist', async () => {
     await runAction(chooseNextStepAction, {
       modules: {
         presenter,
-      },
-      state: {
-        screenMetadata: {},
       },
     });
 

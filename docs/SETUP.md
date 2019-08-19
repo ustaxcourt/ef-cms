@@ -37,9 +37,9 @@
      - `UI_SONAR_TOKEN` (the token for the sonar UI project)
      - `COGNITO_SUFFIX` (a suffix of your choice for the cognito url)
      - `USTC_ADMIN_PASS` (a unique password of your choice used by the cognito admin user)
-     - `DYNAMSOFT_REPO` (the private github repo path for fetching the tarball, e.g., `https://api.github.com/repos/codyseibert/dynamsoft/tarball`)
-     - `DYNAMSOFT_ZIP_NAME` (the name of the zip file which is zipped into the tarball, e.g., `codyseibert-dynamsoft-5bbf51a51de3717dfee641678d33f36e3cc857e7`)
-     - `PRODUCT_KEYS` (the list of product keys provided by dynamsoft, e.g., `abc;123`)
-     - `GIT_ACCESS_TOKEN` (a private access token which has access to the dynamsoft repo for fetching the tarball [Access Tokens](https://github.com/settings/tokens))
+     - `DYNAMSOFT_PRODUCT_KEYS_DEV` (the product key provided after purchasing dynamsoft)
+     - `DYNAMSOFT_PRODUCT_KEYS_STG`  (the product key provided after purchasing dynamsoft)
+     - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing dynamsoft)
+     - `DYNAMSOFT_S3_ZIP_PATH` (the full s3 path to the dynamsoft .tar.zip, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build.

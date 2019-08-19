@@ -1,14 +1,14 @@
 import { compact } from 'lodash';
 import { state } from 'cerebral';
 
-const formatCase = caseItem => {
+export const formatCase = caseItem => {
   caseItem.docketNumberWithSuffix = `${
     caseItem.docketNumber
   }${caseItem.docketNumberSuffix || ''}`;
   return caseItem;
 };
 
-const compareCasesByDocketNumber = (a, b) => {
+export const compareCasesByDocketNumber = (a, b) => {
   const [numberA, yearA] = a.docketNumber.split('-');
   const [numberB, yearB] = b.docketNumber.split('-');
 
@@ -22,6 +22,7 @@ const compareCasesByDocketNumber = (a, b) => {
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const result = get(state.trialSession);
+  if (!result) return undefined;
 
   result.formattedEligibleCases = (
     get(state.trialSession.eligibleCases) || []
@@ -46,7 +47,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     hour = +hour - 12;
   }
   result.formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
-  result.formattedJudge = result.judge || 'Not assigned';
+  result.formattedJudge = (result.judge && result.judge.name) || 'Not assigned';
   result.formattedTrialClerk = result.trialClerk || 'Not assigned';
   result.formattedCourtReporter = result.courtReporter || 'Not assigned';
   result.formattedIrsCalendarAdministrator =

@@ -21,9 +21,9 @@ describe('fileExternalDocumentInteractor integration test', () => {
     sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
     applicationContext = createTestApplicationContext({
       user: {
-        name: 'Rick Petitioner',
+        name: 'Test Petitioner',
         role: 'petitioner',
-        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
   });
@@ -45,7 +45,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           city: 'Rerum eaque cupidata',
           countryType: 'domestic',
           email: 'taxpayer@example.com',
-          name: 'Rick Petitioner',
+          name: 'Test Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',
           state: 'AP',
@@ -115,10 +115,10 @@ describe('fileExternalDocumentInteractor integration test', () => {
     });
 
     expect(caseAfterDocument).toMatchObject({
-      caseCaption: 'Rick Petitioner, Petitioner',
+      caseCaption: 'Test Petitioner, Petitioner',
       caseId,
       caseTitle:
-        'Rick Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
       caseType: 'Innocent Spouse',
       contactPrimary: {
         address1: '19 First Freeway',
@@ -127,7 +127,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         city: 'Rerum eaque cupidata',
         countryType: 'domestic',
         email: 'taxpayer@example.com',
-        name: 'Rick Petitioner',
+        name: 'Test Petitioner',
         phone: '+1 (599) 681-5435',
         postalCode: '89614',
         state: 'AP',
@@ -140,7 +140,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           description: 'Petition',
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Test Petitioner',
         },
         {
           description: 'Request for Place of Trial at Aberdeen, South Dakota',
@@ -167,8 +167,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
-          filedBy: 'Rick Petitioner',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          filedBy: 'Test Petitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -180,21 +180,21 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
                 documentType: 'Petition',
-                filedBy: 'Rick Petitioner',
-                userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                filedBy: 'Test Petitioner',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               isInitializeCase: true,
               messages: [
                 {
-                  from: 'Rick Petitioner',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
-                    'Petition filed by Rick Petitioner is ready for review.',
+                    'Petition filed by Test Petitioner is ready for review.',
                 },
               ],
               section: 'petitions',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -203,8 +203,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: 'Statement of Taxpayer Identification',
-          filedBy: 'Rick Petitioner',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          filedBy: 'Test Petitioner',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
         {
@@ -221,7 +221,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           scenario: 'Nonstandard H',
           supportingDocument: 'Brief in Support',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -245,19 +245,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 partyPrimary: true,
                 scenario: 'Nonstandard H',
                 supportingDocument: 'Brief in Support',
-                userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               messages: [
                 {
-                  from: 'Rick Petitioner',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
                     'Motion for Leave to File filed by Petitioner is ready for review.',
                 },
               ],
               section: 'docket',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
             },
           ],
         },
@@ -270,7 +270,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -287,19 +287,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 partyPrimary: true,
                 previousDocument: 'Amended Answer',
                 scenario: 'Nonstandard A',
-                userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               messages: [
                 {
-                  from: 'Rick Petitioner',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
                     'Brief in Support filed by Petitioner is ready for review.',
                 },
               ],
               section: 'docket',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -313,7 +313,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -330,19 +330,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 partyPrimary: true,
                 previousDocument: 'Petition',
                 scenario: 'Nonstandard A',
-                userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               messages: [
                 {
-                  from: 'Rick Petitioner',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
                     'Brief in Support filed by Petitioner is ready for review.',
                 },
               ],
               section: 'docket',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -356,7 +356,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
               assigneeId: null,
@@ -373,19 +373,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 partyPrimary: true,
                 previousDocument: 'Amended Answer',
                 scenario: 'Nonstandard A',
-                userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
               messages: [
                 {
-                  from: 'Rick Petitioner',
-                  fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+                  from: 'Test Petitioner',
+                  fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
                     'Brief in Support filed by Petitioner is ready for review.',
                 },
               ],
               section: 'docket',
-              sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+              sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
               updatedAt: '2019-03-01T22:54:06.000Z',
             },
           ],
@@ -395,7 +395,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       hasIrsNotice: false,
       initialDocketNumberSuffix: 'S',
       initialTitle:
-        'Rick Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
+        'Test Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
       isPaper: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
@@ -409,13 +409,13 @@ describe('fileExternalDocumentInteractor integration test', () => {
       preferredTrialCity: 'Aberdeen, South Dakota',
       procedureType: 'Small',
       status: 'New',
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       yearAmounts: [],
     });
 
     applicationContext.getCurrentUser = () => {
       return new User({
-        name: 'bob',
+        name: 'Test Docketclerk',
         role: 'docketclerk',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -447,19 +447,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           scenario: 'Nonstandard H',
           supportingDocument: 'Brief in Support',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
         messages: [
           {
-            from: 'Rick Petitioner',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            from: 'Test Petitioner',
+            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             message:
               'Motion for Leave to File filed by Petitioner is ready for review.',
           },
         ],
         section: 'docket',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
       {
         assigneeId: null,
@@ -476,19 +476,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
         messages: [
           {
-            from: 'Rick Petitioner',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            from: 'Test Petitioner',
+            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             message:
               'Brief in Support filed by Petitioner is ready for review.',
           },
         ],
         section: 'docket',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
         updatedAt: '2019-03-01T22:54:06.000Z',
       },
       {
@@ -506,19 +506,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
         messages: [
           {
-            from: 'Rick Petitioner',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            from: 'Test Petitioner',
+            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             message:
               'Brief in Support filed by Petitioner is ready for review.',
           },
         ],
         section: 'docket',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
         updatedAt: '2019-03-01T22:54:06.000Z',
       },
       {
@@ -536,19 +536,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
           partyPrimary: true,
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
         messages: [
           {
-            from: 'Rick Petitioner',
-            fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            from: 'Test Petitioner',
+            fromUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
             message:
               'Brief in Support filed by Petitioner is ready for review.',
           },
         ],
         section: 'docket',
-        sentBy: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+        sentBy: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);
   });

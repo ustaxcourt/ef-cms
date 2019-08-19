@@ -3,13 +3,14 @@ const { joiValidationDecorator } = require('./JoiValidationDecorator');
 
 /**
  * fake entity constructor
- * @param raw {object}
+ *
+ * @param {object} raw raw entity
  */
 function MockEntity1(raw) {
   Object.assign(this, raw);
 }
 
-MockEntity1.name = 'MockEntity1';
+MockEntity1.validationName = 'MockEntity1';
 
 MockEntity1.errorToMessageMap = {
   favoriteNumber: 'Tell me your favorite number.',
