@@ -20,7 +20,7 @@ find ./web-api/src -type f -exec chmod -R ugo+r {} ";"
 
 npm run "${build}"
 cp "./web-api/src/${handler}" /tmp
-cp ./dist/${handler} web-api/src
+cp "./dist/${handler}" web-api/src
 
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 ./node_modules/.bin/sls create_domain \
