@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecordTemplate.htm';
+import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecordTemplate.html';
 
 /**
  * Prints the docket record
