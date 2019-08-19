@@ -150,7 +150,8 @@ petitioner1@example.com – petitioner5@example.com
 petitionsclerk1@example.com – petitionsclerk5@example.com
 docketclerk1@example.com – docketclerk5@example.com
 respondent1@example.com – respondent10@example.com
-seniorattorney1@example.com – seniorattorney10@example.com
+practitioner1@example.com – practitioner10@example.com
+seniorattorney1@example.com – seniorattorney5@example.com
 judgeArmen@example.com
 judgeAshford@example.com
 judgeBuch@example.com
