@@ -1,3 +1,4 @@
+import { applicationContext } from '../../applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -9,6 +10,7 @@ import {
 } from '../../../../shared/src/business/utilities/DateHandler';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
+  ...applicationContext,
   getCurrentUser: () => ({
     role: 'petitionsclerk',
     section: 'petitions',
