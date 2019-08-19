@@ -8,6 +8,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { createISODateString } = require('../utilities/DateHandler');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
@@ -165,7 +166,7 @@ function Case(rawCase) {
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
-  this.createdAt = rawCase.createdAt || new Date().toISOString();
+  this.createdAt = rawCase.createdAt || createISODateString();
   this.currentVersion = rawCase.currentVersion;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
@@ -531,7 +532,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
-        filingDate: new Date().toISOString(),
+        filingDate: createISODateString(),
       }),
     );
   }
@@ -574,7 +575,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
-        filingDate: new Date().toISOString(),
+        filingDate: createISODateString(),
       }),
     );
   }
