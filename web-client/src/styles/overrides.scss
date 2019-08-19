@@ -16,11 +16,19 @@
 
   .usa-logo {
     width: 100%;
-    max-width: 75px;
     margin: 20px 0 0 0;
+
+    button {
+      padding: 0;
+      border: none;
+      background: none;
+      color: #1b1b1b;
+      text-decoration: none;
+    }
 
     img {
       width: 100%;
+      max-width: 75px;
       max-height: 100%;
     }
 
