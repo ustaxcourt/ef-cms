@@ -1,6 +1,10 @@
 const joi = require('joi-browser');
-const moment = require('moment');
 const uuid = require('uuid');
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../../utilities/DateHandler');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -8,11 +12,9 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { ContactFactory } = require('../contacts/ContactFactory');
-const { createISODateString } = require('../utilities/DateHandler');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
-const { formatDateString } = require('../../utilities/DateHandler');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { YearAmount } = require('../YearAmount');
 
@@ -499,8 +501,8 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   this.documents.forEach(document => {
     document.status = 'served';
   });
-
-  const status = `R served on ${moment(sendDate).format('L LT')}`;
+  const dateServed = prepareDateFromString(undefined, 'L LT');
+  const status = `R served on ${dateServed}`;
   this.docketRecord.forEach(docketRecord => {
     if (docketRecord.documentId) {
       docketRecord.status = status;
@@ -798,7 +800,7 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = moment().subtract(
+  let docFiledCutoffDate = prepareDateFromString().subtract(
     Case.ANSWER_CUTOFF_AMOUNT,
     Case.ANSWER_CUTOFF_UNIT,
   );
@@ -813,10 +815,9 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
-        docFiledCutoffDate,
-        Case.ANSWER_CUTOFF_UNIT,
-      );
+      const docFiledBeforeCutoff = prepareDateFromString(
+        document.createdAt,
+      ).isBefore(docFiledCutoffDate, Case.ANSWER_CUTOFF_UNIT);
 
       if (isAnswerDocument && docFiledBeforeCutoff) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;

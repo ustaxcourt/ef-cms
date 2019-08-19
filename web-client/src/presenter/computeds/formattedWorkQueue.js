@@ -1,4 +1,4 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '../../../../shared/src/business/entities/cases/Case'; // TODO clean this up
 import {
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
@@ -6,7 +6,6 @@ import {
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
-import moment from 'moment';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext
@@ -26,7 +25,9 @@ const formatDateIfToday = (date, applicationContext) => {
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
   const yesterday = applicationContext.getUtilities().formatDateString(
-    moment(new Date())
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString()
       .add(-1, 'days')
       .toDate(),
     'MMDDYY',
