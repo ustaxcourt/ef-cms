@@ -13,14 +13,15 @@ import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTria
 export const printTrialCalendarAction = ({ get }) => {
   const caseDetail = get(state.formattedCaseDetail);
   const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
+
   const openCases = get(state.formattedTrialSessionDetails.openCases);
 
   const renderCases = item => {
     return `<tr>
-      <td class="valign-top">
+      <td>
         ${item.docketNumberWithSuffix}
       </td>
-      <td class="valign-top" class="line-height-13">${item.caseCaption}</td>
+      <td class="line-height-13">${item.caseCaption}</td>
       <td style="width: 25%;" class="line-height-13">
         ${item.practitioners
           .map(practitioner => practitioner.name)
