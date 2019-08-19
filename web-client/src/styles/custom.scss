@@ -763,10 +763,16 @@ header.usa-header {
         }
       }
 
+      &:hover {
+        a {
+        color: color($theme-color-primary-dark);
+        }
+      }
+
       &.active,
       &:hover {
         padding-bottom: 5px;
-        border-bottom: 3px solid color($theme-color-primary);
+        border-bottom: 3px solid color($theme-color-primary-dark);
 
         &.ustc-nav-no-active-underline {
           border: 0;
@@ -963,6 +969,10 @@ nav.usa-nav {
           }
         }
       }
+    }
+
+    @media (min-width: units('desktop')) {
+      display: none;
     }
   }
 
@@ -1520,4 +1530,8 @@ button.change-scanner-button {
       }
     }
   }
+}
+
+.minw-30 {
+  min-width: 15rem;
 }

@@ -67,35 +67,6 @@ describe('Get trial session working copy', () => {
     );
   });
 
-  it('throws a not found error if persistence does not return any results', async () => {
-    applicationContext = {
-      environment: { stage: 'local' },
-      getCurrentUser: () => {
-        return {
-          role: 'judge',
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        };
-      },
-      getPersistenceGateway: () => {
-        return {
-          getTrialSessionWorkingCopy: () => Promise.resolve(null),
-        };
-      },
-    };
-    let error;
-    try {
-      await getTrialSessionWorkingCopyInteractor({
-        applicationContext,
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain(
-      'Working copy for trial session c54ba5a9-b37b-479d-9201-067ec6e335bb was not found.',
-    );
-  });
-
   it('correctly returns data from persistence', async () => {
     applicationContext = {
       environment: { stage: 'local' },

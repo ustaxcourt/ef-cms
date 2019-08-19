@@ -1,25 +1,30 @@
 [
   {
-    "pk": "trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc",
-    "sk": "trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "caseOrder": [
+      {
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5"
+      }
+    ],
     "gsi1pk": "trial-session-catalog",
-    "maxCases": 100,
+    "trialLocation": "Houston, Texas",
+    "createdAt": "2019-10-27T05:00:00.000Z",
+    "swingSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
+    "sk": "trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "sessionType": "Regular",
+    "termYear": "2019",
+    "startTime": "10:00",
+    "term": "Fall",
+    "pk": "trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc",
     "judge": {
       "name": "Judge Armen",
       "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
     },
-    "startDate": "2019-11-27T05:00:00.000Z",
-    "createdAt": "2019-10-27T05:00:00.000Z",
-    "startTime": "10:00",
-    "term": "Fall",
-    "termYear": "2019",
     "swingSession": true,
-    "swingSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
-    "trialLocation": "Houston, Texas",
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
-    "isCalendared": false,
-    "status": "Upcoming"
+    "startDate": "2019-11-27T05:00:00.000Z",
+    "isCalendared": true,
+    "maxCases": 100,
+    "status": "Upcoming",
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
   },
   {
     "pk": "trial-session-working-copy|959c4338-0fac-42eb-b0eb-d53b8d0195cc",

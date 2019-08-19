@@ -51,7 +51,9 @@ exports.handler = event =>
   customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const { docketNumber, docketRecordHtml } = JSON.parse(event.body);
+    const { docketNumber, docketRecordHtml, headerHtml } = JSON.parse(
+      event.body,
+    );
 
     try {
       const result = await applicationContext
@@ -60,6 +62,7 @@ exports.handler = event =>
           applicationContext,
           docketNumber,
           docketRecordHtml,
+          headerHtml,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Docket Number', docketNumber);
