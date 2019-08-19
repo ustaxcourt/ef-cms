@@ -18,13 +18,12 @@ export const AddEditSessionNoteModal = connect(
         cancelLabel="Cancel"
         className="add-edit-note-modal"
         confirmLabel="Save"
-        title="Add/Edit Notes"
+        preventCancelOnBlur={true}
+        title="Add/Edit Session Notes"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="updateWorkingCopySessionNoteSequence"
       >
-        <h5 className="margin-bottom-4">
-          Docket {modal.docketNumber}: {modal.caseCaptionNames}
-        </h5>
+        <h5 className="margin-bottom-4">{modal.heading}</h5>
         <div
           className={classnames(
             'usa-form-group',
