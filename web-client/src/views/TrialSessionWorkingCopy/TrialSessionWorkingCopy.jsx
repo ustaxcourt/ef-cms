@@ -1,5 +1,5 @@
-import { AddEditNoteModal } from './AddEditNoteModal';
-import { DeleteNoteConfirmModal } from './DeleteNoteConfirmModal';
+import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
+import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
@@ -19,8 +19,8 @@ export const TrialSessionWorkingCopy = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WorkingCopySessionList />
-          {showModal === 'DeleteNoteConfirmModal' && <DeleteNoteConfirmModal />}
-          {showModal === 'AddEditNoteModal' && <AddEditNoteModal />}
+          {showModal === 'DeleteCaseNoteConfirmModal' && <DeleteCaseNoteConfirmModal />}
+          {showModal === 'AddEditCaseNoteModal' && <AddEditCaseNoteModal />}
         </section>
       </>
     );

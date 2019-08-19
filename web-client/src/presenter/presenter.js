@@ -77,8 +77,8 @@ import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
-import { openAddEditNoteModalFromDetailSequence } from './sequences/openAddEditNoteModalFromDetailSequence';
-import { openAddEditNoteModalFromListSequence } from './sequences/openAddEditNoteModalFromListSequence';
+import { openAddEditCaseNoteModalFromDetailSequence } from './sequences/openAddEditCaseNoteModalFromDetailSequence';
+import { openAddEditCaseNoteModalFromListSequence } from './sequences/openAddEditCaseNoteModalFromListSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
@@ -93,7 +93,7 @@ import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseD
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
-import { openDeleteNoteConfirmModalSequence } from './sequences/openDeleteNoteConfirmModalSequence';
+import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
@@ -309,8 +309,8 @@ export const presenter = {
     loginWithTokenSequence,
     navigateToPathSequence,
     notFoundErrorSequence,
-    openAddEditNoteModalFromDetailSequence,
-    openAddEditNoteModalFromListSequence,
+    openAddEditCaseNoteModalFromDetailSequence,
+    openAddEditCaseNoteModalFromListSequence,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
     openCaseCaptionModalSequence,
@@ -325,7 +325,7 @@ export const presenter = {
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
-    openDeleteNoteConfirmModalSequence,
+    openDeleteCaseNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
