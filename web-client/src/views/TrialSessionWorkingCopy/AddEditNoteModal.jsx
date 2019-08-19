@@ -18,6 +18,7 @@ export const AddEditNoteModal = connect(
         cancelLabel="Cancel"
         className="add-edit-note-modal"
         confirmLabel="Save"
+        preventCancelOnBlur={true}
         title="Add/Edit Notes"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="updateCaseWorkingCopyNoteSequence"

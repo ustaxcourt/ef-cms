@@ -1,6 +1,7 @@
 import { AddEditNoteModal } from './AddEditNoteModal';
 import { DeleteNoteConfirmModal } from './DeleteNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
+import { SessionNotes } from './SessionNotes';
 import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
 import { WorkingCopySessionList } from './WorkingCopySessionList';
@@ -18,6 +19,7 @@ export const TrialSessionWorkingCopy = connect(
           <h2 className="heading-1">Session Working Copy</h2>
           <SuccessNotification />
           <ErrorNotification />
+          <SessionNotes />
           <WorkingCopySessionList />
           {showModal === 'DeleteNoteConfirmModal' && <DeleteNoteConfirmModal />}
           {showModal === 'AddEditNoteModal' && <AddEditNoteModal />}
