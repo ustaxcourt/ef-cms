@@ -1,4 +1,3 @@
-import { set } from 'lodash';
 import { state } from 'cerebral';
 
 /**
