@@ -46,7 +46,7 @@ export const printTrialCalendarAction = ({ get }) => {
         </h3>
       </div>
 
-      <div class="grid-container">
+      <div class="grid-container-main">
         <div class="panel">
           <div class="header">
             Trial Information
@@ -79,7 +79,7 @@ export const printTrialCalendarAction = ({ get }) => {
             </div>
           </div>
         </div>
-
+        <div></div>
         <div class="panel">
           <div class="header">
             Assignments
@@ -111,7 +111,7 @@ export const printTrialCalendarAction = ({ get }) => {
         <div class="header">
           Session Notes
         </div>
-        <div class="content">
+        <div class="content notes">
           <p>${formattedTrialSessionDetails.notes || ''}</p>
         </div>
       </div>
