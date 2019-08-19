@@ -1,7 +1,6 @@
 #!/bin/bash -e
 ENV=$1
 REGION="us-east-1"
-restApiId=$(aws apigateway get-rest-apis --region="${REGION}" --query "items[?name=='${ENV}-ef-cms-users'].id" --output text)
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}")
 USER_POOL_ID="${USER_POOL_ID%\"}"
@@ -30,6 +29,7 @@ petitionsclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken"
 
 for i in $(seq 1 20);
 do
+  echo "creating case ${i}"
   petitionFileId=$(uuidgen)
   stinFileId=$(uuidgen)
 
