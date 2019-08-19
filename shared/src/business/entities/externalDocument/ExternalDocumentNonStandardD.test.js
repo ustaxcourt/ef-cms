@@ -1,5 +1,4 @@
 const moment = require('moment');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 
 describe('ExternalDocumentNonStandardD', () => {
