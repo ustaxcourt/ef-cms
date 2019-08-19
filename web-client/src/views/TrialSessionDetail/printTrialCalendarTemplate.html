@@ -14,17 +14,19 @@
         padding-top: 10px;
         margin-bottom: 0px;
         font-size: 24px;
+        line-height: 15px;
       }
 
       h2 {
         margin-top: 0px;
+        /* padding-bottom: 15px; */
         font-size: 20px;
         font-weight: normal;
       }
 
       h3 {
         margin-top: 0px;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: normal;
       }
 
@@ -46,19 +48,36 @@
 
       th,
       td {
-        padding: 12px 8px;
         border-bottom: 1px solid #ccc;
         text-align: left;
+      }
+
+      td {
+        padding: 12px 8px;
+        line-height: 13px;
+      }
+
+      th {
+        padding: 8px 10px;
       }
 
       th {
         background-color: #f0f0f0;
       }
 
+      .valign-top {
+        vertical-align: top;
+      }
+
       .grid-container {
         display: grid;
         grid-gap: 10px;
         grid-template-columns: 50% 50%;
+      }
+
+      .grid-container-main {
+        display: grid;
+        grid-template-columns: 49% 2% 49%;
       }
 
       .mb-1 {
@@ -70,7 +89,11 @@
       }
 
       h4 {
-        margin-bottom: 5px;
+        margin-bottom: 0px;
+      }
+
+      p {
+        margin-top: 4px;
       }
 
       .court-header {
@@ -84,7 +107,7 @@
       }
 
       .header {
-        padding: 10px;
+        padding: 8px 10px;
         border-bottom: 1px solid #ccc;
         background: #f0f0f0;
         font-size: 10px;
@@ -100,8 +123,16 @@
         padding: 0 10px 10px 10px;
       }
 
+      .content.notes {
+        padding-top: 12px;
+      }
+
       .mb-4 {
         margin-bottom: 40px;
+      }
+
+      .pr-1 {
+        padding-right: 10px;
       }
 
       .us-tax-court-seal {

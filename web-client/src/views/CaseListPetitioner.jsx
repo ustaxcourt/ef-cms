@@ -13,7 +13,7 @@ export const CaseListPetitioner = connect(
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
-              <h2 className="margin-0">Your Cases</h2>
+              <h2 className="margin-0">My Cases</h2>
             </div>
             <div className="tablet:grid-col-6 mobile:grid-col-12 text-right">
               <a
@@ -27,7 +27,7 @@ export const CaseListPetitioner = connect(
           </div>
         </div>
         <div className="padding-top-205 show-on-mobile">
-          <h2>Your Cases</h2>
+          <h2>My Cases</h2>
         </div>
         <div className="margin-top-2">
           <table

@@ -1,4 +1,7 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { If } from '../../ustc-ui/If/If';
+import { Text } from '../../ustc-ui/Text/Text';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -11,20 +14,24 @@ export const WorkingCopySessionList = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
+    openAddEditNoteModalFromListSequence:
+      sequences.openAddEditNoteModalFromListSequence,
+    openDeleteNoteConfirmModalSequence:
+      sequences.openDeleteNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
-    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
+    openAddEditNoteModalFromListSequence,
+    openDeleteNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
-    trialSessionWorkingCopy,
     trialStatusOptions,
   }) => {
     return (
@@ -37,7 +44,10 @@ export const WorkingCopySessionList = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="padding-left-2px">
+              <th
+                aria-label="Docket Number"
+                className="padding-left-2px no-wrap"
+              >
                 <button
                   className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
@@ -59,8 +69,8 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </button>
               </th>
-              <th>Case Caption</th>
-              <th>
+              <th className="no-wrap">Case Caption</th>
+              <th className="no-wrap">
                 <button
                   className="usa-button usa-button--unstyled sortable-header-button"
                   onClick={() => {
@@ -82,61 +92,110 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </button>
               </th>
-              <th>Respondent Counsel</th>
-              <th colSpan="2">Trial Status</th>
+              <th className="no-wrap">Respondent Counsel</th>
+              <th className="no-wrap" colSpan="2">
+                Trial Status
+              </th>
             </tr>
           </thead>
-          {formattedCases.map((item, idx) => (
-            <tbody key={idx}>
-              <tr>
-                <td>
-                  <a href={`/case-detail/${item.docketNumber}`}>
-                    {item.docketNumberWithSuffix}
-                  </a>
-                </td>
-                <td>{item.caseName}</td>
-                <td>
-                  {item.practitioners.map((practitioner, idx) => (
-                    <div key={idx}>{practitioner.name}</div>
-                  ))}
-                </td>
-                <td>
-                  {item.respondents.map((respondent, idx) => (
-                    <div key={idx}>{respondent.name}</div>
-                  ))}
-                </td>
-                <td>
-                  <select
-                    aria-label="trial status"
-                    className="usa-select"
-                    id={`trialSessionWorkingCopy-${item.docketNumber}`}
-                    name={`caseMetadata.${item.docketNumber}.trialStatus`}
-                    value={
-                      (trialSessionWorkingCopy.caseMetadata[
-                        item.docketNumber
-                      ] &&
-                        trialSessionWorkingCopy.caseMetadata[item.docketNumber]
-                          .trialStatus) ||
-                      ''
-                    }
-                    onChange={e => {
-                      autoSaveTrialSessionWorkingCopySequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  >
-                    <option value="">-Trial Status-</option>
-                    {trialStatusOptions.map(({ key, value }) => (
-                      <option key={key} value={key}>
-                        {value}
-                      </option>
+          {formattedCases.map((item, idx) => {
+            return (
+              <tbody className="hoverable" key={idx}>
+                <tr className="vertical-align-middle-row">
+                  <td>
+                    <a href={`/case-detail/${item.docketNumber}`}>
+                      {item.docketNumberWithSuffix}
+                    </a>
+                  </td>
+                  <td>{item.caseCaptionNames}</td>
+                  <td>
+                    {item.practitioners.map((practitioner, idx) => (
+                      <div key={idx}>{practitioner.name}</div>
                     ))}
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          ))}
+                  </td>
+                  <td>
+                    {item.respondents.map((respondent, idx) => (
+                      <div key={idx}>{respondent.name}</div>
+                    ))}
+                  </td>
+                  <td className="minw-30">
+                    <BindedSelect
+                      ariaLabel="trial status"
+                      bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
+                      id={`trialSessionWorkingCopy-${item.docketNumber}`}
+                      onChange={() => {
+                        autoSaveTrialSessionWorkingCopySequence();
+                      }}
+                    >
+                      <option value="">-Trial Status-</option>
+                      {trialStatusOptions.map(({ key, value }) => (
+                        <option key={key} value={key}>
+                          {value}
+                        </option>
+                      ))}
+                    </BindedSelect>
+                  </td>
+                  <td className="no-wrap">
+                    <If
+                      not
+                      bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                    >
+                      <button
+                        className="usa-button usa-button--unstyled margin-top-1"
+                        onClick={() => {
+                          openAddEditNoteModalFromListSequence({
+                            docketNumber: item.docketNumber,
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon icon="plus-circle"></FontAwesomeIcon>
+                        Add Note
+                      </button>
+                    </If>
+                  </td>
+                </tr>
+                <If
+                  bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                >
+                  <tr className="notes-row">
+                    <td className="text-right font-body-2xs">
+                      <strong>Notes:</strong>
+                    </td>
+                    <td className="font-body-2xs" colSpan="3">
+                      <Text
+                        bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                      />
+                    </td>
+                    <td className="no-wrap text-align-right">
+                      <button
+                        className="usa-button usa-button--unstyled red-warning margin-right-105"
+                        onClick={() => {
+                          openDeleteNoteConfirmModalSequence({
+                            docketNumber: item.docketNumber,
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon icon="times-circle"></FontAwesomeIcon>
+                        Delete Note
+                      </button>
+                    </td>
+                    <td className="no-wrap text-align-right">
+                      <button
+                        className="usa-button usa-button--unstyled"
+                        onClick={() => {
+                          openAddEditNoteModalFromListSequence({
+                            docketNumber: item.docketNumber,
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon icon="edit"></FontAwesomeIcon>Edit Note
+                      </button>
+                    </td>
+                  </tr>
+                </If>
+              </tbody>
+            );
+          })}
         </table>
         {casesShownCount === 0 && (
           <p>Please select a trial status to show cases.</p>

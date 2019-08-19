@@ -17,6 +17,8 @@ export const caseDetailHelper = (get, applicationContext) => {
   const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
     userRole,
   );
+  const isJudge = 'judge' == userRole;
+  const isCalendaredCase = get(state.caseDetail.trialSessionId);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
@@ -103,6 +105,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
+    showNotes: isJudge && isCalendaredCase,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,

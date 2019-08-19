@@ -36,13 +36,17 @@ export const AllCases = connect(
                     {item.docketNumberWithSuffix}
                   </a>
                 </td>
-                <td>{item.caseCaption}</td>
+                <td>{item.caseCaptionNames}</td>
                 <td aria-hidden="true">
                   {item.practitioners.map((practitioner, idx) => (
                     <div key={idx}>{practitioner.name}</div>
                   ))}
                 </td>
-                <td>{item.respondent}</td>
+                <td>
+                  {item.respondents.map((respondent, idx) => (
+                    <div key={idx}>{respondent.name}</div>
+                  ))}
+                </td>
                 <td>{item.disposition}</td>
               </tr>
             </tbody>

@@ -20,7 +20,7 @@ export const EligibleCases = connect(
               <th>Docket</th>
               <th>Case Caption</th>
               <th>Petitioner Counsel</th>
-              <th>IRS Counsel</th>
+              <th>Respondent Counsel</th>
               <th>Case Type</th>
             </tr>
           </thead>

@@ -1,4 +1,4 @@
-const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 /**
  * takes an array of JPG images (each a bytearray) and combines
@@ -8,34 +8,24 @@ const { drawImage, PDFDocumentFactory, PDFDocumentWriter } = require('pdf-lib');
  * @returns {Uint8Array} bytearray of PDF
  */
 
-exports.generatePDFFromJPGs = imgData => {
-  const pdfDoc = PDFDocumentFactory.create();
-
-  const addImageToPage = img => {
-    const [imgRef, imgDim] = pdfDoc.embedJPG(img);
-    const page = pdfDoc
-      .createPage([imgDim.width, imgDim.height])
-      .addImageObject('imgObj', imgRef);
-
-    const pageContentStream = pdfDoc.createContentStream(
-      drawImage('imgObj', {
-        height: imgDim.height,
-        width: imgDim.width,
-        x: 0,
-        y: 0,
-      }),
-    );
-    page.addContentStreams(pdfDoc.register(pageContentStream));
-    pdfDoc.addPage(page);
+exports.generatePDFFromJPGs = async imgData => {
+  const pdfDoc = await PDFDocument.create();
+  const addImageToPage = async img => {
+    const imgRef = await pdfDoc.embedJpg(img);
+    const page = pdfDoc.addPage([imgRef.width, imgRef.height]);
+    page.drawImage(imgRef, {
+      height: imgRef.height,
+      width: imgRef.width,
+      x: 0,
+      y: 0,
+    });
   };
 
-  imgData.map(data => {
-    addImageToPage(data);
-  });
+  for (const image of imgData) {
+    await addImageToPage(image);
+  }
 
-  const pdfBytes = PDFDocumentWriter.saveToBytes(pdfDoc, {
-    useObjectStreams: false,
-  });
+  const pdfBytes = await pdfDoc.save();
 
   return pdfBytes;
 };
