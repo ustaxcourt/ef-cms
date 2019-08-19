@@ -1,5 +1,7 @@
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
+import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
+import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
@@ -22,7 +24,13 @@ export const TrialSessionWorkingCopy = connect(
           {showModal === 'DeleteCaseNoteConfirmModal' && (
             <DeleteCaseNoteConfirmModal />
           )}
+          {showModal === 'DeleteSessionNoteConfirmModal' && (
+            <DeleteSessionNoteConfirmModal />
+          )}
           {showModal === 'AddEditCaseNoteModal' && <AddEditCaseNoteModal />}
+          {showModal === 'AddEditSessionNoteModal' && (
+            <AddEditSessionNoteModal />
+          )}
         </section>
       </>
     );
