@@ -758,7 +758,7 @@ header.usa-header {
       margin-right: 60px;
 
       &.active {
-        a {
+        a, button {
           color: color($theme-color-base-darkest);
         }
       }
@@ -774,7 +774,7 @@ header.usa-header {
       }
     }
 
-    a {
+    a, button {
       padding: 0 0 6px 0;
       background: none;
       color: color($theme-color-primary);
@@ -805,7 +805,7 @@ nav.usa-nav {
 
   .mobile-account-menu-container {
     display: none;
-    a {
+    a, button {
       padding: 0px;
       background: none;
       color: color($theme-color-primary);
@@ -888,7 +888,9 @@ nav.usa-nav {
         li {
           border: none;
           &.usa-search {
-            button {
+            button.search-button {
+              padding-right: 1rem;
+              padding-left: 1rem;
               background: color($theme-color-base);
             }
 
@@ -897,7 +899,7 @@ nav.usa-nav {
             }
           }
         }
-        a {
+        a, button {
           padding: 0px;
           color: $color-white;
           font-family: $font-source-sans;
@@ -932,10 +934,10 @@ nav.usa-nav {
         }
       }
 
-      a {
+      a, button {
         color: $color-white;
       }
-      a:hover {
+      a, button:hover {
         text-decoration: underline;
       }
     }
