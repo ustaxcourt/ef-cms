@@ -1,5 +1,5 @@
 export default test => {
-  return it('Judge views dashboard', async () => {
+  return it('Judge views dashboard messages', async () => {
     await test.runSequence('gotoDashboardSequence', {
       baseRoute: 'dashboard',
     });
