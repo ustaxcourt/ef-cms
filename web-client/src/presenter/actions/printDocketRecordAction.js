@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecordTemplate.html';
+import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecordTemplate.htm';
 
 /**
  * Prints the docket record
@@ -204,6 +204,13 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
         if (document.additionalInfo2) {
           recordDescription += ' ' + document.additionalInfo2;
         }
+      }
+
+      if (documentDateServed) {
+        const arrDateServed = documentDateServed.split(' ');
+        documentDateServed = `${
+          arrDateServed[0]
+        } <span class="no-wrap">${arrDateServed.slice(1).join(' ')}</span>`;
       }
 
       docketRecordContent += `
