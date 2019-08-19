@@ -16,7 +16,7 @@ import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import judgeLogIn from './journey/judgeLogIn';
 import judgeSignsOut from './journey/judgeSignsOut';
 import judgeViewsCaseDetail from './journey/judgeViewsCaseDetail';
-import judgeViewsDashboard from './journey/judgeViewsDashboard';
+import judgeViewsDashboardMessages from './journey/judgeViewsDashboardMessages';
 import petitionsClerkCreatesMessageToJudge from './journey/petitionsClerkCreatesMessageToJudge';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
@@ -110,7 +110,7 @@ describe('Judge messages journey', () => {
   docketClerkSignsOut(test);
 
   judgeLogIn(test);
-  judgeViewsDashboard(test);
+  judgeViewsDashboardMessages(test);
   judgeViewsCaseDetail(test);
   judgeSignsOut(test);
 });
