@@ -20,6 +20,7 @@ import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
+import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
@@ -37,6 +38,8 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
+import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
@@ -89,6 +92,7 @@ export const state = {
   form: {},
   formattedCaseDetail,
   formattedCases,
+  formattedDashboardTrialSessions,
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
@@ -140,6 +144,8 @@ export const state = {
   submitting: false,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
+  trialSessionHeaderHelper,
+  trialSessionWorkingCopyHelper,
   usaBanner: {
     showDetails: false,
   },

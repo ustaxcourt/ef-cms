@@ -1,8 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -33,43 +31,7 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <h1>Add Docket Entry</h1>
         <div className="blue-container docket-entry-form">
-          <div
-            className={`usa-form-group ${
-              validationErrors.primaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            }`}
-          >
-            <label
-              className={
-                'usa-label ustc-upload ' +
-                (addDocketEntryHelper.showPrimaryDocumentValid
-                  ? 'validated'
-                  : '')
-              }
-              htmlFor="primary-document"
-              id="primary-document-label"
-            >
-              Add Document{' '}
-              <span className="success-message">
-                <FontAwesomeIcon icon="check-circle" size="sm" />
-              </span>
-            </label>
-            <StateDrivenFileInput
-              aria-describedby="primary-document-label"
-              id="primary-document"
-              name="primaryDocumentFile"
-              updateFormValueSequence="updateDocketEntryFormValueSequence"
-              validationSequence="validateDocketEntrySequence"
-            />
-            <Text
-              bind="validationErrors.primaryDocumentFile"
-              className="usa-error-message"
-            />
-          </div>
-
           <div
             className={`usa-form-group ${
               validationErrors.lodged ? 'usa-form-group--error' : ''
@@ -217,6 +179,9 @@ export const PrimaryDocumentForm = connect(
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               placeholder="- Select -"
+              value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
+                ({ value }) => value === form.eventCode,
+              )}
               onChange={(inputValue, { action, name }) => {
                 switch (action) {
                   case 'select-option':
@@ -265,6 +230,10 @@ export const PrimaryDocumentForm = connect(
                 id="secondary-document-type-label"
               >
                 Which Document Is This Motion for Leave For?
+                <span className="usa-hint">
+                  You can upload the associated document by creating a new
+                  docket entry for it.
+                </span>
               </label>
               <Select
                 aria-describedby="secondary-document-type-label"
@@ -277,6 +246,11 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
                 placeholder="- Select -"
+                value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
+                  ({ value }) =>
+                    form.secondaryDocument &&
+                    value === form.secondaryDocument.eventCode,
+                )}
                 onChange={(inputValue, { action, name }) => {
                   switch (action) {
                     case 'select-option':
@@ -324,13 +298,15 @@ export const PrimaryDocumentForm = connect(
             />
           )}
 
+          {form.secondaryDocument && <SecondaryDocumentForm />}
+
           <div className="usa-form-group">
             <label
               className="usa-label"
               htmlFor="additional-info"
               id="additional-info-label"
             >
-              Additional Info 1
+              Additional Info 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info-label"
@@ -382,7 +358,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info2"
               id="additional-info2-label"
             >
-              Additional Info 2
+              Additional Info 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info2-label"
@@ -421,42 +397,6 @@ export const PrimaryDocumentForm = connect(
               <legend className="usa-legend">
                 Who Is Filing This Document?
               </legend>
-              {addDocketEntryHelper.showPractitionerParty &&
-                addDocketEntryHelper.practitionerNames.map(
-                  (practitionerName, idx) => {
-                    return (
-                      <div className="usa-checkbox" key={idx}>
-                        <input
-                          checked={
-                            (form.practitioner[idx] &&
-                              form.practitioner[idx].partyPractitioner) ||
-                            false
-                          }
-                          className="usa-checkbox__input"
-                          id={`party-practitioner-${idx}`}
-                          name={`practitioner.${idx}`}
-                          type="checkbox"
-                          onChange={e => {
-                            updateDocketEntryFormValueSequence({
-                              key: e.target.name,
-                              value: {
-                                name: practitionerName,
-                                partyPractitioner: e.target.checked,
-                              },
-                            });
-                            validateDocketEntrySequence();
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor={`party-practitioner-${idx}`}
-                        >
-                          Counsel {practitionerName}
-                        </label>
-                      </div>
-                    );
-                  },
-                )}
               <div className="usa-checkbox">
                 <input
                   checked={form.partyPrimary || false}
@@ -500,30 +440,28 @@ export const PrimaryDocumentForm = connect(
                   </label>
                 </div>
               )}
-              {addDocketEntryHelper.showRespondentParty && (
-                <div className="usa-checkbox">
-                  <input
-                    checked={form.partyRespondent || false}
-                    className="usa-checkbox__input"
-                    id="party-respondent"
-                    name="partyRespondent"
-                    type="checkbox"
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                      validateDocketEntrySequence();
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="party-respondent"
-                  >
-                    Respondent
-                  </label>
-                </div>
-              )}
+              <div className="usa-checkbox">
+                <input
+                  checked={form.partyRespondent || false}
+                  className="usa-checkbox__input"
+                  id="party-respondent"
+                  name="partyRespondent"
+                  type="checkbox"
+                  onChange={e => {
+                    updateDocketEntryFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateDocketEntrySequence();
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="party-respondent"
+                >
+                  Respondent
+                </label>
+              </div>
               <Text
                 bind="addDocketEntryHelper.partyValidationError"
                 className="usa-error-message"
@@ -574,8 +512,6 @@ export const PrimaryDocumentForm = connect(
             </div>
           )}
         </div>
-
-        {form.secondaryDocument && <SecondaryDocumentForm />}
       </React.Fragment>
     );
   },

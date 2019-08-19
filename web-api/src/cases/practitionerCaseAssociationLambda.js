@@ -10,8 +10,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 exports.handler = event =>
   handle(event, async () => {
-    const {userId} = event.pathParameters || {};
-    const {caseId} = event.pathParameters || {};
+    const { caseId, userId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
@@ -20,6 +19,7 @@ exports.handler = event =>
         .submitCaseAssociationRequestInteractor({
           applicationContext,
           caseId,
+          ...JSON.parse(event.body),
           userId,
         });
       applicationContext.logger.info('User', user);

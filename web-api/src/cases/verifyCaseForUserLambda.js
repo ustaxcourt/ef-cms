@@ -10,16 +10,17 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 exports.handler = event =>
   handle(event, async () => {
-    const {userId} = event.pathParameters || {};
-    const {caseId} = event.pathParameters || {};
+    const { caseId, userId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().verifyCaseForUserInteractor({
-        applicationContext,
-        caseId,
-        userId,
-      });
+      const results = await applicationContext
+        .getUseCases()
+        .verifyCaseForUserInteractor({
+          applicationContext,
+          caseId,
+          userId,
+        });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
       return results;

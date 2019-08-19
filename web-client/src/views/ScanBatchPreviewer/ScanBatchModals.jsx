@@ -10,7 +10,7 @@ export const EmptyHopperModal = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Scan"
-        title="The Hopper is Empty"
+        title="The hopper is empty"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="startScanSequence"
       >
@@ -37,8 +37,9 @@ export const ConfirmRescanBatchModal = connect(
 export const DeleteBatchModal = connect(
   {
     batchIndex: state.batchIndexToDelete,
+    pageCount: state.batchToDeletePageCount,
   },
-  ({ batchIndex }) => {
+  ({ batchIndex, pageCount }) => {
     return (
       <ConfirmModal
         cancelLabel="No, cancel"
@@ -47,7 +48,40 @@ export const DeleteBatchModal = connect(
         onCancelSequence="clearModalSequence"
         onConfirmSequence="removeBatchSequence"
       >
-        <p>Are you sure you want to delete Batch {batchIndex + 1}?</p>
+        This will delete {pageCount} {pageCount === 1 ? 'page' : 'pages'} from
+        your document.
+      </ConfirmModal>
+    );
+  },
+);
+export const DeletePDFModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        cancelLabel="No, cancel"
+        confirmLabel="Yes, delete"
+        title="Are you sure you want to delete this PDF?"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="removeScannedPdfSequence"
+      >
+        This action cannot be undone.
+      </ConfirmModal>
+    );
+  },
+);
+export const ScanErrorModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        noCancel
+        confirmLabel="OK"
+        title="An error occured while scanning"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="clearModalSequence"
+      >
+        Please try again or contact your IT Administrator.
       </ConfirmModal>
     );
   },
@@ -56,13 +90,14 @@ export const UnfinishedScansModal = connect(
   {},
   () => (
     <ConfirmModal
-      cancelLabel="Cancel"
+      noCancel
       confirmLabel="OK"
-      title="You Have Unfinished Scans"
+      title="You have unfinished scans"
       onCancelSequence="clearModalSequence"
       onConfirmSequence="clearModalSequence"
     >
-      If you continue, your unfinished scans will be lost.
+      Please ensure your scans are completed and all PDFs have been created
+      before continuing.
     </ConfirmModal>
   ),
 );

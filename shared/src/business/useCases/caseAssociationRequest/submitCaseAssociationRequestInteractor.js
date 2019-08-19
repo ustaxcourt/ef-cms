@@ -1,15 +1,28 @@
-const { Case } = require('../../entities/cases/Case');
+const {
+  associatePractitionerToCase,
+} = require('../../useCaseHelper/caseAssociation/associatePractitionerToCase');
+const {
+  associateRespondentToCase,
+} = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
+ * submitCaseAssociationRequestInteractor
  *
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the case id
+ * @param {string} providers.representingPrimary true if the user is representing
+ * the primary contact on the case, false otherwise
+ * @param {string} providers.representingSecondary true if the user is representing
+ * the secondary contact on the case, false otherwise
+ * @returns {Promise<*>} the promise of the case assocation request
  */
 exports.submitCaseAssociationRequestInteractor = async ({
   applicationContext,
   caseId,
+  representingPrimary,
+  representingSecondary,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -20,45 +33,19 @@ exports.submitCaseAssociationRequestInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
+  if (isPractitioner) {
+    return await associatePractitionerToCase({
       applicationContext,
       caseId,
-      userId: user.userId,
+      representingPrimary,
+      representingSecondary,
+      user,
     });
-
-  if (!isAssociated) {
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
+  } else if (isRespondent) {
+    return await associateRespondentToCase({
       applicationContext,
-      caseId: caseId,
-      userId: user.userId,
+      caseId,
+      user,
     });
-
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
-        applicationContext,
-        caseId,
-      });
-
-    const caseEntity = new Case(caseToUpdate);
-
-    if (isPractitioner) {
-      caseEntity.attachPractitioner({
-        user,
-      });
-    } else if (isRespondent) {
-      caseEntity.attachRespondent({
-        user,
-      });
-    }
-
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-    return caseEntity.toRawObject();
   }
 };

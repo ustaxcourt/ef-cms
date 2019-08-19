@@ -3,15 +3,16 @@ const {
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { TrialSession } = require('../../entities/TrialSession');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * set trial session calendar
  *
- * @param trialSessionId
- * @param applicationContext
- * @returns {*|Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.trialSessionId the id of the trial session to set the calendar
+ * @returns {Promise} the promise of the updateTrialSession call
  */
 exports.setTrialSessionCalendarInteractor = async ({
   applicationContext,

@@ -144,16 +144,9 @@ provider:
 
 package:
   exclude:
-    - storage/**
-    - coverage/**
-    - terraform/**
-    - cognito/**
-    - node_modules/**
-    - .cache/**
-    - .dynamodb/**
-    - .nyc_output/**
-    - dist/**
-    - runtimes/**
+    - ./**
+  include:
+    - web-api/src/sectionsHandlers.js
 
   excludeDevDependencies: true
 
@@ -193,7 +186,7 @@ resources:
 
 functions:
   getInboxMessagesForSection:
-    handler: src/sectionsHandlers.getInboxMessagesForSectionLambda
+    handler: web-api/src/sectionsHandlers.getInboxMessagesForSectionLambda
     events:
       - http:
           path: /{section}/messages/inbox
@@ -204,7 +197,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getSentMessagesForSection:
-    handler: src/sectionsHandlers.getSentMessagesForSectionLambda
+    handler: web-api/src/sectionsHandlers.getSentMessagesForSectionLambda
     events:
       - http:
           path: /{section}/messages/sent
@@ -215,7 +208,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getDocumentQCBatchedForSection:
-    handler: src/sectionsHandlers.getDocumentQCBatchedForSectionLambda
+    handler: web-api/src/sectionsHandlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/batched
@@ -227,7 +220,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForSection:
-    handler: src/sectionsHandlers.getDocumentQCServedForSectionLambda
+    handler: web-api/src/sectionsHandlers.getDocumentQCServedForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/served
@@ -238,7 +231,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getUsersInSection:
-    handler: src/sectionsHandlers.getUsersInSectionLambda
+    handler: web-api/src/sectionsHandlers.getUsersInSectionLambda
     events:
       - http:
           path: /{section}/users
@@ -250,7 +243,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForSection:
-    handler: src/sectionsHandlers.getDocumentQCInboxForSectionLambda
+    handler: web-api/src/sectionsHandlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/inbox

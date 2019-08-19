@@ -7,17 +7,15 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
  *
- * @param rawProps
+ * @param {object} rawProps the raw document data
  * @constructor
  */
 function ExternalDocumentNonStandardD(rawProps) {
-  Object.assign(this, {
-    category: rawProps.category,
-    documentTitle: rawProps.documentTitle,
-    documentType: rawProps.documentType,
-    previousDocument: rawProps.previousDocument,
-    serviceDate: rawProps.serviceDate,
-  });
+  this.category = rawProps.category;
+  this.documentTitle = rawProps.documentTitle;
+  this.documentType = rawProps.documentType;
+  this.previousDocument = rawProps.previousDocument;
+  this.serviceDate = rawProps.serviceDate;
 }
 
 ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {

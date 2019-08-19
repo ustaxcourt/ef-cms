@@ -1,4 +1,4 @@
-import { find, orderBy } from 'lodash';
+import { filter, find, identity, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -18,11 +18,38 @@ export const sessionSorter = sessionList => {
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
-  const sessions = orderBy(get(state.trialSessions), 'startDate');
+  const user = get(state.user);
+  const orderedSessions = orderBy(get(state.trialSessions), 'startDate');
+
+  // filter trial sessions
+  const trialSessionFilters = pickBy(
+    get(state.screenMetadata.trialSessionFilters),
+    identity,
+  );
+
+  const judgeFilter = get(
+    state.screenMetadata.trialSessionFilters.judge.userId,
+  );
+  if (!judgeFilter) {
+    delete trialSessionFilters.judge;
+  }
+
+  const sessions = filter(orderedSessions, trialSessionFilters);
 
   const formattedSessions = [];
   sessions.forEach(session => {
+    if (
+      session.judge &&
+      user.role === 'judge' &&
+      session.judge.userId === user.userId
+    ) {
+      session.userIsAssignedToSession = true;
+    } else {
+      session.userIsAssignedToSession = false;
+    }
+
     const formattedSession = formatSession(session, applicationContext);
+
     let match = find(formattedSessions, {
       dateFormatted: formattedSession.startOfWeek,
     });

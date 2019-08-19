@@ -5,19 +5,25 @@ const { createSectionInboxRecord } = require('./createSectionInboxRecord');
 const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
 const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { createUserOutboxRecord } = require('./createUserOutboxRecord');
-const { put } = require('../../dynamodbClientService');
+const { get, put } = require('../../dynamodbClientService');
 
 /**
  * createWorkItem
  *
- * @param workItemId
- * @param message
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.workItem the work item data
  */
 exports.createWorkItem = async ({ applicationContext, workItem }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  const user = await get({
+    Key: {
+      pk: authorizedUser.userId,
+      sk: authorizedUser.userId,
+    },
+    applicationContext,
+  });
 
   await put({
     Item: {

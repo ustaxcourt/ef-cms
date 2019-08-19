@@ -11,10 +11,11 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  * getWorkItem
  *
- * @param userId
- * @param workItemId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.assigneeId the id of the user to assign the work item to
+ * @param {string} providers.assigneeName the name of the user to assign the work item to
+ * @param {string} providers.workItemId the id of the work item to assign
  */
 exports.assignWorkItemsInteractor = async ({
   applicationContext,
@@ -22,10 +23,14 @@ exports.assignWorkItemsInteractor = async ({
   assigneeName,
   workItemId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, WORKITEM)) {
+  const authorizedUser = applicationContext.getCurrentUser();
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const fullWorkItem = await applicationContext
     .getPersistenceGateway()
@@ -58,10 +63,10 @@ exports.assignWorkItemsInteractor = async ({
     .assignToUser({
       assigneeId,
       assigneeName,
-      role: user.role,
+      section: user.section,
       sentBy: user.name,
+      sentBySection: user.section,
       sentByUserId: user.userId,
-      sentByUserRole: user.role,
     })
     .addMessage(newMessage);
 

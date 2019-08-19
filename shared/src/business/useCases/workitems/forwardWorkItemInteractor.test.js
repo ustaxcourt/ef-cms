@@ -1,5 +1,6 @@
 const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('forwardWorkItemInteractor', () => {
   let applicationContext;
@@ -21,10 +22,10 @@ describe('forwardWorkItemInteractor', () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
-        name: 'Tax Payer',
+        name: 'Petitionsclerk',
         role: 'petitionsclerk',
         section: 'petitions',
-        userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
       }),
       getPersistenceGateway: () => ({
         deleteWorkItemFromInbox: () => null,
@@ -118,14 +119,7 @@ describe('forwardWorkItemInteractor', () => {
             },
           ],
         }),
-        getUserById: () => {
-          return {
-            name: 'Tax Docketclerk',
-            role: 'docketclerk',
-            section: 'docket',
-            userId: 'e54ba5a9-b37b-479d-9201-067ec6e335bb',
-          };
-        },
+        getUserById: ({ userId }) => MOCK_USERS[userId],
         getWorkItemById: async () => mockWorkItem,
         putWorkItemInOutbox: () => null,
         saveWorkItemForPaper: () => null,
@@ -134,13 +128,13 @@ describe('forwardWorkItemInteractor', () => {
     };
     const workItem = await forwardWorkItemInteractor({
       applicationContext,
-      assigneeId: 'docketclerk',
+      assigneeId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       message: 'success',
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     expect(workItem).toMatchObject({
-      assigneeId: 'e54ba5a9-b37b-479d-9201-067ec6e335bb',
-      assigneeName: 'Tax Docketclerk',
+      assigneeId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+      assigneeName: 'Docketclerk',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: undefined,
       caseTitle: undefined,
@@ -158,17 +152,17 @@ describe('forwardWorkItemInteractor', () => {
       isRead: undefined,
       messages: [
         {
-          from: 'Tax Payer',
-          fromUserId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+          from: 'Petitionsclerk',
+          fromUserId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
           message: 'success',
-          to: 'Tax Docketclerk',
-          toUserId: 'e54ba5a9-b37b-479d-9201-067ec6e335bb',
+          to: 'Docketclerk',
+          toUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
       section: 'docket',
-      sentBy: 'Tax Payer',
+      sentBy: 'Petitionsclerk',
       sentBySection: 'petitions',
-      sentByUserId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+      sentByUserId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
@@ -179,12 +173,10 @@ describe('forwardWorkItemInteractor', () => {
       getCurrentUser: () => ({
         name: 'Tax Payer',
         role: 'petitioner',
-        userId: 'taxpayer',
+        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       }),
       getPersistenceGateway: () => ({
-        getUserById: () => {
-          return { userId: 'docketclerk' };
-        },
+        getUserById: ({ userId }) => MOCK_USERS[userId],
         getWorkItemById: async () => mockWorkItem,
       }),
     };
@@ -192,7 +184,7 @@ describe('forwardWorkItemInteractor', () => {
     try {
       await forwardWorkItemInteractor({
         applicationContext,
-        assigneeId: 'docketclerk',
+        assigneeId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         message: 'success',
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });

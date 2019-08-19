@@ -13,22 +13,28 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
- * @param documentMetadata
- * @param documentIds
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Array<string>} providers.documentIds the document ids for the primary, supporting,
+ * secondary, and secondary supporting documents
+ * @param {object} providers.documentMetadata the metadata for all the documents
+ * @returns {object} the updated case after the documents have been added
  */
 exports.fileExternalDocumentInteractor = async ({
   applicationContext,
   documentIds,
   documentMetadata,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -145,10 +151,10 @@ exports.fileExternalDocumentInteractor = async ({
         workItem.assignToUser({
           assigneeId: user.userId,
           assigneeName: user.name,
-          role: user.role,
+          section: user.section,
           sentBy: user.name,
+          sentBySection: user.section,
           sentByUserId: user.userId,
-          sentByUserRole: user.role,
         });
       }
 

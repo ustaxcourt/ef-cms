@@ -14,57 +14,60 @@ Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
+Document.validationName = 'Document';
+
 /**
  * constructor
- * @param rawDocument
+ *
+ * @param {object} rawDocument the raw document data
  * @constructor
  */
 function Document(rawDocument) {
-  Object.assign(this, {
-    attachments: rawDocument.attachments,
-    caseId: rawDocument.caseId,
-    category: rawDocument.category,
-    certificateOfService: rawDocument.certificateOfService,
-    certificateOfServiceDate: rawDocument.certificateOfServiceDate,
-    createdAt: rawDocument.createdAt || new Date().toISOString(),
-    docketNumber: rawDocument.docketNumber,
-    documentId: rawDocument.documentId,
-    documentTitle: rawDocument.documentTitle,
-    documentType: rawDocument.documentType,
-    eventCode: rawDocument.eventCode,
-    exhibits: rawDocument.exhibits,
-    filedBy: rawDocument.filedBy,
-    hasSupportingDocuments: rawDocument.hasSupportingDocuments,
-    isPaper: rawDocument.isPaper,
-    lodged: rawDocument.lodged,
-    objections: rawDocument.objections,
-    partyPrimary: rawDocument.partyPrimary,
-    partyRespondent: rawDocument.partyRespondent,
-    partySecondary: rawDocument.partySecondary,
-    practitioner: rawDocument.practitioner,
-    previousDocument: rawDocument.previousDocument,
-    processingStatus: rawDocument.processingStatus,
-    receivedAt: rawDocument.receivedAt || new Date().toISOString(),
-    relationship: rawDocument.relationship,
-    scenario: rawDocument.scenario,
-    servedAt: rawDocument.servedAt,
-    servedParties: rawDocument.servedParties,
-    serviceDate: rawDocument.serviceDate,
-    signedAt: rawDocument.signedAt,
-    signedByUserId: rawDocument.signedByUserId,
-    status: rawDocument.status,
-    supportingDocument: rawDocument.supportingDocument,
-    userId: rawDocument.userId,
-    workItems: rawDocument.workItems,
-  });
+  this.additionalInfo = rawDocument.additionalInfo;
+  this.additionalInfo2 = rawDocument.additionalInfo2;
+  this.addToCoversheet = rawDocument.addToCoversheet;
+  this.attachments = rawDocument.attachments;
+  this.caseId = rawDocument.caseId;
+  this.category = rawDocument.category;
+  this.certificateOfService = rawDocument.certificateOfService;
+  this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
+  this.createdAt = rawDocument.createdAt || new Date().toISOString();
+  this.docketNumber = rawDocument.docketNumber;
+  this.documentId = rawDocument.documentId;
+  this.documentTitle = rawDocument.documentTitle;
+  this.documentType = rawDocument.documentType;
+  this.isFileAttached = rawDocument.isFileAttached;
+  this.eventCode = rawDocument.eventCode;
+  this.exhibits = rawDocument.exhibits;
+  this.filedBy = rawDocument.filedBy;
+  this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
+  this.isPaper = rawDocument.isPaper;
+  this.lodged = rawDocument.lodged;
+  this.objections = rawDocument.objections;
+  this.partyPrimary = rawDocument.partyPrimary;
+  this.partyRespondent = rawDocument.partyRespondent;
+  this.partySecondary = rawDocument.partySecondary;
+  this.practitioner = rawDocument.practitioner;
+  this.previousDocument = rawDocument.previousDocument;
+  this.processingStatus = rawDocument.processingStatus;
+  this.receivedAt = rawDocument.receivedAt || new Date().toISOString();
+  this.relationship = rawDocument.relationship;
+  this.scenario = rawDocument.scenario;
+  this.servedAt = rawDocument.servedAt;
+  this.servedParties = rawDocument.servedParties;
+  this.serviceDate = rawDocument.serviceDate;
+  this.signedAt = rawDocument.signedAt;
+  this.signedByUserId = rawDocument.signedByUserId;
+  this.status = rawDocument.status;
+  this.supportingDocument = rawDocument.supportingDocument;
+  this.userId = rawDocument.userId;
+  this.workItems = rawDocument.workItems;
 
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem),
   );
 }
-
-Document.name = 'Document';
 
 const practitionerAssociationDocumentTypes = [
   'Entry of Appearance',
@@ -73,6 +76,7 @@ const practitionerAssociationDocumentTypes = [
 
 /**
  * documentTypes
+ *
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
  */
 Document.INITIAL_DOCUMENT_TYPES = {
@@ -127,7 +131,7 @@ Document.getDocumentTypes = () => {
 
 /**
  *
- * @returns {boolean}
+ * @returns {boolean} true if the document is a petition document type, false otherwise
  */
 Document.prototype.isPetitionDocument = function() {
   return Document.PETITION_DOCUMENT_TYPES.includes(this.documentType);
@@ -182,7 +186,7 @@ joiValidationDecorator(
 
 /**
  *
- * @param workItem
+ * @param {WorkItem} workItem the work item to add to the document
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
@@ -200,7 +204,7 @@ Document.prototype.setAsServed = function(servedParties = null) {
  * generates the filedBy string from parties selected for the document
  * and contact info from the case detail
  *
- * @param caseDetail
+ * @param {object} caseDetail the case detail
  */
 Document.prototype.generateFiledBy = function(caseDetail) {
   if (!this.filedBy) {
@@ -244,7 +248,7 @@ Document.prototype.generateFiledBy = function(caseDetail) {
 /**
  * attaches a signedAt date to the document
  *
- * @param signByUserId
+ * @param {string} signByUserId the user id of the user who signed the document
  *
  */
 Document.prototype.setSigned = function(signByUserId) {

@@ -1,6 +1,18 @@
 const {
+  createSectionInboxRecord,
+} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
+const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
+const {
+  deleteSectionOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteUserOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
+const {
+  deleteWorkItemFromInbox,
+} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 const {
   InvalidEntityError,
   NotFoundError,
@@ -13,35 +25,28 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 
-const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
-const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-const {
-  deleteWorkItemFromInbox,
-} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
 /**
  *
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to recall
+ * @returns {object} the updated case after it has been recalled
  */
 exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, UPDATE_CASE)) {
     throw new UnauthorizedError(
       'Unauthorized for recall from IRS Holding Queue',
     );
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()

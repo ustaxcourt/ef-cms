@@ -51,6 +51,7 @@ exports.getScannerInterface = () => {
                 'dwtcontrolContainer',
               );
               if (!DWObject) return;
+
               clearInterval(interval);
               resolve(dynanScriptClass);
             }, 100);
@@ -65,6 +66,7 @@ exports.getScannerInterface = () => {
 
         // Get the scanner resources URI based on applicationContext
         const scannerResourceUri = applicationContext.getScannerResourceUri();
+
         initiateScript.src = `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`;
         configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
 
@@ -73,6 +75,7 @@ exports.getScannerInterface = () => {
         document.getElementsByTagName('head')[0].appendChild(configScript);
       });
     }
+
     return dynamsoftLoader;
   };
 
@@ -151,10 +154,29 @@ exports.getScannerInterface = () => {
           });
       };
 
+      // called when ALL pages are finished
       DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
-      DWObject.IfDisableSourceAfterAcquire = true;
+
       DWObject.OpenSource();
-      DWObject.AcquireImage();
+      DWObject.IfDisableSourceAfterAcquire = true;
+      DWObject.IfShowUI = false;
+      DWObject.IfShowIndicator = false;
+      DWObject.IfShowProgressBar = false;
+      DWObject.Resolution = 300;
+      DWObject.IfFeederEnabled = true;
+      DWObject.IfDuplexEnabled = false;
+      DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
+      DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
+
+      if (!DWObject.IfFeederLoaded) {
+        DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+        return reject(new Error('no images in buffer'));
+      }
+
+      DWObject.AcquireImage(null, null, e => {
+        DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+        return reject(e);
+      });
     });
   };
 

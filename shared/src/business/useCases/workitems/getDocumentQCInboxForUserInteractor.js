@@ -7,19 +7,24 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getDocumentQCInboxForUserInteractor
  *
- * @param section
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.userId the user to get the document qc
+ * @returns {object} the work items in the user document inbox
  */
 exports.getDocumentQCInboxForUserInteractor = async ({
   applicationContext,
   userId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const workItems = await applicationContext
     .getPersistenceGateway()

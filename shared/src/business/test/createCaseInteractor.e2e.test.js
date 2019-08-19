@@ -100,7 +100,7 @@ describe('createCase integration test', () => {
               isInitializeCase: true,
               messages: [
                 {
-                  from: 'Rick Petitioner',
+                  from: 'Alex Petitionsclerk',
                   fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
                   message:
                     'Petition filed by Rick Petitioner is ready for review.',
@@ -163,7 +163,7 @@ describe('createCase integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'Rick Petitioner',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Rick Petitioner is ready for review.',
           },

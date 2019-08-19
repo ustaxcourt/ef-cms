@@ -11,6 +11,7 @@ describe('setPdfPreviewUrlAction', () => {
       props: { pdfUrl: '123' },
       state: {},
     });
+
     expect(result.state.pdfPreviewUrl).toEqual('123');
   });
 });

@@ -87,20 +87,3 @@ exports.CHAMBERS_SECTIONS = sortBy([
   exports.VASQUEZS_CHAMBERS_SECTION,
   exports.WELLS_CHAMBERS_SECTION,
 ]);
-
-/**
- *
- * @param role
- * @returns {string}
- */
-exports.getSectionForRole = role => {
-  if (role === 'docketclerk') {
-    return exports.DOCKET_SECTION;
-  } else if (role === 'seniorattorney') {
-    return exports.SENIOR_ATTORNEY_SECTION;
-  } else if (role === 'petitionsclerk') {
-    return exports.PETITIONS_SECTION;
-  } else if (role === 'irsBatchSystem') {
-    return exports.IRS_BATCH_SYSTEM_SECTION;
-  }
-};

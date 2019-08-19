@@ -53,13 +53,14 @@ const addPetitionDocumentWithWorkItemToCase = (
 
 /**
  *
- * @param petitionMetadata
- * @param petitionFileId
- * @param ownershipDisclosureFileId
- * @param requestForPlaceOfTrialFileId
- * @param stinFileId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
+ * @param {string} providers.petitionFileId the id of the petition file
+ * @param {string} providers.petitionMetadata the petition metadata
+ * @param {string} providers.requestForPlaceOfTrialFileId the id of the request for place of trial file
+ * @param {string} providers.stinFileId the id of the stin file
+ * @returns {object} the created case
  */
 exports.createCaseFromPaperInteractor = async ({
   applicationContext,
@@ -69,10 +70,15 @@ exports.createCaseFromPaperInteractor = async ({
   requestForPlaceOfTrialFileId,
   stinFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, START_PAPER_CASE)) {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const { CaseInternal } = applicationContext.getEntityConstructors();
   const petitionEntity = new CaseInternal({

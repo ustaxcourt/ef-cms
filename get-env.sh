@@ -5,9 +5,9 @@ BRANCH=$1
 if  [[ $BRANCH == 'develop' ]] ; then 
   echo 'dev'
 elif [[ $BRANCH == 'staging' ]] ; then
- echo 'stg'
+  echo 'stg'
 elif [[ $BRANCH == 'master' ]] ; then
- echo 'prod'
+  echo 'prod'
 else
   exit 1;
 fi
