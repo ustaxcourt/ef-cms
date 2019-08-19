@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case'; // TODO clean this up
 import {
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
@@ -144,6 +143,7 @@ export const formatWorkItem = (
 };
 
 export const filterWorkItems = ({
+  applicationContext,
   user,
   workQueueIsInternal,
   workQueueToDisplay,
@@ -151,6 +151,7 @@ export const filterWorkItems = ({
   const { box, queue } = workQueueToDisplay;
   const docQCUserSection =
     user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
+  const { Case } = applicationContext.getEntityConstructors();
 
   const filters = {
     documentQc: {
@@ -283,6 +284,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   let workQueue = workItems
     .filter(
       filterWorkItems({
+        applicationContext,
         user,
         workQueueIsInternal: isInternal,
         workQueueToDisplay,
