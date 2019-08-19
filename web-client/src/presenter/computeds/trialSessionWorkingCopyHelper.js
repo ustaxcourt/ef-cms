@@ -21,6 +21,5 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   return {
     formattedSessions,
-    title: trialSession.title || 'Birmingham, Alabama',
   };
 };
