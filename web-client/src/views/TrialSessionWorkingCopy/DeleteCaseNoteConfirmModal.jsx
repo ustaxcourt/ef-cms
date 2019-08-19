@@ -1,7 +1,7 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import React from 'react';
 
-export const DeleteNoteConfirmModal = () => (
+export const DeleteCaseNoteConfirmModal = () => (
   <ConfirmModal
     noCloseBtn
     cancelLabel="No, cancel"

@@ -6,7 +6,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classnames from 'classnames';
 
-export const AddEditNoteModal = connect(
+export const AddEditCaseNoteModal = connect(
   {
     modal: state.modal,
     validateCaseNoteSequence: sequences.validateCaseNoteSequence,

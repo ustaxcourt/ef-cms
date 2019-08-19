@@ -14,10 +14,10 @@ export const WorkingCopySessionList = connect(
       sequences.autoSaveTrialSessionWorkingCopySequence,
     casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     formattedCases: state.trialSessionWorkingCopyHelper.formattedCases,
-    openAddEditNoteModalFromListSequence:
-      sequences.openAddEditNoteModalFromListSequence,
-    openDeleteNoteConfirmModalSequence:
-      sequences.openDeleteNoteConfirmModalSequence,
+    openAddEditCaseNoteModalFromListSequence:
+      sequences.openAddEditCaseNoteModalFromListSequence,
+    openDeleteCaseNoteConfirmModalSequence:
+      sequences.openDeleteCaseNoteConfirmModalSequence,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -27,8 +27,8 @@ export const WorkingCopySessionList = connect(
     autoSaveTrialSessionWorkingCopySequence,
     casesShownCount,
     formattedCases,
-    openAddEditNoteModalFromListSequence,
-    openDeleteNoteConfirmModalSequence,
+    openAddEditCaseNoteModalFromListSequence,
+    openDeleteCaseNoteConfirmModalSequence,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -138,7 +138,7 @@ export const WorkingCopySessionList = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         onClick={() => {
-                          openAddEditNoteModalFromListSequence({
+                          openAddEditCaseNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
                           });
                         }}
@@ -165,7 +165,7 @@ export const WorkingCopySessionList = connect(
                       <button
                         className="usa-button usa-button--unstyled red-warning margin-right-105"
                         onClick={() => {
-                          openDeleteNoteConfirmModalSequence({
+                          openDeleteCaseNoteConfirmModalSequence({
                             docketNumber: item.docketNumber,
                           });
                         }}
@@ -178,7 +178,7 @@ export const WorkingCopySessionList = connect(
                       <button
                         className="usa-button usa-button--unstyled"
                         onClick={() => {
-                          openAddEditNoteModalFromListSequence({
+                          openAddEditCaseNoteModalFromListSequence({
                             docketNumber: item.docketNumber,
                           });
                         }}
