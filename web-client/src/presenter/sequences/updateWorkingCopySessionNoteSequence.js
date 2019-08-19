@@ -4,8 +4,8 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateCaseNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateCaseNoteInTrialSessionWorkingCopyAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
+import { updateSessionNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateSessionNoteInTrialSessionWorkingCopyAction';
 import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
 import { validateCaseNoteAction } from '../actions/Cases/validateCaseNoteAction';
 
@@ -18,7 +18,7 @@ export const updateWorkingCopySessionNoteSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
-      updateCaseNoteInTrialSessionWorkingCopyAction,
+      updateSessionNoteInTrialSessionWorkingCopyAction,
       updateTrialSessionWorkingCopyAction,
       clearModalAction,
       clearModalStateAction,
