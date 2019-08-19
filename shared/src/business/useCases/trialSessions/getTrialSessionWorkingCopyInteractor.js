@@ -5,7 +5,7 @@ const {
 const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -32,14 +32,10 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
       userId: user.userId,
     });
 
-  if (!trialSessionWorkingCopy) {
-    throw new NotFoundError(
-      `Working copy for trial session ${trialSessionId} was not found.`,
-    );
+  if (trialSessionWorkingCopy) {
+    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
+      trialSessionWorkingCopy,
+    ).validate();
+    return trialSessionWorkingCopyEntity.toRawObject();
   }
-
-  const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
-    trialSessionWorkingCopy,
-  ).validate();
-  return trialSessionWorkingCopyEntity.toRawObject();
 };
