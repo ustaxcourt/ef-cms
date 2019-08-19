@@ -4,9 +4,9 @@ export class ActionError extends CerebralError {
   get className() {
     return this.constructor.name;
   }
-  constructor() {
+  constructor(message) {
     super(arguments);
     this.title = 'An error occurred';
-    this.message = 'generic error message';
+    this.message = message || 'An unspecified error occurred.';
   }
 }

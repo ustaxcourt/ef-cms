@@ -206,6 +206,13 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
         }
       }
 
+      if (documentDateServed) {
+        const arrDateServed = documentDateServed.split(' ');
+        documentDateServed = `${
+          arrDateServed[0]
+        } <span class="no-wrap">${arrDateServed.slice(1).join(' ')}</span>`;
+      }
+
       docketRecordContent += `
         <tr>
           <td>${index}</td>
