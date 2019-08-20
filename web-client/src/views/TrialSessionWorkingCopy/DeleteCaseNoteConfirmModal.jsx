@@ -9,7 +9,7 @@ export const DeleteCaseNoteConfirmModal = () => (
     preventCancelOnBlur={true}
     title="Are you sure you want to delete this note?"
     onCancelSequence="clearModalSequence"
-    onConfirmSequence="deleteCaseWorkingCopyNoteSequence"
+    onConfirmSequence="deleteCaseNoteFromCaseDetailSequence"
   >
     <p>This action cannot be undone.</p>
   </ConfirmModal>

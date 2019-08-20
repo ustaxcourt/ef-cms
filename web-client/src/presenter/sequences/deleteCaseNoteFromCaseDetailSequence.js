@@ -1,14 +1,13 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { deleteCaseNoteAction } from '../actions/TrialSession/deleteCaseNoteAction';
-import { unsetCaseNoteFromTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/unsetCaseNoteFromTrialSessionWorkingCopyAction';
+import { setCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setCaseNoteOnCaseDetailAction';
 import { updateDeleteCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteCaseNotePropsFromModalStateAction';
-import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
 
-export const deleteCaseWorkingCopyNoteSequence = [
+export const deleteCaseNoteFromCaseDetailSequence = [
   updateDeleteCaseNotePropsFromModalStateAction,
   deleteCaseNoteAction,
-  updateTrialSessionWorkingCopyAction,
+  setCaseNoteOnCaseDetailAction,
   clearModalAction,
   clearModalStateAction,
 ];

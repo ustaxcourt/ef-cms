@@ -9,6 +9,7 @@ import React from 'react';
 
 export const CaseNotes = connect(
   {
+    caseDetail: state.caseDetail,
     openAddEditCaseNoteModalFromDetailSequence:
       sequences.openAddEditCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence:
@@ -16,6 +17,7 @@ export const CaseNotes = connect(
     showModal: state.showModal,
   },
   ({
+    caseDetail,
     openAddEditCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
     showModal,
@@ -60,7 +62,9 @@ export const CaseNotes = connect(
                           <button
                             className="usa-button usa-button--unstyled red-warning"
                             onClick={() => {
-                              openDeleteCaseNoteConfirmModalSequence();
+                              openDeleteCaseNoteConfirmModalSequence({
+                                caseId: caseDetail.caseId,
+                              });
                             }}
                           >
                             <FontAwesomeIcon icon="times-circle"></FontAwesomeIcon>
