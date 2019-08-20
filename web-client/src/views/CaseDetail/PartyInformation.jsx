@@ -10,7 +10,7 @@ import React from 'react';
 const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
   return (
     <React.Fragment>
-      <p className="margin-top-0">
+      <p className="margin-top-0 address-name">
         {nameOverride || contact.name}
         {contact.inCareOf && (
           <span>
@@ -21,7 +21,9 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
       </p>
       <p>
         <span className="address-line">{contact.address1}</span>
-        <span className="address-line">{contact.address2}</span>
+        {contact.address2 && (
+          <span className="address-line">{contact.address2}</span>
+        )}
         {contact.address3 && (
           <span className="address-line">{contact.address3}</span>
         )}
@@ -29,10 +31,9 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
           {contact.city && `${contact.city}, `}
           {contact.state} {contact.postalCode}
         </span>
-        <span className="address-line">
-          {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL &&
-            contact.country}
-        </span>
+        {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
+          <span className="address-line">contact.country</span>
+        )}
       </p>
       {contact.phone && <p>{contact.phone}</p>}
     </React.Fragment>
