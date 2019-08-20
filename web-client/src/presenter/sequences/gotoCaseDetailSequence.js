@@ -3,16 +3,15 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
-import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
+import { getCaseNoteForCaseAction } from '../actions/TrialSession/getCaseNoteForCaseAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
+import { setCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setCaseNoteOnCaseDetailAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
-import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
-import { shouldGetTrialSessionWorkingCopyAction } from '../actions/CaseDetail/shouldGetTrialSessionWorkingCopyAction';
 
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
@@ -28,14 +27,8 @@ export const gotoCaseDetailSequence = [
   {
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
     judge: [
-      shouldGetTrialSessionWorkingCopyAction,
-      {
-        no: [],
-        yes: [
-          getTrialSessionWorkingCopyAction,
-          setTrialSessionWorkingCopyAction,
-        ],
-      },
+      getCaseNoteForCaseAction,
+      setCaseNoteOnCaseDetailAction,
       setCurrentPageAction('CaseDetailInternal'),
     ],
     petitioner: [

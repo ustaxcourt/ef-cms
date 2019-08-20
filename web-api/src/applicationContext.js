@@ -66,6 +66,12 @@ const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/createCaseNote');
+const {
+  createCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/createCaseNoteInteractor');
+const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
@@ -103,6 +109,12 @@ const {
 const {
   deleteCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor');
+const {
+  deleteCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/deleteCaseNote');
+const {
+  deleteCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor');
 const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
@@ -157,6 +169,12 @@ const {
 const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
+const {
+  getCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/getCaseNote');
+const {
+  getCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/getCaseNoteInteractor');
 const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
@@ -372,6 +390,12 @@ const {
   updateCaseInteractor,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
+  updateCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/updateCaseNote');
+const {
+  updateCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
+const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
@@ -510,12 +534,14 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
+        createCaseNote,
         createCaseTrialSortMappingRecords,
         createTrialSession,
         createTrialSessionWorkingCopy,
         createUser,
         createWorkItem,
         deleteCaseDeadline,
+        deleteCaseNote,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
@@ -525,6 +551,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCaseNote,
         getCasesByUser,
         getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
@@ -558,6 +585,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
+        updateCaseNote,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateTrialSession,
@@ -595,11 +623,13 @@ module.exports = (appContextUser = {}) => {
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
+        createCaseNoteInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
+        deleteCaseNoteInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
@@ -609,6 +639,7 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
+        getCaseNoteInteractor,
         getCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
         getDocumentQCBatchedForUserInteractor,
@@ -646,6 +677,7 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
+        updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,

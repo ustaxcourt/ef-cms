@@ -9,7 +9,7 @@ import React from 'react';
 
 export const CaseNotes = connect(
   {
-    caseDetail: state.formattedCaseDetail,
+    caseDetail: state.caseDetail,
     openAddEditCaseNoteModalFromDetailSequence:
       sequences.openAddEditCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence:
@@ -30,15 +30,12 @@ export const CaseNotes = connect(
               <div className="tablet:grid-col-6">
                 <div className="card">
                   <div className="content-wrapper">
-                    <If
-                      not
-                      bind={`trialSessionWorkingCopy.caseMetadata.${caseDetail.docketNumber}.notes`}
-                    >
+                    <If not bind="caseDetail.caseNote.notes">
                       <button
                         className="usa-button usa-button--unstyled float-right"
                         onClick={() => {
                           openAddEditCaseNoteModalFromDetailSequence({
-                            docketNumber: caseDetail.docketNumber,
+                            caseId: caseDetail.caseId,
                           });
                         }}
                       >
@@ -47,13 +44,9 @@ export const CaseNotes = connect(
                       </button>
                     </If>
                     <h3 className="display-inline">Judge’s Notes</h3>
-                    <If
-                      bind={`trialSessionWorkingCopy.caseMetadata.${caseDetail.docketNumber}.notes`}
-                    >
+                    <If bind="caseDetail.caseNote.notes">
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text
-                          bind={`trialSessionWorkingCopy.caseMetadata.${caseDetail.docketNumber}.notes`}
-                        />
+                        <Text bind="caseDetail.caseNote.notes" />
                       </div>
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
@@ -61,7 +54,7 @@ export const CaseNotes = connect(
                             className="usa-button usa-button--unstyled"
                             onClick={() => {
                               openAddEditCaseNoteModalFromDetailSequence({
-                                docketNumber: caseDetail.docketNumber,
+                                caseId: caseDetail.caseId,
                               });
                             }}
                           >
@@ -74,7 +67,7 @@ export const CaseNotes = connect(
                             className="usa-button usa-button--unstyled red-warning"
                             onClick={() => {
                               openDeleteCaseNoteConfirmModalSequence({
-                                docketNumber: caseDetail.docketNumber,
+                                caseId: caseDetail.caseId,
                               });
                             }}
                           >
@@ -91,9 +84,11 @@ export const CaseNotes = connect(
           </div>
         </div>
         {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal />
+          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromCaseDetailSequence" />
         )}
-        {showModal === 'AddEditCaseNoteModal' && <AddEditCaseNoteModal />}
+        {showModal === 'AddEditCaseNoteModal' && (
+          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteOnCaseDetailSequence" />
+        )}
       </>
     );
   },
