@@ -9,15 +9,10 @@ import classnames from 'classnames';
 export const AddEditCaseNoteModal = connect(
   {
     modal: state.modal,
-    validateCaseNoteSequence: sequences.validateCaseNoteSequence,
+    validateNoteSequence: sequences.validateNoteSequence,
     validationErrors: state.validationErrors,
   },
-  ({
-    modal,
-    onConfirmSequence,
-    validateCaseNoteSequence,
-    validationErrors,
-  }) => {
+  ({ modal, onConfirmSequence, validateNoteSequence, validationErrors }) => {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -45,7 +40,7 @@ export const AddEditCaseNoteModal = connect(
             bind="modal.notes"
             id="case-notes"
             onChange={() => {
-              validateCaseNoteSequence();
+              validateNoteSequence();
             }}
           />
           <Text bind="validationErrors.notes" className="usa-error-message" />

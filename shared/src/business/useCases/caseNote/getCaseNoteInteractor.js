@@ -11,7 +11,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to get notes for
- * @returns {Promise} the promise of the getCaseNote call
+ * @returns {object} the case note object if one is found
  */
 exports.getCaseNoteInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
@@ -27,6 +27,7 @@ exports.getCaseNoteInteractor = async ({ applicationContext, caseId }) => {
       userId: user.userId,
     });
 
-  const caseNoteEntity = new CaseNote(caseNote).validate();
-  return caseNoteEntity.toRawObject();
+  if (caseNote) {
+    return new CaseNote(caseNote).validate().toRawObject();
+  }
 };
