@@ -33,12 +33,12 @@ export const StartCaseStep5 = connect(
       <>
         <Focus>
           <h1 className="heading-1" id="file-a-document-header" tabIndex="-1">
-            Review Your Petition
+            5. Review Your Petition
           </h1>
         </Focus>
 
         <p>
-          You can’t edit your petition once you submit it. Please make sure your
+          You can’t edit your Petition once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
 
@@ -111,7 +111,7 @@ export const StartCaseStep5 = connect(
                         </label>
                         {form.partyType}
 
-                        <div className="margin-top-2">
+                        <div className="margin-top-2 margin-bottom-2">
                           <label className="usa-label" htmlFor="filing-parties">
                             Statement of Taxpayer Identification
                           </label>
@@ -123,26 +123,26 @@ export const StartCaseStep5 = connect(
                             file={form.stinFile}
                             title={form.stinFile.name}
                           />
-                        </div>
 
-                        {form.ownershipDisclosureFile && (
-                          <div className="margin-top-2">
-                            <label
-                              className="usa-label margin-top-2"
-                              htmlFor="filing-parties"
-                            >
-                              Ownership Disclosure Statement
-                            </label>
-                            <FontAwesomeIcon
-                              className="fa-icon-blue"
-                              icon={['fas', 'file-pdf']}
-                            />
-                            <PDFPreviewButton
-                              file={form.ownershipDisclosureFile}
-                              title={form.ownershipDisclosureFile.name}
-                            />
-                          </div>
-                        )}
+                          {form.ownershipDisclosureFile && (
+                            <div className="margin-top-2">
+                              <label
+                                className="usa-label margin-top-2"
+                                htmlFor="filing-parties"
+                              >
+                                Ownership Disclosure Statement
+                              </label>
+                              <FontAwesomeIcon
+                                className="fa-icon-blue"
+                                icon={['fas', 'file-pdf']}
+                              />
+                              <PDFPreviewButton
+                                file={form.ownershipDisclosureFile}
+                                title={form.ownershipDisclosureFile.name}
+                              />
+                            </div>
+                          )}
+                        </div>
                       </>
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1">
@@ -205,16 +205,16 @@ export const StartCaseStep5 = connect(
                   <li>Double check that your Petition is timely.</li>
                   <li>
                     Be sure you’ve removed or redacted all personal information
-                    from your documents.{' '}
+                    from your documents.
                   </li>
                   <li>Don’t include any evidence with your Petition.</li>
                   <li>
-                    Save your Petiton and any IRS noticies and uploaded them as
+                    Save your Petition and any IRS notices and uploaded them as
                     a single PDF.
                   </li>
                   <li>
                     Confirm everything appears as you want it to—you can’t edit
-                    your Petition after you submit it.{' '}
+                    your Petition after you submit it.
                   </li>
                 </ol>
               </div>
