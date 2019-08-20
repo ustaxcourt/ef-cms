@@ -1,13 +1,13 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setAddEditNoteModalStateFromListAction } from './setAddEditNoteModalStateFromListAction';
+import { setAddEditCaseNoteModalStateFromListAction } from './setAddEditCaseNoteModalStateFromListAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setAddEditNoteModalStateFromListAction', () => {
+describe('setAddEditCaseNoteModalStateFromListAction', () => {
   it('should set the modal caseId state', async () => {
-    const result = await runAction(setAddEditNoteModalStateFromListAction, {
+    const result = await runAction(setAddEditCaseNoteModalStateFromListAction, {
       modules: {
         presenter,
       },

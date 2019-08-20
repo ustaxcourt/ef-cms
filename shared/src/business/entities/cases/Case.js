@@ -1,6 +1,10 @@
 const joi = require('joi-browser');
-const moment = require('moment');
 const uuid = require('uuid');
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('../../utilities/DateHandler');
 const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
@@ -11,7 +15,6 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes, uniqBy } = require('lodash');
-const { formatDateString } = require('../../utilities/DateHandler');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { YearAmount } = require('../YearAmount');
 
@@ -165,7 +168,7 @@ function Case(rawCase) {
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
-  this.createdAt = rawCase.createdAt || new Date().toISOString();
+  this.createdAt = rawCase.createdAt || createISODateString();
   this.currentVersion = rawCase.currentVersion;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
@@ -498,8 +501,8 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
   this.documents.forEach(document => {
     document.status = 'served';
   });
-
-  const status = `R served on ${moment(sendDate).format('L LT')}`;
+  const dateServed = prepareDateFromString(undefined, 'L LT');
+  const status = `R served on ${dateServed}`;
   this.docketRecord.forEach(docketRecord => {
     if (docketRecord.documentId) {
       docketRecord.status = status;
@@ -531,7 +534,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
-        filingDate: new Date().toISOString(),
+        filingDate: createISODateString(),
       }),
     );
   }
@@ -574,7 +577,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
-        filingDate: new Date().toISOString(),
+        filingDate: createISODateString(),
       }),
     );
   }
@@ -797,7 +800,7 @@ Case.prototype.getWorkItems = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
-  let docFiledCutoffDate = moment().subtract(
+  let docFiledCutoffDate = prepareDateFromString().subtract(
     Case.ANSWER_CUTOFF_AMOUNT,
     Case.ANSWER_CUTOFF_UNIT,
   );
@@ -812,10 +815,9 @@ Case.prototype.checkForReadyForTrial = function() {
         document.eventCode,
       );
 
-      const docFiledBeforeCutoff = moment(document.createdAt).isBefore(
-        docFiledCutoffDate,
-        Case.ANSWER_CUTOFF_UNIT,
-      );
+      const docFiledBeforeCutoff = prepareDateFromString(
+        document.createdAt,
+      ).isBefore(docFiledCutoffDate, Case.ANSWER_CUTOFF_UNIT);
 
       if (isAnswerDocument && docFiledBeforeCutoff) {
         this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
