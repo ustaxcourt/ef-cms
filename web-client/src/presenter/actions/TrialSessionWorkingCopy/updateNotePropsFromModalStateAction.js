@@ -8,8 +8,8 @@ import { state } from 'cerebral';
  * @returns {object} the new props from modal state
  */
 export const updateNotePropsFromModalStateAction = ({ get }) => {
-  const docketNumber = get(state.modal.docketNumber);
+  const caseId = get(state.modal.caseId);
   const notes = get(state.modal.notes);
 
-  return { docketNumber, notes };
+  return { caseId, notes };
 };
