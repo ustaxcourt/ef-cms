@@ -7,11 +7,11 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
-import { validateCaseNoteAction } from '../actions/Cases/validateCaseNoteAction';
+import { validateNoteAction } from '../actions/validateNoteAction';
 
 export const updateCaseNoteOnCaseDetailSequence = [
   startShowValidationAction,
-  validateCaseNoteAction,
+  validateNoteAction,
   {
     error: [setValidationErrorsAction],
     success: [
