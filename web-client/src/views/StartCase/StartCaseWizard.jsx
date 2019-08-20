@@ -7,6 +7,7 @@ import { StartCaseStep1 } from './StartCaseStep1';
 import { StartCaseStep2 } from './StartCaseStep2';
 import { StartCaseStep3 } from './StartCaseStep3';
 import { StartCaseStep4 } from './StartCaseStep4';
+import { StartCaseStep5 } from './StartCaseStep5';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -41,6 +42,9 @@ export const StartCaseWizard = connect(
             </Tab>
             <Tab tabName="StartCaseStep4">
               <StartCaseStep4 />
+            </Tab>
+            <Tab tabName="StartCaseStep5">
+              <StartCaseStep5 />
             </Tab>
           </Tabs>
         </section>

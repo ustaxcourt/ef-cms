@@ -9,9 +9,11 @@ module.exports = {
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
+  createCaseNoteLambda: require('./caseNote/createCaseNoteLambda').handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
   deleteCaseDeadlineLambda: require('./caseDeadline/deleteCaseDeadlineLambda')
     .handler,
+  deleteCaseNoteLambda: require('./caseNote/deleteCaseNoteLambda').handler,
   fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
     .handler,
   fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
@@ -21,6 +23,7 @@ module.exports = {
   getCaseDeadlinesForCaseLambda: require('./caseDeadline/getCaseDeadlinesForCaseLambda')
     .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
+  getCaseNoteLambda: require('./caseNote/getCaseNoteLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
@@ -33,6 +36,7 @@ module.exports = {
   updateCaseDeadlineLambda: require('./caseDeadline/updateCaseDeadlineLambda')
     .handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
+  updateCaseNoteLambda: require('./caseNote/updateCaseNoteLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
   updateDocketEntryOnCaseLambda: require('./cases/updateDocketEntryOnCaseLambda')

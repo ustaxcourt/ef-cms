@@ -1,14 +1,14 @@
 /**
- * validateCaseNote
+ * validateNote
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseNote the case note object
+ * @param {object} providers.note the note object
  * @returns {object} the errors or null
  */
-exports.validateCaseNoteInteractor = ({ applicationContext, caseNote }) => {
-  const errors = new (applicationContext.getEntityConstructors()).CaseNote(
-    caseNote,
+exports.validateNoteInteractor = ({ applicationContext, note }) => {
+  const errors = new (applicationContext.getEntityConstructors()).Note(
+    note,
   ).getFormattedValidationErrors();
   if (!errors) return null;
 
