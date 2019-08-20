@@ -49,13 +49,15 @@ export const setServiceIndicatorsForCase = caseDetail => {
   }
 
   // contactPrimary
-  if (hasPrimaryPractitioner) {
-    contactPrimary.serviceIndicator = constants.SI_NONE;
-  } else {
-    if (isPaper) {
-      contactPrimary.serviceIndicator = constants.SI_PAPER;
+  if (contactPrimary) {
+    if (hasPrimaryPractitioner) {
+      contactPrimary.serviceIndicator = constants.SI_NONE;
     } else {
-      contactPrimary.serviceIndicator = constants.SI_ELECTRONIC;
+      if (isPaper) {
+        contactPrimary.serviceIndicator = constants.SI_PAPER;
+      } else {
+        contactPrimary.serviceIndicator = constants.SI_ELECTRONIC;
+      }
     }
   }
 
