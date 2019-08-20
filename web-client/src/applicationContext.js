@@ -11,7 +11,6 @@ import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
-import { CaseNote } from '../../shared/src/business/entities/cases/CaseNote';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { Document } from '../../shared/src/business/entities/Document';
@@ -25,6 +24,7 @@ import {
   MAX_FILE_SIZE_MB,
 } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
+import { Note } from '../../shared/src/business/entities/Note';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
@@ -133,12 +133,12 @@ import { validateAddRespondent } from '../../shared/src/business/useCases/caseAs
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
-import { validateCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateCaseNoteInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateForwardMessageInteractor } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
 import { validateInitialWorkItemMessageInteractor } from '../../shared/src/business/useCases/workitems/validateInitialWorkItemMessageInteractor';
+import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
@@ -262,12 +262,12 @@ const allUseCases = {
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
-  validateCaseNoteInteractor,
   validateDocketEntryInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateForwardMessageInteractor,
   validateInitialWorkItemMessageInteractor,
+  validateNoteInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
@@ -351,7 +351,6 @@ const applicationContext = {
     CaseExternal,
     CaseExternalInformationFactory,
     CaseInternal,
-    CaseNote,
     ContactFactory,
     DocketEntryFactory,
     ExternalDocumentFactory,
@@ -359,6 +358,7 @@ const applicationContext = {
     ForwardMessage,
     InitialWorkItemMessage,
     NewTrialSession,
+    Note,
     OrderWithoutBody,
   }),
   getError: e => {

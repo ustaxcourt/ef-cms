@@ -1,27 +1,27 @@
-import { presenter } from '../../presenter';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { validateCaseNoteAction } from './validateCaseNoteAction';
+import { validateNoteAction } from './validateNoteAction';
 import sinon from 'sinon';
 
-describe('validateCaseNote', () => {
-  let validateCaseNoteStub;
+describe('validateNote', () => {
+  let validateNoteStub;
   let successStub;
   let errorStub;
 
-  let mockCaseNote;
+  let mockNote;
 
   beforeEach(() => {
-    validateCaseNoteStub = sinon.stub();
+    validateNoteStub = sinon.stub();
     successStub = sinon.stub();
     errorStub = sinon.stub();
 
-    mockCaseNote = {
+    mockNote = {
       notes: 'hello notes',
     };
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateCaseNoteInteractor: validateCaseNoteStub,
+        validateNoteInteractor: validateNoteStub,
       }),
     };
 
@@ -32,13 +32,13 @@ describe('validateCaseNote', () => {
   });
 
   it('should call the path success when no errors are found', async () => {
-    validateCaseNoteStub.returns(null);
-    await runAction(validateCaseNoteAction, {
+    validateNoteStub.returns(null);
+    await runAction(validateNoteAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockCaseNote,
+        form: mockNote,
       },
     });
 
@@ -46,13 +46,13 @@ describe('validateCaseNote', () => {
   });
 
   it('should call the path error when any errors are found', async () => {
-    validateCaseNoteStub.returns('error');
-    await runAction(validateCaseNoteAction, {
+    validateNoteStub.returns('error');
+    await runAction(validateNoteAction, {
       modules: {
         presenter,
       },
       state: {
-        form: mockCaseNote,
+        form: mockNote,
       },
     });
 
