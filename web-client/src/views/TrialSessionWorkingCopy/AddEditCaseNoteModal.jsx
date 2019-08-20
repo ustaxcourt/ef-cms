@@ -12,7 +12,12 @@ export const AddEditCaseNoteModal = connect(
     validateCaseNoteSequence: sequences.validateCaseNoteSequence,
     validationErrors: state.validationErrors,
   },
-  ({ modal, validateCaseNoteSequence, validationErrors }) => {
+  ({
+    modal,
+    onConfirmSequence,
+    validateCaseNoteSequence,
+    validationErrors,
+  }) => {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -21,7 +26,7 @@ export const AddEditCaseNoteModal = connect(
         preventCancelOnBlur={true}
         title="Add/Edit Notes"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateCaseWorkingCopyNoteSequence"
+        onConfirmSequence={onConfirmSequence}
       >
         <h5 className="margin-bottom-4">
           Docket {modal.docketNumber}: {modal.caseCaptionNames}
