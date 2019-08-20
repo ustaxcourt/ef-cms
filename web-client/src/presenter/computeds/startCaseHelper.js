@@ -12,12 +12,15 @@ export const startCaseHelper = get => {
   let contactPrimaryLabel = 'Contact Information';
   let contactSecondaryLabel = 'Contact Information';
 
-  if (form.partyType === 'Myself' || form.partyType === 'Petitioner & Spouse') {
+  if (
+    form.partyType === 'Petitioner' ||
+    form.partyType === 'Petitioner & Spouse'
+  ) {
     contactPrimaryLabel = 'Your Contact Information';
   }
 
   if (form.partyType === 'Petitioner & Spouse') {
-    contactSecondaryLabel = "Spouse's Contact Information";
+    contactSecondaryLabel = 'Spouse‘s Contact Information';
   }
 
   return {
