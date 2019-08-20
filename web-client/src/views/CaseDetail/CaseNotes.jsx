@@ -80,7 +80,7 @@ export const CaseNotes = connect(
           </div>
         </div>
         {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal />
+          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromCaseDetailSequence" />
         )}
         {showModal === 'AddEditCaseNoteModal' && (
           <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteOnCaseDetailSequence" />
