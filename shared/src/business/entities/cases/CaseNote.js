@@ -3,6 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+CaseNote.validationName = 'CaseNote';
+
 /**
  * Case Note entity
  *
@@ -10,6 +12,8 @@ const {
  * @constructor
  */
 function CaseNote(rawProps) {
+  this.caseId = rawProps.caseId;
+  this.userId = rawProps.userId;
   this.notes = rawProps.notes;
 }
 
@@ -18,7 +22,19 @@ CaseNote.errorToMessageMap = {
 };
 
 CaseNote.schema = joi.object().keys({
+  caseId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
   notes: joi.string().required(),
+  userId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .required(),
 });
 
 joiValidationDecorator(

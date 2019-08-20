@@ -9,12 +9,16 @@ describe('updateNotePropsFromModalStateAction', () => {
         presenter,
       },
       props: {},
-      state: { modal: { docketNumber: '123', notes: 'down with opp' } },
+      state: {
+        modal: { caseId: '123', notes: 'down with opp' },
+        trialSession: { trialSessionId: '456' },
+      },
     });
 
     expect(result.output).toEqual({
-      docketNumber: '123',
+      caseId: '123',
       notes: 'down with opp',
+      trialSessionId: '456',
     });
   });
 });

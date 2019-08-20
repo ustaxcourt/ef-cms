@@ -1,14 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateCaseNoteAction } from '../actions/Cases/validateCaseNoteAction';
+import { validateNoteAction } from '../actions/validateNoteAction';
 
-export const validateCaseNoteSequence = [
+export const validateNoteSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      validateCaseNoteAction,
+      validateNoteAction,
       {
         error: [setValidationErrorsAction],
         success: [clearAlertsAction],

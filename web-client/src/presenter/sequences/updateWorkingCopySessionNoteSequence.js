@@ -7,11 +7,11 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
 import { updateSessionNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateSessionNoteInTrialSessionWorkingCopyAction';
 import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
-import { validateCaseNoteAction } from '../actions/Cases/validateCaseNoteAction';
+import { validateNoteAction } from '../actions/validateNoteAction';
 
 export const updateWorkingCopySessionNoteSequence = [
   startShowValidationAction,
-  validateCaseNoteAction,
+  validateNoteAction,
   {
     error: [setValidationErrorsAction],
     success: [

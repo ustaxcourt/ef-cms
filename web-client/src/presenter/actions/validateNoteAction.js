@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * validate the case note
+ * validate the case or session note
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -9,14 +9,14 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateCaseNoteAction = ({ applicationContext, get, path }) => {
-  const caseNote = {
+export const validateNoteAction = ({ applicationContext, get, path }) => {
+  const note = {
     ...get(state.modal),
   };
 
-  const errors = applicationContext.getUseCases().validateCaseNoteInteractor({
+  const errors = applicationContext.getUseCases().validateNoteInteractor({
     applicationContext,
-    caseNote,
+    note,
   });
 
   if (!errors) {

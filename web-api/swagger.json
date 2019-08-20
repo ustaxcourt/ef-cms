@@ -2985,6 +2985,115 @@
           }
         }
       }
+    },
+    "/cases/{caseId}/case-note": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["caseNotes"],
+        "summary": "gets the logged in user's note for a case",
+        "description": "gets the logged in user's note for a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["caseNotes"],
+        "summary": "create and associate a note to a case for the logged in user",
+        "description": "create and associate a note to a case for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["caseNotes"],
+        "summary": "update a case note for the logged in user",
+        "description": "update a case note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["caseNotes"],
+        "summary": "delete the case note for the logged in user",
+        "description": "delete the case note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -3330,6 +3439,24 @@
         }
       },
       "description": "a case deadline"
+    },
+    "caseNote": {
+      "type": "object",
+      "properties": {
+        "caseId": {
+          "type": "string",
+          "description": "id of the case"
+        },
+        "userId": {
+          "type": "string",
+          "description": "id of the user who owns the note"
+        },
+        "notes": {
+          "type": "string",
+          "description": "notes for the case"
+        }
+      },
+      "description": "a case note"
     }
   }
 }
