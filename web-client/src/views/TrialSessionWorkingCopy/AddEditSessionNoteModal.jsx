@@ -6,7 +6,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classnames from 'classnames';
 
-export const AddEditNoteModal = connect(
+export const AddEditSessionNoteModal = connect(
   {
     modal: state.modal,
     validateCaseNoteSequence: sequences.validateCaseNoteSequence,
@@ -18,13 +18,12 @@ export const AddEditNoteModal = connect(
         cancelLabel="Cancel"
         className="add-edit-note-modal"
         confirmLabel="Save"
-        title="Add/Edit Notes"
+        preventCancelOnBlur={true}
+        title="Add/Edit Session Notes"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateCaseWorkingCopyNoteSequence"
+        onConfirmSequence="updateWorkingCopySessionNoteSequence"
       >
-        <h5 className="margin-bottom-4">
-          Docket {modal.docketNumber}: {modal.caseCaptionNames}
-        </h5>
+        <h5 className="margin-bottom-4">{modal.heading}</h5>
         <div
           className={classnames(
             'usa-form-group',

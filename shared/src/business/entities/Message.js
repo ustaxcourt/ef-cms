@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * constructor
@@ -11,7 +12,7 @@ const {
  * @constructor
  */
 function Message(rawMessage) {
-  this.createdAt = rawMessage.createdAt || new Date().toISOString();
+  this.createdAt = rawMessage.createdAt || createISODateString();
   this.from = rawMessage.from;
   this.fromUserId = rawMessage.fromUserId;
   this.message = rawMessage.message;

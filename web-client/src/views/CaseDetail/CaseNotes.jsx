@@ -1,5 +1,5 @@
-import { AddEditNoteModal } from '../TrialSessionWorkingCopy/AddEditNoteModal';
-import { DeleteNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteNoteConfirmModal';
+import { AddEditCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditCaseNoteModal';
+import { DeleteCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteCaseNoteConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { Text } from '../../ustc-ui/Text/Text';
@@ -10,16 +10,16 @@ import React from 'react';
 export const CaseNotes = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    openAddEditNoteModalFromDetailSequence:
-      sequences.openAddEditNoteModalFromDetailSequence,
-    openDeleteNoteConfirmModalSequence:
-      sequences.openDeleteNoteConfirmModalSequence,
+    openAddEditCaseNoteModalFromDetailSequence:
+      sequences.openAddEditCaseNoteModalFromDetailSequence,
+    openDeleteCaseNoteConfirmModalSequence:
+      sequences.openDeleteCaseNoteConfirmModalSequence,
     showModal: state.showModal,
   },
   ({
     caseDetail,
-    openAddEditNoteModalFromDetailSequence,
-    openDeleteNoteConfirmModalSequence,
+    openAddEditCaseNoteModalFromDetailSequence,
+    openDeleteCaseNoteConfirmModalSequence,
     showModal,
   }) => {
     return (
@@ -37,7 +37,7 @@ export const CaseNotes = connect(
                       <button
                         className="usa-button usa-button--unstyled float-right"
                         onClick={() => {
-                          openAddEditNoteModalFromDetailSequence({
+                          openAddEditCaseNoteModalFromDetailSequence({
                             docketNumber: caseDetail.docketNumber,
                           });
                         }}
@@ -60,7 +60,7 @@ export const CaseNotes = connect(
                           <button
                             className="usa-button usa-button--unstyled"
                             onClick={() => {
-                              openAddEditNoteModalFromDetailSequence({
+                              openAddEditCaseNoteModalFromDetailSequence({
                                 docketNumber: caseDetail.docketNumber,
                               });
                             }}
@@ -73,7 +73,7 @@ export const CaseNotes = connect(
                           <button
                             className="usa-button usa-button--unstyled red-warning"
                             onClick={() => {
-                              openDeleteNoteConfirmModalSequence({
+                              openDeleteCaseNoteConfirmModalSequence({
                                 docketNumber: caseDetail.docketNumber,
                               });
                             }}
@@ -90,8 +90,10 @@ export const CaseNotes = connect(
             </div>
           </div>
         </div>
-        {showModal === 'DeleteNoteConfirmModal' && <DeleteNoteConfirmModal />}
-        {showModal === 'AddEditNoteModal' && <AddEditNoteModal />}
+        {showModal === 'DeleteCaseNoteConfirmModal' && (
+          <DeleteCaseNoteConfirmModal />
+        )}
+        {showModal === 'AddEditCaseNoteModal' && <AddEditCaseNoteModal />}
       </>
     );
   },
