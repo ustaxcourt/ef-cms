@@ -17,15 +17,15 @@ export default test => {
       state: test.getState(),
     });
 
-    const { docketNumber } = workingCopyHelper.formattedCases[0];
+    const { caseId } = workingCopyHelper.formattedCases[0];
 
     await test.runSequence('openAddEditCaseNoteModalFromListSequence', {
-      docketNumber,
+      caseId,
     });
 
     expect(test.getState('modal')).toEqual({
       caseCaptionNames: 'Mona Schultz',
-      docketNumber: docketNumber,
+      caseId,
       notes: undefined,
     });
 
@@ -36,18 +36,16 @@ export default test => {
 
     expect(test.getState('modal')).toEqual({
       caseCaptionNames: 'Mona Schultz',
-      docketNumber: docketNumber,
+      caseId,
       notes: 'this is a note added from the modal',
     });
 
-    await test.runSequence('updateCaseWorkingCopyNoteSequence');
+    await test.runSequence('updateCaseNoteOnWorkingCopySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(
-      test.getState(
-        `trialSessionWorkingCopy.caseMetadata.${docketNumber}.notes`,
-      ),
+      test.getState(`trialSessionWorkingCopy.caseNotes.${caseId}.notes`),
     ).toEqual('this is a note added from the modal');
   });
 };

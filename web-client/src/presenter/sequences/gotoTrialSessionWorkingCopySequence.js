@@ -14,6 +14,7 @@ import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkin
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
+import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
@@ -29,6 +30,7 @@ const gotoTrialSessionDetails = [
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
       setDefaultWorkingCopyValuesAction,
+      updateTrialSessionWorkingCopyAction,
       isTrialSessionCalendaredAction,
       {
         no: [],
