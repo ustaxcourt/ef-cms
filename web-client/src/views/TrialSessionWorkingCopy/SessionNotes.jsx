@@ -1,10 +1,8 @@
-import { AddEditNoteModal } from '../TrialSessionWorkingCopy/AddEditNoteModal';
-import { DeleteNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteNoteConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const SessionNotes = connect(
@@ -13,12 +11,10 @@ export const SessionNotes = connect(
       sequences.openAddEditSessionNoteModalSequence,
     openDeleteSessionNoteConfirmModalSequence:
       sequences.openDeleteSessionNoteConfirmModalSequence,
-    showModal: state.showModal,
   },
   ({
     openAddEditSessionNoteModalSequence,
     openDeleteSessionNoteConfirmModalSequence,
-    showModal,
   }) => {
     return (
       <>
@@ -28,10 +24,7 @@ export const SessionNotes = connect(
               <div className="tablet:grid-col-6">
                 <div className="card">
                   <div className="content-wrapper">
-                    <If
-                      not
-                      bind="trialSessionWorkingCopy.caseMetadata.sessionNotes"
-                    >
+                    <If not bind="trialSessionWorkingCopy.sessionNotes">
                       <button
                         className="usa-button usa-button--unstyled float-right"
                         onClick={() => {
@@ -43,9 +36,9 @@ export const SessionNotes = connect(
                       </button>
                     </If>
                     <h3 className="display-inline">Session Notes</h3>
-                    <If bind="trialSessionWorkingCopy.caseMetadata.sessionNotes">
+                    <If bind="trialSessionWorkingCopy.sessionNotes">
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="trialSessionWorkingCopy.caseMetadata.sessionNotes" />
+                        <Text bind="trialSessionWorkingCopy.sessionNotes" />
                       </div>
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
@@ -78,8 +71,6 @@ export const SessionNotes = connect(
             </div>
           </div>
         </div>
-        {showModal === 'DeleteNoteConfirmModal' && <DeleteNoteConfirmModal />}
-        {showModal === 'AddEditNoteModal' && <AddEditNoteModal />}
       </>
     );
   },

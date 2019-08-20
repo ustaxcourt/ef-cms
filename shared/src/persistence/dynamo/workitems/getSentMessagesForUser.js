@@ -1,9 +1,10 @@
-const moment = require('moment');
+const {
+  prepareDateFromString,
+} = require('../../../business/utilities/DateHandler');
 const { query } = require('../../dynamodbClientService');
 
 exports.getSentMessagesForUser = async ({ applicationContext, userId }) => {
-  const afterDate = moment
-    .utc(new Date().toISOString())
+  const afterDate = prepareDateFromString()
     .startOf('day')
     .subtract(7, 'd')
     .utc()
