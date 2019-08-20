@@ -7,7 +7,39 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PartyInformation = connect(
+const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
+  return (
+    <React.Fragment>
+      <p className="margin-top-0">
+        {nameOverride || contact.name}
+        {contact.inCareOf && (
+          <span>
+            <br />
+            c/o {contact.inCareOf}
+          </span>
+        )}
+      </p>
+      <p>
+        <span className="address-line">{contact.address1}</span>
+        <span className="address-line">{contact.address2}</span>
+        {contact.address3 && (
+          <span className="address-line">{contact.address3}</span>
+        )}
+        <span className="address-line">
+          {contact.city && `${contact.city}, `}
+          {contact.state} {contact.postalCode}
+        </span>
+        <span className="address-line">
+          {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL &&
+            contact.country}
+        </span>
+      </p>
+      {contact.phone && <p>{contact.phone}</p>}
+    </React.Fragment>
+  );
+};
+
+const PartyInformation = connect(
   {
     caseDetail: state.formattedCaseDetail,
     caseHelper: state.caseDetailHelper,
@@ -40,7 +72,7 @@ export const PartyInformation = connect(
             {caseDetail.contactPrimary && (
               <div>
                 <address aria-labelledby="primary-label">
-                  {addressDisplay(caseDetail.contactPrimary, {
+                  {AddressDisplay(caseDetail.contactPrimary, constants, {
                     nameOverride:
                       caseHelper.showCaseNameForPrimary && caseDetail.caseName,
                   })}
@@ -62,7 +94,7 @@ export const PartyInformation = connect(
               <div>
                 <address aria-labelledby="secondary-label">
                   {caseDetail.contactSecondary.name &&
-                    addressDisplay(caseDetail.contactSecondary, {})}
+                    AddressDisplay(caseDetail.contactSecondary, constants, {})}
                 </address>
                 {caseHelper.showEditContactButton && (
                   <button
@@ -93,13 +125,14 @@ export const PartyInformation = connect(
               >
                 <address aria-labelledby="practitioner-label">
                   {practitioner.name &&
-                    addressDisplay(
+                    AddressDisplay(
                       {
                         ...practitioner,
                         address1: practitioner.addressLine1,
                         address2: practitioner.addressLine2,
                         address3: practitioner.addressLine3,
                       },
+                      constants,
                       {
                         nameOverride: practitioner.formattedName,
                       },
@@ -134,13 +167,14 @@ export const PartyInformation = connect(
               >
                 <address aria-labelledby="respondent-label">
                   {respondent.name &&
-                    addressDisplay(
+                    AddressDisplay(
                       {
                         ...respondent,
                         address1: respondent.addressLine1,
                         address2: respondent.addressLine2,
                         address3: respondent.addressLine3,
                       },
+                      constants,
                       {
                         nameOverride: respondent.formattedName,
                       },
@@ -284,38 +318,6 @@ export const PartyInformation = connect(
       </>
     );
 
-    const addressDisplay = (contact, { nameOverride } = {}) => {
-      return (
-        <React.Fragment>
-          <p className="margin-top-0">
-            {nameOverride || contact.name}
-            {contact.inCareOf && (
-              <span>
-                <br />
-                c/o {contact.inCareOf}
-              </span>
-            )}
-          </p>
-          <p>
-            <span className="address-line">{contact.address1}</span>
-            <span className="address-line">{contact.address2}</span>
-            {contact.address3 && (
-              <span className="address-line">{contact.address3}</span>
-            )}
-            <span className="address-line">
-              {contact.city && `${contact.city}, `}
-              {contact.state} {contact.postalCode}
-            </span>
-            <span className="address-line">
-              {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL &&
-                contact.country}
-            </span>
-          </p>
-          {contact.phone && <p>{contact.phone}</p>}
-        </React.Fragment>
-      );
-    };
-
     return (
       <>
         <div className="subsection party-information">
@@ -367,3 +369,5 @@ export const PartyInformation = connect(
     );
   },
 );
+
+export { AddressDisplay, PartyInformation };
