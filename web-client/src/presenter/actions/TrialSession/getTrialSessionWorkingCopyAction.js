@@ -28,7 +28,7 @@ export const getTrialSessionWorkingCopyAction = async ({
   let caseNotes = [];
   let caseNote;
 
-  for (let i = 0; i < caseNotes.length; i++) {
+  for (let i = 0; i < caseIds.length; i++) {
     caseNote = await applicationContext.getUseCases().getCaseNoteInteractor({
       applicationContext,
       caseId: caseIds[i],

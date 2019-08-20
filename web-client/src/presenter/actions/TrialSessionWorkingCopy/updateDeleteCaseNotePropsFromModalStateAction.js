@@ -9,6 +9,7 @@ import { state } from 'cerebral';
  */
 export const updateDeleteCaseNotePropsFromModalStateAction = ({ get }) => {
   const caseId = get(state.modal.caseId);
+  const trialSessionId = get(state.trialSession.trialSessionId);
 
-  return { caseId };
+  return { caseId, trialSessionId };
 };
