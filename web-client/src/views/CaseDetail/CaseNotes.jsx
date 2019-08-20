@@ -34,7 +34,9 @@ export const CaseNotes = connect(
                       <button
                         className="usa-button usa-button--unstyled float-right"
                         onClick={() => {
-                          openAddEditCaseNoteModalFromDetailSequence();
+                          openAddEditCaseNoteModalFromDetailSequence({
+                            caseId: caseDetail.caseId,
+                          });
                         }}
                       >
                         <FontAwesomeIcon icon="plus-circle" />
@@ -51,7 +53,9 @@ export const CaseNotes = connect(
                           <button
                             className="usa-button usa-button--unstyled"
                             onClick={() => {
-                              openAddEditCaseNoteModalFromDetailSequence();
+                              openAddEditCaseNoteModalFromDetailSequence({
+                                caseId: caseDetail.caseId,
+                              });
                             }}
                           >
                             <FontAwesomeIcon icon="edit"></FontAwesomeIcon>
