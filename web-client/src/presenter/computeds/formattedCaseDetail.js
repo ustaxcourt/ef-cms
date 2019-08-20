@@ -371,10 +371,10 @@ export const formattedCaseDetail = (get, applicationContext) => {
   }
   const caseDetailErrors = get(state.caseDetailErrors);
   const result = {
-    ...formatCase(applicationContext, caseDetail, caseDetailErrors),
     ...applicationContext
       .getUtilities()
       .setServiceIndicatorsForCase(caseDetail),
+    ...formatCase(applicationContext, caseDetail, caseDetailErrors),
   };
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
