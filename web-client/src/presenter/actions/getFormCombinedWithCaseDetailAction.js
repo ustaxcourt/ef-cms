@@ -156,7 +156,10 @@ export const getFormCombinedWithCaseDetailAction = ({
 
   return {
     combinedCaseDetailWithForm: {
-      ...caseDetail,
+      ...omit(caseDetail, [
+        'contactPrimary.serviceIndicator',
+        'contactSecondary.serviceIndicator',
+      ]),
       ...form,
       payGovId: caseDetail.payGovId === '' ? null : caseDetail.payGovId,
     },
