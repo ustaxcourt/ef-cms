@@ -155,12 +155,4 @@ describe('setServiceIndicatorsForCases', () => {
       constants.SI_ELECTRONIC,
     );
   });
-
-  it('should return empty object when there is no contactPrimary or contactSecondary set', async () => {
-    const caseDetail = {};
-
-    const result = setServiceIndicatorsForCase(caseDetail);
-
-    expect(result).toMatchObject(caseDetail);
-  });
 });
