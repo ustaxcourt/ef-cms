@@ -56,11 +56,13 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
 
 /**
  *
- * @param petitionMetadata
- * @param petitionFileId
- * @param ownershipDisclosureFileId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
+ * @param {string} providers.petitionFileId the id of the petition file
+ * @param {object} providers.petitionMetadata the petition metadata
+ * @param {string} providers.stinFileId the id of the stin file
+ * @returns {object} the created case
  */
 exports.createCaseInteractor = async ({
   applicationContext,
@@ -69,10 +71,15 @@ exports.createCaseInteractor = async ({
   petitionMetadata,
   stinFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, PETITION)) {
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const { CaseExternal } = applicationContext.getEntityConstructors();
   const petitionEntity = new CaseExternal(petitionMetadata).validate();
@@ -92,6 +99,15 @@ exports.createCaseInteractor = async ({
         applicationContext,
         userId: user.userId,
       });
+
+    practitionerUser.representingPrimary = true;
+    if (
+      petitionMetadata.contactSecondary &&
+      petitionMetadata.contactSecondary.name
+    ) {
+      practitionerUser.representingSecondary = true;
+    }
+
     practitioners = [practitionerUser];
   }
 

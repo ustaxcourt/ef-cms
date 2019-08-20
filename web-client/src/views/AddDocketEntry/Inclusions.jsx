@@ -22,26 +22,9 @@ export const Inclusions = connect(
     return (
       <div className={`usa-form-group ${marginClass}`}>
         <fieldset className={`usa-fieldset ${marginClass}`}>
-          <legend className="usa-legend">Inclusions</legend>
-          <div className="usa-checkbox">
-            <input
-              checked={form.exhibits || false}
-              className="usa-checkbox__input"
-              id="exhibits"
-              name="exhibits"
-              type="checkbox"
-              onChange={e => {
-                updateDocketEntryFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                validateDocketEntrySequence();
-              }}
-            />
-            <label className="usa-checkbox__label" htmlFor="exhibits">
-              Exhibit(s)
-            </label>
-          </div>
+          <legend className="usa-legend">
+            Inclusions <span className="usa-hint">(optional)</span>
+          </legend>
           <div className="usa-checkbox">
             <input
               checked={form.attachments || false}

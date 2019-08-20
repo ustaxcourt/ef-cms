@@ -7,19 +7,24 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
  *
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to send to the IRS holding queue
+ * @returns {Promise<*>} the promise of the updateCase call
  */
 exports.sendPetitionToIRSHoldingQueueInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -48,7 +53,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
       workItem.assignToIRSBatchSystem({
         name: user.name,
         userId: user.userId,
-        userRole: user.role,
+        userSection: user.section,
       });
 
       await applicationContext.getPersistenceGateway().putWorkItemInOutbox({

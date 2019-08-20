@@ -41,6 +41,12 @@ describe('createCaseInteractor', () => {
       getPersistenceGateway: () => {
         return {
           createCase: async () => null,
+          getUserById: () => ({
+            name: 'Test Taxpayer',
+            role: 'petitioner',
+            section: 'petitioner',
+            userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          }),
           saveWorkItemForNonPaper: async () => null,
         };
       },
@@ -129,6 +135,12 @@ describe('createCaseInteractor', () => {
       getPersistenceGateway: () => {
         return {
           createCase: async () => null,
+          getUserById: () => ({
+            name: 'Test Taxpayer',
+            role: 'petitioner',
+            section: 'petitioner',
+            userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          }),
           saveWorkItemForNonPaper: async () => null,
         };
       },
@@ -203,7 +215,12 @@ describe('createCaseInteractor', () => {
       getPersistenceGateway: () => {
         return {
           createCase: async () => null,
-          getUserById: async () => practitionerUser,
+          getUserById: () => ({
+            name: 'Olivia Jade',
+            role: 'practitioner',
+            section: 'practitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
           saveWorkItemForNonPaper: async () => null,
         };
       },
@@ -257,5 +274,7 @@ describe('createCaseInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
+    expect(result.practitioners[0].representingPrimary).toEqual(true);
+    expect(result.practitioners[0].representingSecondary).toBeUndefined();
   });
 });

@@ -2,8 +2,19 @@
   &.red-warning {
     &:not(.usa-button--unstyled) {
       box-shadow: 0 0 0 2px color($theme-color-secondary-dark);
+
+      &:hover {
+        box-shadow: 0 0 0 2px color($theme-color-secondary-vivid);
+        color: color($theme-color-secondary-vivid);
+      }
     }
+
     color: color($theme-color-secondary-dark);
+
+    &:hover {
+      color: color($theme-color-secondary-vivid);
+    }
+
   }
 
   &:not(.usa-button--unstyled) {

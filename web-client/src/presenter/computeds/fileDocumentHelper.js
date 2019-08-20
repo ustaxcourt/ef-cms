@@ -17,8 +17,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-  const showPractitionerParty =
-    caseDetail.practitioners && caseDetail.practitioners.length > 0;
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
     entry => {
@@ -108,7 +106,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
     showAddSupportingDocuments,
     showAddSupportingDocumentsLimitReached,
     showFilingIncludes,
-    showPractitionerParty,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,

@@ -5,7 +5,8 @@ const {
 
 /**
  * YearAmount constructor
- * @param rawYearAmount
+ *
+ * @param {object} rawYearAmount the raw year amount data
  * @constructor
  */
 function YearAmount(rawYearAmount) {

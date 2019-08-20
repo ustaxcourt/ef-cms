@@ -12,68 +12,90 @@ exports.TRIAL_SESSIONS = 'trialSessions';
 exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
 exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
+exports.ASSOCIATE_USER_WITH_CASE = 'ASSOCIATE_USER_WITH_CASE';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
   docketclerk: [
+    exports.ASSOCIATE_USER_WITH_CASE,
+    exports.CASE_DEADLINE,
     exports.CASE_METADATA,
-    exports.GET_CASE,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.WORKITEM,
-    exports.UPDATE_CASE,
-    exports.GET_USERS_IN_SECTION,
-    exports.START_PAPER_CASE,
-    exports.GET_READ_MESSAGES,
     exports.FILE_EXTERNAL_DOCUMENT,
-    exports.TRIAL_SESSIONS,
-    exports.CASE_DEADLINE,
-    exports.SERVE_DOCUMENT,
-  ],
-  petitioner: [exports.PETITION, exports.FILE_EXTERNAL_DOCUMENT],
-  petitionsclerk: [
-    exports.CASE_METADATA,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.PETITION,
+    exports.GET_READ_MESSAGES,
+    exports.GET_USERS_IN_SECTION,
+    exports.SERVE_DOCUMENT,
+    exports.START_PAPER_CASE,
+    exports.TRIAL_SESSIONS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
-    exports.GET_USERS_IN_SECTION,
-    exports.START_PAPER_CASE,
-    exports.GET_READ_MESSAGES,
-    exports.TRIAL_SESSIONS,
-    exports.CREATE_COURT_ISSUED_ORDER,
+  ],
+  judge: [
+    // TODO: review this list for accuracy!
+    exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_DEADLINE,
+    exports.CASE_METADATA,
+    exports.FILE_EXTERNAL_DOCUMENT,
+    exports.GET_CASE,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_READ_MESSAGES,
+    exports.GET_USERS_IN_SECTION,
+    exports.PETITION,
+    exports.SERVE_DOCUMENT,
+    exports.START_PAPER_CASE,
+    exports.TRIAL_SESSIONS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
+  ],
+  petitioner: [exports.FILE_EXTERNAL_DOCUMENT, exports.PETITION],
+  petitionsclerk: [
+    exports.ASSOCIATE_USER_WITH_CASE,
+    exports.CASE_DEADLINE,
+    exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
+    exports.GET_CASE,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_READ_MESSAGES,
+    exports.GET_USERS_IN_SECTION,
+    exports.PETITION,
+    exports.START_PAPER_CASE,
+    exports.TRIAL_SESSIONS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
   ],
 
   practitioner: [
+    exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.PETITION,
-    exports.FILE_EXTERNAL_DOCUMENT,
   ],
   respondent: [
-    exports.GET_CASE,
     exports.FILE_EXTERNAL_DOCUMENT,
+    exports.GET_CASE,
     exports.UPDATE_CASE,
   ],
   seniorattorney: [
+    exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_METADATA,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.UPDATE_CASE,
-    exports.WORKITEM,
     exports.GET_READ_MESSAGES,
     exports.GET_USERS_IN_SECTION,
     exports.TRIAL_SESSIONS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
   ],
   taxpayer: [exports.PETITION],
 };
 
 /**
  * Checks user permissions for an action
- * @param user
- * @param action
- * @param owner
- * @returns {boolean}
+ *
+ * @param {object} user the user to check for authorization
+ * @param {string} action the action to verify if the user is authorized for
+ * @param {string} owner the user id of the owner of the item to verify
+ * @returns {boolean} true if user is authorized, false otherwise
  */
 exports.isAuthorized = (user, action, owner) => {
   if (user.userId && user.userId === owner) {

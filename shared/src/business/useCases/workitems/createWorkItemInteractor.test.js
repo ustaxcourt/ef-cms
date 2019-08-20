@@ -1,6 +1,7 @@
 const sinon = require('sinon');
 const { createWorkItemInteractor } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('createWorkItem', () => {
   let createWorkItemStub;
@@ -16,16 +17,12 @@ describe('createWorkItem', () => {
     getCurrentUser: () => ({
       name: 'Tax Payer',
       role: 'petitioner',
-      userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     }),
     getPersistenceGateway: () => ({
       createWorkItem: createWorkItemStub,
       getCaseByCaseId: () => MOCK_CASE,
-      getUserById: () => ({
-        name: 'docketclerk',
-        role: 'docketclerk',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      getUserById: ({ userId }) => MOCK_USERS[userId],
       updateCase: updateCaseStub,
     }),
     ...overrides,
@@ -53,20 +50,21 @@ describe('createWorkItem', () => {
       getCurrentUser: () => ({
         name: 'Docketclerk',
         role: 'docketclerk',
-        userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     });
+
     await createWorkItemInteractor({
       applicationContext,
-      assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+      assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       message: 'testing',
     });
     expect(createWorkItemStub.calledOnce).toBeTruthy();
     expect(createWorkItemStub.getCall(0).args[0].workItem).toMatchObject({
-      assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-      assigneeName: 'docketclerk',
+      assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
+      assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: 'New',
       docketNumber: '101-18',
@@ -79,15 +77,15 @@ describe('createWorkItem', () => {
       messages: [
         {
           from: 'Docketclerk',
-          fromUserId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+          fromUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
           message: 'testing',
-          to: 'docketclerk',
-          toUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          to: 'Docketclerk1',
+          toUserId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
       section: 'docket',
       sentBy: 'Docketclerk',
-      sentByUserId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+      sentByUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
 
@@ -96,12 +94,13 @@ describe('createWorkItem', () => {
       getCurrentUser: () => ({
         name: 'Docketclerk',
         role: 'docketclerk',
-        userId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     });
+
     await createWorkItemInteractor({
       applicationContext,
-      assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+      assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       message: 'testing',
@@ -110,8 +109,8 @@ describe('createWorkItem', () => {
     expect(
       updateCaseStub.getCall(0).args[0].caseToUpdate.documents[2].workItems[0],
     ).toMatchObject({
-      assigneeId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
-      assigneeName: 'docketclerk',
+      assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
+      assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
       caseStatus: 'New',
       docketNumber: '101-18',
@@ -124,15 +123,15 @@ describe('createWorkItem', () => {
       messages: [
         {
           from: 'Docketclerk',
-          fromUserId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+          fromUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
           message: 'testing',
-          to: 'docketclerk',
-          toUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          to: 'Docketclerk1',
+          toUserId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
       section: 'docket',
       sentBy: 'Docketclerk',
-      sentByUserId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+      sentByUserId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
 });

@@ -24,6 +24,12 @@ const {
   assignWorkItemsInteractor,
 } = require('../../shared/src/business/useCases/workitems/assignWorkItemsInteractor');
 const {
+  associatePractitionerWithCaseInteractor,
+} = require('../../shared/src/business/useCases/manualAssociation/associatePractitionerWithCaseInteractor');
+const {
+  associateRespondentWithCaseInteractor,
+} = require('../../shared/src/business/useCases/manualAssociation/associateRespondentWithCaseInteractor');
+const {
   associateUserWithCase,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCase');
 const {
@@ -221,6 +227,12 @@ const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
+  getPractitionersBySearchKeyInteractor,
+} = require('../../shared/src/business/useCases/users/getPractitionersBySearchKeyInteractor');
+const {
+  getRespondentsBySearchKeyInteractor,
+} = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
+const {
   getSentMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getSentMessagesForSection');
 const {
@@ -253,6 +265,9 @@ const {
 const {
   getUserInteractor,
 } = require('../../shared/src/business/useCases/getUserInteractor');
+const {
+  getUsersBySearchKey,
+} = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
   getUsersInSection,
 } = require('../../shared/src/persistence/dynamo/users/getUsersInSection');
@@ -296,6 +311,9 @@ const {
 const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
+const {
+  saveWorkItemForDocketEntryWithoutFile,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryWithoutFile');
 const {
   saveWorkItemForNonPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForNonPaper');
@@ -350,6 +368,9 @@ const {
 const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
+const {
+  updateDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
@@ -479,6 +500,7 @@ module.exports = (appContextUser = {}) => {
         createUser,
         createWorkItem,
         deleteCaseDeadline,
+
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
@@ -506,6 +528,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessions,
         getUploadPolicy,
         getUserById,
+        getUsersBySearchKey,
         getUsersInSection,
         getWorkItemById,
         incrementCounter,
@@ -513,6 +536,7 @@ module.exports = (appContextUser = {}) => {
         putWorkItemInUsersOutbox,
         saveDocument,
         saveWorkItemForDocketClerkFilingExternalDocument,
+        saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
         setWorkItemAsRead,
@@ -547,6 +571,8 @@ module.exports = (appContextUser = {}) => {
       return {
         addCoverToPDFDocumentInteractor,
         assignWorkItemsInteractor,
+        associatePractitionerWithCaseInteractor,
+        associateRespondentWithCaseInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
@@ -578,6 +604,8 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getNotificationsInteractor,
+        getPractitionersBySearchKeyInteractor,
+        getRespondentsBySearchKeyInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
         getTrialSessionDetailsInteractor,
@@ -601,6 +629,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
         validatePdfInteractor,
         verifyCaseForUserInteractor,

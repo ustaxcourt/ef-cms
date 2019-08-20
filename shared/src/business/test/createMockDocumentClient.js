@@ -18,6 +18,23 @@ const createMockDocumentClient = () => {
       sk: '3805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     },
+    ['7805d1ab-18d0-43ec-bafb-654e83405416 7805d1ab-18d0-43ec-bafb-654e83405416']: {
+      email: 'taxpayer',
+      name: 'Test Petitioner',
+      pk: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      role: 'petitioner',
+      sk: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+    ['a805d1ab-18d0-43ec-bafb-654e83405416 a805d1ab-18d0-43ec-bafb-654e83405416']: {
+      email: 'pettitionsclerk',
+      name: 'Alex Petitionsclerk',
+      pk: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      role: 'petitionsclerk',
+      section: 'petitions',
+      sk: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    },
   };
 
   return {

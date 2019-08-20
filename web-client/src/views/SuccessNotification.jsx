@@ -51,7 +51,7 @@ class SuccessNotificationComponent extends React.Component {
                     </p>
                     <p className="usa-alert__text">{alertSuccess.message}</p>
                   </div>
-                  <div className="tablet:grid-col-2 usa-alert__action">
+                  <div className="tablet:grid-col-2 usa-alert__action margin-top-1">
                     <button
                       className="usa-button usa-button--unstyled no-underline"
                       type="button"

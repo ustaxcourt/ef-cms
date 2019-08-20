@@ -21,8 +21,8 @@ presenter.providers.applicationContext = {
 };
 
 presenter.providers.path = {
-  selectSource: mockSelectSource,
-  success: mockSuccess,
+  sourceInCache: mockSuccess,
+  sourceNotInCache: mockSelectSource,
 };
 
 describe('getCachedScannerSourceAction', () => {

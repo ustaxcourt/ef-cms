@@ -3,13 +3,14 @@ const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { getSectionForRole, PETITIONS_SECTION } = require('./WorkQueue');
+const { IRS_BATCH_SYSTEM_SECTION, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
 const { orderBy } = require('lodash');
 
 /**
  * constructor
- * @param rawWorkItem
+ *
+ * @param {object} rawWorkItem the raw work item data
  * @constructor
  */
 function WorkItem(rawWorkItem) {
@@ -43,7 +44,7 @@ function WorkItem(rawWorkItem) {
 
 const IRS_BATCH_SYSTEM_USER_ID = '63784910-c1af-4476-8988-a02f92da8e09';
 
-WorkItem.name = 'WorkItem';
+WorkItem.validationName = 'WorkItem';
 
 joiValidationDecorator(
   WorkItem,
@@ -125,8 +126,8 @@ joiValidationDecorator(
 
 /**
  *
- * @param message
- * @returns {WorkItem}
+ * @param {Message} message the message to add to the work item
+ * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.addMessage = function(message) {
   this.messages = [...this.messages, message];
@@ -140,33 +141,39 @@ WorkItem.prototype.setAsInternal = function() {
 
 /**
  * get the latest message (by createdAt)
- * @returns {Message}
+ *
+ * @returns {Message} the latest message entity by date
  */
 WorkItem.prototype.getLatestMessageEntity = function() {
   return orderBy(this.messages, 'createdAt', 'desc')[0];
 };
 
 /**
+ * Assign to a user
  *
- * @param assigneeId
- * @param assigneeName
- * @param role
- * @returns {WorkItem}
+ * @param {object} props the props object
+ * @param {string} props.assigneeId the user id of the user to assign the work item to
+ * @param {string} props.assigneeName the name of the user to assign the work item to
+ * @param {string} props.role the role of the user to assign the work item to
+ * @param {string} props.sentBy the name of the user who sent the work item
+ * @param {string} props.sentByUserId the user id of the user who sent the work item
+ * @param {string} props.sentByUserRole the role of the user who sent the work item
+ * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.assignToUser = function({
   assigneeId,
   assigneeName,
-  role,
+  section,
   sentBy,
+  sentBySection,
   sentByUserId,
-  sentByUserRole,
 }) {
   Object.assign(this, {
     assigneeId,
     assigneeName,
-    section: getSectionForRole(role),
+    section,
     sentBy,
-    sentBySection: getSectionForRole(sentByUserRole),
+    sentBySection,
     sentByUserId,
   });
   return this;
@@ -178,20 +185,23 @@ WorkItem.prototype.setStatus = function(status) {
 
 /**
  *
- * @param userId
+ * @param {object} props the props object
+ * @param {string} props.name the name of the user who triggered the assign action
+ * @param {string} props.userId the user id of the user who triggered the assign action
+ * @param {string} props.userRole the role of the user who triggered the assign action
  */
 WorkItem.prototype.assignToIRSBatchSystem = function({
   name,
   userId,
-  userRole,
+  userSection,
 }) {
   this.assignToUser({
     assigneeId: IRS_BATCH_SYSTEM_USER_ID,
     assigneeName: 'IRS Holding Queue',
-    role: 'irsBatchSystem',
+    section: IRS_BATCH_SYSTEM_SECTION,
     sentBy: name,
+    sentBySection: userSection,
     sentByUserId: userId,
-    sentByUserRole: userRole,
   });
   this.addMessage(
     new Message({
@@ -206,7 +216,9 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
 
 /**
  *
- * @param user
+ * @param {object} props the props object
+ * @param {string} props.user the user who recalled the work item from the IRS queue
+ * @returns {Message} the message created when the work item was recalled
  */
 WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   const message = new Message({
@@ -220,10 +232,10 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
   this.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    role: user.role,
+    section: user.section,
     sentBy: user.name,
+    sentBySection: user.section,
     sentByUserId: user.userId,
-    sentByUserRole: user.role,
   });
   this.section = PETITIONS_SECTION;
   this.addMessage(message);
@@ -232,7 +244,10 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
 
 /**
  *
- * @param userId
+ * @param {object} props the props object
+ * @param {string} props.message the message the user entered when setting as completed
+ * @param {object} props.user the user who triggered the complete action
+ * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedAt = new Date().toISOString();
@@ -246,9 +261,10 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 /**
  * complete the work item as the IRS user with the message 'Served on IRS'
  *
- * @param opts
- * @param opts.batchedByUserId
- * @param opts.batchedByName
+ * @param {object} props the props object
+ * @param {string} props.batchedByName the name of the user who batched the work item
+ * @param {object} props.batchedByUserId the user id of the user who batched the work item
+ * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.setAsSentToIRS = function({
   batchedByName,

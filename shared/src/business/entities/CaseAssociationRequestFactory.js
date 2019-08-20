@@ -9,32 +9,32 @@ const {
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 /**
- * @param rawProps
+ * Case Association Request Factory entity
+ *
+ * @param {object} rawProps the raw case association request data
  * @constructor
  */
 function CaseAssociationRequestFactory(rawProps) {
   let entityConstructor = function(rawPropsParam) {
-    Object.assign(this, {
-      attachments: rawPropsParam.attachments,
-      certificateOfService: rawPropsParam.certificateOfService,
-      certificateOfServiceDate: rawPropsParam.certificateOfServiceDate,
-      documentTitle: rawPropsParam.documentTitle,
-      documentTitleTemplate: rawPropsParam.documentTitleTemplate,
-      documentType: rawPropsParam.documentType,
-      eventCode: rawPropsParam.eventCode,
-      exhibits: rawPropsParam.exhibits,
-      hasSupportingDocuments: rawPropsParam.hasSupportingDocuments,
-      objections: rawPropsParam.objections,
-      partyPractitioner: rawPropsParam.partyPractitioner,
-      partyRespondent: rawPropsParam.partyRespondent,
-      primaryDocumentFile: rawPropsParam.primaryDocumentFile,
-      representingPrimary: rawPropsParam.representingPrimary,
-      representingSecondary: rawPropsParam.representingSecondary,
-      scenario: rawPropsParam.scenario,
-      supportingDocument: rawPropsParam.supportingDocument,
-      supportingDocumentFile: rawPropsParam.supportingDocumentFile,
-      supportingDocumentFreeText: rawPropsParam.supportingDocumentFreeText,
-    });
+    this.attachments = rawPropsParam.attachments;
+    this.certificateOfService = rawPropsParam.certificateOfService;
+    this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
+    this.documentTitle = rawPropsParam.documentTitle;
+    this.documentTitleTemplate = rawPropsParam.documentTitleTemplate;
+    this.documentType = rawPropsParam.documentType;
+    this.eventCode = rawPropsParam.eventCode;
+    this.exhibits = rawPropsParam.exhibits;
+    this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
+    this.objections = rawPropsParam.objections;
+    this.partyPractitioner = rawPropsParam.partyPractitioner;
+    this.partyRespondent = rawPropsParam.partyRespondent;
+    this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
+    this.representingPrimary = rawPropsParam.representingPrimary;
+    this.representingSecondary = rawPropsParam.representingSecondary;
+    this.scenario = rawPropsParam.scenario;
+    this.supportingDocument = rawPropsParam.supportingDocument;
+    this.supportingDocumentFile = rawPropsParam.supportingDocumentFile;
+    this.supportingDocumentFreeText = rawPropsParam.supportingDocumentFreeText;
   };
 
   const documentWithExhibits = [

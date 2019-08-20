@@ -2,8 +2,10 @@ const { StringDecoder } = require('string_decoder');
 
 /**
  * validatePdfInteractor
- * @param applicationContext
- * @param documentId
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.documentId the id of the document to validate
  * @returns {object} errors (null if no errors)
  */
 exports.validatePdfInteractor = async ({ applicationContext, documentId }) => {

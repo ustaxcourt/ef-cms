@@ -1,15 +1,25 @@
 #!/bin/bash
-git_access_token="${git_access_token}"
-dynamsoft_repo="${dynamsoft_repo}"
-dynamsoft_zip_name="${dynamsoft_zip_name}"
-product_keys="${product_keys}"
+dynamsoft_s3_zip_path="${dynamsoft_s3_zip_path}"
+dynamsoft_url="${dynamsoft_url}"
+dynamsoft_product_keys="${dynamsoft_product_keys}"
 
+export DEBIAN_FRONTEND=noninteractive 
 sudo apt update
-sudo apt install -y nginx
+sudo apt install -y nginx 
+sudo apt install -y awscli 
 sudo ufw allow 'Nginx HTTP'
 cd /var/www/html || exit
-sudo curl -H "Authorization: token ${git_access_token}" -L "${dynamsoft_repo}" -o dynamsoft.tar.gz
+
+# download the zip
+sudo aws s3 cp "${dynamsoft_s3_zip_path}" dynamsoft.tar.gz
 sudo tar xvzf dynamsoft.tar.gz
-sudo cp -R "${dynamsoft_zip_name}"/* .
-sudo sed "s/DYNAMSOFT_KEY/${product_keys}/" Resources/dynamsoft.webtwain.config.js.tpl | sudo tee /tmp/dynamsoft.webtwain.config.js
-sudo cp /tmp/dynamsoft.webtwain.config.js ./Resources
+
+# copy config to /tmp due to permission issues
+cp dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js /tmp/dynamsoft.webtwain.config.js.tpl
+
+# replace the resource path with the full path to the resources folder
+sudo sed -i "s|DYNAMSOFT_RESOURCE_PATH|${dynamsoft_url}/dynamic-web-twain-sdk-14.3.1|" /tmp/dynamsoft.webtwain.config.js.tpl
+sudo sed -i "s|DYNAMSOFT_PRODUCT_KEYS|${dynamsoft_product_keys}|" /tmp/dynamsoft.webtwain.config.js.tpl
+
+# copy back from /tmp to main nginx html folder
+sudo cp /tmp/dynamsoft.webtwain.config.js.tpl dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js

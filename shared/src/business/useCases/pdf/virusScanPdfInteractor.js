@@ -3,8 +3,10 @@ const tmp = require('tmp');
 
 /**
  * virusScanDocument
- * @param applicationContext
- * @param documentId
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.documentId the id of the document to virus scan
  * @returns {object} errors (null if no errors)
  */
 exports.virusScanPdfInteractor = async ({ applicationContext, documentId }) => {

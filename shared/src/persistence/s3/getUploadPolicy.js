@@ -3,8 +3,10 @@ exports.MAX_FILE_SIZE_BYTES = exports.MAX_FILE_SIZE_MB * 1024 * 1024; // bytes -
 
 /**
  * getUploadPolicy
- * @param applicationContext
- * @returns {Promise<any>}
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {Promise} the promise of the call to the storage client
  */
 exports.getUploadPolicy = ({ applicationContext }) =>
   new Promise((resolve, reject) => {

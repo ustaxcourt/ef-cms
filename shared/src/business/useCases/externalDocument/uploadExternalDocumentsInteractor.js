@@ -23,6 +23,7 @@ exports.uploadExternalDocumentsInteractor = async ({
 
   /**
    * produces a promise even if document is not defined
+   *
    * @param {object} document the document to be uploaded
    * @param {number} idx the index of the document and progress function
    *

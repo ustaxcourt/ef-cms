@@ -3,14 +3,35 @@ import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import close from '../../node_modules/uswds/dist/img/close.svg';
+import classNames from 'classnames';
+import close from '../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
 
-const NavigationItems = (helper, sequences) => {
+const NavigationItems = (helper, { navigateToPathSequence }) => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list">
+      {helper.showHomeIcon && (
+        <li
+          className={classNames(
+            'ustc-nav-no-active-underline',
+            'usa-nav__primary-item',
+            helper.pageIsHome && 'active',
+          )}
+        >
+          <button
+            onClick={() => {
+              navigateToPathSequence({
+                path: '/',
+              });
+            }}
+          >
+            <FontAwesomeIcon icon="home" />
+            <span className="sr-only">Home</span>
+          </button>
+        </li>
+      )}
       {helper.showMessages && (
         <li
           className={
@@ -19,11 +40,11 @@ const NavigationItems = (helper, sequences) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href="/"
-            onClick={e => {
-              e.preventDefault();
-              sequences.navigateToPathSequence({
+          <button
+            className="usa-button usa-button__unstyled"
+            href="/messages/my/inbox"
+            onClick={() => {
+              navigateToPathSequence({
                 path: '/messages/my/inbox',
               });
             }}
@@ -38,7 +59,7 @@ const NavigationItems = (helper, sequences) => {
                 size="sm"
               />
             )}
-          </a>
+          </button>
         </li>
       )}
       {helper.showDocumentQC && (
@@ -49,17 +70,17 @@ const NavigationItems = (helper, sequences) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a
-            href="/"
-            onClick={e => {
-              e.preventDefault();
-              sequences.navigateToPathSequence({
+          <button
+            className="usa-button usa-button__unstyled"
+            title="Document QC"
+            onClick={() => {
+              navigateToPathSequence({
                 path: helper.defaultQCBoxPath,
               });
             }}
           >
             Document QC
-          </a>
+          </button>
         </li>
       )}
       {helper.showMyCases && (
@@ -70,7 +91,16 @@ const NavigationItems = (helper, sequences) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/">My Cases</a>
+          <button
+            className="usa-button usa-button__unstyled"
+            onClick={() => {
+              navigateToPathSequence({
+                path: '/',
+              });
+            }}
+          >
+            My Cases
+          </button>
         </li>
       )}
       {helper.showTrialSessions && (
@@ -81,7 +111,16 @@ const NavigationItems = (helper, sequences) => {
               : 'usa-nav__primary-item'
           }
         >
-          <a href="/trial-sessions">Trial Sessions</a>
+          <button
+            className="usa-button usa-button__unstyled"
+            onClick={() => {
+              navigateToPathSequence({
+                path: '/trial-sessions',
+              });
+            }}
+          >
+            Trial Sessions
+          </button>
         </li>
       )}
     </ul>
@@ -144,12 +183,18 @@ export const Header = connect(
         >
           <div className="grid-col-1">
             <div className="usa-logo" id="extended-logo">
-              <a href="/">
+              <button
+                onClick={() => {
+                  navigateToPathSequence({
+                    path: '/',
+                  });
+                }}
+              >
                 <img alt="USTC Seal" src={seal} />
-              </a>
+              </button>
             </div>
           </div>
-          <div className="grid-col-6">
+          <div className="grid-col-7">
             <nav className="main-navigation" role="navigation">
               {user &&
                 NavigationItems(helper, {
@@ -157,7 +202,7 @@ export const Header = connect(
                 })}
             </nav>
           </div>
-          <div className="grid-col-5">
+          <div className="grid-col-4">
             <button
               className="usa-menu-btn"
               onClick={() => toggleMobileMenuSequence()}

@@ -289,3 +289,11 @@ button {
   margin-top: 20px;
   text-align: left;
 }
+
+.practitioner-matches,
+.respondent-matches {
+  overflow: auto;
+  max-height: 170px;
+  padding: 6px;
+  margin: -6px;
+}

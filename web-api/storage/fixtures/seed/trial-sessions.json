@@ -5,8 +5,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 100,
     "sessionType": "Regular",
-    "judge": "Judge Judy",
+    "judge": {
+      "name": "Judge Armen",
+      "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+    },
     "startDate": "2019-11-27T05:00:00.000Z",
+    "createdAt": "2019-10-27T05:00:00.000Z",
     "startTime": "10:00",
     "term": "Fall",
     "termYear": "2019",
@@ -23,8 +27,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 6,
     "sessionType": "Special",
-    "judge": "Judge Judy",
+    "judge": {
+      "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Carluzzo"
+    },
     "startDate": "2019-11-25T05:00:00.000Z",
+    "createdAt": "2019-10-25T05:00:00.000Z",
     "startTime": "15:00",
     "term": "Fall",
     "termYear": "2019",
@@ -41,8 +49,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 125,
     "sessionType": "Hybrid",
-    "judge": "Judge Smith",
+    "judge": {
+      "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Buch"
+    },
     "startDate": "2019-11-25T05:00:00.000Z",
+    "createdAt": "2019-10-25T05:00:00.000Z",
     "startTime": "15:00",
     "term": "Fall",
     "termYear": "2019",
@@ -57,8 +69,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 100,
     "sessionType": "Regular",
-    "judge": "Judge Dredd",
+    "judge": {
+      "name": "Judge Armen",
+      "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+    },
     "startDate": "2019-11-25T05:00:00.000Z",
+    "createdAt": "2019-10-25T05:00:00.000Z",
     "startTime": "21:00",
     "term": "Fall",
     "termYear": "2019",
@@ -73,8 +89,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 125,
     "sessionType": "Small",
-    "judge": "Judge Dredd",
+    "judge": {
+      "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Carluzzo"
+    },
     "startDate": "2019-12-02T05:00:00.000Z",
+    "createdAt": "2019-10-02T05:00:00.000Z",
     "startTime": "21:00",
     "term": "Fall",
     "termYear": "2019",
@@ -89,8 +109,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 30,
     "sessionType": "Special",
-    "judge": "Judge Arnold",
+    "judge": {
+      "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Cohen"
+    },
     "startDate": "2019-12-02T05:00:00.000Z",
+    "createdAt": "2019-10-02T05:00:00.000Z",
     "startTime": "21:00",
     "term": "Fall",
     "termYear": "2019",
@@ -105,8 +129,12 @@
     "gsi1pk": "trial-session-catalog",
     "maxCases": 8,
     "sessionType": "Regular",
-    "judge": "Judge Judy",
+    "judge": {
+      "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Cohen"
+    },
     "startDate": "2019-12-02T05:00:00.000Z",
+    "createdAt": "2019-10-02T05:00:00.000Z",
     "startTime": "09:00",
     "term": "Fall",
     "termYear": "2019",

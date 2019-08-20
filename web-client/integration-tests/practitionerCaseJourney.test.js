@@ -1,7 +1,7 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
@@ -19,17 +19,13 @@ import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsCaseDetailOfOwnedCase';
 import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
 import practitionerViewsDashboard from './journey/practitionerViewsDashboard';
-import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
+import { uploadPetition } from './helpers';
 
 let test;
 global.FormData = FormData;
@@ -94,11 +90,20 @@ describe('Practitioner requests access to case', () => {
   //tests for practitioner requesting access to existing case
   //taxpayer must first create a case for practitioner to request access to
   taxpayerLogin(test);
-  taxpayerCancelsCreateCase(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
+  it('Create test case #1', async () => {
+    await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: 'domestic',
+        name: 'Jimothy Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+      partyType: 'Petitioner & Spouse',
+    });
+  });
   taxpayerViewsDashboard(test);
   taxpayerSignsOut(test);
 
@@ -114,11 +119,21 @@ describe('Practitioner requests access to case', () => {
   //tests for practitioner requesting access to existing case
   //taxpayer must first create a case for practitioner to request access to
   taxpayerLogin(test);
-  taxpayerCancelsCreateCase(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
+  taxpayerViewsDashboard(test);
+  it('Create test case #2', async () => {
+    await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: 'domestic',
+        name: 'Jimothy Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+      partyType: 'Petitioner & Spouse',
+    });
+  });
   taxpayerViewsDashboard(test);
   taxpayerSignsOut(test);
 

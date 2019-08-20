@@ -7,8 +7,10 @@ const execPromise = util.promisify(exec);
 
 /**
  * sanitizes PDF input, removing interactive elements, saves altered PDF to persistence
- * @param applicationContext
- * @param documentId
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.documentId the id of the document to sanitize
  * @returns {Uint8Array} modified PDF data
  */
 exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {

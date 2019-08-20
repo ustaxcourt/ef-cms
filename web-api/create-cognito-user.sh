@@ -22,7 +22,7 @@ generate_post_data() {
   "role": "$role",
   "name": "$name",
   "address": "123 Main Street Los Angeles, CA 98089",
-  "barnumber": "12345-67",
+  "barNumber": "PT1234",
   "phone": "111-111-1111"
 }
 EOF

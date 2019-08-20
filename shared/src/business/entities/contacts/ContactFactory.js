@@ -161,10 +161,11 @@ ContactFactory.getErrorToMessageMap = ({
  * used for getting the contact constructor depending on the party type and contact type
  *
  * @param {object} options the options object
- * @param {string} partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @param {string} countryType typically either 'domestic' or 'international'
- * @param {string} contactType typically either 'primary' or 'secondary'
- * @param {boolean} isPaper is paper case
+ * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
+ * @param {string} options.countryType typically either 'domestic' or 'international'
+ * @param {string} options.contactType typically either 'primary' or 'secondary'
+ * @param {boolean} options.isPaper is paper case
+ * @returns {object} the contact constructors for the primary and/or secondary contacts
  */
 const getContactConstructor = ({
   contactType,
@@ -304,8 +305,8 @@ const getContactConstructor = ({
  * used for instantiating the primary and secondary contact objects which are later used in the Petition entity.
  *
  * @param {object} options the options object
- * @param {string} partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @param {string} contactInfo object which should contain primary and secondary used for creating the contact entities
+ * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
+ * @param {string} options. object which should contain primary and secondary used for creating the contact entities
  * @returns {object} contains the primary and secondary contacts constructed
  */
 ContactFactory.createContacts = ({ contactInfo, isPaper, partyType }) => {
@@ -345,27 +346,25 @@ ContactFactory.createContactFactory = ({
 }) => {
   return ({ countryType, isPaper }) => {
     /**
-     * creates a contact entities
+     * creates a contact entity
+     *
      * @param {object} rawContact the options object
-     * @returns {object} the entity constructor function
      */
     function GenericContactConstructor(rawContact) {
-      Object.assign(this, {
-        address1: rawContact.address1,
-        address2: rawContact.address2 ? rawContact.address2 : undefined,
-        address3: rawContact.address3 ? rawContact.address3 : undefined,
-        city: rawContact.city,
-        country: rawContact.country,
-        countryType: rawContact.countryType,
-        email: rawContact.email,
-        inCareOf: rawContact.inCareOf,
-        name: rawContact.name,
-        phone: rawContact.phone,
-        postalCode: rawContact.postalCode,
-        secondaryName: rawContact.secondaryName,
-        state: rawContact.state,
-        title: rawContact.title,
-      });
+      this.address1 = rawContact.address1;
+      this.address2 = rawContact.address2 ? rawContact.address2 : undefined;
+      this.address3 = rawContact.address3 ? rawContact.address3 : undefined;
+      this.city = rawContact.city;
+      this.country = rawContact.country;
+      this.countryType = rawContact.countryType;
+      this.email = rawContact.email;
+      this.inCareOf = rawContact.inCareOf;
+      this.name = rawContact.name;
+      this.phone = rawContact.phone;
+      this.postalCode = rawContact.postalCode;
+      this.secondaryName = rawContact.secondaryName;
+      this.state = rawContact.state;
+      this.title = rawContact.title;
     }
 
     GenericContactConstructor.errorToMessageMap = {

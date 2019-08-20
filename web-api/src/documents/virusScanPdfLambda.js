@@ -12,14 +12,16 @@ const {
  */
 exports.handler = event =>
   handle(event, async () => {
-    const {documentId} = event.pathParameters;
+    const { documentId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().virusScanPdfInteractor({
-        applicationContext,
-        documentId,
-      });
+      const results = await applicationContext
+        .getUseCases()
+        .virusScanPdfInteractor({
+          applicationContext,
+          documentId,
+        });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
     } catch (e) {

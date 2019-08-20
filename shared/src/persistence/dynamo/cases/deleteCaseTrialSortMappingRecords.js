@@ -3,9 +3,10 @@ const client = require('../../dynamodbClientService');
 /**
  * deleteCaseTrialSortMappingRecords
  *
- * @param caseId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to delete the mapping records for
+ * @returns {Promise} the return from the persistence delete calls
  */
 exports.deleteCaseTrialSortMappingRecords = async ({
   applicationContext,

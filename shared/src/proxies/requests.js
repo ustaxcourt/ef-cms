@@ -2,10 +2,11 @@
  *
  * get
  *
- * @param applicationContext
- * @param userId
- * @param status
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.endpoint the endpoint to call
+ * @param {object} providers.params the params to send to the endpoint
+ * @returns {Promise<*>} the response data
  */
 exports.get = ({ applicationContext, endpoint, params }) =>
   applicationContext
@@ -22,10 +23,11 @@ exports.get = ({ applicationContext, endpoint, params }) =>
  *
  * post
  *
- * @param applicationContext
- * @param userId
- * @param status
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.body the body to send with the request
+ * @param {string} providers.endpoint the endpoint to call
+ * @returns {Promise<*>} the response data
  */
 exports.post = ({ applicationContext, body, endpoint }) =>
   applicationContext
@@ -41,10 +43,11 @@ exports.post = ({ applicationContext, body, endpoint }) =>
  *
  * put
  *
- * @param applicationContext
- * @param userId
- * @param status
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.body the body to send with the request
+ * @param {string} providers.endpoint the endpoint to call
+ * @returns {Promise<*>} the response data
  */
 exports.put = ({ applicationContext, body, endpoint }) =>
   applicationContext
@@ -60,10 +63,11 @@ exports.put = ({ applicationContext, body, endpoint }) =>
  *
  * remove
  *
- * @param applicationContext
- * @param userId
- * @param status
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.endpoint the endpoint to call
+ * @param {object} providers.params the params to send to the endpoint
+ * @returns {Promise<*>} the response data
  */
 exports.remove = ({ applicationContext, endpoint, params }) =>
   applicationContext

@@ -144,16 +144,9 @@ provider:
 
 package:
   exclude:
-    - storage/**
-    - coverage/**
-    - terraform/**
-    - cognito/**
-    - node_modules/**
-    - .cache/**
-    - .dynamodb/**
-    - .nyc_output/**
-    - dist/**
-    - runtimes/**
+    - ./**
+  include:
+    - web-api/src/trialSessionsHandlers.js
 
   excludeDevDependencies: true
 
@@ -193,7 +186,7 @@ resources:
 
 functions:
   getTrialSessions:
-    handler: src/trialSessionsHandlers.getTrialSessionsLambda
+    handler: web-api/src/trialSessionsHandlers.getTrialSessionsLambda
     events:
       - http:
           path: /
@@ -204,7 +197,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   createTrialSession:
-    handler: src/trialSessionsHandlers.createTrialSessionLambda
+    handler: web-api/src/trialSessionsHandlers.createTrialSessionLambda
     events:
       - http:
           path: /
@@ -216,7 +209,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getTrialSessionDetails:
-    handler: src/trialSessionsHandlers.getTrialSessionDetailsLambda
+    handler: web-api/src/trialSessionsHandlers.getTrialSessionDetailsLambda
     events:
       - http:
           path: /{trialSessionId}
@@ -228,7 +221,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setTrialSessionAsSwingSession:
-    handler: src/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
+    handler: web-api/src/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
           path: /{trialSessionId}/set-swing-session
@@ -240,7 +233,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getEligibleCasesForTrialSession:
-    handler: src/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
+    handler: web-api/src/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
     events:
       - http:
           path: /{trialSessionId}/eligible-cases
@@ -252,7 +245,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setTrialSessionCalendar:
-    handler: src/trialSessionsHandlers.setTrialSessionCalendarLambda
+    handler: web-api/src/trialSessionsHandlers.setTrialSessionCalendarLambda
     events:
       - http:
           path: /{trialSessionId}/set-calendar
@@ -263,7 +256,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getCalendaredCasesForTrialSession:
-    handler: src/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
+    handler: web-api/src/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
           path: /{trialSessionId}/get-calendared-cases

@@ -1,15 +1,46 @@
 const { getUserInteractor } = require('./getUserInteractor');
+const { User } = require('../entities/User');
 
-describe('Get user', () => {
-  it('returns the same user passed in with section defined', async () => {
-    const user = await getUserInteractor({
-      role: 'docketclerk',
-      userId: 'docketclerk',
-    });
+describe('getUserInteractor', () => {
+  let applicationContext;
+
+  it('calls the persistence method to get the user', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () =>
+        new User({
+          name: 'Test Taxpayer',
+          role: 'petitionsclerk',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        }),
+      getPersistenceGateway: () => ({
+        getUserById: () => ({
+          name: 'Test Taxpayer',
+          role: 'petitionsclerk',
+          section: 'petitions',
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        }),
+      }),
+    };
+
+    let error;
+    let user;
+
+    try {
+      user = await getUserInteractor({
+        applicationContext,
+        caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeUndefined();
     expect(user).toEqual({
-      role: 'docketclerk',
-      section: 'docket',
-      userId: 'docketclerk',
+      name: 'Test Taxpayer',
+      role: 'petitionsclerk',
+      section: 'petitions',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   });
 });
