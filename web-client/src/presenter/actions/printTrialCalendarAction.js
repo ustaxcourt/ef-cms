@@ -18,7 +18,7 @@ export const printTrialCalendarAction = ({ get }) => {
 
   const renderCases = item => {
     return `<tr>
-      <td>
+      <td style="width: 13%;" class="valign-top">
         ${item.docketNumberWithSuffix}
       </td>
       <td class="line-height-13">${item.caseCaption}</td>
@@ -143,6 +143,6 @@ export const printTrialCalendarAction = ({ get }) => {
   return {
     docketNumber: caseDetail.docketNumberWithSuffix,
     docketRecordHtml: output,
-    headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDateFull} ${formattedTrialSessionDetails.sessionType}`,
+    headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDate} ${formattedTrialSessionDetails.sessionType}`,
   };
 };
