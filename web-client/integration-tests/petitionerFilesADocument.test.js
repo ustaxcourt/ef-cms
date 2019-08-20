@@ -1,7 +1,7 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { Document } from '../../shared/src/business/entities/Document';
-import { TrialSession } from '../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../src/applicationContext';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
@@ -16,6 +16,7 @@ import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
+import taxpayerViewsCaseDetailAfterFilingDocument from './journey/taxpayerViewsCaseDetailAfterFilingDocument';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 const {
   ContactFactory,
@@ -83,5 +84,6 @@ describe('Taxpayer files document', () => {
   taxpayerViewsDashboard(test);
   taxpayerViewsCaseDetail(test);
   taxpayerFilesDocumentForCase(test, fakeFile);
+  taxpayerViewsCaseDetailAfterFilingDocument(test);
   taxpayerSignsOut(test);
 });

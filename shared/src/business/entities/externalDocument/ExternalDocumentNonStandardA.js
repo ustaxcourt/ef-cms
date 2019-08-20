@@ -6,7 +6,7 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
  *
- * @param rawProps
+ * @param {object} rawProps the raw document data
  * @constructor
  */
 function ExternalDocumentNonStandardA(rawProps) {

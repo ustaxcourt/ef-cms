@@ -3,11 +3,9 @@ const { put } = require('../../dynamodbClientService');
 /**
  * createSectionInboxRecord
  *
- * @param workItemId
- * @param message
- * @param userId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.workItem the work item data
  */
 exports.createSectionInboxRecord = async ({ applicationContext, workItem }) => {
   await put({

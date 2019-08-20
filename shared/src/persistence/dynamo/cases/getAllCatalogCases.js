@@ -2,8 +2,9 @@ const { query } = require('../../dynamodbClientService');
 /**
  * getAllCatalogCases
  *
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {Array} the catalog cases
  */
 exports.getAllCatalogCases = async ({ applicationContext }) => {
   return query({

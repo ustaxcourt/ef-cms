@@ -19,6 +19,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   );
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
+  const modalState = get(state.modal);
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
@@ -73,7 +74,16 @@ export const caseDetailHelper = (get, applicationContext) => {
     caseDeadlines,
     documentDetailTab,
     hidePublicCaseInformation: !isExternalUser,
+    practitionerSearchResultsCount:
+      modalState &&
+      modalState.practitionerMatches &&
+      modalState.practitionerMatches.length,
+    respondentSearchResultsCount:
+      modalState &&
+      modalState.respondentMatches &&
+      modalState.respondentMatches.length,
     showActionRequired,
+    showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
@@ -84,6 +94,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseNameForPrimary,
     showCreateOrderButton,
     showDirectDownloadLink: directDocumentLinkDesired,
+    showDocketRecordInProgressState: !isExternalUser,
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
@@ -96,9 +107,15 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
     showPendingAccessToCaseButton,
+    showPractitionerSection:
+      !isExternalUser ||
+      (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showRecallButton: caseDetail.status === 'Batched for IRS',
     showRequestAccessToCaseButton,
+    showRespondentSection:
+      !isExternalUser ||
+      (caseDetail.respondents && !!caseDetail.respondents.length),
     showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
     userHasAccessToCase,
   };

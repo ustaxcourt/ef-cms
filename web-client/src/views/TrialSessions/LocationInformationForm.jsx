@@ -1,4 +1,5 @@
 import { Text } from '../../ustc-ui/Text/Text';
+import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -6,7 +7,6 @@ import React from 'react';
 export const LocationInformationForm = connect(
   {
     form: state.form,
-    trialCitiesHelper: state.trialCitiesHelper,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -14,7 +14,6 @@ export const LocationInformationForm = connect(
   },
   ({
     form,
-    trialCitiesHelper,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -45,19 +44,7 @@ export const LocationInformationForm = connect(
               }}
             >
               <option value="">-- Select --</option>
-              {Object.keys(trialCitiesHelper('All').trialCitiesByState).map(
-                (state, idx) => (
-                  <optgroup key={idx} label={state}>
-                    {trialCitiesHelper('All').trialCitiesByState[state].map(
-                      (trialCity, cityIdx) => (
-                        <option key={cityIdx} value={trialCity}>
-                          {trialCity}
-                        </option>
-                      ),
-                    )}
-                  </optgroup>
-                ),
-              )}
+              <TrialCityOptions />
             </select>
             <Text
               bind="validationErrors.trialLocation"

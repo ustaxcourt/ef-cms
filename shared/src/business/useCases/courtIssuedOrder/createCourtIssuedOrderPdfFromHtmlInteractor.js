@@ -3,9 +3,12 @@ const { pdfStyles } = require('../../../tools/pdfStyles');
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
- * @param applicationContext
- * @param htmlString
- * @returns Buffer result the pdf as a binary buffer
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.docketNumberWithSuffix the docket number of the case with the suffix
+ * @param {string} providers.htmlString the htmlString for the pdf content
+ * @returns {Buffer} the pdf as a binary buffer
  */
 exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   applicationContext,

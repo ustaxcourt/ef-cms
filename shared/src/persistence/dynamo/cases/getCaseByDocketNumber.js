@@ -6,9 +6,11 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
  * getCaseByDocketNumber
- * @param docketNumber
- * @param applicationContext
- * @returns {*}
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.docketNumber the docket number to get
+ * @returns {object} the case details
  */
 exports.getCaseByDocketNumber = async ({
   applicationContext,

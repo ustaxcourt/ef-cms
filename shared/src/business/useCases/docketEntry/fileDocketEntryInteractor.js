@@ -13,13 +13,14 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
- * @param documentMetadata
- * @param primaryDocumentFileId
- * @param secondaryDocumentFileId
- * @param supportingDocumentFileId
- * @param secondarySupportingDocumentFileId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.documentMetadata the document metadata
+ * @param {string} providers.primaryDocumentFileId the id of the primary document file
+ * @param {string} providers.secondaryDocumentFileId the id of the secondary document file (optional)
+ * @param {string} providers.secondarySupportingDocumentFileId the id of the secondary supporting document file (optional)
+ * @param {string} providers.supportingDocumentFileId the id of the supporting document file (optional)
+ * @returns {object} the updated case after the documents are added
  */
 exports.fileDocketEntryInteractor = async ({
   applicationContext,
@@ -29,12 +30,16 @@ exports.fileDocketEntryInteractor = async ({
   secondarySupportingDocumentFileId,
   supportingDocumentFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
-  const { caseId } = documentMetadata;
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const { caseId } = documentMetadata;
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -60,11 +65,18 @@ exports.fileDocketEntryInteractor = async ({
     'practitioner',
   ]);
 
+  if (primaryDocumentMetadata.lodged) {
+    primaryDocumentMetadata.eventCode = 'MISL';
+  }
+
   if (secondaryDocument) {
     secondaryDocument.lodged = true;
+    secondaryDocument.eventCode = 'MISL';
   }
+
   if (secondarySupportingDocumentMetadata) {
     secondarySupportingDocumentMetadata.lodged = true;
+    secondarySupportingDocumentMetadata.eventCode = 'MISL';
   }
 
   [
@@ -104,6 +116,7 @@ exports.fileDocketEntryInteractor = async ({
           createdAt: documentEntity.createdAt,
         },
         isInternal: false,
+        isRead: user.role !== 'practitioner',
         section: DOCKET_SECTION,
         sentBy: user.userId,
       });
@@ -120,28 +133,34 @@ exports.fileDocketEntryInteractor = async ({
       documentEntity.addWorkItem(workItem);
 
       if (metadata.isPaper) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
+        if (metadata.isFileAttached) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
+          });
+        }
 
         workItem.assignToUser({
           assigneeId: user.userId,
           assigneeName: user.name,
-          role: user.role,
+          section: user.section,
           sentBy: user.name,
+          sentBySection: user.section,
           sentByUserId: user.userId,
-          sentByUserRole: user.role,
         });
       }
 
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
+      const docketRecordEditState =
+        documentEntity.isFileAttached === false ? documentMetadata : {};
+
       caseEntity.addDocketRecord(
         new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
+          editState: JSON.stringify(docketRecordEditState),
           filingDate: documentEntity.receivedAt,
         }),
       );
@@ -157,12 +176,19 @@ exports.fileDocketEntryInteractor = async ({
   for (let workItem of workItems) {
     if (workItem.document.isPaper) {
       workItemsSaved.push(
-        applicationContext
-          .getPersistenceGateway()
-          .saveWorkItemForDocketClerkFilingExternalDocument({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          }),
+        workItem.document.isFileAttached
+          ? applicationContext
+              .getPersistenceGateway()
+              .saveWorkItemForDocketClerkFilingExternalDocument({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              })
+          : applicationContext
+              .getPersistenceGateway()
+              .saveWorkItemForDocketEntryWithoutFile({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              }),
       );
     } else {
       workItemsSaved.push(

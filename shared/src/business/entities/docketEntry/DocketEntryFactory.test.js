@@ -13,9 +13,18 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require a file', () => {
-      expect(errors().primaryDocumentFile).toEqual('A file was not selected.');
       rawEntity.primaryDocumentFile = {};
+      rawEntity.primaryDocumentFileSize = 1;
       expect(errors().primaryDocumentFile).toEqual(undefined);
+    });
+
+    it('should return an error when an empty document is attached', () => {
+      rawEntity.primaryDocumentFile = {};
+      rawEntity.primaryDocumentFileSize = 0;
+      expect(errors().primaryDocumentFile).toEqual(undefined);
+      expect(errors().primaryDocumentFileSize).toEqual(
+        'Your document file size is empty.',
+      );
     });
 
     it('should not require a Filing Status selection', () => {
@@ -62,36 +71,6 @@ describe('DocketEntryFactory', () => {
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
       expect(errors().partyPrimary).toEqual('Select a filing party.');
       rawEntity.partySecondary = true;
-      expect(errors().partyPrimary).toEqual(undefined);
-    });
-
-    it('should require one of [partyPrimary, partySecondary, partyRespondent, partyPractitioner] to be selected', () => {
-      rawEntity.practitioner = [
-        {
-          name: 'Test Practitioner',
-          partyPractitioner: false,
-        },
-        {
-          name: 'Test Practitioner1',
-          partyPractitioner: false,
-        },
-      ];
-      rawEntity.partyPrimary = false;
-      expect(errors().partyPrimary).toEqual('Select a filing party.');
-    });
-
-    it('should have no errors if a single partyPractitioner is true', () => {
-      rawEntity.practitioner = [
-        {
-          name: 'Test Practitioner',
-          partyPractitioner: true,
-        },
-        {
-          name: 'Test Practitioner1',
-          partyPractitioner: false,
-        },
-      ];
-      rawEntity.partyPrimary = false;
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
@@ -166,11 +145,7 @@ describe('DocketEntryFactory', () => {
           rawEntity.scenario = 'Nonstandard H';
         });
 
-        it('should require secondary file', () => {
-          expect(errors().secondaryDocumentFile).toEqual(
-            'A file was not selected.',
-          );
-          rawEntity.secondaryDocumentFile = {};
+        it('should not require secondary file', () => {
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 

@@ -6,7 +6,10 @@ const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * constructor
- * @param rawBatch
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.rawBatch the raw batch data
  * @constructor
  */
 function Batch({ applicationContext, rawBatch }) {
@@ -22,8 +25,8 @@ Batch.validationName = 'Batch';
 /**
  * adds a page to current Batch
  *
- * @param {object} page
- * @returns {Batch}
+ * @param {object} page the page to add
+ * @returns {Batch} the batch entity after the page is added
 
  */
 Batch.prototype.addPage = function(page) {
@@ -34,7 +37,7 @@ Batch.prototype.addPage = function(page) {
 /**
  * clears all pages within this Batch
  *
- * @returns {Batch}
+ * @returns {Batch} the batch entity after the pages are cleared
  */
 Batch.prototype.clear = function() {
   this.pages = [];

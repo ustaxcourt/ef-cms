@@ -1,7 +1,8 @@
 /**
  *
- * @param applicationContext
- * @returns {Promise<string>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {string} the generated docket number
  */
 exports.createDocketNumber = async ({ applicationContext }) => {
   const id = await applicationContext.getPersistenceGateway().incrementCounter({

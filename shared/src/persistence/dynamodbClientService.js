@@ -2,8 +2,9 @@ const { chunk } = require('lodash');
 
 /**
  * PUT for dynamodb aws-sdk client
- * @param item
- * @returns {*}
+ *
+ * @param {object} item the item to remove AWS global fields from
+ * @returns {object} the item with AWS global fields removed
  */
 const removeAWSGlobalFields = item => {
   // dynamodb always adds these fields for purposes of global tables
@@ -19,8 +20,8 @@ const getTableName = ({ applicationContext }) =>
   `efcms-${applicationContext.environment.stage}`;
 /**
  *
- * @param params
- * @returns {*}
+ * @param {object} params the params to put
+ * @returns {object} the item that was put
  */
 exports.put = params => {
   return params.applicationContext
@@ -37,8 +38,8 @@ exports.put = params => {
 
 /**
  *
- * @param params
- * @returns {*}
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
  */
 exports.update = params => {
   return params.applicationContext
@@ -55,8 +56,9 @@ exports.update = params => {
 
 /**
  * updateConsistent
- * @param params
- * @returns {*}
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
  */
 exports.updateConsistent = params => {
   return params.applicationContext
@@ -75,8 +77,9 @@ exports.updateConsistent = params => {
 
 /**
  * get
- * @param params
- * @returns {*}
+ *
+ * @param {object} params the params to get
+ * @returns {object} the item that was retrieved
  */
 exports.get = params => {
   return params.applicationContext
@@ -98,7 +101,9 @@ exports.get = params => {
 
 /**
  * GET for aws-sdk dynamodb client
- * @param params
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
  */
 exports.query = params => {
   return params.applicationContext
@@ -118,7 +123,11 @@ exports.query = params => {
 
 /**
  * BATCH GET for aws-sdk dynamodb client
- * @param params
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Array} providers.keys the keys to get
+ * @returns {Array} the results retrieved
  */
 exports.batchGet = async ({ applicationContext, keys }) => {
   if (!keys.length) return [];
@@ -149,10 +158,10 @@ exports.batchGet = async ({ applicationContext, keys }) => {
 
 /**
  *
- * @param applicationContext
- * @param tableName
- * @param items
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.items the items to write
+ * @returns {Promise} the promise of the persistence call
  */
 exports.batchWrite = ({ applicationContext, items }) => {
   return applicationContext

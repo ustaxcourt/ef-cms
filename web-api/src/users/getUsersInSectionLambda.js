@@ -12,14 +12,16 @@ const {
  */
 exports.handler = event =>
   handle(event, async () => {
-    const {section} = event.pathParameters || {};
+    const { section } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const results = await applicationContext.getUseCases().getUsersInSectionInteractor({
-        applicationContext,
-        section,
-      });
+      const results = await applicationContext
+        .getUseCases()
+        .getUsersInSectionInteractor({
+          applicationContext,
+          section,
+        });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
       return results;

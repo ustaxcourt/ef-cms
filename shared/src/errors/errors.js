@@ -7,7 +7,7 @@ module.exports.NotFoundError = class NotFoundError extends Error {
   /**
    * constructor
    *
-   * @param message
+   * @param {string} message the error message
    */
   constructor(message) {
     super(message);
@@ -25,7 +25,7 @@ module.exports.UnknownUserError = class UnknownUserError extends Error {
   /**
    * constructor
    *
-   * @param message
+   * @param {string} message the error message
    */
   constructor(message) {
     super(message);
@@ -43,7 +43,7 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
   /**
    * constructor
    *
-   * @param message
+   * @param {string} message the error message
    */
   constructor(message) {
     super(message);
@@ -61,7 +61,7 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
   /**
    * constructor
    *
-   * @param message
+   * @param {string} message the error message
    */
   constructor(message = 'cannot process') {
     super(message);
@@ -79,7 +79,7 @@ module.exports.InvalidEntityError = class InvalidEntityError extends Error {
   /**
    * constructor
    *
-   * @param message
+   * @param {string} message the error message
    */
   constructor(message = 'entity is invalid or invalid for operation') {
     super(message);

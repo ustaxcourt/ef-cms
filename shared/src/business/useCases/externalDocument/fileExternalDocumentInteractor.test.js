@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentInteractor', () => {
@@ -38,13 +39,14 @@ describe('fileExternalDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            name: 'Olivia Jade',
+            name: 'Seniorattorney',
             role: 'seniorattorney',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
           };
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: async () => caseRecord,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
         }),
@@ -73,13 +75,14 @@ describe('fileExternalDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return new User({
-            name: 'Olivia Jade',
+            name: 'Respondent',
             role: 'respondent',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           });
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
@@ -112,13 +115,14 @@ describe('fileExternalDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            name: 'Olivia Jade',
+            name: 'Docketclerk',
             role: 'docketclerk',
-            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
           };
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,

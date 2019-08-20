@@ -30,7 +30,6 @@ describe('addDocketEntryHelper', () => {
 
     const expected = {
       showObjection: false,
-      showPractitionerParty: false,
       showPrimaryDocumentValid: false,
       showSecondaryDocumentValid: false,
       showSecondaryParty: false,
@@ -106,48 +105,6 @@ describe('addDocketEntryHelper', () => {
     state.validationErrors = { partyPrimary: 'You did something bad.' };
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
-  });
-
-  it('does not show respondent option under Parties Filing if no respondent is associated with case', () => {
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showRespondentParty).toBe(false);
-  });
-
-  it('shows respondent option under Parties Filing if a respondent is associated with case', () => {
-    state.caseDetail.respondents = [{ name: 'Test Respondent' }];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showRespondentParty).toBe(true);
-  });
-
-  it('does not show practitioner option under Parties Filing if practitioners on case is an empty array', () => {
-    state.caseDetail.practitioners = [];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeFalsy();
-  });
-
-  it('does not show practitioner option under Parties Filing if practitioners on case is not defined', () => {
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeFalsy();
-  });
-
-  it('shows single practitioner under Parties Filing if they are associated with the case', () => {
-    state.caseDetail.practitioners = [{ name: 'Test Practitioner' }];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeTruthy();
-    expect(result.practitionerNames).toEqual(['Test Practitioner']);
-  });
-
-  it('shows multiple practitioners under Parties Filing if they are associated with the case', () => {
-    state.caseDetail.practitioners = [
-      { name: 'Test Practitioner' },
-      { name: 'Test Practitioner1' },
-    ];
-    const result = runCompute(addDocketEntryHelper, { state });
-    expect(result.showPractitionerParty).toBeTruthy();
-    expect(result.practitionerNames).toEqual([
-      'Test Practitioner',
-      'Test Practitioner1',
-    ]);
   });
 
   it("shows should show inclusions when previous document isn't secondary", () => {

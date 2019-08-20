@@ -10,10 +10,11 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 /**
  * serveSignedStipDecisionInteractor
  *
- * @param caseId
- * @param documentId
- * @param applicationContext
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the case id of the case containing the document to serve
+ * @param {string} providers.documentId the document id of the signed stipulated decision document
+ * @returns {object} the updated case after the document was served
  */
 exports.serveSignedStipDecisionInteractor = async ({
   applicationContext,

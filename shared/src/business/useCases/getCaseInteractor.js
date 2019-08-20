@@ -8,10 +8,10 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 /**
  * getCaseInteractor
  *
- * @param user
- * @param caseId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to get
+ * @returns {object} the case data
  */
 exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
   let caseRecord;

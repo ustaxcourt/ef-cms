@@ -28,7 +28,13 @@ const state = {
     contactSecondary: {},
     docketNumberWithSuffix: '123-45S',
     docketRecordWithDocument: [],
-    practitioners: [],
+    practitioners: [
+      {
+        formattedName: 'Test Practitioner (PT1234)',
+        representingPrimary: true,
+        userId: '123',
+      },
+    ],
     respondents: [],
   },
 };
@@ -54,5 +60,9 @@ describe('printDocketRecordAction', () => {
     expect(result.output.docketRecordHtml).toContain(
       state.caseDetailHelper.caseCaptionPostfix,
     );
+    expect(result.output.docketRecordHtml).toContain(
+      state.formattedCaseDetail.practitioners.formattedName,
+    );
+    expect(result.output.docketRecordHtml).toContain('Representing');
   });
 });

@@ -1,5 +1,5 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { TrialSession } from '../../../../shared/src/business/entities/TrialSession';
+import { TrialSession } from '../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper } from './startCaseHelper';

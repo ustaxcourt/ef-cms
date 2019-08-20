@@ -10,11 +10,12 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
- * @param workItemId
- * @param assigneeId
- * @param message
- * @param applicationContext
- * @returns {Promise<Promise<*>|*|Promise<*>|Promise<*>|Promise<*>|Promise<null>>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.assigneeId the id of the user to assign the work item to
+ * @param {string} providers.message the message to send to the user when assigning the work item
+ * @param {string} providers.workItemId the id of the work item to assign
+ * @returns {object} the updated work item
  */
 exports.forwardWorkItemInteractor = async ({
   applicationContext,
@@ -22,11 +23,15 @@ exports.forwardWorkItemInteractor = async ({
   message,
   workItemId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for assign work item');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const userToForwardTo = new User(
     await applicationContext
@@ -55,10 +60,10 @@ exports.forwardWorkItemInteractor = async ({
     .assignToUser({
       assigneeId: userToForwardTo.userId,
       assigneeName: userToForwardTo.name,
-      role: userToForwardTo.role,
+      section: userToForwardTo.section,
       sentBy: user.name,
+      sentBySection: user.section,
       sentByUserId: user.userId,
-      sentByUserRole: user.role,
     })
     .addMessage(newMessage);
 

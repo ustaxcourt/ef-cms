@@ -1,4 +1,4 @@
-const client = require('ef-cms-shared/src/persistence/dynamodbClientService');
+const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
 const {
   updateDocumentProcessingStatus,

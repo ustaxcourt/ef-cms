@@ -148,14 +148,15 @@ Case.COMMON_ERROR_MESSAGES = {
   ],
 };
 
-Case.name = 'Case';
+Case.validationName = 'Case';
 
 const docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
 
 /**
  * Case Entity
  * Represents a Case that has already been accepted into the system.
- * @param rawCase
+ *
+ * @param {object} rawCase the raw case data
  * @constructor
  */
 function Case(rawCase) {
@@ -168,7 +169,6 @@ function Case(rawCase) {
   this.currentVersion = rawCase.currentVersion;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
-  // this.docketRecord = rawCase.docketRecord;
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
@@ -318,7 +318,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
-    receivedAt: joi //TODO - should we be storing M/D/YY as ISO strings?
+    receivedAt: joi
       .date()
       .iso()
       .max('now')
@@ -365,8 +365,8 @@ joiValidationDecorator(
 /**
  * builds the case caption from case contact name(s) based on party type
  *
- * @param rawCase
- * @returns {string}
+ * @param {object} rawCase the raw case data
+ * @returns {string} the generated case caption
  */
 Case.getCaseCaption = function(rawCase) {
   let caseCaption;
@@ -429,8 +429,9 @@ Case.getCaseCaption = function(rawCase) {
 
 /**
  * get the case caption without the ", Petitioner/s/(s)" postfix
- * @param caseCaption
- * @returns caseCaptionNames
+ *
+ * @param {string} caseCaption the original case caption
+ * @returns {string} caseCaptionNames the case caption with the postfix removed
  */
 Case.getCaseCaptionNames = function(caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
@@ -453,9 +454,10 @@ Case.prototype.attachPractitioner = function({ user }) {
 
   this.practitioners.push(practitioner);
 };
+
 /**
  *
- * @param document
+ * @param {object} document the document to add to the case
  */
 Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
@@ -474,7 +476,7 @@ Case.prototype.addDocument = function(document) {
 
 /**
  *
- * @param document
+ * @param {object} document the document to add to the case
  */
 Case.prototype.addDocumentWithoutDocketRecord = function(document) {
   document.caseId = this.caseId;
@@ -487,8 +489,8 @@ Case.prototype.closeCase = function() {
 
 /**
  *
- * @param sendDate
- * @returns {Case}
+ * @param {Date} sendDate the timestamp when the case was sent to the IRS
+ * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
@@ -509,8 +511,7 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
 
 /**
  *
- * @param updateCaseTitleDocketRecord
- * @returns {Case}
+ * @returns {Case} the updated case entity
  */
 Case.prototype.updateCaseTitleDocketRecord = function() {
   const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
@@ -540,8 +541,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 
 /**
  *
- * @param updateDocketNumberRecord
- * @returns {Case}
+ * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
@@ -584,8 +584,7 @@ Case.prototype.updateDocketNumberRecord = function() {
 
 /**
  *
- * @param sendDate
- * @returns {Case}
+ * @returns {Case} the updated case entity
  */
 Case.prototype.sendToIRSHoldingQueue = function() {
   this.status = Case.STATUS_TYPES.batchedForIRS;
@@ -604,7 +603,7 @@ Case.prototype.getDocumentById = function({ documentId }) {
 /**
  *
  * @param {string} payGovDate an ISO formatted datestring
- * @returns {Case}
+ * @returns {Case} the updated case entity
  */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
   this.payGovDate = payGovDate;
@@ -638,8 +637,8 @@ Case.prototype.markAsPaidByPayGov = function(payGovDate) {
 
 /**
  *
- * @param {string} preferredTrialCity
- * @returns {Case}
+ * @param {string} preferredTrialCity the preferred trial city
+ * @returns {Case} the updated case entity
  */
 Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
   this.preferredTrialCity = preferredTrialCity;
@@ -663,7 +662,8 @@ Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
 
 /**
  *
- * @param docketRecordEntity
+ * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
+ * @returns {Case} the updated case entity
  */
 Case.prototype.addDocketRecord = function(docketRecordEntity) {
   const nextIndex =
@@ -679,8 +679,24 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
 
 /**
  *
- * @param docketRecordIndex
- * @param docketRecordEntity
+ * @param {DocketRecord} updatedDocketEntry the update docket entry data
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
+  this.docketRecord.some(entry => {
+    if (entry.documentId === updatedDocketEntry.documentId) {
+      Object.assign(entry, updatedDocketEntry);
+      return true;
+    }
+  });
+  return this;
+};
+
+/**
+ *
+ * @param {number} docketRecordIndex the index of the docket record to update
+ * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
+ * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketRecord = function(
   docketRecordIndex,
@@ -692,7 +708,8 @@ Case.prototype.updateDocketRecord = function(
 
 /**
  *
- * @param updatedDocument
+ * @param {Document} updatedDocument the document to update on the case
+ * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function(updatedDocument) {
   this.documents.some(document => {
@@ -706,8 +723,9 @@ Case.prototype.updateDocument = function(updatedDocument) {
 
 /**
  * isValidCaseId
- * @param caseId
- * @returns {*|boolean}
+ *
+ * @param {string} caseId the case id to validate
+ * @returns {*|boolean} true if the caseId is valid, false otherwise
  */
 Case.isValidCaseId = caseId =>
   caseId &&
@@ -717,8 +735,9 @@ Case.isValidCaseId = caseId =>
 
 /**
  * isValidDocketNumber
- * @param docketNumber
- * @returns {*|boolean}
+ *
+ * @param {string} docketNumber the docket number to validate
+ * @returns {*|boolean} true if the docketNumber is valid, false otherwise
  */
 Case.isValidDocketNumber = docketNumber => {
   return (
@@ -730,8 +749,9 @@ Case.isValidDocketNumber = docketNumber => {
 
 /**
  * stripLeadingZeros
- * @param docketNumber
- * @returns {string}
+ *
+ * @param {string} docketNumber the docket number
+ * @returns {string} the updated docket number
  */
 Case.stripLeadingZeros = docketNumber => {
   const [number, year] = docketNumber.split('-');
@@ -740,8 +760,8 @@ Case.stripLeadingZeros = docketNumber => {
 
 /**
  *
- * @param yearAmounts
- * @returns {boolean}
+ * @param {Array} yearAmounts the array of year amounts to check
+ * @returns {boolean} true if the years in the array are all unique, false otherwise
  */
 Case.areYearsUnique = yearAmounts => {
   return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
@@ -749,8 +769,9 @@ Case.areYearsUnique = yearAmounts => {
 
 /**
  * getFilingTypes
- * @param userRole - the role of the user logged in
- * @returns {string[]}
+ *
+ * @param {string} userRole - the role of the user logged in
+ * @returns {string[]} array of filing types for the user role
  */
 Case.getFilingTypes = userRole => {
   return Case.FILING_TYPES[userRole] || Case.FILING_TYPES.petitioner;
@@ -758,7 +779,8 @@ Case.getFilingTypes = userRole => {
 
 /**
  * getWorkItems
- * @returns {WorkItem[]}
+ *
+ * @returns {WorkItem[]} the work items on the case
  */
 Case.prototype.getWorkItems = function() {
   let workItems = [];
@@ -769,9 +791,10 @@ Case.prototype.getWorkItems = function() {
 };
 
 /**
- * check a case to see whether it should change to ready for trial.
+ * check a case to see whether it should change to ready for trial and update the
+ * status to General Docket - Ready for Trial if so
  *
- * @returns {Case}
+ * @returns {Case} the updated case entity
  */
 Case.prototype.checkForReadyForTrial = function() {
   let docFiledCutoffDate = moment().subtract(
@@ -861,13 +884,15 @@ Case.prototype.generateTrialSortTags = function() {
  * set as calendared
  *
  * @param {object} trialSessionEntity - the trial session that is associated with the case
- * @returns {Case}
+ * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialSessionId = trialSessionEntity.trialSessionId;
   this.trialDate = trialSessionEntity.startDate;
   this.trialTime = trialSessionEntity.startTime;
-  this.trialJudge = trialSessionEntity.judge;
+  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
+    this.trialJudge = trialSessionEntity.judge.name;
+  }
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = Case.STATUS_TYPES.calendared;
   return this;

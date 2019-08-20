@@ -9,9 +9,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getDocumentQCBatchedForUserInteractor
  *
- * @param userId
- * @param applicationContext
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.userId the user to get the document qc
+ * @returns {object} the work items in the user document batched inbox
  */
 exports.getDocumentQCBatchedForUserInteractor = async ({
   applicationContext,

@@ -17,6 +17,14 @@ presenter.providers.applicationContext = {
     removeItemInteractor: mockRemoveItemInteractor,
   }),
 };
+
+const successStub = jest.fn();
+const errorStub = jest.fn();
+
+presenter.providers.path = {
+  error: errorStub,
+  success: successStub,
+};
 global.alert = () => null;
 
 describe('rescanBatchAction', () => {
@@ -42,7 +50,7 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeTruthy();
+    expect(result.state.isScanning).toBeFalsy();
     expect(mockStartScanSession).toHaveBeenCalled();
     expect(result.state.batches.petition[1].pages).toEqual([
       { e: 5 },
@@ -60,15 +68,41 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(mockRemoveItemInteractor).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
-  it('opens the hopper empty modal if an hopper empty error is thrown', async () => {
+  it('sets the selectedBatchIndex based on the rescanned batch', async () => {
+    const result = await runAction(rescanBatchAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        scannerSourceIndex: 0,
+        scannerSourceName: 'scanner',
+      },
+      state: {
+        batchIndexToRescan: 2,
+        batches: {
+          petition: [
+            { index: 0, pages: [{ a: 1 }, { b: 2 }] },
+            { index: 2, pages: [{ c: 3 }, { d: 4 }] },
+          ],
+        },
+        documentSelectedForScan: 'petition',
+        isScanning: false,
+        selectedBatchIndex: 0,
+      },
+    });
+
+    expect(result.state.selectedBatchIndex).toEqual(2);
+  });
+
+  it('should call path of error on errors', async () => {
     mockStartScanSession = jest.fn(() => {
       throw new Error('no images in buffer');
     });
 
-    const result = await runAction(rescanBatchAction, {
+    await runAction(rescanBatchAction, {
       modules: {
         presenter,
       },
@@ -83,8 +117,6 @@ describe('rescanBatchAction', () => {
       },
     });
 
-    expect(result.state.isScanning).toBeFalsy();
-    expect(mockStartScanSession).toHaveBeenCalled();
-    expect(result.state.showModal).toEqual('EmptyHopperModal');
+    expect(errorStub).toHaveBeenCalled();
   });
 });

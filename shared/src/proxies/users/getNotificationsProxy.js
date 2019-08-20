@@ -3,10 +3,9 @@ const { get } = require('../requests');
 /**
  * getNotificationsInteractor
  *
- * @param applicationContext
- * @param caseId
- * @param userToken
- * @returns {Promise<*>}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {Promise<*>} the promise of the api call
  */
 exports.getNotificationsInteractor = ({ applicationContext }) => {
   return get({

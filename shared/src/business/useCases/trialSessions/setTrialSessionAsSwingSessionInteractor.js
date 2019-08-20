@@ -2,15 +2,17 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/TrialSession');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * setTrialSessionAsSwingSessionInteractor
- * @param trialSessionId
- * @param swingSessionId
- * @param applicationContext
- * @returns {*|Promise<*>}
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.swingSessionId the id of the trial session to add as a swing session
+ * @param {string} providers.trialSessionId the trial session to add the swing session to
+ * @returns {Promise} the promise of the updateTrialSession call
  */
 exports.setTrialSessionAsSwingSessionInteractor = async ({
   applicationContext,

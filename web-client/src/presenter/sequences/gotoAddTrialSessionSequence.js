@@ -2,11 +2,13 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
+import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
+import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
 
 const gotoAddTrialSession = [
@@ -17,6 +19,8 @@ const gotoAddTrialSession = [
   clearScreenMetadataAction,
   getTrialSessionsAction,
   setTrialSessionsAction,
+  getUsersInSectionAction({ section: 'judge' }),
+  setUsersAction,
   setCurrentPageAction('AddTrialSession'),
 ];
 

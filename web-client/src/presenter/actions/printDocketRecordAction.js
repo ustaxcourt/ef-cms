@@ -63,7 +63,6 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
           ? ifTextContent(contact.country, contact.country)
           : '';
       content += ifTextContent(contact.phone, '<p>' + contact.phone + '</p>');
-      content += ifTextContent(contact.email, '<p>' + contact.email + '</p>');
 
       return content;
     };
@@ -74,13 +73,18 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
       practitioners,
       respondents,
     } = detail;
+
+    partyInfoContent +=
+      '<div class="party-info"><div class="party-info-header">' +
+      detail.partyType +
+      '</div><div class="party-info-content">';
     // contactPrimary
     if (detail.contactPrimary) {
       const name = helper.showCaseNameForPrimary
         ? detail.caseName
         : contactPrimary.name;
 
-      partyInfoContent += '<div class="party-details"><h4>Primary Contact</h4>';
+      partyInfoContent += '<div class="party-details">';
       partyInfoContent += '<p>' + name + '</p>';
       partyInfoContent += getAddress(contactPrimary);
       partyInfoContent += '</div>';
@@ -88,37 +92,54 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
 
     // contactSecondary
     if (contactSecondary && contactSecondary.name) {
-      partyInfoContent +=
-        '<div class="party-details"><h4>Secondary Contact</h4>';
+      partyInfoContent += '<div class="party-details">';
       partyInfoContent += '<p>' + contactSecondary.name + '</p>';
       partyInfoContent += getAddress(contactSecondary);
       partyInfoContent += '</div>';
     }
+    partyInfoContent += '</div></div>';
 
     // practitioners
     if (practitioners.length > 0) {
+      partyInfoContent +=
+        '<div class="party-info"><div class="party-info-header">Petitioner Counsel</div><div class="party-info-content">';
       practitioners.map(practitioner => {
-        if (practitioner.name) {
-          partyInfoContent +=
-            '<div class="party-details"><h4>Petitioner Counsel</h4>';
-          partyInfoContent += '<p>' + practitioner.name + '</p>';
+        if (practitioner.formattedName) {
+          partyInfoContent += '<div class="party-details">';
+          partyInfoContent += '<p>' + practitioner.formattedName + '</p>';
           partyInfoContent += getAddress({
             ...practitioner,
             address1: practitioner.addressLine1,
             address2: practitioner.addressLine2,
             address3: practitioner.addressLine3,
           });
-          partyInfoContent += '</div>';
+          partyInfoContent += '<p><strong>Representing</strong><br/>';
+          if (practitioner.representingPrimary) {
+            partyInfoContent += detail.contactPrimary.name;
+            if (practitioner.representingSecondary) {
+              partyInfoContent += '<br/>';
+            }
+          }
+          if (
+            practitioner.representingSecondary &&
+            detail.contactSecondary &&
+            detail.contactSecondary.name
+          ) {
+            partyInfoContent += detail.contactSecondary.name;
+          }
+          partyInfoContent += '</p></div>';
         }
       });
+      partyInfoContent += '</div></div>';
     }
 
     // respondents
     if (respondents.length > 0) {
+      partyInfoContent +=
+        '<div class="party-info"><div class="party-info-header">Respondent Counsel</div><div class="party-info-content">';
       respondents.map(respondent => {
         if (respondent.name) {
-          partyInfoContent +=
-            '<div class="party-details"><h4>Respondent Information</h4>';
+          partyInfoContent += '<div class="party-details">';
           partyInfoContent += '<p>' + respondent.name + '</p>';
           partyInfoContent += getAddress({
             ...respondent,
@@ -129,6 +150,7 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
           partyInfoContent += '</div>';
         }
       });
+      partyInfoContent += '</div></div>';
     }
     return partyInfoContent;
   };
@@ -190,25 +212,25 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
   const replaceTemplate = () => {
     let output = printDocketRecordTemplate;
     // caption
-    output = output.replace(/{{caption}}/g, caseDetail.caseCaption);
+    output = output.replace(/{{ caption }}/g, caseDetail.caseCaption);
     // captionPostfix
     output = output.replace(
-      /{{captionPostfix}}/g,
+      /{{ captionPostfix }}/g,
       caseDetailHelper.caseCaptionPostfix,
     );
     // docketNumber
     output = output.replace(
-      /{{docketNumber}}/g,
+      /{{ docketNumber }}/g,
       caseDetail.docketNumberWithSuffix,
     );
     // partyInfo
     output = output.replace(
-      /{{partyInfo}}/g,
+      /{{ partyInfo }}/g,
       getPartyInfoContent(caseDetail, caseDetailHelper),
     );
     // docketRecord
     output = output.replace(
-      /{{docketRecord}}/g,
+      /{{ docketRecord }}/g,
       getDocketRecordContent(caseDetail),
     );
     return output;

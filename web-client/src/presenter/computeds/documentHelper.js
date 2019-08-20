@@ -4,6 +4,7 @@ export const documentHelper = get => ({
   docketNumber,
   documentId,
   messageId,
+  shouldLinkToEdit,
   workItemIdToMarkAsRead,
 }) => {
   const currentUser = get(state.user);
@@ -31,7 +32,9 @@ export const documentHelper = get => ({
     ? `/mark/${workItemIdToMarkAsRead}`
     : '';
 
-  if (shouldLinkToMessagesTab()) {
+  if (shouldLinkToEdit) {
+    return `${baseUri}/edit`;
+  } else if (shouldLinkToMessagesTab()) {
     return `${baseUri}/messages/${messageId}${markReadPath}`;
   } else {
     return `${baseUri}${markReadPath}`;

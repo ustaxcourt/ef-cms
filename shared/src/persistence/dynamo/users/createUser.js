@@ -1,6 +1,69 @@
 const AWS = require('aws-sdk');
 const client = require('../../dynamodbClientService');
-const { getSectionForRole } = require('../../../business/entities/WorkQueue');
+const {
+  createMappingRecord,
+} = require('../../dynamo/helpers/createMappingRecord');
+
+exports.createUserRecords = async ({ applicationContext, user, userId }) => {
+  if (user.barNumber === '') {
+    delete user.barNumber;
+  }
+
+  if (user.section) {
+    await client.put({
+      Item: {
+        pk: `${user.section}|user`,
+        sk: userId,
+      },
+      applicationContext,
+    });
+
+    if (user.role === 'judge') {
+      await client.put({
+        Item: {
+          pk: 'judge|user',
+          sk: userId,
+        },
+        applicationContext,
+      });
+    }
+  }
+
+  await client.put({
+    Item: {
+      pk: userId,
+      sk: userId,
+      ...user,
+      userId,
+    },
+    applicationContext,
+  });
+
+  if (
+    (user.role === 'practitioner' || user.role === 'respondent') &&
+    user.name &&
+    user.barNumber
+  ) {
+    await createMappingRecord({
+      applicationContext,
+      pkId: user.name,
+      skId: userId,
+      type: user.role,
+    });
+
+    await createMappingRecord({
+      applicationContext,
+      pkId: user.barNumber,
+      skId: userId,
+      type: user.role,
+    });
+  }
+
+  return {
+    ...user,
+    userId,
+  };
+};
 
 exports.createUser = async ({ applicationContext, user }) => {
   const cognito = new AWS.CognitoIdentityServiceProvider({
@@ -46,26 +109,9 @@ exports.createUser = async ({ applicationContext, user }) => {
     userId = response.Username;
   }
 
-  await client.put({
-    Item: {
-      pk: `${getSectionForRole(user.role)}|user`,
-      sk: userId,
-    },
+  return await this.createUserRecords({
     applicationContext,
-  });
-
-  await client.put({
-    Item: {
-      pk: userId,
-      sk: userId,
-      ...user,
-      userId,
-    },
-    applicationContext,
-  });
-
-  return {
-    ...user,
+    user,
     userId,
-  };
+  });
 };

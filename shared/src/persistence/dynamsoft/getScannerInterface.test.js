@@ -5,6 +5,8 @@ const jsdom = new JSDOM('');
 global.window = jsdom.window;
 
 window['EnumDWT_ImageType'] = { IT_PNG: 1 };
+window['EnumDWT_PixelType'] = { TWPT_RGB: 1 };
+window['EnumDWT_CapSupportedSizes'] = { TWSS_A4: 1 };
 const mockSources = ['Test Source 1', 'Test Source 2'];
 const mockScanCount = 1;
 
@@ -14,6 +16,11 @@ const mockAcquireImage = jest.fn(() => onPostAllTransfersCb());
 const mockCloseSource = jest.fn();
 const mockOpenSource = jest.fn();
 const mockRemoveAllImages = jest.fn();
+
+const applicationContext = {
+  convertBlobToUInt8Array: () => new Uint8Array([]),
+  getScannerResourceUri: () => 'abc',
+};
 
 const DWObject = {
   AcquireImage: mockAcquireImage,
@@ -34,6 +41,7 @@ const DWObject = {
   GetSourceNameItems: index => mockSources[index],
   HowManyImagesInBuffer: mockScanCount,
   IfDisableSourceAfterAcquire: false,
+  IfFeederLoaded: true,
   OpenSource: mockOpenSource,
   RegisterEvent: (event, cb) => {
     onPostAllTransfersCb = cb;
@@ -125,13 +133,27 @@ describe('getScannerInterface', () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
     expect(scannerAPI).toHaveProperty('startScanSession');
-    const applicationContext = {
-      convertBlobToUInt8Array: () => new Uint8Array([]),
-    };
+
     await scannerAPI.startScanSession({ applicationContext });
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
     expect(mockAcquireImage).toHaveBeenCalled();
+  });
+
+  it('throws an exception if the hopper is empty', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject({
+      ...DWObject,
+      IfFeederLoaded: false,
+    });
+
+    let error;
+    try {
+      await scannerAPI.startScanSession({ applicationContext });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
@@ -162,17 +184,13 @@ describe('getScannerInterface', () => {
     // global.window.document = ;
     const scannerAPI = getScannerInterface();
     let script = await scannerAPI.loadDynamsoft({
-      applicationContext: {
-        getScannerResourceUri: () => 'abc',
-      },
+      applicationContext,
     });
     expect(script).toEqual('dynam-scanner-injection');
 
     // try to load it again to verify it doesn't attempt to download the scripts again
     script = await scannerAPI.loadDynamsoft({
-      applicationContext: {
-        getScannerResourceUri: () => 'abc',
-      },
+      applicationContext,
     });
     expect(script).toEqual('dynam-scanner-injection');
     expect(calls).toEqual(2);

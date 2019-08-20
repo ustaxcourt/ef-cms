@@ -12,6 +12,7 @@ describe('submitDocketEntryAction', () => {
     fileDocketEntryStub = sinon.stub();
 
     presenter.providers.applicationContext = {
+      getUniqueId: () => '123',
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,
         fileDocketEntryInteractor: fileDocketEntryStub,

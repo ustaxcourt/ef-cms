@@ -165,15 +165,18 @@ class PDFSignerComponent extends React.Component {
                       <br />
                       Chief Judge
                     </span>
-                    <canvas
-                      className={
-                        !this.props.signatureData && this.props.signatureApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
-                      id="sign-pdf-canvas"
-                      ref={this.canvasRef}
-                    ></canvas>
+                    {!process.env.CI && (
+                      <canvas
+                        className={
+                          !this.props.signatureData &&
+                          this.props.signatureApplied
+                            ? 'cursor-grabbing'
+                            : 'cursor-grab'
+                        }
+                        id="sign-pdf-canvas"
+                        ref={this.canvasRef}
+                      ></canvas>
+                    )}
                   </div>
                 </div>
               </div>

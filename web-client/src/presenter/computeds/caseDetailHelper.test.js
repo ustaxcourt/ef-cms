@@ -406,4 +406,174 @@ describe('case detail computed', () => {
     expect(result.showCaseDeadlinesInternal).toEqual(false);
     expect(result.showCaseDeadlinesExternal).toEqual(false);
   });
+
+  it('should show add counsel section if user is an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showAddCounsel).toEqual(true);
+  });
+
+  it('should not show add counsel section if user is an external user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        user: {
+          role: 'practitioner',
+        },
+      },
+    });
+    expect(result.showAddCounsel).toEqual(false);
+  });
+
+  it('should show practitioner section if user is an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showPractitionerSection).toEqual(true);
+  });
+
+  it('should show practitioner section if user is an external user and there are practitioners on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { practitioners: [{ name: 'Test Practitioner' }] },
+        form: {},
+        user: {
+          role: 'practitioner',
+        },
+      },
+    });
+    expect(result.showPractitionerSection).toEqual(true);
+  });
+
+  it('should not show practitioner section if user is an external user and there are no practitioners on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { practitioners: [] },
+        form: {},
+        user: {
+          role: 'practitioner',
+        },
+      },
+    });
+    expect(result.showPractitionerSection).toEqual(false);
+  });
+
+  it('should show respondent section if user is an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showRespondentSection).toEqual(true);
+  });
+
+  it('should show respondent section if user is an external user and there are respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { respondents: [{ name: 'Test Respondents' }] },
+        form: {},
+        user: {
+          role: 'practitioner',
+        },
+      },
+    });
+    expect(result.showRespondentSection).toEqual(true);
+  });
+
+  it('should not show respondent section if user is an external user and there are no respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { respondents: [] },
+        form: {},
+        user: {
+          role: 'practitioner',
+        },
+      },
+    });
+    expect(result.showRespondentSection).toEqual(false);
+  });
+
+  it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { practitionerMatches: [{ name: '1' }, { name: '2' }] },
+      },
+    });
+    expect(result.practitionerSearchResultsCount).toEqual(2);
+  });
+
+  it('should set practitionerSearchResultsCount to 0 if the state.modal.practitionerMatches is an empty array', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { practitionerMatches: [] },
+      },
+    });
+    expect(result.practitionerSearchResultsCount).toEqual(0);
+  });
+
+  it('should not set practitionerSearchResultsCount if state.modal is an empty object', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.practitionerSearchResultsCount).toBeUndefined();
+  });
+
+  it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { respondentMatches: [{ name: '1' }, { name: '2' }] },
+      },
+    });
+    expect(result.respondentSearchResultsCount).toEqual(2);
+  });
+
+  it('should set respondentSearchResultsCount to 0 if the state.modal.respondentMatches is an empty array', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: { respondentMatches: [] },
+      },
+    });
+    expect(result.respondentSearchResultsCount).toEqual(0);
+  });
+
+  it('should not set respondentSearchResultsCount if state.modal is an empty object', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.respondentSearchResultsCount).toBeUndefined();
+  });
 });

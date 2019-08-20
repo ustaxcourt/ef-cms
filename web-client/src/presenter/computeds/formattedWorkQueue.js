@@ -3,7 +3,6 @@ import {
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
   SENIOR_ATTORNEY_SECTION,
-  getSectionForRole,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
@@ -149,9 +148,8 @@ export const filterWorkItems = ({
   workQueueToDisplay,
 }) => {
   const { box, queue } = workQueueToDisplay;
-  const userSection = getSectionForRole(user.role);
   const docQCUserSection =
-    userSection === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : userSection;
+    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
 
   const filters = {
     documentQc: {
@@ -165,12 +163,22 @@ export const filterWorkItems = ({
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
         },
+        inProgress: item => {
+          return (
+            item.assigneeId === user.userId &&
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === user.section &&
+            item.document.isFileAttached === false
+          );
+        },
         inbox: item => {
           return (
             item.assigneeId === user.userId &&
             !item.completedAt &&
             !item.isInternal &&
-            item.section === userSection
+            item.section === user.section &&
+            item.document.isFileAttached !== false
           );
         },
         outbox: item => {
@@ -194,11 +202,20 @@ export const filterWorkItems = ({
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
         },
+        inProgress: item => {
+          return (
+            !item.completedAt &&
+            !item.isInternal &&
+            item.section === user.section &&
+            item.document.isFileAttached === false
+          );
+        },
         inbox: item => {
           return (
             !item.completedAt &&
             !item.isInternal &&
-            item.section === docQCUserSection
+            item.section === docQCUserSection &&
+            item.document.isFileAttached !== false
           );
         },
         outbox: item => {
@@ -218,7 +235,7 @@ export const filterWorkItems = ({
           return (
             !item.completedAt &&
             item.isInternal &&
-            item.section === userSection &&
+            item.section === user.section &&
             item.assigneeId === user.userId
           );
         },
@@ -234,14 +251,16 @@ export const filterWorkItems = ({
       section: {
         inbox: item => {
           return (
-            !item.completedAt && item.isInternal && item.section === userSection
+            !item.completedAt &&
+            item.isInternal &&
+            item.section === user.section
           );
         },
         outbox: item => {
           return (
             !item.completedAt &&
             item.isInternal &&
-            item.sentBySection === userSection
+            item.sentBySection === user.section
           );
         },
       },

@@ -145,16 +145,9 @@ provider:
 
 package:
   exclude:
-    - storage/**
-    - coverage/**
-    - terraform/**
-    - cognito/**
-    - node_modules/**
-    - .cache/**
-    - .dynamodb/**
-    - .nyc_output/**
-    - dist/**
-    - runtimes/**
+    - ./**
+  include:
+    - web-api/src/apiHandlers.js
 
   excludeDevDependencies: true
 
@@ -194,7 +187,7 @@ resources:
 
 functions:
   runBatchProcess:
-    handler: src/apiHandlers.runBatchProcessLambda
+    handler: web-api/src/apiHandlers.runBatchProcessLambda
     events:
       - http:
           path: runBatchProcess
@@ -206,7 +199,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getNotifications:
-    handler: src/apiHandlers.getNotificationsLambda
+    handler: web-api/src/apiHandlers.getNotificationsLambda
     events:
       - http:
           path: notifications
@@ -218,12 +211,12 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   checkForReadyForTrialCases:
-    handler: src/apiHandlers.checkForReadyForTrialCases
+    handler: web-api/src/apiHandlers.checkForReadyForTrialCases
     events:
       - schedule: cron(0 7 * * ? *)
 
   swagger:
-    handler: src/apiHandlers.swaggerLambda
+    handler: web-api/src/apiHandlers.swaggerLambda
     events:
       - http:
           path: swagger
@@ -231,7 +224,7 @@ functions:
           cors: true
 
   swaggerJson:
-    handler: src/apiHandlers.swaggerJsonLambda
+    handler: web-api/src/apiHandlers.swaggerJsonLambda
     events:
       - http:
           path: swagger.json
@@ -240,7 +233,7 @@ functions:
 
   createCourtIssuedOrderPdfFromHtml:
     runtime: nodejs8.10
-    handler: src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
+    handler: web-api/src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -258,7 +251,7 @@ functions:
 
   generateDocketRecordPdfLambda:
     runtime: nodejs8.10
-    handler: src/apiHandlers.generateDocketRecordPdfLambda
+    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008

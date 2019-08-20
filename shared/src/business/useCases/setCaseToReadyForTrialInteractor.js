@@ -8,9 +8,10 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 /**
  * setCaseToReadyForTrialInteractor
  *
- * @param applicationContext
- * @param caseToUpdate
- * @returns {*}
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the id of the case to set ready for trial
+ * @returns {object} the updated case
  */
 exports.setCaseToReadyForTrialInteractor = async ({
   applicationContext,

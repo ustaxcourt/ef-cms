@@ -20,11 +20,7 @@ export const scanBatchPreviewerHelper = get => {
     return btoa(binstr);
   };
 
-  if (
-    batches.length &&
-    currentPageIndex !== null &&
-    selectedBatchIndex !== null
-  ) {
+  if (batches.length && currentPageIndex !== null) {
     const page = selectedBatch.pages[currentPageIndex];
     const b64encoded = bufferToBase64(page);
     selectPageImage = b64encoded;

@@ -4,28 +4,13 @@
 # application.  This can only be run with a clean start of the web-api.
 
 # For more thorough validations, run the ./build-all.sh script since that
-# runs basically all the same things Jenkins runs.
+# runs basically all the same things CircleCI runs.
 
-# shared
-pushd shared
 npm ci
 npm run lint
-npm test
-popd
+sh ./run-shellcheck.sh
+npx run-p test:api test:client test:shared test:pa11y
 
-# web-api
-pushd web-api
-npm ci
-npm run lint
-npm test
-popd
-
-# web-client
-pushd web-client
-npm ci
-npm run lint
-npm run test:unit
-npm test
-npm run cypress
-npm run test:pa11y
-popd
+echo "NOTE: to run cypress, you will need to run client with the start:client:ci script. "
+# With the back-end already running, try this:
+# npm run start:client:ci && ./wait-until.sh http://localhost:1234 && npm run cypress

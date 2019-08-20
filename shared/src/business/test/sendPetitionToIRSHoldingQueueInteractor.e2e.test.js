@@ -76,7 +76,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
 
     applicationContext.getCurrentUser = () => {
       return new User({
-        name: 'richard',
+        name: 'Test Petitionsclerk',
         role: 'petitionsclerk',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -105,7 +105,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
           },
@@ -138,12 +138,12 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
             to: 'Test Petitionsclerk',
@@ -151,7 +151,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'petitions',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: workItemId,
@@ -188,7 +188,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: false,
         messages: [
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'this is a new message for the docketclerk user',
             to: 'Test Docketclerk',
@@ -196,7 +196,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -222,7 +222,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: false,
         messages: [
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'this is a new message for the docketclerk user',
             to: 'Test Docketclerk',
@@ -230,7 +230,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -238,7 +238,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
 
     applicationContext.getCurrentUser = () => {
       return new User({
-        name: 'richard',
+        name: 'Test Petitionsclerk',
         role: 'petitionsclerk',
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -288,19 +288,19 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
             to: 'Test Petitionsclerk',
             toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition batched for IRS',
             to: 'IRS Holding Queue',
@@ -308,7 +308,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'irsBatchSection',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -336,19 +336,19 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: true,
         messages: [
           {
-            from: 'richard',
+            from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition filed by Adele Carver is ready for review.',
             to: 'Test Petitionsclerk',
             toUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'Petition batched for IRS',
             to: 'IRS Holding Queue',
@@ -356,7 +356,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'irsBatchSection',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -364,7 +364,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
 
     applicationContext.getCurrentUser = () => {
       return new User({
-        name: 'richard',
+        name: 'Test Petitionsclerk',
         role: 'docketclerk',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -389,7 +389,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: false,
         messages: [
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'this is a new message for the docketclerk user',
             to: 'Test Docketclerk',
@@ -397,7 +397,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
@@ -422,7 +422,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         isInitializeCase: false,
         messages: [
           {
-            from: 'richard',
+            from: 'Test Petitionsclerk',
             fromUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
             message: 'this is a new message for the docketclerk user',
             to: 'Test Docketclerk',
@@ -430,7 +430,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           },
         ],
         section: 'docket',
-        sentBy: 'richard',
+        sentBy: 'Test Petitionsclerk',
         sentBySection: 'petitions',
         sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       },
