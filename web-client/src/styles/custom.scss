@@ -170,6 +170,15 @@ select[disabled] {
   }
 }
 
+.numbered-list {
+  padding: 0px 20px;
+  margin: 0px;
+
+  li {
+    margin-bottom: 0.5em;
+  }
+}
+
 .blue-container {
   padding: 20px;
   background-color: $color-primary-alt-lightest;
@@ -294,6 +303,16 @@ select[disabled] {
     font-weight: $font-semibold;
     line-height: 30px;
     text-align: center;
+  }
+}
+
+.create-case-review {
+  label {
+    margin-bottom: 8px;
+  }
+
+  p.address-name {
+    margin-bottom: 0px;
   }
 }
 
@@ -765,7 +784,7 @@ header.usa-header {
 
       &:hover {
         a {
-        color: color($theme-color-primary-dark);
+          color: color($theme-color-primary-dark);
         }
       }
 

@@ -45,7 +45,6 @@ TrialSessionWorkingCopy.validationRules = {
     .pattern(
       Case.docketNumberMatcher, //keys are docket numbers
       joi.object().keys({
-        notes: joi.string().optional(),
         trialStatus: joi.string().optional(),
       }),
     )
