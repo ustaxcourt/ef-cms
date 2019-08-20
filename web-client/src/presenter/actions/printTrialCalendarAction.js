@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTrialCalendarTemplate.htm';
+import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTrialCalendarTemplate.html';
 
 /**
  * Prints the trial calendar
@@ -13,14 +13,15 @@ import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTria
 export const printTrialCalendarAction = ({ get }) => {
   const caseDetail = get(state.formattedCaseDetail);
   const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
+
   const openCases = get(state.formattedTrialSessionDetails.openCases);
 
   const renderCases = item => {
     return `<tr>
-      <td class="valign-top">
+      <td style="width: 13%;" class="valign-top">
         ${item.docketNumberWithSuffix}
       </td>
-      <td class="valign-top" class="line-height-13">${item.caseCaption}</td>
+      <td class="line-height-13">${item.caseCaption}</td>
       <td style="width: 25%;" class="line-height-13">
         ${item.practitioners
           .map(practitioner => practitioner.name)
@@ -66,13 +67,13 @@ export const printTrialCalendarAction = ({ get }) => {
               }
               <p>${formattedTrialSessionDetails.courthouseName || ''}</p>
               <p>
-                <span className="address-line">
+                <span class="address-line">
                   ${formattedTrialSessionDetails.address1 || ''}
                 </span>
-                <span className="address-line">
+                <span class="address-line">
                   ${formattedTrialSessionDetails.address2 || ''}
                 </span>
-                <span className="address-line">
+                <span class="address-line">
                   ${formattedTrialSessionDetails.formattedCityStateZip || ''}
                 </span>
               </p>
@@ -142,6 +143,6 @@ export const printTrialCalendarAction = ({ get }) => {
   return {
     docketNumber: caseDetail.docketNumberWithSuffix,
     docketRecordHtml: output,
-    headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDateFull} ${formattedTrialSessionDetails.sessionType}`,
+    headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDate} ${formattedTrialSessionDetails.sessionType}`,
   };
 };
