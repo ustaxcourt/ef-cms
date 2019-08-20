@@ -106,6 +106,7 @@ import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serv
 import { setCaseToReadyForTrialInteractor } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/DateHandler';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -393,6 +394,7 @@ const applicationContext = {
       formatDateString,
       isStringISOFormatted,
       prepareDateFromString,
+      setServiceIndicatorsForCase,
     };
   },
   setCurrentUser,

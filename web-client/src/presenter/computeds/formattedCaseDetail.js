@@ -1,4 +1,3 @@
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { state } from 'cerebral';
 import _ from 'lodash';
 
@@ -371,10 +370,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
   const caseDetailErrors = get(state.caseDetailErrors);
-  const result = Object.assign(
-    formatCase(applicationContext, caseDetail, caseDetailErrors),
-    setServiceIndicatorsForCase(caseDetail),
-  );
+  const result = {
+    ...formatCase(applicationContext, caseDetail, caseDetailErrors),
+    ...applicationContext
+      .getUtilities()
+      .setServiceIndicatorsForCase(caseDetail),
+  };
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,
