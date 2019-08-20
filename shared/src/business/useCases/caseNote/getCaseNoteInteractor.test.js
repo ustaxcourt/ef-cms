@@ -84,4 +84,26 @@ describe('Get case note', () => {
     });
     expect(result).toMatchObject(MOCK_NOTE);
   });
+
+  it('does not return anything if nothing is returned from persistence', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: 'judge',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          getCaseNote: () => null,
+        };
+      },
+    };
+    const result = await getCaseNoteInteractor({
+      applicationContext,
+      caseId: MOCK_NOTE.caseId,
+    });
+    expect(result).toEqual(undefined);
+  });
 });
