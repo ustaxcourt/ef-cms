@@ -23,17 +23,20 @@ export const getTrialSessionWorkingCopyAction = async ({
       trialSessionId,
     });
 
-  const trialSessionsCases = get(state.trialSessions.caseOrder);
+  const trialSessionsCases = get(state.trialSession.caseOrder);
   const caseIds = (trialSessionsCases || []).map(c => c.caseId);
-  let caseNotes = new Array(caseIds.length);
+  let caseNotes = [];
+  let caseNote;
 
   for (let i = 0; i < caseNotes.length; i++) {
-    caseNotes[i] = await applicationContext
-      .getUseCases()
-      .getCaseNoteInteractor({
-        applicationContext,
-        caseId: caseIds[i],
-      });
+    caseNote = await applicationContext.getUseCases().getCaseNoteInteractor({
+      applicationContext,
+      caseId: caseIds[i],
+    });
+
+    if (caseNote && caseNote.notes) {
+      caseNotes.push(caseNote);
+    }
   }
 
   trialSessionWorkingCopy.caseNotes = makeMap(caseNotes, 'caseId');

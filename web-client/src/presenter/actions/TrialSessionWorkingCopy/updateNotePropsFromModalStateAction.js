@@ -10,6 +10,7 @@ import { state } from 'cerebral';
 export const updateNotePropsFromModalStateAction = ({ get }) => {
   const caseId = get(state.modal.caseId);
   const notes = get(state.modal.notes);
+  const trialSessionId = get(state.trialSession.trialSessionId);
 
-  return { caseId, notes };
+  return { caseId, notes, trialSessionId };
 };
