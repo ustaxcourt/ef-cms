@@ -34,8 +34,10 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
         {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <span className="address-line">contact.country</span>
         )}
+        {contact.phone && (
+          <span className="address-line margin-top-1">{contact.phone}</span>
+        )}
       </p>
-      {contact.phone && <p>{contact.phone}</p>}
     </React.Fragment>
   );
 };
