@@ -47,12 +47,20 @@ export const PartyInformation = connect(
                 </address>
 
                 {caseHelper.showEditContactButton && (
-                  <a
-                    href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
-                  >
-                    <FontAwesomeIcon icon="edit" size="sm" />
-                    Edit
-                  </a>
+                  <div>
+                    <a
+                      href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </a>
+                  </div>
+                )}
+                {caseDetail.contactPrimary.serviceIndicator && (
+                  <div className="margin-top-4">
+                    <span className="semi-bold">Service: </span>
+                    {caseDetail.contactPrimary.serviceIndicator}
+                  </div>
                 )}
               </div>
             )}
@@ -72,6 +80,12 @@ export const PartyInformation = connect(
                     <FontAwesomeIcon icon="question-circle" size="sm" />
                     Why can’t I edit this?
                   </button>
+                )}
+                {caseDetail.contactSecondary.serviceIndicator && (
+                  <div className="margin-top-4">
+                    <span className="semi-bold">Service: </span>
+                    {caseDetail.contactSecondary.serviceIndicator}
+                  </div>
                 )}
               </div>
             )}
@@ -105,6 +119,12 @@ export const PartyInformation = connect(
                       },
                     )}
                 </address>
+                {practitioner.serviceIndicator && (
+                  <div className="margin-top-4">
+                    <span className="semi-bold">Service: </span>
+                    {practitioner.serviceIndicator}
+                  </div>
+                )}
                 <p className="label representing-label margin-top-2">
                   Representing
                 </p>
@@ -146,6 +166,12 @@ export const PartyInformation = connect(
                       },
                     )}
                 </address>
+                {respondent.serviceIndicator && (
+                  <div className="margin-top-4">
+                    <span className="semi-bold">Service: </span>
+                    {respondent.serviceIndicator}
+                  </div>
+                )}
               </div>
             ))}
         </div>
