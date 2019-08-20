@@ -370,7 +370,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
   const caseDetailErrors = get(state.caseDetailErrors);
-  const result = formatCase(applicationContext, caseDetail, caseDetailErrors);
+  const result = {
+    ...applicationContext
+      .getUtilities()
+      .setServiceIndicatorsForCase(caseDetail),
+    ...formatCase(applicationContext, caseDetail, caseDetailErrors),
+  };
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,
