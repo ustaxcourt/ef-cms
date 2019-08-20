@@ -15,11 +15,9 @@ describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
         },
         props: { docketNumber: '123-12' },
         state: {
-          caseDetail: { caseCaption: 'Sisqo, Petitioner' },
-          trialSessionWorkingCopy: {
-            caseMetadata: {
-              '123-12': { notes: 'i got some notes' },
-            },
+          caseDetail: {
+            caseCaption: 'Sisqo, Petitioner',
+            caseNote: { notes: 'i got some notes' },
           },
         },
       },

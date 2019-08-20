@@ -1,4 +1,3 @@
-import { get as _get } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -18,11 +17,7 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
 }) => {
   const { docketNumber } = props;
 
-  const notes = _get(get(state.trialSessionWorkingCopy.caseMetadata), [
-    docketNumber,
-    'notes',
-  ]);
-
+  const notes = get(state.caseDetail.caseNote.notes);
   const caseCaption = get(state.caseDetail.caseCaption);
   const caseCaptionNames = applicationContext.getCaseCaptionNames(
     caseCaption || '',
