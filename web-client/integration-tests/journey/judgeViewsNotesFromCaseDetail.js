@@ -5,10 +5,8 @@ export default test => {
     });
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(
-      test.getState(
-        `trialSessionWorkingCopy.caseMetadata.${test.docketNumber}.notes`,
-      ),
-    ).toEqual('this is a note added from the modal');
+    expect(test.getState('caseDetail.caseNote.notes')).toEqual(
+      'this is a note added from the modal',
+    );
   });
 };
