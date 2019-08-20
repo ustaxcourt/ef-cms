@@ -121,7 +121,7 @@ export const WorkingCopySessionList = connect(
                   <td className="minw-30">
                     <BindedSelect
                       ariaLabel="trial status"
-                      bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
+                      bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.trialStatus`}
                       id={`trialSessionWorkingCopy-${item.docketNumber}`}
                       onChange={() => {
                         autoSaveTrialSessionWorkingCopySequence();
@@ -138,7 +138,7 @@ export const WorkingCopySessionList = connect(
                   <td className="no-wrap">
                     <If
                       not
-                      bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                      bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
                     >
                       <button
                         className="usa-button usa-button--unstyled margin-top-1"
@@ -155,7 +155,7 @@ export const WorkingCopySessionList = connect(
                   </td>
                 </tr>
                 <If
-                  bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                  bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
                 >
                   <tr className="notes-row">
                     <td className="text-right font-body-2xs">
@@ -163,7 +163,7 @@ export const WorkingCopySessionList = connect(
                     </td>
                     <td className="font-body-2xs" colSpan="3">
                       <Text
-                        bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.notes`}
+                        bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
                       />
                     </td>
                     <td className="no-wrap text-align-right">
