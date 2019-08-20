@@ -26,6 +26,6 @@ describe('getCaseNoteForCaseAction', () => {
       state: { caseDetail: { caseId: '123' } },
     });
     expect(getCaseNoteStub.calledOnce).toEqual(true);
-    expect(getCaseNoteStub.getCall(0).args[0].note).toEqual('123');
+    expect(getCaseNoteStub.getCall(0).args[0].caseId).toEqual('123');
   });
 });

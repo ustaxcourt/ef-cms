@@ -11,22 +11,30 @@ describe('setAddEditCaseNoteModalStateFromListAction', () => {
       modules: {
         presenter,
       },
-      props: { docketNumber: '123-12' },
+      props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
       state: {
         trialSession: {
           calendaredCases: [
-            { caseCaption: 'Sisqo, Petitioner', docketNumber: '123-12' },
+            {
+              caseCaption: 'Sisqo, Petitioner',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            },
           ],
         },
         trialSessionWorkingCopy: {
-          caseMetadata: {
-            '123-12': { notes: 'i got some notes' },
+          caseNotes: {
+            'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              notes: 'i got some notes',
+            },
           },
         },
       },
     });
     expect(result.state.modal.caseCaptionNames).toEqual('Sisqo');
-    expect(result.state.modal.docketNumber).toEqual('123-12');
+    expect(result.state.modal.caseId).toEqual(
+      'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    );
     expect(result.state.modal.notes).toEqual('i got some notes');
   });
 });
