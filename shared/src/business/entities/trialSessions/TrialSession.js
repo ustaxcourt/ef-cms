@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../../utilities/DateHandler');
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -125,7 +126,7 @@ TrialSession.prototype.init = function(rawSession) {
   this.city = rawSession.city;
   this.courtReporter = rawSession.courtReporter;
   this.courthouseName = rawSession.courthouseName;
-  this.createdAt = rawSession.createdAt || new Date().toISOString();
+  this.createdAt = rawSession.createdAt || createISODateString();
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
   this.judge = rawSession.judge;
