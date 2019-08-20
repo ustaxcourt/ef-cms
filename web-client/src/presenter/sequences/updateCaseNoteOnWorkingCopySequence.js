@@ -1,12 +1,13 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
+import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateCaseNoteInTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/updateCaseNoteInTrialSessionWorkingCopyAction';
+import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
-import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
 export const updateCaseNoteOnWorkingCopySequence = [
@@ -18,8 +19,9 @@ export const updateCaseNoteOnWorkingCopySequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
-      updateCaseNoteInTrialSessionWorkingCopyAction,
-      updateTrialSessionWorkingCopyAction,
+      updateCaseNoteAction,
+      getTrialSessionWorkingCopyAction,
+      setTrialSessionWorkingCopyAction,
       clearModalAction,
       clearModalStateAction,
     ],

@@ -24,7 +24,7 @@ export const TrialSessionWorkingCopy = connect(
           <SessionNotes />
           <WorkingCopySessionList />
           {showModal === 'DeleteCaseNoteConfirmModal' && (
-            <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromCaseDetailSequence" />
+            <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromWorkingCopySequence" />
           )}
           {showModal === 'DeleteSessionNoteConfirmModal' && (
             <DeleteSessionNoteConfirmModal />

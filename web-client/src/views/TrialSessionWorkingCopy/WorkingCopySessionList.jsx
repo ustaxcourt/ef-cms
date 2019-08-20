@@ -144,7 +144,7 @@ export const WorkingCopySessionList = connect(
                         className="usa-button usa-button--unstyled margin-top-1"
                         onClick={() => {
                           openAddEditCaseNoteModalFromListSequence({
-                            docketNumber: item.docketNumber,
+                            caseId: item.caseId,
                           });
                         }}
                       >
@@ -171,7 +171,7 @@ export const WorkingCopySessionList = connect(
                         className="usa-button usa-button--unstyled red-warning margin-right-105"
                         onClick={() => {
                           openDeleteCaseNoteConfirmModalSequence({
-                            docketNumber: item.docketNumber,
+                            caseId: item.caseId,
                           });
                         }}
                       >
@@ -184,7 +184,7 @@ export const WorkingCopySessionList = connect(
                         className="usa-button usa-button--unstyled"
                         onClick={() => {
                           openAddEditCaseNoteModalFromListSequence({
-                            docketNumber: item.docketNumber,
+                            caseId: item.caseId,
                           });
                         }}
                       >
