@@ -1,6 +1,17 @@
-const { createISODateString, formatDateString } = require('./DateHandler');
+const {
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} = require('./DateHandler');
 
 describe('DateHandler', () => {
+  describe('prepareDateFromString', () => {
+    it("Creates a new moment object for 'now' when given no inputs'", () => {
+      const myMoment = prepareDateFromString();
+      expect(myMoment).toBeDefined();
+    });
+  });
+
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = createISODateString();

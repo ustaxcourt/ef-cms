@@ -8,6 +8,7 @@ const {
   UPDATE_CASE,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { createISODateString } = require('../utilities/DateHandler');
 const { Document } = require('../entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -80,7 +81,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     }
 
     const caseEntity = new Case(caseToBatch).markAsSentToIRS(
-      new Date().toISOString(),
+      createISODateString(),
     );
 
     const petitionDocument = caseEntity.documents.find(

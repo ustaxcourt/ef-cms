@@ -19,7 +19,7 @@ export default test => {
 
     const { docketNumber } = workingCopyHelper.formattedCases[0];
 
-    await test.runSequence('openAddEditNoteModalFromListSequence', {
+    await test.runSequence('openAddEditCaseNoteModalFromListSequence', {
       docketNumber,
     });
 

@@ -1,5 +1,6 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
 const MY_MESSAGES_INBOX = {
@@ -420,7 +421,11 @@ describe('filterWorkItems', () => {
 
   it('Returns internal messages for a Petitions Clerk in My Messages Inbox', () => {
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...MY_MESSAGES_INBOX, user: petitionsClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_MESSAGES_INBOX,
+        user: petitionsClerk1,
+      }),
     );
 
     expect(filtered.length).toEqual(1);
@@ -435,7 +440,11 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
     };
     const filtered = [...workQueueOutbox, completedItemDoNotShow].filter(
-      filterWorkItems({ ...MY_MESSAGES_OUTBOX, user: petitionsClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_MESSAGES_OUTBOX,
+        user: petitionsClerk1,
+      }),
     );
     expect(filtered.length).toEqual(1);
     expect(filtered[0].docketNumber).toEqual(
@@ -446,7 +455,7 @@ describe('filterWorkItems', () => {
   it('Returns work items for a Petitions Clerk in Section Messages Inbox', () => {
     const user = petitionsClerk1;
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...SECTION_MESSAGES_INBOX, user }),
+      filterWorkItems({ applicationContext, ...SECTION_MESSAGES_INBOX, user }),
     );
     let assigned = null;
     let unassigned = null;
@@ -475,7 +484,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
     };
     const filtered = [...workQueueOutbox, completedItemDoNotShow].filter(
-      filterWorkItems({ ...SECTION_MESSAGES_OUTBOX, user }),
+      filterWorkItems({ applicationContext, ...SECTION_MESSAGES_OUTBOX, user }),
     );
 
     let sentByUser = null;
@@ -500,14 +509,22 @@ describe('filterWorkItems', () => {
 
   it('Returns assigned messages for a Petitions Clerk in My Document QC Inbox', () => {
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...MY_DOCUMENT_QC_INBOX, user: petitionsClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_DOCUMENT_QC_INBOX,
+        user: petitionsClerk1,
+      }),
     );
     expect(filtered.length).toEqual(1);
   });
 
   it('Returns batched items for a Petitions Clerk in My Document QC Batched', () => {
     const filtered = workQueueBatched.filter(
-      filterWorkItems({ ...MY_DOCUMENT_QC_BATCHED, user: petitionsClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_DOCUMENT_QC_BATCHED,
+        user: petitionsClerk1,
+      }),
     );
 
     expect(filtered.length).toEqual(1);
@@ -518,7 +535,11 @@ describe('filterWorkItems', () => {
 
   it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', () => {
     const filtered = workQueueOutbox.filter(
-      filterWorkItems({ ...MY_DOCUMENT_QC_OUTBOX, user: petitionsClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_DOCUMENT_QC_OUTBOX,
+        user: petitionsClerk1,
+      }),
     );
 
     expect(filtered.length).toEqual(1);
@@ -530,7 +551,11 @@ describe('filterWorkItems', () => {
   it('Returns section work items for a Petitions Clerk in Section Document QC Inbox', () => {
     const user = petitionsClerk1;
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...SECTION_DOCUMENT_QC_INBOX, user }),
+      filterWorkItems({
+        applicationContext,
+        ...SECTION_DOCUMENT_QC_INBOX,
+        user,
+      }),
     );
     let assigned = null;
     let unassigned = null;
@@ -555,7 +580,11 @@ describe('filterWorkItems', () => {
   it('Returns batched work items for a Petitions Clerk in Section Document QC Batched', () => {
     const user = petitionsClerk1;
     const filtered = workQueueBatched.filter(
-      filterWorkItems({ ...SECTION_DOCUMENT_QC_BATCHED, user }),
+      filterWorkItems({
+        applicationContext,
+        ...SECTION_DOCUMENT_QC_BATCHED,
+        user,
+      }),
     );
     let sentByUser = null;
     let sentByOtherUser = null;
@@ -583,7 +612,11 @@ describe('filterWorkItems', () => {
   it('Returns sent work items for a Petitions Clerk in Section Document QC Outbox', () => {
     const user = petitionsClerk1;
     const filtered = workQueueOutbox.filter(
-      filterWorkItems({ ...SECTION_DOCUMENT_QC_OUTBOX, user }),
+      filterWorkItems({
+        applicationContext,
+        ...SECTION_DOCUMENT_QC_OUTBOX,
+        user,
+      }),
     );
     let sentByUser = null;
     let sentByOtherUser = null;
@@ -612,14 +645,22 @@ describe('filterWorkItems', () => {
 
   it('Returns internal messages for a Docket Clerk in My Messages Inbox', () => {
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...MY_MESSAGES_INBOX, user: docketClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_MESSAGES_INBOX,
+        user: docketClerk1,
+      }),
     );
     expect(filtered.length).toEqual(1);
   });
 
   it('Returns sent messages for a Docket Clerk in My Messages Outbox', () => {
     const filtered = workQueueOutbox.filter(
-      filterWorkItems({ ...MY_MESSAGES_OUTBOX, user: docketClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_MESSAGES_OUTBOX,
+        user: docketClerk1,
+      }),
     );
     expect(filtered.length).toEqual(1);
   });
@@ -627,7 +668,7 @@ describe('filterWorkItems', () => {
   it('Returns work items for a Docket Clerk in Section Messages Inbox', () => {
     const user = docketClerk1;
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...SECTION_MESSAGES_INBOX, user }),
+      filterWorkItems({ applicationContext, ...SECTION_MESSAGES_INBOX, user }),
     );
     let assigned = null;
     let unassigned = null;
@@ -650,7 +691,7 @@ describe('filterWorkItems', () => {
   it('Returns sent work items for a Docket Clerk in Section Messages Outbox', () => {
     const user = docketClerk1;
     const filtered = workQueueOutbox.filter(
-      filterWorkItems({ ...SECTION_MESSAGES_OUTBOX, user }),
+      filterWorkItems({ applicationContext, ...SECTION_MESSAGES_OUTBOX, user }),
     );
     let sentByUser = null;
     let sentByOtherUser = null;
@@ -675,7 +716,11 @@ describe('filterWorkItems', () => {
 
   it('Returns assigned messages for a Docket Clerk in My Document QC Inbox', () => {
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...MY_DOCUMENT_QC_INBOX, user: docketClerk1 }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_DOCUMENT_QC_INBOX,
+        user: docketClerk1,
+      }),
     );
     expect(filtered.length).toEqual(1);
   });
@@ -683,7 +728,11 @@ describe('filterWorkItems', () => {
   it('Returns section work items for a Docket Clerk in Section Document QC Inbox', () => {
     const user = docketClerk1;
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...SECTION_DOCUMENT_QC_INBOX, user }),
+      filterWorkItems({
+        applicationContext,
+        ...SECTION_DOCUMENT_QC_INBOX,
+        user,
+      }),
     );
     let assigned = null;
     let unassigned = null;
@@ -708,7 +757,11 @@ describe('filterWorkItems', () => {
   it('Returns docket section work items for a Senior Attorney in Document QC Inbox', () => {
     const user = seniorAttorney;
     const filtered = workQueueInbox.filter(
-      filterWorkItems({ ...SECTION_DOCUMENT_QC_INBOX, user }),
+      filterWorkItems({
+        applicationContext,
+        ...SECTION_DOCUMENT_QC_INBOX,
+        user,
+      }),
     );
 
     expect(filtered).toMatchObject([
@@ -720,7 +773,11 @@ describe('filterWorkItems', () => {
   it('Returns docket section work items for a Docket Clerk in My Document QC In Progress', () => {
     const user = docketClerk1;
     const filtered = workQueueInProgress.filter(
-      filterWorkItems({ ...MY_DOCUMENT_QC_IN_PROGRESS, user }),
+      filterWorkItems({
+        applicationContext,
+        ...MY_DOCUMENT_QC_IN_PROGRESS,
+        user,
+      }),
     );
 
     expect(filtered).toEqual([workItemDocketMyDocumentQCInProgress]);
@@ -729,7 +786,11 @@ describe('filterWorkItems', () => {
   it('Returns docket section work items for a Docket Clerk in Section Document QC In Progress', () => {
     const user = docketClerk1;
     const filtered = workQueueInProgress.filter(
-      filterWorkItems({ ...SECTION_DOCUMENT_QC_IN_PROGRESS, user }),
+      filterWorkItems({
+        applicationContext,
+        ...SECTION_DOCUMENT_QC_IN_PROGRESS,
+        user,
+      }),
     );
 
     expect(filtered).toEqual([
