@@ -212,12 +212,12 @@ import { validateAddRespondentSequence } from './sequences/caseAssociation/valid
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
-import { validateCaseNoteSequence } from './sequences/validateCaseNoteSequence';
 import { validateContactPrimarySequence } from './sequences/validateContactPrimarySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
+import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
@@ -446,12 +446,12 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
-    validateCaseNoteSequence,
     validateContactPrimarySequence,
     validateDocketEntrySequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageSequence,
+    validateNoteSequence,
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
     validateSelectDocumentTypeSequence,
