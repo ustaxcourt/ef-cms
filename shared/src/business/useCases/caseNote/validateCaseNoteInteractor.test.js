@@ -12,6 +12,6 @@ describe('validateCaseNoteInteractor', () => {
       caseNote: {},
     });
 
-    expect(Object.keys(errors)).toEqual(['notes']);
+    expect(Object.keys(errors)).toEqual(['caseId', 'notes', 'userId']);
   });
 });

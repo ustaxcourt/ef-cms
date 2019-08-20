@@ -23,7 +23,6 @@ describe('TrialSessionWorkingCopy entity', () => {
         },
         caseMetadata: {
           '101-19': {
-            notes: 'something',
             trialStatus: 'recall',
           },
         },
@@ -51,7 +50,6 @@ describe('TrialSessionWorkingCopy entity', () => {
         },
         caseMetadata: {
           '101-19': {
-            notes: 'something',
             trialStatus: 123,
           },
         },
