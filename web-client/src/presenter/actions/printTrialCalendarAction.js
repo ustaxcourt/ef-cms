@@ -67,13 +67,13 @@ export const printTrialCalendarAction = ({ get }) => {
               }
               <p>${formattedTrialSessionDetails.courthouseName || ''}</p>
               <p>
-                <span className="address-line">
+                <span class="address-line">
                   ${formattedTrialSessionDetails.address1 || ''}
                 </span>
-                <span className="address-line">
+                <span class="address-line">
                   ${formattedTrialSessionDetails.address2 || ''}
                 </span>
-                <span className="address-line">
+                <span class="address-line">
                   ${formattedTrialSessionDetails.formattedCityStateZip || ''}
                 </span>
               </p>
