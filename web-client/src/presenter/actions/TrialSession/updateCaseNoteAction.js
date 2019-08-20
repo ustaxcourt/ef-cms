@@ -14,7 +14,7 @@ export const updateCaseNoteAction = async ({
   get,
   props,
 }) => {
-  const { caseId } = get(state.caseDetail.caseId);
+  const caseId = get(state.caseDetail.caseId);
   const { notes } = props;
 
   const caseNote = await applicationContext

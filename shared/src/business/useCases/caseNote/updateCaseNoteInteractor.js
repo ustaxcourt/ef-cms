@@ -24,19 +24,18 @@ exports.updateCaseNoteInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseNoteToUpdate = {
+  const caseNoteEntity = new CaseNote({
     caseId,
     notes,
     userId: user.userId,
-  };
+  });
 
-  const updatedCaseNote = await applicationContext
-    .getPersistenceGateway()
-    .updateCaseNote({
-      applicationContext,
-      caseNoteToUpdate,
-    });
+  const caseNoteToUpdate = caseNoteEntity.validate().toRawObject();
 
-  const caseNoteEntity = new CaseNote(updatedCaseNote).validate();
-  return caseNoteEntity.toRawObject();
+  await applicationContext.getPersistenceGateway().updateCaseNote({
+    applicationContext,
+    caseNoteToUpdate,
+  });
+
+  return caseNoteToUpdate;
 };

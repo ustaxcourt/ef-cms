@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const { caseId } = event.pathParamaters || {};
+      const { caseId } = event.pathParameters || {};
       const { notes } = JSON.parse(event.body);
 
       const results = await applicationContext

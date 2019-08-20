@@ -39,6 +39,7 @@ import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
+import { deleteCaseNoteFromCaseDetailSequence } from './sequences/deleteCaseNoteFromCaseDetailSequence';
 import { deleteCaseWorkingCopyNoteSequence } from './sequences/deleteCaseWorkingCopyNoteSequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
@@ -277,6 +278,7 @@ export const presenter = {
     createCaseDeadlineSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
+    deleteCaseNoteFromCaseDetailSequence,
     deleteCaseWorkingCopyNoteSequence,
     deleteWorkingCopySessionNoteSequence,
     dismissAlertSequence,

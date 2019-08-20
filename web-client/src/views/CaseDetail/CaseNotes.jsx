@@ -28,7 +28,7 @@ export const CaseNotes = connect(
               <div className="tablet:grid-col-6">
                 <div className="card">
                   <div className="content-wrapper">
-                    <If not bind="caseDetail.caseNotes.notes">
+                    <If not bind="caseDetail.caseNote.notes">
                       <button
                         className="usa-button usa-button--unstyled float-right"
                         onClick={() => {
@@ -40,9 +40,9 @@ export const CaseNotes = connect(
                       </button>
                     </If>
                     <h3 className="display-inline">Judge’s Notes</h3>
-                    <If bind="caseDetail.caseNotes.notes">
+                    <If bind="caseDetail.caseNote.notes">
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="caseDetail.caseNotes.notes" />
+                        <Text bind="caseDetail.caseNote.notes" />
                       </div>
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
