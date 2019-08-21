@@ -16,7 +16,7 @@ exports.createDocketRecordPdfInteractor = ({
   return applicationContext
     .getHttpClient()
     .post(
-      `${applicationContext.getBaseUrl()}/api/docket-record-pdf`,
+      `${applicationContext.getBaseUrl()}/api/generate-pdf-from-html`,
       {
         docketNumber,
         docketRecordHtml,

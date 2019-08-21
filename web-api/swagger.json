@@ -2626,7 +2626,7 @@
         }
       }
     },
-    "/docket-record-pdf": {
+    "/generate-pdf-from-html": {
       "post": {
         "summary": "generate a printable pdf of the docket record",
         "description": "creates a printable pdf with the provided docket record html template.\n",
