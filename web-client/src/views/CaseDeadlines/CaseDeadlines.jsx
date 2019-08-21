@@ -27,9 +27,24 @@ export const CaseDeadlines = connect(
                 <DateSelectCalendar />
               </div>
               <div className="grid-col-9">
-                <h2>{helper.formattedFilterDate}</h2>
-                <p>Count: {helper.caseDeadlineCount}</p>
-                <table className="usa-table row-border-only subsection deadlines">
+                <div className="grid-row">
+                  <div className="grid-col-6">
+                    <h2>{helper.formattedFilterDateHeader}</h2>
+                  </div>
+                  <div className="grid-col-6 text-right margin-top-1">
+                    <span className="text-semibold">
+                      Count: {helper.caseDeadlineCount}
+                    </span>
+                  </div>
+                </div>
+                <table className="usa-table row-border-only subsection work-queue deadlines">
+                  <thead>
+                    <tr>
+                      <th className="center-column">Due Date</th>
+                      <th className="center-column">Docket</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
                   <tbody>
                     {helper.caseDeadlines.map((item, idx) => (
                       <tr key={idx}>

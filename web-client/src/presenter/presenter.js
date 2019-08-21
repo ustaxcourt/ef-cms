@@ -120,6 +120,7 @@ import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
+import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
@@ -362,6 +363,7 @@ export const presenter = {
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
+    selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
     selectDocumentSequence,
