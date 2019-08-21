@@ -9,11 +9,29 @@ export const startCaseHelper = get => {
 
   const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 
+  let contactPrimaryLabel = 'Contact Information';
+  let contactSecondaryLabel = 'Contact Information';
+
+  if (
+    form.partyType === 'Petitioner' ||
+    form.partyType === 'Petitioner & Spouse'
+  ) {
+    contactPrimaryLabel = 'Your Contact Information';
+  }
+
+  if (form.partyType === 'Petitioner & Spouse') {
+    contactSecondaryLabel = 'Spouse‘s Contact Information';
+  }
+
   return {
+    contactPrimaryLabel,
+    contactSecondaryLabel,
     deceasedSpouseLegend:
       userRole === 'petitioner'
         ? 'Is your spouse deceased?'
         : 'Is the spouse deceased?',
+    hasContactSecondary:
+      form.contactSecondary && Object.keys(form.contactSecondary).length > 0,
     minorIncompetentLegend:
       userRole === 'petitioner'
         ? 'What is your role in filing for this minor or legally incompetent person?'

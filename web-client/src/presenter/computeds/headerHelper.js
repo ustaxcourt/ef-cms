@@ -50,6 +50,7 @@ export const headerHelper = get => {
     showMessages: isUserInternal(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases: isUserExternal(userRole),
+    showReports: isUserInternal(userRole),
     showSearchInHeader:
       user &&
       userRole &&
