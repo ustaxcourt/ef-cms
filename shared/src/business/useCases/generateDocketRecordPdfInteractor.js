@@ -51,7 +51,7 @@ exports.generateDocketRecordPdfInteractor = async ({
     `;
 
     const footerTemplate = `
-      <div style="font-size:8px !important; color:#000; text-align:center; width:100%;"><span class="date"></span></div>
+      <div style="font-size:8px !important; color:#000; text-align:center; width:100%; margin-bottom:5px;">Printed <span class="date"></span></div>
     `;
 
     result = await page.pdf({
@@ -60,7 +60,7 @@ exports.generateDocketRecordPdfInteractor = async ({
       format: 'Letter',
       headerTemplate,
       margin: {
-        bottom: '200px',
+        bottom: '100px',
         top: '80px',
       },
       printBackground: true,
