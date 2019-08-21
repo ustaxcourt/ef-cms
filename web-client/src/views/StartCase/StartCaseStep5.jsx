@@ -56,8 +56,8 @@ export const StartCaseStep5 = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">About Your Petition</h3>
                   <div className="grid-row grid-gap">
-                    <div className="tablet:grid-col-6 margin-bottom-1">
-                      <div className="tablet:margin-bottom-0 margin-bottom-205">
+                    <div className="tablet:grid-col-6 margin-bottom-05">
+                      <div className="tablet:margin-bottom-0 margin-bottom-05">
                         <label className="usa-label" htmlFor="filing-type">
                           Type of Notice/Case
                         </label>
