@@ -2,6 +2,7 @@ import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
+import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -45,6 +46,7 @@ const pages = {
   AddTrialSession,
   BeforeStartingCase,
   BeforeYouFileADocument,
+  CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
   CreateOrder,

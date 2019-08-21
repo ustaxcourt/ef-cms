@@ -1,6 +1,6 @@
 const {
-  generateDocketRecordPdfInteractor,
-} = require('./generateDocketRecordPdfInteractor.js');
+  generatePdfFromHtmlInteractor,
+} = require('./generatePdfFromHtmlInteractor.js');
 
 const launchMock = jest.fn();
 const newPageMock = jest.fn();
@@ -8,7 +8,7 @@ const setContentMock = jest.fn();
 const pdfMock = jest.fn();
 const closeMock = jest.fn();
 
-describe('generateDocketRecordPdfInteractor', () => {
+describe('generatePdfFromHtmlInteractor', () => {
   it('should launch puppeteer to generate a new pdf', async () => {
     const applicationContext = {
       getChromium: () => {
@@ -39,12 +39,12 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     const args = {
       applicationContext,
-      docketNumber: '123-45',
-      docketRecordHtml:
+      contentHtml:
         '<!doctype html><html><head></head><body>Hello World</body></html>',
+      docketNumber: '123-45',
     };
 
-    await generateDocketRecordPdfInteractor(args);
+    await generatePdfFromHtmlInteractor(args);
     expect(launchMock).toHaveBeenCalled();
     expect(newPageMock).toHaveBeenCalled();
     expect(setContentMock).toHaveBeenCalled();

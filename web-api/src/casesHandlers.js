@@ -20,6 +20,8 @@ module.exports = {
     .handler,
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
+  getAllCaseDeadlinesLambda: require('./caseDeadline/getAllCaseDeadlinesLambda')
+    .handler,
   getCaseDeadlinesForCaseLambda: require('./caseDeadline/getCaseDeadlinesForCaseLambda')
     .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
