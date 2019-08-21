@@ -9,7 +9,7 @@ export const ReportsMenuItems = () => {
       <li>
         <a
           className="reports-menu-item usa-button usa-button--unstyled"
-          href="/all-deadlines"
+          href="/reports/case-deadlines"
           id="all-deadlines"
         >
           Deadlines

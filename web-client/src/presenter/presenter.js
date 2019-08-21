@@ -53,9 +53,9 @@ import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificatio
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
-import { gotoAddCaseDeadlinesSequence } from './sequences/gotoAddCaseDeadlinesSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
+import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -295,9 +295,9 @@ export const presenter = {
     formCancelToggleCancelSequence,
     generatePdfFromScanSessionSequence,
     getUsersInSectionSequence,
-    gotoAddCaseDeadlinesSequence,
     gotoAddDocketEntrySequence,
     gotoAddTrialSessionSequence,
+    gotoAllCaseDeadlinesSequence,
     gotoBeforeStartCaseSequence,
     gotoBeforeYouFileDocumentSequence,
     gotoCaseDetailSequence,

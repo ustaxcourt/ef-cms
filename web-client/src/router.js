@@ -392,7 +392,7 @@ const router = {
       '/reports/case-deadlines',
       checkLoggedIn(() => {
         document.title = `Case Deadlines ${pageTitleSuffix}`;
-        app.getSequence('gotoAddCaseDeadlinesSequence')();
+        app.getSequence('gotoAllCaseDeadlinesSequence')();
       }),
     );
 

@@ -166,5 +166,8 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
+  },
+  "dependencies": {
+    "react-calendar": "^2.19.1"
   }
 }
