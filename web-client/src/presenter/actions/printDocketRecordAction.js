@@ -8,7 +8,7 @@ import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecor
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.store the cerebral store object
- * @returns {object} the docket number and stringified docketRecordHtml
+ * @returns {object} the docket number and stringified contentHtml
  */
 export const printDocketRecordAction = ({ applicationContext, get }) => {
   const { ContactFactory } = applicationContext.getEntityConstructors();
@@ -262,9 +262,9 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     return output;
   };
 
-  const docketRecordHtml = replaceTemplate();
+  const contentHtml = replaceTemplate();
   return {
+    contentHtml,
     docketNumber: caseDetail.docketNumberWithSuffix,
-    docketRecordHtml,
   };
 };

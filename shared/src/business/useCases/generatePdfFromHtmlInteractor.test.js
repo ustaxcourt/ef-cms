@@ -39,9 +39,9 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const args = {
       applicationContext,
-      docketNumber: '123-45',
-      docketRecordHtml:
+      contentHtml:
         '<!doctype html><html><head></head><body>Hello World</body></html>',
+      docketNumber: '123-45',
     };
 
     await generatePdfFromHtmlInteractor(args);

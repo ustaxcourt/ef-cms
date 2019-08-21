@@ -52,9 +52,9 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     const {
+      contentHtml,
       displayHeaderFooter,
       docketNumber,
-      docketRecordHtml,
       headerHtml,
     } = JSON.parse(event.body);
 
@@ -63,9 +63,9 @@ exports.handler = event =>
         .getUseCases()
         .generatePdfFromHtmlInteractor({
           applicationContext,
+          contentHtml,
           displayHeaderFooter,
           docketNumber,
-          docketRecordHtml,
           headerHtml,
         });
       applicationContext.logger.info('User', user);
