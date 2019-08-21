@@ -7,10 +7,6 @@
   line-height: 1.3em;
 }
 
-body {
-  font-size: 1.0625rem;
-}
-
 h1,
 .heading-1 {
   margin-top: 0;
@@ -154,4 +150,8 @@ a {
 
 a:hover {
   color: color($theme-color-primary-darker);
+}
+
+.create-case-review {
+  font-size: 1.0625rem;
 }
