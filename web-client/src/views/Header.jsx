@@ -8,6 +8,7 @@ import close from '../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
+import { ReportsMenu } from './ReportsMenu';
 
 const NavigationItems = (helper, { clearAlertSequence }) => {
   return (
@@ -21,6 +22,7 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
           )}
         >
           <a
+            className="usa-button usa-button--unstyled"
             href="/"
             onClick={() => {
               clearAlertSequence();
@@ -40,6 +42,7 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
           }
         >
           <a
+            className="usa-button usa-button--unstyled"
             href="/messages/my/inbox"
             onClick={() => {
               clearAlertSequence();
@@ -67,6 +70,7 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
           }
         >
           <a
+            className="usa-button usa-button--unstyled"
             href={helper.defaultQCBoxPath}
             onClick={() => {
               clearAlertSequence();
@@ -85,6 +89,7 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
           }
         >
           <a
+            className="usa-button usa-button--unstyled"
             href="/"
             onClick={() => {
               clearAlertSequence();
@@ -103,6 +108,7 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
           }
         >
           <a
+            className="usa-button usa-button--unstyled"
             href="/trial-sessions"
             onClick={() => {
               clearAlertSequence();
@@ -110,6 +116,17 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
           >
             Trial Sessions
           </a>
+        </li>
+      )}
+      {helper.showReports && (
+        <li
+          className={
+            helper.pageIsReports
+              ? 'usa-nav__primary-item active'
+              : 'usa-nav__primary-item'
+          }
+        >
+          <ReportsMenu />
         </li>
       )}
     </ul>

@@ -3,7 +3,6 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
-import { accountMenuHelper } from './computeds/accountMenuHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
@@ -27,6 +26,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -45,7 +45,6 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
-  accountMenuHelper,
   addDocketEntryHelper,
   alertHelper,
   assigneeId: null,
@@ -83,6 +82,7 @@ export const state = {
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
   documentSigningHelper,
+  menuHelper,
   documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,

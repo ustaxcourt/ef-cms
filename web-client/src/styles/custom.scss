@@ -777,7 +777,8 @@ header.usa-header {
       margin-right: 60px;
 
       &.active {
-        a {
+        a,
+        button.header-tab-button {
           color: color($theme-color-base-darkest);
         }
       }
@@ -799,7 +800,8 @@ header.usa-header {
       }
     }
 
-    a {
+    a,
+    button.header-tab-button {
       padding: 0 0 6px 0;
       background: none;
       color: color($theme-color-primary);
@@ -810,6 +812,11 @@ header.usa-header {
         background: none;
         color: color($theme-color-primary);
       }
+    }
+
+    .usa-button.header-tab-button {
+      min-width: auto;
+      padding: 0.5em 0.5em 0 0.5em;
     }
   }
 
@@ -1054,6 +1061,71 @@ nav.usa-nav {
       a {
         color: $color-white;
         font-size: 15px;
+      }
+    }
+  }
+}
+
+.reports-menu {
+  .reports-button-container {
+    .usa-button.header-tab-button {
+      &:hover {
+        background: none;
+        color: color($theme-color-primary-dark);
+      }
+    }
+  }
+
+  &.closed {
+    .reports-button-container {
+      background: none;
+
+      :hover {
+        background-color: color($theme-color-primary);
+        border-radius: 0;
+        color: $color-white;
+      }
+    }
+  }
+  &.open {
+    .reports-button-container {
+      background-color: color($theme-color-primary);
+
+      .usa-button.header-tab-button {
+        padding-bottom: 0.5em;
+        color: $color-white;
+      }
+    }
+  }
+  .reports-menu-content {
+    position: absolute;
+    width: 130px;
+    padding: 10px 0;
+    background-color: color($theme-color-primary);
+
+    ul {
+      padding-left: 0.75em;
+
+      li {
+        display: block;
+        text-align: left;
+
+        &:hover {
+          padding: 0;
+          border: none;
+        }
+
+        a.reports-menu-item {
+          color: $color-white;
+          font-family: $font-source-sans;
+          font-size: 15px;
+          font-weight: $font-regular;
+
+          &:hover {
+            color: $color-primary-alt;
+            text-decoration: underline;
+          }
+        }
       }
     }
   }
