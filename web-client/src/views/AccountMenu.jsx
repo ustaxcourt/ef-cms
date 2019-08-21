@@ -24,14 +24,18 @@ export const AccountMenuItems = ({ signOut }) => {
 
 export const AccountMenu = connect(
   {
-    isMenuOpen: state.accountMenuHelper.isMenuOpen,
+    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     signOutSequence: sequences.signOutSequence,
     toggleAccountMenu: sequences.toggleAccountMenuSequence,
     user: state.user,
   },
-  ({ isMenuOpen, toggleAccountMenu, user }) => {
+  ({ isAccountMenuOpen, toggleAccountMenu, user }) => {
     return (
-      <div className={isMenuOpen ? 'account-menu open' : 'account-menu closed'}>
+      <div
+        className={
+          isAccountMenuOpen ? 'account-menu open' : 'account-menu closed'
+        }
+      >
         <div className="account-button-container">
           <button
             aria-label="account menu"
@@ -50,7 +54,7 @@ export const AccountMenu = connect(
             />
           </button>
         </div>
-        {isMenuOpen && <AccountMenuContent />}
+        {isAccountMenuOpen && <AccountMenuContent />}
       </div>
     );
   },
