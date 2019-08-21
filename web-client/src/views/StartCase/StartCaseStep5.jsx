@@ -180,7 +180,11 @@ export const StartCaseStep5 = connect(
                       </label>
                       {form.contactPrimary && (
                         <address aria-labelledby="primary-label">
-                          {AddressDisplay(form.contactPrimary, constants)}
+                          {AddressDisplay(form.contactPrimary, constants, {
+                            nameOverride:
+                              startCaseHelper.showCaseNameForPrimary &&
+                              startCaseHelper.caseName,
+                          })}
                         </address>
                       )}
                     </div>

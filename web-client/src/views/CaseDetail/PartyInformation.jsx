@@ -8,6 +8,8 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
+  console.log('contact', contact);
+  console.log('nameOverride', nameOverride);
   return (
     <React.Fragment>
       <p className="margin-top-0 address-name">
