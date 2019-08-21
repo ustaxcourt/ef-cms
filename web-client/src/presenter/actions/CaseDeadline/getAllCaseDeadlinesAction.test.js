@@ -1,5 +1,5 @@
 import { getAllCaseDeadlinesAction } from './getAllCaseDeadlinesAction';
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = {
