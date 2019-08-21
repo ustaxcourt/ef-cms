@@ -523,3 +523,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getAllCaseDeadlines:
+    handler: web-api/src/casesHandlers.getAllCaseDeadlinesLambda
+    events:
+      - http:
+          path: /case-deadlines
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

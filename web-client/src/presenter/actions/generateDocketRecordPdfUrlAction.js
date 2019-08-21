@@ -10,14 +10,14 @@ export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const { docketNumber, docketRecordHtml, headerHtml } = props;
+  const { contentHtml, docketNumber, headerHtml } = props;
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
     .createDocketRecordPdfInteractor({
       applicationContext,
+      contentHtml,
       docketNumber,
-      docketRecordHtml,
       headerHtml,
     });
 

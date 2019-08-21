@@ -51,17 +51,21 @@ exports.handler = event =>
   customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const { docketNumber, docketRecordHtml, headerHtml } = JSON.parse(
-      event.body,
-    );
+    const {
+      contentHtml,
+      displayHeaderFooter,
+      docketNumber,
+      headerHtml,
+    } = JSON.parse(event.body);
 
     try {
       const result = await applicationContext
         .getUseCases()
-        .generateDocketRecordPdfInteractor({
+        .generatePdfFromHtmlInteractor({
           applicationContext,
+          contentHtml,
+          displayHeaderFooter,
           docketNumber,
-          docketRecordHtml,
           headerHtml,
         });
       applicationContext.logger.info('User', user);
