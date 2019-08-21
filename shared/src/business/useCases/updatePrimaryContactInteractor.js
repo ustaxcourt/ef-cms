@@ -43,27 +43,33 @@ exports.updatePrimaryContactInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate);
 
-  // generate pdf
   const docketRecordPdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor({
       applicationContext,
+      contentHtml: pdfContentHtml,
       displayHeaderFooter: false,
       docketNumber: caseToUpdate.docketNumber,
       headerHtml: null,
-      pdfContentHtml,
     });
 
-  // upload document
+  const newDocumentId = applicationContext.getUniqueId();
 
-  // attach document to docket entry
+  await applicationContext.getPersistenceGateway().saveDocument({
+    applicationContext,
+    document: docketRecordPdf,
+    documentId: newDocumentId,
+  });
 
-  caseEntity.addDocketRecord(
-    new DocketRecord({
-      description: `Notice of Change of Address by ${user.name}`,
-      filingDate: applicationContext.getUtilities().createISODateString(),
-    }),
-  );
+  const changeOfAddressDocument = new Document({
+    caseId,
+    documentId: newDocumentId,
+    documentType: 'Notice of Change of Address',
+    processingStatus: 'complete',
+    userId: user.userId,
+  });
+
+  caseEntity.addDocument(changeOfAddressDocument);
 
   const rawCase = caseEntity.validate().toRawObject();
 
