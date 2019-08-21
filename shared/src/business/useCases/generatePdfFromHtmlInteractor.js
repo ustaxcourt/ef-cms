@@ -1,5 +1,5 @@
 /**
- * generateDocketRecordPdfInteractor
+ * generatePdfFromHtmlInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -7,11 +7,13 @@
  * @param {string} providers.docketRecordHtml the html content for the pdf
  * @returns {Buffer} the pdf as a binary buffer
  */
-exports.generateDocketRecordPdfInteractor = async ({
+exports.generatePdfFromHtmlInteractor = async ({
   applicationContext,
   docketNumber,
   docketRecordHtml,
   headerHtml,
+  showFooter = true,
+  showHeader = true,
 }) => {
   let browser = null;
   let result = null;
@@ -56,9 +58,9 @@ exports.generateDocketRecordPdfInteractor = async ({
 
     result = await page.pdf({
       displayHeaderFooter: true,
-      footerTemplate,
+      footerTemplate: showFooter ? footerTemplate : '',
       format: 'Letter',
-      headerTemplate,
+      headerTemplate: showHeader ? headerTemplate : '',
       margin: {
         bottom: '100px',
         top: '80px',
