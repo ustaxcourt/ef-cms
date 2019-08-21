@@ -5,6 +5,8 @@
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.docketRecordHtml the html content for the pdf
+ * @param {boolean} providers.showFooter boolean to determine if the footer should be displayed
+ * @param {boolean} providers.showHeader boolean to determine if the header should be displayed
  * @returns {Buffer} the pdf as a binary buffer
  */
 exports.generatePdfFromHtmlInteractor = async ({
