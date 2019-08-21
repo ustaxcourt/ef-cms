@@ -1,6 +1,5 @@
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
@@ -17,7 +16,6 @@ exports.updatePrimaryContactInteractor = async ({
   applicationContext,
   caseId,
   contactInfo,
-  pdfContentHtml,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -35,6 +33,17 @@ exports.updatePrimaryContactInteractor = async ({
   if (user.userId !== caseToUpdate.userId) {
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
+
+  const pdfContentHtml = applicationContext
+    .getUtilities()
+    .generateChangeOfAddressTemplate({
+      caseDetail: {
+        ...caseToUpdate,
+        caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
+      },
+      newData: contactInfo,
+      oldData: caseToUpdate.contactPrimary,
+    });
 
   caseToUpdate.contactPrimary = ContactFactory.createContacts({
     contactInfo: { primary: contactInfo },
