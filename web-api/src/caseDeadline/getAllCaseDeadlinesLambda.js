@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .getAllCaseDeadlines({
+        .getAllCaseDeadlinesInteractor({
           applicationContext,
         });
       applicationContext.logger.info('User', user);
