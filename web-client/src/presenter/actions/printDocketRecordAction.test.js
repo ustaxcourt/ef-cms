@@ -145,19 +145,19 @@ describe('printDocketRecordAction', () => {
     expect(result.output.docketNumber).toEqual(
       mockState.formattedCaseDetail.docketNumberWithSuffix,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState.formattedCaseDetail.caseCaption,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState.formattedCaseDetail.contactPrimary.name,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState.caseDetailHelper.caseCaptionPostfix,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState.formattedCaseDetail.practitioners.formattedName,
     );
-    expect(result.output.docketRecordHtml).toContain('Representing');
+    expect(result.output.contentHtml).toContain('Representing');
   });
 
   it('generates html for a printable docket record with other conditions', async () => {
@@ -171,13 +171,13 @@ describe('printDocketRecordAction', () => {
     expect(result.output.docketNumber).toEqual(
       mockState2.formattedCaseDetail.docketNumberWithSuffix,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState2.formattedCaseDetail.caseCaption,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState2.caseDetailHelper.caseCaptionPostfix,
     );
-    expect(result.output.docketRecordHtml).toContain('Yee vs. Haw');
+    expect(result.output.contentHtml).toContain('Yee vs. Haw');
   });
 
   it('generates html for a printable docket record with no primary contact', async () => {
@@ -208,12 +208,12 @@ describe('printDocketRecordAction', () => {
     expect(result.output.docketNumber).toEqual(
       mockState2.formattedCaseDetail.docketNumberWithSuffix,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState2.formattedCaseDetail.caseCaption,
     );
-    expect(result.output.docketRecordHtml).toContain(
+    expect(result.output.contentHtml).toContain(
       mockState2.caseDetailHelper.caseCaptionPostfix,
     );
-    expect(result.output.docketRecordHtml).toContain('Caption Postfix');
+    expect(result.output.contentHtml).toContain('Caption Postfix');
   });
 });

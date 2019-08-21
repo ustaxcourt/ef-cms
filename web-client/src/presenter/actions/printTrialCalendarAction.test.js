@@ -28,9 +28,9 @@ describe('printTrialCalendarAction', () => {
       state: MOCK_STATE,
     });
 
-    expect(result.output.docketRecordHtml).toContain('Guy Fieri');
-    expect(result.output.docketRecordHtml).toContain('Judge Dredd');
-    expect(result.output.docketRecordHtml).toContain('Some notes here.');
+    expect(result.output.contentHtml).toContain('Guy Fieri');
+    expect(result.output.contentHtml).toContain('Judge Dredd');
+    expect(result.output.contentHtml).toContain('Some notes here.');
   });
 
   it('outputs correct HTML for trial session calendar with cases', async () => {
@@ -64,7 +64,7 @@ describe('printTrialCalendarAction', () => {
       },
     });
 
-    expect(result.output.docketRecordHtml).toContain('Johnny Cash');
-    expect(result.output.docketRecordHtml).toContain('Jimi Hendrix');
+    expect(result.output.contentHtml).toContain('Johnny Cash');
+    expect(result.output.contentHtml).toContain('Jimi Hendrix');
   });
 });
