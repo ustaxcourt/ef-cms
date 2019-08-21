@@ -80,7 +80,13 @@ export const updatePrimaryContactAction = async ({
 
   const pdfContentHtml = printChangeOfAddressTemplate
     .replace(/{{ oldAddress }}/g, oldAddress)
-    .replace(/{{ newAddress }}/g, newAddress);
+    .replace(/{{ newAddress }}/g, newAddress)
+    .replace(/{{ caption }}/g, caseToUpdate.caseCaption)
+    .replace(/{{ captionPostfix }}/g, caseToUpdate.caseCaptionPostfix)
+    .replace(
+      /{{ docketNumber }}/g,
+      `${caseToUpdate.docketNumber}${caseToUpdate.docketNumberSuffix || ''}`,
+    );
 
   const updatedCase = await applicationContext
     .getUseCases()
