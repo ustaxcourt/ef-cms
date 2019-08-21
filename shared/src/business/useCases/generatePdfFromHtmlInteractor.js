@@ -5,17 +5,15 @@
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.docketRecordHtml the html content for the pdf
- * @param {boolean} providers.showFooter boolean to determine if the footer should be displayed
- * @param {boolean} providers.showHeader boolean to determine if the header should be displayed
+ * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
  * @returns {Buffer} the pdf as a binary buffer
  */
 exports.generatePdfFromHtmlInteractor = async ({
   applicationContext,
+  displayHeaderFooter = true,
   docketNumber,
   docketRecordHtml,
   headerHtml,
-  showFooter = true,
-  showHeader = true,
 }) => {
   let browser = null;
   let result = null;
@@ -59,10 +57,10 @@ exports.generatePdfFromHtmlInteractor = async ({
     `;
 
     result = await page.pdf({
-      displayHeaderFooter: true,
-      footerTemplate: showFooter ? footerTemplate : '',
+      displayHeaderFooter,
+      footerTemplate: footerTemplate,
       format: 'Letter',
-      headerTemplate: showHeader ? headerTemplate : '',
+      headerTemplate: headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',

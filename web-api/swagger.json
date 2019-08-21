@@ -2628,8 +2628,8 @@
     },
     "/generate-pdf-from-html": {
       "post": {
-        "summary": "generate a printable pdf of the docket record",
-        "description": "creates a printable pdf with the provided docket record html template.\n",
+        "summary": "generates a pdf given a html string",
+        "description": "creates a printable pdf out of the provided html string.\n",
         "produces": ["application/pdf"],
         "responses": {
           "200": {
