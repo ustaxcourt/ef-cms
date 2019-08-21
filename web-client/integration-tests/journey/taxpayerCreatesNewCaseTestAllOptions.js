@@ -2,8 +2,10 @@ import { runCompute } from 'cerebral/test';
 const {
   ContactFactory,
 } = require('../../../shared/src/business/entities/contacts/ContactFactory');
+import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
-import { startCaseHelper } from '../../src/presenter/computeds/startCaseHelper';
+const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
 export default (test, fakeFile, overrides = {}) => {
   return it('Taxpayer creates a new case, testing all form options', async () => {
