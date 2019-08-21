@@ -56,8 +56,8 @@ export const StartCaseStep5 = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">About Your Petition</h3>
                   <div className="grid-row grid-gap">
-                    <div className="tablet:grid-col-6 margin-bottom-1">
-                      <div className="tablet:margin-bottom-0 margin-bottom-205">
+                    <div className="tablet:grid-col-6 margin-bottom-05">
+                      <div className="tablet:margin-bottom-0 margin-bottom-05">
                         <label className="usa-label" htmlFor="filing-type">
                           Type of Notice/Case
                         </label>
@@ -78,7 +78,7 @@ export const StartCaseStep5 = connect(
                                     icon={['fas', 'file-pdf']}
                                   />
                                 </div>
-                                <div className="grid-col-fill">
+                                <div className="grid-col-11">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
                                     title={form.petitionFile.name}
@@ -100,7 +100,7 @@ export const StartCaseStep5 = connect(
                         <label className="usa-label" htmlFor="filing-location">
                           Trial Location
                         </label>
-                        {form.preferredTrialCity}
+                        <p>{form.preferredTrialCity}</p>
                       </div>
                     </div>
                   </div>
@@ -118,7 +118,7 @@ export const StartCaseStep5 = connect(
                         <label className="usa-label" htmlFor="filing-parties">
                           Party Type
                         </label>
-                        {form.partyType}
+                        <p>{form.partyType}</p>
 
                         <div className="margin-top-2 margin-bottom-2">
                           <label className="usa-label" htmlFor="filing-parties">
@@ -132,7 +132,7 @@ export const StartCaseStep5 = connect(
                                   icon={['fas', 'file-pdf']}
                                 />
                               </div>
-                              <div className="grid-col-fill margin-left-neg-1">
+                              <div className="grid-col-11">
                                 {' '}
                                 <PDFPreviewButton
                                   file={form.stinFile}
@@ -158,7 +158,7 @@ export const StartCaseStep5 = connect(
                                       icon={['fas', 'file-pdf']}
                                     />
                                   </div>
-                                  <div className="grid-col-fill">
+                                  <div className="grid-col-11">
                                     <PDFPreviewButton
                                       file={form.ownershipDisclosureFile}
                                       title={form.ownershipDisclosureFile.name}
@@ -180,7 +180,11 @@ export const StartCaseStep5 = connect(
                       </label>
                       {form.contactPrimary && (
                         <address aria-labelledby="primary-label">
-                          {AddressDisplay(form.contactPrimary, constants)}
+                          {AddressDisplay(form.contactPrimary, constants, {
+                            nameOverride:
+                              startCaseHelper.showCaseNameForPrimary &&
+                              startCaseHelper.caseName,
+                          })}
                         </address>
                       )}
                     </div>
@@ -235,8 +239,8 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>Don’t include any evidence with your Petition.</li>
                   <li>
-                    Save your Petition and any IRS notices and uploaded them as
-                    a single PDF.
+                    Save your Petition and any IRS notices and upload them as a
+                    single PDF.
                   </li>
                   <li>
                     Confirm everything appears as you want it to—you can’t edit
