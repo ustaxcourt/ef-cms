@@ -13,13 +13,21 @@ export const startCaseHelper = get => {
   let contactSecondaryLabel = 'Contact Information';
 
   if (
-    form.partyType === 'Petitioner' ||
-    form.partyType === 'Petitioner & Spouse'
+    [
+      PARTY_TYPES.petitioner,
+      PARTY_TYPES.petitionerDeceasedSpouse,
+      PARTY_TYPES.petitionerSpouse,
+    ].includes(form.partyType)
   ) {
     contactPrimaryLabel = 'Your Contact Information';
   }
 
-  if (form.partyType === 'Petitioner & Spouse') {
+  if (
+    [
+      PARTY_TYPES.petitionerDeceasedSpouse,
+      PARTY_TYPES.petitionerSpouse,
+    ].includes(form.partyType)
+  ) {
     contactSecondaryLabel = 'Spouse‘s Contact Information';
   }
 
