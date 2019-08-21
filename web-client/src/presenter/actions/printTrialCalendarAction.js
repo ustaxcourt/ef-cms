@@ -8,7 +8,7 @@ import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTria
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.store the cerebral store object
- * @returns {object} the docket number and stringified docketRecordHtml
+ * @returns {object} the docket number and stringified contentHtml
  */
 export const printTrialCalendarAction = ({ get }) => {
   const caseDetail = get(state.formattedCaseDetail);
@@ -141,8 +141,8 @@ export const printTrialCalendarAction = ({ get }) => {
   );
 
   return {
+    contentHtml: output,
     docketNumber: caseDetail.docketNumberWithSuffix,
-    docketRecordHtml: output,
     headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDate} ${formattedTrialSessionDetails.sessionType}`,
   };
 };
