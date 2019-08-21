@@ -1,6 +1,7 @@
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { DocketRecord } = require('../entities/DocketRecord');
+const { Document } = require('../entities/Document');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -16,6 +17,7 @@ exports.updatePrimaryContactInteractor = async ({
   applicationContext,
   caseId,
   contactInfo,
+  pdfContentHtml,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -40,6 +42,21 @@ exports.updatePrimaryContactInteractor = async ({
   }).primary.toRawObject();
 
   const caseEntity = new Case(caseToUpdate);
+
+  // generate pdf
+  const docketRecordPdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      displayHeaderFooter: false,
+      docketNumber: caseToUpdate.docketNumber,
+      headerHtml: null,
+      pdfContentHtml,
+    });
+
+  // upload document
+
+  // attach document to docket entry
 
   caseEntity.addDocketRecord(
     new DocketRecord({
