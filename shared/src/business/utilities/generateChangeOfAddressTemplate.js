@@ -6,6 +6,14 @@ const printChangeOfAddressTemplate = fs.readFileSync(
   'utf8',
 );
 
+/**
+ * hydrates printChangeOfAddressTemplate with contact and case info
+ *
+ * @param {object} caseDetail the case being updated
+ * @param {object} newData updated contact information
+ * @param {object} oldData the old contact information
+ * @returns {string} pdfContentHtml in string form
+ */
 exports.generateChangeOfAddressTemplate = ({
   caseDetail,
   newData,
