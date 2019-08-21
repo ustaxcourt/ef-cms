@@ -20,6 +20,7 @@ generate_post_data() {
   cat <<EOF
 {
   "email": "$email",
+  "password": "Testing1234$",
   "role": "$role",
   "section": "$section",
   "name": "$name",
