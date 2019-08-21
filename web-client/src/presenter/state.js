@@ -82,7 +82,6 @@ export const state = {
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
   documentSigningHelper,
-  menuHelper,
   documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
@@ -100,6 +99,7 @@ export const state = {
   headerHelper,
   internalTypesHelper,
   isAccountMenuOpen: false,
+  menuHelper,
   mobileMenu: {
     isVisible: false,
   },
