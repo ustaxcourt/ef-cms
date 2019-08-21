@@ -13,10 +13,11 @@ exports.updatePrimaryContactInteractor = ({
   applicationContext,
   caseId,
   contactInfo,
+  pdfContentHtml,
 }) => {
   return put({
     applicationContext,
-    body: { caseId, contactInfo },
+    body: { caseId, contactInfo, pdfContentHtml },
     endpoint: `/cases/${caseId}/contact-primary`,
   });
 };

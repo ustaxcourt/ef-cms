@@ -10,6 +10,7 @@
 exports.createDocketRecordPdfInteractor = ({
   applicationContext,
   contentHtml,
+  displayHeaderFooter = true,
   docketNumber,
   headerHtml,
 }) => {
@@ -19,6 +20,7 @@ exports.createDocketRecordPdfInteractor = ({
       `${applicationContext.getBaseUrl()}/api/generate-pdf-from-html`,
       {
         contentHtml: contentHtml,
+        displayHeaderFooter,
         docketNumber,
         headerHtml,
       },

@@ -78,7 +78,7 @@ export const updatePrimaryContactAction = async ({
     newAddress += `<div>${diff.phone.newData}</div>`;
   }
 
-  const contentHtml = printChangeOfAddressTemplate
+  const pdfContentHtml = printChangeOfAddressTemplate
     .replace(/{{ oldAddress }}/g, oldAddress)
     .replace(/{{ newAddress }}/g, newAddress);
 
@@ -88,6 +88,7 @@ export const updatePrimaryContactAction = async ({
       applicationContext,
       caseId: caseToUpdate.caseId,
       contactInfo,
+      pdfContentHtml,
     });
 
   return {
