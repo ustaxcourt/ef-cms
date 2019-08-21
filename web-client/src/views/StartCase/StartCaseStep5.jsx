@@ -78,7 +78,7 @@ export const StartCaseStep5 = connect(
                                     icon={['fas', 'file-pdf']}
                                   />
                                 </div>
-                                <div className="grid-col-fill">
+                                <div className="grid-col-11">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
                                     title={form.petitionFile.name}
@@ -132,7 +132,7 @@ export const StartCaseStep5 = connect(
                                   icon={['fas', 'file-pdf']}
                                 />
                               </div>
-                              <div className="grid-col-fill margin-left-neg-1">
+                              <div className="grid-col-11">
                                 {' '}
                                 <PDFPreviewButton
                                   file={form.stinFile}
@@ -158,7 +158,7 @@ export const StartCaseStep5 = connect(
                                       icon={['fas', 'file-pdf']}
                                     />
                                   </div>
-                                  <div className="grid-col-fill">
+                                  <div className="grid-col-11">
                                     <PDFPreviewButton
                                       file={form.ownershipDisclosureFile}
                                       title={form.ownershipDisclosureFile.name}
