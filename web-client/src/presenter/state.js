@@ -6,6 +6,7 @@ import {
 import { accountMenuHelper } from './computeds/accountMenuHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
@@ -55,6 +56,7 @@ export const state = {
     isVisible: true,
   },
   caseCaption: '',
+  caseDeadlineReportHelper,
   caseDetail: {},
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
