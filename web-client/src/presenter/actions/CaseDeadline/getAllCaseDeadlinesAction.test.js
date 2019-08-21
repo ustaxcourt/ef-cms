@@ -15,8 +15,6 @@ describe('getAllCaseDeadlinesAction', () => {
         presenter,
       },
     });
-    expect(result.props.caseDeadlines).toEqual(
-      'hello from get all case deadlines',
-    );
+    expect(result.output.caseDeadlines).toEqual('hello world');
   });
 });
