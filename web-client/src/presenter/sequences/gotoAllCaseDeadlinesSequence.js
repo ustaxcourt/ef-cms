@@ -7,7 +7,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
-const gotoAddCaseDeadlines = [
+const gotoAllCaseDeadlines = [
   setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearScreenMetadataAction,
@@ -17,10 +17,10 @@ const gotoAddCaseDeadlines = [
   setCurrentPageAction('CaseDeadlines'),
 ];
 
-export const gotoAddCaseDeadlinesSequence = [
+export const gotoAllCaseDeadlinesSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddCaseDeadlines,
+    isLoggedIn: gotoAllCaseDeadlines,
     unauthorized: [redirectToCognitoAction],
   },
 ];
