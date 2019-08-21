@@ -83,6 +83,7 @@
     "query-string": "5.1.0",
     "quill-delta-to-html": "^0.10.13",
     "react": "^16.9.0",
+    "react-calendar": "^2.19.1",
     "react-dom": "^16.9.0",
     "react-focus-lock": "^2.0.5",
     "react-idle-timer": "^4.2.8",
@@ -166,8 +167,5 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
-  },
-  "dependencies": {
-    "react-calendar": "^2.19.1"
   }
 }
