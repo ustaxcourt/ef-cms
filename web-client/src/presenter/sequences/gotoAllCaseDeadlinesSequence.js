@@ -6,6 +6,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultDateOnCalendarAction } from '../actions/CaseDeadline/setDefaultDateOnCalendarAction';
 
 const gotoAllCaseDeadlines = [
   setCurrentPageAction('Interstitial'),
@@ -14,6 +15,7 @@ const gotoAllCaseDeadlines = [
   clearErrorAlertsAction,
   getAllCaseDeadlinesAction,
   setCaseDeadlinesAction,
+  setDefaultDateOnCalendarAction,
   setCurrentPageAction('CaseDeadlines'),
 ];
 
