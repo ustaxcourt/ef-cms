@@ -59,7 +59,7 @@ export const RequestAccessDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                 >
-                  Upload Your Document{' '}
+                  Upload your document{' '}
                   <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
@@ -451,7 +451,7 @@ export const RequestAccessDocumentForm = connect(
                     htmlFor="supporting-document"
                     id="supporting-document-label"
                   >
-                    Select Supporting Document
+                    Select supporting document
                   </label>
                   <select
                     aria-describedby="supporting-document-label"
