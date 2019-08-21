@@ -12,17 +12,19 @@ import { ReportsMenu } from './ReportsMenu';
 
 const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
   return (
-    <ul className="usa-nav__primary usa-unstyled-list padding-left-0">
+    <ul className="usa-nav__primary usa-accordion padding-left-0">
       {helper.showHomeIcon && (
         <li
           className={classNames(
             'ustc-nav-no-active-underline',
             'usa-nav__primary-item',
-            helper.pageIsHome && 'active',
           )}
         >
           <a
-            className="usa-button usa-button--unstyled"
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsHome && 'usa-current',
+            )}
             href="/"
             onClick={() => {
               clearAlertSequence();
@@ -34,15 +36,12 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
         </li>
       )}
       {helper.showMessages && (
-        <li
-          className={
-            helper.pageIsMessages
-              ? 'usa-nav__primary-item active'
-              : 'usa-nav__primary-item'
-          }
-        >
+        <li className={classNames('usa-nav__primary-item')}>
           <a
-            className="usa-button usa-button--unstyled"
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsMessages && 'usa-current',
+            )}
             href="/messages/my/inbox"
             onClick={() => {
               clearAlertSequence();
@@ -62,15 +61,12 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
         </li>
       )}
       {helper.showDocumentQC && (
-        <li
-          className={
-            helper.pageIsDocumentQC
-              ? 'usa-nav__primary-item active'
-              : 'usa-nav__primary-item'
-          }
-        >
+        <li className={classNames('usa-nav__primary-item')}>
           <a
-            className="usa-button usa-button--unstyled"
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsDocumentQC && 'usa-current',
+            )}
             href={helper.defaultQCBoxPath}
             onClick={() => {
               clearAlertSequence();
@@ -81,15 +77,12 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
         </li>
       )}
       {helper.showMyCases && (
-        <li
-          className={
-            helper.pageIsMyCases
-              ? 'usa-nav__primary-item active'
-              : 'usa-nav__primary-item'
-          }
-        >
+        <li className={classNames('usa-nav__primary-item')}>
           <a
-            className="usa-button usa-button--unstyled"
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsMyCases && 'usa-current',
+            )}
             href="/"
             onClick={() => {
               clearAlertSequence();
@@ -100,15 +93,12 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
         </li>
       )}
       {helper.showTrialSessions && (
-        <li
-          className={
-            helper.pageIsTrialSessions
-              ? 'usa-nav__primary-item active'
-              : 'usa-nav__primary-item'
-          }
-        >
+        <li className={classNames('usa-nav__primary-item')}>
           <a
-            className="usa-button usa-button--unstyled"
+            className={classNames(
+              'usa-nav__link',
+              helper.pageIsTrialSessions && 'usa-current',
+            )}
             href="/trial-sessions"
             onClick={() => {
               clearAlertSequence();
@@ -122,11 +112,11 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
         <li
           className={classNames(
             'usa-nav__primary-item',
-            helper.pageIsReports && 'active',
+            helper.pageIsReports && 'usa-current',
             isReportsMenuOpen && 'usa-nav__submenu--open',
           )}
         >
-          <ReportsMenu />
+          <ReportsMenu isExpanded={isReportsMenuOpen} />
         </li>
       )}
     </ul>
@@ -186,7 +176,7 @@ export const Header = connect(
         )}
 
         <header
-          className="usa-header usa-header-extended grid-container"
+          className="usa-header usa-header-extended grid-container usa-header--basic"
           role="banner"
         >
           <div className="grid-col-1">

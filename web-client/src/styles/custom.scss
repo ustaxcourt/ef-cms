@@ -768,6 +768,9 @@ header.usa-header {
     display: none;
     margin-top: 3rem;
     font-family: $font-serif;
+    .usa-accordion {
+      font-family: inherit;
+    }
 
     @media (min-width: units('desktop')) {
       display: block;
@@ -789,27 +792,29 @@ header.usa-header {
         }
       }
 
-      &.active,
-      &:hover {
-        border-bottom: 3px solid color($theme-color-primary-dark);
-
-        &.ustc-nav-no-active-underline {
-          border: 0;
-        }
+      &.ustc-nav-no-active-underline {
+        border: 0;
       }
     }
 
-    a,
-    button.header-tab-button {
-      padding: 0 0 6px 0;
-      background: none;
-      color: color($theme-color-primary);
-      font-family: $font-serif;
-      font-size: 20px;
-      font-weight: $font-bold;
-      :hover {
+    .usa-nav__primary {
+      .usa-nav__link {
+        padding: 0 0 6px 0;
         background: none;
         color: color($theme-color-primary);
+        font-family: $font-serif;
+        font-size: 20px;
+        font-weight: $font-bold;
+        &:hover {
+          background: none;
+          color: color($theme-color-primary);
+        }
+        &.usa-current,
+        &::after {
+          right: 0;
+          left: 0;
+          /* height: 0.2rem // fixes thickness of "underline" but causes other issues */
+        }
       }
     }
 
