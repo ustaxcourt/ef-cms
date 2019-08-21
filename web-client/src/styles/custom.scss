@@ -1456,6 +1456,11 @@ hr.lighter {
   }
 }
 
+.pdf-preview-btn {
+  line-height: 1.1rem;
+  word-break: break-all;
+}
+
 button.change-scanner-button {
   color: white;
   font-weight: $font-semibold;
