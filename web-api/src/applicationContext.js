@@ -146,6 +146,12 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
+  getAllCaseDeadlines,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
+const {
+  getAllCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/caseDeadline/getAllCaseDeadlinesInteractor');
+const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
@@ -546,6 +552,7 @@ module.exports = (appContextUser = {}) => {
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        getAllCaseDeadlines,
         getAllCatalogCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
@@ -636,6 +643,7 @@ module.exports = (appContextUser = {}) => {
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
+        getAllCaseDeadlinesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
