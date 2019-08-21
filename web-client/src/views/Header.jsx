@@ -10,7 +10,7 @@ import seal from '../images/ustc_seal.svg';
 import { AccountMenu, AccountMenuItems } from './AccountMenu';
 import { ReportsMenu } from './ReportsMenu';
 
-const NavigationItems = (helper, { clearAlertSequence }) => {
+const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
   return (
     <ul className="usa-nav__primary usa-unstyled-list padding-left-0">
       {helper.showHomeIcon && (
@@ -120,11 +120,11 @@ const NavigationItems = (helper, { clearAlertSequence }) => {
       )}
       {helper.showReports && (
         <li
-          className={
-            helper.pageIsReports
-              ? 'usa-nav__primary-item active'
-              : 'usa-nav__primary-item'
-          }
+          className={classNames(
+            'usa-nav__primary-item',
+            helper.pageIsReports && 'active',
+            isReportsMenuOpen && 'usa-nav__submenu--open',
+          )}
         >
           <ReportsMenu />
         </li>
@@ -138,6 +138,7 @@ export const Header = connect(
     betaBar: state.betaBar,
     clearAlertSequence: sequences.clearAlertSequence,
     helper: state.headerHelper,
+    isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     loginSequence: sequences.gotoLoginSequence,
     mobileMenu: state.mobileMenu,
     signOutSequence: sequences.signOutSequence,
@@ -149,6 +150,7 @@ export const Header = connect(
     betaBar,
     clearAlertSequence,
     helper,
+    isReportsMenuOpen,
     loginSequence,
     mobileMenu,
     signOutSequence,
@@ -204,6 +206,7 @@ export const Header = connect(
               {user &&
                 NavigationItems(helper, {
                   clearAlertSequence,
+                  isReportsMenuOpen,
                 })}
             </nav>
           </div>

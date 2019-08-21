@@ -791,7 +791,6 @@ header.usa-header {
 
       &.active,
       &:hover {
-        padding-bottom: 5px;
         border-bottom: 3px solid color($theme-color-primary-dark);
 
         &.ustc-nav-no-active-underline {
@@ -1066,6 +1065,10 @@ nav.usa-nav {
   }
 }
 
+.usa-nav__submenu--open {
+  background-color: color($theme-color-primary);
+}
+
 .reports-menu {
   .reports-button-container {
     .usa-button.header-tab-button {
@@ -1092,13 +1095,13 @@ nav.usa-nav {
       background-color: color($theme-color-primary);
 
       .usa-button.header-tab-button {
-        padding-bottom: 0.5em;
         color: $color-white;
       }
     }
   }
   .reports-menu-content {
     position: absolute;
+    bottom: 0;
     width: 130px;
     padding: 10px 0;
     background-color: color($theme-color-primary);
