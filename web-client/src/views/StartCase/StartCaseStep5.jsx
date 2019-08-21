@@ -239,8 +239,8 @@ export const StartCaseStep5 = connect(
                   </li>
                   <li>Don’t include any evidence with your Petition.</li>
                   <li>
-                    Save your Petition and any IRS notices and them as a single
-                    PDF.
+                    Save your Petition and any IRS notices and upload them as a
+                    single PDF.
                   </li>
                   <li>
                     Confirm everything appears as you want it to—you can’t edit
