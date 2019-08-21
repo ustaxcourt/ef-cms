@@ -13,11 +13,12 @@ const formatDateFromCalendar = ({ applicationContext, date }) => {
 };
 
 /**
- * sets the state.assigneeId and state.assigneeName based on the props.assigneeId and props.assigneeName passed in.
+ * sets the state.filterStartDate and state.filterEndDate
+ * based on the props.startDate and props.endDate passed in.
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store used for setting the state.assigneeId and state.assigneeName
- * @param {object} providers.props the cerebral props object used for passing the props.assigneeId and props.assigneeName
+ * @param {object} providers.store the cerebral store used for setting the state.filterStartDate and state.filterEndDate
+ * @param {object} providers.props the cerebral props object used for passing the props.startDate and props.endDate
  */
 export const updateDateFromCalendarAction = ({
   applicationContext,
