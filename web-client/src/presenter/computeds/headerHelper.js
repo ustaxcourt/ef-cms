@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const headerHelper = get => {
   const user = get(state.user);
+  const isLoggedIn = !!user;
   const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
@@ -45,6 +46,7 @@ export const headerHelper = get => {
       currentPage &&
       (isTrialSessions || isTrialSessionDetails) &&
       isUserInternal(userRole),
+    showAccountMenu: isLoggedIn,
     showDocumentQC: isUserInternal(userRole),
     showHomeIcon: userRole == 'judge',
     showMessages: isUserInternal(userRole),
