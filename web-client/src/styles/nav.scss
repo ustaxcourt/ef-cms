@@ -1,6 +1,39 @@
 .ustc-header {
   /* small screens: */
   @media only screen and (max-width: $medium-screen - 1px) {
+    .usa-nav-container {
+      width: 100%;
+
+      .usa-navbar {
+        justify-content: space-between;
+      }
+
+      .usa-nav__primary {
+        margin-top: 0;
+      }
+
+      .usa-search.ustc-search {
+        margin-bottom: 20px;
+
+        .usa-input {
+          width: 220px;
+          height: 34px;
+        }
+        .usa-button {
+          &.ustc-search-button {
+            min-width: 90px;
+            height: 34px;
+            background-image: none;
+          }
+        }
+      }
+
+      .usa-nav__close {
+        width: 100px;
+        font-weight: $font-semibold;
+        text-decoration: none;
+      }
+    }
     .usa-logo {
       max-width: 46px;
     }
@@ -91,20 +124,27 @@
         padding-left: 20px;
       }
     }
-  }
 
-  .usa-search.ustc-search {
-    margin-left: 10rem;
-    .usa-input {
-      width: 220px;
-      height: 34px;
-    }
-    .usa-button {
-      &.ustc-search-button {
-        min-width: 90px;
+    .usa-search.ustc-search {
+      margin-left: 10rem;
+      .usa-input {
+        width: 220px;
         height: 34px;
-        background-image: none;
+      }
+      .usa-button {
+        &.ustc-search-button {
+          min-width: 90px;
+          height: 34px;
+          background-image: none;
+        }
       }
     }
+  }
+}
+
+/* small screens: */
+@media only screen and (max-width: $medium-screen - 1px) {
+  .grid-container.no-mobile-padding {
+    padding: 0;
   }
 }

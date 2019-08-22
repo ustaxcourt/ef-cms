@@ -153,6 +153,7 @@ export const Header = connect(
     helper: state.headerHelper,
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
+    mobileMenu: state.mobileMenu,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
@@ -163,6 +164,7 @@ export const Header = connect(
     helper,
     isAccountMenuOpen,
     isReportsMenuOpen,
+    mobileMenu,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -170,7 +172,7 @@ export const Header = connect(
     return (
       <>
         {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
-        <div className="grid-container">
+        <div className="grid-container no-mobile-padding">
           <header
             className="usa-header usa-header--basic ustc-header"
             role="banner"
@@ -194,7 +196,13 @@ export const Header = connect(
                   Menu
                 </button>
               </div>
-              <nav className="usa-nav ustc-nav" role="navigation">
+              <nav
+                className={classNames(
+                  'usa-nav ustc-nav',
+                  mobileMenu.isVisible && 'is-visible',
+                )}
+                role="navigation"
+              >
                 <button
                   className="usa-nav__close"
                   onClick={() => toggleMobileMenuSequence()}
