@@ -153,5 +153,12 @@ a:hover {
 }
 
 .create-case-review {
-  font-size: 1.0625rem;
+  p,
+  div {
+    font-size: 17px;
+  }
+}
+
+.submit-reminders {
+  font-size: 17px;
 }
