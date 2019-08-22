@@ -1,28 +1,74 @@
+import { compareCasesByDocketNumber } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
+
+export const sortByDateAndDocketNumber = (a, b) => {
+  const firstDate = a.deadlineDate;
+  const secondDate = b.deadlineDate;
+
+  if (firstDate === secondDate) {
+    return compareCasesByDocketNumber(a, b);
+  } else {
+    return firstDate.localeCompare(secondDate, 'en');
+  }
+};
 
 export const caseDeadlineReportHelper = (get, applicationContext) => {
   let caseDeadlines = get(state.allCaseDeadlines) || [];
-  let filterDate = get(state.filterDate);
+  let filterStartDate = get(state.filterStartDate);
+  let filterEndDate = get(state.filterEndDate);
 
-  filterDate = applicationContext
+  filterStartDate = applicationContext
     .getUtilities()
-    .prepareDateFromString(filterDate);
+    .prepareDateFromString(filterStartDate);
 
-  filterDate = applicationContext
+  let formattedFilterDateHeader = applicationContext
     .getUtilities()
-    .formatDateString(filterDate, 'MMMM D, YYYY');
+    .formatDateString(filterStartDate, 'MMMM D, YYYY');
 
-  caseDeadlines = caseDeadlines.map(d => ({
-    ...d,
-    formattedDeadline: applicationContext
+  if (filterEndDate && filterStartDate !== filterEndDate) {
+    filterEndDate = applicationContext
       .getUtilities()
-      .formatDateString(d.deadlineDate, 'MMDDYY'),
-    formattedDocketNumber: `${d.docketNumber}${d.docketNumberSuffix || ''}`,
-  }));
+      .prepareDateFromString(filterEndDate);
+
+    formattedFilterDateHeader +=
+      ' - ' +
+      applicationContext
+        .getUtilities()
+        .formatDateString(filterEndDate, 'MMMM D, YYYY');
+  }
+
+  const filterByDate = date => {
+    if (
+      filterStartDate &&
+      (!filterEndDate || filterStartDate === filterEndDate)
+    ) {
+      return date.isSame(filterStartDate, 'day');
+    } else if (
+      filterStartDate &&
+      filterEndDate &&
+      filterStartDate !== filterEndDate
+    ) {
+      return date.isBetween(filterStartDate, filterEndDate, 'day', 'day');
+    }
+  };
+
+  caseDeadlines = caseDeadlines
+    .sort(sortByDateAndDocketNumber)
+    .map(d => ({
+      ...d,
+      formattedDeadline: applicationContext
+        .getUtilities()
+        .formatDateString(d.deadlineDate, 'MMDDYY'),
+      deadlineDateReal: applicationContext
+        .getUtilities()
+        .prepareDateFromString(d.deadlineDate),
+      formattedDocketNumber: `${d.docketNumber}${d.docketNumberSuffix || ''}`,
+    }))
+    .filter(d => filterByDate(d.deadlineDateReal));
 
   return {
     caseDeadlineCount: caseDeadlines.length,
     caseDeadlines,
-    formattedFilterDate: filterDate,
+    formattedFilterDateHeader,
   };
 };
