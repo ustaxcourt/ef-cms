@@ -141,6 +141,7 @@ const {
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
   generateChangeOfAddressTemplate,
+  getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
   generatePdfFromHtmlInteractor,
@@ -705,6 +706,7 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatDateString,
         generateChangeOfAddressTemplate,
+        getDocumentTypeForAddressChange,
         prepareDateFromString,
       };
     },
