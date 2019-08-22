@@ -53,9 +53,9 @@ import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificatio
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
-import { gotoAddCaseDeadlinesSequence } from './sequences/gotoAddCaseDeadlinesSequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
+import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSequence';
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
@@ -120,6 +120,7 @@ import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
+import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectDocumentSequence } from './sequences/selectDocumentSequence';
@@ -295,9 +296,9 @@ export const presenter = {
     formCancelToggleCancelSequence,
     generatePdfFromScanSessionSequence,
     getUsersInSectionSequence,
-    gotoAddCaseDeadlinesSequence,
     gotoAddDocketEntrySequence,
     gotoAddTrialSessionSequence,
+    gotoAllCaseDeadlinesSequence,
     gotoBeforeStartCaseSequence,
     gotoBeforeYouFileDocumentSequence,
     gotoCaseDetailSequence,
@@ -362,6 +363,7 @@ export const presenter = {
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
+    selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
     selectDocumentForScanSequence,
     selectDocumentSequence,

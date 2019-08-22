@@ -2,7 +2,10 @@ import { ContactFactory } from '../../../../shared/src/business/entities/contact
 import { TrialSession } from '../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from 'cerebral/test';
-import { startCaseHelper } from './startCaseHelper';
+import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
 describe('start a case computed', () => {
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {
