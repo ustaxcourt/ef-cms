@@ -5,17 +5,17 @@ import classNames from 'classnames';
 
 export const ReportsMenu = connect(
   {
-    isPageReports: state.headerHelper.isPageReports,
+    pageIsReports: state.headerHelper.pageIsReports,
     toggleReportsMenuSequence: sequences.toggleReportsMenuSequence,
   },
-  ({ isExpanded, isPageReports, toggleReportsMenuSequence }) => {
+  ({ isExpanded, pageIsReports, toggleReportsMenuSequence }) => {
     return (
       <>
         <button
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
-            isPageReports && 'usa-current',
+            pageIsReports && 'usa-current',
           )}
           onClick={() => toggleReportsMenuSequence()}
         >
