@@ -62,7 +62,7 @@ export const StartCaseStep5 = connect(
                           Type of Notice/Case
                         </label>
                         {form.caseType}
-                        <div className="grid-row margin-top-2">
+                        <div className="grid-row margin-top-3">
                           <div className="grid-col">
                             <label
                               className="usa-label"
@@ -96,7 +96,7 @@ export const StartCaseStep5 = connect(
                       </label>
                       {form.procedureType}
 
-                      <div className="margin-top-2">
+                      <div className="margin-top-3">
                         <label className="usa-label" htmlFor="filing-location">
                           Trial Location
                         </label>
@@ -120,7 +120,7 @@ export const StartCaseStep5 = connect(
                         </label>
                         <p>{form.partyType}</p>
 
-                        <div className="margin-top-2 margin-bottom-2">
+                        <div className="margin-top-3 margin-bottom-2">
                           <label className="usa-label" htmlFor="filing-parties">
                             Statement of Taxpayer Identification
                           </label>
@@ -143,9 +143,9 @@ export const StartCaseStep5 = connect(
                           </div>
 
                           {form.ownershipDisclosureFile && (
-                            <div className="margin-top-2">
+                            <div className="margin-top-3">
                               <label
-                                className="usa-label margin-top-2"
+                                className="usa-label margin-top-3"
                                 htmlFor="filing-parties"
                               >
                                 Ownership Disclosure Statement
