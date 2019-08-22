@@ -7,12 +7,36 @@ import classNames from 'classnames';
 import close from '../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
 
-import { AccountMenu, AccountMenuItems } from './AccountMenu';
+import { AccountMenu } from './AccountMenu';
 import { ReportsMenu } from './ReportsMenu';
+
+const BetaBar = toggleBetaBarSequence => {
+  return (
+    <div className="beta">
+      <div className="grid-container">
+        <div className="grid-row">
+          <div className="grid-col-10">
+            This is a testing site for the U.S. Tax Court and not intended for
+            public use. To learn more about starting a case, visit the{' '}
+            <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
+          </div>
+          <div className="grid-col-2">
+            <button
+              className="button-icon float-right usa-button usa-button--unstyled"
+              onClick={() => toggleBetaBarSequence()}
+            >
+              <img alt="close" src={close} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
   return (
-    <ul className="usa-nav__primary usa-accordion padding-left-0">
+    <ul className="usa-nav__primary usa-accordion">
       {helper.showHomeIcon && (
         <li
           className={classNames(
@@ -129,9 +153,6 @@ export const Header = connect(
     clearAlertSequence: sequences.clearAlertSequence,
     helper: state.headerHelper,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
-    loginSequence: sequences.gotoLoginSequence,
-    mobileMenu: state.mobileMenu,
-    signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
@@ -141,83 +162,40 @@ export const Header = connect(
     clearAlertSequence,
     helper,
     isReportsMenuOpen,
-    loginSequence,
-    mobileMenu,
-    signOutSequence,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
   }) => {
     return (
       <>
-        {betaBar.isVisible && (
-          <div className="beta">
-            <div className="grid-container">
-              <div className="grid-row">
-                <div className="grid-col-10">
-                  This is a testing site for the U.S. Tax Court and not intended
-                  for public use. To learn more about starting a case, visit the{' '}
-                  <a href="https://www.ustaxcourt.gov/">
-                    U.S. Tax Court website
-                  </a>
-                  .
-                </div>
-                <div className="grid-col-2">
-                  <button
-                    className="button-icon float-right usa-button usa-button--unstyled"
-                    onClick={() => toggleBetaBarSequence()}
+        {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
+        <div className="grid-container">
+          <header
+            className="usa-header usa-header--basic ustc-header"
+            role="banner"
+          >
+            <div className="usa-nav-container">
+              <div className="usa-navbar">
+                <div className="usa-logo">
+                  <a
+                    href="/"
+                    onClick={() => {
+                      clearAlertSequence();
+                    }}
                   >
-                    <img alt="close" src={close} />
-                  </button>
+                    <img alt="USTC Seal" src={seal} />
+                  </a>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <header
-          className="usa-header usa-header-extended grid-container usa-header--basic"
-          role="banner"
-        >
-          <div className="grid-col-1">
-            <div className="usa-logo" id="extended-logo">
-              <a
-                href="/"
-                onClick={() => {
-                  clearAlertSequence();
-                }}
-              >
-                <img alt="USTC Seal" src={seal} />
-              </a>
-            </div>
-          </div>
-          <div className="grid-col-7">
-            <nav className="main-navigation" role="navigation">
-              {user &&
-                NavigationItems(helper, {
-                  clearAlertSequence,
-                  isReportsMenuOpen,
-                })}
-            </nav>
-          </div>
-          <div className="grid-col-4">
-            <button
-              className="usa-menu-btn"
-              onClick={() => toggleMobileMenuSequence()}
-            >
-              Menu
-            </button>
-            <nav
-              className={
-                mobileMenu.isVisible
-                  ? 'usa-nav mobile-menu is-visible'
-                  : 'usa-nav'
-              }
-              role="navigation"
-            >
-              <div className="usa-nav-inner">
                 <button
-                  className="usa-nav-close"
+                  className="usa-menu-btn"
+                  onClick={() => toggleMobileMenuSequence()}
+                >
+                  Menu
+                </button>
+              </div>
+              <nav className="usa-nav ustc-nav" role="navigation">
+                <button
+                  className="usa-nav__close"
                   onClick={() => toggleMobileMenuSequence()}
                 >
                   Close{' '}
@@ -226,57 +204,17 @@ export const Header = connect(
                     icon={['fa', 'times-circle']}
                   />
                 </button>
-                <div className="header-search-container">
-                  <ul className="usa-unstyled-list padding-left-0">
-                    {helper.showSearchInHeader && (
-                      <li className="usa-search" role="search">
-                        <SearchBox />
-                        {user && user.userId && (
-                          <div className="mobile-account-menu-container">
-                            {NavigationItems(helper, {
-                              clearAlertSequence,
-                            })}
-                          </div>
-                        )}
-                      </li>
-                    )}
-                    {user && user.userId && (
-                      <li className="user-dropdown">
-                        <AccountMenu />
-                      </li>
-                    )}
-                  </ul>
-                  <div className="account-menu-items">
-                    {mobileMenu.isVisible && user && user.userId && (
-                      <AccountMenuItems signOut={signOutSequence} />
-                    )}
-                  </div>
-                </div>
-                {!user && (
-                  <div className="">
-                    <ul className="usa-unstyled-list">
-                      <li>
-                        <button
-                          aria-label="login"
-                          className="button-account-login"
-                          title="Login"
-                          type="button"
-                          onClick={() => loginSequence()}
-                        >
-                          <FontAwesomeIcon
-                            className="account-menu-icon user-icon"
-                            icon={['far', 'user']}
-                          />{' '}
-                          Log In
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </nav>
-          </div>
-        </header>
+                {user &&
+                  NavigationItems(helper, {
+                    clearAlertSequence,
+                    isReportsMenuOpen,
+                  })}
+                {helper.showSearchInHeader && <SearchBox />}
+                {helper.showAccountMenu && <AccountMenu />}
+              </nav>
+            </div>
+          </header>
+        </div>
       </>
     );
   },

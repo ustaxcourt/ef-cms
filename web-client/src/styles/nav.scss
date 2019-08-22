@@ -1,0 +1,41 @@
+.ustc-header {
+  /* small screens: */
+  @media only screen and (max-width: $medium-screen - 1px) {
+    .usa-logo {
+      max-width: 46px;
+    }
+  }
+  /* big screens: */
+  @media only screen and (min-width: $medium-screen) {
+    .usa-nav-container {
+      width: 100%;
+
+      .usa-navbar {
+        width: unset;
+      }
+
+      .usa-logo {
+        max-width: 75px;
+      }
+      .usa-nav__primary-item {
+        .usa-nav__link {
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  .usa-search.ustc-search {
+    .usa-input {
+      width: 220px;
+      height: 34px;
+    }
+    .usa-button {
+      &.ustc-search-button {
+        min-width: auto;
+        height: 34px;
+        background-image: none;
+      }
+    }
+  }
+}
