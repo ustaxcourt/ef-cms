@@ -34,6 +34,13 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange({
+      newData: contactInfo,
+      oldData: caseToUpdate.contactPrimary,
+    });
+
   const pdfContentHtml = applicationContext
     .getUtilities()
     .generateChangeOfAddressTemplate({
@@ -41,6 +48,7 @@ exports.updatePrimaryContactInteractor = async ({
         ...caseToUpdate,
         caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
       },
+      documentTitle: documentType,
       newData: contactInfo,
       oldData: caseToUpdate.contactPrimary,
     });
@@ -73,7 +81,7 @@ exports.updatePrimaryContactInteractor = async ({
   const changeOfAddressDocument = new Document({
     caseId,
     documentId: newDocumentId,
-    documentType: 'Notice of Change of Address',
+    documentType: `${documentType} by ${user.name}`,
     processingStatus: 'complete',
     userId: user.userId,
   });
