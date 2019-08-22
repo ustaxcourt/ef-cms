@@ -1,6 +1,3 @@
-// expect(result.indexOf('address 2')).toBeGreaterThan(-1);
-// expect(result.indexOf('address 3')).toBeGreaterThan(-1);
-
 import {
   generateChangeOfAddressTemplate,
   getAddressPhoneDiff,
