@@ -57,7 +57,7 @@ export const StartCaseStep5 = connect(
                   <h3 className="underlined">About Your Petition</h3>
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-05">
-                      <div className="tablet:margin-bottom-0 margin-bottom-05">
+                      <div className="margin-bottom-2">
                         <label className="usa-label" htmlFor="filing-type">
                           Type of Notice/Case
                         </label>
@@ -144,7 +144,7 @@ export const StartCaseStep5 = connect(
                         </div>
 
                         {form.ownershipDisclosureFile && (
-                          <div className="margin-top-3">
+                          <div className="margin-top-3 margin-bottom-3">
                             <label
                               className="usa-label margin-top-3"
                               htmlFor="filing-parties"
