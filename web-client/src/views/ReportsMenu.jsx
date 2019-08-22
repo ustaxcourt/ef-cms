@@ -1,20 +1,21 @@
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const ReportsMenu = connect(
   {
+    isPageReports: state.headerHelper.isPageReports,
     toggleReportsMenuSequence: sequences.toggleReportsMenuSequence,
   },
-  ({ isExpanded, toggleReportsMenuSequence }) => {
+  ({ isExpanded, isPageReports, toggleReportsMenuSequence }) => {
     return (
       <>
         <button
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
-            isExpanded && 'usa-current',
+            isPageReports && 'usa-current',
           )}
           onClick={() => toggleReportsMenuSequence()}
         >
