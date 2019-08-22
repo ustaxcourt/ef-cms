@@ -16,7 +16,7 @@ export const WorkingCopyFilterHeader = connect(
   }) => {
     return (
       <div className="working-copy-filters">
-        <div className="working-copy-filters--header">
+        <div className="working-copy-filters--header header-with-blue-background">
           <div className="grid-row">
             <div className="grid-col-6">
               <h3>Show Cases by Trial Status</h3>

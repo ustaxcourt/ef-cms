@@ -6,21 +6,23 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultDateOnCalendarAction } from '../actions/CaseDeadline/setDefaultDateOnCalendarAction';
 
-const gotoAddCaseDeadlines = [
+const gotoAllCaseDeadlines = [
   setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   getAllCaseDeadlinesAction,
   setCaseDeadlinesAction,
+  setDefaultDateOnCalendarAction,
   setCurrentPageAction('CaseDeadlines'),
 ];
 
-export const gotoAddCaseDeadlinesSequence = [
+export const gotoAllCaseDeadlinesSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddCaseDeadlines,
+    isLoggedIn: gotoAllCaseDeadlines,
     unauthorized: [redirectToCognitoAction],
   },
 ];

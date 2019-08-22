@@ -103,7 +103,7 @@ export const StartCaseStep4 = connect(
         </div>
         <div className="blue-container">
           <ProcedureType
-            legend="Select Case Procedure"
+            legend="Select case procedure"
             value={form.procedureType}
             onChange={e => {
               updateFormValueSequence({
@@ -125,7 +125,7 @@ export const StartCaseStep4 = connect(
             </p>
             <div className="blue-container">
               <TrialCity
-                label="Select a Trial Location"
+                label="Select a trial location"
                 showDefaultOption={true}
                 showHint={true}
                 showRegularTrialCitiesHint={
