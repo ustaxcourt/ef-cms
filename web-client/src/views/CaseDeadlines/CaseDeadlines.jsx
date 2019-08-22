@@ -40,18 +40,18 @@ export const CaseDeadlines = connect(
                 <table className="usa-table row-border-only subsection work-queue deadlines">
                   <thead>
                     <tr>
-                      <th className="center-column">Due Date</th>
-                      <th className="center-column">Docket</th>
+                      <th>Due Date</th>
+                      <th>Docket</th>
                       <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
                     {helper.caseDeadlines.map((item, idx) => (
                       <tr key={idx}>
-                        <td className="smaller-column center-column semi-bold">
+                        <td className="smaller-column semi-bold">
                           {item.formattedDeadline}
                         </td>
-                        <td className="smaller-column center-column semi-bold">
+                        <td className="smaller-column semi-bold">
                           <a href={'/case-detail/' + item.docketNumber}>
                             {item.formattedDocketNumber}
                           </a>
