@@ -9,6 +9,8 @@
   @media only screen and (min-width: $medium-screen) {
     .usa-nav-container {
       width: 100%;
+      max-width: unset;
+      padding: 0;
 
       .usa-navbar {
         width: unset;
@@ -17,22 +19,89 @@
       .usa-logo {
         max-width: 75px;
       }
+
       .usa-nav__primary-item {
-        .usa-nav__link {
-          white-space: nowrap;
+        &:not(:last-child) {
+          padding-right: 20px;
         }
+
+        .usa-current::after,
+        .usa-nav__link::after {
+          height: 3px;
+        }
+
+        .hidden-underline {
+          &.usa-nav__link:hover::after {
+            display: none;
+          }
+        }
+
+        .account-menu-icon {
+          color: color($theme-color-primary);
+          font-size: 25px;
+        }
+
+        &.usa-nav__submenu--open {
+          background-color: color($theme-color-primary);
+
+          .usa-nav__link {
+            background-color: color($theme-color-primary);
+            color: $color-white;
+
+            .account-menu-icon {
+              color: $color-white;
+            }
+          }
+          .usa-nav__submenu {
+            background-color: color($theme-color-primary);
+
+            .usa-nav__submenu-item button {
+              color: $color-white;
+              font-weight: $font-regular;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+
+            &.position-right-0 {
+              right: 0;
+              width: 100px;
+              text-align: right;
+            }
+          }
+        }
+
+        .usa-nav__link {
+          color: color($theme-color-primary);
+          font-family: $font-serif;
+          font-size: 20px;
+          font-weight: $font-bold;
+          white-space: nowrap;
+
+          &.usa-current {
+            color: color($theme-color-base-darkest);
+          }
+        }
+      }
+
+      nav.ustc-nav {
+        height: 117px;
+        justify-content: space-between;
+        padding-left: 20px;
       }
     }
   }
 
   .usa-search.ustc-search {
+    margin-left: 10rem;
     .usa-input {
       width: 220px;
       height: 34px;
     }
     .usa-button {
       &.ustc-search-button {
-        min-width: auto;
+        min-width: 90px;
         height: 34px;
         background-image: none;
       }

@@ -136,7 +136,6 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
         <li
           className={classNames(
             'usa-nav__primary-item',
-            helper.pageIsReports && 'usa-current',
             isReportsMenuOpen && 'usa-nav__submenu--open',
           )}
         >
@@ -152,6 +151,7 @@ export const Header = connect(
     betaBar: state.betaBar,
     clearAlertSequence: sequences.clearAlertSequence,
     helper: state.headerHelper,
+    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
@@ -161,6 +161,7 @@ export const Header = connect(
     betaBar,
     clearAlertSequence,
     helper,
+    isAccountMenuOpen,
     isReportsMenuOpen,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
@@ -210,7 +211,9 @@ export const Header = connect(
                     isReportsMenuOpen,
                   })}
                 {helper.showSearchInHeader && <SearchBox />}
-                {helper.showAccountMenu && <AccountMenu />}
+                {helper.showAccountMenu && (
+                  <AccountMenu isExpanded={isAccountMenuOpen} />
+                )}
               </nav>
             </div>
           </header>

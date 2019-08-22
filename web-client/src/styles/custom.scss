@@ -765,69 +765,6 @@ header.usa-header {
   }
 }
 
-.account-menu {
-  .account-button-container {
-    button.button-account-menu {
-      padding: 12px;
-      border: none;
-      background: none;
-      color: color($theme-color-primary);
-    }
-
-    .caret {
-      margin-right: 0;
-    }
-  }
-
-  &.closed {
-    .account-menu-icon {
-      color: color($theme-color-primary);
-    }
-    .account-button-container {
-      background: none;
-
-      :hover {
-        background-color: color($theme-color-primary);
-        border-radius: 0;
-
-        .account-menu-icon {
-          color: $color-white;
-        }
-      }
-    }
-  }
-  &.open {
-    .account-menu-icon {
-      color: $color-white;
-    }
-    .account-button-container {
-      background-color: color($theme-color-primary);
-    }
-  }
-  .account-menu-content {
-    position: absolute;
-    right: 0px;
-    width: 109px;
-    padding: 10px 0;
-    background-color: color($theme-color-primary);
-
-    ul li {
-      display: block;
-      margin-right: 8px;
-      text-align: right;
-
-      a {
-        color: $color-white;
-        font-size: 15px;
-      }
-    }
-  }
-}
-
-.usa-nav__submenu--open {
-  background-color: color($theme-color-primary);
-}
-
 .reports-menu {
   .reports-button-container {
     .usa-button.header-tab-button {
