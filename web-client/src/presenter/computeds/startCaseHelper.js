@@ -33,9 +33,9 @@ export const startCaseHelper = (get, applicationContext) => {
   const hasContactSecondary =
     form.contactSecondary && Object.keys(form.contactSecondary).length > 0;
 
-  const caseName = applicationContext
-    .getEntityConstructors()
-    .Case.getCaseCaption(form);
+  const { Case } = applicationContext.getEntityConstructors();
+  const caseCaption = Case.getCaseCaption(form);
+  const caseName = Case.getCaseCaptionNames(caseCaption);
 
   return {
     caseName,
