@@ -27,7 +27,7 @@ export default test => {
       'Apt. 104',
     );
     expect(test.getState('caseDetail.docketRecord')[2].description).toEqual(
-      'Notice of Change of Address by Test Petitioner',
+      'Notice of Change of Address',
     );
   });
 };

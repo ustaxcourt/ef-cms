@@ -13,6 +13,8 @@ fakeFile.name = 'fakeFile.pdf';
 const updateCaseStub = jest.fn();
 const generateChangeOfAddressTemplateStub = jest.fn();
 const generatePdfFromHtmlInteractorStub = jest.fn();
+const getAddressPhoneDiffStub = jest.fn();
+const getDocumentTypeForAddressChangeStub = jest.fn();
 const saveDocumentStub = jest.fn();
 
 let persistenceGateway = {
@@ -47,6 +49,19 @@ const applicationContext = {
       generateChangeOfAddressTemplate: () => {
         generateChangeOfAddressTemplateStub();
         return '<html></html>';
+      },
+      getAddressPhoneDiff: () => {
+        getAddressPhoneDiffStub();
+        return {
+          address1: {
+            newData: 'tset',
+            oldData: 'test',
+          },
+        };
+      },
+      getDocumentTypeForAddressChange: () => {
+        getDocumentTypeForAddressChangeStub();
+        return 'Notice of Change of Address';
       },
     };
   },

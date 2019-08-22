@@ -81,7 +81,7 @@ exports.updatePrimaryContactInteractor = async ({
   const changeOfAddressDocument = new Document({
     caseId,
     documentId: newDocumentId,
-    documentType: `${documentType} by ${user.name}`,
+    documentType: documentType,
     processingStatus: 'complete',
     userId: user.userId,
   });
