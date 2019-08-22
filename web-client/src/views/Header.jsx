@@ -1,14 +1,14 @@
+import { AccountMenu } from './AccountMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import close from '../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../images/ustc_seal.svg';
-
-import { AccountMenu } from './AccountMenu';
-import { ReportsMenu } from './ReportsMenu';
 
 const BetaBar = toggleBetaBarSequence => {
   return (
@@ -141,29 +141,23 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
   );
 };
 
-export const Header = connect(
-  {
-    betaBar: state.betaBar,
-    clearAlertSequence: sequences.clearAlertSequence,
-    helper: state.headerHelper,
-    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
-    isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
-    mobileMenu: state.mobileMenu,
-    toggleBetaBarSequence: sequences.toggleBetaBarSequence,
-    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-    user: state.user,
-  },
-  ({
-    betaBar,
-    clearAlertSequence,
-    helper,
-    isAccountMenuOpen,
-    isReportsMenuOpen,
-    mobileMenu,
-    toggleBetaBarSequence,
-    toggleMobileMenuSequence,
-    user,
-  }) => {
+export class HeaderComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      betaBar,
+      clearAlertSequence,
+      helper,
+      isAccountMenuOpen,
+      isReportsMenuOpen,
+      mobileMenu,
+      toggleBetaBarSequence,
+      toggleMobileMenuSequence,
+      user,
+    } = this.props;
     return (
       <>
         {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
@@ -223,5 +217,32 @@ export const Header = connect(
         </div>
       </>
     );
+  }
+}
+
+HeaderComponent.propTypes = {
+  betaBar: PropTypes.object,
+  clearAlertSequence: PropTypes.func,
+  helper: PropTypes.object,
+  isAccountMenuOpen: PropTypes.bool,
+  isReportsMenuOpen: PropTypes.bool,
+  mobileMenu: PropTypes.object,
+  toggleBetaBarSequence: PropTypes.func,
+  toggleMobileMenuSequence: PropTypes.func,
+  user: PropTypes.object,
+};
+
+export const Header = connect(
+  {
+    betaBar: state.betaBar,
+    clearAlertSequence: sequences.clearAlertSequence,
+    helper: state.headerHelper,
+    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
+    isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
+    mobileMenu: state.mobileMenu,
+    toggleBetaBarSequence: sequences.toggleBetaBarSequence,
+    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+    user: state.user,
   },
+  HeaderComponent,
 );

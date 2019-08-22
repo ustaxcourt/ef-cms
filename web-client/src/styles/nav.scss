@@ -83,7 +83,8 @@
         &.usa-nav__submenu--open {
           background-color: color($theme-color-primary);
 
-          .usa-nav__link {
+          .usa-nav__link,
+          .usa-nav__link.usa-current {
             background-color: color($theme-color-primary);
             color: $color-white;
 
@@ -91,6 +92,7 @@
               color: $color-white;
             }
           }
+
           .usa-nav__submenu {
             background-color: color($theme-color-primary);
 
