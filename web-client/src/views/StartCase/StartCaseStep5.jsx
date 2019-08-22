@@ -70,15 +70,15 @@ export const StartCaseStep5 = connect(
                             >
                               Petition
                             </label>
-                            <div className="grid-container margin-0 padding-0">
+                            <div>
                               <div className="grid-row">
-                                <div className="grid-col-1">
+                                <div className="grid-col flex-auto">
                                   <FontAwesomeIcon
                                     className="fa-icon-blue"
                                     icon={['fas', 'file-pdf']}
                                   />
                                 </div>
-                                <div className="grid-col-11">
+                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
                                     title={form.petitionFile.name}
@@ -124,15 +124,15 @@ export const StartCaseStep5 = connect(
                           <label className="usa-label" htmlFor="filing-parties">
                             Statement of Taxpayer Identification
                           </label>
-                          <div className="grid-container margin-0 padding-0">
+                          <div>
                             <div className="grid-row">
-                              <div className="grid-col-1">
+                              <div className="grid-col flex-auto">
                                 <FontAwesomeIcon
                                   className="fa-icon-blue"
                                   icon={['fas', 'file-pdf']}
                                 />
                               </div>
-                              <div className="grid-col-11">
+                              <div className="grid-col flex-fill">
                                 {' '}
                                 <PDFPreviewButton
                                   file={form.stinFile}
@@ -141,34 +141,34 @@ export const StartCaseStep5 = connect(
                               </div>
                             </div>
                           </div>
+                        </div>
 
-                          {form.ownershipDisclosureFile && (
-                            <div className="margin-top-3">
-                              <label
-                                className="usa-label margin-top-3"
-                                htmlFor="filing-parties"
-                              >
-                                Ownership Disclosure Statement
-                              </label>
-                              <div className="grid-container margin-0 padding-0">
-                                <div className="grid-row">
-                                  <div className="grid-col-1">
-                                    <FontAwesomeIcon
-                                      className="fa-icon-blue"
-                                      icon={['fas', 'file-pdf']}
-                                    />
-                                  </div>
-                                  <div className="grid-col-11">
-                                    <PDFPreviewButton
-                                      file={form.ownershipDisclosureFile}
-                                      title={form.ownershipDisclosureFile.name}
-                                    />
-                                  </div>
+                        {form.ownershipDisclosureFile && (
+                          <div className="margin-top-3">
+                            <label
+                              className="usa-label margin-top-3"
+                              htmlFor="filing-parties"
+                            >
+                              Ownership Disclosure Statement
+                            </label>
+                            <div>
+                              <div className="grid-row">
+                                <div className="grid-col flex-auto">
+                                  <FontAwesomeIcon
+                                    className="fa-icon-blue"
+                                    icon={['fas', 'file-pdf']}
+                                  />
+                                </div>
+                                <div className="grid-col flex-fill">
+                                  <PDFPreviewButton
+                                    file={form.ownershipDisclosureFile}
+                                    title={form.ownershipDisclosureFile.name}
+                                  />
                                 </div>
                               </div>
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </>
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1">
