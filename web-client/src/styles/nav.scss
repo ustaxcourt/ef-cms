@@ -45,11 +45,16 @@
       max-width: unset;
       padding: 0;
 
+      .ustc-navigation-items {
+        flex-grow: 1;
+      }
+
       .usa-navbar {
         width: unset;
       }
 
       .usa-logo {
+        width: 75px;
         max-width: 75px;
       }
 
@@ -64,7 +69,8 @@
         }
 
         .hidden-underline {
-          &.usa-nav__link:hover::after {
+          &.usa-nav__link:hover::after,
+          &.usa-current::after {
             display: none;
           }
         }
@@ -126,7 +132,7 @@
     }
 
     .usa-search.ustc-search {
-      margin-left: 10rem;
+      margin-right: 2rem;
       .usa-input {
         width: 220px;
         height: 34px;

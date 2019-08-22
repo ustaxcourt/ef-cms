@@ -36,17 +36,12 @@ const BetaBar = toggleBetaBarSequence => {
 
 const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
   return (
-    <ul className="usa-nav__primary usa-accordion">
+    <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
       {helper.showHomeIcon && (
-        <li
-          className={classNames(
-            'ustc-nav-no-active-underline',
-            'usa-nav__primary-item',
-          )}
-        >
+        <li className="usa-nav__primary-item">
           <a
             className={classNames(
-              'usa-nav__link',
+              'hidden-underline usa-nav__link',
               helper.pageIsHome && 'usa-current',
             )}
             href="/"
