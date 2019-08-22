@@ -28,26 +28,6 @@ export const ReportsMenu = connect(
                 Deadlines
               </a>
             </li>
-            <li className="usa-nav__submenu-item">
-              <a href="/reports/case-deadlines" id="all-deadlines">
-                Deadlines
-              </a>
-            </li>
-            <li className="usa-nav__submenu-item">
-              <a href="/reports/case-deadlines" id="all-deadlines">
-                Deadlines
-              </a>
-            </li>
-            <li className="usa-nav__submenu-item">
-              <a href="/reports/case-deadlines" id="all-deadlines">
-                Deadlines
-              </a>
-            </li>
-            <li className="usa-nav__submenu-item">
-              <a href="/reports/case-deadlines" id="all-deadlines">
-                Deadlines
-              </a>
-            </li>
           </ul>
         )}
       </>
