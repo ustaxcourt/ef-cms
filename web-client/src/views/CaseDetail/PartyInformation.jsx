@@ -32,7 +32,7 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
           {contact.state} {contact.postalCode}
         </span>
         {contact.countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <span className="address-line">contact.country</span>
+          <span className="address-line">{contact.country}</span>
         )}
         {contact.phone && (
           <span className="address-line margin-top-1">{contact.phone}</span>
