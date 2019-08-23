@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   shellcheck: circleci/shellcheck@1.3.14
   sonar: bulderbank/sonar@1.2.1
+  cypress: cypress-io/cypress@1.8.0
 
 jobs:
   build:
@@ -38,13 +39,35 @@ jobs:
       - run:
           name: Shared - Test
           command: npm run test:shared
+      ### SonarQube ###
+      - restore_cache:
+          keys:
+            - sonar-scanner-4.0.0-v0.0.2
       - run:
-          name: Shared - Export SonarQube Credentials
+          name: Install SonarQube
           command: |
-            echo "export SONARQUBE_TOKEN=$(./get-env.sh $SHARED_SONAR_KEY)" >> $BASH_ENV
-      - sonar/scan:
-          sonar-sources: shared/
-          sonar-owner: SONAR_ORG
+            if test ! -d /tmp/sonar-scanner; then
+                wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
+                unzip sonar-scanner-cli-4.0.0.1744-linux.zip
+                rm sonar-scanner-cli-4.0.0.1744-linux.zip
+                mv sonar-scanner-4.0.0.1744-linux /tmp/sonar-scanner
+            fi
+      - run:
+          name: Shared - SonarQube
+          command: |
+            export SONAR_SCANNER_OPTS="-Xmx2048m"
+            /tmp/sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
+            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+            -Dsonar.organization="${SONAR_ORG}" \
+            -Dsonar.projectBaseDir="shared" \
+            -Dproject.settings="shared/sonar-project.properties" \
+            -Dsonar.login="${SHARED_SONAR_TOKEN}" \
+            -Dsonar.host.url="${FULL_URL}"
+      - save_cache:
+          key: sonar-scanner-4.0.0-v0.0.2
+          paths:
+            - /tmp/sonar-scanner
       # - run:
       #     name: Shared - SonarQube
       #     command: SONAR_KEY=${SHARED_SONAR_KEY} branch_name=${CIRCLE_BRANCH} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SHARED_SONAR_TOKEN} PROJECT_PATH=shared ./verify-sonarqube-passed.sh
