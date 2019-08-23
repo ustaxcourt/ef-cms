@@ -34,6 +34,9 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
+  const caseEntity = new Case(caseToUpdate);
+  const caseName = Case.getCaseCaptionNames(caseEntity.caseCaption);
+
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
@@ -48,7 +51,8 @@ exports.updatePrimaryContactInteractor = async ({
         ...caseToUpdate,
         caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
       },
-      documentTitle: documentType,
+      documentTitle: documentType.title,
+      name: caseName,
       newData: contactInfo,
       oldData: caseToUpdate.contactPrimary,
     });
@@ -57,8 +61,6 @@ exports.updatePrimaryContactInteractor = async ({
     contactInfo: { primary: contactInfo },
     partyType: caseToUpdate.partyType,
   }).primary.toRawObject();
-
-  const caseEntity = new Case(caseToUpdate);
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
@@ -79,10 +81,12 @@ exports.updatePrimaryContactInteractor = async ({
   });
 
   const changeOfAddressDocument = new Document({
-    additionalInfo: `for ${Case.getCaseCaptionNames(caseEntity.caseCaption)}`,
+    additionalInfo: `for ${caseName}`,
     caseId,
     documentId: newDocumentId,
-    documentType: documentType,
+    documentType: documentType.title,
+    eventCode: documentType.eventCode,
+    filedBy: user.name,
     processingStatus: 'complete',
     userId: user.userId,
   });
