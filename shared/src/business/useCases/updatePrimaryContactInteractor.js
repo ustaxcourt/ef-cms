@@ -1,6 +1,6 @@
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { DocketRecord } = require('../entities/DocketRecord');
+const { Document } = require('../entities/Document');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -34,6 +34,25 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange({
+      newData: contactInfo,
+      oldData: caseToUpdate.contactPrimary,
+    });
+
+  const pdfContentHtml = applicationContext
+    .getUtilities()
+    .generateChangeOfAddressTemplate({
+      caseDetail: {
+        ...caseToUpdate,
+        caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
+      },
+      documentTitle: documentType,
+      newData: contactInfo,
+      oldData: caseToUpdate.contactPrimary,
+    });
+
   caseToUpdate.contactPrimary = ContactFactory.createContacts({
     contactInfo: { primary: contactInfo },
     partyType: caseToUpdate.partyType,
@@ -41,12 +60,33 @@ exports.updatePrimaryContactInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate);
 
-  caseEntity.addDocketRecord(
-    new DocketRecord({
-      description: `Notice of Change of Address by ${user.name}`,
-      filingDate: applicationContext.getUtilities().createISODateString(),
-    }),
-  );
+  const docketRecordPdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+      docketNumber: caseToUpdate.docketNumber,
+      headerHtml: null,
+    });
+
+  const newDocumentId = applicationContext.getUniqueId();
+
+  await applicationContext.getPersistenceGateway().saveDocument({
+    applicationContext,
+    document: docketRecordPdf,
+    documentId: newDocumentId,
+  });
+
+  const changeOfAddressDocument = new Document({
+    caseId,
+    documentId: newDocumentId,
+    documentType: documentType,
+    processingStatus: 'complete',
+    userId: user.userId,
+  });
+
+  caseEntity.addDocument(changeOfAddressDocument);
 
   const rawCase = caseEntity.validate().toRawObject();
 
