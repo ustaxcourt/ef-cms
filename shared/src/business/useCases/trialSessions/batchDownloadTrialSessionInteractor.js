@@ -31,8 +31,26 @@ exports.batchDownloadTrialSessionInteractor = async ({
       trialSessionId,
     });
 
+  const sessionCases = await applicationContext
+    .getPersistenceGateway()
+    .getCalendaredCasesForTrialSession({
+      applicationContext,
+      trialSessionId,
+    });
+
   let s3Ids = [];
-  let fileNames;
+  let fileNames = [];
+
+  sessionCases.forEach(caseToBatch => {
+    caseToBatch.documents.forEach(document => {
+      if (document.documentType === 'Petition') {
+        s3Ids.push(document.documentId);
+        fileNames.push(
+          `${caseToBatch.docketNumber}/${document.documentType}.pdf`,
+        );
+      }
+    });
+  });
 
   const zipName = sanitize(
     `${formatDateString(
@@ -40,7 +58,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
       'MMMM_D_YYYY',
     )}_${trialSessionDetails.trialLocation
       .replace(/\s/g, '_')
-      .replace(/,/g, '')}.zip)`,
+      .replace(/,/g, '')}.zip`,
   );
 
   await applicationContext.getPersistenceGateway().zipDocuments({
