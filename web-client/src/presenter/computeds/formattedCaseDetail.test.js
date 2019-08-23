@@ -822,7 +822,7 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
-    it('formats deadline dates and sets overdue to false if the deadlineDate is today', () => {
+    it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
       };
