@@ -1,6 +1,5 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
-import moment from 'moment';
 
 export const formatDocument = (applicationContext, document) => {
   const result = _.cloneDeep(document);
