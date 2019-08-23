@@ -36,6 +36,9 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  batchDownloadTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
+const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
 const {
@@ -625,6 +628,7 @@ module.exports = (appContextUser = {}) => {
         assignWorkItemsInteractor,
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
+        batchDownloadTrialSessionInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,

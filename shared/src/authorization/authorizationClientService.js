@@ -14,6 +14,7 @@ exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
 exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
 exports.ASSOCIATE_USER_WITH_CASE = 'ASSOCIATE_USER_WITH_CASE';
+exports.BATCH_DOWNLOAD_TRIAL_SESSION = 'BATCH_DOWNLOAD_TRIAL_SESSION';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -49,6 +50,7 @@ const AUTHORIZATION_MAP = {
     exports.TRIAL_SESSIONS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.BATCH_DOWNLOAD_TRIAL_SESSION,
   ],
   petitioner: [exports.FILE_EXTERNAL_DOCUMENT, exports.PETITION],
   petitionsclerk: [
