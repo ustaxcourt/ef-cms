@@ -25,6 +25,7 @@ const saveDocumentStub = jest.fn();
 let persistenceGateway = {
   getCaseByCaseId: () => MOCK_CASE,
   saveDocument: saveDocumentStub,
+  saveWorkItemForNonPaper: () => null,
   updateCase: updateCaseStub,
 };
 const applicationContext = {
@@ -84,7 +85,7 @@ describe('update primary contact on a case', () => {
   it('updates contactPrimary', async () => {
     await updatePrimaryContactInteractor({
       applicationContext,
-      caseId: 'abc',
+      caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactInfo: {},
     });
     expect(updateCaseStub).toHaveBeenCalled();
@@ -98,13 +99,15 @@ describe('update primary contact on a case', () => {
     try {
       await updatePrimaryContactInteractor({
         applicationContext,
-        caseId: 'abc',
+        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
       });
     } catch (err) {
       error = err;
     }
-    expect(error.message).toEqual('Case abc was not found.');
+    expect(error.message).toEqual(
+      'Case a805d1ab-18d0-43ec-bafb-654e83405416 was not found.',
+    );
   });
 
   it('throws an error if the case user id is not equal to the user making the request', async () => {
@@ -116,7 +119,7 @@ describe('update primary contact on a case', () => {
     try {
       await updatePrimaryContactInteractor({
         applicationContext,
-        caseId: 'abc',
+        caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         contactInfo: {},
       });
     } catch (err) {
