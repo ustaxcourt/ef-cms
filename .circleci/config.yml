@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:10.15.3
+    parallelism: 4
     steps:
       - checkout
       - run:
