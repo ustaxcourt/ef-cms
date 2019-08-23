@@ -25,7 +25,9 @@ jobs:
             - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - npm-v1-{{ .Branch }}-
             - npm-v1-
-      - run: npm i
+      - run:
+          name: NPM - Install
+          command: npm i
       - save_cache:
           name: NPM - Save to Cache
           paths:
@@ -37,7 +39,9 @@ jobs:
       ### GhostScript ###
       - run:
           name: Ghostscript - Install
-          command: sudo apt-get install ghostscript
+          command: |
+            sudo apt-get update
+            sudo apt-get install ghostscript
       - run:
           name: Shared - Test
           command: npm run test:shared
