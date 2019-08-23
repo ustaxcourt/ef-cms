@@ -93,14 +93,7 @@ export const SectionWorkQueueInProgress = connect(
               <tr>
                 {workQueueHelper.showSelectColumn && (
                   <>
-                    <td className="focus-toggle">
-                      <button
-                        aria-controls={`detail-${item.workItemId}`}
-                        aria-expanded={item.isFocused}
-                        aria-label="Expand message detail"
-                        className="focus-button usa-button usa-button--unstyled"
-                      />{' '}
-                    </td>
+                    <td aria-hidden="true" className="focus-toggle" />
                     <td
                       className="message-select-control"
                       onClick={e => {
