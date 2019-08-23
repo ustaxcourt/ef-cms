@@ -8,37 +8,42 @@ jobs:
       - image: circleci/node:10.15.3
     steps:
       - restore_cache:
-          name: Restoring source code from cache
+          name: Source - Restoring Cache
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          name: Saving source code cache
+          name: Source - Saving Cache
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
       - restore_cache:
-          name: Restoring npm cache
+          name: NPM - Restoring Cache
           keys:
             - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - npm-v1-{{ .Branch }}-
             - npm-v1-
       - run: npm i
       - save_cache:
-          name: Saving npm cache
+          name: NPM - Save to Cache
           paths:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Lint
           command: npm run lint
-      # - run:
-      #     name: Shared - Test
-      #     command: npm run test:shared
+      ### GhostScript ###
+      - run:
+          name: Ghostscript - Install
+          command: sudo apt-get install ghostscript
+      - run:
+          name: Shared - Test
+          command: npm run test:shared
       ### SonarQube ###
       - restore_cache:
+          name: SonarQube - Restoring Cache
           keys:
             - sonar-scanner-4.0.0-v0.0.2
       - run:
@@ -66,9 +71,6 @@ jobs:
           key: sonar-scanner-4.0.0-v0.0.2
           paths:
             - /tmp/sonar-scanner
-      # - run:
-      #     name: Shared - SonarQube
-      #     command: SONAR_KEY=${SHARED_SONAR_KEY} branch_name=${CIRCLE_BRANCH} SONAR_ORG=${SONAR_ORG} SONAR_TOKEN=${SHARED_SONAR_TOKEN} PROJECT_PATH=shared ./verify-sonarqube-passed.sh
       # - run:
       #     name: Web API - Test
       #     command: npm run test:api
