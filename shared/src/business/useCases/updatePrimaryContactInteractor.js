@@ -79,6 +79,7 @@ exports.updatePrimaryContactInteractor = async ({
   });
 
   const changeOfAddressDocument = new Document({
+    additionalInfo: `for ${Case.getCaseCaptionNames(caseEntity.caseCaption)}`,
     caseId,
     documentId: newDocumentId,
     documentType: documentType,
