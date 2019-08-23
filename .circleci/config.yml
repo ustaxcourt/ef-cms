@@ -89,8 +89,8 @@ jobs:
             -Dsonar.projectKey="${API_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="api" \
-            -Dproject.settings="api/sonar-project.properties" \
+            -Dsonar.projectBaseDir="web-api" \
+            -Dproject.settings="web-api/sonar-project.properties" \
             -Dsonar.login="${API_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
       - run:
