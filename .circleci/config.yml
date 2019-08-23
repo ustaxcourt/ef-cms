@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  shellcheck: circleci/shellcheck@1.3.14
 jobs:
   build:
     docker:
@@ -28,12 +30,11 @@ jobs:
           paths:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run:
+      - lint:
           name: Lint
           command: npm run lint
-      - run:
+      - circleci/shellcheck:
           name: Shellcheck
-          command: ./run-shellcheck.sh
       - run:
           name: Shared - Test
           command: npm run test:shared
