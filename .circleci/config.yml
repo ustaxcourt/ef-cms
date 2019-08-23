@@ -96,8 +96,8 @@ jobs:
       - run:
           name: Install Java
           command: |
-            echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
-            sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
+            sudo echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
+            sudo sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
             sudo apt-get install -t jessie-backports ca-certificates-java
             sudo apt-get install openjdk-8-jdk && update-alternatives --config java
       - run:
