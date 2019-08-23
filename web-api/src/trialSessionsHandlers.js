@@ -1,4 +1,6 @@
 module.exports = {
+  batchDownloadTrialSessionLambda: require('./trialSessions/batchDownloadTrialSessionLambda')
+    .handler,
   createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
     .handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
