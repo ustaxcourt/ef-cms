@@ -25,7 +25,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     .getUtilities()
     .formatDateString(filterStartDate, 'MMMM D, YYYY');
 
-  if (filterEndDate && filterStartDate !== filterEndDate) {
+  if (filterEndDate && !filterStartDate.isSame(filterEndDate, 'day')) {
     filterEndDate = applicationContext
       .getUtilities()
       .prepareDateFromString(filterEndDate);
