@@ -18,7 +18,8 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
       }
 
       h3 {
-        margin-top: 30px;
+        margin-top: 40px;
+        margin-bottom: 30px;
         font-size: 18px;
         font-weight: normal;
         text-align: center;
@@ -26,6 +27,7 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
       }
 
       .please-change {
+        margin-bottom: 20px;
         font-size: 12px;
         font-weight: 600;
       }
@@ -65,6 +67,7 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
       .case-information #caption {
         width: 40%;
         float: left;
+        line-height:18px;
       }
 
       .case-information #docket-number {
