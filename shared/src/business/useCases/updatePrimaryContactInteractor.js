@@ -81,7 +81,7 @@ exports.updatePrimaryContactInteractor = async ({
   });
 
   const changeOfAddressDocument = new Document({
-    additionalInfo: `for ${caseName}`,
+    additionalInfo2: `for ${caseName}`,
     caseId,
     documentId: newDocumentId,
     documentType: documentType.title,
