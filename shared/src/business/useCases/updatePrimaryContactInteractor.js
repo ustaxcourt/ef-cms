@@ -95,7 +95,7 @@ exports.updatePrimaryContactInteractor = async ({
   const workItem = new WorkItem({
     assigneeId: null,
     assigneeName: null,
-    caseId: caseId,
+    caseId,
     caseStatus: caseEntity.status,
     docketNumber: caseEntity.docketNumber,
     docketNumberSuffix: caseEntity.docketNumberSuffix,
