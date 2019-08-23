@@ -1,10 +1,14 @@
 const {
   addCoverToPdf,
 } = require('../../business/useCases/addCoverToPDFDocumentInteractor');
+const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');
+const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+const { WorkItem } = require('../entities/WorkItem');
 
 /**
  * updatePrimaryContactInteractor
@@ -88,6 +92,33 @@ exports.updatePrimaryContactInteractor = async ({
     userId: user.userId,
   });
 
+  const workItem = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    caseId: caseId,
+    caseStatus: caseToUpdate.status,
+    docketNumber: caseToUpdate.docketNumber,
+    docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+    document: {
+      ...changeOfAddressDocument.toRawObject(),
+      createdAt: changeOfAddressDocument.createdAt,
+    },
+    isInternal: false,
+    section: DOCKET_SECTION,
+    sentBy: user.userId,
+  });
+
+  const message = new Message({
+    from: user.name,
+    fromUserId: user.userId,
+    message: `${changeOfAddressDocument.documentType} filed by ${capitalize(
+      user.role,
+    )} is ready for review.`,
+  });
+
+  workItem.addMessage(message);
+  changeOfAddressDocument.addWorkItem(workItem);
+
   caseEntity.addDocument(changeOfAddressDocument);
 
   const docketRecordPdfWithCover = await addCoverToPdf({
@@ -101,6 +132,11 @@ exports.updatePrimaryContactInteractor = async ({
     applicationContext,
     document: docketRecordPdfWithCover,
     documentId: newDocumentId,
+  });
+
+  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+    applicationContext,
+    workItem: workItem,
   });
 
   const rawCase = caseEntity.validate().toRawObject();
