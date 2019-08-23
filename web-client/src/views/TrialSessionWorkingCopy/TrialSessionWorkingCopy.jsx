@@ -33,8 +33,8 @@ export const TrialSessionWorkingCopy = connect(
                 aria-label="Batch download trial session"
                 href={`${baseUrl}/trial-sessions/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
               >
-                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} /> Batch
-                Zip Download
+                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
+                Download All Cases
               </a>
             </div>
           </div>
