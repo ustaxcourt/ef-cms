@@ -1,3 +1,6 @@
+const {
+  addCoverToPdf,
+} = require('../../business/useCases/addCoverToPDFDocumentInteractor');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { Document } = require('../entities/Document');
@@ -74,12 +77,6 @@ exports.updatePrimaryContactInteractor = async ({
 
   const newDocumentId = applicationContext.getUniqueId();
 
-  await applicationContext.getPersistenceGateway().saveDocument({
-    applicationContext,
-    document: docketRecordPdf,
-    documentId: newDocumentId,
-  });
-
   const changeOfAddressDocument = new Document({
     additionalInfo: `for ${caseName}`,
     caseId,
@@ -92,6 +89,19 @@ exports.updatePrimaryContactInteractor = async ({
   });
 
   caseEntity.addDocument(changeOfAddressDocument);
+
+  const docketRecordPdfWithCover = await addCoverToPdf({
+    applicationContext,
+    caseEntity,
+    documentEntity: changeOfAddressDocument,
+    pdfData: docketRecordPdf,
+  });
+
+  await applicationContext.getPersistenceGateway().saveDocument({
+    applicationContext,
+    document: docketRecordPdfWithCover,
+    documentId: newDocumentId,
+  });
 
   const rawCase = caseEntity.validate().toRawObject();
 
