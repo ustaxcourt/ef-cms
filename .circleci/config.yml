@@ -4,8 +4,30 @@ jobs:
     docker:
       - image: circleci/node:10.15.3
     steps:
+      - restore_cache:
+          name: Restoring source code from cache
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout
+      - save_cache:
+          name: Saving source code cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - restore_cache:
+          name: Restoring npm cache
+          keys:
+            - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-v1-{{ .Branch }}-
+            - npm-v1-
       - run: npm i
+      - save_cache:
+          name: Saving npm cache
+          paths:
+            - node_modules # location depends on npm version
+          key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Lint
           command: npm run lint
