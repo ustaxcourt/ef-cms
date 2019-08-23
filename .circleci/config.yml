@@ -98,7 +98,7 @@ jobs:
           command: sudo apt-get install openjdk-8-jdk && update-alternatives --config java
       - run:
           name: Web Client - Test
-          command: (AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run test:client
+          command: (AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run test:client
       # - run:
       #     name: Web Client - Test
       #     command: docker run -v $(pwd)/web-client/coverage:/home/app/web-client/coverage --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c "(npm run start:api > /dev/null &) && ./wait-until.sh http://localhost:3000/api/swagger && sleep 5 && npm run test:client"
