@@ -26,11 +26,9 @@ import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequen
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearWizardDataSequence } from './sequences/clearWizardDataSequence';
 import { clickServeToIrsSequence } from './sequences/clickServeToIrsSequence';
-import { closeAccountMenuSequence } from './sequences/closeAccountMenuSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
-import { closeReportsMenuSequence } from './sequences/closeReportsMenuSequence';
 import { completeDocumentSelectSequence } from './sequences/completeDocumentSelectSequence';
 import { completeDocumentSigningSequence } from './sequences/completeDocumentSigningSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
@@ -174,9 +172,9 @@ import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/sub
 import { submitSearchSequence } from './sequences/submitSearchSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
-import { toggleAccountMenuSequence } from './sequences/toggleAccountMenuSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
+import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
@@ -270,11 +268,9 @@ export const presenter = {
     clearPreferredTrialCitySequence,
     clearWizardDataSequence,
     clickServeToIrsSequence,
-    closeAccountMenuSequence,
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
-    closeReportsMenuSequence,
     completeDocumentSelectSequence,
     completeDocumentSigningSequence,
     completeStartCaseWizardStepSequence,
@@ -416,9 +412,9 @@ export const presenter = {
     submitSearchSequence,
     submitTrialSessionSequence,
     submitUpdateCaseSequence,
-    toggleAccountMenuSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
+    toggleMenuSequence,
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
