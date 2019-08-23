@@ -82,7 +82,7 @@ jobs:
           name: Web API - Test
           command: npm run test:api
       - run:
-          name: Shared - SonarQube
+          name: Web API - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
             /tmp/sonar-scanner/bin/sonar-scanner \
