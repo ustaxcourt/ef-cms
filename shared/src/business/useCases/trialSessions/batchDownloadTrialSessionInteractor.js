@@ -36,10 +36,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   const zipName = sanitize(
     `${(formatDateString(trialSessionDetails.startDate),
-    'MMMM_D_YYYY')}_${trialSessionDetails.trialLocation.replace(
-      /[,\s]/g,
-      '_',
-    )}.zip`,
+    'MMMM_D_YYYY')}_${trialSessionDetails.trialLocation
+      .replace(/\s/g, '_')
+      .replace(/,/g, '')}.zip`,
   );
 
   await applicationContext.getPersistenceGateway().zipDocuments({
