@@ -10,20 +10,24 @@ describe('menuHelper', () => {
     expect(isReportsMenuOpen).toEqual(false);
   });
 
-  it('should return result of state.isAccountMenuOpen', () => {
+  it('should indicate Account Menu is open according to state', () => {
     const { isAccountMenuOpen } = runCompute(menuHelper, {
       state: {
-        isAccountMenuOpen: true,
+        navigation: {
+          openMenu: 'AccountMenu',
+        },
       },
     });
 
     expect(isAccountMenuOpen).toEqual(true);
   });
 
-  it('should return result of state.isReportsMenuOpen', () => {
+  it('should indicate Reports Menu is open according to state', () => {
     const { isReportsMenuOpen } = runCompute(menuHelper, {
       state: {
-        isReportsMenuOpen: true,
+        navigation: {
+          openMenu: 'ReportsMenu',
+        },
       },
     });
 
