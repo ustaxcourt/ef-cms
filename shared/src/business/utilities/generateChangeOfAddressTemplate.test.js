@@ -239,7 +239,10 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual('Notice of Change of Address');
+    expect(result).toEqual({
+      eventCode: 'NCA',
+      title: 'Notice of Change of Address',
+    });
   });
 
   it('Returns Notice of Change of Telephone Number when only the phone fields differ', () => {
@@ -250,7 +253,10 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual('Notice of Change of Telephone Number');
+    expect(result).toEqual({
+      eventCode: 'NCP',
+      title: 'Notice of Change of Telephone Number',
+    });
   });
 
   it('Returns a Notice of Change of Address and Telephone Number when both the phone and address fields differ', () => {
@@ -263,6 +269,9 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual('Notice of Change of Address and Telephone Number');
+    expect(result).toEqual({
+      eventCode: 'NCAP',
+      title: 'Notice of Change of Address and Telephone Number',
+    });
   });
 });
