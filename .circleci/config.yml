@@ -33,9 +33,6 @@ jobs:
       - run:
           name: Lint
           command: npm run lint
-      - shellcheck/check:
-          name: Shellcheck
-          exclude: ./node_modules/*
       - run:
           name: Shared - Test
           command: npm run test:shared
@@ -216,6 +213,8 @@ workflows:
   build-and-deploy:
     jobs:
       - build
+      - shellcheck/check
+          exclude: ./foo/*
       - e2e
       - deploy-ui:
           requires:
