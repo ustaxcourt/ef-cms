@@ -307,8 +307,8 @@ exports.generateChangeOfAddressTemplate = ({
     newAddress += `<div>${newData.city}, ${newData.state} ${newData.postalCode}</div>`;
 
     if (documentTitle === 'Notice of Change of Address and Telephone Number') {
-      oldAddress += `<div>${oldData.phone}</dvi>`;
-      newAddress += `<div>${newData.phone}</dvi>`;
+      oldAddress += `<div style="margin-top:8px;">${oldData.phone}</dvi>`;
+      newAddress += `<div style="margin-top:8px;">${newData.phone}</dvi>`;
     }
   }
 
