@@ -61,7 +61,10 @@ const applicationContext = {
       },
       getDocumentTypeForAddressChange: () => {
         getDocumentTypeForAddressChangeStub();
-        return 'Notice of Change of Address';
+        return {
+          eventCode: 'NCA',
+          title: 'Notice of Change of Address',
+        };
       },
     };
   },
