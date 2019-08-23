@@ -1,5 +1,6 @@
 import { state } from 'cerebral';
 import _ from 'lodash';
+import moment from 'moment';
 
 export const formatDocument = (applicationContext, document) => {
   const result = _.cloneDeep(document);
@@ -46,7 +47,14 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
 
-  if (new Date(result.deadlineDate) < new Date()) {
+  //use the app context utility function so the time zones match when comparing dates
+  const deadlineDateMomented = applicationContext
+    .getUtilities()
+    .prepareDateFromString(result.deadlineDate);
+
+  const today = applicationContext.getUtilities().prepareDateFromString();
+
+  if (deadlineDateMomented.isBefore(today, 'day')) {
     result.overdue = true;
   }
 
