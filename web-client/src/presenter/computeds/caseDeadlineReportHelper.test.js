@@ -38,6 +38,17 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.formattedFilterDateHeader).toBeTruthy();
   });
 
+  it('should only use formatted startDate in header if start and end date are on the same day', () => {
+    let result = runCompute(caseDeadlineReportHelper, {
+      state: {
+        allCaseDeadlines: caseDeadlines,
+        filterEndDate: '2019-08-21T12:59:59.000Z',
+        filterStartDate: '2019-08-21T04:00:00.000Z',
+      },
+    });
+    expect(result.formattedFilterDateHeader).toEqual('August 21, 2019');
+  });
+
   it('should filter deadlines by filterStartDate without a filterEndDate and sort by docket number', () => {
     let result = runCompute(caseDeadlineReportHelper, {
       state: {
