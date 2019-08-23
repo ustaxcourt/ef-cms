@@ -3,9 +3,11 @@ jobs:
   build:
     docker:
       - image: circleci/node:10.15.3
-    parallelism: 4
     steps:
       - checkout
+      - run:
+          name: ls -la
+          command: ls -la ./node_modules/.bin
       - run:
           name: Lint
           command: npm run lint
