@@ -91,7 +91,7 @@ describe('Modify Petitioner Contact Information', () => {
   // attempt to modify secondary contact information
   taxpayerLogin(test);
   taxpayerViewsDashboard(test, { caseIndex: 2 });
-  taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
+  taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L', documentCount: 3 });
   taxpayerEditsCaseSecondaryContactInformation(test);
   taxpayerSignsOut(test);
 });
