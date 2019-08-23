@@ -34,9 +34,9 @@ jobs:
       - run:
           name: Lint
           command: npm run lint
-      - run:
-          name: Shared - Test
-          command: npm run test:shared
+      # - run:
+      #     name: Shared - Test
+      #     command: npm run test:shared
       ### SonarQube ###
       - restore_cache:
           keys:
