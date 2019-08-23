@@ -155,4 +155,14 @@ describe('headerHelper', () => {
     });
     expect(result.pageIsTrialSessions).toBeTruthy();
   });
+
+  it('should show border under Reports tab when page is CaseDeadlines', () => {
+    const result = runCompute(headerHelper, {
+      state: {
+        ...getState('petitionsclerk'),
+        currentPage: 'CaseDeadlines',
+      },
+    });
+    expect(result.pageIsReports).toBeTruthy();
+  });
 });

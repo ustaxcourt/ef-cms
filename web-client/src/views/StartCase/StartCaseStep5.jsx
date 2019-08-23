@@ -57,12 +57,12 @@ export const StartCaseStep5 = connect(
                   <h3 className="underlined">About Your Petition</h3>
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-05">
-                      <div className="tablet:margin-bottom-0 margin-bottom-05">
+                      <div className="margin-bottom-2">
                         <label className="usa-label" htmlFor="filing-type">
                           Type of Notice/Case
                         </label>
                         {form.caseType}
-                        <div className="grid-row margin-top-2">
+                        <div className="grid-row margin-top-3">
                           <div className="grid-col">
                             <label
                               className="usa-label"
@@ -70,15 +70,15 @@ export const StartCaseStep5 = connect(
                             >
                               Petition
                             </label>
-                            <div className="grid-container margin-0 padding-0">
+                            <div>
                               <div className="grid-row">
-                                <div className="grid-col-1">
+                                <div className="grid-col flex-auto">
                                   <FontAwesomeIcon
                                     className="fa-icon-blue"
                                     icon={['fas', 'file-pdf']}
                                   />
                                 </div>
-                                <div className="grid-col-11">
+                                <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
                                     title={form.petitionFile.name}
@@ -96,7 +96,7 @@ export const StartCaseStep5 = connect(
                       </label>
                       {form.procedureType}
 
-                      <div className="margin-top-2">
+                      <div className="margin-top-3">
                         <label className="usa-label" htmlFor="filing-location">
                           Trial Location
                         </label>
@@ -120,19 +120,19 @@ export const StartCaseStep5 = connect(
                         </label>
                         <p>{form.partyType}</p>
 
-                        <div className="margin-top-2 margin-bottom-2">
+                        <div className="margin-top-3 margin-bottom-2">
                           <label className="usa-label" htmlFor="filing-parties">
                             Statement of Taxpayer Identification
                           </label>
-                          <div className="grid-container margin-0 padding-0">
+                          <div>
                             <div className="grid-row">
-                              <div className="grid-col-1">
+                              <div className="grid-col flex-auto">
                                 <FontAwesomeIcon
                                   className="fa-icon-blue"
                                   icon={['fas', 'file-pdf']}
                                 />
                               </div>
-                              <div className="grid-col-11">
+                              <div className="grid-col flex-fill">
                                 {' '}
                                 <PDFPreviewButton
                                   file={form.stinFile}
@@ -141,34 +141,34 @@ export const StartCaseStep5 = connect(
                               </div>
                             </div>
                           </div>
+                        </div>
 
-                          {form.ownershipDisclosureFile && (
-                            <div className="margin-top-2">
-                              <label
-                                className="usa-label margin-top-2"
-                                htmlFor="filing-parties"
-                              >
-                                Ownership Disclosure Statement
-                              </label>
-                              <div className="grid-container margin-0 padding-0">
-                                <div className="grid-row">
-                                  <div className="grid-col-1">
-                                    <FontAwesomeIcon
-                                      className="fa-icon-blue"
-                                      icon={['fas', 'file-pdf']}
-                                    />
-                                  </div>
-                                  <div className="grid-col-11">
-                                    <PDFPreviewButton
-                                      file={form.ownershipDisclosureFile}
-                                      title={form.ownershipDisclosureFile.name}
-                                    />
-                                  </div>
+                        {form.ownershipDisclosureFile && (
+                          <div className="margin-top-3 margin-bottom-3">
+                            <label
+                              className="usa-label margin-top-3"
+                              htmlFor="filing-parties"
+                            >
+                              Ownership Disclosure Statement
+                            </label>
+                            <div>
+                              <div className="grid-row">
+                                <div className="grid-col flex-auto">
+                                  <FontAwesomeIcon
+                                    className="fa-icon-blue"
+                                    icon={['fas', 'file-pdf']}
+                                  />
+                                </div>
+                                <div className="grid-col flex-fill">
+                                  <PDFPreviewButton
+                                    file={form.ownershipDisclosureFile}
+                                    title={form.ownershipDisclosureFile.name}
+                                  />
                                 </div>
                               </div>
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </>
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1">
