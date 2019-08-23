@@ -5,9 +5,7 @@ jobs:
       - image: circleci/node:10.15.3
     steps:
       - checkout
-      - run:
-          name: ls -la
-          command: ls -la ./node_modules/.bin
+      - run: npm i
       - run:
           name: Lint
           command: npm run lint
