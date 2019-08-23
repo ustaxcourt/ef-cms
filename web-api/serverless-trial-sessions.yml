@@ -295,7 +295,7 @@ functions:
     handler: web-api/src/trialSessionsHandlers.batchDownloadTrialSessionLambda
     events:
       - http:
-          path: /{trailSessionId}/batch-download
+          path: /{trialSessionId}/batch-download
           method: get
           cors: true
           authorizer:
