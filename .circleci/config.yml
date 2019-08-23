@@ -97,7 +97,7 @@ jobs:
           name: Install Java
           command: |
             sudo chmod 646 /etc/apt/sources.list
-            sudo chmod 646 /etc/apt/sources.list.d/jessie-backports.list
+            sudo chmod 646 /etc/apt/sources.list.d
             sudo echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
             sudo sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
             sudo apt-get install -t jessie-backports ca-certificates-java
