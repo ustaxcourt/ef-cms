@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Lint
           command: npm run lint
-      - circleci/shellcheck:
+      - shellcheck:
           name: Shellcheck
       - run:
           name: Shared - Test
