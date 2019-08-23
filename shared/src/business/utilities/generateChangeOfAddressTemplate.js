@@ -217,6 +217,8 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
   }
 
   const addressFields = [
+    'country',
+    'countryType',
     'address1',
     'address2',
     'address3',
@@ -305,6 +307,14 @@ exports.generateChangeOfAddressTemplate = ({
 
     oldAddress += `<div>${oldData.city}, ${oldData.state} ${oldData.postalCode}</div>`;
     newAddress += `<div>${newData.city}, ${newData.state} ${newData.postalCode}</div>`;
+
+    if (oldData.country) {
+      oldAddress += `<div>${oldData.country}</div>`;
+    }
+
+    if (newData.country) {
+      newAddress += `<div>${newData.country}</div>`;
+    }
 
     if (documentTitle === 'Notice of Change of Address and Telephone Number') {
       oldAddress += `<div style="margin-top:8px;">${oldData.phone}</dvi>`;
