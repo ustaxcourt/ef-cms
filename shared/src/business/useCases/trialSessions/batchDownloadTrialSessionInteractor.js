@@ -31,14 +31,16 @@ exports.batchDownloadTrialSessionInteractor = async ({
       trialSessionId,
     });
 
-  const s3Ids = [];
-  const fileNames = [];
+  let s3Ids = [];
+  let fileNames;
 
   const zipName = sanitize(
-    `${(formatDateString(trialSessionDetails.startDate),
-    'MMMM_D_YYYY')}_${trialSessionDetails.trialLocation
+    `${formatDateString(
+      trialSessionDetails.startDate,
+      'MMMM_D_YYYY',
+    )}_${trialSessionDetails.trialLocation
       .replace(/\s/g, '_')
-      .replace(/,/g, '')}.zip`,
+      .replace(/,/g, '')}.zip)`,
   );
 
   await applicationContext.getPersistenceGateway().zipDocuments({
