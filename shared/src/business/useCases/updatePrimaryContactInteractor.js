@@ -48,25 +48,25 @@ exports.updatePrimaryContactInteractor = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: contactInfo,
-      oldData: caseToUpdate.contactPrimary,
+      oldData: caseEntity.contactPrimary,
     });
 
   const pdfContentHtml = applicationContext
     .getUtilities()
     .generateChangeOfAddressTemplate({
       caseDetail: {
-        ...caseToUpdate,
+        ...caseEntity.toRawObject(),
         caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
       },
       documentTitle: documentType.title,
       name: caseName,
       newData: contactInfo,
-      oldData: caseToUpdate.contactPrimary,
+      oldData: caseEntity.contactPrimary,
     });
 
-  caseToUpdate.contactPrimary = ContactFactory.createContacts({
+  caseEntity.contactPrimary = ContactFactory.createContacts({
     contactInfo: { primary: contactInfo },
-    partyType: caseToUpdate.partyType,
+    partyType: caseEntity.partyType,
   }).primary.toRawObject();
 
   const docketRecordPdf = await applicationContext
@@ -75,7 +75,7 @@ exports.updatePrimaryContactInteractor = async ({
       applicationContext,
       contentHtml: pdfContentHtml,
       displayHeaderFooter: false,
-      docketNumber: caseToUpdate.docketNumber,
+      docketNumber: caseEntity.docketNumber,
       headerHtml: null,
     });
 
@@ -96,9 +96,9 @@ exports.updatePrimaryContactInteractor = async ({
     assigneeId: null,
     assigneeName: null,
     caseId: caseId,
-    caseStatus: caseToUpdate.status,
-    docketNumber: caseToUpdate.docketNumber,
-    docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+    caseStatus: caseEntity.status,
+    docketNumber: caseEntity.docketNumber,
+    docketNumberSuffix: caseEntity.docketNumberSuffix,
     document: {
       ...changeOfAddressDocument.toRawObject(),
       createdAt: changeOfAddressDocument.createdAt,
