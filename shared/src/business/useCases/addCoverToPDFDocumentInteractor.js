@@ -2,6 +2,16 @@ const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
+/**
+ * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
+ *
+ * @param {object} options the providers object
+ * @param {object} options.applicationContext the application context
+ * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
+ * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {object} options.pdfData the original document pdf data
+ * @returns {object} the new pdf with a coversheet attached
+ */
 exports.addCoverToPdf = async ({
   applicationContext,
   caseEntity,
