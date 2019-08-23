@@ -454,7 +454,7 @@ exports.addCoverToPdf = async ({
         });
         return contentLines;
       } else {
-        page.drawText('' + content, params);
+        page.drawText('' + content.join(' '), params);
         return;
       }
     } else {
