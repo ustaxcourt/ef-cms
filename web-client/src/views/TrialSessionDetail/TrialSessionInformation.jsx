@@ -5,12 +5,10 @@ import React from 'react';
 
 export const TrialSessionInformation = connect(
   {
-    baseUrl: state.baseUrl,
     formattedTrialSession: state.formattedTrialSessionDetails,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
-    token: state.token,
   },
-  ({ baseUrl, formattedTrialSession, printTrialCalendarSequence, token }) => {
+  ({ formattedTrialSession, printTrialCalendarSequence }) => {
     return (
       <>
         <div className="grid-container padding-x-0">
@@ -19,13 +17,6 @@ export const TrialSessionInformation = connect(
               <h1>Session Information</h1>
             </div>
             <div className="grid-col-2">
-              <a
-                aria-label="Batch download trial session"
-                href={`${baseUrl}/trial-sessions/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
-              >
-                <FontAwesomeIcon icon={['far', 'file-pdf']} />
-                Batch Zip Download
-              </a>
               {formattedTrialSession.isCalendared && (
                 <button
                   className="usa-button usa-button--unstyled float-right margin-top-2"

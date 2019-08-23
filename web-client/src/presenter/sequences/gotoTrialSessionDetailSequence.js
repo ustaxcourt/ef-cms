@@ -6,7 +6,6 @@ import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSe
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
@@ -17,7 +16,6 @@ const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearErrorAlertsAction,
-  setBaseUrlAction,
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
