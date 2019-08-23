@@ -30,7 +30,7 @@ jobs:
           paths:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - lint:
+      - run:
           name: Lint
           command: npm run lint
       - circleci/shellcheck:
