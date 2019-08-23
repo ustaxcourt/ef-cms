@@ -106,6 +106,7 @@ export const state = {
     isVisible: false,
   },
   modal: {},
+  navigation: {},
   notifications: {},
   path: '/',
   paymentInfo: {
