@@ -1,7 +1,4 @@
-import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
+import { unset } from 'cerebral/factories';
 
-export const resetHeaderAccordionsSequence = [
-  set(state.isAccountMenuOpen, false),
-  set(state.isReportsMenuOpen, false),
-];
+export const resetHeaderAccordionsSequence = [unset(state.navigation.openMenu)];
