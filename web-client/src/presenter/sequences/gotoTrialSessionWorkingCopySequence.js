@@ -8,6 +8,7 @@ import { isJudgeAssociatedWithTrialSessionAction } from '../actions/TrialSession
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopyValuesAction';
@@ -20,6 +21,7 @@ const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
   clearAlertsAction,
   clearErrorAlertsAction,
+  setBaseUrlAction,
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
