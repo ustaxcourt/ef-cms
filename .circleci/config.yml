@@ -44,7 +44,7 @@ jobs:
             sudo apt-get install ghostscript
       - run:
           name: Shared - Test
-          command: CI=true npm run test:shared
+          command: npm run test:shared
       ### SonarQube ###
       - restore_cache:
           name: SonarQube - Restoring Cache
