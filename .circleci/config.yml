@@ -214,7 +214,7 @@ workflows:
     jobs:
       - build
       - shellcheck/check
-          exclude: ./foo/*
+        exclude: ./foo/*
       - e2e
       - deploy-ui:
           requires:
