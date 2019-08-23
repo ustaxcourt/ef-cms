@@ -61,7 +61,7 @@ jobs:
             -Dsonar.projectBaseDir="shared" \
             -Dproject.settings="shared/sonar-project.properties" \
             -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-            -Dsonar.host.url="${FULL_URL}"
+            -Dsonar.host.url="https://sonarcloud.io"
       - save_cache:
           key: sonar-scanner-4.0.0-v0.0.2
           paths:
