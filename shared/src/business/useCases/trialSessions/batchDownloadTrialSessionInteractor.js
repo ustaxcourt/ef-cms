@@ -1,11 +1,12 @@
-const sanitize = require('sanitize-filename');
 const {
   BATCH_DOWNLOAD_TRIAL_SESSION,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
-const { formatDateString } = require('../../../business/utilities/DateHandler');
+const {
+  generatePdfFromHtml,
+} = require('../../useCaseHelper/pdf/generatePdfFromHtml');
+const { s3Zip } = require('../../useCaseHelper/zip/s3-zip');
 const { UnauthorizedError } = require('../../../errors/errors');
-
 /**
  * batchDownloadTrialSessionInteractor
  *
@@ -24,13 +25,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
   if (!isAuthorized(user, BATCH_DOWNLOAD_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const trialSessionDetails = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
 
   const sessionCases = await applicationContext
     .getPersistenceGateway()
@@ -53,28 +47,32 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   });
 
-  const zipName = sanitize(
-    `${formatDateString(
-      trialSessionDetails.startDate,
-      'MMMM_D_YYYY',
-    )}_${trialSessionDetails.trialLocation
-      .replace(/\s/g, '_')
-      .replace(/,/g, '')}.zip`,
-  );
+  const { region } = applicationContext.environment;
+  const bucket = applicationContext.environment.documentsBucketName;
+  const s3Client = applicationContext.getStorageClient();
 
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    fileNames,
-    s3Ids,
-    zipName,
-  });
+  s3Zip.setArchiverOptions({ gzip: false });
+  const archive = s3Zip.initArchive();
 
-  const results = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
+  let docketRecordPdf;
+  for (let index = 0; index < sessionCases.length; index++) {
+    let { caseId, docketNumber } = sessionCases[index];
+
+    docketRecordPdf = await generatePdfFromHtml({
       applicationContext,
-      documentId: zipName,
+      contentHtml: caseHtml[caseId],
+      docketNumber,
     });
 
-  return results;
+    archive.append(docketRecordPdf, {
+      name: `${docketNumber}/Docket Record.pdf`,
+    });
+  }
+
+  return s3Zip.archive(
+    { bucket: bucket, region: region, s3: s3Client },
+    '',
+    s3Ids,
+    fileNames,
+  );
 };

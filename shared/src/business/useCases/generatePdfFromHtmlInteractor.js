@@ -1,4 +1,7 @@
-import { generatePdfFromHtml } from '../useCaseHelper/pdf/generatePdfFromHtml';
+const {
+  generatePdfFromHtml,
+} = require('../useCaseHelper/pdf/generatePdfFromHtml');
+
 /**
  * generatePdfFromHtmlInteractor
  *
