@@ -16,6 +16,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
+  caseHtml,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
