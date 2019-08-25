@@ -24,6 +24,6 @@ export const hasAnotherCalendaredCaseAction = ({ path, props }) => {
 
   return path.yes({
     calendaredCaseIndex,
-    docketRecord: calendaredCases[calendaredCaseIndex].docketRecord,
+    docketNumber: calendaredCases[calendaredCaseIndex].docketNumber,
   });
 };
