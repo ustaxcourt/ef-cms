@@ -1,11 +1,38 @@
 /**
- * Fetches the trial sessions using the getTrialSessions use case
+ * downloadBatchOfTrialSessionAction
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the props object
- * @returns {object} the new object of html of docket records
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
+ * @returns {object} the zipFile
  */
+export const downloadBatchOfTrialSessionAction = async ({
+  applicationContext,
+  props,
+}) => {
+  const { caseHtml, trialSession, trialSessionId } = props;
 
-export const downloadBatchOfTrialSessionAction = async ({ props }) => {
-  console.log('downloadBatchOfTrialSessionAction', props);
+  const zipBlob = await applicationContext
+    .getUseCases()
+    .batchDownloadTrialSessionInteractor({
+      applicationContext,
+      caseHtml,
+      trialSessionId,
+    });
+
+  const trialDate = applicationContext
+    .getUtilities()
+    .formatDateString(trialSession.startDate, 'MMMM_D_YYYY');
+
+  const trialLocation = trialSession.trialLocation
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
+
+  const zipName = `${trialDate}_${trialLocation}.zip`;
+
+  const zipFile = new File([zipBlob], zipName, {
+    type: 'application/pdf',
+  });
+
+  return { zipFile };
 };

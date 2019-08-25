@@ -28,11 +28,5 @@ exports.batchDownloadTrialSessionInteractor = ({
         responseType: 'blob',
       },
     )
-    .then(response => {
-      const zipBlob = new Blob([response.data], { type: 'application/zip' });
-      const zipFile = new File([zipBlob], 'thezip.zip', {
-        type: 'application/pdf',
-      });
-      return zipFile;
-    });
+    .then(response => new Blob([response.data], { type: 'application/zip' }));
 };
