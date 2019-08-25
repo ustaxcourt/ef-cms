@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * used to determine if the trial session is calendared
  *
@@ -7,8 +5,8 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
  * @returns {*} returns the next action in the sequence's path
  */
-export const isTrialSessionCalendaredAction = ({ get, path }) => {
-  const trialSession = get(state.trialSession);
+export const isTrialSessionCalendaredAction = ({ path, props }) => {
+  const { trialSession } = props;
 
   const isTrialSessionCalendared = trialSession && trialSession.isCalendared;
 
