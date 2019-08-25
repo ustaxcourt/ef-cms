@@ -45,8 +45,8 @@ describe('hasAnotherCalendaredCaseAction', () => {
       },
       props: {
         calendaredCaseIndex: 0,
-        calendaredCases: [{ docketRecord: 'abc' }],
-        docketRecord: 'abc',
+        calendaredCases: [{ docketNumber: 'abc' }],
+        docketNumber: 'abc',
       },
     });
 
@@ -59,13 +59,13 @@ describe('hasAnotherCalendaredCaseAction', () => {
         presenter,
       },
       props: {
-        calendaredCases: [{ docketRecord: 'abc' }],
+        calendaredCases: [{ docketNumber: 'abc' }],
       },
     });
 
     expect(pathYesStub).toHaveBeenCalledWith({
       calendaredCaseIndex: 0,
-      docketRecord: 'abc',
+      docketNumber: 'abc',
     });
   });
 });
