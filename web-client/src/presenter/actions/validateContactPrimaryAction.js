@@ -1,8 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * Creates and appends a new "blank" year amount object to the yearAmounts array for when a user needs to add another
- * year amount to the petition document info.
+ * Validates primary contact information and redirects user to success or error path
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object

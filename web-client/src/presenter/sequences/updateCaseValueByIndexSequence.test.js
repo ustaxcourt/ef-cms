@@ -10,22 +10,22 @@ test = CerebralTest(presenter);
 describe('updateCaseValueByIndexSequence', () => {
   it('updates the expected key and index inside the caseDetail', async () => {
     test.setState('caseDetail', {
-      yearAmounts: [
+      keyName: [
         {
-          year: '2000',
+          subkeyName: 'André 3000',
         },
       ],
     });
     await test.runSequence('updateCaseValueByIndexSequence', {
       index: 0,
-      key: 'yearAmounts',
-      subKey: 'year',
-      value: '1999',
+      key: 'keyName',
+      subKey: 'subkeyName',
+      value: 'Hey ya',
     });
     expect(test.getState('caseDetail')).toEqual({
-      yearAmounts: [
+      keyName: [
         {
-          year: '1999',
+          subkeyName: 'Hey ya',
         },
       ],
     });
