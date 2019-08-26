@@ -46,7 +46,7 @@ s3Zip.archive = function(opts, folder, filesS3, filesZip, extra, extraZip) {
   return archive;
 };
 
-s3Zip.archiveStream = function(stream, filesS3, filesZip, extra, extraZip) {
+s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
   const self = this;
   const folder = this.folder || '';
   if (this.registerFormat) {
@@ -54,13 +54,13 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extra, extraZip) {
   }
   const archive = archiver(this.format || 'zip', this.archiverOpts || {});
 
-  const extraFilesPromises = (extra || []).map((extra, index) =>
+  const extrasPromises = (extras || []).map((extra, index) =>
     Promise.resolve(extra).then(file =>
-      archive.append(file, { name: extraZip[index] }),
+      archive.append(file, { name: extrasZip[index] }),
     ),
   );
 
-  const extraFilesPromisesAll = Promise.all(extraFilesPromises).then(() => {
+  const extraFilesPromisesAll = Promise.all(extrasPromises).then(() => {
     self.debug && console.log('promise.all complete');
   });
 
@@ -96,7 +96,7 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extra, extraZip) {
     })
     .on('end', function() {
       self.debug && console.log('end -> finalize');
-      extraFilesPromisesAll.then(() => {
+      extraFilesPromisesAll.finally(() => {
         self.debug && console.log('promise.all -> finalize');
         archive.finalize();
       });
