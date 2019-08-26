@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /* eslint-disable no-console */
 const archiver = require('archiver');
 const s3Files = require('s3-files');
