@@ -28,16 +28,16 @@ exports.batchDownloadTrialSessionInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const sessionCases = await applicationContext
+  const trialSessionDetails = await applicationContext
     .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
+    .getTrialSessionById({
       applicationContext,
       trialSessionId,
     });
 
-  const trialSessionDetails = await applicationContext
+  const sessionCases = await applicationContext
     .getPersistenceGateway()
-    .getTrialSessionById({
+    .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
     });
