@@ -81,7 +81,7 @@ export const StartCaseStep5 = connect(
                                 <div className="grid-col flex-fill">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
-                                    title="Petiton"
+                                    title="Petition"
                                   />
                                 </div>
                               </div>
