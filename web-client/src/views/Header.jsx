@@ -48,7 +48,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
           >
             <FontAwesomeIcon icon="home" />
             <span className="sr-only">Home</span>
-          </a>
+          </button>
         </li>
       )}
       {helper.showMessages && (
@@ -70,7 +70,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
                 size="sm"
               />
             )}
-          </a>
+          </button>
         </li>
       )}
       {helper.showDocumentQC && (
@@ -83,7 +83,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
             href={helper.defaultQCBoxPath}
           >
             Document QC
-          </a>
+          </button>
         </li>
       )}
       {helper.showMyCases && (
@@ -96,7 +96,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
             href="/"
           >
             My Cases
-          </a>
+          </button>
         </li>
       )}
       {helper.showTrialSessions && (
@@ -109,7 +109,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
             href="/trial-sessions"
           >
             Trial Sessions
-          </a>
+          </button>
         </li>
       )}
       {helper.showReports && (

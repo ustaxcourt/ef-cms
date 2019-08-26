@@ -94,7 +94,7 @@
             font-size: 17px;
             text-align: center;
 
-            &:hover {
+            &:hover, &:focus {
               border-bottom: none;
               background-color: none;
               color: color($theme-color-primary-darker);
