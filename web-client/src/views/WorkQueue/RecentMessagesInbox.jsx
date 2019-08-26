@@ -31,9 +31,12 @@ export const RecentMessagesInbox = connect(
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row">
-                    <span className="no-wrap">
+                    <a
+                      className="no-wrap"
+                      href={`/case-detail/${item.docketNumber}`}
+                    >
                       {item.docketNumberWithSuffix}
-                    </span>
+                    </a>
                   </td>
                   <td className="message-queue-row">
                     <span className="no-wrap">{item.received}</span>
