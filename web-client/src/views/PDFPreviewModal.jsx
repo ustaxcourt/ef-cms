@@ -32,12 +32,11 @@ class PDFPreviewModalComponent extends ModalDialog {
       <>
         <Mobile>
           <div className="modal-mobile-header">
-            <h3>
+            <h3 onClick={() => this.props.cancelSequence()}>
               <FontAwesomeIcon
                 className="back"
                 icon={['fas', 'caret-left']}
                 size="lg"
-                onClick={() => this.props.cancelSequence()}
               />
               Back to Review Your Filing
             </h3>
