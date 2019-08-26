@@ -1,3 +1,4 @@
+import { cloneFile } from '../cloneFile';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from '../limitFileSize';
 import { props, sequences, state } from 'cerebral';
@@ -38,16 +39,20 @@ export const StateDrivenFileInput = connect(
           }}
           type="file"
           onChange={e => {
+            const { name } = e.target;
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-              updateFormValueSequence({
-                key: e.target.name,
-                value: e.target.files[0],
+              const file = e.target.files[0];
+              cloneFile(file).then(clonedFile => {
+                updateFormValueSequence({
+                  key: name,
+                  value: clonedFile,
+                });
+                updateFormValueSequence({
+                  key: `${name}Size`,
+                  value: clonedFile.size,
+                });
+                validationSequence();
               });
-              updateFormValueSequence({
-                key: `${e.target.name}Size`,
-                value: e.target.files[0].size,
-              });
-              validationSequence();
             });
           }}
           onClick={e => {
