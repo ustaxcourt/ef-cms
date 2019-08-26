@@ -10,9 +10,10 @@ export const downloadBatchOfTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
-  const { caseHtml, trialSession, trialSessionId } = props;
+  console.log('downloadBatchOfTrialSessionAction', props);
+  const { caseHtml, trialSessionId } = props;
 
-  const zipBlob = await applicationContext
+  const result = await applicationContext
     .getUseCases()
     .batchDownloadTrialSessionInteractor({
       applicationContext,
@@ -20,19 +21,7 @@ export const downloadBatchOfTrialSessionAction = async ({
       trialSessionId,
     });
 
-  const trialDate = applicationContext
-    .getUtilities()
-    .formatDateString(trialSession.startDate, 'MMMM_D_YYYY');
+  console.log(result);
 
-  const trialLocation = trialSession.trialLocation
-    .replace(/\s/g, '_')
-    .replace(/,/g, '');
-
-  const zipName = `${trialDate}_${trialLocation}.zip`;
-
-  const zipFile = new File([zipBlob], zipName, {
-    type: 'application/pdf',
-  });
-
-  return { zipFile };
+  location.href = result.url;
 };

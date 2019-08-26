@@ -1,3 +1,5 @@
+const { post } = require('../requests');
+
 /**
  * batchDownloadTrialSessionInteractor
  *
@@ -12,21 +14,12 @@ exports.batchDownloadTrialSessionInteractor = ({
   caseHtml,
   trialSessionId,
 }) => {
-  return applicationContext
-    .getHttpClient()
-    .post(
-      `${applicationContext.getBaseUrl()}/trial-sessions/${trialSessionId}/batch-download`,
-      {
-        caseHtml,
-        trialSessionId,
-      },
-      {
-        headers: {
-          Accept: 'application/zip',
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-        responseType: 'blob',
-      },
-    )
-    .then(response => new Blob([response.data], { type: 'application/zip' }));
+  return post({
+    applicationContext,
+    body: {
+      caseHtml,
+      trialSessionId,
+    },
+    endpoint: `/trial-sessions/${trialSessionId}/batch-download`,
+  });
 };

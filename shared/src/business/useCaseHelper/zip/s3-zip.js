@@ -3,7 +3,6 @@ const archiver = require('archiver');
 const s3Files = require('s3-files');
 
 const s3Zip = {};
-module.exports.s3Zip = s3Zip;
 
 s3Zip.archive = function(opts, folder, filesS3, filesZip) {
   const self = this;
@@ -112,3 +111,5 @@ s3Zip.setRegisterFormatOptions = function(registerFormat, formatModule) {
   this.formatModule = formatModule;
   return this;
 };
+
+module.exports.s3Zip = s3Zip;
