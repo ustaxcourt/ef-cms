@@ -86,7 +86,6 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
-      - 'application/zip'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
