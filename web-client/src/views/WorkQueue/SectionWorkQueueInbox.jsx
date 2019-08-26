@@ -128,7 +128,12 @@ export const SectionWorkQueueInbox = connect(
                   </>
                 )}
                 <td className="message-queue-row">
-                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
+                  <a
+                    className="no-wrap"
+                    href={`/case-detail/${item.docketNumber}`}
+                  >
+                    {item.docketNumberWithSuffix}
+                  </a>
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
