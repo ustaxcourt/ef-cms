@@ -3,7 +3,7 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('handleScanErrorAction', () => {
-  it('should show the EmptyHopperModal modal when no images could be aquired', async () => {
+  it('should show the EmptyHopperModal modal when no images could be acquired', async () => {
     const result = await runAction(handleScanErrorAction, {
       modules: {
         presenter,
