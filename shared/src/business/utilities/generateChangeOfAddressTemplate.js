@@ -180,9 +180,10 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
 
 /**
  * creates a lookup of changed contact fields
- *
- * @param {object} newData updated contact information
- * @param {object} oldData the old contact information
+
+ * @param {object} providers the providers object
+ * @param {object} providers.newData updated contact information
+ * @param {object} providers.oldData the old contact information
  * @returns {object} diff object with old and new values for each changed field
  */
 const getAddressPhoneDiff = ({ newData, oldData }) => {
@@ -206,8 +207,10 @@ exports.getAddressPhoneDiff = getAddressPhoneDiff;
 /**
  * returns the appropiate documentType given the old and new contact data
  *
- * @param {object} newData updated contact information
- * @param {object} oldData the old contact information
+ * @param {object} providers the providers object
+ * @param {object} providers.diff contact difference
+ * @param {object} providers.newData updated contact information
+ * @param {object} providers.oldData the old contact information
  * @returns {string} documentType for the address / phone change scenario
  */
 const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
@@ -261,11 +264,12 @@ exports.getDocumentTypeForAddressChange = getDocumentTypeForAddressChange;
 /**
  * hydrates printChangeOfAddressTemplate with contact and case info
  *
- * @param {object} caseDetail the case being updated
- * @param {string} documentTitle the document title to use on the pdf
- * @param {string} name name of party whose info is being changed
- * @param {object} newData updated contact information
- * @param {object} oldData the old contact information
+ * @param {object} providers the providers object
+ * @param {object} providers.caseDetail the case being updated
+ * @param {string} providers.documentTitle the document title to use on the pdf
+ * @param {string} providers.name name of party whose info is being changed
+ * @param {object} providers.newData updated contact information
+ * @param {object} providers.oldData the old contact information
  * @returns {string} pdfContentHtml in string form
  */
 exports.generateChangeOfAddressTemplate = ({

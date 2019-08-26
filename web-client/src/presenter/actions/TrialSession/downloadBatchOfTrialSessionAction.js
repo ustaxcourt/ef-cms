@@ -10,7 +10,6 @@ export const downloadBatchOfTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
-  console.log('downloadBatchOfTrialSessionAction', props);
   const { caseHtml, trialSessionId } = props;
 
   const result = await applicationContext
@@ -20,8 +19,6 @@ export const downloadBatchOfTrialSessionAction = async ({
       caseHtml,
       trialSessionId,
     });
-
-  console.log(result);
 
   location.href = result.url;
 };
