@@ -3,8 +3,9 @@ const archiver = require('archiver');
 const s3Files = require('s3-files');
 
 const s3Zip = {};
+module.exports = s3Zip;
 
-s3Zip.archive = function(opts, folder, filesS3, filesZip) {
+s3Zip.archive = function(opts, folder, filesS3, filesZip, extra, extraZip) {
   const self = this;
   let connectionConfig;
 
@@ -34,27 +35,35 @@ s3Zip.archive = function(opts, folder, filesS3, filesZip) {
     keyStream,
     preserveFolderStructure,
   );
-  const archive = self.archiveStream(fileStream, filesS3, filesZip);
+  const archive = self.archiveStream(
+    fileStream,
+    filesS3,
+    filesZip,
+    extra,
+    extraZip,
+  );
 
   return archive;
 };
 
-s3Zip.initArchive = function() {
-  if (this.registerFormat) {
-    archiver.registerFormat(this.registerFormat, this.formatModule);
-  }
-  this.archive = archiver(this.format || 'zip', this.archiverOpts || {});
-  return this.archive;
-};
-
-s3Zip.archiveStream = function(stream, filesS3, filesZip) {
+s3Zip.archiveStream = function(stream, filesS3, filesZip, extra, extraZip) {
   const self = this;
   const folder = this.folder || '';
   if (this.registerFormat) {
     archiver.registerFormat(this.registerFormat, this.formatModule);
   }
-  const archive =
-    this.archive || archiver(this.format || 'zip', this.archiverOpts || {});
+  const archive = archiver(this.format || 'zip', this.archiverOpts || {});
+
+  const extraFilesPromises = (extra || []).map((extra, index) =>
+    Promise.resolve(extra).then(file =>
+      archive.append(file, { name: extraZip[index] }),
+    ),
+  );
+
+  const extraFilesPromisesAll = Promise.all(extraFilesPromises).then(() => {
+    self.debug && console.log('promise.all complete');
+  });
+
   archive.on('error', function(err) {
     self.debug && console.log('archive error', err);
   });
@@ -87,7 +96,10 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip) {
     })
     .on('end', function() {
       self.debug && console.log('end -> finalize');
-      archive.finalize();
+      extraFilesPromisesAll.then(() => {
+        self.debug && console.log('promise.all -> finalize');
+        archive.finalize();
+      });
     })
     .on('error', function(err) {
       archive.emit('error', err);
@@ -111,5 +123,3 @@ s3Zip.setRegisterFormatOptions = function(registerFormat, formatModule) {
   this.formatModule = formatModule;
   return this;
 };
-
-module.exports.s3Zip = s3Zip;
