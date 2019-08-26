@@ -3,38 +3,21 @@ const { coverLogo } = require('../assets/coverLogo');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 /**
- * addCoverToPDFDocumentInteractor
+ * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id
- * @param {string} providers.documentId the document id
- * @returns {Uint8Array} the new pdf data
+ * @param {object} options the providers object
+ * @param {object} options.applicationContext the application context
+ * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
+ * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {object} options.pdfData the original document pdf data
+ * @returns {object} the new pdf with a coversheet attached
  */
-exports.addCoverToPDFDocumentInteractor = async ({
+exports.addCoverToPdf = async ({
   applicationContext,
-  caseId,
-  documentId,
+  caseEntity,
+  documentEntity,
+  pdfData,
 }) => {
-  applicationContext.logger.time('Fetching the Case');
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByCaseId({
-      applicationContext,
-      caseId,
-    });
-  applicationContext.logger.timeEnd('Fetching the Case');
-
-  const caseEntity = new Case(caseRecord);
-
-  const documentEntity = caseEntity.documents.find(
-    document => document.documentId === documentId,
-  );
-
-  const documentIndex = caseEntity.documents.findIndex(
-    document => document.documentId === documentId,
-  );
-
   const isLodged = documentEntity.lodged;
   const { isPaper } = documentEntity;
 
@@ -70,7 +53,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
         .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
     null;
 
-  const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
+  const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
   let documentTitle =
@@ -93,17 +76,6 @@ exports.addCoverToPDFDocumentInteractor = async ({
       documentEntity.certificateOfService === true ? true : false,
     originallyFiledElectronically: !caseEntity.isPaper,
   };
-
-  applicationContext.logger.time('Fetching S3 File');
-  let { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
-    })
-    .promise();
-
-  applicationContext.logger.timeEnd('Fetching S3 File');
 
   // create pdfDoc object from file data
   applicationContext.logger.time('Loading the PDF');
@@ -482,7 +454,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
         });
         return contentLines;
       } else {
-        page.drawText('' + content, params);
+        page.drawText('' + content.join(' '), params);
         return;
       }
     } else {
@@ -516,11 +488,58 @@ exports.addCoverToPDFDocumentInteractor = async ({
     contentDateServed,
   ].map(cont => drawContent(coverPage, cont));
 
-  // Write our pdfDoc object to byte array, ready to physically write to disk or upload
-  // to file server
-  applicationContext.logger.time('Saving Bytes');
-  const newPdfData = await pdfDoc.save();
-  applicationContext.logger.timeEnd('Saving Bytes');
+  return pdfDoc.save();
+};
+
+/**
+ * addCoverToPDFDocumentInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the case id
+ * @param {string} providers.documentId the document id
+ * @returns {Uint8Array} the new pdf data
+ */
+exports.addCoverToPDFDocumentInteractor = async ({
+  applicationContext,
+  caseId,
+  documentId,
+}) => {
+  applicationContext.logger.time('Fetching the Case');
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
+  applicationContext.logger.timeEnd('Fetching the Case');
+
+  const caseEntity = new Case(caseRecord);
+
+  const documentEntity = caseEntity.documents.find(
+    document => document.documentId === documentId,
+  );
+
+  const documentIndex = caseEntity.documents.findIndex(
+    document => document.documentId === documentId,
+  );
+
+  applicationContext.logger.time('Fetching S3 File');
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
+  applicationContext.logger.timeEnd('Fetching S3 File');
+
+  const newPdfData = await exports.addCoverToPdf({
+    applicationContext,
+    caseEntity,
+    documentEntity,
+    pdfData,
+  });
 
   documentEntity.processingStatus = 'complete';
 
