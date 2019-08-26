@@ -35,5 +35,6 @@ export const setPageAction = async ({ get, props, store }) => {
     viewport: viewport,
   };
 
+  page.cleanup();
   page.render(renderContext);
 };
