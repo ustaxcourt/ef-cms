@@ -35,6 +35,7 @@ export const submitFilePetitionSequence = [
           closeFileUploadStatusModalAction,
           getCreateCaseAlertSuccessAction,
           setAlertSuccessAction,
+          set(state.saveAlertsForNavigation, true),
           navigateToDashboardAction,
         ],
       },
