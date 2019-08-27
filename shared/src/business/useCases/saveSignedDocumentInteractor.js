@@ -30,6 +30,9 @@ exports.saveSignedDocumentInteractor = async ({
   const caseEntity = new Case(caseRecord);
   applicationContext.logger.timeEnd('Fetching the Case');
 
+  console.log('caseEntity', caseEntity.documents);
+  console.log('originalDocumentId', originalDocumentId);
+
   const originalDocumentEntity = caseEntity.documents.find(
     document => document.documentId === originalDocumentId,
   );
