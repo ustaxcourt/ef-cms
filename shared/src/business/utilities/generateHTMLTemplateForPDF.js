@@ -76,30 +76,6 @@ const generateHTMLTemplateForPDF = (content, options) => {
             text-indent: 5px;
           }
 
-          .party-info {
-            border: 1px solid #ccc;
-            margin: 15px 0 30px 0;
-          }
-
-          .party-info-header {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            background: #f0f0f0;
-            font-size: 10px;
-            font-weight: bold;
-          }
-
-          .party-info-content {
-            display: flex;
-            flex-flow: row wrap;
-            align-items: flex-start;
-            padding: 0 10px 10px 10px;
-          }
-
-          .party-details {
-            width: 25%;
-          }
-
           .clear {
             clear: both;
           }
@@ -280,6 +256,32 @@ const generatePrintableDocketRecordTemplate = content => {
     partyInfo,
   } = content;
 
+  const styles = `
+    .party-info {
+      border: 1px solid #ccc;
+      margin: 15px 0 30px 0;
+    }
+
+    .party-info-header {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      background: #f0f0f0;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .party-info-content {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: flex-start;
+      padding: 0 10px 10px 10px;
+    }
+
+    .party-details {
+      width: 25%;
+    }
+  `;
+
   const templateContent = {
     caption,
     captionPostfix,
@@ -291,6 +293,7 @@ const generatePrintableDocketRecordTemplate = content => {
   };
   const options = {
     h2: '<h2>Docket Record</h2>',
+    styles,
     title: 'Docket Record',
   };
 
