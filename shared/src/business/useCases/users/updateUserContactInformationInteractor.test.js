@@ -3,7 +3,7 @@ const {
 } = require('./updateUserContactInformationInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('updateUserContactInformationInteractor', () => {
   it('retrieves the users in the petitions section', async () => {
@@ -60,25 +60,56 @@ describe('updateUserContactInformationInteractor', () => {
     });
   });
 
-  it('returns unauthorizederror when user not authorized', async () => {
+  it('returns unauthorized error when user not authorized', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
           role: 'petitioner',
-          userId: 'taxpayer',
+          userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
       getPersistenceGateway: () => {
         return {};
       },
     };
-    let result = 'error';
+    let result = null;
     try {
-      const sectionToGet = { section: 'unknown' };
       await updateUserContactInformationInteractor({
         applicationContext,
-        sectionToGet,
+        contactInfo: {
+          addressLine1: '999',
+          addressLine2: 'circle st.',
+        },
+        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      });
+    } catch (e) {
+      if (e instanceof UnauthorizedError) {
+        result = 'error';
+      }
+    }
+    expect(result).toEqual('error');
+  });
+
+  it('returns unauthorized error when the user attempts to update a different user not owned by themself', async () => {
+    const applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
+      },
+      getPersistenceGateway: () => {
+        return {};
+      },
+    };
+    let result = null;
+    try {
+      await updateUserContactInformationInteractor({
+        applicationContext,
+        contactInfo: {
+          addressLine1: '999',
+          addressLine2: 'circle st.',
+        },
+        userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (e) {
       if (e instanceof UnauthorizedError) {
