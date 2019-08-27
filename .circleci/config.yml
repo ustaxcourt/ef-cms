@@ -129,7 +129,7 @@ jobs:
             sudo apt-get install clamav
             sudo freshclam
       - run:
-          name: Build Deps
+          name: Install Deps
           command: |
             sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \
               libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \
@@ -141,7 +141,7 @@ jobs:
       - run:
           name: Web Client - Test
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null & 
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api & 
             ./wait-until.sh http://localhost:3000/api/swagger 
             sleep 5
             npm run test:client
