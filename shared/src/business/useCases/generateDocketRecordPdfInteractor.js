@@ -224,14 +224,19 @@ exports.generateDocketRecordPdfInteractor = async ({
     return docketRecordContent;
   };
 
-  const { caseCaption, caseCaptionPostfix, docketNumber } = caseDetail;
+  const {
+    caseCaption,
+    caseCaptionPostfix,
+    docketNumber,
+    docketNumberSuffix,
+  } = caseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generatePrintableDocketRecordTemplate({
       caption: caseCaption,
       captionPostfix: caseCaptionPostfix,
-      docketNumber: docketNumber,
+      docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
       docketRecord: getDocketRecordContent(caseDetail),
       partyInfo: getPartyInfoContent(caseDetail),
     });

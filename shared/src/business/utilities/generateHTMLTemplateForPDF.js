@@ -1,6 +1,12 @@
+/**
+ * HTML template generator for printable PDF views
+ *
+ * @param {object} content content to be injected into the template
+ * @param {object} options optional content that modifies the template
+ * @returns {string} hydrated HTML content in string form
+ */
 const generateHTMLTemplateForPDF = (content, options) => {
-  return `
-    <!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html>
       <head>
         <title>${options.title || 'U.S. Tax Court'}</title>
@@ -110,22 +116,29 @@ const generateHTMLTemplateForPDF = (content, options) => {
 
           <div class="case-information">
             <div id="caption">${content.caption} ${content.captionPostfix}</div>
-            <div id="docket-number">Docket Number: ${content.docketNumber}</div>
+            <div id="docket-number">Docket Number: ${
+              content.docketNumberWithSuffix
+            }</div>
             <div class="clear"></div>
           </div>
           ${options.h3 ? '<h3>' + options.h3 + '</h3>' : ''}
           ${content.main}
         </div>
       </body>
-    </html>
-  `;
+    </html>`;
 };
 
+/**
+ * HTML template generator for printable change of address/telephone PDF views
+ *
+ * @param {object} content content to be injected into the template
+ * @returns {string} hydrated HTML content in string form
+ */
 const generateChangeOfAddressTemplate = content => {
   const {
     caption,
     captionPostfix,
-    docketNumber,
+    docketNumberWithSuffix,
     documentTitle,
     name,
     newData,
@@ -234,7 +247,7 @@ const generateChangeOfAddressTemplate = content => {
   const templateContent = {
     caption,
     captionPostfix,
-    docketNumber,
+    docketNumberWithSuffix,
     main,
   };
 
@@ -247,11 +260,17 @@ const generateChangeOfAddressTemplate = content => {
   return generateHTMLTemplateForPDF(templateContent, options);
 };
 
+/**
+ * HTML template generator for printable docket record PDF views
+ *
+ * @param {object} content content to be injected into the template
+ * @returns {string} hydrated HTML content in string form
+ */
 const generatePrintableDocketRecordTemplate = content => {
   const {
     caption,
     captionPostfix,
-    docketNumber,
+    docketNumberWithSuffix,
     docketRecord,
     partyInfo,
   } = content;
@@ -285,7 +304,7 @@ const generatePrintableDocketRecordTemplate = content => {
   const templateContent = {
     caption,
     captionPostfix,
-    docketNumber,
+    docketNumberWithSuffix,
     main: `
     ${partyInfo}
     <div class="docket-record">${docketRecord}</div>
