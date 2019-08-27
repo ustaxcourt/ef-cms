@@ -280,11 +280,13 @@ describe('caseDetailEditContactsHelper', () => {
         displayPhone: true,
         header: 'Petitioner Information',
         nameLabel: 'Name',
+        phoneNumberLabelHint: 'optional',
       },
       contactSecondary: {
         displayPhone: true,
         header: 'Spouse Information',
         nameLabel: "Spouse's Name",
+        phoneNumberLabelHint: 'optional',
       },
     });
   });
