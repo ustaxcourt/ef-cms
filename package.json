@@ -54,6 +54,8 @@
     "http-proxy-middleware": "^0.19.1",
     "husky": "^3.0.4",
     "i": "^0.3.6",
+    "imagemin": "^7.0.0",
+    "imagemin-pngquant": "^8.0.0",
     "is-reachable": "^3.1.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^24.9.0",
@@ -95,14 +97,9 @@
     "riot-route": "^3.1.4",
     "s3-zip": "^3.1.1",
     "s3rver": "github:ustaxcourt/s3rver#created_presigned_post_support",
-<<<<<<< HEAD
-    "sanitize-filename": "^1.6.2",
-    "sass": "^1.22.10",
-    "serverless": "^1.50.0",
-=======
     "sanitize-filename": "^1.6.3",
+    "sass": "^1.22.10",
     "serverless": "^1.50.1",
->>>>>>> 8479c23359c2ddf8dba391bb143c89878a2885e7
     "serverless-apigw-binary": "^0.4.4",
     "serverless-apigwy-binary": "^1.0.0",
     "serverless-domain-manager": "^3.3.0",
@@ -123,8 +120,6 @@
     "swagger-cli": "^2.3.1",
     "tmp": "^0.1.0",
     "try-thread-sleep": "^2.0.0",
-    "imagemin": "^7.0.0",
-    "imagemin-pngquant": "^8.0.0",
     "uswds": "^2.1.0",
     "uuid": "^3.3.3",
     "webpack": "^4.39.2",
