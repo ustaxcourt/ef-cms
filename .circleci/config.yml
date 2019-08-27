@@ -102,6 +102,11 @@ jobs:
             sudo apt-get install -t jessie-backports ca-certificates-java
             sudo apt-get install openjdk-8-jdk && update-alternatives --config java
       - run:
+          name: Install ClamAV
+          command: |
+            sudo apt-get install clamav
+            freshclam
+      - run:
           name: Web Client - Test
           command: |
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null & 
