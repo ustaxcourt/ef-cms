@@ -16,6 +16,29 @@ const removeAWSGlobalFields = item => {
   return item;
 };
 
+/**
+ * used to filter empty strings from values before storing in dynamo
+ *
+ * @param {object} params the params to filter empty strings from
+ * @returns {object} the params with empty string values removed
+ */
+const filterEmptyStrings = params => {
+  const removeEmpty = obj => {
+    Object.keys(obj).forEach(key => {
+      if (obj[key] && typeof obj[key] === 'object') {
+        removeEmpty(obj[key]);
+      } else if (obj[key] === '') {
+        delete obj[key];
+      }
+    });
+  };
+
+  if (params) {
+    removeEmpty(params);
+  }
+  return params;
+};
+
 const getTableName = ({ applicationContext }) =>
   `efcms-${applicationContext.environment.stage}`;
 /**
@@ -27,10 +50,10 @@ exports.put = params => {
   return params.applicationContext
     .getDocumentClient()
     .put({
+      Item: filterEmptyStrings(params.Item),
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
-      ...params,
     })
     .promise()
     .then(() => params.Item);
@@ -45,10 +68,10 @@ exports.update = params => {
   return params.applicationContext
     .getDocumentClient()
     .update({
+      Item: filterEmptyStrings(params.Item),
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
-      ...params,
     })
     .promise()
     .then(() => params.Item);
@@ -66,10 +89,10 @@ exports.updateConsistent = params => {
       useMasterRegion: true,
     })
     .update({
+      Item: filterEmptyStrings(params.Item),
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
-      ...params,
     })
     .promise()
     .then(data => data.Attributes.id);
@@ -176,7 +199,7 @@ exports.batchWrite = ({ applicationContext, items }) => {
               '#pk': item.pk,
               '#sk': item.sk,
             },
-            Item: item,
+            Item: filterEmptyStrings(item),
           },
         })),
       },
