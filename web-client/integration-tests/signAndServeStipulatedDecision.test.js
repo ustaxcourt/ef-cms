@@ -97,7 +97,10 @@ describe('a user signs and serves a stipulated decision', () => {
         item.document.documentType === 'Proposed Stipulated Decision' &&
         item.docketNumber === caseDetail.docketNumber,
     );
+    console.log('stiplated decision', stipulatedDecision);
+    console.log('inbox', inbox);
     await signProposedStipulatedDecision(test, stipulatedDecision);
+    await waitForRouter();
   });
 
   it('docketclerk serves the signed stipulated decision', async () => {
