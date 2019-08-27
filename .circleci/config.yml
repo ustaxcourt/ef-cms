@@ -27,6 +27,9 @@ jobs:
     docker:
       - image: circleci/node:10.15.3
     steps:
+      - run:
+          name: CHMOD
+          command: chmod -R 777 ./
       - restore_cache:
           name: Source - Restoring Cache
           keys:
