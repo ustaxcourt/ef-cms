@@ -161,16 +161,6 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:10.15.3
-      - image: dwmkerr/dynamodb
-        entrypoint:
-          [
-            'java',
-            '-Xmx2048M',
-            '-jar',
-            'DynamoDBLocal.jar',
-            '-inMemory',
-            '-sharedDb',
-          ]
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -203,8 +193,8 @@ jobs:
           command: |
             npx run-p start:api:ci start:client:ci &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:1234 
-            CI=true npm run test:pa11y
+            ./wait-until.sh http://localhost:1234
+            npm run test:pa11y
       # - run:
       #     name: Cypress
       #     command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api:ci start:client:ci > /dev/null &) && ./wait-until-services.sh && ./wait-until.sh http://localhost:1234 && npm run cypress'
