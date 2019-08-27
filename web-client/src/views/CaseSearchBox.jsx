@@ -16,14 +16,14 @@ export const CaseSearchBox = connect(
     updateSearchTermSequence,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <form
           onSubmit={e => {
             e.preventDefault();
             submitCaseSearchSequence();
           }}
         >
-          <div className="case-search">
+          <div className="case-search margin-bottom-4">
             <div className="card">
               <div className="content-wrapper gray">
                 <h3>Search for a Case</h3>
@@ -70,7 +70,7 @@ export const CaseSearchBox = connect(
             </div>
           </div>
         </form>
-      </React.Fragment>
+      </>
     );
   },
 );
