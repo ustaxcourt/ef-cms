@@ -1,5 +1,12 @@
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-
+/**
+ * generateDocketRecordPdfInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseDetail the formatted case detail
+ * @returns {Uint8Array} docket record pdf
+ */
 exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   caseDetail,
