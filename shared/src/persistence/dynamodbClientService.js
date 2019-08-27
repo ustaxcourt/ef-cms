@@ -47,13 +47,14 @@ const getTableName = ({ applicationContext }) =>
  * @returns {object} the item that was put
  */
 exports.put = params => {
+  const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient()
     .put({
-      Item: filterEmptyStrings(params.Item),
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
+      ...filteredParams,
     })
     .promise()
     .then(() => params.Item);
@@ -65,13 +66,14 @@ exports.put = params => {
  * @returns {object} the item that was updated
  */
 exports.update = params => {
+  const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient()
     .update({
-      Item: filterEmptyStrings(params.Item),
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
+      ...filteredParams,
     })
     .promise()
     .then(() => params.Item);
@@ -84,15 +86,16 @@ exports.update = params => {
  * @returns {object} the item that was updated
  */
 exports.updateConsistent = params => {
+  const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
     .update({
-      Item: filterEmptyStrings(params.Item),
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
+      ...filteredParams,
     })
     .promise()
     .then(data => data.Attributes.id);
