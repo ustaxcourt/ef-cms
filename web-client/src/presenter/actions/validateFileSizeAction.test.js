@@ -35,7 +35,7 @@ describe('validateFileSizeAction', () => {
     expect(mockValid).toHaveBeenCalled();
   });
 
-  it('should return the invalid() path if the file size is equal to the limit', async () => {
+  it('should return the valid() path if the file size is equal to the limit', async () => {
     await runAction(validateFileSizeAction, {
       modules: {
         presenter,

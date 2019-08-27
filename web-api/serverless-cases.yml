@@ -245,7 +245,12 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updatePrimaryContact:
+    runtime: nodejs8.10
     handler: web-api/src/casesHandlers.updatePrimaryContactLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/contact-primary

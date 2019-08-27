@@ -114,7 +114,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('321-321-4321')).toBeGreaterThan(-1);
   });
 
-  it('It does NOT show address2 or address3 if they are not in the old data or new data', () => {
+  it('Does NOT show address2 or address3 if they are not in the old data or new data', () => {
     const result = generateChangeOfAddressTemplate({
       caseDetail,
       documentTitle: 'Notice of Change of Address',
@@ -129,7 +129,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('address 3')).toEqual(-1);
   });
 
-  it('It shows address2 if it is in the old data', () => {
+  it('Shows address2 if it is in the old data', () => {
     const result = generateChangeOfAddressTemplate({
       caseDetail,
       documentTitle: 'Notice of Change of Address',
@@ -147,7 +147,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('address 3')).toEqual(-1);
   });
 
-  it('It shows address3 if it is in the old data', () => {
+  it('Shows address3 if it is in the old data', () => {
     const result = generateChangeOfAddressTemplate({
       caseDetail,
       documentTitle: 'Notice of Change of Address',
@@ -166,7 +166,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('address 3')).toBeGreaterThan(-1);
   });
 
-  it('It shows address2 if it is in the new data', () => {
+  it('Shows address2 if it is in the new data', () => {
     const result = generateChangeOfAddressTemplate({
       caseDetail,
       documentTitle: 'Notice of Change of Address',
@@ -182,7 +182,7 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Address Three')).toEqual(-1);
   });
 
-  it('It shows address3 if it is in the new data', () => {
+  it('Shows address3 if it is in the new data', () => {
     const result = generateChangeOfAddressTemplate({
       caseDetail,
       documentTitle: 'Notice of Change of Address',
@@ -197,6 +197,21 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Address One')).toBeGreaterThan(-1);
     expect(result.indexOf('Address Two')).toBeGreaterThan(-1);
     expect(result.indexOf('Address Three')).toBeGreaterThan(-1);
+  });
+
+  it('Shows country if countryType has been changed to/from international', () => {
+    const result = generateChangeOfAddressTemplate({
+      caseDetail,
+      documentTitle: 'Notice of Change of Address',
+      newData: {
+        address1: 'Address One',
+        country: 'Test Country',
+        countryType: 'international',
+      },
+      oldData: caseDetail.contactPrimary,
+    });
+
+    expect(result.indexOf('Test Country')).toBeGreaterThan(-1);
   });
 });
 
@@ -239,7 +254,10 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual('Notice of Change of Address');
+    expect(result).toEqual({
+      eventCode: 'NCA',
+      title: 'Notice of Change of Address',
+    });
   });
 
   it('Returns Notice of Change of Telephone Number when only the phone fields differ', () => {
@@ -250,7 +268,10 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual('Notice of Change of Telephone Number');
+    expect(result).toEqual({
+      eventCode: 'NCP',
+      title: 'Notice of Change of Telephone Number',
+    });
   });
 
   it('Returns a Notice of Change of Address and Telephone Number when both the phone and address fields differ', () => {
@@ -263,6 +284,9 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual('Notice of Change of Address and Telephone Number');
+    expect(result).toEqual({
+      eventCode: 'NCAP',
+      title: 'Notice of Change of Address and Telephone Number',
+    });
   });
 });

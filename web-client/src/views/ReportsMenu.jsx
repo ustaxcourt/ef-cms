@@ -6,9 +6,15 @@ import classNames from 'classnames';
 export const ReportsMenu = connect(
   {
     pageIsReports: state.headerHelper.pageIsReports,
-    toggleReportsMenuSequence: sequences.toggleReportsMenuSequence,
+    resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
+    toggleMenuSequence: sequences.toggleMenuSequence,
   },
-  ({ isExpanded, pageIsReports, toggleReportsMenuSequence }) => {
+  ({
+    isExpanded,
+    pageIsReports,
+    resetHeaderAccordionsSequence,
+    toggleMenuSequence,
+  }) => {
     return (
       <>
         <button
@@ -17,14 +23,20 @@ export const ReportsMenu = connect(
             'usa-accordion__button usa-nav__link',
             pageIsReports && 'usa-current',
           )}
-          onClick={() => toggleReportsMenuSequence()}
+          onClick={() => {
+            toggleMenuSequence({ openMenu: 'ReportsMenu' });
+          }}
         >
           <span>Reports</span>
         </button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
-              <a href="/reports/case-deadlines" id="all-deadlines">
+              <a
+                href="/reports/case-deadlines"
+                id="all-deadlines"
+                onClick={() => resetHeaderAccordionsSequence()}
+              >
                 Deadlines
               </a>
             </li>

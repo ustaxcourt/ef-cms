@@ -10,6 +10,7 @@ cypress/videos
 dist/
 gen.conf
 graph-generators/node_modules/
+graph-generators/*png
 node_modules/
 parcel-debug-*
 /policy.json
