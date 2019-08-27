@@ -148,6 +148,9 @@ const {
   generatePrintableDocketRecordTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
 const {
+  generateDocketRecordPdfInteractor,
+} = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
+const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -660,6 +663,7 @@ module.exports = (appContextUser = {}) => {
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
+        generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         getAllCaseDeadlinesInteractor,

@@ -249,6 +249,24 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  generateDocketRecordPdfLambda:
+    runtime: nodejs8.10
+    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: docket-record-pdf
+          method: post
+          cors: true
+          contentHandling: CONVERT_TO_BINARY
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   generatePdfFromHtmlLambda:
     runtime: nodejs8.10
     handler: web-api/src/apiHandlers.generatePdfFromHtmlLambda
