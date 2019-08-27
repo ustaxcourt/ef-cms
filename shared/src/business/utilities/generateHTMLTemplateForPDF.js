@@ -292,7 +292,7 @@ const generatePrintableDocketRecordTemplate = content => {
   `,
   };
   const options = {
-    h2: '<h2>Docket Record</h2>',
+    h2: 'Docket Record',
     styles,
     title: 'Docket Record',
   };
