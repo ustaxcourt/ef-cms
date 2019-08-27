@@ -15,7 +15,34 @@ describe('Case entity', () => {
       orderForFilingFee: false,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
+    });
+  });
+
+  it('defaults the orderDesignatingPlaceOfTrial to false if not a paper case or trial city is set', () => {
+    let myCase = new Case(MOCK_CASE);
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: false,
+    });
+
+    myCase = new Case({
+      ...MOCK_CASE,
+      isPaper: true,
+    });
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: false,
+    });
+  });
+
+  it('defaults the orderDesignatingPlaceOfTrial to true if paper case and trial city is not set', () => {
+    const myCase = new Case({
+      ...MOCK_CASE,
+      isPaper: true,
+      preferredTrialCity: undefined,
+    });
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: true,
     });
   });
 
@@ -23,20 +50,24 @@ describe('Case entity', () => {
     const myCase = new Case({
       ...MOCK_CASE,
       noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
     expect(myCase).toMatchObject({
       noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
   });

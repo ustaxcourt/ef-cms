@@ -250,7 +250,11 @@ function Case(rawCase) {
     rawCase.orderToChangeDesignatedPlaceOfTrial || false;
 
   this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
-    rawCase.orderDesignatingPlaceOfTrial,
+    {
+      isPaper: rawCase.isPaper,
+      preferredTrialCity: rawCase.preferredTrialCity,
+      rawValue: rawCase.orderDesignatingPlaceOfTrial,
+    },
   );
 }
 
@@ -906,11 +910,15 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   return this;
 };
 
-Case.getDefaultOrderDesignatingPlaceOfTrialValue = function(rawValue) {
-  let orderDesignatingPlaceOfTrial = rawValue;
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
+  isPaper,
+  preferredTrialCity,
+  rawValue,
+}) {
+  let orderDesignatingPlaceOfTrial;
   if (rawValue || rawValue === false) {
     orderDesignatingPlaceOfTrial = rawValue;
-  } else if (this.isPaper && !this.preferredTrialCity) {
+  } else if (isPaper && !preferredTrialCity) {
     orderDesignatingPlaceOfTrial = true;
   } else {
     orderDesignatingPlaceOfTrial = false;
