@@ -161,6 +161,16 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:10.15.3
+      - image: circleci/dynamodb:8-jdk
+        entrypoint:
+          [
+            'java',
+            '-Xmx1G',
+            '-jar',
+            'DynamoDBLocal.jar',
+            '-inMemory',
+            '-sharedDb',
+          ]
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -199,7 +209,6 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            free -h -s 10 >> /tmp/memory.log
             npx run-p start:api:ci start:client:ci &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234 
