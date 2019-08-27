@@ -124,9 +124,19 @@ You can log in using these usernames:
 ```
 taxpayer
 petitionsclerk
+petitionsclerk1
 docketclerk
+docketclerk1
 respondent
+respondent1 - respondent4
+practitioner
+practitioner1 - practitioner4
 seniorattorney
+judgeArmen
+judgeAshford
+judgeBuch
+judgeCarluzzo
+judgeCohen
 ```
 
 No password is required.
@@ -139,8 +149,14 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 petitioner1@example.com – petitioner5@example.com
 petitionsclerk1@example.com – petitionsclerk5@example.com
 docketclerk1@example.com – docketclerk5@example.com
-respondent1@example.com – respondent5@example.com
+respondent1@example.com – respondent10@example.com
+practitioner1@example.com – practitioner10@example.com
 seniorattorney1@example.com – seniorattorney5@example.com
+judgeArmen@example.com
+judgeAshford@example.com
+judgeBuch@example.com
+judgeCarluzzo@example.com
+judgeCohen@example.com
 ```
 
 The password for all accounts is:

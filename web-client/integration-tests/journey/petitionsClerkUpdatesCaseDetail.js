@@ -1,7 +1,6 @@
 import { runCompute } from 'cerebral/test';
 
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
@@ -10,73 +9,11 @@ export default test => {
   return it('Petitions clerk updates case detail', async () => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    expect(caseDetailFormatted.yearAmountsFormatted.length).toEqual(1);
-
     await test.runSequence('updateCaseValueSequence', {
       key: 'hasIrsNotice',
       value: false,
     });
 
-    //yearAmounts
-    //valid with comma
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'yearAmounts',
-      value: [{ amount: '1,000', year: '1999' }],
-    });
-    await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
-
-    //valid with cents
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'yearAmounts',
-      value: [{ amount: '1,000.95', year: '1999' }],
-    });
-    await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({});
-
-    //invalid with zeros and year in future
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'yearAmounts',
-      value: [{ amount: '000', year: '2100' }],
-    });
-    await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({
-      yearAmounts: [
-        {
-          amount: 'Please enter a valid amount.',
-          index: 0,
-          year: 'That year is in the future. Please enter a valid year.',
-        },
-      ],
-    });
-
-    //invalid year in future
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'yearAmounts',
-      value: [{ amount: '', year: '2100' }],
-    });
-    await test.runSequence('autoSaveCaseSequence');
-    expect(test.getState('caseDetailErrors')).toEqual({
-      yearAmounts: [
-        {
-          index: 0,
-          year: 'That year is in the future. Please enter a valid year.',
-        },
-      ],
-    });
-
-    //valid
-    await test.runSequence('updateCaseValueSequence', {
-      key: 'yearAmounts',
-      value: [{ amount: '10', year: '1990' }],
-    });
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
