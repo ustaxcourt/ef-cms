@@ -190,6 +190,13 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       };
       break;
   }
+
+  ['contactPrimary', 'contactSecondary'].forEach(contactLabel => {
+    if (contacts[contactLabel]) {
+      contacts[contactLabel].phoneNumberLabelHint = 'optional';
+    }
+  });
+
   return contacts;
 };
 
