@@ -498,6 +498,36 @@ Case.prototype.markAsSentToIRS = function(sendDate) {
  *
  * @returns {Case} the updated case entity
  */
+Case.prototype.updateCaseTitleDocketRecord = function() {
+  const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
+  let lastTitle = this.initialTitle;
+
+  this.docketRecord.forEach(docketRecord => {
+    const result = caseTitleRegex.exec(docketRecord.description);
+    if (result) {
+      const [, , changedTitle] = result;
+      lastTitle = changedTitle;
+    }
+  });
+
+  const hasTitleChanged = this.initialTitle && lastTitle !== this.caseTitle;
+
+  if (hasTitleChanged) {
+    this.addDocketRecord(
+      new DocketRecord({
+        description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+        filingDate: createISODateString(),
+      }),
+    );
+  }
+
+  return this;
+};
+
+/**
+ *
+ * @returns {Case} the updated case entity
+ */
 Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
