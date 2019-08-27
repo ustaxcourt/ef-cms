@@ -7,7 +7,6 @@ import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction'
 
 export const printDocketRecordSequence = [
   setFormSubmittingAction,
-  printDocketRecordAction,
   generateDocketRecordPdfUrlAction,
   ...setPdfPreviewUrlSequence,
   gotoPrintDocketRecordPreview,
