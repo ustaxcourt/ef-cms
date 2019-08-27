@@ -137,7 +137,7 @@ const generateHTMLTemplateForPDF = (content, options) => {
             <div id="docket-number">Docket Number: ${content.docketNumber}</div>
             <div class="clear"></div>
           </div>
-          ${options.h3 ? '<h2>' + options.h3 + '</h2>' : ''}
+          ${options.h3 ? '<h3>' + options.h3 + '</h3>' : ''}
           ${content.main}
         </div>
       </body>
@@ -151,6 +151,7 @@ const generateChangeOfAddressTemplate = content => {
     captionPostfix,
     docketNumber,
     documentTitle,
+    name,
     newData,
     oldData,
   } = content;
@@ -200,7 +201,7 @@ const generateChangeOfAddressTemplate = content => {
 
   const main = `
     <p class="please-change">
-      Please change the contact information for ${content.name} on the records of the Court.
+      Please change the contact information for ${name} on the records of the Court.
     </p>
     <div>
       <table>
