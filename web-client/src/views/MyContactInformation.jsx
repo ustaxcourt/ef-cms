@@ -19,15 +19,21 @@ export const MyContactInformation = connect(
                 {user.name} ({user.barNumber})
               </p>
               <p>
-                {user.addressLine1}
+                {user.contact.addressLine1}
                 <br />
-                {user.addressLine2}
+                {user.contact.addressLine2}
+                <br />
+                {user.contact.addressLine3}
               </p>
-              <p>{user.phone}</p>
+              <p>
+                {user.contact.city}, {user.contact.state}{' '}
+                {user.contact.postalCode}
+              </p>
+              <p>{user.contact.phone}</p>
               <p className="margin-bottom-0">
                 <a
                   className="usa-button usa-button--unstyled"
-                  href="/user/address/edit"
+                  href="/user/contact/edit"
                 >
                   <FontAwesomeIcon className="margin-0" icon="edit" />
                   Edit
