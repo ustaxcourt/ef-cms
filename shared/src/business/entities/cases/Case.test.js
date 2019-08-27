@@ -703,6 +703,72 @@ describe('Case entity', () => {
     });
   });
 
+  describe('updateCaseTitleDocketRecord', () => {
+    it('should not add to the docket record when the caption is not set', () => {
+      const caseToVerify = new Case({}).updateCaseTitleDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should not add to the docket record when the caption is initially being set', () => {
+      const caseToVerify = new Case({
+        caseCaption: 'Caption',
+      }).updateCaseTitleDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should not add to the docket record when the caption is equivalent to the initial title', () => {
+      const caseToVerify = new Case({
+        caseCaption: 'Caption',
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should add to the docket record when the caption changes from the initial title', () => {
+      const caseToVerify = new Case({
+        caseCaption: 'A New Caption',
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(1);
+    });
+
+    it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
+      const caseToVerify = new Case({
+        caseCaption: 'A Very New Caption',
+        docketRecord: [
+          {
+            description:
+              "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
+          },
+          {
+            description:
+              "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
+          },
+        ],
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(2);
+    });
+
+    it('should add to the docket record when the caption changes from the last updated title', () => {
+      const caseToVerify = new Case({
+        caseCaption: 'A Very Berry New Caption',
+        docketRecord: [
+          {
+            description:
+              "Caption of case is amended from 'Caption v. Commissioner of Internal Revenue, Respondent' to 'A New Caption v. Commissioner of Internal Revenue, Respondent'",
+          },
+          {
+            description:
+              "Caption of case is amended from 'A New Caption v. Commissioner of Internal Revenue, Respondent' to 'A Very New Caption v. Commissioner of Internal Revenue, Respondent'",
+          },
+        ],
+        initialTitle: 'Caption v. Commissioner of Internal Revenue, Respondent',
+      }).updateCaseTitleDocketRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(3);
+    });
+  });
+
   describe('getWorkItems', () => {
     it('should get all the work items associated with the documents in the case', () => {
       const myCase = new Case(MOCK_CASE);
