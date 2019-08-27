@@ -189,6 +189,14 @@ jobs:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
+          name: Install Java
+          command: |
+            sudo sh -c 'echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list'
+            sudo sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
+            sudo apt-get -o Acquire::Check-Valid-Until=false update
+            sudo apt-get install -t jessie-backports ca-certificates-java
+            sudo apt-get install openjdk-8-jdk && update-alternatives --config java
+      - run:
           name: Pa11y
           command: |
             npx run-p start:api:ci start:client:ci &
