@@ -99,8 +99,6 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
     section: 'docket',
   });
 
-  console.log('state', test.getState());
-
   await test.runSequence('completeDocumentSigningSequence');
 };
 
