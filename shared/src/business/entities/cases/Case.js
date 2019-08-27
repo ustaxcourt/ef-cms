@@ -246,6 +246,10 @@ function Case(rawCase) {
   this.orderForOds = rawCase.orderForOds || false;
   this.orderForRatification = rawCase.orderForRatification || false;
   this.orderToShowCause = rawCase.orderToShowCause || false;
+  this.orderToChangeDesignatedPlaceOfTrial =
+    rawCase.orderToChangeDesignatedPlaceOfTrial || false;
+  this.orderDesignatingPlaceOfTrial =
+    rawCase.orderDesignatingPlaceOfTrial || false;
 }
 
 joiValidationDecorator(

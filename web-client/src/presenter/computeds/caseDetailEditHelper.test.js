@@ -7,6 +7,9 @@ describe('case detail edit computed', () => {
   it('sets partyTypes from constants ', () => {
     const result = runCompute(caseDetailEditHelper, {
       state: {
+        caseDetail: {
+          partyType: ContactFactory.PARTY_TYPES.conservator,
+        },
         constants: {
           PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
@@ -340,5 +343,68 @@ describe('case detail edit computed', () => {
       },
     });
     expect(result.showOwnershipDisclosureStatement).toBeFalsy();
+  });
+
+  it('sets showReadOnlyTrialLocation true if isPaper is undefined and preferred trial city is selected', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
+          preferredTrialCity: 'Somewhere, USA',
+        },
+        constants: {
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+        },
+      },
+    });
+    expect(result.showReadOnlyTrialLocation).toBeTruthy();
+    expect(result.showNoTrialLocationSelected).toBeFalsy();
+    expect(result.showRQTDocumentLink).toBeFalsy();
+  });
+
+  it('sets showNoTrialLocationSelected true if isPaper is true and a request for place of trial document does not exist', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          documents: [],
+          isPaper: true,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
+        },
+        constants: {
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+        },
+      },
+    });
+    expect(result.showNoTrialLocationSelected).toBeTruthy();
+    expect(result.showReadOnlyTrialLocation).toBeFalsy();
+    expect(result.showRQTDocumentLink).toBeFalsy();
+  });
+
+  it('sets showRQTDocumentLink true if isPaper is true and a request for place of trial document exists', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              documentId: '123',
+              documentTitle: 'Request for Place of Trial at Somewhere, USA',
+              documentType: 'Request for Place of Trial',
+            },
+          ],
+          isPaper: true,
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
+        },
+        constants: {
+          PARTY_TYPES: ContactFactory.PARTY_TYPES,
+        },
+      },
+    });
+    expect(result.showRQTDocumentLink).toBeTruthy();
+    expect(result.requestForPlaceOfTrialDocumentId).toEqual('123');
+    expect(result.requestForPlaceOfTrialDocumentTitle).toEqual(
+      'Request for Place of Trial at Somewhere, USA',
+    );
+    expect(result.showNoTrialLocationSelected).toBeFalsy();
+    expect(result.showReadOnlyTrialLocation).toBeFalsy();
   });
 });
