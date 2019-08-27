@@ -159,19 +159,45 @@ jobs:
             -Dsonar.host.url="https://sonarcloud.io"
 
   e2e:
-    machine:
-      docker_layer_caching: true
+    docker:
+      - image: cypress/base:10.15.3
     steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - restore_cache:
+          name: NPM - Restoring Cache
+          keys:
+            - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-v1-{{ .Branch }}-
+            - npm-v1-
       - run:
-          name: Build Docker Image
-          command: docker build -t efcms -f Dockerfile .
+          name: NPM - Install
+          command: npm i
+      - save_cache:
+          name: NPM - Save to Cache
+          paths:
+            - node_modules # location depends on npm version
+          key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Pa11y
-          command: docker run --rm -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api:ci start:client:ci > /dev/null &) && ./wait-until-services.sh && ./wait-until.sh http://localhost:1234 && npm run test:pa11y'
-      - run:
-          name: Cypress
-          command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api:ci start:client:ci > /dev/null &) && ./wait-until-services.sh && ./wait-until.sh http://localhost:1234 && npm run cypress'
+          command: |
+            npx run-p start:api:ci start:client:ci > /dev/null &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:1234 
+            npm run test:pa11y
+      # - run:
+      #     name: Cypress
+      #     command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api:ci start:client:ci > /dev/null &) && ./wait-until-services.sh && ./wait-until.sh http://localhost:1234 && npm run cypress'
 
   deploy-ui:
     machine:
