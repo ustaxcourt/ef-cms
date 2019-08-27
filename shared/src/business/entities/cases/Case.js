@@ -14,9 +14,8 @@ const {
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
-const { find, includes, uniqBy } = require('lodash');
+const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
-const { YearAmount } = require('../YearAmount');
 
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
@@ -142,13 +141,6 @@ Case.COMMON_ERROR_MESSAGES = {
     },
     'Your STIN file size is empty.',
   ],
-  yearAmounts: [
-    {
-      contains: 'contains a duplicate',
-      message: 'Duplicate years are not allowed',
-    },
-    'A valid year and amount are required.',
-  ],
 };
 
 Case.validationName = 'Case';
@@ -203,10 +195,6 @@ function Case(rawCase) {
     }`;
     this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
-
-  this.yearAmounts = (rawCase.yearAmounts || []).map(
-    yearAmount => new YearAmount(yearAmount),
-  );
 
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents.map(document => new Document(document));
@@ -348,17 +336,11 @@ joiValidationDecorator(
     trialTime: joi.string().optional(),
     userId: joi.string().optional(),
     workItems: joi.array().optional(),
-    yearAmounts: joi
-      .array()
-      .unique((a, b) => a.year === b.year)
-      .optional(),
   }),
   function() {
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
-      YearAmount.validateCollection(this.yearAmounts) &&
-      Case.areYearsUnique(this.yearAmounts) &&
       DocketRecord.validateCollection(this.docketRecord)
     );
   },
@@ -759,15 +741,6 @@ Case.isValidDocketNumber = docketNumber => {
 Case.stripLeadingZeros = docketNumber => {
   const [number, year] = docketNumber.split('-');
   return `${parseInt(number)}-${year}`;
-};
-
-/**
- *
- * @param {Array} yearAmounts the array of year amounts to check
- * @returns {boolean} true if the years in the array are all unique, false otherwise
- */
-Case.areYearsUnique = yearAmounts => {
-  return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
 };
 
 /**
