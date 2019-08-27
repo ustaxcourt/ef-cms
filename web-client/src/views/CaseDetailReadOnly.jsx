@@ -36,32 +36,6 @@ export const CaseDetailReadOnly = connect(
 
           <div className="label">Notice Date</div>
           <p>{formattedCaseDetail.irsNoticeDateFormatted}</p>
-          <div>
-            {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
-              <div key={idx}>
-                <div className="inline-input-year">
-                  <div className="label">Year</div>
-                  <p>{yearAmount.year}</p>
-                </div>
-                <div className="inline-input-amount">
-                  <div className="label">Amount</div>
-                  <p>
-                    <span aria-hidden="true" role="presentation">
-                      $
-                    </span>
-                    <span
-                      aria-label="IRS Notice Amount in whole dollars"
-                      id="amount"
-                    />
-                    {yearAmount.amountFormatted}
-                    <span aria-hidden="true" role="presentation">
-                      .00
-                    </span>
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </React.Fragment>
     );

@@ -121,7 +121,7 @@ export const WorkingCopySessionList = connect(
                   <td className="minw-30">
                     <BindedSelect
                       ariaLabel="trial status"
-                      bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.trialStatus`}
+                      bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
                       id={`trialSessionWorkingCopy-${item.docketNumber}`}
                       onChange={() => {
                         autoSaveTrialSessionWorkingCopySequence();
