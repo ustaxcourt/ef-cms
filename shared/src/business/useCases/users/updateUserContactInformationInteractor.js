@@ -25,6 +25,10 @@ exports.updateUserContactInformationInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (authenticatedUser.userId !== userId) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
