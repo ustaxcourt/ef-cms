@@ -105,7 +105,7 @@ jobs:
           name: Install ClamAV
           command: |
             sudo apt-get install clamav
-            freshclam
+            sudo freshclam
       - run:
           name: Web Client - Test
           command: |
