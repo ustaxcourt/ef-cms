@@ -438,7 +438,7 @@ describe('Case entity', () => {
         }),
       );
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.docketRecord.length).toEqual(2);
+      expect(caseRecord.docketRecord.length).toEqual(5);
     });
   });
 
@@ -475,9 +475,9 @@ describe('Case entity', () => {
         }),
       );
 
-      expect(caseRecord.docketRecord).toHaveLength(1);
-      expect(caseRecord.docketRecord[0].description).toEqual('test');
-      expect(caseRecord.docketRecord[0].index).toEqual(5);
+      expect(caseRecord.docketRecord).toHaveLength(4);
+      expect(caseRecord.docketRecord[3].description).toEqual('test');
+      expect(caseRecord.docketRecord[3].index).toEqual(5);
 
       caseRecord.addDocketRecord(
         new DocketRecord({
@@ -486,7 +486,7 @@ describe('Case entity', () => {
         }),
       );
 
-      expect(caseRecord.docketRecord[1].index).toEqual(6);
+      expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
     it('validates the docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);
@@ -501,6 +501,36 @@ describe('Case entity', () => {
     });
   });
 
+  describe('updateDocketRecordEntry', () => {
+    it('updates an existing docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const updatedDocketEntry = new DocketRecord({
+        description: 'second record now updated',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+        filingDate: '2018-03-02T22:22:00.000Z',
+        index: 7,
+      });
+      caseRecord.updateDocketRecordEntry(updatedDocketEntry);
+
+      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
+      expect(caseRecord.docketRecord[1].description).toEqual(
+        'second record now updated',
+      );
+      expect(caseRecord.docketRecord[1].index).toEqual(7);
+    });
+
+    it('validates the docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      let error;
+      try {
+        caseRecord.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeTruthy();
+    });
+  });
   describe('validateWithError', () => {
     it('passes back an error passed in if invalid', () => {
       let error = null;
