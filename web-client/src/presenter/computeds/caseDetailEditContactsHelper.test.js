@@ -303,11 +303,11 @@ describe('caseDetailEditContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Petitioner Information',
-        nameLabel: 'Name',
+        nameLabel: 'Name of Petitioner/Surviving Spouse',
       },
       contactSecondary: {
-        header: 'Spouse Information',
-        nameLabel: "Spouse's Name",
+        header: 'Deceased Spouse Information',
+        nameLabel: 'Name of Deceased Spouse',
       },
     });
   });
