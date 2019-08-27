@@ -48,5 +48,6 @@ module.exports = {
     useIncognitoBrowserContext: true,
     wait: 5000,
   },
-  urls: [...initialUrls, ...userUrls],
+  urls: [...docketclerk],
+  // urls: [...initialUrls, ...userUrls],
 };
