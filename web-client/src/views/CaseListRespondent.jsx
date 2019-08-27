@@ -1,8 +1,8 @@
+import { CaseSearchBox } from './CaseSearchBox';
+import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-
-import { CaseSearchBox } from './CaseSearchBox.jsx';
 
 export const CaseListRespondent = connect(
   {
@@ -48,14 +48,14 @@ export const CaseListRespondent = connect(
     const renderTitle = () => <h2>My Cases</h2>;
 
     const renderEmptyState = () => (
-      <React.Fragment>
+      <>
         {renderTitle()}
         <p>You are not associated with any cases.</p>
-      </React.Fragment>
+      </>
     );
 
     const renderNonEmptyState = () => (
-      <React.Fragment>
+      <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
@@ -67,7 +67,7 @@ export const CaseListRespondent = connect(
           <h2>My Cases</h2>
         </div>
         {renderTable()}
-      </React.Fragment>
+      </>
     );
 
     return (
@@ -79,6 +79,7 @@ export const CaseListRespondent = connect(
             </div>
             <div className="tablet:grid-col-4">
               <CaseSearchBox />
+              <MyContactInformation />
             </div>
           </div>
         </div>
