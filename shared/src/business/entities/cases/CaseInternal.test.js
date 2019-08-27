@@ -85,5 +85,17 @@ describe('CaseInternal entity', () => {
           .requestForPlaceOfTrialFileSize,
       ).toEqual('Your Request for Place of Trial file size is empty.');
     });
+
+    it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        receivedAt: new Date().toISOString(),
+        requestForPlaceOfTrialFile: new File([], 'test.pdf'),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors().preferredTrialCity,
+      ).toEqual('Trial Location is required.');
+    });
   });
 });
