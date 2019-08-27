@@ -341,6 +341,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateUserContactInformation:
+    handler: web-api/src/usersHandlers.updateUserContactInformationLambda
+    events:
+      - http:
+          path: /{userId}/contact-info
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getPractitionersBySearchKey:
     handler: web-api/src/usersHandlers.getPractitionersBySearchKeyLambda
     events:
