@@ -189,7 +189,7 @@ export const CaseInfo = connect(
           <label className="usa-label" htmlFor="preferred-trial-city">
             Trial Location
           </label>
-          <span id="preferred-trial-city">
+          <div id="preferred-trial-city">
             {caseDetailEditHelper.showNoTrialLocationSelected && (
               <>
                 <p>No trial location selected</p>
@@ -254,7 +254,7 @@ export const CaseInfo = connect(
             )}
             {caseDetailEditHelper.showReadOnlyTrialLocation &&
               `Request for Place of Trial at ${caseDetail.preferredTrialCity}`}
-          </span>
+          </div>
         </div>
 
         <div

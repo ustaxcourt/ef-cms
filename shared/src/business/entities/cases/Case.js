@@ -248,8 +248,10 @@ function Case(rawCase) {
   this.orderToShowCause = rawCase.orderToShowCause || false;
   this.orderToChangeDesignatedPlaceOfTrial =
     rawCase.orderToChangeDesignatedPlaceOfTrial || false;
-  this.orderDesignatingPlaceOfTrial =
-    rawCase.orderDesignatingPlaceOfTrial || false;
+
+  this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
+    rawCase.orderDesignatingPlaceOfTrial,
+  );
 }
 
 joiValidationDecorator(
@@ -902,6 +904,18 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = Case.STATUS_TYPES.calendared;
   return this;
+};
+
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function(rawValue) {
+  let orderDesignatingPlaceOfTrial = rawValue;
+  if (rawValue || rawValue === false) {
+    orderDesignatingPlaceOfTrial = rawValue;
+  } else if (this.isPaper && !this.preferredTrialCity) {
+    orderDesignatingPlaceOfTrial = true;
+  } else {
+    orderDesignatingPlaceOfTrial = false;
+  }
+  return orderDesignatingPlaceOfTrial;
 };
 
 module.exports = { Case };
