@@ -26,6 +26,15 @@ const generateHTMLTemplateForPDF = (content, options) => {
             text-align: center;
           }
 
+          h3 {
+            margin-top: 40px;
+            margin-bottom: 30px;
+            font-size: 18px;
+            font-weight: normal;
+            text-align: center;
+            font-family: serif;
+          }
+
           table {
             width: 100%;
             border: 1px solid #ccc;
@@ -136,7 +145,130 @@ const generateHTMLTemplateForPDF = (content, options) => {
   `;
 };
 
-const generateChangeOfAddressTemplate = () => {};
+const generateChangeOfAddressTemplate = content => {
+  const {
+    caption,
+    captionPostfix,
+    docketNumber,
+    documentTitle,
+    newData,
+    oldData,
+  } = content;
+
+  let oldAddress = '';
+  let newAddress = '';
+
+  if (documentTitle === 'Notice of Change of Telephone Number') {
+    oldAddress = `<div>${oldData.phone}</dvi>`;
+    newAddress = `<div>${newData.phone}</dvi>`;
+  } else {
+    oldAddress = `<div>${oldData.address1}</div>`;
+    newAddress = `<div>${newData.address1}</div>`;
+
+    if (oldData.address2) {
+      oldAddress += `<div>${oldData.address2}</div>`;
+    }
+
+    if (newData.address2) {
+      newAddress += `<div>${newData.address2}</div>`;
+    }
+
+    if (oldData.address3) {
+      oldAddress += `<div>${oldData.address3}</div>`;
+    }
+
+    if (newData.address3) {
+      newAddress += `<div>${newData.address3}</div>`;
+    }
+
+    oldAddress += `<div>${oldData.city}, ${oldData.state} ${oldData.postalCode}</div>`;
+    newAddress += `<div>${newData.city}, ${newData.state} ${newData.postalCode}</div>`;
+
+    if (oldData.country) {
+      oldAddress += `<div>${oldData.country}</div>`;
+    }
+
+    if (newData.country) {
+      newAddress += `<div>${newData.country}</div>`;
+    }
+
+    if (documentTitle === 'Notice of Change of Address and Telephone Number') {
+      oldAddress += `<div style="margin-top:8px;">${oldData.phone}</dvi>`;
+      newAddress += `<div style="margin-top:8px;">${newData.phone}</dvi>`;
+    }
+  }
+
+  const main = `
+    <p class="please-change">
+      Please change the contact information for ${content.name} on the records of the Court.
+    </p>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Old Contact Information</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              ${oldAddress}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br /><br />
+      <table>
+        <thead>
+          <tr>
+            <th>New Contact Information</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              ${newAddress}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  const styles = `
+    .please-change {
+      margin-bottom: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    th, td {
+      font-size: 10px;
+    }
+    th {
+      font-weight: 600;
+    }
+    .case-information #caption {
+      line-height:18px;
+    }
+  `;
+
+  const templateContent = {
+    caption,
+    captionPostfix,
+    docketNumber,
+    main,
+  };
+
+  const options = {
+    h3: documentTitle,
+    styles,
+    title: 'Change of Contact Information',
+  };
+
+  return generateHTMLTemplateForPDF(templateContent, options);
+};
 
 const generatePrintableDocketRecordTemplate = content => {
   const {
@@ -153,7 +285,7 @@ const generatePrintableDocketRecordTemplate = content => {
     docketNumber,
     main: `
     ${partyInfo}
-    <div class="docket-record">{${docketRecord}</div>
+    <div class="docket-record">${docketRecord}</div>
   `,
   };
   const options = {
