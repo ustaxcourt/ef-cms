@@ -165,7 +165,7 @@ jobs:
         entrypoint:
           [
             'java',
-            '-Xmx1G',
+            '-Xmx2048M',
             '-jar',
             'DynamoDBLocal.jar',
             '-inMemory',
