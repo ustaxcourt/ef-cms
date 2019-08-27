@@ -200,7 +200,7 @@ jobs:
           name: Pa11y
           command: |
             echo "CI is ${CI}"
-            npx run-p start:api:ci start:client:ci > /dev/null &
+            npx run-p start:api:ci start:client:ci &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234 
             CI=true npm run test:pa11y
