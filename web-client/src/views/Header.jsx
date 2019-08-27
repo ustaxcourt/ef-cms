@@ -34,7 +34,7 @@ const BetaBar = toggleBetaBarSequence => {
   );
 };
 
-const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
+const NavigationItems = (helper, { isReportsMenuOpen }) => {
   return (
     <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
       {helper.showHomeIcon && (
@@ -45,9 +45,6 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
               helper.pageIsHome && 'usa-current',
             )}
             href="/"
-            onClick={() => {
-              clearAlertSequence();
-            }}
           >
             <FontAwesomeIcon icon="home" />
             <span className="sr-only">Home</span>
@@ -62,9 +59,6 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
               helper.pageIsMessages && 'usa-current',
             )}
             href="/messages/my/inbox"
-            onClick={() => {
-              clearAlertSequence();
-            }}
           >
             Messages{' '}
             {helper.showMessagesIcon && (
@@ -87,9 +81,6 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
               helper.pageIsDocumentQC && 'usa-current',
             )}
             href={helper.defaultQCBoxPath}
-            onClick={() => {
-              clearAlertSequence();
-            }}
           >
             Document QC
           </a>
@@ -103,9 +94,6 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
               helper.pageIsMyCases && 'usa-current',
             )}
             href="/"
-            onClick={() => {
-              clearAlertSequence();
-            }}
           >
             My Cases
           </a>
@@ -119,9 +107,6 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
               helper.pageIsTrialSessions && 'usa-current',
             )}
             href="/trial-sessions"
-            onClick={() => {
-              clearAlertSequence();
-            }}
           >
             Trial Sessions
           </a>
@@ -144,12 +129,54 @@ const NavigationItems = (helper, { clearAlertSequence, isReportsMenuOpen }) => {
 export class HeaderComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.clearAlertSequence = props.clearAlertSequence;
+    this.resetSequence = props.resetSequence;
+    this.headerRef = React.createRef();
+
+    this.headerNavClick = this.headerNavClick.bind(this);
+    this.keydown = this.keydown.bind(this);
+    this.reset = this.reset.bind(this);
+  }
+
+  headerNavClick(e) {
+    e.stopPropagation();
+    this.resetSequence();
+    this.clearAlertSequence();
+    return true;
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.reset, false);
+    document.addEventListener('keydown', this.keydown, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.reset, false);
+    document.removeEventListener('keydown', this.keydown, false);
+  }
+
+  keydown(event) {
+    if (event.keyCode === 27) {
+      return this.reset(event);
+    }
+  }
+
+  reset(e) {
+    const clickedWithinThisComponent = this.headerRef.current.contains(
+      e.target,
+    );
+    const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
+    const clickedOnSubnav = e.target.closest('.usa-nav__submenu-item');
+    if (!clickedWithinThisComponent) {
+      return this.resetSequence();
+    } else if (!clickedOnMenuButton && !clickedOnSubnav) {
+      return this.resetSequence();
+    }
   }
 
   render() {
     const {
       betaBar,
-      clearAlertSequence,
       helper,
       isAccountMenuOpen,
       isReportsMenuOpen,
@@ -159,7 +186,7 @@ export class HeaderComponent extends React.Component {
       user,
     } = this.props;
     return (
-      <>
+      <div ref={this.headerRef}>
         {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
         <div className="grid-container no-mobile-padding">
           <header
@@ -169,12 +196,7 @@ export class HeaderComponent extends React.Component {
             <div className="usa-nav-container">
               <div className="usa-navbar">
                 <div className="usa-logo">
-                  <a
-                    href="/"
-                    onClick={() => {
-                      clearAlertSequence();
-                    }}
-                  >
+                  <a href="/">
                     <img alt="USTC Seal" src={seal} />
                   </a>
                 </div>
@@ -204,7 +226,6 @@ export class HeaderComponent extends React.Component {
                 </button>
                 {user &&
                   NavigationItems(helper, {
-                    clearAlertSequence,
                     isReportsMenuOpen,
                   })}
                 {helper.showSearchInHeader && <SearchBox />}
@@ -215,7 +236,7 @@ export class HeaderComponent extends React.Component {
             </div>
           </header>
         </div>
-      </>
+      </div>
     );
   }
 }
@@ -227,6 +248,7 @@ HeaderComponent.propTypes = {
   isAccountMenuOpen: PropTypes.bool,
   isReportsMenuOpen: PropTypes.bool,
   mobileMenu: PropTypes.object,
+  resetSequence: PropTypes.func,
   toggleBetaBarSequence: PropTypes.func,
   toggleMobileMenuSequence: PropTypes.func,
   user: PropTypes.object,
@@ -240,6 +262,7 @@ export const Header = connect(
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     mobileMenu: state.mobileMenu,
+    resetSequence: sequences.resetHeaderAccordionsSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,

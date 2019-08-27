@@ -68,6 +68,10 @@
           height: 3px;
         }
 
+        .usa-nav__link:hover {
+          color: color($theme-color-primary-dark);
+        }
+
         .hidden-underline {
           &.usa-nav__link:hover::after,
           &.usa-current::after {
@@ -76,7 +80,6 @@
         }
 
         .account-menu-icon {
-          color: color($theme-color-primary);
           font-size: 25px;
         }
 

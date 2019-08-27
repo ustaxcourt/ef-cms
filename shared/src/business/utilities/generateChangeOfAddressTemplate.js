@@ -18,7 +18,8 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
       }
 
       h3 {
-        margin-top: 30px;
+        margin-top: 40px;
+        margin-bottom: 30px;
         font-size: 18px;
         font-weight: normal;
         text-align: center;
@@ -26,6 +27,7 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
       }
 
       .please-change {
+        margin-bottom: 20px;
         font-size: 12px;
         font-weight: 600;
       }
@@ -65,6 +67,7 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
       .case-information #caption {
         width: 40%;
         float: left;
+        line-height:18px;
       }
 
       .case-information #docket-number {
@@ -135,13 +138,13 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
 
       <h3>{{ documentTitle }}</h3>
       <p class="please-change">
-        Please change my/our address on the records of the Court.
+        Please change the contact information for {{ name }} on the records of the Court.
       </p>
       <div>
         <table>
           <thead>
             <tr>
-              <th>Old Address</th>
+              <th>Old Contact Information</th>
             </tr>
           </thead>
 
@@ -157,7 +160,7 @@ const printChangeOfAddressTemplate = `<!DOCTYPE html>
         <table>
           <thead>
             <tr>
-              <th>New Address</th>
+              <th>New Contact Information</th>
             </tr>
           </thead>
 
@@ -214,6 +217,8 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
   }
 
   const addressFields = [
+    'country',
+    'countryType',
     'address1',
     'address2',
     'address3',
@@ -228,15 +233,24 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
   const isPhoneChange = !!diff.phone;
 
   if (isAddressChange && !isPhoneChange) {
-    documentType = 'Notice of Change of Address';
+    documentType = {
+      eventCode: 'NCA',
+      title: 'Notice of Change of Address',
+    };
   }
 
   if (isPhoneChange && !isAddressChange) {
-    documentType = 'Notice of Change of Telephone Number';
+    documentType = {
+      eventCode: 'NCP',
+      title: 'Notice of Change of Telephone Number',
+    };
   }
 
   if (isAddressChange && isPhoneChange) {
-    documentType = 'Notice of Change of Address and Telephone Number';
+    documentType = {
+      eventCode: 'NCAP',
+      title: 'Notice of Change of Address and Telephone Number',
+    };
   }
 
   return documentType;
@@ -249,6 +263,7 @@ exports.getDocumentTypeForAddressChange = getDocumentTypeForAddressChange;
  *
  * @param {object} caseDetail the case being updated
  * @param {string} documentTitle the document title to use on the pdf
+ * @param {string} name name of party whose info is being changed
  * @param {object} newData updated contact information
  * @param {object} oldData the old contact information
  * @returns {string} pdfContentHtml in string form
@@ -256,6 +271,7 @@ exports.getDocumentTypeForAddressChange = getDocumentTypeForAddressChange;
 exports.generateChangeOfAddressTemplate = ({
   caseDetail,
   documentTitle,
+  name,
   newData,
   oldData,
 }) => {
@@ -263,7 +279,7 @@ exports.generateChangeOfAddressTemplate = ({
   let newAddress = '';
 
   if (!documentTitle) {
-    documentTitle = getDocumentTypeForAddressChange({ newData, oldData });
+    documentTitle = getDocumentTypeForAddressChange({ newData, oldData }).title;
   }
 
   if (documentTitle === 'Notice of Change of Telephone Number') {
@@ -292,9 +308,17 @@ exports.generateChangeOfAddressTemplate = ({
     oldAddress += `<div>${oldData.city}, ${oldData.state} ${oldData.postalCode}</div>`;
     newAddress += `<div>${newData.city}, ${newData.state} ${newData.postalCode}</div>`;
 
+    if (oldData.country) {
+      oldAddress += `<div>${oldData.country}</div>`;
+    }
+
+    if (newData.country) {
+      newAddress += `<div>${newData.country}</div>`;
+    }
+
     if (documentTitle === 'Notice of Change of Address and Telephone Number') {
-      oldAddress += `<div>${oldData.phone}</dvi>`;
-      newAddress += `<div>${newData.phone}</dvi>`;
+      oldAddress += `<div style="margin-top:8px;">${oldData.phone}</dvi>`;
+      newAddress += `<div style="margin-top:8px;">${newData.phone}</dvi>`;
     }
   }
 
@@ -302,6 +326,7 @@ exports.generateChangeOfAddressTemplate = ({
     .replace(/{{ oldAddress }}/g, oldAddress)
     .replace(/{{ newAddress }}/g, newAddress)
     .replace(/{{ documentTitle }}/g, documentTitle)
+    .replace(/{{ name }}/g, name)
     .replace(/{{ caption }}/g, caseDetail.caseCaption)
     .replace(/{{ captionPostfix }}/g, caseDetail.caseCaptionPostfix)
     .replace(

@@ -822,6 +822,27 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
+    it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+      };
+      const caseDeadlines = [
+        {
+          deadlineDate: new Date(),
+        },
+      ];
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDeadlines,
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.caseDeadlines.length).toEqual(1);
+      expect(result.caseDeadlines[0].overdue).toBeUndefined();
+    });
+
     it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],

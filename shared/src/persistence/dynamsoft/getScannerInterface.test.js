@@ -140,7 +140,7 @@ describe('getScannerInterface', () => {
     expect(mockAcquireImage).toHaveBeenCalled();
   });
 
-  it('throws a no images in buffer exception if the hopper is empty', async () => {
+  it('throws an exception if the hopper is empty', async () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject({
       ...DWObject,
