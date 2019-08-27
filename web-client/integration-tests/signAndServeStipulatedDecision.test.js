@@ -10,6 +10,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
   viewDocumentDetailMessage,
+  waitForRouter,
 } from './helpers';
 
 const test = setupTest({
@@ -89,6 +90,7 @@ describe('a user signs and serves a stipulated decision', () => {
 
   it('senior attorney signs the proposed stipulated decision', async () => {
     await loginAs(test, 'seniorattorney');
+    await waitForRouter();
     const inbox = await getFormattedMyInbox(test);
     const stipulatedDecision = inbox.find(
       item =>
@@ -100,6 +102,7 @@ describe('a user signs and serves a stipulated decision', () => {
 
   it('docketclerk serves the signed stipulated decision', async () => {
     await loginAs(test, 'docketclerk');
+    await waitForRouter();
     const inbox = await getFormattedMyInbox(test);
     const signedStipulatedDecision = inbox.find(
       item =>
