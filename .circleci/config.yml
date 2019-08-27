@@ -199,10 +199,11 @@ jobs:
       - run:
           name: Pa11y
           command: |
+            echo "CI is ${CI}"
             npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234 
-            npm run test:pa11y
+            CI=true npm run test:pa11y
       # - run:
       #     name: Cypress
       #     command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api:ci start:client:ci > /dev/null &) && ./wait-until-services.sh && ./wait-until.sh http://localhost:1234 && npm run cypress'
