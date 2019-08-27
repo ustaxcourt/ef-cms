@@ -161,7 +161,7 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:10.15.3
-      - image: circleci/dynamodb:8-jdk
+      - image: dwmkerr/dynamodb
         entrypoint:
           [
             'java',
