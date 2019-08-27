@@ -85,6 +85,8 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
     pageNumber: 1,
   });
 
+  console.log('pdfForSigning1', test.getState('pdfForSigning'));
+
   await test.runSequence('setPDFSignatureDataSequence', {
     signatureData: {
       scale: 1,
@@ -93,11 +95,15 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
     },
   });
 
+  console.log('pdfForSigning2', test.getState('pdfForSigning'));
+
   test.setState('form', {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     message: 'serve this please!',
     section: 'docket',
   });
+
+  console.log('pdfForSigning3', test.getState('pdfForSigning'));
 
   await test.runSequence('completeDocumentSigningSequence');
 };
