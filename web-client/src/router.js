@@ -396,6 +396,14 @@ const router = {
       }),
     );
 
+    route(
+      '/user/contact/edit',
+      checkLoggedIn(() => {
+        document.title = `Edit User Contact ${pageTitleSuffix}`;
+        app.getSequence('gotoUserContactSequence');
+      }),
+    );
+
     route('/mock-login...', () => {
       const { path, token } = queryStringDecoder();
       if (token) {
@@ -413,6 +421,7 @@ const router = {
         app.getSequence('gotoLoginSequence')();
       }
     });
+
     route(
       '..',
       () => {
