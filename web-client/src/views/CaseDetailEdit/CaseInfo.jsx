@@ -264,7 +264,7 @@ export const CaseInfo = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="fee-payment-date-legend">
-              Fee Payment Date
+              Fee Payment Date <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month">
@@ -356,7 +356,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="fee-payment-id">
-            Fee Payment ID
+            Fee Payment ID <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"
@@ -396,7 +396,9 @@ export const CaseInfo = connect(
           </label>
         </div>
 
-        <h3 id="orders-needed">Orders Needed</h3>
+        <h3 id="orders-needed">
+          Orders Needed <span className="usa-hint">(optional)</span>
+        </h3>
         <div
           aria-labelledby="orders-needed"
           className="orders-needed"
