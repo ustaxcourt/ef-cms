@@ -8,4 +8,4 @@ if [ ! -e ".dynamodb/dynamo.tar.gz" ]; then
 fi
 
 # start dynamo
-cd .dynamodb && java -Djava.library.path=.dynamodb/DynamoDBLocal_lib -Xmx1024m -jar DynamoDBLocal.jar -inMemory -sharedDb
+cd .dynamodb && java -Djava.library.path=.dynamodb/DynamoDBLocal_lib -Xmx2048m -jar DynamoDBLocal.jar -inMemory -sharedDb
