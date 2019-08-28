@@ -18,19 +18,11 @@ export const setPDFForSigningAction = async ({
 
   store.set(state.pdfForSigning.documentId, documentId);
 
-  if (process.env.CI) {
-    console.log('returning early');
-    return;
-  }
-
   let pdfObj = {};
 
-  try {
-    pdfObj = await applicationContext
-      .getUseCases()
-      .loadPDFForSigningInteractor({ applicationContext, documentId });
-  } catch (e) {
-    console.log('error here', e);
-  }
+  pdfObj = await applicationContext
+    .getUseCases()
+    .loadPDFForSigningInteractor({ applicationContext, documentId });
+
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
 };
