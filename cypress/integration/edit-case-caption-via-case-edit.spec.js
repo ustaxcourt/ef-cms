@@ -19,7 +19,7 @@ describe('change the case caption via the case edit page ', () => {
     getSaveButton().click();
   });
 
-  it('updates the case tittle header', () => {
+  it('updates the case title header', () => {
     getCaseTitleContaining(
       'hello world v. Commissioner of Internal Revenue, Respondent',
     ).should('exist');

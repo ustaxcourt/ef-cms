@@ -190,7 +190,6 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Deficiency",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Officiis sit consect",
       "address2": "Eiusmod officiis dol",
@@ -717,7 +716,6 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Deficiency",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Officiis sit consect",
       "address2": "Eiusmod officiis dol",
