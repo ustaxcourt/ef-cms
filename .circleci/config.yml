@@ -185,6 +185,12 @@ jobs:
             - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - npm-v1-{{ .Branch }}-
             - npm-v1-
+      - restore_cache:
+          name: Cypress - Restore Cache
+          paths:
+            - /root/.cache/Cypress
+          keys:
+            - cypress-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: NPM - Install
           command: npm i
@@ -193,6 +199,12 @@ jobs:
           paths:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - save_cache:
+          name: Cypress - Save to Cache
+          paths:
+            - /root/.cache/Cypress
+          keys:
+            - cypress-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install Java
           command: |
