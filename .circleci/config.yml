@@ -1,35 +1,10 @@
 version: 2
 
 jobs:
-  # build-image:
-  #   docker:
-  #     - image: circleci/node:10.15.3
-  #   steps:
-  #     - run:
-  #       name: Shellcheck
-  #       command: |
-  #         sudo apt-get install shellcheck
-  #     - run:
-  #         name: Ghostscript - Install
-  #         command: |
-  #           sudo apt-get update
-  #           sudo apt-get install ghostscript
-  #     - run:
-  #         name: SonarQube - Install
-  #         command: |
-  #           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
-  #           unzip sonar-scanner-cli-4.0.0.1744-linux.zip
-  #           rm sonar-scanner-cli-4.0.0.1744-linux.zip
-  #           mv sonar-scanner-4.0.0.1744-linux /tmp/sonar-scanner
-  #     - setup_remote_docker
-
   build:
     docker:
       - image: sutt0n/ef-cms:latest
     steps:
-      - run:
-          name: CHMOD
-          command: chmod -R 777 ./
       - restore_cache:
           name: Source - Restoring Cache
           keys:
