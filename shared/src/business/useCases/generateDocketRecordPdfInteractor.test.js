@@ -58,7 +58,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       caseDetail,
     });
 
-    expect(result.includes('<!DOCTYPE html>')).toBeTruthy();
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(generatePrintableDocketRecordTemplateMock).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorMock).toHaveBeenCalled();
   });

@@ -21,21 +21,23 @@ describe('generateHTMLTemplateForPDF', () => {
 
   it('Returns HTML with the given content', () => {
     const result = generateHTMLTemplateForPDF(content, {});
-    expect(result.includes('<!DOCTYPE html>')).toBeTruthy();
-    expect(result.includes('U.S. Tax Court')).toBeTruthy();
-    expect(result.includes('Test Case Caption')).toBeTruthy();
-    expect(result.includes('Test Caption Postfix')).toBeTruthy();
-    expect(result.includes('123-45S')).toBeTruthy();
-    expect(result.includes('<div>Test Main Content</div>')).toBeTruthy();
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
+    expect(result.indexOf('U.S. Tax Court')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('<div>Test Main Content</div>')).toBeGreaterThan(-1);
   });
 
   it('Returns HTML with the given optional content', () => {
     const result = generateHTMLTemplateForPDF(content, options);
-    expect(result.includes('U.S. Tax Court')).toBeFalsy();
-    expect(result.includes('Test Title')).toBeTruthy();
-    expect(result.includes('#test-style { display: none; }')).toBeTruthy();
-    expect(result.includes('<h2>Test H2</h2>')).toBeTruthy();
-    expect(result.includes('<h3>Test H3</h3>')).toBeTruthy();
+    expect(result.indexOf('U.S. Tax Court')).toBe(-1);
+    expect(result.indexOf('Test Title')).toBeGreaterThan(-1);
+    expect(result.indexOf('#test-style { display: none; }')).toBeGreaterThan(
+      -1,
+    );
+    expect(result.indexOf('<h2>Test H2</h2>')).toBeGreaterThan(-1);
+    expect(result.indexOf('<h3>Test H3</h3>')).toBeGreaterThan(-1);
   });
 });
 
@@ -69,16 +71,16 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('<!DOCTYPE html>')).toBeTruthy();
-    expect(result.includes('Test Case Caption')).toBeTruthy();
-    expect(result.includes('Test Caption Postfix')).toBeTruthy();
-    expect(result.includes('Notice of Change of Address')).toBeTruthy();
-    expect(result.includes('123-45S')).toBeTruthy();
-    expect(result.includes('address 1')).toBeTruthy();
-    expect(result.includes('City')).toBeTruthy();
-    expect(result.includes('ST')).toBeTruthy();
-    expect(result.includes('12345')).toBeTruthy();
-    expect(result.includes('Address One')).toBeTruthy();
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf('Notice of Change of Address')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('City')).toBeGreaterThan(-1);
+    expect(result.indexOf('ST')).toBeGreaterThan(-1);
+    expect(result.indexOf('12345')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address One')).toBeGreaterThan(-1);
   });
 
   it('Does not compute the document type / title if one is given', () => {
@@ -95,7 +97,7 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('Test Document Title')).toBeTruthy();
+    expect(result.indexOf('Test Document Title')).toBeGreaterThan(-1);
   });
 
   it('Returns a Notice of Change of Address when updating address fields only', () => {
@@ -112,13 +114,13 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('Notice of Change of Address')).toBeTruthy();
-    expect(result.includes('address 1')).toBeTruthy();
-    expect(result.includes('City')).toBeTruthy();
-    expect(result.includes('ST')).toBeTruthy();
-    expect(result.includes('12345')).toBeTruthy();
-    expect(result.includes('Address One')).toBeTruthy();
-    expect(result.includes('123-123-1234')).toBeFalsy();
+    expect(result.indexOf('Notice of Change of Address')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('City')).toBeGreaterThan(-1);
+    expect(result.indexOf('ST')).toBeGreaterThan(-1);
+    expect(result.indexOf('12345')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address One')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-123-1234')).toEqual(-1);
   });
 
   it('Returns a Notice of Change of Telephone Number when updating the phone field only', () => {
@@ -136,14 +138,14 @@ describe('generateChangeOfAddressTemplate', () => {
     });
 
     expect(
-      result.includes('Notice of Change of Telephone Number'),
-    ).toBeTruthy();
-    expect(result.includes('address 1')).toBeFalsy();
-    expect(result.includes('City')).toBeFalsy();
-    expect(result.includes('ST')).toBeFalsy();
-    expect(result.includes('12345')).toBeFalsy();
-    expect(result.includes('Address One')).toBeFalsy();
-    expect(result.includes('123-123-1234')).toBeTruthy();
+      result.indexOf('Notice of Change of Telephone Number'),
+    ).toBeGreaterThan(-1);
+    expect(result.indexOf('address 1')).toEqual(-1);
+    expect(result.indexOf('City')).toEqual(-1);
+    expect(result.indexOf('ST')).toEqual(-1);
+    expect(result.indexOf('12345')).toEqual(-1);
+    expect(result.indexOf('Address One')).toEqual(-1);
+    expect(result.indexOf('123-123-1234')).toBeGreaterThan(-1);
   });
 
   it('Returns a Notice of Change of Address and Telephone Number when updating both the phone and address fields', () => {
@@ -162,14 +164,14 @@ describe('generateChangeOfAddressTemplate', () => {
     });
 
     expect(
-      result.includes('Notice of Change of Address and Telephone Number'),
-    ).toBeTruthy();
-    expect(result.includes('address 1')).toBeTruthy();
-    expect(result.includes('City')).toBeTruthy();
-    expect(result.includes('ST')).toBeTruthy();
-    expect(result.includes('12345')).toBeTruthy();
-    expect(result.includes('Address One')).toBeTruthy();
-    expect(result.includes('321-321-4321')).toBeTruthy();
+      result.indexOf('Notice of Change of Address and Telephone Number'),
+    ).toBeGreaterThan(-1);
+    expect(result.indexOf('address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('City')).toBeGreaterThan(-1);
+    expect(result.indexOf('ST')).toBeGreaterThan(-1);
+    expect(result.indexOf('12345')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address One')).toBeGreaterThan(-1);
+    expect(result.indexOf('321-321-4321')).toBeGreaterThan(-1);
   });
 
   it('Does NOT show address2 or address3 if they are not in the old data or new data', () => {
@@ -186,9 +188,9 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('address 1')).toBeTruthy();
-    expect(result.includes('address 2')).toBeFalsy();
-    expect(result.includes('address 3')).toBeFalsy();
+    expect(result.indexOf('address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 2')).toEqual(-1);
+    expect(result.indexOf('address 3')).toEqual(-1);
   });
 
   it('Shows address2 if it is in the old data', () => {
@@ -208,9 +210,9 @@ describe('generateChangeOfAddressTemplate', () => {
       },
     });
 
-    expect(result.includes('address 1')).toBeTruthy();
-    expect(result.includes('address 2')).toBeTruthy();
-    expect(result.includes('address 3')).toBeFalsy();
+    expect(result.indexOf('address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 2')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 3')).toEqual(-1);
   });
 
   it('Shows address3 if it is in the old data', () => {
@@ -231,9 +233,9 @@ describe('generateChangeOfAddressTemplate', () => {
       },
     });
 
-    expect(result.includes('address 1')).toBeTruthy();
-    expect(result.includes('address 2')).toBeTruthy();
-    expect(result.includes('address 3')).toBeTruthy();
+    expect(result.indexOf('address 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 2')).toBeGreaterThan(-1);
+    expect(result.indexOf('address 3')).toBeGreaterThan(-1);
   });
 
   it('Shows address2 if it is in the new data', () => {
@@ -251,9 +253,9 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('Address One')).toBeTruthy();
-    expect(result.includes('Address Two')).toBeTruthy();
-    expect(result.includes('Address Three')).toBeFalsy();
+    expect(result.indexOf('Address One')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address Two')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address Three')).toEqual(-1);
   });
 
   it('Shows address3 if it is in the new data', () => {
@@ -272,9 +274,9 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('Address One')).toBeTruthy();
-    expect(result.includes('Address Two')).toBeTruthy();
-    expect(result.includes('Address Three')).toBeTruthy();
+    expect(result.indexOf('Address One')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address Two')).toBeGreaterThan(-1);
+    expect(result.indexOf('Address Three')).toBeGreaterThan(-1);
   });
 
   it('Shows country if countryType has been changed to/from international', () => {
@@ -293,7 +295,7 @@ describe('generateChangeOfAddressTemplate', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result.includes('Test Country')).toBeTruthy();
+    expect(result.indexOf('Test Country')).toBeGreaterThan(-1);
   });
 });
 
@@ -309,14 +311,14 @@ describe('generatePrintableDocketRecordTemplate', () => {
   it('Returns HTML with the given content', () => {
     const result = generatePrintableDocketRecordTemplate(content);
 
-    expect(result.includes('Test Case Caption')).toBeTruthy();
-    expect(result.includes('Test Caption Postfix')).toBeTruthy();
-    expect(result.includes('123-45S')).toBeTruthy();
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(
-      result.includes('<table id="test-docket-record"></table>'),
-    ).toBeTruthy();
+      result.indexOf('<table id="test-docket-record"></table>'),
+    ).toBeGreaterThan(-1);
     expect(
-      result.includes('<table id="test-party-info"></table>'),
-    ).toBeTruthy();
+      result.indexOf('<table id="test-party-info"></table>'),
+    ).toBeGreaterThan(-1);
   });
 });
