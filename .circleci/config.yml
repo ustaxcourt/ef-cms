@@ -165,7 +165,7 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms512m -Xmx1024m'
+      _JAVA_OPTIONS: '-Xms512m -Xmx3G'
     steps:
       # - restore_cache:
       #     name: Source - Restoring Cache
