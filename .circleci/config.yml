@@ -202,7 +202,7 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            npx run-p start:api:ci start:client:ci &
+            npx run-p start:api start:client &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234
             npm run test:pa11y
