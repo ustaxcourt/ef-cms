@@ -5,7 +5,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   const getTrialSessionByIdMock = jest.fn(() => {
     return {
       startDate: new Date(),
-      trialLocation: 'Brimingham',
+      trialLocation: 'Birmingham',
     };
   });
   const getCalendaredCasesForTrialSessionMock = jest.fn(() => []);
