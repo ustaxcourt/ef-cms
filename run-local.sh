@@ -2,9 +2,9 @@
 echo "killing dynamo if already running"
 pkill -f DynamoDBLocal
 
-  echo "starting dynamo"
-  ./web-api/start-dynamo.sh &
-  DYNAMO_PID=$!
+echo "starting dynamo"
+./web-api/start-dynamo.sh &
+DYNAMO_PID=$!
 
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
@@ -50,7 +50,10 @@ npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
 echo "starting proxy"
 node ./web-api/proxy.js
 
+echo "proxy stopped"
+
 if [ ! -e $CIRCLECI ]; then 
+  echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
 fi 
 kill $S3RVER_PID
