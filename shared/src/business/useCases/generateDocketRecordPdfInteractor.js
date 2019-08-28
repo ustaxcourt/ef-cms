@@ -95,8 +95,8 @@ exports.generateDocketRecordPdfInteractor = async ({
                   ${representingSecondary ? '<br />' : ''}
                   ${
                     representingSecondary &&
-                    contactPrimary &&
-                    contactPrimary.name
+                    contactSecondary &&
+                    contactSecondary.name
                       ? contactSecondary.name
                       : ''
                   }
