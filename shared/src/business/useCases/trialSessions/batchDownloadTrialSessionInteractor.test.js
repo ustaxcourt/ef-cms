@@ -8,7 +8,21 @@ describe('batchDownloadTrialSessionInteractor', () => {
       trialLocation: 'Birmingham',
     };
   });
-  const getCalendaredCasesForTrialSessionMock = jest.fn(() => []);
+  const getCalendaredCasesForTrialSessionMock = jest.fn(() => [
+    {
+      docketNumber: '123-45',
+      documents: [
+        {
+          documentId: '123123123123',
+          documentType: 'Test Document',
+        },
+        {
+          documentId: '123123123124',
+          documentType: 'Petition',
+        },
+      ],
+    },
+  ]);
   const zipDocumentsMock = jest.fn();
   const getDownloadPolicyUrlMock = jest.fn();
 
