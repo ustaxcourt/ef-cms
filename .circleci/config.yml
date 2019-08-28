@@ -163,9 +163,9 @@ jobs:
 
   e2e:
     docker:
-      - image: cypress/base:10.15.3
+      - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms512m -Xmx812m'
+      _JAVA_OPTIONS: '-Xms512m -Xmx512m'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -194,27 +194,12 @@ jobs:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
-          name: Check - Install Cypress
+          name: Pa11y
           command: |
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
-      - run:
-          name: Install Java
-          command: |
-            sh -c 'echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list'
-            sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
-            apt-get -o Acquire::Check-Valid-Until=false update
-            apt-get -y install -t jessie-backports ca-certificates-java
-            apt-get -y install openjdk-8-jdk && update-alternatives --config java
-      # - run:
-      #     name: Pa11y
-      #     command: |
-      #       SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
-      #       ./wait-until-services.sh
-      #       ./wait-until.sh http://localhost:3000/api/swagger
-      #       npm run test:pa11y
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            npm run test:pa11y
       - run:
           name: Cypress
           command: |
