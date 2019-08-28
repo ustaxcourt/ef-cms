@@ -29,9 +29,9 @@ exports.handle = async (event, fun) => {
     const response = await fun();
     return exports.sendOk(response);
   } catch (err) {
-    // if (!process.env.CI) {
-    console.error('error here', err);
-    // }
+    if (!process.env.CI) {
+      console.error('err', err);
+    }
     if (err instanceof NotFoundError) {
       err.statusCode = 404;
       return exports.sendError(err);

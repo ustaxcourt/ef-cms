@@ -201,17 +201,22 @@ jobs:
             apt-get -o Acquire::Check-Valid-Until=false update
             apt-get -y install -t jessie-backports ca-certificates-java
             apt-get -y install openjdk-8-jdk && update-alternatives --config java
-      - run:
-          name: Pa11y
-          command: |
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger 
-            npm run test:pa11y
       # - run:
-      #     name: Cypress
-      #     command: docker run --rm -e SLS_DEBUG=* -e AWS_ACCESS_KEY_ID=noop -e AWS_SECRET_ACCESS_KEY=noop efcms /bin/sh -c '(npx run-p start:api:ci start:client:ci > /dev/null &) && ./wait-until-services.sh && ./wait-until.sh http://localhost:1234 && npm run cypress'
-
+      #     name: Pa11y
+      #     command: |
+      #       SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
+      #       ./wait-until-services.sh
+      #       ./wait-until.sh http://localhost:3000/api/swagger
+      #       npm run test:pa11y
+      - run:
+          name: Cypress
+          command: |
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null & 
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:1234 
+            npm run cypress
+      - store_artifacts:
+          path: /root/project/cypress/videos/
   deploy-ui:
     machine:
       docker_layer_caching: true
