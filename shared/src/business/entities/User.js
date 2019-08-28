@@ -21,8 +21,8 @@ function User(rawUser) {
   if (rawUser.contact) {
     this.contact = {
       address1: rawUser.contact.address1,
-      address2: rawUser.contact.address2,
-      address3: rawUser.contact.address3,
+      address2: rawUser.contact.address2 || undefined,
+      address3: rawUser.contact.address3 || undefined,
       city: rawUser.contact.city,
       country: rawUser.contact.country,
       countryType: rawUser.contact.countryType,
