@@ -202,7 +202,7 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234
             npm run test:pa11y
