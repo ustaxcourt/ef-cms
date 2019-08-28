@@ -19,11 +19,11 @@ export const MyContactInformation = connect(
                 {user.name} ({user.barNumber})
               </p>
               <p>
-                {user.contact.addressLine1}
+                {user.contact.address1}
                 <br />
-                {user.contact.addressLine2}
+                {user.contact.address2}
                 <br />
-                {user.contact.addressLine3}
+                {user.contact.address3}
               </p>
               <p>
                 {user.contact.city}, {user.contact.state}{' '}

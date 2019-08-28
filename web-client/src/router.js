@@ -400,7 +400,7 @@ const router = {
       '/user/contact/edit',
       checkLoggedIn(() => {
         document.title = `Edit User Contact ${pageTitleSuffix}`;
-        app.getSequence('gotoUserContactSequence');
+        app.getSequence('gotoUserContactEditSequence')();
       }),
     );
 

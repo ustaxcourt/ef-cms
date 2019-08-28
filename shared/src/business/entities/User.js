@@ -18,9 +18,9 @@ function User(rawUser) {
   this.token = rawUser.token;
   this.userId = rawUser.userId;
   this.contact = {
-    addressLine1: rawUser.contact.addressLine1,
-    addressLine2: rawUser.contact.addressLine2,
-    addressLine3: rawUser.contact.addressLine3,
+    address1: rawUser.contact.address1,
+    address2: rawUser.contact.address2,
+    address3: rawUser.contact.address3,
     city: rawUser.contact.city,
     countryType: rawUser.contact.countryType,
     phone: rawUser.contact.phone,
