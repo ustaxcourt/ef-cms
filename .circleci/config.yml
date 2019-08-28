@@ -164,8 +164,6 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:10.15.3
-    environment:
-      _JAVA_OPTIONS: '-Xmx2G -Xms2G'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
