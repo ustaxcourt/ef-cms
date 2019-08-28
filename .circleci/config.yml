@@ -206,7 +206,7 @@ jobs:
           command: |
             npx run-p start:api start:client &
             ./wait-until-services.sh
-            dmesg | grep -B20 sacrifice
+            sudo dmesg | grep -B20 sacrifice
             ./wait-until.sh http://localhost:1234
             npm run test:pa11y
       # - run:
