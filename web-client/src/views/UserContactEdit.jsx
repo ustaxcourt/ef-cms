@@ -10,16 +10,16 @@ import React from 'react';
 export const UserContactEdit = connect(
   {
     submitEditUserContactSequence: sequences.submitEditUserContactSequence,
-    updateUserValueSequence: sequences.updateUserValueSequence,
+    updateUserContactValueSequence: sequences.updateUserContactValueSequence,
     user: state.user,
     validateUserContactSequence: sequences.validateUserContactSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    // submitEditUserContactSequence,
-    // updateUserValueSequence,
+    submitEditUserContactSequence,
+    updateUserContactValueSequence,
     user,
-    // validateUserContactSequence,
+    validateUserContactSequence,
     validationErrors,
   }) => {
     const type = 'contact';
@@ -79,8 +79,15 @@ export const UserContactEdit = connect(
                 name="contact.phone"
                 type="tel"
                 value={user.contact.phone || ''}
-                onBlur={() => {}}
-                onChange={e => {}}
+                onBlur={() => {
+                  validateUserContactSequence();
+                }}
+                onChange={e => {
+                  updateUserContactValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
               />
               <Text
                 bind={'validationErrors.phone'}
@@ -90,7 +97,9 @@ export const UserContactEdit = connect(
           </div>
           <button
             className="usa-button margin-top-3 margin-right-3"
-            onClick={() => {}}
+            onClick={() => {
+              submitEditUserContactSequence();
+            }}
           >
             Save
           </button>
