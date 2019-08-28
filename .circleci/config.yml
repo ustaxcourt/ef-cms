@@ -165,7 +165,7 @@ jobs:
     docker:
       - image: cypress/base:10.15.3
     environment:
-      _JAVA_OPTIONS: '-Xms512m -Xmx512m'
+      _JAVA_OPTIONS: '-Xms512m -Xmx1024m'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
