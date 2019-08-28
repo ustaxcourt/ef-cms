@@ -4,6 +4,8 @@ jobs:
   build:
     docker:
       - image: sutt0n/ef-cms:latest
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -91,6 +93,8 @@ jobs:
   e2e:
     docker:
       - image: sutt0n/ef-cms:latest
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     resource_class: large
     steps:
       - restore_cache:
