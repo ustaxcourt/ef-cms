@@ -24,13 +24,9 @@ export const setPDFForSigningAction = async ({
 
   let pdfObj = {};
 
-  try {
-    pdfObj = await applicationContext
-      .getUseCases()
-      .loadPDFForSigningInteractor({ applicationContext, documentId });
-  } catch (e) {
-    console.log('err', e);
-  }
+  pdfObj = await applicationContext
+    .getUseCases()
+    .loadPDFForSigningInteractor({ applicationContext, documentId });
 
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
 };
