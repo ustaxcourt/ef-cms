@@ -204,7 +204,7 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            npx run-p start:api start:client &
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci &
             ./wait-until-services.sh
             sudo dmesg | grep -B20 sacrifice
             ./wait-until.sh http://localhost:1234
