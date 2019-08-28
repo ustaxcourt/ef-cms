@@ -92,7 +92,7 @@ const mockState = {
     ],
     respondents: [
       {
-        addressLine1: '123 Main St',
+        address1: '123 Main St',
         name: 'Yee Haw',
       },
     ],

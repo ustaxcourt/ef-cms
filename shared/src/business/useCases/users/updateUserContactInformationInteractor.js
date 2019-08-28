@@ -3,7 +3,6 @@ const {
   UPDATE_CONTACT_INFO,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -38,7 +37,7 @@ exports.updateUserContactInformationInteractor = async ({
     applicationContext,
     user: {
       ...user,
-      ...pick(contactInfo, ['addressLine1', 'addressLine2', 'phone']),
+      contact: contactInfo,
     },
   });
 
