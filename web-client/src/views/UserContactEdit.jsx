@@ -9,20 +9,21 @@ import React from 'react';
 
 export const UserContactEdit = connect(
   {
-    contact: state.user.contact,
     submitEditUserContactSequence: sequences.submitEditUserContactSequence,
     updateUserValueSequence: sequences.updateUserValueSequence,
+    user: state.user,
     validateUserContactSequence: sequences.validateUserContactSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    contact,
-    submitEditUserContactSequence,
-    updateUserValueSequence,
-    validateUserContactSequence,
+    // submitEditUserContactSequence,
+    // updateUserValueSequence,
+    user,
+    // validateUserContactSequence,
     validationErrors,
   }) => {
-    const bind = 'contact';
+    const type = 'contact';
+    const bind = 'user';
     const onBlur = 'validateUserContactSequence';
 
     return (
@@ -42,17 +43,20 @@ export const UserContactEdit = connect(
             <Country
               bind={bind}
               clearTypeOnCountryChange={true}
+              type={type}
               onChange="countryTypeChangeSequence"
             />
-            {contact.countryType === 'domestic' ? (
+            {user.contact.countryType === 'domestic' ? (
               <Address
                 bind={bind}
+                type={type}
                 onBlur={onBlur}
                 onChange="updateUserValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
+                type={type}
                 onBlur={onBlur}
                 onChange="updateUserValueSequence"
               />
@@ -72,18 +76,11 @@ export const UserContactEdit = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 id="phone"
-                name="contactPrimary.phone"
+                name="contact.phone"
                 type="tel"
-                value={contact.phone || ''}
-                onBlur={() => {
-                  validateUserContactSequence();
-                }}
-                onChange={e => {
-                  updateUserValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
+                value={user.contact.phone || ''}
+                onBlur={() => {}}
+                onChange={e => {}}
               />
               <Text
                 bind={'validationErrors.phone'}
@@ -93,9 +90,7 @@ export const UserContactEdit = connect(
           </div>
           <button
             className="usa-button margin-top-3 margin-right-3"
-            onClick={() => {
-              submitEditUserContactSequence();
-            }}
+            onClick={() => {}}
           >
             Save
           </button>

@@ -67,9 +67,9 @@ exports.userMap = {
   practitioner: {
     barNumber: 'PT1234',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -85,9 +85,9 @@ exports.userMap = {
   practitioner1: {
     barNumber: 'PT5432',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -103,9 +103,9 @@ exports.userMap = {
   practitioner2: {
     barNumber: 'GL1111',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -121,9 +121,9 @@ exports.userMap = {
   practitioner3: {
     barNumber: 'SC2222',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -139,9 +139,9 @@ exports.userMap = {
   practitioner4: {
     barNumber: 'RA3333',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -157,9 +157,9 @@ exports.userMap = {
   respondent: {
     barNumber: 'RT6789',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -175,9 +175,9 @@ exports.userMap = {
   respondent1: {
     barNumber: 'RT0987',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -193,9 +193,9 @@ exports.userMap = {
   respondent2: {
     barNumber: 'WN7777',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -211,9 +211,9 @@ exports.userMap = {
   respondent3: {
     barNumber: 'MS8888',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
@@ -229,9 +229,9 @@ exports.userMap = {
   respondent4: {
     barNumber: 'LJ9999',
     contact: {
-      addressLine1: '234 Main St',
-      addressLine2: 'Apartment 4',
-      addressLine3: 'Under the stairs',
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
       city: 'Chicago',
       countryType: 'domestic',
       phone: '+1 (555) 555-5555',
