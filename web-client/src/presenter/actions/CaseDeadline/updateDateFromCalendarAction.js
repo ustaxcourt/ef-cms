@@ -13,11 +13,11 @@ const formatDateFromCalendar = ({ applicationContext, date }) => {
 };
 
 /**
- * sets the state.filterStartDate and state.filterEndDate
+ * sets the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  * based on the props.startDate and props.endDate passed in.
  *
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store used for setting the state.filterStartDate and state.filterEndDate
+ * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  * @param {object} providers.props the cerebral props object used for passing the props.startDate and props.endDate
  */
 export const updateDateFromCalendarAction = ({
@@ -32,15 +32,15 @@ export const updateDateFromCalendarAction = ({
     applicationContext,
     date: filterStartDate,
   });
-  store.set(state.filterStartDate, formattedFilterStartDate);
+  store.set(state.screenMetadata.filterStartDate, formattedFilterStartDate);
 
   if (filterEndDate) {
     const formattedFilterEndDate = formatDateFromCalendar({
       applicationContext,
       date: filterEndDate,
     });
-    store.set(state.filterEndDate, formattedFilterEndDate);
+    store.set(state.screenMetadata.filterEndDate, formattedFilterEndDate);
   } else {
-    store.unset(state.filterEndDate);
+    store.unset(state.screenMetadata.filterEndDate);
   }
 };

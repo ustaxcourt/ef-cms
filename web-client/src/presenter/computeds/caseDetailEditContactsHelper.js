@@ -150,14 +150,14 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Petitioner Information',
-          nameLabel: 'Name',
+          nameLabel: 'Name of Petitioner/Surviving Spouse',
         },
         contactSecondary: {
           displayInCareOf: true,
           displayPhone: true,
-          header: 'Spouse Information',
+          header: 'Deceased Spouse Information',
           inCareOfLabel: 'In Care Of',
-          nameLabel: "Spouse's Name",
+          nameLabel: 'Name of Deceased Spouse',
         },
       };
       break;
@@ -190,6 +190,13 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       };
       break;
   }
+
+  ['contactPrimary', 'contactSecondary'].forEach(contactLabel => {
+    if (contacts[contactLabel]) {
+      contacts[contactLabel].phoneNumberLabelHint = 'optional';
+    }
+  });
+
   return contacts;
 };
 

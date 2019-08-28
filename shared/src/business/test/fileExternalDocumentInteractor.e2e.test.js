@@ -410,7 +410,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
       procedureType: 'Small',
       status: 'New',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      yearAmounts: [],
     });
 
     applicationContext.getCurrentUser = () => {
