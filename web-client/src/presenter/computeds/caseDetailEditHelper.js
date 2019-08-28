@@ -12,12 +12,13 @@ import { state } from 'cerebral';
  */
 export const caseDetailEditHelper = get => {
   const { PARTY_TYPES } = get(state.constants);
-  const partyType = get(state.caseDetail.partyType);
-  const documents = get(state.caseDetail.documents);
-  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+  const caseDetail = get(state.caseDetail);
+  const showContacts = showContactsHelper(caseDetail.partyType, PARTY_TYPES);
 
   let showOwnershipDisclosureStatement = false;
-  let ownershipDisclosureStatementDocumentId;
+  let ownershipDisclosureStatementDocumentId,
+    requestForPlaceOfTrialDocumentId,
+    requestForPlaceOfTrialDocumentTitle;
 
   if (
     [
@@ -25,10 +26,10 @@ export const caseDetailEditHelper = get => {
       PARTY_TYPES.partnershipOtherThanTaxMatters,
       PARTY_TYPES.partnershipBBA,
       PARTY_TYPES.corporation,
-    ].includes(partyType) &&
-    documents
+    ].includes(caseDetail.partyType) &&
+    caseDetail.documents
   ) {
-    const odsDocs = documents.filter(document => {
+    const odsDocs = caseDetail.documents.filter(document => {
       return document.documentType === 'Ownership Disclosure Statement';
     });
     showOwnershipDisclosureStatement = true;
@@ -37,11 +38,28 @@ export const caseDetailEditHelper = get => {
     }
   }
 
+  if (caseDetail.documents) {
+    const rptDocs = caseDetail.documents.filter(document => {
+      return document.documentType.includes('Request for Place of Trial');
+    });
+    if (rptDocs[0]) {
+      requestForPlaceOfTrialDocumentId = rptDocs[0].documentId;
+      requestForPlaceOfTrialDocumentTitle = rptDocs[0].documentTitle;
+    }
+  }
+
   return {
     ownershipDisclosureStatementDocumentId,
     partyTypes: PARTY_TYPES,
+    requestForPlaceOfTrialDocumentId,
+    requestForPlaceOfTrialDocumentTitle,
+    showNoTrialLocationSelected:
+      caseDetail.isPaper && !requestForPlaceOfTrialDocumentId,
     showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
+    showRQTDocumentLink: caseDetail.isPaper && requestForPlaceOfTrialDocumentId,
+    showReadOnlyTrialLocation:
+      !caseDetail.isPaper && caseDetail.preferredTrialCity,
     showSecondaryContact: showContacts.contactSecondary,
   };
 };
