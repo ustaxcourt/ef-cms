@@ -25,7 +25,7 @@ jobs:
 
   build:
     docker:
-      - image: circleci/node:10.15.3
+      - image: sutt0n/ef-cms:latest
     steps:
       - run:
           name: CHMOD
@@ -167,33 +167,33 @@ jobs:
     environment:
       _JAVA_OPTIONS: '-Xms512m -Xmx512m'
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+      # - restore_cache:
+      #     name: Source - Restoring Cache
+      #     keys:
+      #       - source-v1-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
+      #       - source-v1-{{ .Branch }}-{{ .Revision }}
+      #       - source-v1-{{ .Branch }}-
+      #       - source-v1-
       - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-v1-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: NPM - Restoring Cache
-          keys:
-            - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-v1-{{ .Branch }}-
-            - npm-v1-
+      # - save_cache:
+      #     name: Source - Saving Cache
+      #     key: source-v1-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
+      #     paths:
+      #       - '.git'
+      # - restore_cache:
+      #     name: NPM - Restoring Cache
+      #     keys:
+      #       - npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      #       - npm-v1-{{ .Branch }}-
+      #       - npm-v1-
       - run:
           name: NPM - Install
           command: npm i
-      - save_cache:
-          name: NPM - Save to Cache
-          paths:
-            - node_modules # location depends on npm version
-          key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      # - save_cache:
+      #     name: NPM - Save to Cache
+      #     paths:
+      #       - node_modules # location depends on npm version
+      #     key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Pa11y
           command: |
@@ -210,6 +210,7 @@ jobs:
             npm run cypress
       - store_artifacts:
           path: /root/project/cypress/videos/
+
   deploy-ui:
     machine:
       docker_layer_caching: true
