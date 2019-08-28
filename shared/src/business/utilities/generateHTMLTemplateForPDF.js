@@ -149,8 +149,8 @@ const generateChangeOfAddressTemplate = content => {
   let newAddress = '';
 
   if (documentTitle === 'Notice of Change of Telephone Number') {
-    oldAddress = `<div>${oldData.phone}</dvi>`;
-    newAddress = `<div>${newData.phone}</dvi>`;
+    oldAddress = `<div>${oldData.phone}</div>`;
+    newAddress = `<div>${newData.phone}</div>`;
   } else {
     oldAddress = `<div>${oldData.address1}</div>`;
     newAddress = `<div>${newData.address1}</div>`;
@@ -183,8 +183,8 @@ const generateChangeOfAddressTemplate = content => {
     }
 
     if (documentTitle === 'Notice of Change of Address and Telephone Number') {
-      oldAddress += `<div style="margin-top:8px;">${oldData.phone}</dvi>`;
-      newAddress += `<div style="margin-top:8px;">${newData.phone}</dvi>`;
+      oldAddress += `<div style="margin-top:8px;">${oldData.phone}</div>`;
+      newAddress += `<div style="margin-top:8px;">${newData.phone}</div>`;
     }
   }
 
