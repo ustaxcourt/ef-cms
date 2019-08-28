@@ -164,8 +164,7 @@ jobs:
   e2e:
     docker:
       - image: sutt0n/ef-cms:latest
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx1024m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2'
+    resource_class: large
     steps:
       # - restore_cache:
       #     name: Source - Restoring Cache
@@ -197,14 +196,14 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             npm run test:pa11y
       - run:
           name: Cypress
           command: |
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci & 
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null & 
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234 
             npm run cypress
