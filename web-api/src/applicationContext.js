@@ -144,8 +144,12 @@ const {
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
   generateChangeOfAddressTemplate,
-  getDocumentTypeForAddressChange,
-} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
+  generateHTMLTemplateForPDF,
+  generatePrintableDocketRecordTemplate,
+} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
+const {
+  generateDocketRecordPdfInteractor,
+} = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
@@ -230,6 +234,9 @@ const {
 const {
   getDocumentQCServedForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor');
+const {
+  getDocumentTypeForAddressChange,
+} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
   getDownloadPolicyUrl,
 } = require('../../shared/src/persistence/s3/getDownloadPolicyUrl');
@@ -630,6 +637,13 @@ module.exports = (appContextUser = {}) => {
       return s3Cache;
     },
     // TODO: replace external calls to environment
+    getTemplateGenerators: () => {
+      return {
+        generateChangeOfAddressTemplate,
+        generateHTMLTemplateForPDF,
+        generatePrintableDocketRecordTemplate,
+      };
+    },
     getUniqueId: () => {
       return uuidv4();
     },
@@ -656,6 +670,7 @@ module.exports = (appContextUser = {}) => {
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
+        generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         getAllCaseDeadlinesInteractor,
@@ -717,7 +732,6 @@ module.exports = (appContextUser = {}) => {
       return {
         createISODateString,
         formatDateString,
-        generateChangeOfAddressTemplate,
         getDocumentTypeForAddressChange,
         prepareDateFromString,
       };

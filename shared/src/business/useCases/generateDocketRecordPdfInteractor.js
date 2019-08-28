@@ -1,21 +1,17 @@
-import { state } from 'cerebral';
-import printDocketRecordTemplate from '../../views/DocketRecord/printDocketRecordTemplate.html';
-
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 /**
- * Prints the docket record
+ * generateDocketRecordPdfInteractor
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object
- * @param {object} providers.store the cerebral store object
- * @returns {object} the docket number and stringified contentHtml
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseDetail the formatted case detail
+ * @returns {Uint8Array} docket record pdf
  */
-export const printDocketRecordAction = ({ applicationContext, get }) => {
-  const { ContactFactory } = applicationContext.getEntityConstructors();
-  const caseDetail = get(state.formattedCaseDetail);
-  const caseDetailHelper = get(state.caseDetailHelper);
-
-  const getPartyInfoContent = (detail, helper) => {
+exports.generateDocketRecordPdfInteractor = async ({
+  applicationContext,
+  caseDetail,
+}) => {
+  const getPartyInfoContent = detail => {
     const {
       contactPrimary,
       contactSecondary,
@@ -46,7 +42,7 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     };
 
     const getContactPrimary = () => {
-      const name = helper.showCaseNameForPrimary
+      const name = detail.showCaseNameForPrimary
         ? detail.caseName
         : contactPrimary.name;
 
@@ -99,8 +95,8 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
                   ${representingSecondary ? '<br />' : ''}
                   ${
                     representingSecondary &&
-                    contactPrimary &&
-                    contactPrimary.name
+                    contactSecondary &&
+                    contactSecondary.name
                       ? contactSecondary.name
                       : ''
                   }
@@ -235,36 +231,26 @@ export const printDocketRecordAction = ({ applicationContext, get }) => {
     return docketRecordContent;
   };
 
-  const replaceTemplate = () => {
-    let output = printDocketRecordTemplate;
-    // caption
-    output = output.replace(/{{ caption }}/g, caseDetail.caseCaption);
-    // captionPostfix
-    output = output.replace(
-      /{{ captionPostfix }}/g,
-      caseDetailHelper.caseCaptionPostfix,
-    );
-    // docketNumber
-    output = output.replace(
-      /{{ docketNumber }}/g,
-      caseDetail.docketNumberWithSuffix,
-    );
-    // partyInfo
-    output = output.replace(
-      /{{ partyInfo }}/g,
-      getPartyInfoContent(caseDetail, caseDetailHelper),
-    );
-    // docketRecord
-    output = output.replace(
-      /{{ docketRecord }}/g,
-      getDocketRecordContent(caseDetail),
-    );
-    return output;
-  };
+  const {
+    caseCaption,
+    caseCaptionPostfix,
+    docketNumber,
+    docketNumberSuffix,
+  } = caseDetail;
 
-  const contentHtml = replaceTemplate();
-  return {
+  const contentHtml = await applicationContext
+    .getTemplateGenerators()
+    .generatePrintableDocketRecordTemplate({
+      caption: caseCaption,
+      captionPostfix: caseCaptionPostfix,
+      docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+      docketRecord: getDocketRecordContent(caseDetail),
+      partyInfo: getPartyInfoContent(caseDetail),
+    });
+
+  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+    applicationContext,
     contentHtml,
-    docketNumber: caseDetail.docketNumberWithSuffix,
-  };
+    docketNumber,
+  });
 };
