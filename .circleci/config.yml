@@ -196,8 +196,10 @@ jobs:
       - run:
           name: Install Cypress
           command: |
-            if [ -z "/root/.cache/Cypress" ]; then
-              cypress install
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            echo "cypress version is $CYPRESS_VERSION"
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
             fi
       - run:
           name: Install Java
