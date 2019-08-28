@@ -10,29 +10,36 @@ const {
  * @constructor
  */
 function User(rawUser) {
-  this.email = rawUser.email;
-  this.addressLine1 = rawUser.addressLine1;
-  this.addressLine2 = rawUser.addressLine2;
   this.barNumber = rawUser.barNumber;
-  this.phone = rawUser.phone;
+  this.email = rawUser.email;
   this.name = rawUser.name;
   this.role = rawUser.role || 'petitioner';
   this.section = rawUser.section;
   this.token = rawUser.token;
   this.userId = rawUser.userId;
+  if (rawUser.contact) {
+    this.contact = {
+      address1: rawUser.contact.address1,
+      address2: rawUser.contact.address2,
+      address3: rawUser.contact.address3,
+      city: rawUser.contact.city,
+      countryType: rawUser.contact.countryType,
+      phone: rawUser.contact.phone,
+      postalCode: rawUser.contact.postalCode,
+      state: rawUser.contact.state,
+    };
+  }
 }
 
 joiValidationDecorator(
   User,
   joi.object().keys({
-    addressLine1: joi.string().optional(),
-    addressLine2: joi.string().optional(),
     barNumber: joi.string().optional(),
     email: joi.string().optional(),
     name: joi.string().optional(),
-    phone: joi.string().optional(),
     token: joi.string().optional(),
     userId: joi.string().required(),
+    // TODO: add contact
   }),
 );
 
