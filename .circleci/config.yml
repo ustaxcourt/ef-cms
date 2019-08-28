@@ -76,7 +76,7 @@ jobs:
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null & 
             ./wait-until.sh http://localhost:3000/api/swagger 
             sleep 5
-            npm run test:client
+            CI=false npm run test:client
       - run:
           name: Web Client - SonarQube
           command: |
