@@ -57,6 +57,7 @@ module.exports = [
   {
     actions: [
       'wait for #caption-edit-button to be visible',
+      'wait for .progress-indicator to be hidden',
       'click element #caption-edit-button',
       'wait for .modal-dialog to be visible',
     ],
@@ -67,8 +68,10 @@ module.exports = [
   {
     actions: [
       'wait for #tab-pending-messages to be visible',
+      'wait for .progress-indicator to be hidden',
       'click element #tab-pending-messages',
       'wait for #create-message-button to be visible',
+      'wait for .progress-indicator to be hidden',
       'click element #create-message-button',
       'wait for .modal-dialog to be visible',
     ],

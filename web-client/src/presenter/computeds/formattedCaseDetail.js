@@ -60,79 +60,6 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
   return result;
 };
 
-const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
-  const yearAmountError = caseDetailErrors.yearAmounts.find(error => {
-    return error.index === idx;
-  });
-
-  if (yearAmountError) {
-    yearAmount.showError = true;
-    yearAmount.errorMessage = yearAmountError.year;
-  }
-};
-
-const processDuplicateError = (caseDetail, caseDetailErrors) => {
-  const duplicates = _.filter(caseDetail.yearAmounts, (val, i, iteratee) =>
-    _.find(iteratee, (val2, i2) => {
-      return val.formattedYear === val2.formattedYear && i !== i2;
-    }),
-  );
-
-  duplicates.forEach(duplicate => {
-    duplicate.showError = true;
-    duplicate.errorMessage = caseDetailErrors.yearAmounts;
-  });
-};
-
-const formatYearAmount = (applicationContext, caseDetailErrors, caseDetail) => (
-  yearAmount,
-  idx,
-) => {
-  const isoYear = applicationContext
-    .getUtilities()
-    .createISODateString(yearAmount.year, 'YYYY');
-  const formattedYear = yearAmount.year
-    ? applicationContext.getUtilities().formatDateString(isoYear, 'YYYY')
-    : 'Invalid date';
-  yearAmount.formattedYear = formattedYear;
-  yearAmount.showError = false;
-  yearAmount.amountFormatted = yearAmount.amount
-    ? Number(yearAmount.amount).toLocaleString('en-US')
-    : yearAmount.amount;
-  if (Array.isArray(caseDetailErrors.yearAmounts)) {
-    processArrayErrors(yearAmount, caseDetailErrors, idx);
-  } else if (typeof caseDetailErrors.yearAmounts === 'string') {
-    processDuplicateError(caseDetail, caseDetailErrors);
-  }
-
-  return {
-    ...yearAmount,
-    year:
-      formattedYear.includes('Invalid') || yearAmount.year.length < 4
-        ? yearAmount.year
-        : formattedYear,
-  };
-};
-
-export const formatYearAmounts = (
-  applicationContext,
-  caseDetail = {},
-  caseDetailErrors = {},
-) => {
-  caseDetail.canAddYearAmount =
-    (caseDetail.yearAmounts || []).filter(yearAmount => {
-      return !yearAmount.year;
-    }).length !== 1;
-
-  if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
-    caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
-  } else {
-    caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
-      formatYearAmount(applicationContext, caseDetailErrors, caseDetail),
-    );
-  }
-};
-
 const formatDocketRecordWithDocument = (
   applicationContext,
   docketRecords = [],
@@ -202,7 +129,7 @@ const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
   );
 };
 
-const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
+const formatCase = (applicationContext, caseDetail) => {
   if (_.isEmpty(caseDetail)) {
     return {};
   }
@@ -277,14 +204,9 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
       result.hasVerifiedIrsNotice === undefined) &&
       result.hasIrsNotice);
 
-  result.shouldShowYearAmounts =
-    result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
-
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
-
-  formatYearAmounts(applicationContext, result, caseDetailErrors);
 
   result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
   result.formattedTrialDate = 'Not scheduled';

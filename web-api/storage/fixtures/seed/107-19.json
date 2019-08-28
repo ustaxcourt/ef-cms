@@ -265,7 +265,6 @@
     "receivedAt": null,
     "irsSendDate": "2019-08-16T17:30:10.522Z",
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -440,7 +439,6 @@
     "orderForFilingFee": false,
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -583,7 +581,6 @@
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
     "receivedAt": null,
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -739,7 +736,6 @@
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
     "receivedAt": null,
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -895,7 +891,6 @@
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
     "receivedAt": null,
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -1067,7 +1062,6 @@
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
     "receivedAt": null,
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -1272,7 +1266,6 @@
     "receivedAt": null,
     "irsSendDate": "2019-08-16T17:30:10.522Z",
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",
@@ -1479,7 +1472,6 @@
     "receivedAt": null,
     "irsSendDate": "2019-08-16T17:30:10.522Z",
     "caseType": "CDP (Lien/Levy)",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Veritatis vel tenetu",
       "secondaryName": "Wayne Obrien",

@@ -1,6 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TrialCityOptions } from './TrialCityOptions';
+import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
