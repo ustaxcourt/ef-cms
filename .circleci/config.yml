@@ -128,6 +128,14 @@ jobs:
             ./wait-until.sh http://localhost:3000/api/swagger
             npm run test:pa11y
       - run:
+          name: Install Cypress
+          command: |
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            echo "cypress version is $CYPRESS_VERSION"
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+      - run:
           name: Cypress
           command: |
             SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null & 
