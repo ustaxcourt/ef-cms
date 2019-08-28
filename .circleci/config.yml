@@ -170,13 +170,14 @@ jobs:
       - restore_cache:
           name: Source - Restoring Cache
           keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
             - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
           name: Source - Saving Cache
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: source-v1-{{ .Branch }}-{{ .Revision }}-{{ checksum "package-lock.json" }}
           paths:
             - '.git'
       - restore_cache:
