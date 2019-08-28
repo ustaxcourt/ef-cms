@@ -17,16 +17,18 @@ function User(rawUser) {
   this.section = rawUser.section;
   this.token = rawUser.token;
   this.userId = rawUser.userId;
-  this.contact = {
-    address1: rawUser.contact.address1,
-    address2: rawUser.contact.address2,
-    address3: rawUser.contact.address3,
-    city: rawUser.contact.city,
-    countryType: rawUser.contact.countryType,
-    phone: rawUser.contact.phone,
-    postalCode: rawUser.contact.postalCode,
-    state: rawUser.contact.state,
-  };
+  if (rawUser.contact) {
+    this.contact = {
+      address1: rawUser.contact.address1,
+      address2: rawUser.contact.address2,
+      address3: rawUser.contact.address3,
+      city: rawUser.contact.city,
+      countryType: rawUser.contact.countryType,
+      phone: rawUser.contact.phone,
+      postalCode: rawUser.contact.postalCode,
+      state: rawUser.contact.state,
+    };
+  }
 }
 
 joiValidationDecorator(
