@@ -50,6 +50,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           header: 'Executor/Personal Representative/Etc.',
           nameLabel: 'Name of Decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+          titleHint: 'optional',
         },
       };
       break;
