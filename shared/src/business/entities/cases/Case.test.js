@@ -15,7 +15,34 @@ describe('Case entity', () => {
       orderForFilingFee: false,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
+    });
+  });
+
+  it('defaults the orderDesignatingPlaceOfTrial to false if not a paper case or trial city is set', () => {
+    let myCase = new Case(MOCK_CASE);
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: false,
+    });
+
+    myCase = new Case({
+      ...MOCK_CASE,
+      isPaper: true,
+    });
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: false,
+    });
+  });
+
+  it('defaults the orderDesignatingPlaceOfTrial to true if paper case and trial city is not set', () => {
+    const myCase = new Case({
+      ...MOCK_CASE,
+      isPaper: true,
+      preferredTrialCity: undefined,
+    });
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: true,
     });
   });
 
@@ -23,20 +50,24 @@ describe('Case entity', () => {
     const myCase = new Case({
       ...MOCK_CASE,
       noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
     expect(myCase).toMatchObject({
       noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
   });
@@ -87,50 +118,6 @@ describe('Case entity', () => {
         petitioners: [],
       });
       expect(myCase.isValid()).toBeFalsy();
-    });
-
-    it('creates a case with year amounts', () => {
-      const myCase = new Case({
-        petitioners: [],
-        yearAmounts: [
-          { amount: '34.50', year: '2000' },
-          { amount: '34.50', year: '2001' },
-        ],
-      });
-      expect(myCase.isValid()).toBeFalsy();
-    });
-
-    it('should not be valid because of duplicate years in yearAmounts', () => {
-      const isValid = new Case({
-        ...MOCK_CASE,
-        yearAmounts: [
-          {
-            amount: '34.50',
-            year: '2000',
-          },
-          {
-            amount: '100.50',
-            year: '2000',
-          },
-        ],
-      }).isValid();
-      expect(isValid).toBeFalsy();
-    });
-  });
-
-  describe('areYearsUnique', () => {
-    it('will fail validation when having two year amounts with the same year', () => {
-      const isValid = Case.areYearsUnique([
-        {
-          amount: '34.50',
-          year: '2000',
-        },
-        {
-          amount: '34.50',
-          year: '2000',
-        },
-      ]);
-      expect(isValid).toBeFalsy();
     });
   });
 
@@ -482,7 +469,7 @@ describe('Case entity', () => {
         }),
       );
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.docketRecord.length).toEqual(2);
+      expect(caseRecord.docketRecord.length).toEqual(5);
     });
   });
 
@@ -519,9 +506,9 @@ describe('Case entity', () => {
         }),
       );
 
-      expect(caseRecord.docketRecord).toHaveLength(1);
-      expect(caseRecord.docketRecord[0].description).toEqual('test');
-      expect(caseRecord.docketRecord[0].index).toEqual(5);
+      expect(caseRecord.docketRecord).toHaveLength(4);
+      expect(caseRecord.docketRecord[3].description).toEqual('test');
+      expect(caseRecord.docketRecord[3].index).toEqual(5);
 
       caseRecord.addDocketRecord(
         new DocketRecord({
@@ -530,7 +517,7 @@ describe('Case entity', () => {
         }),
       );
 
-      expect(caseRecord.docketRecord[1].index).toEqual(6);
+      expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
     it('validates the docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);
@@ -545,6 +532,36 @@ describe('Case entity', () => {
     });
   });
 
+  describe('updateDocketRecordEntry', () => {
+    it('updates an existing docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const updatedDocketEntry = new DocketRecord({
+        description: 'second record now updated',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+        filingDate: '2018-03-02T22:22:00.000Z',
+        index: 7,
+      });
+      caseRecord.updateDocketRecordEntry(updatedDocketEntry);
+
+      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
+      expect(caseRecord.docketRecord[1].description).toEqual(
+        'second record now updated',
+      );
+      expect(caseRecord.docketRecord[1].index).toEqual(7);
+    });
+
+    it('validates the docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      let error;
+      try {
+        caseRecord.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeTruthy();
+    });
+  });
   describe('validateWithError', () => {
     it('passes back an error passed in if invalid', () => {
       let error = null;

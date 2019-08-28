@@ -14,12 +14,6 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 
-  if (caseToUpdate.yearAmounts) {
-    caseToUpdate.yearAmounts = caseToUpdate.yearAmounts.filter(yearAmount => {
-      return yearAmount.amount || yearAmount.year;
-    });
-  }
-
   const caseDetail = await applicationContext
     .getUseCases()
     .updateCaseInteractor({
