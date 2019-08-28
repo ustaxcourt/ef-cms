@@ -18,9 +18,7 @@ export const setPDFForSigningAction = async ({
 
   store.set(state.pdfForSigning.documentId, documentId);
 
-  console.log('CI flag is set to ', process.env.CI);
-
-  if (process.env.CI) {
+  if (process.env.CI === 'true') {
     return;
   }
 
