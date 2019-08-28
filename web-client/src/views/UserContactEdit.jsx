@@ -33,7 +33,6 @@ export const UserContactEdit = connect(
             <h1>My Contact Information</h1>
           </div>
         </div>
-
         <section className="usa-section grid-container">
           <ErrorNotification />
 
@@ -42,29 +41,32 @@ export const UserContactEdit = connect(
           <div className="blue-container">
             <Country
               bind={bind}
-              clearTypeOnCountryChange={true}
               type={type}
-              onChange="countryTypeChangeSequence"
+              onBlur={onBlur}
+              onChange="updateUserContactValueSequence"
+              onChangeCountryType="countryTypeUserContactChangeSequence"
             />
             {user.contact.countryType === 'domestic' ? (
               <Address
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateUserValueSequence"
+                onChange="updateUserContactValueSequence"
               />
             ) : (
               <InternationalAddress
                 bind={bind}
                 type={type}
                 onBlur={onBlur}
-                onChange="updateUserValueSequence"
+                onChange="updateUserContactValueSequence"
               />
             )}
             <div
               className={
                 'usa-form-group ' +
-                (validationErrors && validationErrors.phone
+                (validationErrors &&
+                validationErrors.contact &&
+                validationErrors.contact.phone
                   ? 'usa-form-group--error'
                   : '')
               }
@@ -90,7 +92,7 @@ export const UserContactEdit = connect(
                 }}
               />
               <Text
-                bind={'validationErrors.phone'}
+                bind={'validationErrors.contact.phone'}
                 className="usa-error-message"
               />
             </div>

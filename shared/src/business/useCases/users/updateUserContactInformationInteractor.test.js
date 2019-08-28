@@ -37,23 +37,23 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor({
       applicationContext,
       contactInfo: {
-        addressLine1: '999',
-        addressLine2: 'circle st.',
+        address1: '999',
+        address2: 'circle st.',
       },
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
     expect(updateUserSpy).toHaveBeenCalled();
 
     expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
-      addressLine1: '999',
-      addressLine2: 'circle st.',
+      address1: '999',
+      address2: 'circle st.',
     });
     expect(updateCaseSpy).toHaveBeenCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       respondents: [
         {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
+          address1: '999',
+          address2: 'circle st.',
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -91,23 +91,23 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor({
       applicationContext,
       contactInfo: {
-        addressLine1: '999',
-        addressLine2: 'circle st.',
+        address1: '999',
+        address2: 'circle st.',
       },
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
     expect(updateUserSpy).toHaveBeenCalled();
 
     expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
-      addressLine1: '999',
-      addressLine2: 'circle st.',
+      address1: '999',
+      address2: 'circle st.',
     });
     expect(updateCaseSpy).toHaveBeenCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       practitioners: [
         {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
+          address1: '999',
+          address2: 'circle st.',
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -132,8 +132,8 @@ describe('updateUserContactInformationInteractor', () => {
       await updateUserContactInformationInteractor({
         applicationContext,
         contactInfo: {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
+          address1: '999',
+          address2: 'circle st.',
         },
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
       });
@@ -160,8 +160,8 @@ describe('updateUserContactInformationInteractor', () => {
       await updateUserContactInformationInteractor({
         applicationContext,
         contactInfo: {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
+          address1: '999',
+          address2: 'circle st.',
         },
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       });
