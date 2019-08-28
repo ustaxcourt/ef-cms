@@ -164,6 +164,8 @@ jobs:
   e2e:
     docker:
       - image: cypress/base:10.15.3
+    environment:
+      _JAVA_OPTIONS: '-Xms512m -Xmx512m'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -202,7 +204,7 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger 
             npm run test:pa11y
