@@ -165,7 +165,7 @@ jobs:
     docker:
       - image: cypress/base:10.15.3
     environment:
-      _JAVA_OPTIONS: "-Xmx2G -Xms2G"
+      _JAVA_OPTIONS: '-Xmx2G -Xms2G'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -206,6 +206,7 @@ jobs:
           command: |
             npx run-p start:api start:client &
             ./wait-until-services.sh
+            dmesg | grep -B20 sacrifice
             ./wait-until.sh http://localhost:1234
             npm run test:pa11y
       # - run:
