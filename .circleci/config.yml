@@ -197,8 +197,7 @@ jobs:
           name: Install Cypress
           command: |
             if [ -z "/root/.cache/Cypress" ]; then
-              npm set progress=false
-              npm i cypress
+              cypress install
             fi
       - run:
           name: Install Java
