@@ -165,7 +165,7 @@ jobs:
     docker:
       - image: cypress/base:10.15.3
     environment:
-      _JAVA_OPTIONS: '-Xms512m -Xmx1024m'
+      _JAVA_OPTIONS: '-Xms512m -Xmx812m'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -194,10 +194,9 @@ jobs:
             - node_modules # location depends on npm version
           key: npm-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
-          name: Install Cypress
+          name: Check - Install Cypress
           command: |
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            echo "cypress version is $CYPRESS_VERSION"
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
