@@ -15,6 +15,7 @@ exports.CASE_DEADLINE = 'CASE_DEADLINE';
 exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
 exports.ASSOCIATE_USER_WITH_CASE = 'ASSOCIATE_USER_WITH_CASE';
 exports.BATCH_DOWNLOAD_TRIAL_SESSION = 'BATCH_DOWNLOAD_TRIAL_SESSION';
+exports.UPDATE_CONTACT_INFO = 'UPDATE_CONTACT_INFO';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
@@ -68,16 +69,17 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
   ],
-
   practitioner: [
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.PETITION,
+    exports.UPDATE_CONTACT_INFO,
   ],
   respondent: [
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.UPDATE_CASE,
+    exports.UPDATE_CONTACT_INFO,
   ],
   seniorattorney: [
     exports.ASSOCIATE_USER_WITH_CASE,

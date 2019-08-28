@@ -433,6 +433,12 @@ const {
   updateTrialSessionWorkingCopyInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/updateTrialSessionWorkingCopyInteractor');
 const {
+  updateUser,
+} = require('../../shared/src/persistence/dynamo/users/updateUser');
+const {
+  updateUserContactInformationInteractor,
+} = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
+const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -604,6 +610,7 @@ module.exports = (appContextUser = {}) => {
         updateDocumentProcessingStatus,
         updateTrialSession,
         updateTrialSessionWorkingCopy,
+        updateUser,
         updateWorkItem,
         updateWorkItemInCase,
         uploadDocument,
@@ -698,6 +705,7 @@ module.exports = (appContextUser = {}) => {
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
         updateTrialSessionWorkingCopyInteractor,
+        updateUserContactInformationInteractor,
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
