@@ -31,14 +31,6 @@ jobs:
           paths:
             - node_modules # location depends on npm version
           key: npm-v2-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run:
-          name: Install Cypress
-          command: |
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            echo "cypress version is $CYPRESS_VERSION"
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
       - persist_to_workspace:
           root: /home/circleci
           paths:
@@ -124,8 +116,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/circleci
-      - attach_workspace:
-          at: /root/.cache
       - run:
           name: Pa11y
           command: |
@@ -136,6 +126,11 @@ jobs:
       - run:
           name: Cypress
           command: |
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+
             SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null & 
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:1234 
