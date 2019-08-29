@@ -39,6 +39,8 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
+      - run: ls -la
+      - run: pwd
       - persist_to_workspace:
           root: /home/circleci/project
       - persist_to_workspace:
