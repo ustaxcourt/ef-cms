@@ -26,7 +26,7 @@ exports.getScannerInterface = () => {
   };
 
   const loadDynamsoft = ({ applicationContext }) => {
-    if (!process.env.CI && !dynamsoftLoader) {
+    if (!dynamsoftLoader) {
       dynamsoftLoader = new Promise(resolve => {
         const dynamScriptClass = 'dynam-scanner-injection';
 
