@@ -1,11 +1,9 @@
 version: 2
 
 jobs:
-  build:
+  bundle_prerequisites:
     docker:
       - image: sutt0n/ef-cms:latest
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -33,6 +31,27 @@ jobs:
           paths:
             - node_modules # location depends on npm version
           key: npm-v2-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Cypress
+          command: |
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            echo "cypress version is $CYPRESS_VERSION"
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+      - persist_to_workspace:
+          root: /home/circleci/project
+      - persist_to_workspace:
+          root: /root/.cache/Cypress
+    
+  build:
+    docker:
+      - image: sutt0n/ef-cms:latest
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+    steps:
+      - attach_workspace:
+          at: /home/circleci/project
       - run:
           name: Lint
           command: npm run lint
@@ -89,6 +108,8 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
+      - attach_workspace:
+          at: /home/circleci/project
 
   e2e:
     docker:
@@ -97,33 +118,10 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     resource_class: large
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-v2-{{ .Branch }}-{{ .Revision }}
-            - source-v2-{{ .Branch }}-{{ .Revision }}
-            - source-v2-{{ .Branch }}-
-            - source-v2-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-v2-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: NPM - Restoring Cache
-          keys:
-            - npm-v2-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-v2-{{ .Branch }}-
-            - npm-v2-
-      - run:
-          name: NPM - Install
-          command: npm i
-      - save_cache:
-          name: NPM - Save to Cache
-          paths:
-            - node_modules # location depends on npm version
-          key: npm-v2-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: /home/circleci/project
+      - attach_workspace:
+          at: /root/.cache/Cypress
       - run:
           name: Pa11y
           command: |
@@ -131,14 +129,6 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             npm run test:pa11y
-      - run:
-          name: Install Cypress
-          command: |
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            echo "cypress version is $CYPRESS_VERSION"
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
       - run:
           name: Cypress
           command: |
@@ -294,8 +284,13 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
+      - bundle_prerequisites
       - build
+        requires:
+          - bundle_prerequisites
       - e2e
+        requires:
+          - bundle_prerequisites
       - deploy-ui:
           requires:
             - build
