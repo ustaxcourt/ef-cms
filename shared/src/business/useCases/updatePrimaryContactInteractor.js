@@ -71,7 +71,9 @@ exports.updatePrimaryContactInteractor = async ({
     .generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
-      docketNumberWithSuffix: `${caseDetail.docketNumber}${caseDetail.docketNumberSuffix}`,
+      docketNumberWithSuffix: `${
+        caseDetail.docketNumber
+      }${caseDetail.docketNumberSuffix || ''}`,
       documentTitle: documentType.title,
       name: caseNameToUse,
       newData: contactInfo,
