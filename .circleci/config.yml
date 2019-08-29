@@ -304,19 +304,19 @@ workflows:
       - bundle
       - build-shared:
           requires:
-            - bundle_prerequisites
+            - bundle
       - build-api:
           requires:
-            - bundle_prerequisites
+            - bundle
       - build-client:
           requires:
-            - bundle_prerequisites
+            - bundle
       - e2e-pa11y:
           requires:
-            - bundle_prerequisites
+            - bundle
       - e2e-cypress:
           requires:
-            - bundle_prerequisites
+            - bundle
       - deploy-ui:
           requires:
             - build-shared
