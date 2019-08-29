@@ -77,8 +77,6 @@ exports.addCoverToPdf = async ({
     originallyFiledElectronically: !caseEntity.isPaper,
   };
 
-  console.log('coverSheetData', coverSheetData);
-
   // create pdfDoc object from file data
   applicationContext.logger.time('Loading the PDF');
   const pdfDoc = await PDFDocument.load(pdfData);
@@ -143,7 +141,6 @@ exports.addCoverToPdf = async ({
   };
 
   const getContentByKey = key => {
-    console.log('key', key);
     const coverSheetDatumValue = coverSheetData[key];
     switch (key) {
       case 'includesCertificateOfService':
