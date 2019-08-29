@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  bundle_prerequisites:
+  bundle:
     docker:
       - image: sutt0n/ef-cms:latest
     steps:
@@ -35,16 +35,10 @@ jobs:
           root: /home/circleci
           paths:
             - project
-      - persist_to_workspace:
-          root: /root/.cache
-          paths:
-            - Cypress
 
-  build:
+  build-api:
     docker:
       - image: sutt0n/ef-cms:latest
-    environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
       - attach_workspace:
           at: /home/circleci
@@ -55,21 +49,6 @@ jobs:
           name: Shellcheck
           command: |
             ./run-shellcheck.sh
-      - run:
-          name: Shared - Test
-          command: npm run test:shared
-      - run:
-          name: Shared - SonarQube
-          command: |
-            export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
-            -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
-            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-            -Dsonar.organization="${SONAR_ORG}" \
-            -Dsonar.projectBaseDir="shared" \
-            -Dproject.settings="shared/sonar-project.properties" \
-            -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-            -Dsonar.host.url="https://sonarcloud.io"
       - run:
           name: Web API - Test
           command: npm run test:api
@@ -85,6 +64,39 @@ jobs:
             -Dproject.settings="web-api/sonar-project.properties" \
             -Dsonar.login="${API_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
+
+  build-shared:
+    docker:
+      - image: sutt0n/ef-cms:latest
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+    steps:
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          name: Shared - Test
+          command: npm run test:shared
+      - run:
+          name: Shared - SonarQube
+          command: |
+            export SONAR_SCANNER_OPTS="-Xmx2048m"
+            /tmp/sonar-scanner/bin/sonar-scanner \
+            -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
+            -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+            -Dsonar.organization="${SONAR_ORG}" \
+            -Dsonar.projectBaseDir="shared" \
+            -Dproject.settings="shared/sonar-project.properties" \
+            -Dsonar.login="${SHARED_SONAR_TOKEN}" \
+            -Dsonar.host.url="https://sonarcloud.io"
+
+  build-client:
+    docker:
+      - image: sutt0n/ef-cms:latest
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+    steps:
+      - attach_workspace:
+          at: /home/circleci
       - run:
           name: Web Client - Test
           command: |
@@ -104,10 +116,8 @@ jobs:
             -Dproject.settings="web-client/sonar-project.properties" \
             -Dsonar.login="${UI_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
-      - attach_workspace:
-          at: /home/circleci/project
 
-  e2e:
+  e2e-pa11y:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
@@ -123,6 +133,14 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             npm run test:pa11y
+
+  e2e-cypress:
+    docker:
+      - image: sutt0n/ef-cms:latest
+    environment:
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+    resource_class: large
+    steps:
       - run:
           name: Cypress
           command: |
@@ -283,17 +301,29 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - bundle_prerequisites
-      - build:
+      - bundle
+      - build-shared:
           requires:
             - bundle_prerequisites
-      - e2e:
+      - build-api:
+          requires:
+            - bundle_prerequisites
+      - build-client:
+          requires:
+            - bundle_prerequisites
+      - e2e-pa11y:
+          requires:
+            - bundle_prerequisites
+      - e2e-cypress:
           requires:
             - bundle_prerequisites
       - deploy-ui:
           requires:
-            - build
-            - e2e
+            - build-shared
+            - build-api
+            - build-client
+            - e2e-pa11y
+            - e2e-cypress
           filters:
             branches:
               only:
@@ -302,8 +332,11 @@ workflows:
                 - master
       - deploy-api-east:
           requires:
-            - build
-            - e2e
+            - build-shared
+            - build-api
+            - build-client
+            - e2e-pa11y
+            - e2e-cypress
           filters:
             branches:
               only:
@@ -312,8 +345,11 @@ workflows:
                 - master
       - deploy-api-west:
           requires:
-            - build
-            - e2e
+            - build-shared
+            - build-api
+            - build-client
+            - e2e-pa11y
+            - e2e-cypress
           filters:
             branches:
               only:
