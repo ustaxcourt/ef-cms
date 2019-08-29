@@ -156,7 +156,7 @@ jobs:
             ./wait-until.sh http://localhost:1234 
             npm run cypress
       - store_artifacts:
-          path: /root/project/cypress/videos/
+          path: /home/circleci/project/cypress/videos/
 
   deploy-ui:
     machine:
