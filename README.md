@@ -193,6 +193,25 @@ _If these repositories are deleted, the build will fail._ To verify that these r
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 
+## Testing / Coverage Tips
+
+- Run all tests with `npm run test`
+- The web client, api, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively.
+- TIP: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
+
+Example coverage output:
+```
+----------|----------|----------|----------|----------|-------------------|
+File      |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
+----------|----------|----------|----------|----------|-------------------|
+All files |        0 |        0 |        0 |        0 |                   |
+----------|----------|----------|----------|----------|-------------------|
+```
+- Stmts: % of statements executed in the code
+- Branch: % of control structures (for example, if statements) executed in the code
+- Funcs: % of functions executed in the code
+- Uncovered Line #s: lines not covered by tests
+
 ## Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
