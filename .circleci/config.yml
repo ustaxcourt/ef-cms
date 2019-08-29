@@ -94,6 +94,7 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+    resource_class: large
     steps:
       - attach_workspace:
           at: /home/circleci
@@ -103,7 +104,7 @@ jobs:
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null & 
             ./wait-until.sh http://localhost:3000/api/swagger 
             sleep 5
-            npm run test:client:threaded
+            npm run test:client
       - run:
           name: Web Client - SonarQube
           command: |
