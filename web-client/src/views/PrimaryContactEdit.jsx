@@ -13,6 +13,8 @@ export const PrimaryContactEdit = connect(
     cancelEditPrimaryContactSequence:
       sequences.cancelEditPrimaryContactSequence,
     caseDetail: state.caseDetail,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -22,6 +24,8 @@ export const PrimaryContactEdit = connect(
   ({
     cancelEditPrimaryContactSequence,
     caseDetail,
+    caseDetailHelper,
+    formattedCaseDetail,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
     validateContactPrimarySequence,
@@ -56,7 +60,13 @@ export const PrimaryContactEdit = connect(
 
           <div className="blue-container">
             <span className="label">Contact Name</span>
-            <p>{caseDetail.contactPrimary.name}</p>
+
+            <p>
+              {caseDetailHelper.showCaseNameForPrimary
+                ? formattedCaseDetail.caseName
+                : caseDetail.contactPrimary.name}
+            </p>
+
             <Country
               bind={bind}
               clearTypeOnCountryChange={true}
