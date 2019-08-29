@@ -15,6 +15,7 @@ export const PrimaryContactEdit = connect(
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    primaryContactEditHelper: state.primaryContactEditHelper,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -26,6 +27,7 @@ export const PrimaryContactEdit = connect(
     caseDetail,
     caseDetailHelper,
     formattedCaseDetail,
+    primaryContactEditHelper,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
     validateContactPrimarySequence,
@@ -66,6 +68,45 @@ export const PrimaryContactEdit = connect(
                 ? formattedCaseDetail.caseName
                 : caseDetail.contactPrimary.name}
             </p>
+
+            {primaryContactEditHelper.showInCareOf && (
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.inCareOf
+                    ? 'usa-form-group--error'
+                    : '')
+                }
+              >
+                <label className="usa-label" htmlFor="inCareOf">
+                  <span>
+                    In Care Of <span className="usa-hint">(optional)</span>
+                  </span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="inCareOf"
+                  name="contactPrimary.inCareOf"
+                  type="text"
+                  value={caseDetail.contactPrimary.inCareOf || ''}
+                  onBlur={() => {
+                    validateContactPrimarySequence();
+                  }}
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <Text
+                  bind="validationErrors.contactPrimary.inCareOf"
+                  className="usa-error-message"
+                />
+              </div>
+            )}
 
             <Country
               bind={bind}
