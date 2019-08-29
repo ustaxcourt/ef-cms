@@ -5,6 +5,18 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const contactInfo = {
+  address1: '234 Main St',
+  address2: 'Apartment 4',
+  address3: 'Under the stairs',
+  city: 'Chicago',
+  country: 'Brazil',
+  countryType: 'international',
+  phone: '+1 (555) 555-5555',
+  postalCode: '61234',
+  state: 'IL',
+};
+
 describe('updateUserContactInformationInteractor', () => {
   it('updates the user and respondents in the case', async () => {
     const updateCaseSpy = jest.fn();
@@ -36,24 +48,19 @@ describe('updateUserContactInformationInteractor', () => {
     };
     await updateUserContactInformationInteractor({
       applicationContext,
-      contactInfo: {
-        addressLine1: '999',
-        addressLine2: 'circle st.',
-      },
+      contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
     expect(updateUserSpy).toHaveBeenCalled();
 
     expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
-      addressLine1: '999',
-      addressLine2: 'circle st.',
+      contact: contactInfo,
     });
     expect(updateCaseSpy).toHaveBeenCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       respondents: [
         {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
+          ...contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -90,24 +97,19 @@ describe('updateUserContactInformationInteractor', () => {
     };
     await updateUserContactInformationInteractor({
       applicationContext,
-      contactInfo: {
-        addressLine1: '999',
-        addressLine2: 'circle st.',
-      },
+      contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
     expect(updateUserSpy).toHaveBeenCalled();
 
     expect(updateUserSpy.mock.calls[0][0].user).toMatchObject({
-      addressLine1: '999',
-      addressLine2: 'circle st.',
+      contact: contactInfo,
     });
     expect(updateCaseSpy).toHaveBeenCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       practitioners: [
         {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
+          ...contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -131,10 +133,7 @@ describe('updateUserContactInformationInteractor', () => {
     try {
       await updateUserContactInformationInteractor({
         applicationContext,
-        contactInfo: {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
-        },
+        contactInfo,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (e) {
@@ -159,10 +158,7 @@ describe('updateUserContactInformationInteractor', () => {
     try {
       await updateUserContactInformationInteractor({
         applicationContext,
-        contactInfo: {
-          addressLine1: '999',
-          addressLine2: 'circle st.',
-        },
+        contactInfo,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       });
     } catch (e) {

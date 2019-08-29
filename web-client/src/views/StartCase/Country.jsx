@@ -7,6 +7,7 @@ export const Country = connect(
   {
     constants: state.constants,
     data: state[props.bind],
+    onChangeCountryType: sequences[props.onChangeCountryType],
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
     validateStartCaseSequence: sequences[props.onBlur],
@@ -15,6 +16,7 @@ export const Country = connect(
   ({
     constants,
     data,
+    onChangeCountryType,
     type,
     updateFormValueSequence,
     validateStartCaseSequence,
@@ -41,7 +43,8 @@ export const Country = connect(
             name={`${type}.countryType`}
             value={data[type].countryType}
             onChange={e => {
-              updateFormValueSequence({
+              const method = onChangeCountryType || updateFormValueSequence;
+              method({
                 key: e.target.name,
                 value: e.target.value,
               });
