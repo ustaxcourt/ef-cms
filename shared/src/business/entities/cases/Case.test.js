@@ -1017,6 +1017,19 @@ describe('Case entity', () => {
     });
   });
 
+  describe('addDocumentWithoutDocketRecord', () => {
+    it('should add the document without a docket record change', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      const docketRecordLength = myCase.docketRecord.length;
+      myCase.addDocumentWithoutDocketRecord({
+        documentId: 'mock-document-id',
+      });
+      expect(myCase.docketRecord.length).toEqual(docketRecordLength);
+    });
+  });
+
   describe('updateDocument', () => {
     it('should update the document', () => {
       const myCase = new Case({
