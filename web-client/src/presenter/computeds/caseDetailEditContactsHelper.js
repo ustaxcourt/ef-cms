@@ -60,7 +60,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayInCareOf: true,
           header: 'Estate Information',
           inCareOfLabel: 'In Care Of',
-          inCareOfLabelHint: 'Optional',
+          inCareOfLabelHint: 'optional',
           nameLabel: 'Name of Decedent',
         },
       };
