@@ -220,12 +220,6 @@ function Case(rawCase) {
     this.practitioners = [];
   }
 
-  const isNewCase = this.status === Case.STATUS_TYPES.new;
-
-  if (!isNewCase) {
-    this.updateDocketNumberRecord();
-  }
-
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -541,34 +535,28 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
-  const oldDocketNumber =
+  let lastDocketNumber =
     this.docketNumber +
     (this.initialDocketNumberSuffix !== '_'
       ? this.initialDocketNumberSuffix
       : '');
+
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  let found;
-
-  this.docketRecord = this.docketRecord.reduce((acc, docketRecord) => {
+  this.docketRecord.forEach(docketRecord => {
     const result = docketNumberRegex.exec(docketRecord.description);
     if (result) {
-      const [, , pastChangedDocketNumber] = result;
-
-      if (pastChangedDocketNumber === newDocketNumber) {
-        found = true;
-        acc.push(docketRecord);
-      }
-    } else {
-      acc.push(docketRecord);
+      const [, , changedDocketNumber] = result;
+      lastDocketNumber = changedDocketNumber;
     }
-    return acc;
-  }, []);
+  });
 
-  if (!found && oldDocketNumber != newDocketNumber) {
+  const hasDocketNumberChanged = lastDocketNumber !== newDocketNumber;
+
+  if (hasDocketNumberChanged) {
     this.addDocketRecord(
       new DocketRecord({
-        description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
+        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
         filingDate: createISODateString(),
       }),
     );

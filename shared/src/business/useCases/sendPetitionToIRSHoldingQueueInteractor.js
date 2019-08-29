@@ -82,6 +82,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
     applicationContext,
     caseToUpdate: caseEntity
       .updateCaseTitleDocketRecord()
+      .updateDocketNumberRecord()
       .validate()
       .toRawObject(),
   });
