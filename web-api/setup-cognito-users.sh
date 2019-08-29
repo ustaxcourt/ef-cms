@@ -24,8 +24,8 @@ generate_post_data() {
   "role": "$role",
   "section": "$section",
   "name": "$name",
-  "addressLine1": "123 Main Street",
-  "addressLine2": "Los Angeles, CA 98089",
+  "address1": "123 Main Street",
+  "address2": "Los Angeles, CA 98089",
   "barNumber": "$barNumber",
   "phone": "111-111-1111"
 }

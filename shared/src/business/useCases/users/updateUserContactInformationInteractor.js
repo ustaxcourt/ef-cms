@@ -5,7 +5,7 @@ const {
   isAuthorized,
   UPDATE_CONTACT_INFO,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize, clone, pick } = require('lodash');
+const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
@@ -45,7 +45,7 @@ exports.updateUserContactInformationInteractor = async ({
     applicationContext,
     user: {
       ...user,
-      ...pick(contactInfo, ['addressLine1', 'addressLine2', 'phone']),
+      contact: contactInfo,
     },
   });
 
@@ -176,7 +176,7 @@ exports.updateUserContactInformationInteractor = async ({
 
       return applicationContext.getPersistenceGateway().updateCase({
         applicationContext,
-        caseToUpdate: rawCase,
+        caseToUpdate: caseEntity.validate().toRawObject(),
       });
     }),
   );
