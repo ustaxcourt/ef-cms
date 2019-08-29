@@ -3,7 +3,6 @@ const {
   UPDATE_CONTACT_INFO,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -11,6 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  * @returns {Promise} an object is successful
  */
@@ -37,7 +37,7 @@ exports.updateUserContactInformationInteractor = async ({
     applicationContext,
     user: {
       ...user,
-      ...pick(contactInfo, ['addressLine1', 'addressLine2', 'phone']),
+      contact: contactInfo,
     },
   });
 
