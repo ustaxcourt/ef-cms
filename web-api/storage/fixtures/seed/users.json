@@ -412,8 +412,8 @@
     "pk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "email": "respondent4",
-    "addressLine1": "3202 Elk Avenue",
-    "addressLine2": "Hanover, MI 49241",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
     "phone": "517-563-1536"
   },
@@ -433,8 +433,8 @@
     "pk": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "taxpayer",
-    "addressLine1": "3202 Elk Avenue",
-    "addressLine2": "Hanover, MI 49241",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
     "phone": "517-563-1536"
   }
 ]

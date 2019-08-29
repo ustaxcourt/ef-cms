@@ -34,6 +34,7 @@ import { completeStartCaseWizardStepSequence } from './sequences/completeStartCa
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { countryTypeChangeSequence } from './sequences/countryTypeChangeSequence';
+import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
@@ -161,6 +162,7 @@ import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrd
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
+import { submitEditUserContactSequence } from './sequences/submitEditUserContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitForwardSequence } from './sequences/submitForwardSequence';
@@ -211,6 +213,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
+import { updateUserContactValueSequence } from './sequences/updateUserContactValueSequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
 import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
@@ -228,6 +231,8 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
+
+import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
 /**
@@ -275,6 +280,7 @@ export const presenter = {
     confirmStayLoggedInSequence,
     convertHtml2PdfSequence,
     countryTypeChangeSequence,
+    countryTypeUserContactChangeSequence,
     createCaseDeadlineSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
@@ -400,6 +406,7 @@ export const presenter = {
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
     submitEditPrimaryContactSequence,
+    submitEditUserContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitForwardSequence,
@@ -450,6 +457,7 @@ export const presenter = {
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
     updateTrialSessionFormDataSequence,
+    updateUserContactValueSequence,
     updateWorkingCopySessionNoteSequence,
     validateAddPractitionerSequence,
     validateAddRespondentSequence,
@@ -467,6 +475,7 @@ export const presenter = {
     validateSelectDocumentTypeSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionSequence,
+    validateUserContactSequence,
     viewDocumentSequence,
   },
   state,
