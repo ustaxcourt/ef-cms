@@ -24,10 +24,17 @@ generate_post_data() {
   "role": "$role",
   "section": "$section",
   "name": "$name",
-  "address1": "123 Main Street",
-  "address2": "Los Angeles, CA 98089",
   "barNumber": "$barNumber",
-  "phone": "111-111-1111"
+  "contact": {
+    "address1": "234 Main St",
+    "address2": "Apartment 4",
+    "address3": "Under the stairs",
+    "city": "Chicago",
+    "countryType": "domestic",
+    "phone": "+1 (555) 555-5555",
+    "postalCode": "61234",
+    "state": "IL"
+  }
 }
 EOF
 }
@@ -108,7 +115,7 @@ createPractitionerAccount() {
   barNumber=$2
   overrideName=$3
   name=${overrideName:-Test practitioner${index}}
-  
+
   createAccount "practitioner${index}@example.com" "practitioner" "${index}" "${barNumber}" "practitioner" "${name}"
 }
 
@@ -117,7 +124,7 @@ createRespondentAccount() {
   barNumber=$2
   overrideName=$3
   name=${overrideName:-Test respondent${index}}
-  
+
   createAccount "respondent${index}@example.com" "respondent" "${index}" "${barNumber}" "respondent" "${name}"
 }
 
