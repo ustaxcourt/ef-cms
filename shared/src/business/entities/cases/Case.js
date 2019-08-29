@@ -220,12 +220,6 @@ function Case(rawCase) {
     this.practitioners = [];
   }
 
-  const isNewCase = this.status === Case.STATUS_TYPES.new;
-
-  if (!isNewCase) {
-    this.updateDocketNumberRecord();
-  }
-
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -234,6 +228,16 @@ function Case(rawCase) {
   this.orderForOds = rawCase.orderForOds || false;
   this.orderForRatification = rawCase.orderForRatification || false;
   this.orderToShowCause = rawCase.orderToShowCause || false;
+  this.orderToChangeDesignatedPlaceOfTrial =
+    rawCase.orderToChangeDesignatedPlaceOfTrial || false;
+
+  this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
+    {
+      isPaper: rawCase.isPaper,
+      preferredTrialCity: rawCase.preferredTrialCity,
+      rawValue: rawCase.orderDesignatingPlaceOfTrial,
+    },
+  );
 }
 
 joiValidationDecorator(
@@ -531,34 +535,28 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
-  const oldDocketNumber =
+  let lastDocketNumber =
     this.docketNumber +
     (this.initialDocketNumberSuffix !== '_'
       ? this.initialDocketNumberSuffix
       : '');
+
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  let found;
-
-  this.docketRecord = this.docketRecord.reduce((acc, docketRecord) => {
+  this.docketRecord.forEach(docketRecord => {
     const result = docketNumberRegex.exec(docketRecord.description);
     if (result) {
-      const [, , pastChangedDocketNumber] = result;
-
-      if (pastChangedDocketNumber === newDocketNumber) {
-        found = true;
-        acc.push(docketRecord);
-      }
-    } else {
-      acc.push(docketRecord);
+      const [, , changedDocketNumber] = result;
+      lastDocketNumber = changedDocketNumber;
     }
-    return acc;
-  }, []);
+  });
 
-  if (!found && oldDocketNumber != newDocketNumber) {
+  const hasDocketNumberChanged = lastDocketNumber !== newDocketNumber;
+
+  if (hasDocketNumberChanged) {
     this.addDocketRecord(
       new DocketRecord({
-        description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
+        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
         filingDate: createISODateString(),
       }),
     );
@@ -871,6 +869,27 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = Case.STATUS_TYPES.calendared;
   return this;
+};
+
+/**
+ * getDefaultOrderDesignatingPlaceOfTrialValue
+ *
+ * @returns {boolean} the value of if an order is needed for place of trial.
+ */
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
+  isPaper,
+  preferredTrialCity,
+  rawValue,
+}) {
+  let orderDesignatingPlaceOfTrial;
+  if (rawValue || rawValue === false) {
+    orderDesignatingPlaceOfTrial = rawValue;
+  } else if (isPaper && !preferredTrialCity) {
+    orderDesignatingPlaceOfTrial = true;
+  } else {
+    orderDesignatingPlaceOfTrial = false;
+  }
+  return orderDesignatingPlaceOfTrial;
 };
 
 module.exports = { Case };

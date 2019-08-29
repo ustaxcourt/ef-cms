@@ -8,6 +8,7 @@ import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
+import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -215,6 +216,39 @@ export const StartCaseInternal = connect(
                       validatePetitionFromPaperSequence();
                     }}
                   />
+
+                  <div
+                    className={classNames(
+                      'usa-form-group',
+                      validationErrors.preferredTrialCity &&
+                        'usa-form-group--error',
+                    )}
+                  >
+                    <label className="usa-label" htmlFor="preferred-trial-city">
+                      Trial Location{' '}
+                      <span className="usa-hint">(Required with RQT)</span>
+                    </label>
+                    <select
+                      className="usa-select"
+                      id="preferred-trial-city"
+                      name="preferredTrialCity"
+                      value={form.preferredTrialCity}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validatePetitionFromPaperSequence();
+                      }}
+                    >
+                      <option value="">- Select -</option>
+                      <TrialCityOptions />
+                    </select>
+                    <Text
+                      bind="validationErrors.preferredTrialCity"
+                      className="usa-error-message"
+                    />
+                  </div>
 
                   <div
                     className={classNames(

@@ -8,14 +8,14 @@ const fakeData =
 const createDocketRecordPdfInteractorMock = jest.fn();
 const mockCreateObjectUrl = jest.fn();
 
-global.window = {
-  URL: {
-    createObjectURL: () => {
-      mockCreateObjectUrl();
-      return '123456-abcdef';
-    },
+global.URL = {
+  createObjectURL: () => {
+    mockCreateObjectUrl();
+    return '123456-abcdef';
   },
 };
+
+global.window = global;
 
 global.Blob = () => {};
 
@@ -39,6 +39,15 @@ describe('generateDocketRecordPdfUrlAction', () => {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
         docketNumber: '123-45',
+      },
+      state: {
+        caseDetailHelper: {
+          caseCaptionPostfix: 'Test',
+          showCaseNameForPrimary: true,
+        },
+        formattedCaseDetail: {
+          docketNumber: '123-45',
+        },
       },
     });
     expect(createDocketRecordPdfInteractorMock).toHaveBeenCalled();

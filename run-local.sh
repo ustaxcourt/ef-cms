@@ -50,5 +50,10 @@ npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
 echo "starting proxy"
 node ./web-api/proxy.js
 
-pkill -P $DYNAMO_PID
+echo "proxy stopped"
+
+if [ ! -e $CIRCLECI ]; then 
+  echo "killing dynamodb local"
+  pkill -P $DYNAMO_PID
+fi 
 kill $S3RVER_PID
