@@ -1,8 +1,9 @@
 /**
  * creates a lookup of changed contact fields
  *
- * @param {object} newData updated contact information
- * @param {object} oldData the old contact information
+ * @param {object} providers the providers object
+ * @param {object} providers.newData updated contact information
+ * @param {object} providers.oldData the old contact information
  * @returns {object} diff object with old and new values for each changed field
  */
 const getAddressPhoneDiff = ({ newData, oldData }) => {
@@ -22,10 +23,12 @@ const getAddressPhoneDiff = ({ newData, oldData }) => {
 };
 
 /**
- * returns the appropiate documentType given the old and new contact data
+ * returns the appropriate documentType given the old and new contact data
  *
- * @param {object} newData updated contact information
- * @param {object} oldData the old contact information
+ * @param {object} providers the providers object
+ * @param {object} providers.diff the initial diff
+ * @param {object} providers.newData updated contact information
+ * @param {object} providers.oldData the old contact information
  * @returns {string} documentType for the address / phone change scenario
  */
 const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
