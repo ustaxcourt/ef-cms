@@ -43,7 +43,7 @@ jobs:
           root: /home/circleci/project
       - persist_to_workspace:
           root: /root/.cache/Cypress
-    
+
   build:
     docker:
       - image: sutt0n/ef-cms:latest
@@ -285,12 +285,12 @@ workflows:
   build-and-deploy:
     jobs:
       - bundle_prerequisites
-      - build
-        requires:
-          - bundle_prerequisites
-      - e2e
-        requires:
-          - bundle_prerequisites
+      - build:
+          requires:
+            - bundle_prerequisites
+      - e2e:
+          requires:
+            - bundle_prerequisites
       - deploy-ui:
           requires:
             - build
