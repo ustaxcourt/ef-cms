@@ -39,12 +39,14 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-      - run: ls -la
-      - run: pwd
       - persist_to_workspace:
-          root: /home/circleci/project
+          root: /home/circleci
+          paths:
+            - project
       - persist_to_workspace:
-          root: /root/.cache/Cypress
+          root: /root/.cache
+          paths:
+            - Cypress
 
   build:
     docker:
@@ -53,7 +55,7 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
       - attach_workspace:
-          at: /home/circleci/project
+          at: /home/circleci
       - run:
           name: Lint
           command: npm run lint
@@ -121,9 +123,9 @@ jobs:
     resource_class: large
     steps:
       - attach_workspace:
-          at: /home/circleci/project
+          at: /home/circleci
       - attach_workspace:
-          at: /root/.cache/Cypress
+          at: /root/.cache
       - run:
           name: Pa11y
           command: |
