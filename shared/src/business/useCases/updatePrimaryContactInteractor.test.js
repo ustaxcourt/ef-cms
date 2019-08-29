@@ -40,6 +40,14 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return persistenceGateway;
   },
+  getTemplateGenerators: () => {
+    return {
+      generateChangeOfAddressTemplate: () => {
+        generateChangeOfAddressTemplateStub();
+        return '<html></html>';
+      },
+    };
+  },
   getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   getUseCases: () => {
     return {
@@ -53,10 +61,6 @@ const applicationContext = {
     return {
       createISODateString,
       formatDateString,
-      generateChangeOfAddressTemplate: () => {
-        generateChangeOfAddressTemplateStub();
-        return '<html></html>';
-      },
       getAddressPhoneDiff: () => {
         getAddressPhoneDiffStub();
         return {

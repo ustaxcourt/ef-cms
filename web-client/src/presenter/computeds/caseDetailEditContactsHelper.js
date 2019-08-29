@@ -50,6 +50,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           header: 'Executor/Personal Representative/Etc.',
           nameLabel: 'Name of Decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+          titleHint: 'optional',
         },
       };
       break;
@@ -59,7 +60,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayInCareOf: true,
           header: 'Estate Information',
           inCareOfLabel: 'In Care Of',
-          inCareOfLabelHint: 'Your Name',
+          inCareOfLabelHint: 'optional',
           nameLabel: 'Name of Decedent',
         },
       };

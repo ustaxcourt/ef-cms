@@ -39,7 +39,7 @@ class AddRespondentModalComponent extends ModalDialog {
                 {modal.respondentMatches[0].barNumber}
                 )
                 <br />
-                {modal.respondentMatches[0].addressLine2}
+                {modal.respondentMatches[0].address2}
               </span>
             )}
             <div className="respondent-matches">
@@ -70,7 +70,7 @@ class AddRespondentModalComponent extends ModalDialog {
                     >
                       {counsel.name} ({counsel.barNumber})
                       <br />
-                      {counsel.addressLine2}
+                      {counsel.address2}
                     </label>
                   </div>
                 ))}
