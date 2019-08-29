@@ -978,12 +978,31 @@ describe('Case entity', () => {
     });
   });
 
+  describe('closeCase', () => {
+    it('should update the status of the case to closed', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.closeCase();
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.closed);
+    });
+  });
+
+  describe('recallFromIRSHoldingQueue', () => {
+    it('should update the status of the case to recalled', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.recallFromIRSHoldingQueue();
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.recalled);
+    });
+  });
+
   describe('getDocumentById', () => {
     it('should get the document by an Id', () => {
       const myCase = new Case({
         ...MOCK_CASE,
       });
-      console.log(MOCK_DOCUMENTS[0].documentId);
       const result = myCase.getDocumentById({
         documentId: MOCK_DOCUMENTS[0].documentId,
       });
