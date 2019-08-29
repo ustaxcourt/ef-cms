@@ -6,7 +6,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Petition',
     processingStatus: 'pending',
     userId: 'taxpayer',
-    workItems: [],
+    workItems: [{ createdAt: '2018-11-21T20:49:28.192Z' }],
   },
   {
     createdAt: '2018-11-21T20:49:28.192Z',
