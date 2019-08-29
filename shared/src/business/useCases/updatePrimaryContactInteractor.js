@@ -61,13 +61,17 @@ exports.updatePrimaryContactInteractor = async ({
       oldData: caseEntity.contactPrimary,
     });
 
+  const caseDetail = {
+    ...caseEntity.toRawObject(),
+    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
+  };
+
   const pdfContentHtml = applicationContext
-    .getUtilities()
+    .getTemplateGenerators()
     .generateChangeOfAddressTemplate({
-      caseDetail: {
-        ...caseEntity.toRawObject(),
-        caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
-      },
+      caption: caseDetail.caseCaption,
+      captionPostfix: caseDetail.caseCaptionPostfix,
+      docketNumber: caseDetail.docketNumber,
       documentTitle: documentType.title,
       name: caseNameToUse,
       newData: contactInfo,

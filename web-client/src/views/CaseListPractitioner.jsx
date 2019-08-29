@@ -1,9 +1,9 @@
+import { CaseSearchBox } from './CaseSearchBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-
-import { CaseSearchBox } from './CaseSearchBox.jsx';
 
 export const CaseListPractitioner = connect(
   {
@@ -97,6 +97,7 @@ export const CaseListPractitioner = connect(
             </div>
             <div className="tablet:grid-col-4">
               {helper.showCaseSearch && <CaseSearchBox />}
+              <MyContactInformation />
             </div>
           </div>
         </div>

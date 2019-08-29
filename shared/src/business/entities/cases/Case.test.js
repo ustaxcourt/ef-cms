@@ -15,7 +15,34 @@ describe('Case entity', () => {
       orderForFilingFee: false,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: false,
       orderToShowCause: false,
+    });
+  });
+
+  it('defaults the orderDesignatingPlaceOfTrial to false if not a paper case or trial city is set', () => {
+    let myCase = new Case(MOCK_CASE);
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: false,
+    });
+
+    myCase = new Case({
+      ...MOCK_CASE,
+      isPaper: true,
+    });
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: false,
+    });
+  });
+
+  it('defaults the orderDesignatingPlaceOfTrial to true if paper case and trial city is not set', () => {
+    const myCase = new Case({
+      ...MOCK_CASE,
+      isPaper: true,
+      preferredTrialCity: undefined,
+    });
+    expect(myCase).toMatchObject({
+      orderDesignatingPlaceOfTrial: true,
     });
   });
 
@@ -23,20 +50,24 @@ describe('Case entity', () => {
     const myCase = new Case({
       ...MOCK_CASE,
       noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
     expect(myCase).toMatchObject({
       noticeOfAttachments: true,
+      orderDesignatingPlaceOfTrial: true,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,
       orderForFilingFee: true,
       orderForOds: false,
       orderForRatification: false,
+      orderToChangeDesignatedPlaceOfTrial: true,
       orderToShowCause: true,
     });
   });
@@ -438,7 +469,7 @@ describe('Case entity', () => {
         }),
       );
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.docketRecord.length).toEqual(2);
+      expect(caseRecord.docketRecord.length).toEqual(5);
     });
   });
 
@@ -475,9 +506,9 @@ describe('Case entity', () => {
         }),
       );
 
-      expect(caseRecord.docketRecord).toHaveLength(1);
-      expect(caseRecord.docketRecord[0].description).toEqual('test');
-      expect(caseRecord.docketRecord[0].index).toEqual(5);
+      expect(caseRecord.docketRecord).toHaveLength(4);
+      expect(caseRecord.docketRecord[3].description).toEqual('test');
+      expect(caseRecord.docketRecord[3].index).toEqual(5);
 
       caseRecord.addDocketRecord(
         new DocketRecord({
@@ -486,7 +517,7 @@ describe('Case entity', () => {
         }),
       );
 
-      expect(caseRecord.docketRecord[1].index).toEqual(6);
+      expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
     it('validates the docketrecord', () => {
       const caseRecord = new Case(MOCK_CASE);
@@ -501,6 +532,36 @@ describe('Case entity', () => {
     });
   });
 
+  describe('updateDocketRecordEntry', () => {
+    it('updates an existing docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      const updatedDocketEntry = new DocketRecord({
+        description: 'second record now updated',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+        filingDate: '2018-03-02T22:22:00.000Z',
+        index: 7,
+      });
+      caseRecord.updateDocketRecordEntry(updatedDocketEntry);
+
+      expect(caseRecord.docketRecord).toHaveLength(3); // unchanged
+      expect(caseRecord.docketRecord[1].description).toEqual(
+        'second record now updated',
+      );
+      expect(caseRecord.docketRecord[1].index).toEqual(7);
+    });
+
+    it('validates the docketrecord', () => {
+      const caseRecord = new Case(MOCK_CASE);
+      caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
+      let error;
+      try {
+        caseRecord.validate();
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeTruthy();
+    });
+  });
   describe('validateWithError', () => {
     it('passes back an error passed in if invalid', () => {
       let error = null;
@@ -609,66 +670,40 @@ describe('Case entity', () => {
     });
   });
 
-  describe('docket record suffix changes', () => {
-    it('should save initial docket record suffix', () => {
-      const caseToVerify = new Case({});
+  describe('updateDocketNumberRecord records suffix changes', () => {
+    it('should create a docket record when the suffix updates', () => {
+      const caseToVerify = new Case({ docketNumber: '123-19' });
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
-    });
-
-    it('should not add a docket record item when the suffix updates from the initial suffix when the case is new', () => {
-      const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        initialDocketNumberSuffix: 'W',
-        status: 'New',
-      });
-      expect(caseToVerify.docketRecord.length).toEqual(0);
-    });
-
-    it('should add a docket record item when the suffix is different from the initial suffix and the case is not new', () => {
-      const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        initialDocketNumberSuffix: 'W',
-        status: 'Recalled',
-      });
-      expect(caseToVerify.docketRecord[0].description).toEqual(
-        "Docket Number is amended from 'BobW' to 'Bob'",
-      );
-    });
-
-    it('should remove a docket record entry when the suffix updates back to the initial suffix', () => {
-      const caseToVerify = new Case({
-        docketNumber: 'Bob',
-        docketRecord: [
-          {
-            description: 'Petition',
-          },
-          {
-            description: "Docket Number is amended from 'Bob' to 'BobW'",
-          },
-        ],
-        initialDocketNumberSuffix: '_',
-        status: 'Recalled',
-      });
+      caseToVerify.docketNumberSuffix = 'W';
+      caseToVerify.updateDocketNumberRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
-    it('should not update a docket record entry when the suffix was changed earlier', () => {
+    it('should not create a docket record if suffix has not changed', () => {
+      const caseToVerify = new Case({ docketNumber: '123-19' });
+      expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
+      caseToVerify.updateDocketNumberRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(0);
+    });
+
+    it('should add to the docket record when the docket number changes from the last updated docket number', () => {
       const caseToVerify = new Case({
-        docketNumber: 'Bob',
+        caseCaption: 'A Very Berry New Caption',
+        docketNumber: '123-19',
         docketRecord: [
           {
-            description: "Docket Number is amended from 'BobW' to 'Bob'",
+            description: "Docket Number is amended from '123-19A' to '123-19B'",
           },
           {
-            description: 'Petition',
+            description: "Docket Number is amended from '123-19B' to '123-19P'",
           },
         ],
-        initialDocketNumberSuffix: 'W',
-        status: 'Recalled',
       });
-      expect(caseToVerify.docketRecord.length).toEqual(2);
-      expect(caseToVerify.docketRecord[0].description).toEqual(
-        "Docket Number is amended from 'BobW' to 'Bob'",
+      caseToVerify.docketNumberSuffix = 'W';
+      caseToVerify.updateDocketNumberRecord();
+      expect(caseToVerify.docketRecord.length).toEqual(3);
+      expect(caseToVerify.docketRecord[2].description).toEqual(
+        "Docket Number is amended from '123-19P' to '123-19W'",
       );
     });
   });

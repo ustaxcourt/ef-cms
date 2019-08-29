@@ -51,7 +51,6 @@ exports.updateCaseInteractor = async ({
   const paidCase = new Case(caseToUpdate)
     .markAsPaidByPayGov(caseToUpdate.payGovDate)
     .setRequestForTrialDocketRecord(caseToUpdate.preferredTrialCity)
-    .updateCaseTitleDocketRecord()
     .validate()
     .toRawObject();
 
