@@ -1,8 +1,39 @@
 const { User } = require('./User');
 
 describe('User entity', () => {
+  it('Creates a valid international taxpayer user', () => {
+    const user = new User({
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        country: 'Brazil',
+        countryType: 'international',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      firstName: 'firstName',
+      lastName: 'lastName',
+      role: 'petitioner',
+      userId: 'taxpayer',
+    });
+    expect(user.isValid()).toBeTruthy();
+  });
+
   it('Creates a valid taxpayer user', () => {
     const user = new User({
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: 'domestic',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
       firstName: 'firstName',
       lastName: 'lastName',
       role: 'petitioner',
