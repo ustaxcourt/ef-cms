@@ -871,6 +871,11 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   return this;
 };
 
+/**
+ * getDefaultOrderDesignatingPlaceOfTrialValue
+ *
+ * @returns {boolean} the value of if an order is needed for place of trial.
+ */
 Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
   isPaper,
   preferredTrialCity,
