@@ -406,6 +406,7 @@ export const CaseInfo = connect(
         >
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.orderForRatification}
               className="usa-checkbox__input"
               id="order-for-ratification"
@@ -428,6 +429,7 @@ export const CaseInfo = connect(
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.noticeOfAttachments}
               className="usa-checkbox__input"
               id="notice-of-attachments"
@@ -450,6 +452,7 @@ export const CaseInfo = connect(
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.orderForAmendedPetition}
               className="usa-checkbox__input"
               id="order-for-amended-petition"
@@ -472,6 +475,7 @@ export const CaseInfo = connect(
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.orderForAmendedPetitionAndFilingFee}
               className="usa-checkbox__input"
               id="order-for-amended-petition-and-filing-fee"
