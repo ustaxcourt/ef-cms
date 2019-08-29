@@ -1,6 +1,7 @@
 import { Address } from './StartCase/Address';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -36,7 +37,18 @@ export const UserContactEdit = connect(
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <h2>Edit Your Contact Information for This Case</h2>
+          <h2>Edit Your Contact Information</h2>
+
+          <p>
+            This form will automatically create and submit change of contact
+            information notifications for all of your cases. Please ensure your
+            information is accurate before submitting.
+          </p>
+
+          <Hint wider>
+            For name and Bar Number changes, please contact the Court’s
+            Admissions section at (202)-521-0700
+          </Hint>
 
           <div className="blue-container">
             <Country
