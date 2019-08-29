@@ -3,6 +3,7 @@ const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -967,10 +968,46 @@ describe('Case entity', () => {
         ...MOCK_CASE,
       });
       myCase.setAsCalendared({
+        judge: {
+          name: 'Judge Judy',
+        },
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+    });
+  });
+
+  describe('getDocumentById', () => {
+    it('should get the document by an Id', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      console.log(MOCK_DOCUMENTS[0].documentId);
+      const result = myCase.getDocumentById({
+        documentId: MOCK_DOCUMENTS[0].documentId,
+      });
+      expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+    });
+  });
+
+  describe('stripLeadingZeros', () => {
+    it('should remove leading zeros', () => {
+      const result = Case.stripLeadingZeros('000101-19');
+      expect(result).toEqual('101-19');
+    });
+  });
+
+  describe('updateDocument', () => {
+    it('should update the document', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.updateDocument({
+        documentId: MOCK_DOCUMENTS[0].documentId,
+        processingStatus: 'success',
+      });
+      expect(myCase.documents[0].processingStatus).toEqual('success');
     });
   });
 });
