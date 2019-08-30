@@ -1,5 +1,5 @@
 const printChangeOfAddressTemplate = `<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Docket Record</title>
     <meta charset="utf-8" />
