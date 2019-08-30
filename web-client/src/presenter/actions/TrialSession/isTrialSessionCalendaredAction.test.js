@@ -21,7 +21,7 @@ describe('isTrialSessionCalendaredAction', () => {
       modules: {
         presenter,
       },
-      state: {
+      props: {
         trialSession: {
           isCalendared: true,
         },
@@ -36,7 +36,7 @@ describe('isTrialSessionCalendaredAction', () => {
       modules: {
         presenter,
       },
-      state: {
+      props: {
         trialSession: {
           isCalendared: false,
         },
