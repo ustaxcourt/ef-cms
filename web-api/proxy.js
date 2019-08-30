@@ -48,7 +48,7 @@ const proxyMain = async () => {
   const app = express();
   app.use('/', proxyObj);
 
-  app.listen(PROXY_PORT, PROXY_HOST);
+  app.listen(PROXY_PORT);
 
   const isProxyReachable = uri => {
     // hitting '/TEST/PROXY' to deliberately elicit a 404 rather than 403 which clutters authorization logs
