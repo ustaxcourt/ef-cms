@@ -150,7 +150,7 @@ const PartyInformation = connect(
                       },
                       constants,
                       {
-                        nameOverride: practitioner.formattedName,
+                        nameOverride: practitioner.name,
                       },
                     )}
                 </address>
@@ -196,7 +196,7 @@ const PartyInformation = connect(
                       },
                       constants,
                       {
-                        nameOverride: respondent.formattedName,
+                        nameOverride: respondent.name,
                       },
                     )}
                 </address>
