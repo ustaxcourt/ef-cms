@@ -124,9 +124,19 @@ You can log in using these usernames:
 ```
 taxpayer
 petitionsclerk
+petitionsclerk1
 docketclerk
+docketclerk1
 respondent
+respondent1 - respondent4
+practitioner
+practitioner1 - practitioner4
 seniorattorney
+judgeArmen
+judgeAshford
+judgeBuch
+judgeCarluzzo
+judgeCohen
 ```
 
 No password is required.
@@ -139,8 +149,14 @@ To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm
 petitioner1@example.com – petitioner5@example.com
 petitionsclerk1@example.com – petitionsclerk5@example.com
 docketclerk1@example.com – docketclerk5@example.com
-respondent1@example.com – respondent5@example.com
+respondent1@example.com – respondent10@example.com
+practitioner1@example.com – practitioner10@example.com
 seniorattorney1@example.com – seniorattorney5@example.com
+judgeArmen@example.com
+judgeAshford@example.com
+judgeBuch@example.com
+judgeCarluzzo@example.com
+judgeCohen@example.com
 ```
 
 The password for all accounts is:
@@ -176,6 +192,25 @@ _If these repositories are deleted, the build will fail._ To verify that these r
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
+
+## Testing / Coverage Tips
+
+- Run all tests with `npm run test`
+- The web client, api, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively.
+- TIP: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
+
+Example coverage output:
+```
+----------|----------|----------|----------|----------|-------------------|
+File      |  % Stmts | % Branch |  % Funcs |  % Lines | Uncovered Line #s |
+----------|----------|----------|----------|----------|-------------------|
+All files |        0 |        0 |        0 |        0 |                   |
+----------|----------|----------|----------|----------|-------------------|
+```
+- Stmts: % of statements executed in the code
+- Branch: % of control structures (for example, if statements) executed in the code
+- Funcs: % of functions executed in the code
+- Uncovered Line #s: lines not covered by tests
 
 ## Public domain
 

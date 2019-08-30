@@ -40,7 +40,7 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
         if (subject.is(':visible')) {
-          return cy.wrap(subject).trigger('change');
+          return cy.wrap(subject).trigger('change', { force: true });
         } else {
           return cy.wrap(subject);
         }

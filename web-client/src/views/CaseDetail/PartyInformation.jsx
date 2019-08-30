@@ -145,9 +145,7 @@ const PartyInformation = connect(
                     AddressDisplay(
                       {
                         ...practitioner,
-                        address1: practitioner.addressLine1,
-                        address2: practitioner.addressLine2,
-                        address3: practitioner.addressLine3,
+                        ...practitioner.contact,
                       },
                       constants,
                       {
@@ -193,9 +191,7 @@ const PartyInformation = connect(
                     AddressDisplay(
                       {
                         ...respondent,
-                        address1: respondent.addressLine1,
-                        address2: respondent.addressLine2,
-                        address3: respondent.addressLine3,
+                        ...respondent.contact,
                       },
                       constants,
                       {

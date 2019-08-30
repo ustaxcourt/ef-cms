@@ -102,7 +102,7 @@ exports.joiValidationDecorator = function(
   entityConstructor,
   schema,
   customValidate,
-  errorToMessageMap,
+  errorToMessageMap = {},
 ) {
   entityConstructor.prototype.getErrorToMessageMap = function() {
     return errorToMessageMap;

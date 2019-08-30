@@ -35,7 +35,12 @@ export const IndividualWorkQueueBatched = connect(
               <tr>
                 <td aria-hidden="true" className="focus-toggle" />
                 <td className="message-queue-row">
-                  <span className="no-wrap">{item.docketNumberWithSuffix}</span>
+                  <a
+                    className="no-wrap"
+                    href={`/case-detail/${item.docketNumber}`}
+                  >
+                    {item.docketNumberWithSuffix}
+                  </a>
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>

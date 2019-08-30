@@ -160,10 +160,17 @@
     "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "practitioner",
-    "addressLine1": "123 Main Street",
-    "addressLine2": "Los Angeles, CA 98089",
     "barNumber": "PT1234",
-    "phone": "111-111-1111"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -181,10 +188,17 @@
     "pk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "email": "practitioner1",
-    "addressLine1": "123 Main Street",
-    "addressLine2": "Los Angeles, CA 98089",
     "barNumber": "PT5432",
-    "phone": "111-111-1111"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -202,10 +216,17 @@
     "pk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "email": "practitioner2",
-    "addressLine1": "234 South Street",
-    "addressLine2": "Denver, CO 87493",
     "barNumber": "GL1111",
-    "phone": "222-222-2222"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
@@ -223,10 +244,17 @@
     "pk": "9f25dc2c-764a-435c-86dd-323e53634537",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
     "email": "practitioner3",
-    "addressLine1": "87676 West Street",
-    "addressLine2": "Nashville, TN 37055",
     "barNumber": "SC2222",
-    "phone": "333-333-3333"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "9f25dc2c-764a-435c-86dd-323e53634537",
@@ -244,10 +272,17 @@
     "pk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "email": "practitioner4",
-    "addressLine1": "135 Bob Street",
-    "addressLine2": "Oakland, CA 91839",
     "barNumber": "RA3333",
-    "phone": "444-444-4444"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
@@ -265,10 +300,17 @@
     "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "respondent",
-    "addressLine1": "123 Main Street",
-    "addressLine2": "Los Angeles, CA 98089",
     "barNumber": "RT6789",
-    "phone": "111-111-1111"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -281,15 +323,22 @@
   {
     "role": "respondent",
     "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "name": "Test Respondent",
+    "name": "Test Respondent1",
     "section": "respondent",
     "pk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "email": "respondent1",
-    "addressLine1": "123 Main Street",
-    "addressLine2": "Los Angeles, CA 98089",
     "barNumber": "RT0987",
-    "phone": "111-111-1111"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
@@ -307,10 +356,17 @@
     "pk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "email": "respondent2",
-    "addressLine1": "3983 Feathers Hooves Drive",
-    "addressLine2": "Hicksville, NY 11612",
     "barNumber": "WN7777",
-    "phone": "631-719-1496"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
@@ -328,10 +384,17 @@
     "pk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "email": "respondent3",
-    "addressLine1": "4248 Bailey Drive",
-    "addressLine2": "Shellsburg, IA 52332",
     "barNumber": "MS8888",
-    "phone": "319-436-9050"
+    "contact": {
+      "address1": "234 Main St",
+      "address2": "Apartment 4",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    }
   },
   {
     "sk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
@@ -349,8 +412,8 @@
     "pk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "email": "respondent4",
-    "addressLine1": "3202 Elk Avenue",
-    "addressLine2": "Hanover, MI 49241",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
     "barNumber": "LJ9999",
     "phone": "517-563-1536"
   },
@@ -370,8 +433,8 @@
     "pk": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "taxpayer",
-    "addressLine1": "3202 Elk Avenue",
-    "addressLine2": "Hanover, MI 49241",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
     "phone": "517-563-1536"
   }
 ]
