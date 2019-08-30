@@ -3,6 +3,7 @@ const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
 const { WorkItem } = require('../WorkItem');
@@ -969,10 +970,78 @@ describe('Case entity', () => {
         ...MOCK_CASE,
       });
       myCase.setAsCalendared({
+        judge: {
+          name: 'Judge Judy',
+        },
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+    });
+  });
+
+  describe('closeCase', () => {
+    it('should update the status of the case to closed', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.closeCase();
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.closed);
+    });
+  });
+
+  describe('recallFromIRSHoldingQueue', () => {
+    it('should update the status of the case to recalled', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.recallFromIRSHoldingQueue();
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.recalled);
+    });
+  });
+
+  describe('getDocumentById', () => {
+    it('should get the document by an Id', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      const result = myCase.getDocumentById({
+        documentId: MOCK_DOCUMENTS[0].documentId,
+      });
+      expect(result.documentId).toEqual(MOCK_DOCUMENTS[0].documentId);
+    });
+  });
+
+  describe('stripLeadingZeros', () => {
+    it('should remove leading zeros', () => {
+      const result = Case.stripLeadingZeros('000101-19');
+      expect(result).toEqual('101-19');
+    });
+  });
+
+  describe('addDocumentWithoutDocketRecord', () => {
+    it('should add the document without a docket record change', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      const docketRecordLength = myCase.docketRecord.length;
+      myCase.addDocumentWithoutDocketRecord({
+        documentId: 'mock-document-id',
+      });
+      expect(myCase.docketRecord.length).toEqual(docketRecordLength);
+    });
+  });
+
+  describe('updateDocument', () => {
+    it('should update the document', () => {
+      const myCase = new Case({
+        ...MOCK_CASE,
+      });
+      myCase.updateDocument({
+        documentId: MOCK_DOCUMENTS[0].documentId,
+        processingStatus: 'success',
+      });
+      expect(myCase.documents[0].processingStatus).toEqual('success');
     });
   });
 });
