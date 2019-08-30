@@ -31,7 +31,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
       .prepareDateFromString(filterEndDate);
 
     formattedFilterDateHeader +=
-      ' - ' +
+      ' – ' +
       applicationContext
         .getUtilities()
         .formatDateString(filterEndDate, 'MMMM D, YYYY');

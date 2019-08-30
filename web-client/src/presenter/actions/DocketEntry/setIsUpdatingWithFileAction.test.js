@@ -53,7 +53,7 @@ describe('setIsUpdatingWithFileAction', () => {
     expect(result.state.isUpdatingWithFile).toBeFalsy();
   });
 
-  it('should set store.isUpdatingWithFile to false if a file is NOT being attached to a  previously-created docket entry', async () => {
+  it('should set store.isUpdatingWithFile to false if a file is NOT being attached to a previously-created docket entry', async () => {
     const result = await runAction(setIsUpdatingWithFileAction, {
       modules: {
         presenter,
