@@ -61,13 +61,14 @@ export const PrimaryContactEdit = connect(
           </Hint>
 
           <div className="blue-container">
-            <span className="label">Contact Name</span>
-
-            <p>
-              {caseDetailHelper.showCaseNameForPrimary
-                ? formattedCaseDetail.caseName
-                : caseDetail.contactPrimary.name}
-            </p>
+            <div className="usa-form-group">
+              <p className="usa-label">Contact Name</p>
+              <p className="margin-top-0">
+                {caseDetailHelper.showCaseNameForPrimary
+                  ? formattedCaseDetail.caseName
+                  : caseDetail.contactPrimary.name}
+              </p>
+            </div>
 
             {primaryContactEditHelper.showInCareOf && (
               <div
@@ -131,7 +132,7 @@ export const PrimaryContactEdit = connect(
             )}
             <div
               className={
-                'usa-form-group ' +
+                'usa-form-group margin-bottom-0 ' +
                 (validationErrors &&
                 validationErrors.contactPrimary &&
                 validationErrors.contactPrimary.phone
