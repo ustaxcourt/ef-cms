@@ -51,10 +51,13 @@ export const UserContactEdit = connect(
           </Hint>
 
           <div className="blue-container">
-            <span className="label">Contact Name</span>
-            <p>
-              {user.name} ({user.barNumber})
-            </p>
+            <div className="usa-form-group">
+              <p className="usa-label">Contact Name</p>
+              <p className="margin-top-0">
+                {user.name} ({user.barNumber})
+              </p>
+            </div>
+
             <Country
               bind={bind}
               type={type}
@@ -79,7 +82,7 @@ export const UserContactEdit = connect(
             )}
             <div
               className={
-                'usa-form-group ' +
+                'usa-form-group margin-bottom-0 ' +
                 (validationErrors &&
                 validationErrors.contact &&
                 validationErrors.contact.phone
