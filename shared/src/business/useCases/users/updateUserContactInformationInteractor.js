@@ -97,9 +97,10 @@ exports.updateUserContactInformationInteractor = async ({
         .generateChangeOfAddressTemplate({
           caption: caseDetail.caseCaption,
           captionPostfix: caseDetail.caseCaptionPostfix,
-          docketNumber: caseDetail.docketNumber,
+          docketNumberWithSuffix:
+            caseDetail.docketNumber + caseDetail.docketNumberSuffix,
           documentTitle: documentType.title,
-          name: contactInfo.name,
+          name: user.name,
           newData,
           oldData,
         });
@@ -110,14 +111,13 @@ exports.updateUserContactInformationInteractor = async ({
           applicationContext,
           contentHtml: pdfContentHtml,
           displayHeaderFooter: false,
-          docketNumber: caseEntity.docketNumber,
-          headerHtml: null,
+          docketNumber: caseDetail.docketNumber,
         });
 
       const newDocumentId = applicationContext.getUniqueId();
 
       const changeOfAddressDocument = new Document({
-        additionalInfo2: `for ${contactInfo.name}`,
+        additionalInfo2: `for ${user.name}`,
         caseId: caseEntity.caseId,
         documentId: newDocumentId,
         documentType: documentType.title,
