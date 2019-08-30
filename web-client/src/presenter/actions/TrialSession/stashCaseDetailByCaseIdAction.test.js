@@ -12,10 +12,10 @@ describe('stashCaseDetailByCaseIdAction', () => {
         caseDetail: { caseId: 'okay' },
       },
       state: {
-        caseDetailHelper: {
+        caseDetailHelper: {},
+        formattedCaseDetail: {
           caseId: 'okay',
         },
-        formattedCaseDetail: {},
       },
     });
 
