@@ -12,10 +12,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
+ * @param {string} providers.caseDetails the case details of the calendared cases
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
+  caseDetails,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -40,29 +42,44 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   let s3Ids = [];
   let fileNames = [];
+  let extraFiles = [];
+  let extraFileNames = [];
+
+  const trialDate = formatDateString(
+    trialSessionDetails.startDate,
+    'MMMM_D_YYYY',
+  );
+
+  const trialLocation = trialSessionDetails.trialLocation
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
+
+  const zipName = sanitize(`${trialDate}_${trialLocation}.zip`);
 
   sessionCases.forEach(caseToBatch => {
     caseToBatch.documents.forEach(document => {
-      if (document.documentType === 'Petition') {
-        s3Ids.push(document.documentId);
-        fileNames.push(
-          `${caseToBatch.docketNumber}/${document.documentType}.pdf`,
-        );
-      }
+      s3Ids.push(document.documentId);
+      fileNames.push(
+        `${caseToBatch.docketNumber}/${document.documentType}.pdf`,
+      );
     });
   });
 
-  const zipName = sanitize(
-    `${formatDateString(
-      trialSessionDetails.startDate,
-      'MMMM_D_YYYY',
-    )}_${trialSessionDetails.trialLocation
-      .replace(/\s/g, '_')
-      .replace(/,/g, '')}.zip`,
-  );
+  for (let index = 0; index < sessionCases.length; index++) {
+    let { caseId, docketNumber } = sessionCases[index];
+    extraFiles.push(
+      applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseDetail: caseDetails[caseId],
+      }),
+    );
+    extraFileNames.push(`${docketNumber}/Docket Record.pdf`);
+  }
 
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
+    extraFileNames,
+    extraFiles,
     fileNames,
     s3Ids,
     zipName,

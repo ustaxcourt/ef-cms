@@ -45,6 +45,7 @@ import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { downloadBatchOfTrialSessionSequence } from './sequences/downloadBatchOfTrialSessionSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
@@ -291,6 +292,7 @@ export const presenter = {
     dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
+    downloadBatchOfTrialSessionSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
     fetchUserNotificationsSequence,
