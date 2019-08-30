@@ -23,8 +23,8 @@ function Practitioner(rawUser) {
   if (rawUser.contact) {
     this.contact = {
       address1: rawUser.contact.address1,
-      address2: rawUser.contact.address2 || undefined,
-      address3: rawUser.contact.address3 || undefined,
+      address2: rawUser.contact.address2 ? rawUser.contact.address2 : null,
+      address3: rawUser.contact.address3 ? rawUser.contact.address3 : null,
       city: rawUser.contact.city,
       country: rawUser.contact.country,
       countryType: rawUser.contact.countryType,
@@ -43,8 +43,14 @@ joiValidationDecorator(
       .object()
       .keys({
         address1: joi.string().required(),
-        address2: joi.string().optional(),
-        address3: joi.string().optional(),
+        address2: joi
+          .string()
+          .optional()
+          .allow(null),
+        address3: joi
+          .string()
+          .optional()
+          .allow(null),
         city: joi.string().required(),
         country: joi.when('countryType', {
           is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,

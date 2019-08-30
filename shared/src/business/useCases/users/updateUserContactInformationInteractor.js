@@ -45,7 +45,7 @@ exports.updateUserContactInformationInteractor = async ({
     applicationContext,
     user: {
       ...user,
-      contact: contactInfo,
+      contact: { ...contactInfo },
     },
   });
 
@@ -60,24 +60,24 @@ exports.updateUserContactInformationInteractor = async ({
     userCases.map(async userCase => {
       let oldData;
       const newData = contactInfo;
-      const caseEntity = new Case(userCase);
 
-      const practitioner = caseEntity.practitioners.find(
+      const practitioner = userCase.practitioners.find(
         practitioner => practitioner.userId === userId,
       );
       if (practitioner) {
         oldData = clone(practitioner.contact);
-        Object.assign(practitioner.contact, contactInfo);
+        practitioner.contact = contactInfo;
       }
 
-      const respondent = caseEntity.respondents.find(
+      const respondent = userCase.respondents.find(
         respondent => respondent.userId === userId,
       );
       if (respondent) {
         oldData = clone(respondent.contact);
-        Object.assign(respondent.contact, contactInfo);
+        respondent.contact = contactInfo;
       }
 
+      const caseEntity = new Case(userCase);
       const rawCase = caseEntity.validate().toRawObject();
 
       const caseDetail = {
