@@ -15,11 +15,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
+ * @param {string} providers.caseDetails the case details of the calendared cases
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
-  caseHtml,
+  caseDetails,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -70,10 +71,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
   for (let index = 0; index < sessionCases.length; index++) {
     let { caseId, docketNumber } = sessionCases[index];
     extraFiles.push(
-      generatePdfFromHtml({
+      applicationContext.getUseCases().generateDocketRecordPdfInteractor({
         applicationContext,
-        contentHtml: caseHtml[caseId],
-        docketNumber,
+        caseDetail: caseDetails[caseId],
       }),
     );
     extraFileNames.push(`${docketNumber}/Docket Record.pdf`);

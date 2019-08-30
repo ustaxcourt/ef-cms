@@ -10,13 +10,13 @@ export const downloadBatchOfTrialSessionAction = async ({
   applicationContext,
   props,
 }) => {
-  const { caseHtml, trialSessionId } = props;
+  const { caseDetails, trialSessionId } = props;
 
   const result = await applicationContext
     .getUseCases()
     .batchDownloadTrialSessionInteractor({
       applicationContext,
-      caseHtml,
+      caseDetails,
       trialSessionId,
     });
 
