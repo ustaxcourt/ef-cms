@@ -61,7 +61,8 @@ exports.updateUserContactInformationInteractor = async ({
       let oldData;
       const newData = contactInfo;
 
-      const practitioner = userCase.practitioners.find(
+      let caseEntity = new Case(userCase);
+      const practitioner = caseEntity.practitioners.find(
         practitioner => practitioner.userId === userId,
       );
       if (practitioner) {
@@ -69,7 +70,7 @@ exports.updateUserContactInformationInteractor = async ({
         practitioner.contact = contactInfo;
       }
 
-      const respondent = userCase.respondents.find(
+      const respondent = caseEntity.respondents.find(
         respondent => respondent.userId === userId,
       );
       if (respondent) {
@@ -77,7 +78,8 @@ exports.updateUserContactInformationInteractor = async ({
         respondent.contact = contactInfo;
       }
 
-      const caseEntity = new Case(userCase);
+      // we do this again so that it will convert '' to null
+      caseEntity = new Case(caseEntity);
       const rawCase = caseEntity.validate().toRawObject();
 
       const caseDetail = {
@@ -101,7 +103,7 @@ exports.updateUserContactInformationInteractor = async ({
             caseDetail.docketNumber
           }${caseDetail.docketNumberSuffix || ''}`,
           documentTitle: documentType.title,
-          name: user.name,
+          name: `${user.name} (${user.barNumber})`,
           newData,
           oldData,
         });
