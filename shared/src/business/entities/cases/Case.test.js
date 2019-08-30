@@ -3,6 +3,8 @@ const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { Practitioner } = require('../Practitioner');
+const { Respondent } = require('../Respondent');
 const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
@@ -590,11 +592,11 @@ describe('Case entity', () => {
   describe('attachRespondent', () => {
     it('adds the user to the respondents', () => {
       const caseToVerify = new Case({});
-      caseToVerify.attachRespondent({
-        user: {
+      caseToVerify.attachRespondent(
+        new Respondent({
           userId: 'respondent',
-        },
-      });
+        }),
+      );
       expect(caseToVerify.respondents).not.toBeNull();
       expect(caseToVerify.respondents[0].userId).toEqual('respondent');
     });
@@ -603,11 +605,11 @@ describe('Case entity', () => {
   describe('attachPractitioner', () => {
     it('adds the user to the practitioners', () => {
       const caseToVerify = new Case({});
-      caseToVerify.attachPractitioner({
-        user: {
+      caseToVerify.attachPractitioner(
+        new Practitioner({
           userId: 'practitioner',
-        },
-      });
+        }),
+      );
       expect(caseToVerify.practitioners).not.toBeNull();
       expect(caseToVerify.practitioners[0].userId).toEqual('practitioner');
     });

@@ -87,6 +87,16 @@ describe('submitCaseAssociationRequest', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
+          contact: {
+            address1: '234 Main St',
+            address2: 'Apartment 4',
+            address3: 'Under the stairs',
+            city: 'Chicago',
+            countryType: 'domestic',
+            phone: '+1 (555) 555-5555',
+            postalCode: '61234',
+            state: 'IL',
+          },
           name: 'Olivia Jade',
           role: 'practitioner',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

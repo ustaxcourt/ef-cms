@@ -16,6 +16,8 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
+const { Practitioner } = require('../Practitioner');
+const { Respondent } = require('../Respondent');
 
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
@@ -173,11 +175,9 @@ function Case(rawCase) {
   this.partyType = rawCase.partyType;
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
-  this.practitioners = rawCase.practitioners;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
-  this.respondents = rawCase.respondents || [];
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialJudge = rawCase.trialJudge;
@@ -202,6 +202,22 @@ function Case(rawCase) {
     this.documents = [];
   }
 
+  if (Array.isArray(rawCase.practitioners)) {
+    this.practitioners = rawCase.practitioners.map(
+      practitioner => new Practitioner(practitioner),
+    );
+  } else {
+    this.practitioners = [];
+  }
+
+  if (Array.isArray(rawCase.respondents)) {
+    this.respondents = rawCase.respondents.map(
+      respondent => new Respondent(respondent),
+    );
+  } else {
+    this.respondents = [];
+  }
+
   this.documents.forEach(document => {
     document.workItems.forEach(workItem => {
       workItem.docketNumberSuffix = this.docketNumberSuffix;
@@ -214,10 +230,6 @@ function Case(rawCase) {
     );
   } else {
     this.docketRecord = [];
-  }
-
-  if (!Array.isArray(this.practitioners)) {
-    this.practitioners = [];
   }
 
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -345,7 +357,9 @@ joiValidationDecorator(
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
-      DocketRecord.validateCollection(this.docketRecord)
+      DocketRecord.validateCollection(this.docketRecord) &&
+      Respondent.validateCollection(this.respondents) &&
+      Practitioner.validateCollection(this.practitioners)
     );
   },
   Case.COMMON_ERROR_MESSAGES,
@@ -426,21 +440,11 @@ Case.getCaseCaptionNames = function(caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-Case.prototype.attachRespondent = function({ user }) {
-  const respondent = {
-    ...user,
-    respondentId: user.userId,
-  };
-
+Case.prototype.attachRespondent = function(respondent) {
   this.respondents.push(respondent);
 };
 
-Case.prototype.attachPractitioner = function({ user }) {
-  const practitioner = {
-    ...user,
-    practitionerId: user.userId,
-  };
-
+Case.prototype.attachPractitioner = function(practitioner) {
   this.practitioners.push(practitioner);
 };
 
