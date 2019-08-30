@@ -9,20 +9,14 @@
  */
 exports.createDocketRecordPdfInteractor = ({
   applicationContext,
-  contentHtml,
-  displayHeaderFooter = true,
-  docketNumber,
-  headerHtml,
+  caseDetail,
 }) => {
   return applicationContext
     .getHttpClient()
     .post(
-      `${applicationContext.getBaseUrl()}/api/generate-pdf-from-html`,
+      `${applicationContext.getBaseUrl()}/api/docket-record-pdf`,
       {
-        contentHtml: contentHtml,
-        displayHeaderFooter,
-        docketNumber,
-        headerHtml,
+        caseDetail,
       },
       {
         headers: {

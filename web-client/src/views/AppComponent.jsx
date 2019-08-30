@@ -36,6 +36,7 @@ import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
+import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -77,6 +78,7 @@ const pages = {
   TrialSessionDetail,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UserContactEdit,
 };
 
 /**

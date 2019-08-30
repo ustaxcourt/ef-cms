@@ -90,6 +90,7 @@ Document.INITIAL_DOCUMENT_TYPES = {
     eventCode: 'P',
   },
   requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
   },

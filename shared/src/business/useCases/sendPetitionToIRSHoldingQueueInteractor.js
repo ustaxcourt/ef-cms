@@ -80,6 +80,10 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity
+      .updateCaseTitleDocketRecord()
+      .updateDocketNumberRecord()
+      .validate()
+      .toRawObject(),
   });
 };
