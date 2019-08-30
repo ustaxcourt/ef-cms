@@ -299,15 +299,21 @@
       {
         "role": "respondent",
         "barNumber": "RT6789",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Respondent",
-        "address1": "123 Main Street",
         "section": "respondent",
-        "address2": "Los Angeles, CA 98089",
         "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "respondentId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "respondent"
       }
     ],
@@ -316,13 +322,20 @@
         "role": "practitioner",
         "section": "practitioner",
         "representingPrimary": true,
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
-        "phone": "111-111-1111",
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
-        "address1": "123 Main Street",
-        "address2": "Los Angeles, CA 98089",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "practitioner"
       }
@@ -925,14 +938,21 @@
       {
         "role": "practitioner",
         "section": "practitioner",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "representingPrimary": true,
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
-        "phone": "111-111-1111",
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
-        "address1": "123 Main Street",
-        "address2": "Los Angeles, CA 98089",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "practitioner"
       }
@@ -1094,15 +1114,21 @@
       {
         "role": "respondent",
         "barNumber": "RT6789",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Respondent",
-        "address1": "123 Main Street",
         "section": "respondent",
-        "address2": "Los Angeles, CA 98089",
         "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-        "respondentId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "respondent"
       }
     ],
@@ -1111,13 +1137,20 @@
         "role": "practitioner",
         "section": "practitioner",
         "representingPrimary": true,
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
-        "phone": "111-111-1111",
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
-        "address1": "123 Main Street",
-        "address2": "Los Angeles, CA 98089",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "practitioner"
       }
@@ -1297,12 +1330,19 @@
       {
         "role": "respondent",
         "barNumber": "RT6789",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Respondent",
-        "address1": "123 Main Street",
         "section": "respondent",
-        "address2": "Los Angeles, CA 98089",
         "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "respondentId": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -1316,11 +1356,18 @@
         "representingPrimary": true,
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
-        "address1": "123 Main Street",
-        "address2": "Los Angeles, CA 98089",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "practitioner"
       }
@@ -1502,12 +1549,19 @@
       {
         "role": "respondent",
         "barNumber": "RT6789",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Respondent",
-        "address1": "123 Main Street",
         "section": "respondent",
-        "address2": "Los Angeles, CA 98089",
         "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
         "respondentId": "5805d1ab-18d0-43ec-bafb-654e83405416",
@@ -1521,11 +1575,18 @@
         "representingPrimary": true,
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "barNumber": "PT1234",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
-        "address1": "123 Main Street",
-        "address2": "Los Angeles, CA 98089",
         "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "email": "practitioner"
       }

@@ -66,16 +66,19 @@ exports.updateUserContactInformationInteractor = async ({
         practitioner => practitioner.userId === userId,
       );
       if (practitioner) {
-        oldData = clone(practitioner);
-        Object.assign(practitioner, contactInfo);
+        oldData = clone(practitioner.contact);
+        Object.assign(practitioner.contact, contactInfo);
       }
 
+      console.log('respondents', caseEntity.respondents);
+      console.log('userId', userId);
       const respondent = caseEntity.respondents.find(
         respondent => respondent.userId === userId,
       );
+      console.log('respondent', respondent);
       if (respondent) {
-        oldData = clone(respondent);
-        Object.assign(respondent, contactInfo);
+        oldData = clone(respondent.contact);
+        Object.assign(respondent.contact, contactInfo);
       }
 
       const rawCase = caseEntity.validate().toRawObject();

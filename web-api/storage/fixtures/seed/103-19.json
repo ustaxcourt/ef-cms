@@ -225,6 +225,16 @@
         "name": "Test Respondent",
         "custom:role": "respondent",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "iat": 1551480838,
         "respondentId": "respondent",
         "email": "respondent",
@@ -751,6 +761,16 @@
         "name": "Test Respondent",
         "custom:role": "respondent",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "iat": 1551480838,
         "respondentId": "respondent",
         "email": "respondent",
