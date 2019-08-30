@@ -3,7 +3,9 @@ const {
   BATCH_DOWNLOAD_TRIAL_SESSION,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { formatDateString } = require('../../../business/utilities/DateHandler');
+const { padStart } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -33,7 +35,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
       trialSessionId,
     });
 
-  const sessionCases = await applicationContext
+  let sessionCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
@@ -47,33 +49,55 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
-    'MMMM_D_YYYY',
+    'MMMM D, YYYY',
   );
+  const { trialLocation } = trialSessionDetails;
+  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`);
 
-  const trialLocation = trialSessionDetails.trialLocation
-    .replace(/\s/g, '_')
-    .replace(/,/g, '');
+  sessionCases = sessionCases.map(caseToBatch => {
+    const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
+    const caseFolder = `${caseToBatch.docketNumber}, ${caseName}`;
 
-  const zipName = sanitize(`${trialDate}_${trialLocation}.zip`);
+    return {
+      ...caseToBatch,
+      caseName,
+      caseFolder,
+    };
+  });
 
   sessionCases.forEach(caseToBatch => {
-    caseToBatch.documents.forEach(document => {
-      s3Ids.push(document.documentId);
-      fileNames.push(
-        `${caseToBatch.docketNumber}/${document.documentType}.pdf`,
-      );
+    const documentMap = caseToBatch.documents.reduce((acc, document) => {
+      acc[document.documentId] = document;
+      return acc;
+    }, {});
+
+    caseToBatch.docketRecord.forEach(aDocketRecord => {
+      let myDoc;
+      if (
+        aDocketRecord.documentId &&
+        (myDoc = documentMap[aDocketRecord.documentId])
+      ) {
+        const docDate = formatDateString(
+          aDocketRecord.filingDate,
+          'YYYY-MM-DD',
+        );
+        const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
+        const pdfTitle = `${caseToBatch.caseFolder}/${docDate}_${docNum}_${aDocketRecord.description}.pdf`;
+        s3Ids.push(myDoc.documentId);
+        fileNames.push(pdfTitle);
+      }
     });
   });
 
   for (let index = 0; index < sessionCases.length; index++) {
-    let { caseId, docketNumber } = sessionCases[index];
+    let { caseId } = sessionCases[index];
     extraFiles.push(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor({
         applicationContext,
         caseDetail: caseDetails[caseId],
       }),
     );
-    extraFileNames.push(`${docketNumber}/Docket Record.pdf`);
+    extraFileNames.push(`${sessionCases[index].caseFolder}/Docket Record.pdf`);
   }
 
   await applicationContext.getPersistenceGateway().zipDocuments({
