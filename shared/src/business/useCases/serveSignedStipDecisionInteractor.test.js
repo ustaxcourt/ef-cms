@@ -44,12 +44,14 @@ const applicationContext = {
           {
             email: 'practitioner@example.com',
             name: 'Practitioner',
+            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
         respondents: [
           {
             email: 'respondent@example.com',
             name: 'Respondent',
+            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
       }),
