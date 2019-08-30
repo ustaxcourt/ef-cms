@@ -11,7 +11,8 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
   return (
     <React.Fragment>
       <p className="margin-top-0 address-name">
-        {nameOverride || contact.name}
+        {nameOverride || contact.name}{' '}
+        {contact.barNumber && `(${contact.barNumber})`}
         {contact.inCareOf && (
           <span>
             <br />
