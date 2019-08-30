@@ -70,12 +70,9 @@ exports.updateUserContactInformationInteractor = async ({
         Object.assign(practitioner.contact, contactInfo);
       }
 
-      console.log('respondents', caseEntity.respondents);
-      console.log('userId', userId);
       const respondent = caseEntity.respondents.find(
         respondent => respondent.userId === userId,
       );
-      console.log('respondent', respondent);
       if (respondent) {
         oldData = clone(respondent.contact);
         Object.assign(respondent.contact, contactInfo);

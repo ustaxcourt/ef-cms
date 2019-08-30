@@ -42,6 +42,7 @@ describe('updateUserContactInformationInteractor', () => {
                 ...MOCK_CASE,
                 respondents: [
                   {
+                    contact: {},
                     userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
                   },
                 ],
@@ -92,7 +93,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       respondents: [
         {
-          ...contactInfo,
+          contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
@@ -115,6 +116,7 @@ describe('updateUserContactInformationInteractor', () => {
                 ...MOCK_CASE,
                 practitioners: [
                   {
+                    contact: {},
                     userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
                   },
                 ],
@@ -165,7 +167,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       practitioners: [
         {
-          ...contactInfo,
+          contact: contactInfo,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         },
       ],
