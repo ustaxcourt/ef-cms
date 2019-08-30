@@ -35,6 +35,7 @@ export const IRSNotice = connect(
           </legend>
           <div className="usa-radio usa-radio__inline">
             <input
+              aria-describedby="irs-verified-notice-radios"
               checked={caseDetail.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
@@ -59,6 +60,7 @@ export const IRSNotice = connect(
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
+              aria-describedby="irs-verified-notice-radios"
               checked={caseDetail.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"

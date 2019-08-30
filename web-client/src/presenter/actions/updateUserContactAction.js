@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {object} alertSuccess, caseId, tab
  */
 export const updateUserContactAction = async ({ applicationContext, get }) => {
-  const user = get(state.user);
+  const userId = get(state.user.userId);
   const contactInfo = get(state.user.contact);
 
   await applicationContext
@@ -17,7 +17,7 @@ export const updateUserContactAction = async ({ applicationContext, get }) => {
     .updateUserContactInformationInteractor({
       applicationContext,
       contactInfo,
-      userId: user.userId,
+      userId,
     });
 
   return {
