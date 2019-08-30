@@ -20,7 +20,7 @@ describe('trial session helper computed', () => {
     expect(result).toBeDefined();
   });
 
-  it('does not show switch-links in header if not assigned judge', () => {
+  it('does not show switch-links in header if not the assigned judge', () => {
     const result = runCompute(trialSessionHeaderHelper, {
       state: {
         currentPage: 'TrialSessionDetail',

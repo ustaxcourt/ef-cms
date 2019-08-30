@@ -5,6 +5,7 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
@@ -126,9 +127,20 @@ exports.createCaseFromPaperInteractor = async ({
   );
 
   if (requestForPlaceOfTrialFileId) {
+    let {
+      documentTitle,
+    } = Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
+    if (caseToAdd.preferredTrialCity) {
+      documentTitle = replaceBracketed(
+        documentTitle,
+        caseToAdd.preferredTrialCity,
+      );
+    }
+
     const requestForPlaceOfTrialDocumentEntity = new Document({
       createdAt: caseToAdd.receivedAt,
       documentId: requestForPlaceOfTrialFileId,
+      documentTitle,
       documentType:
         Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
       eventCode:

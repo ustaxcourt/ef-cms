@@ -1,5 +1,5 @@
 import { Text } from '../../ustc-ui/Text/Text';
-import { TrialCityOptions } from './TrialCityOptions';
+import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';

@@ -645,7 +645,6 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Innocent Spouse",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Saepe proident enim",
       "address2": "Nostrud sint lorem u",
@@ -910,7 +909,6 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Innocent Spouse",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Saepe proident enim",
       "address2": "Nostrud sint lorem u",

@@ -62,7 +62,6 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Interest Abatement",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Aliquam molestias fu",
       "address2": "Est asperiores ullam",
@@ -89,8 +88,16 @@
     "practitioners": [
       {
         "role": "practitioner",
-        "address": "123 Main Street Los Angeles, CA 98089",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
         "section": "practitioner",

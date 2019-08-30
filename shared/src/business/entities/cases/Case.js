@@ -14,9 +14,10 @@ const {
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
-const { find, includes, uniqBy } = require('lodash');
+const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
-const { YearAmount } = require('../YearAmount');
+const { Practitioner } = require('../Practitioner');
+const { Respondent } = require('../Respondent');
 
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
@@ -142,13 +143,6 @@ Case.COMMON_ERROR_MESSAGES = {
     },
     'Your STIN file size is empty.',
   ],
-  yearAmounts: [
-    {
-      contains: 'contains a duplicate',
-      message: 'Duplicate years are not allowed',
-    },
-    'A valid year and amount are required.',
-  ],
 };
 
 Case.validationName = 'Case';
@@ -181,11 +175,9 @@ function Case(rawCase) {
   this.partyType = rawCase.partyType;
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
-  this.practitioners = rawCase.practitioners;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
-  this.respondents = rawCase.respondents || [];
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialJudge = rawCase.trialJudge;
@@ -204,14 +196,26 @@ function Case(rawCase) {
     this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
 
-  this.yearAmounts = (rawCase.yearAmounts || []).map(
-    yearAmount => new YearAmount(yearAmount),
-  );
-
   if (Array.isArray(rawCase.documents)) {
     this.documents = rawCase.documents.map(document => new Document(document));
   } else {
     this.documents = [];
+  }
+
+  if (Array.isArray(rawCase.practitioners)) {
+    this.practitioners = rawCase.practitioners.map(
+      practitioner => new Practitioner(practitioner),
+    );
+  } else {
+    this.practitioners = [];
+  }
+
+  if (Array.isArray(rawCase.respondents)) {
+    this.respondents = rawCase.respondents.map(
+      respondent => new Respondent(respondent),
+    );
+  } else {
+    this.respondents = [];
   }
 
   this.documents.forEach(document => {
@@ -228,16 +232,6 @@ function Case(rawCase) {
     this.docketRecord = [];
   }
 
-  if (!Array.isArray(this.practitioners)) {
-    this.practitioners = [];
-  }
-
-  const isNewCase = this.status === Case.STATUS_TYPES.new;
-
-  if (!isNewCase) {
-    this.updateDocketNumberRecord();
-  }
-
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -246,6 +240,16 @@ function Case(rawCase) {
   this.orderForOds = rawCase.orderForOds || false;
   this.orderForRatification = rawCase.orderForRatification || false;
   this.orderToShowCause = rawCase.orderToShowCause || false;
+  this.orderToChangeDesignatedPlaceOfTrial =
+    rawCase.orderToChangeDesignatedPlaceOfTrial || false;
+
+  this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
+    {
+      isPaper: rawCase.isPaper,
+      preferredTrialCity: rawCase.preferredTrialCity,
+      rawValue: rawCase.orderDesignatingPlaceOfTrial,
+    },
+  );
 }
 
 joiValidationDecorator(
@@ -348,18 +352,14 @@ joiValidationDecorator(
     trialTime: joi.string().optional(),
     userId: joi.string().optional(),
     workItems: joi.array().optional(),
-    yearAmounts: joi
-      .array()
-      .unique((a, b) => a.year === b.year)
-      .optional(),
   }),
   function() {
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
-      YearAmount.validateCollection(this.yearAmounts) &&
-      Case.areYearsUnique(this.yearAmounts) &&
-      DocketRecord.validateCollection(this.docketRecord)
+      DocketRecord.validateCollection(this.docketRecord) &&
+      Respondent.validateCollection(this.respondents) &&
+      Practitioner.validateCollection(this.practitioners)
     );
   },
   Case.COMMON_ERROR_MESSAGES,
@@ -440,21 +440,11 @@ Case.getCaseCaptionNames = function(caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-Case.prototype.attachRespondent = function({ user }) {
-  const respondent = {
-    ...user,
-    respondentId: user.userId,
-  };
-
+Case.prototype.attachRespondent = function(respondent) {
   this.respondents.push(respondent);
 };
 
-Case.prototype.attachPractitioner = function({ user }) {
-  const practitioner = {
-    ...user,
-    practitionerId: user.userId,
-  };
-
+Case.prototype.attachPractitioner = function(practitioner) {
   this.practitioners.push(practitioner);
 };
 
@@ -549,34 +539,28 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
-  const oldDocketNumber =
+  let lastDocketNumber =
     this.docketNumber +
     (this.initialDocketNumberSuffix !== '_'
       ? this.initialDocketNumberSuffix
       : '');
+
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  let found;
-
-  this.docketRecord = this.docketRecord.reduce((acc, docketRecord) => {
+  this.docketRecord.forEach(docketRecord => {
     const result = docketNumberRegex.exec(docketRecord.description);
     if (result) {
-      const [, , pastChangedDocketNumber] = result;
-
-      if (pastChangedDocketNumber === newDocketNumber) {
-        found = true;
-        acc.push(docketRecord);
-      }
-    } else {
-      acc.push(docketRecord);
+      const [, , changedDocketNumber] = result;
+      lastDocketNumber = changedDocketNumber;
     }
-    return acc;
-  }, []);
+  });
 
-  if (!found && oldDocketNumber != newDocketNumber) {
+  const hasDocketNumberChanged = lastDocketNumber !== newDocketNumber;
+
+  if (hasDocketNumberChanged) {
     this.addDocketRecord(
       new DocketRecord({
-        description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
+        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
         filingDate: createISODateString(),
       }),
     );
@@ -762,15 +746,6 @@ Case.stripLeadingZeros = docketNumber => {
 };
 
 /**
- *
- * @param {Array} yearAmounts the array of year amounts to check
- * @returns {boolean} true if the years in the array are all unique, false otherwise
- */
-Case.areYearsUnique = yearAmounts => {
-  return uniqBy(yearAmounts, 'year').length === yearAmounts.length;
-};
-
-/**
  * getFilingTypes
  *
  * @param {string} userRole - the role of the user logged in
@@ -898,6 +873,27 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = Case.STATUS_TYPES.calendared;
   return this;
+};
+
+/**
+ * getDefaultOrderDesignatingPlaceOfTrialValue
+ *
+ * @returns {boolean} the value of if an order is needed for place of trial.
+ */
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
+  isPaper,
+  preferredTrialCity,
+  rawValue,
+}) {
+  let orderDesignatingPlaceOfTrial;
+  if (rawValue || rawValue === false) {
+    orderDesignatingPlaceOfTrial = rawValue;
+  } else if (isPaper && !preferredTrialCity) {
+    orderDesignatingPlaceOfTrial = true;
+  } else {
+    orderDesignatingPlaceOfTrial = false;
+  }
+  return orderDesignatingPlaceOfTrial;
 };
 
 module.exports = { Case };

@@ -19,7 +19,7 @@ exports.generatePdfFromHtml = async ({
   let result = null;
 
   try {
-    applicationContext.logger.time('Generating Docket Record PDF');
+    applicationContext.logger.time('Generating PDF From HTML');
     const chromium = applicationContext.getChromium();
 
     browser = await chromium.puppeteer.launch({
@@ -75,6 +75,6 @@ exports.generatePdfFromHtml = async ({
       await browser.close();
     }
   }
-  applicationContext.logger.timeEnd('Generating Docket Record PDF');
+  applicationContext.logger.timeEnd('Generating PDF From HTML');
   return result;
 };

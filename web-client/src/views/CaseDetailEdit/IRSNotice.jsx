@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,27 +6,23 @@ import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 
 export const IRSNotice = connect(
   {
-    appendNewYearAmountSequence: sequences.appendNewYearAmountSequence,
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     caseTypes: state.caseTypes,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    removeYearAmountSequence: sequences.removeYearAmountSequence,
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
-    appendNewYearAmountSequence,
     autoSaveCaseSequence,
     caseDetail,
     caseDetailErrors,
     caseTypes,
     form,
     formattedCaseDetail,
-    removeYearAmountSequence,
     setIrsNoticeFalseSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
@@ -40,6 +35,7 @@ export const IRSNotice = connect(
           </legend>
           <div className="usa-radio usa-radio__inline">
             <input
+              aria-describedby="irs-verified-notice-radios"
               checked={caseDetail.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
@@ -64,6 +60,7 @@ export const IRSNotice = connect(
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
+              aria-describedby="irs-verified-notice-radios"
               checked={caseDetail.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"
@@ -97,7 +94,7 @@ export const IRSNotice = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="date-of-notice-legend">
-              Date of Notice
+              Date of Notice <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -189,108 +186,6 @@ export const IRSNotice = connect(
       );
     };
 
-    const renderYearAmounts = () => {
-      return (
-        <React.Fragment>
-          {formattedCaseDetail.yearAmountsFormatted.map((yearAmount, idx) => (
-            <div
-              className={yearAmount.showError ? ' usa-input-error' : ''}
-              key={idx}
-            >
-              <div className="inline-input-year">
-                <label className="usa-label" htmlFor="year">
-                  Year
-                </label>
-                <input
-                  aria-label="IRS Notice Year"
-                  className="usa-input"
-                  id="year"
-                  name="year"
-                  type="number"
-                  value={yearAmount.year || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateCaseValueSequence({
-                      key: `yearAmounts.${idx}.year`,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="inline-input-amount">
-                <label className="usa-label" htmlFor="amount">
-                  Amount
-                </label>
-                <span aria-hidden="true" role="presentation">
-                  $
-                </span>
-                <input
-                  aria-label="IRS Notice Amount in whole dollars"
-                  className="usa-input"
-                  id="amount"
-                  name="amount"
-                  type="text"
-                  value={Number(yearAmount.amount || 0).toLocaleString('en-US')}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateCaseValueSequence({
-                      key: `yearAmounts.${idx}.amount`,
-                      value: e.target.value.replace(/\D/g, ''),
-                    });
-                  }}
-                />
-                <span aria-hidden="true" role="presentation">
-                  .00
-                </span>
-                {idx !== 0 && (
-                  <button
-                    aria-controls="removeYearAmount"
-                    className="usa-button usa-button--unstyled"
-                    type="button"
-                    onClick={e => {
-                      e.preventDefault();
-                      removeYearAmountSequence({
-                        index: idx,
-                      });
-                    }}
-                  >
-                    <span>
-                      <FontAwesomeIcon icon="times-circle" size="sm" />
-                      Remove
-                    </span>
-                  </button>
-                )}
-              </div>
-              {yearAmount.showError && (
-                <div className="usa-error-message">
-                  {yearAmount.errorMessage}
-                </div>
-              )}
-            </div>
-          ))}
-          <button
-            aria-controls="addAnotherYearAmount"
-            className="usa-button usa-button--unstyled"
-            disabled={!formattedCaseDetail.canAddYearAmount}
-            type="button"
-            onClick={e => {
-              e.preventDefault();
-              appendNewYearAmountSequence();
-            }}
-          >
-            <span>
-              <FontAwesomeIcon icon="plus-circle" size="sm" />
-              Add Another
-            </span>
-          </button>
-        </React.Fragment>
-      );
-    };
-
     return (
       <div className="blue-container">
         {renderIrsNoticeRadios()}
@@ -305,12 +200,6 @@ export const IRSNotice = connect(
         />
 
         {formattedCaseDetail.shouldShowIrsNoticeDate && renderIrsNoticeDate()}
-        {formattedCaseDetail.shouldShowYearAmounts && (
-          <React.Fragment>
-            <hr />
-            {renderYearAmounts()}
-          </React.Fragment>
-        )}
       </div>
     );
   },

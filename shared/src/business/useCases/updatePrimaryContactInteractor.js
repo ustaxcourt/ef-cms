@@ -41,8 +41,18 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
+  let caseNameToUse;
   const caseEntity = new Case(caseToUpdate);
-  const caseName = Case.getCaseCaptionNames(caseEntity.caseCaption);
+  const spousePartyTypes = [
+    ContactFactory.PARTY_TYPES.petitionerSpouse,
+    ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
+  ];
+
+  if (spousePartyTypes.includes(caseEntity.partyType)) {
+    caseNameToUse = caseEntity.contactPrimary.name;
+  } else {
+    caseNameToUse = Case.getCaseCaptionNames(caseEntity.caseCaption);
+  }
 
   const documentType = applicationContext
     .getUtilities()
@@ -51,15 +61,21 @@ exports.updatePrimaryContactInteractor = async ({
       oldData: caseEntity.contactPrimary,
     });
 
+  const caseDetail = {
+    ...caseEntity.toRawObject(),
+    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
+  };
+
   const pdfContentHtml = applicationContext
-    .getUtilities()
+    .getTemplateGenerators()
     .generateChangeOfAddressTemplate({
-      caseDetail: {
-        ...caseEntity.toRawObject(),
-        caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
-      },
+      caption: caseDetail.caseCaption,
+      captionPostfix: caseDetail.caseCaptionPostfix,
+      docketNumberWithSuffix: `${
+        caseDetail.docketNumber
+      }${caseDetail.docketNumberSuffix || ''}`,
       documentTitle: documentType.title,
-      name: caseName,
+      name: caseNameToUse,
       newData: contactInfo,
       oldData: caseEntity.contactPrimary,
     });
@@ -82,7 +98,7 @@ exports.updatePrimaryContactInteractor = async ({
   const newDocumentId = applicationContext.getUniqueId();
 
   const changeOfAddressDocument = new Document({
-    additionalInfo2: `for ${caseName}`,
+    additionalInfo2: `for ${caseNameToUse}`,
     caseId,
     documentId: newDocumentId,
     documentType: documentType.title,

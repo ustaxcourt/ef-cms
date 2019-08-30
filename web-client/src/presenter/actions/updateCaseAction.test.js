@@ -19,46 +19,6 @@ presenter.providers.applicationContext = {
 };
 
 describe('updateCaseAction', () => {
-  it('should filter the year amounts that do not have values', async () => {
-    await runAction(updateCaseAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          ...MOCK_CASE,
-          yearAmounts: [
-            {
-              amount: '',
-              year: '',
-            },
-            {
-              amount: '',
-              year: '2001',
-            },
-            {
-              amount: '1000',
-              year: '',
-            },
-            {
-              amount: '1000',
-              year: '2002',
-            },
-          ],
-        },
-        constants: { STATUS_TYPES: Case.STATUS_TYPES },
-      },
-    });
-    expect(updateCaseStub.getCall(0).args[0].caseToUpdate).toMatchObject({
-      yearAmounts: [
-        { amount: '', year: '2001' },
-        { amount: '1000', year: '' },
-        { amount: '1000', year: '2002' },
-      ],
-    });
-  });
-
   it('should call the updateCaseTrialSortTags use case if case status is ready for trial', async () => {
     const caseDetail = {
       ...MOCK_CASE,
