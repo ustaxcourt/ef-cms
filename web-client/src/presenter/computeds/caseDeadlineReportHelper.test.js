@@ -94,7 +94,7 @@ describe('caseDeadlineReportHelper', () => {
       },
     ]);
     expect(result.formattedFilterDateHeader).toEqual(
-      'August 21, 2019 - August 23, 2019',
+      'August 21, 2019 – August 23, 2019',
     );
   });
 
