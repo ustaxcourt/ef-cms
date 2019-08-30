@@ -45,7 +45,7 @@ exports.setTrialSessionCalendarInteractor = async ({
 
   const setTrialSessionCalendar = async caseRecord => {
     const { caseId } = caseRecord;
-    const caseEntity = new Case(caseRecord);
+    const caseEntity = new Case({ applicationContext, rawCase: caseRecord });
 
     caseEntity.setAsCalendared(trialSessionEntity);
     trialSessionEntity.addCaseToCalendar(caseEntity);

@@ -43,7 +43,7 @@ exports.associatePractitionerToCase = async ({
         caseId,
       });
 
-    const caseEntity = new Case(caseToUpdate);
+    const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
 
     caseEntity.attachPractitioner(
       new Practitioner({

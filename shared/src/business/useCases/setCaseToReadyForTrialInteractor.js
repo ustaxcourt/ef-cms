@@ -34,7 +34,7 @@ exports.setCaseToReadyForTrialInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
 
   caseEntity.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
 
