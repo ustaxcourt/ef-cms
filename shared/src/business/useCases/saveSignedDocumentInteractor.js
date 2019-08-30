@@ -27,7 +27,7 @@ exports.saveSignedDocumentInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseRecord);
+  const caseEntity = new Case({ applicationContext, rawCase: caseRecord });
   applicationContext.logger.timeEnd('Fetching the Case');
 
   const originalDocumentEntity = caseEntity.documents.find(

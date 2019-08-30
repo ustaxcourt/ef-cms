@@ -29,7 +29,7 @@ exports.updateCaseTrialSortTagsInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
 
   if (!isAuthorized(user, UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');

@@ -114,7 +114,9 @@ describe('Update case trial sort tags', () => {
           getCaseByCaseId: () =>
             Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
           updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(new Case(caseToUpdate)),
+            Promise.resolve(
+              new Case({ applicationContext, rawCase: caseToUpdate }),
+            ),
         };
       },
     };

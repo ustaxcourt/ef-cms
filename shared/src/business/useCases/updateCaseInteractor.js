@@ -48,7 +48,7 @@ exports.updateCaseInteractor = async ({
     }).secondary.toRawObject();
   }
 
-  const paidCase = new Case(caseToUpdate)
+  const paidCase = new Case({ applicationContext, rawCase: caseToUpdate })
     .markAsPaidByPayGov(caseToUpdate.payGovDate)
     .setRequestForTrialDocketRecord(caseToUpdate.preferredTrialCity)
     .validate()

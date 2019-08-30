@@ -80,9 +80,10 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       });
     }
 
-    const caseEntity = new Case(caseToBatch).markAsSentToIRS(
-      createISODateString(),
-    );
+    const caseEntity = new Case({
+      applicationContext,
+      rawCase: caseToBatch,
+    }).markAsSentToIRS(createISODateString());
 
     const petitionDocument = caseEntity.documents.find(
       document =>

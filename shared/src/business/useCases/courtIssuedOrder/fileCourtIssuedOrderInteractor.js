@@ -34,7 +34,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
 
   if (primaryDocumentFileId && documentMetadata) {
     const documentEntity = new Document({

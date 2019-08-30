@@ -43,7 +43,7 @@ exports.fileExternalDocumentInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
   const workItems = [];
 
   const {
