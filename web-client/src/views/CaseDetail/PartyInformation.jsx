@@ -83,14 +83,15 @@ const PartyInformation = connect(
                 </address>
 
                 {caseHelper.showEditContactButton && (
-                  <div>
+                  <p>
                     <a
+                      className="usa-button usa-button--unstyled"
                       href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
                     </a>
-                  </div>
+                  </p>
                 )}
                 {caseDetail.contactPrimary.serviceIndicator && (
                   <div className="margin-top-4">
