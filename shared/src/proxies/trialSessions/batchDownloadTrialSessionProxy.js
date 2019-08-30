@@ -11,13 +11,13 @@ const { post } = require('../requests');
  */
 exports.batchDownloadTrialSessionInteractor = ({
   applicationContext,
-  caseHtml,
+  caseDetails,
   trialSessionId,
 }) => {
   return post({
     applicationContext,
     body: {
-      caseHtml,
+      caseDetails,
       trialSessionId,
     },
     endpoint: `/trial-sessions/${trialSessionId}/batch-download`,

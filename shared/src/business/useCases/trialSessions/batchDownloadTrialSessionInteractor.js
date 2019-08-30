@@ -3,9 +3,6 @@ const {
   BATCH_DOWNLOAD_TRIAL_SESSION,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
-const {
-  generatePdfFromHtml,
-} = require('../../useCaseHelper/pdf/generatePdfFromHtml');
 const { formatDateString } = require('../../../business/utilities/DateHandler');
 const { UnauthorizedError } = require('../../../errors/errors');
 
