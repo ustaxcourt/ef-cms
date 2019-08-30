@@ -31,13 +31,13 @@ export const UserContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>My Contact Information</h1>
+            <h1>Contact Information</h1>
           </div>
         </div>
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <h2>Edit Your Contact Information</h2>
+          <h2>Edit Contact Information</h2>
 
           <p>
             This form will automatically create and submit change of contact
@@ -51,6 +51,10 @@ export const UserContactEdit = connect(
           </Hint>
 
           <div className="blue-container">
+            <span className="label">Contact Name</span>
+            <p>
+              {user.name} ({user.barNumber})
+            </p>
             <Country
               bind={bind}
               type={type}

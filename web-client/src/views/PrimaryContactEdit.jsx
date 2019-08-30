@@ -1,6 +1,7 @@
 import { Address } from './StartCase/Address';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -12,6 +13,9 @@ export const PrimaryContactEdit = connect(
     cancelEditPrimaryContactSequence:
       sequences.cancelEditPrimaryContactSequence,
     caseDetail: state.caseDetail,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
+    primaryContactEditHelper: state.primaryContactEditHelper,
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
@@ -21,6 +25,9 @@ export const PrimaryContactEdit = connect(
   ({
     cancelEditPrimaryContactSequence,
     caseDetail,
+    caseDetailHelper,
+    formattedCaseDetail,
+    primaryContactEditHelper,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
     validateContactPrimarySequence,
@@ -34,16 +41,73 @@ export const PrimaryContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>My Contact Information</h1>
+            <h1>Contact Information</h1>
           </div>
         </div>
 
         <section className="usa-section grid-container">
           <ErrorNotification />
 
-          <h2>Edit Your Contact Information for This Case</h2>
+          <h2>Edit Contact Information</h2>
+
+          <p>
+            This form will automatically create and submit a change of contact
+            information notification for this case. Please ensure your
+            information is accurate before submitting.
+          </p>
+
+          <Hint wider>
+            To change the case caption, please file a Motion to Change Caption
+          </Hint>
 
           <div className="blue-container">
+            <span className="label">Contact Name</span>
+
+            <p>
+              {caseDetailHelper.showCaseNameForPrimary
+                ? formattedCaseDetail.caseName
+                : caseDetail.contactPrimary.name}
+            </p>
+
+            {primaryContactEditHelper.showInCareOf && (
+              <div
+                className={
+                  'usa-form-group ' +
+                  (validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.inCareOf
+                    ? 'usa-form-group--error'
+                    : '')
+                }
+              >
+                <label className="usa-label" htmlFor="inCareOf">
+                  <span>
+                    In Care Of <span className="usa-hint">(Your Name)</span>
+                  </span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  id="inCareOf"
+                  name="contactPrimary.inCareOf"
+                  type="text"
+                  value={caseDetail.contactPrimary.inCareOf || ''}
+                  onBlur={() => {
+                    validateContactPrimarySequence();
+                  }}
+                  onChange={e => {
+                    updateCaseValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <Text
+                  bind="validationErrors.contactPrimary.inCareOf"
+                  className="usa-error-message"
+                />
+              </div>
+            )}
+
             <Country
               bind={bind}
               clearTypeOnCountryChange={true}

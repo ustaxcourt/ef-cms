@@ -24,14 +24,18 @@ exports.submitCaseAssociationRequestInteractor = async ({
   representingPrimary,
   representingSecondary,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  const isPractitioner = user.role === 'practitioner';
-  const isRespondent = user.role === 'respondent';
+  const isPractitioner = authorizedUser.role === 'practitioner';
+  const isRespondent = authorizedUser.role === 'respondent';
 
   if (!isPractitioner && !isRespondent) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   if (isPractitioner) {
     return await associatePractitionerToCase({
