@@ -201,4 +201,59 @@ describe('fileDocketEntryInteractor', () => {
     expect(error).toBeUndefined();
     expect(caseEntity.documents[3].eventCode).toEqual('MISL');
   });
+
+  it('sets the eventCode to MISL on any secondaryDocument', async () => {
+    let error;
+    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    let saveWorkItemForNonPaperSpy = sinon.spy();
+    let updateCaseSpy = sinon.spy();
+    let caseEntity = null;
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return new User({
+            name: 'Olivia Jade',
+            role: 'respondent',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          });
+        },
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: async () => ({
+            name: 'Olivia Jade',
+            role: 'respondent',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
+          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+          updateCase: updateCaseSpy,
+        }),
+      };
+      caseEntity = await fileDocketEntryInteractor({
+        applicationContext,
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentType: 'Memorandum in Support',
+          lodged: true,
+          secondaryDocument: {
+            documentType: 'Memorandum in Support',
+          },
+          secondarySupportingDocumentMetadata: {
+            documentType: 'Memorandum in Support',
+          },
+        },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        secondaryDocumentFileId: 'd54ba5a9-b37b-479d-9201-067ec6e335bb',
+        secondarySupportingDocumentFileId:
+          'e54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+    expect(caseEntity.documents[4].eventCode).toEqual('MISL');
+    expect(caseEntity.documents[4].lodged).toEqual(true);
+    expect(caseEntity.documents[5].eventCode).toEqual('MISL');
+    expect(caseEntity.documents[5].lodged).toEqual(true);
+  });
 });
