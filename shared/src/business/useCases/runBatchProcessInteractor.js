@@ -105,6 +105,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     const batchedByName = lastMessage.from;
 
     initializeCaseWorkItem.setAsSentToIRS({
+      applicationContext,
       batchedByName,
       batchedByUserId,
     });
