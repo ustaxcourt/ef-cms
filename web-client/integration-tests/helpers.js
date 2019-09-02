@@ -30,7 +30,7 @@ exports.getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
-    workQueueIsMessages: false,
+    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -41,7 +41,7 @@ exports.getFormattedDocumentQCSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
-    workQueueIsMessages: false,
+    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -52,7 +52,7 @@ exports.getFormattedDocumentQCMyOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
-    workQueueIsMessages: false,
+    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -63,7 +63,7 @@ exports.getFormattedDocumentQCSectionOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
-    workQueueIsMessages: false,
+    workQueueIsInternal: false,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -123,7 +123,7 @@ exports.getFormattedMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
-    workQueueIsMessages: true,
+    workQueueIsInternal: true,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -134,7 +134,7 @@ exports.getFormattedSectionInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
-    workQueueIsMessages: true,
+    workQueueIsInternal: true,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -145,7 +145,7 @@ exports.getFormattedMyOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
-    workQueueIsMessages: true,
+    workQueueIsInternal: true,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),
@@ -156,7 +156,7 @@ exports.getFormattedSectionOutbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
-    workQueueIsMessages: true,
+    workQueueIsInternal: true,
   });
   return runCompute(formattedWorkQueue, {
     state: test.getState(),

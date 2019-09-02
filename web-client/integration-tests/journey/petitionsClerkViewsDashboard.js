@@ -7,7 +7,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
     const workItem = test
       .getState('workQueue')

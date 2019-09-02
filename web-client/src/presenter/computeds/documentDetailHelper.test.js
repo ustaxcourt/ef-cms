@@ -293,7 +293,7 @@ describe('formatted work queue computed', () => {
           ],
         },
         documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        workQueueIsMessages: true,
+        workQueueToDisplay: { workQueueIsInternal: true },
       },
     });
 

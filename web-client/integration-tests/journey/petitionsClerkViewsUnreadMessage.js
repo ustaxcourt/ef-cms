@@ -24,7 +24,7 @@ export default (test, message) => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
-      workQueueIsMessages: true,
+      workQueueIsInternal: true,
     });
 
     const updatedWorkQueue = await runCompute(formattedWorkQueue, {

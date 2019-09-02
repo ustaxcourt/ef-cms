@@ -13,7 +13,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
-      workQueueIsMessages: true,
+      workQueueIsInternal: true,
     });
     sectionOutboxWorkQueue = test.getState('workQueue');
     answerWorkItem = sectionOutboxWorkQueue.find(
@@ -26,7 +26,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
 
     const sectionWorkQueue = test.getState('workQueue');
@@ -50,7 +50,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsMessages: true,
+      workQueueIsInternal: true,
     });
     sectionOutboxWorkQueue = test.getState('workQueue');
     answerWorkItem = sectionOutboxWorkQueue.find(
@@ -63,7 +63,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'section',
-      workQueueIsMessages: true,
+      workQueueIsInternal: true,
     });
     sectionOutboxWorkQueue = test.getState('workQueue');
     answerWorkItem = sectionOutboxWorkQueue.find(
@@ -76,7 +76,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
     const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
@@ -90,7 +90,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
   });
 };

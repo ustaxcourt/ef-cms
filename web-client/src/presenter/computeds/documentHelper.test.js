@@ -1,12 +1,24 @@
 import { documentHelper } from './documentHelper';
 import { runCompute } from 'cerebral/test';
 
-const MY_INBOX = { box: 'inbox', queue: 'my' };
-const MY_BATCHED = { box: 'batched', queue: 'my' };
-const MY_OUTBOX = { box: 'outbox', queue: 'my' };
-const SECTION_INBOX = { box: 'inbox', queue: 'section' };
-const SECTION_BATCHED = { box: 'batched', queue: 'section' };
-const SECTION_OUTBOX = { box: 'outbox', queue: 'section' };
+const MY_INBOX = { box: 'inbox', queue: 'my', workQueueIsInternal: true };
+const MY_BATCHED = { box: 'batched', queue: 'my', workQueueIsInternal: true };
+const MY_OUTBOX = { box: 'outbox', queue: 'my', workQueueIsInternal: true };
+const SECTION_INBOX = {
+  box: 'inbox',
+  queue: 'section',
+  workQueueIsInternal: true,
+};
+const SECTION_BATCHED = {
+  box: 'batched',
+  queue: 'section',
+  workQueueIsInternal: true,
+};
+const SECTION_OUTBOX = {
+  box: 'outbox',
+  queue: 'section',
+  workQueueIsInternal: true,
+};
 
 describe('documentHelper', () => {
   it('should return a correctly-assembled URI to document details based on docket number and document id', () => {
@@ -15,7 +27,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -31,7 +42,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -48,7 +58,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -65,7 +74,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -86,7 +94,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -104,7 +111,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -122,7 +128,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -140,7 +145,6 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -158,8 +162,10 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: MY_INBOX,
+        workQueueToDisplay: {
+          ...MY_INBOX,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -176,8 +182,10 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: MY_BATCHED,
+        workQueueToDisplay: {
+          ...MY_BATCHED,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -194,8 +202,10 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: MY_OUTBOX,
+        workQueueToDisplay: {
+          ...MY_OUTBOX,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -212,8 +222,10 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: SECTION_INBOX,
+        workQueueToDisplay: {
+          ...SECTION_INBOX,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -230,8 +242,10 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: SECTION_BATCHED,
+        workQueueToDisplay: {
+          ...SECTION_BATCHED,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -248,8 +262,10 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: SECTION_OUTBOX,
+        workQueueToDisplay: {
+          ...SECTION_OUTBOX,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -266,7 +282,6 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -284,7 +299,6 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -302,7 +316,6 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -320,7 +333,6 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -338,8 +350,10 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: MY_INBOX,
+        workQueueToDisplay: {
+          ...MY_INBOX,
+          workQueueIsInternal: false,
+        },
       },
     })({
       docketNumber: 'abc',
@@ -356,8 +370,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: MY_OUTBOX,
+        workQueueToDisplay: { ...MY_OUTBOX, workQueueIsInternal: false },
       },
     })({
       docketNumber: 'abc',
@@ -374,8 +387,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: SECTION_INBOX,
+        workQueueToDisplay: { ...SECTION_INBOX, workQueueIsInternal: false },
       },
     })({
       docketNumber: 'abc',
@@ -392,8 +404,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsMessages: false,
-        workQueueToDisplay: SECTION_OUTBOX,
+        workQueueToDisplay: { ...SECTION_OUTBOX, workQueueIsInternal: false },
       },
     })({
       docketNumber: 'abc',

@@ -31,7 +31,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'batched',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
 
     // verify item in general status older than 7 days does not show
@@ -85,7 +85,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
 
     expect(test.getState('workQueueToDisplay')).toEqual({
@@ -152,7 +152,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
 
     // no longer in our inbox!
@@ -177,7 +177,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'batched',
       queue: 'section',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
 
     workItem = test

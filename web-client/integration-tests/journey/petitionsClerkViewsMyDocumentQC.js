@@ -7,9 +7,8 @@ export default (test, storeCount) => {
       path: '/document-qc/my/inbox',
     });
     const workQueueToDisplay = test.getState('workQueueToDisplay');
-    const workQueueIsMessages = test.getState('workQueueIsMessages');
 
-    expect(workQueueIsMessages).toBeFalsy();
+    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
