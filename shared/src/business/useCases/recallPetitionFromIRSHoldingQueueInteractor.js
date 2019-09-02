@@ -90,6 +90,7 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
     });
 
     initializeCaseWorkItem.recallFromIRSBatchSystem({
+      applicationContext,
       user,
     });
     const invalidEntityError = new InvalidEntityError(

@@ -189,6 +189,7 @@ describe('WorkItem', () => {
         { applicationContext },
       );
       workItem.setAsSentToIRS({
+        applicationContext,
         batchedByName: 'bob',
         batchedByUserId: 'abc',
       });
