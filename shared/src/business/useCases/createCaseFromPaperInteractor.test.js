@@ -39,7 +39,7 @@ describe('createCaseFromPaperInteractor', () => {
     expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
-  it('creates a case from paper', async () => {
+  fit('creates a case from paper', async () => {
     applicationContext = {
       docketNumberGenerator: {
         createDocketNumber: () => Promise.resolve('00101-00'),

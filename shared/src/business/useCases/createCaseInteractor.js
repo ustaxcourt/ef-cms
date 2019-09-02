@@ -153,7 +153,7 @@ exports.createCaseInteractor = async ({
   const newWorkItem = addDocumentToCase({
     applicationContext,
     caseToAdd,
-    petitionDocumentEntity,
+    documentEntity: petitionDocumentEntity,
     user,
   });
 

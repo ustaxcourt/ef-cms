@@ -138,7 +138,7 @@ exports.createCaseFromPaperInteractor = async ({
   } = addPetitionDocumentWithWorkItemToCase({
     applicationContext,
     caseToAdd,
-    petitionDocumentEntity,
+    documentEntity: petitionDocumentEntity,
     user,
   });
 
