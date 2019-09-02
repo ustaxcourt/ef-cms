@@ -57,7 +57,9 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
 
   if (!caseRecord) throw new NotFoundError(`Case ${caseId} was not found`);
 
-  const caseEntity = new Case(caseRecord).validate();
+  const caseEntity = new Case(caseRecord, {
+    applicationContext,
+  }).validate();
 
   const petitionDocument = caseEntity.documents.find(
     document =>
