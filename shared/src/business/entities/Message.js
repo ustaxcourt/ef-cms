@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -11,12 +10,12 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawMessage the raw message data
  * @constructor
  */
-function Message(rawMessage) {
+function Message(rawMessage, { applicationContext }) {
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.from = rawMessage.from;
   this.fromUserId = rawMessage.fromUserId;
   this.message = rawMessage.message;
-  this.messageId = rawMessage.messageId || uuid.v4();
+  this.messageId = rawMessage.messageId || applicationContext.getUniqueId();
   this.to = rawMessage.to;
   this.toUserId = rawMessage.toUserId;
 }
