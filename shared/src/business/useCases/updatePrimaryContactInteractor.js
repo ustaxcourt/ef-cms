@@ -42,7 +42,7 @@ exports.updatePrimaryContactInteractor = async ({
   }
 
   let caseNameToUse;
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
   const spousePartyTypes = [
     ContactFactory.PARTY_TYPES.petitionerSpouse,
     ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,

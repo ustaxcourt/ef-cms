@@ -78,7 +78,7 @@ exports.forwardWorkItemInteractor = async ({
       caseId: workItemToForward.caseId,
     });
 
-  const caseToUpdate = new Case(caseObject);
+  const caseToUpdate = new Case(caseObject, { applicationContext });
 
   await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
     applicationContext,

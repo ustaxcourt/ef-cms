@@ -37,7 +37,7 @@ exports.associateRespondentToCase = async ({
         caseId,
       });
 
-    const caseEntity = new Case(caseToUpdate);
+    const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     caseEntity.attachRespondent(new Respondent(user));
 

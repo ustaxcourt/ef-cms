@@ -3,8 +3,17 @@ const {
 } = require('./validateCaseDetailInteractor');
 
 describe('validate case detail', () => {
+  let applicationContext;
+
+  beforeAll(() => {
+    applicationContext = {
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+  });
+
   it('returns the expected errors object on an empty case', () => {
     const errors = validateCaseDetailInteractor({
+      applicationContext,
       caseDetail: {},
     });
     expect(errors).toBeTruthy();
@@ -15,6 +24,7 @@ describe('validate case detail', () => {
 
   it('does not return an error if that field is valid', () => {
     const errors = validateCaseDetailInteractor({
+      applicationContext,
       caseDetail: {
         caseTitle: 'A case title',
       },
@@ -27,6 +37,7 @@ describe('validate case detail', () => {
 
   it('returns no errors if the case validates', () => {
     const errors = validateCaseDetailInteractor({
+      applicationContext,
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',
@@ -63,6 +74,7 @@ describe('validate case detail', () => {
 
   it('returns the expected errors when passed bad date objects', () => {
     const errors = validateCaseDetailInteractor({
+      applicationContext,
       caseDetail: {
         hasIrsNotice: true,
         irsNoticeDate: 'aa',
@@ -76,6 +88,7 @@ describe('validate case detail', () => {
 
   it('returns no errors on valid amounts and years', () => {
     const errors = validateCaseDetailInteractor({
+      applicationContext,
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',
@@ -112,6 +125,7 @@ describe('validate case detail', () => {
 
   it('returns no errors on null irsNoticeDate', () => {
     const errors = validateCaseDetailInteractor({
+      applicationContext,
       caseDetail: {
         caseType: 'defined',
         docketNumber: '101-18',

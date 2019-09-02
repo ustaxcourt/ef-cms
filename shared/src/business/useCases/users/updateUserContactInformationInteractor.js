@@ -60,7 +60,7 @@ exports.updateUserContactInformationInteractor = async ({
     userCases.map(async userCase => {
       let oldData;
       const newData = contactInfo;
-      const caseEntity = new Case(userCase);
+      const caseEntity = new Case(userCase, { applicationContext });
 
       const practitioner = caseEntity.practitioners.find(
         practitioner => practitioner.userId === userId,
