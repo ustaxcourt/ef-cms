@@ -145,10 +145,9 @@ export const formatWorkItem = (
 export const filterWorkItems = ({
   applicationContext,
   user,
-  workQueueIsInternal,
   workQueueToDisplay,
 }) => {
-  const { box, queue } = workQueueToDisplay;
+  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   const docQCUserSection =
     user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
   const { Case } = applicationContext.getEntityConstructors();
@@ -286,7 +285,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
       filterWorkItems({
         applicationContext,
         user,
-        workQueueIsInternal,
         workQueueToDisplay,
       }),
     )

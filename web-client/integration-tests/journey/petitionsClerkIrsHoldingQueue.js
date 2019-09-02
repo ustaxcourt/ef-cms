@@ -26,6 +26,7 @@ export default test => {
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'inbox',
       queue: 'my',
+      workQueueIsInternal: false,
     });
 
     await test.runSequence('chooseWorkQueueSequence', {
@@ -80,6 +81,7 @@ export default test => {
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'batched',
       queue: 'section',
+      workQueueIsInternal: false,
     });
 
     await test.runSequence('chooseWorkQueueSequence', {
@@ -91,6 +93,7 @@ export default test => {
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'inbox',
       queue: 'section',
+      workQueueIsInternal: false,
     });
 
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
