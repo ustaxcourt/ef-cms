@@ -7,6 +7,6 @@ export const setMessageInboxPropsAction = () => {
   return {
     box: 'inbox',
     queue: 'my',
-    workQueueIsInternal: true,
+    workQueueIsMessages: true,
   };
 };

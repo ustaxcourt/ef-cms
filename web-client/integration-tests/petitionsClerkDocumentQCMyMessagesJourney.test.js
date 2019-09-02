@@ -43,7 +43,7 @@ presenter.providers.router = {
       await test.runSequence('gotoDashboardSequence', {
         box: 'inbox',
         queue: 'section',
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
       });
     }
 
@@ -51,7 +51,7 @@ presenter.providers.router = {
       await test.runSequence('gotoDashboardSequence', {
         box: 'inbox',
         queue: 'my',
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
       });
     }
 
@@ -59,7 +59,7 @@ presenter.providers.router = {
       await test.runSequence('gotoDashboardSequence', {
         box: 'inbox',
         queue: 'my',
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
       });
     }
 

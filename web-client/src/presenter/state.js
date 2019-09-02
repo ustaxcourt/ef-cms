@@ -161,9 +161,9 @@ export const state = {
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
+  workQueueIsMessages: true,
   workQueue: [],
   workQueueHelper,
-  workQueueIsInternal: true,
   workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };

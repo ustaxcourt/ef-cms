@@ -238,7 +238,7 @@ const router = {
         } else {
           const routeArgs = {
             baseRoute: 'document-qc',
-            workQueueIsInternal: false,
+            workQueueIsMessages: false,
           };
           const pathParts = path.split('/');
 
@@ -371,7 +371,7 @@ const router = {
         } else {
           const routeArgs = {
             baseRoute: 'messages',
-            workQueueIsInternal: true,
+            workQueueIsMessages: true,
           };
           const pathParts = path.split('/');
 

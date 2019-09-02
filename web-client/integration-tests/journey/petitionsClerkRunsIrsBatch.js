@@ -15,7 +15,7 @@ export default test => {
     await test.runSequence('gotoDashboardSequence', {
       box: 'outbox',
       queue: 'my',
-      workQueueIsInternal: false,
+      workQueueIsMessages: false,
     });
 
     const myOutboxWorkQueue = runCompute(formattedWorkQueue, {
@@ -33,7 +33,7 @@ export default test => {
     await test.runSequence('gotoDashboardSequence', {
       box: 'batched',
       queue: 'my',
-      workQueueIsInternal: false,
+      workQueueIsMessages: false,
     });
 
     const myBatchedWorkQueue = runCompute(formattedWorkQueue, {

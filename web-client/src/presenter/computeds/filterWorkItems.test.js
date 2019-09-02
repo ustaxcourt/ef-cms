@@ -4,61 +4,61 @@ import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
 const MY_MESSAGES_INBOX = {
-  workQueueIsInternal: true,
+  workQueueIsMessages: true,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 const MY_MESSAGES_OUTBOX = {
-  workQueueIsInternal: true,
+  workQueueIsMessages: true,
   workQueueToDisplay: { box: 'outbox', queue: 'my' },
 };
 
 const SECTION_MESSAGES_INBOX = {
-  workQueueIsInternal: true,
+  workQueueIsMessages: true,
   workQueueToDisplay: { box: 'inbox', queue: 'section' },
 };
 
 const SECTION_MESSAGES_OUTBOX = {
-  workQueueIsInternal: true,
+  workQueueIsMessages: true,
   workQueueToDisplay: { box: 'outbox', queue: 'section' },
 };
 
 const MY_DOCUMENT_QC_INBOX = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
 const MY_DOCUMENT_QC_IN_PROGRESS = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'inProgress', queue: 'my' },
 };
 
 const MY_DOCUMENT_QC_BATCHED = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'batched', queue: 'my' },
 };
 
 const MY_DOCUMENT_QC_OUTBOX = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'outbox', queue: 'my' },
 };
 
 const SECTION_DOCUMENT_QC_INBOX = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'inbox', queue: 'section' },
 };
 
 const SECTION_DOCUMENT_QC_IN_PROGRESS = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'inProgress', queue: 'section' },
 };
 
 const SECTION_DOCUMENT_QC_BATCHED = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'batched', queue: 'section' },
 };
 
 const SECTION_DOCUMENT_QC_OUTBOX = {
-  workQueueIsInternal: false,
+  workQueueIsMessages: false,
   workQueueToDisplay: { box: 'outbox', queue: 'section' },
 };
 

@@ -122,8 +122,8 @@ describe('formatted work queue computed', () => {
     result = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [workItem],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
@@ -154,8 +154,8 @@ describe('formatted work queue computed', () => {
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
@@ -170,8 +170,8 @@ describe('formatted work queue computed', () => {
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
@@ -186,8 +186,8 @@ describe('formatted work queue computed', () => {
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
@@ -203,8 +203,8 @@ describe('formatted work queue computed', () => {
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
@@ -221,8 +221,8 @@ describe('formatted work queue computed', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
@@ -239,8 +239,8 @@ describe('formatted work queue computed', () => {
     const result = runCompute(formattedWorkQueue, {
       state: {
         selectedWorkItems: [],
+        workQueueIsMessages: true,
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: { box: 'outbox', queue: 'section' },
       },
     });
