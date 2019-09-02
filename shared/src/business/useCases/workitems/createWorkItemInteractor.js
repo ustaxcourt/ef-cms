@@ -57,13 +57,16 @@ exports.createWorkItemInteractor = async ({
     documentId,
   });
 
-  const newMessage = new Message({
-    from: user.name,
-    fromUserId: user.userId,
-    message,
-    to: userToAssignTo.name,
-    toUserId: userToAssignTo.userId,
-  });
+  const newMessage = new Message(
+    {
+      from: user.name,
+      fromUserId: user.userId,
+      message,
+      to: userToAssignTo.name,
+      toUserId: userToAssignTo.userId,
+    },
+    { applicationContext },
+  );
 
   const newWorkItem = new WorkItem({
     caseId: caseId,

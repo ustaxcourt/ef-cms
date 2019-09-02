@@ -17,6 +17,14 @@ const caseDetail = {
 };
 
 describe('Document entity', () => {
+  let applicationContext;
+
+  beforeAll(() => {
+    applicationContext = {
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+  });
+
   describe('isValid', () => {
     it('Creates a valid document', () => {
       const myDoc = new Document(A_VALID_DOCUMENT);
@@ -50,12 +58,15 @@ describe('Document entity', () => {
         document: {},
         sentBy: 'bob',
       });
-      const message = new Message({
-        from: 'Test User',
-        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        message: 'hello world',
-        messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      });
+      const message = new Message(
+        {
+          from: 'Test User',
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          message: 'hello world',
+          messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        },
+        { applicationContext },
+      );
       workItem.addMessage(message);
       myDoc.addWorkItem(new WorkItem({}));
       expect(myDoc.isValid()).toBeFalsy();

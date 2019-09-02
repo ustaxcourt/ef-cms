@@ -2,6 +2,14 @@ const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 
 describe('WorkItem', () => {
+  let applicationContext;
+
+  beforeAll(() => {
+    applicationContext = {
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+  });
+
   describe('isValid', () => {
     it('Creates a valid workitem', () => {
       const workItem = new WorkItem({
@@ -112,11 +120,14 @@ describe('WorkItem', () => {
         sentBy: 'bob',
       });
       workItem.addMessage(
-        new Message({
-          from: 'abc',
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'abc',
-        }),
+        new Message(
+          {
+            from: 'abc',
+            fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+            message: 'abc',
+          },
+          { applicationContext },
+        ),
       );
       expect(workItem.messages.length).toEqual(1);
     });

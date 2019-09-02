@@ -51,14 +51,17 @@ exports.assignWorkItemsInteractor = async ({
   const workItemEntity = new WorkItem(fullWorkItem);
   const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem));
 
-  const newMessage = new Message({
-    createdAt: createISODateString(),
-    from: user.name,
-    fromUserId: user.userId,
-    message: workItemEntity.getLatestMessageEntity().message,
-    to: assigneeName,
-    toUserId: assigneeId,
-  });
+  const newMessage = new Message(
+    {
+      createdAt: createISODateString(),
+      from: user.name,
+      fromUserId: user.userId,
+      message: workItemEntity.getLatestMessageEntity().message,
+      to: assigneeName,
+      toUserId: assigneeId,
+    },
+    { applicationContext },
+  );
 
   workItemEntity
     .assignToUser({
