@@ -11,6 +11,9 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @constructor
  */
 function CaseDeadline(rawProps, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.caseDeadlineId =
     rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
