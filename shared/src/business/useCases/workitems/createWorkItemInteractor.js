@@ -51,7 +51,7 @@ exports.createWorkItemInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case({ applicationContext, rawCase: theCase });
+  const caseEntity = new Case(theCase, { applicationContext });
 
   const document = caseEntity.getDocumentById({
     documentId,

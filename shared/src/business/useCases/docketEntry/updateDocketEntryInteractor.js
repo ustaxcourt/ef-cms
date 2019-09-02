@@ -40,7 +40,7 @@ exports.updateDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocument = caseEntity.getDocumentById({
     documentId: primaryDocumentFileId,
