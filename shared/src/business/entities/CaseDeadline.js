@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -11,8 +10,9 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawProps the raw case deadline data
  * @constructor
  */
-function CaseDeadline(rawProps) {
-  this.caseDeadlineId = rawProps.caseDeadlineId || uuid.v4();
+function CaseDeadline(rawProps, { applicationContext }) {
+  this.caseDeadlineId =
+    rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
   this.createdAt = rawProps.createdAt || createISODateString();
   this.description = rawProps.description;
