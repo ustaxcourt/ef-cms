@@ -150,7 +150,7 @@ import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
-import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
+import { setWorkQueueIsMessagesSequence } from './sequences/setWorkQueueIsMessagesSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
@@ -187,7 +187,7 @@ import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
-import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
+import { unsetWorkQueueIsMessagesSequence } from './sequences/unsetWorkQueueIsMessagesSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
@@ -396,7 +396,7 @@ export const presenter = {
     setSelectedBatchIndexSequence,
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
-    setWorkQueueIsInternalSequence,
+    setWorkQueueIsMessagesSequence,
     showDocketRecordDetailModalSequence,
     signOutSequence,
     startScanSequence,
@@ -432,7 +432,7 @@ export const presenter = {
     unidentifiedUserErrorSequence,
     unsetFormSaveSuccessSequence,
     unsetFormSubmittingSequence,
-    unsetWorkQueueIsInternalSequence,
+    unsetWorkQueueIsMessagesSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
     updateCaseDetailSequence,

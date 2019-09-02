@@ -13,8 +13,8 @@ import { state } from 'cerebral';
  * @returns {*} returns the next action in the sequence's path
  */
 export const chooseWorkQueueAction = ({ get, path, props, store }) => {
-  if (props.hasOwnProperty('workQueueIsInternal')) {
-    store.set(state.workQueueIsInternal, props.workQueueIsInternal);
+  if (props.hasOwnProperty('workQueueIsMessages')) {
+    store.set(state.workQueueIsMessages, props.workQueueIsMessages);
   }
 
   if (props && props.queue) {
@@ -26,8 +26,8 @@ export const chooseWorkQueueAction = ({ get, path, props, store }) => {
   }
 
   let queuePrefs = get(state.workQueueToDisplay);
-  let workQueueIsInternal = get(state.workQueueIsInternal);
-  let workQueuePath = `${workQueueIsInternal ? 'messages' : 'documentqc'}${
+  let workQueueIsMessages = get(state.workQueueIsMessages);
+  let workQueuePath = `${workQueueIsMessages ? 'messages' : 'documentqc'}${
     queuePrefs.queue
   }${queuePrefs.box}`;
 

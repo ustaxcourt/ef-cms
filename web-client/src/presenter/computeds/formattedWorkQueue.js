@@ -145,7 +145,7 @@ export const formatWorkItem = (
 export const filterWorkItems = ({
   applicationContext,
   user,
-  workQueueIsInternal,
+  workQueueIsMessages,
   workQueueToDisplay,
 }) => {
   const { box, queue } = workQueueToDisplay;
@@ -269,7 +269,7 @@ export const filterWorkItems = ({
     },
   };
 
-  const view = workQueueIsInternal ? 'messages' : 'documentQc';
+  const view = workQueueIsMessages ? 'messages' : 'documentQc';
   const composedFilter = filters[view][queue][box];
   return composedFilter;
 };
@@ -278,7 +278,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
-  const isInternal = get(state.workQueueIsInternal);
+  const isInternal = get(state.workQueueIsMessages);
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
@@ -286,7 +286,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       filterWorkItems({
         applicationContext,
         user,
-        workQueueIsInternal: isInternal,
+        workQueueIsMessages: isInternal,
         workQueueToDisplay,
       }),
     )

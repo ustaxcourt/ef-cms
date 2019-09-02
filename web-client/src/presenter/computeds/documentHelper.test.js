@@ -15,7 +15,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -31,7 +31,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -48,7 +48,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -65,7 +65,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -86,7 +86,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -104,7 +104,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -122,7 +122,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -140,7 +140,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -158,7 +158,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -176,7 +176,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: MY_BATCHED,
       },
     })({
@@ -194,7 +194,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -212,7 +212,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -230,7 +230,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: SECTION_BATCHED,
       },
     })({
@@ -248,7 +248,7 @@ describe('documentHelper', () => {
         user: {
           role: 'petitionsclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -266,7 +266,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -284,7 +284,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -302,7 +302,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -320,7 +320,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: true,
+        workQueueIsMessages: true,
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -338,7 +338,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -356,7 +356,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -374,7 +374,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -392,7 +392,7 @@ describe('documentHelper', () => {
         user: {
           role: 'docketclerk',
         },
-        workQueueIsInternal: false,
+        workQueueIsMessages: false,
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({

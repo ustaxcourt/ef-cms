@@ -7,9 +7,9 @@ export default (test, storeCount) => {
       path: '/messages/my/inbox',
     });
     const workQueueToDisplay = test.getState('workQueueToDisplay');
-    const workQueueIsInternal = test.getState('workQueueIsInternal');
+    const workQueueIsMessages = test.getState('workQueueIsMessages');
 
-    expect(workQueueIsInternal).toBeTruthy();
+    expect(workQueueIsMessages).toBeTruthy();
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inbox');
 

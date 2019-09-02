@@ -7,9 +7,9 @@ export default (test, storeCount) => {
       path: '/document-qc/section/inbox',
     });
     const workQueueToDisplay = test.getState('workQueueToDisplay');
-    const workQueueIsInternal = test.getState('workQueueIsInternal');
+    const workQueueIsMessages = test.getState('workQueueIsMessages');
 
-    expect(workQueueIsInternal).toBeFalsy();
+    expect(workQueueIsMessages).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 

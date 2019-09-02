@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @returns {undefined}
  */
 export const setSectionInboxCountAction = ({ get, props, store }) => {
-  const internal = get(state.workQueueIsInternal);
+  const internal = get(state.workQueueIsMessages);
   store.set(
     state.sectionInboxCount,
     props.workItems

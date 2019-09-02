@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 export default test => {
   return it('Petitions clerk assigns work item to self', async () => {
-    test.setState('workQueueIsInternal', false);
+    test.setState('workQueueIsMessages', false);
     // find the work item that is part of an Petition upload
     const sectionWorkItems = test.getState('workQueue');
     test.petitionWorkItemId = sectionWorkItems.find(
@@ -76,6 +76,6 @@ export default test => {
     expect(formattedWorkItem.currentMessage.message).toEqual(
       'Petition filed by Test Person, Deceased, Test Person 2, Surviving Spouse is ready for review.',
     );
-    test.setState('workQueueIsInternal', true);
+    test.setState('workQueueIsMessages', true);
   });
 };

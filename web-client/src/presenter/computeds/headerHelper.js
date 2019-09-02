@@ -6,7 +6,7 @@ export const headerHelper = get => {
   const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
-  const workQueueIsInternal = get(state.workQueueIsInternal);
+  const workQueueIsMessages = get(state.workQueueIsMessages);
 
   const isUserInternal = role => {
     const internalRoles = [
@@ -31,14 +31,14 @@ export const headerHelper = get => {
   const pageIsMessages =
     userRole == 'judge'
       ? currentPage.startsWith('Messages')
-      : isDashboard && workQueueIsInternal && !isTrialSessions;
+      : isDashboard && workQueueIsMessages && !isTrialSessions;
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
-    pageIsDocumentQC: isDashboard && !workQueueIsInternal && !isTrialSessions,
+    pageIsDocumentQC: isDashboard && !workQueueIsMessages && !isTrialSessions,
     pageIsHome: isDashboard && !pageIsMessages,
     pageIsMessages,
     pageIsMyCases: isDashboard && isUserExternal(userRole),
