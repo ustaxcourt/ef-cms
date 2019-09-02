@@ -1,5 +1,4 @@
 const sinon = require('sinon');
-const uuid = require('uuid');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
