@@ -115,21 +115,24 @@ exports.fileExternalDocumentInteractor = async ({
       });
       documentEntity.generateFiledBy(caseToUpdate);
 
-      const workItem = new WorkItem({
-        assigneeId: null,
-        assigneeName: null,
-        caseId: caseId,
-        caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
-          ...documentEntity.toRawObject(),
-          createdAt: documentEntity.createdAt,
+      const workItem = new WorkItem(
+        {
+          assigneeId: null,
+          assigneeName: null,
+          caseId: caseId,
+          caseStatus: caseToUpdate.status,
+          docketNumber: caseToUpdate.docketNumber,
+          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+          document: {
+            ...documentEntity.toRawObject(),
+            createdAt: documentEntity.createdAt,
+          },
+          isInternal: false,
+          section: DOCKET_SECTION,
+          sentBy: user.userId,
         },
-        isInternal: false,
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
+        { applicationContext },
+      );
 
       const message = new Message(
         {

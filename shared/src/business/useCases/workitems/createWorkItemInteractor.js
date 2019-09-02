@@ -68,19 +68,22 @@ exports.createWorkItemInteractor = async ({
     { applicationContext },
   );
 
-  const newWorkItem = new WorkItem({
-    caseId: caseId,
-    caseStatus: theCase.status,
-    docketNumber: theCase.docketNumber,
-    docketNumberSuffix: theCase.docketNumberSuffix,
-    document: {
-      createdAt: document.createdAt,
-      documentId: document.documentId,
-      documentTitle: document.documentTitle,
-      documentType: document.documentType,
+  const newWorkItem = new WorkItem(
+    {
+      caseId: caseId,
+      caseStatus: theCase.status,
+      docketNumber: theCase.docketNumber,
+      docketNumberSuffix: theCase.docketNumberSuffix,
+      document: {
+        createdAt: document.createdAt,
+        documentId: document.documentId,
+        documentTitle: document.documentTitle,
+        documentType: document.documentType,
+      },
+      isInitializeCase: false,
     },
-    isInitializeCase: false,
-  })
+    { applicationContext },
+  )
     .assignToUser({
       assigneeId,
       assigneeName: userToAssignTo.name,

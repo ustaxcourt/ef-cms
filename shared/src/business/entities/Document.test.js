@@ -48,16 +48,19 @@ describe('Document entity', () => {
 
     it('addWorkItem', () => {
       const myDoc = new Document(A_VALID_DOCUMENT);
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        document: {},
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          document: {},
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       const message = new Message(
         {
           from: 'Test User',
@@ -68,7 +71,7 @@ describe('Document entity', () => {
         { applicationContext },
       );
       workItem.addMessage(message);
-      myDoc.addWorkItem(new WorkItem({}));
+      myDoc.addWorkItem(new WorkItem({}, { applicationContext }));
       expect(myDoc.isValid()).toBeFalsy();
     });
   });

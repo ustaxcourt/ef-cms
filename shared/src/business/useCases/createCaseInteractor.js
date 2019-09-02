@@ -17,22 +17,25 @@ const addDocumentToCase = ({
   documentEntity,
   user,
 }) => {
-  const workItemEntity = new WorkItem({
-    assigneeId: null,
-    assigneeName: null,
-    caseId: caseToAdd.caseId,
-    caseStatus: caseToAdd.status,
-    docketNumber: caseToAdd.docketNumber,
-    docketNumberSuffix: caseToAdd.docketNumberSuffix,
-    document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+  const workItemEntity = new WorkItem(
+    {
+      assigneeId: null,
+      assigneeName: null,
+      caseId: caseToAdd.caseId,
+      caseStatus: caseToAdd.status,
+      docketNumber: caseToAdd.docketNumber,
+      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      document: {
+        ...documentEntity.toRawObject(),
+        createdAt: documentEntity.createdAt,
+      },
+      isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
+      isInternal: false,
+      section: PETITIONS_SECTION,
+      sentBy: user.userId,
     },
-    isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
-    isInternal: false,
-    section: PETITIONS_SECTION,
-    sentBy: user.userId,
-  });
+    { applicationContext },
+  );
 
   let message;
 
