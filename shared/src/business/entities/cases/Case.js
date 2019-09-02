@@ -159,7 +159,6 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
-  this.applicationContext = applicationContext;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
