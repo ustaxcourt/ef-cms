@@ -11,6 +11,9 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @constructor
  */
 function Message(rawMessage, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.createdAt = rawMessage.createdAt || createISODateString();
   this.from = rawMessage.from;
   this.fromUserId = rawMessage.fromUserId;

@@ -9,11 +9,12 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
-const addPetitionDocumentWithWorkItemToCase = (
-  user,
+const addPetitionDocumentWithWorkItemToCase = ({
+  applicationContext,
   caseToAdd,
   documentEntity,
-) => {
+  user,
+}) => {
   const message = `${documentEntity.documentType} filed by ${documentEntity.filedBy} is ready for review.`;
 
   const workItemEntity = new WorkItem({
@@ -35,11 +36,14 @@ const addPetitionDocumentWithWorkItemToCase = (
     sentByUserId: user.userId,
   });
 
-  const newMessage = new Message({
-    from: user.name,
-    fromUserId: user.userId,
-    message,
-  });
+  const newMessage = new Message(
+    {
+      from: user.name,
+      fromUserId: user.userId,
+      message,
+    },
+    { applicationContext },
+  );
 
   workItemEntity.addMessage(newMessage);
 
@@ -120,11 +124,12 @@ exports.createCaseFromPaperInteractor = async ({
   const {
     message: newMessage,
     workItem: newWorkItem,
-  } = addPetitionDocumentWithWorkItemToCase(
-    user,
+  } = addPetitionDocumentWithWorkItemToCase({
+    applicationContext,
     caseToAdd,
     petitionDocumentEntity,
-  );
+    user,
+  });
 
   if (requestForPlaceOfTrialFileId) {
     let {

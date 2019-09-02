@@ -144,13 +144,16 @@ exports.updateUserContactInformationInteractor = async ({
         sentBy: user.userId,
       });
 
-      const message = new Message({
-        from: user.name,
-        fromUserId: user.userId,
-        message: `${changeOfAddressDocument.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-      });
+      const message = new Message(
+        {
+          from: user.name,
+          fromUserId: user.userId,
+          message: `${
+            changeOfAddressDocument.documentType
+          } filed by ${capitalize(user.role)} is ready for review.`,
+        },
+        { applicationContext },
+      );
 
       workItem.addMessage(message);
       changeOfAddressDocument.addWorkItem(workItem);

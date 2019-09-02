@@ -11,7 +11,12 @@ const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
-const addDocumentToCase = (user, caseToAdd, documentEntity) => {
+const addDocumentToCase = ({
+  applicationContext,
+  caseToAdd,
+  documentEntity,
+  user,
+}) => {
   const workItemEntity = new WorkItem({
     assigneeId: null,
     assigneeName: null,
@@ -41,11 +46,14 @@ const addDocumentToCase = (user, caseToAdd, documentEntity) => {
   }
 
   workItemEntity.addMessage(
-    new Message({
-      from: user.name,
-      fromUserId: user.userId,
-      message,
-    }),
+    new Message(
+      {
+        from: user.name,
+        fromUserId: user.userId,
+        message,
+      },
+      { applicationContext },
+    ),
   );
 
   documentEntity.addWorkItem(workItemEntity);
@@ -131,11 +139,12 @@ exports.createCaseInteractor = async ({
     userId: user.userId,
   });
   petitionDocumentEntity.generateFiledBy(caseToAdd);
-  const newWorkItem = addDocumentToCase(
-    user,
+  const newWorkItem = addDocumentToCase({
+    applicationContext,
     caseToAdd,
     petitionDocumentEntity,
-  );
+    user,
+  });
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
