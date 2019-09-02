@@ -5,13 +5,12 @@ export default (test, shouldExist) => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'my',
-      workQueueIsMessages: false,
+      workQueueIsInternal: false,
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
-    const workQueueIsMessages = test.getState('workQueueIsMessages');
 
-    expect(workQueueIsMessages).toBeFalsy();
+    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 

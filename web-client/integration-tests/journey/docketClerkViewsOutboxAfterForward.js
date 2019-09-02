@@ -5,7 +5,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
-      workQueueIsMessages: true,
+      workQueueIsInternal: true,
     });
     let myOutboxWorkQueue = test.getState('workQueue');
     let stipulatedDecisionWorkItem = myOutboxWorkQueue.find(

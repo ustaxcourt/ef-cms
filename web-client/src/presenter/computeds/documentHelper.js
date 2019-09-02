@@ -9,16 +9,15 @@ export const documentHelper = get => ({
 }) => {
   const currentUser = get(state.user);
   const userRole = currentUser.role;
-  const { box } = get(state.workQueueToDisplay);
-  const workQueueIsMessages = get(state.workQueueIsMessages);
+  const { box, workQueueIsInternal } = get(state.workQueueToDisplay);
 
   const shouldLinkToMessagesTab = () => {
     let linkToMessagesTab = false;
-    if (userRole == 'docketclerk' || workQueueIsMessages) {
+    if (userRole == 'docketclerk' || workQueueIsInternal) {
       linkToMessagesTab = true;
     } else if (
       userRole == 'petitionsclerk' &&
-      !workQueueIsMessages &&
+      !workQueueIsInternal &&
       box == 'outbox'
     ) {
       linkToMessagesTab = true;

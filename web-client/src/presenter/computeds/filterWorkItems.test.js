@@ -4,62 +4,86 @@ import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
 const MY_MESSAGES_INBOX = {
-  workQueueIsMessages: true,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
 };
 const MY_MESSAGES_OUTBOX = {
-  workQueueIsMessages: true,
-  workQueueToDisplay: { box: 'outbox', queue: 'my' },
+  workQueueToDisplay: { box: 'outbox', queue: 'my', workQueueIsInternal: true },
 };
 
 const SECTION_MESSAGES_INBOX = {
-  workQueueIsMessages: true,
-  workQueueToDisplay: { box: 'inbox', queue: 'section' },
+  workQueueToDisplay: {
+    box: 'inbox',
+    queue: 'section',
+    workQueueIsInternal: true,
+  },
 };
 
 const SECTION_MESSAGES_OUTBOX = {
-  workQueueIsMessages: true,
-  workQueueToDisplay: { box: 'outbox', queue: 'section' },
+  workQueueToDisplay: {
+    box: 'outbox',
+    queue: 'section',
+    workQueueIsInternal: true,
+  },
 };
 
 const MY_DOCUMENT_QC_INBOX = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: false },
 };
 
 const MY_DOCUMENT_QC_IN_PROGRESS = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'inProgress', queue: 'my' },
+  workQueueToDisplay: {
+    box: 'inProgress',
+    queue: 'my',
+    workQueueIsInternal: false,
+  },
 };
 
 const MY_DOCUMENT_QC_BATCHED = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'batched', queue: 'my' },
+  workQueueToDisplay: {
+    box: 'batched',
+    queue: 'my',
+    workQueueIsInternal: false,
+  },
 };
 
 const MY_DOCUMENT_QC_OUTBOX = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'outbox', queue: 'my' },
+  workQueueToDisplay: {
+    box: 'outbox',
+    queue: 'my',
+    workQueueIsInternal: false,
+  },
 };
 
 const SECTION_DOCUMENT_QC_INBOX = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'inbox', queue: 'section' },
+  workQueueToDisplay: {
+    box: 'inbox',
+    queue: 'section',
+    workQueueIsInternal: false,
+  },
 };
 
 const SECTION_DOCUMENT_QC_IN_PROGRESS = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'inProgress', queue: 'section' },
+  workQueueToDisplay: {
+    box: 'inProgress',
+    queue: 'section',
+    workQueueIsInternal: false,
+  },
 };
 
 const SECTION_DOCUMENT_QC_BATCHED = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'batched', queue: 'section' },
+  workQueueToDisplay: {
+    box: 'batched',
+    queue: 'section',
+    workQueueIsInternal: false,
+  },
 };
 
 const SECTION_DOCUMENT_QC_OUTBOX = {
-  workQueueIsMessages: false,
-  workQueueToDisplay: { box: 'outbox', queue: 'section' },
+  workQueueToDisplay: {
+    box: 'outbox',
+    queue: 'section',
+    workQueueIsInternal: false,
+  },
 };
 
 const petitionsClerk1 = {

@@ -63,7 +63,7 @@ export default test => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
-      workQueueIsMessages: true,
+      workQueueIsInternal: true,
     });
     let sectionOutboxWorkQueue = test.getState('workQueue');
     let answerWorkItem = sectionOutboxWorkQueue.find(
