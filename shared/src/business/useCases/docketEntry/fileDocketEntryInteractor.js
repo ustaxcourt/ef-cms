@@ -48,7 +48,7 @@ exports.fileDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
 
   const {

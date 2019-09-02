@@ -23,9 +23,8 @@ export const updateCaseAction = async ({ applicationContext, get, props }) => {
 
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
     const { Case } = applicationContext.getEntityConstructors();
-    const caseEntity = new Case({
+    const caseEntity = new Case(caseDetail, {
       applicationContext,
-      rawCase: caseDetail,
     }).validate();
 
     const caseSortTags = caseEntity.generateTrialSortTags();

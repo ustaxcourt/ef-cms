@@ -37,7 +37,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const caseEntity = new Case({ applicationContext, rawCase: caseToUpdate });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
   caseEntity.sendToIRSHoldingQueue();
 
   const processWorkItem = async workItem => {

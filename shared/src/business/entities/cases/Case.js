@@ -155,7 +155,11 @@ Case.docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case({ applicationContext, rawCase }) {
+function Case(rawCase, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
+  this.applicationContext = applicationContext;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;

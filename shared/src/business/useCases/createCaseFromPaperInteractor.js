@@ -96,15 +96,17 @@ exports.createCaseFromPaperInteractor = async ({
     },
   );
 
-  const caseToAdd = new Case({
-    applicationContext,
-    rawCase: {
+  const caseToAdd = new Case(
+    {
       userId: user.userId,
       ...petitionEntity.toRawObject(),
       docketNumber,
       isPaper: true,
     },
-  });
+    {
+      applicationContext,
+    },
+  );
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
@@ -196,5 +198,5 @@ exports.createCaseFromPaperInteractor = async ({
     workItem: newWorkItem.validate().toRawObject(),
   });
 
-  return new Case({ applicationContext, rawCase: caseToAdd }).toRawObject();
+  return new Case(caseToAdd, { applicationContext }).toRawObject();
 };

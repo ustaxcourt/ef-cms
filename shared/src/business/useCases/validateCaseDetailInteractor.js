@@ -8,8 +8,7 @@ const { Case } = require('../entities/cases/Case');
  * @returns {object} errors (null if no errors)
  */
 exports.validateCaseDetailInteractor = ({ applicationContext, caseDetail }) => {
-  return new Case({
+  return new Case(caseDetail, {
     applicationContext,
-    rawCase: caseDetail,
   }).getFormattedValidationErrors();
 };

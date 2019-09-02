@@ -18,7 +18,7 @@ describe('Case entity', () => {
   });
 
   it('defaults the orders to false', () => {
-    const myCase = new Case({ applicationContext, rawCase: MOCK_CASE });
+    const myCase = new Case(MOCK_CASE, { applicationContext });
     expect(myCase).toMatchObject({
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
@@ -32,41 +32,44 @@ describe('Case entity', () => {
   });
 
   it('defaults the orderDesignatingPlaceOfTrial to false if not a paper case or trial city is set', () => {
-    let myCase = new Case({ applicationContext, rawCase: MOCK_CASE });
+    let myCase = new Case(MOCK_CASE, { applicationContext });
     expect(myCase).toMatchObject({
       orderDesignatingPlaceOfTrial: false,
     });
 
-    myCase = new Case({
-      applicationContext,
-      rawCase: {
+    myCase = new Case(
+      {
         ...MOCK_CASE,
         isPaper: true,
       },
-    });
+      {
+        applicationContext,
+      },
+    );
     expect(myCase).toMatchObject({
       orderDesignatingPlaceOfTrial: false,
     });
   });
 
   it('defaults the orderDesignatingPlaceOfTrial to true if paper case and trial city is not set', () => {
-    const myCase = new Case({
-      applicationContext,
-      rawCase: {
+    const myCase = new Case(
+      {
         ...MOCK_CASE,
         isPaper: true,
         preferredTrialCity: undefined,
       },
-    });
+      {
+        applicationContext,
+      },
+    );
     expect(myCase).toMatchObject({
       orderDesignatingPlaceOfTrial: true,
     });
   });
 
   it('sets the expected order booleans', () => {
-    const myCase = new Case({
-      applicationContext,
-      rawCase: {
+    const myCase = new Case(
+      {
         ...MOCK_CASE,
         noticeOfAttachments: true,
         orderDesignatingPlaceOfTrial: true,
@@ -78,7 +81,10 @@ describe('Case entity', () => {
         orderToChangeDesignatedPlaceOfTrial: true,
         orderToShowCause: true,
       },
-    });
+      {
+        applicationContext,
+      },
+    );
     expect(myCase).toMatchObject({
       noticeOfAttachments: true,
       orderDesignatingPlaceOfTrial: true,
@@ -94,33 +100,32 @@ describe('Case entity', () => {
 
   describe('isValid', () => {
     it('Creates a valid case', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates a valid case from an already existing case json', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       expect(myCase.isValid()).toBeTruthy();
     });
 
     it('adds a paygov date to an already existing case json', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: { payGovId: '1234', ...MOCK_CASE },
-      });
+      const myCase = new Case(
+        { payGovId: '1234', ...MOCK_CASE },
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.isValid()).toBeTruthy();
     });
 
     it('Creates an invalid case with a document', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           documents: [
             {
               documentId: '123',
@@ -129,35 +134,44 @@ describe('Case entity', () => {
           ],
           petitioners: [{ name: 'Test Taxpayer' }],
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with no documents', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           documents: [],
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with empty object', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {},
-      });
+      const myCase = new Case(
+        {},
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.isValid()).toBeFalsy();
     });
 
     it('Creates an invalid case with no petitioners', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           petitioners: [],
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.isValid()).toBeFalsy();
     });
   });
@@ -166,9 +180,8 @@ describe('Case entity', () => {
     it('should do nothing if valid', () => {
       let error;
       try {
-        new Case({
+        new Case(MOCK_CASE, {
           applicationContext,
-          rawCase: MOCK_CASE,
         }).validate();
       } catch (err) {
         error = err;
@@ -179,10 +192,12 @@ describe('Case entity', () => {
     it('should throw an error on invalid cases', () => {
       let error;
       try {
-        new Case({
-          applicationContext,
-          rawCase: {},
-        }).validate();
+        new Case(
+          {},
+          {
+            applicationContext,
+          },
+        ).validate();
       } catch (err) {
         error = err;
       }
@@ -216,17 +231,15 @@ describe('Case entity', () => {
 
   describe('markAsSentToIRS', () => {
     it('sets irsSendDate', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       expect(caseRecord.irsSendDate).toBeDefined();
     });
     it('updates docket record status on petition documents', () => {
-      const caseRecord = new Case({
-        applicationContext,
-        rawCase: {
+      const caseRecord = new Case(
+        {
           ...MOCK_CASE,
           docketRecord: [
             {
@@ -242,7 +255,10 @@ describe('Case entity', () => {
             },
           ],
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       caseRecord.markAsSentToIRS('2018-12-04T18:27:13.370Z');
       expect(caseRecord.irsSendDate).toBeDefined();
       expect(caseRecord.docketRecord[0].status).toMatch(/^R served on/);
@@ -474,9 +490,8 @@ describe('Case entity', () => {
 
   describe('sendToIRSHoldingQueue', () => {
     it('sets status for irs batch', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.sendToIRSHoldingQueue();
       expect(caseRecord.status).toEqual('Batched for IRS');
@@ -485,18 +500,16 @@ describe('Case entity', () => {
 
   describe('markAsPaidByPayGov', () => {
     it('sets pay gov fields', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       expect(caseRecord.payGovDate).toBeDefined();
     });
 
     it('should add item to docket record when paid', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       const payGovDate = new Date().toISOString();
       const initialDocketLength =
@@ -507,9 +520,8 @@ describe('Case entity', () => {
     });
 
     it('should only set docket record once per time paid', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.markAsPaidByPayGov(new Date().toISOString());
       const docketLength = caseRecord.docketRecord.length;
@@ -520,9 +532,8 @@ describe('Case entity', () => {
     });
 
     it('should overwrite existing docket record entry if one already exists', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.addDocketRecord(
         new DocketRecord({
@@ -543,9 +554,8 @@ describe('Case entity', () => {
 
   describe('setRequestForTrialDocketRecord', () => {
     it('sets request for trial docket record when it does not already exist', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       const preferredTrialCity = 'Mobile, Alabama';
       const initialDocketLength =
@@ -556,9 +566,8 @@ describe('Case entity', () => {
     });
 
     it('should only set docket record once for request for trial', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       const preferredTrialCity = 'Mobile, Alabama';
       caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
@@ -571,9 +580,8 @@ describe('Case entity', () => {
 
   describe('addDocketRecord', () => {
     it('adds a new docketrecord', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.addDocketRecord(
         new DocketRecord({
@@ -597,9 +605,8 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
     it('validates the docketrecord', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
       let error;
@@ -614,9 +621,8 @@ describe('Case entity', () => {
 
   describe('updateDocketRecordEntry', () => {
     it('updates an existing docketrecord', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       const updatedDocketEntry = new DocketRecord({
         description: 'second record now updated',
@@ -634,9 +640,8 @@ describe('Case entity', () => {
     });
 
     it('validates the docketrecord', () => {
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       caseRecord.addDocketRecord(new DocketRecord({ description: 'test' }));
       let error;
@@ -651,10 +656,12 @@ describe('Case entity', () => {
   describe('validateWithError', () => {
     it('passes back an error passed in if invalid', () => {
       let error = null;
-      const caseRecord = new Case({
-        applicationContext,
-        rawCase: {},
-      });
+      const caseRecord = new Case(
+        {},
+        {
+          applicationContext,
+        },
+      );
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
       } catch (e) {
@@ -666,9 +673,8 @@ describe('Case entity', () => {
 
     it('does not pass back an error passed in if valid', () => {
       let error;
-      const caseRecord = new Case({
+      const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       try {
         caseRecord.validateWithError(new Error('Imarealerror'));
@@ -681,10 +687,12 @@ describe('Case entity', () => {
 
   describe('attachRespondent', () => {
     it('adds the user to the respondents', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {},
-      });
+      const caseToVerify = new Case(
+        {},
+        {
+          applicationContext,
+        },
+      );
       caseToVerify.attachRespondent(
         new Respondent({
           userId: 'respondent',
@@ -697,10 +705,12 @@ describe('Case entity', () => {
 
   describe('attachPractitioner', () => {
     it('adds the user to the practitioners', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {},
-      });
+      const caseToVerify = new Case(
+        {},
+        {
+          applicationContext,
+        },
+      );
       caseToVerify.attachPractitioner(
         new Practitioner({
           userId: 'practitioner',
@@ -713,10 +723,12 @@ describe('Case entity', () => {
 
   describe('addDocument', () => {
     it('attaches the document to the case', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {},
-      });
+      const caseToVerify = new Case(
+        {},
+        {
+          applicationContext,
+        },
+      );
       caseToVerify.addDocument({
         documentId: '123',
         documentType: 'Answer',
@@ -773,10 +785,12 @@ describe('Case entity', () => {
 
   describe('updateDocketNumberRecord records suffix changes', () => {
     it('should create a docket record when the suffix updates', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: { docketNumber: '123-19' },
-      });
+      const caseToVerify = new Case(
+        { docketNumber: '123-19' },
+        {
+          applicationContext,
+        },
+      );
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
       caseToVerify.docketNumberSuffix = 'W';
       caseToVerify.updateDocketNumberRecord();
@@ -784,19 +798,20 @@ describe('Case entity', () => {
     });
 
     it('should not create a docket record if suffix has not changed', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: { docketNumber: '123-19' },
-      });
+      const caseToVerify = new Case(
+        { docketNumber: '123-19' },
+        {
+          applicationContext,
+        },
+      );
       expect(caseToVerify.initialDocketNumberSuffix).toEqual('_');
       caseToVerify.updateDocketNumberRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should add to the docket record when the docket number changes from the last updated docket number', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToVerify = new Case(
+        {
           caseCaption: 'A Very Berry New Caption',
           docketNumber: '123-19',
           docketRecord: [
@@ -810,7 +825,10 @@ describe('Case entity', () => {
             },
           ],
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       caseToVerify.docketNumberSuffix = 'W';
       caseToVerify.updateDocketNumberRecord();
       expect(caseToVerify.docketRecord.length).toEqual(3);
@@ -822,51 +840,58 @@ describe('Case entity', () => {
 
   describe('updateCaseTitleDocketRecord', () => {
     it('should not add to the docket record when the caption is not set', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {},
-      }).updateCaseTitleDocketRecord();
+      const caseToVerify = new Case(
+        {},
+        {
+          applicationContext,
+        },
+      ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not add to the docket record when the caption is initially being set', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToVerify = new Case(
+        {
           caseCaption: 'Caption',
         },
-      }).updateCaseTitleDocketRecord();
+        {
+          applicationContext,
+        },
+      ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should not add to the docket record when the caption is equivalent to the initial title', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToVerify = new Case(
+        {
           caseCaption: 'Caption',
           initialTitle:
             'Caption v. Commissioner of Internal Revenue, Respondent',
         },
-      }).updateCaseTitleDocketRecord();
+        {
+          applicationContext,
+        },
+      ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
     it('should add to the docket record when the caption changes from the initial title', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToVerify = new Case(
+        {
           caseCaption: 'A New Caption',
           initialTitle:
             'Caption v. Commissioner of Internal Revenue, Respondent',
         },
-      }).updateCaseTitleDocketRecord();
+        {
+          applicationContext,
+        },
+      ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
     });
 
     it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToVerify = new Case(
+        {
           caseCaption: 'A Very New Caption',
           docketRecord: [
             {
@@ -881,14 +906,16 @@ describe('Case entity', () => {
           initialTitle:
             'Caption v. Commissioner of Internal Revenue, Respondent',
         },
-      }).updateCaseTitleDocketRecord();
+        {
+          applicationContext,
+        },
+      ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(2);
     });
 
     it('should add to the docket record when the caption changes from the last updated title', () => {
-      const caseToVerify = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToVerify = new Case(
+        {
           caseCaption: 'A Very Berry New Caption',
           docketRecord: [
             {
@@ -903,16 +930,18 @@ describe('Case entity', () => {
           initialTitle:
             'Caption v. Commissioner of Internal Revenue, Respondent',
         },
-      }).updateCaseTitleDocketRecord();
+        {
+          applicationContext,
+        },
+      ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(3);
     });
   });
 
   describe('getWorkItems', () => {
     it('should get all the work items associated with the documents in the case', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       myCase.addDocument({
         documentId: '123',
@@ -949,20 +978,21 @@ describe('Case entity', () => {
 
   describe('checkForReadyForTrial', () => {
     it('should not change the status if no answer documents have been filed', () => {
-      const caseToCheck = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToCheck = new Case(
+        {
           documents: [],
           status: Case.STATUS_TYPES.generalDocket,
         },
-      }).checkForReadyForTrial();
+        {
+          applicationContext,
+        },
+      ).checkForReadyForTrial();
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status if an answer document has been filed, but the cutoff has not elapsed', () => {
-      const caseToCheck = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToCheck = new Case(
+        {
           documents: [
             {
               createdAt: moment().toISOString(),
@@ -971,14 +1001,16 @@ describe('Case entity', () => {
           ],
           status: Case.STATUS_TYPES.generalDocket,
         },
-      }).checkForReadyForTrial();
+        {
+          applicationContext,
+        },
+      ).checkForReadyForTrial();
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
 
     it('should not change the status if a non answer document has been filed before the cutoff', () => {
-      const caseToCheck = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToCheck = new Case(
+        {
           documents: [
             {
               createdAt: moment()
@@ -989,14 +1021,16 @@ describe('Case entity', () => {
           ],
           status: Case.STATUS_TYPES.generalDocket,
         },
-      }).checkForReadyForTrial();
+        {
+          applicationContext,
+        },
+      ).checkForReadyForTrial();
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.generalDocket);
     });
 
     it("should not change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
-      const caseToCheck = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToCheck = new Case(
+        {
           documents: [
             {
               createdAt: moment()
@@ -1007,7 +1041,10 @@ describe('Case entity', () => {
           ],
           status: Case.STATUS_TYPES.generalDocket,
         },
-      }).checkForReadyForTrial();
+        {
+          applicationContext,
+        },
+      ).checkForReadyForTrial();
 
       expect(caseToCheck.status).not.toEqual(
         Case.STATUS_TYPES.generalDocketReadyForTrial,
@@ -1019,9 +1056,8 @@ describe('Case entity', () => {
         .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
         .toISOString();
 
-      const caseToCheck = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToCheck = new Case(
+        {
           documents: [
             {
               createdAt,
@@ -1030,7 +1066,10 @@ describe('Case entity', () => {
           ],
           status: Case.STATUS_TYPES.new,
         },
-      }).checkForReadyForTrial();
+        {
+          applicationContext,
+        },
+      ).checkForReadyForTrial();
 
       expect(caseToCheck.status).toEqual(Case.STATUS_TYPES.new);
     });
@@ -1040,9 +1079,8 @@ describe('Case entity', () => {
         .subtract(Case.ANSWER_CUTOFF_AMOUNT + 10, Case.ANSWER_CUTOFF_UNIT)
         .toISOString();
 
-      const caseToCheck = new Case({
-        applicationContext,
-        rawCase: {
+      const caseToCheck = new Case(
+        {
           documents: [
             {
               createdAt,
@@ -1051,7 +1089,10 @@ describe('Case entity', () => {
           ],
           status: Case.STATUS_TYPES.generalDocket,
         },
-      }).checkForReadyForTrial();
+        {
+          applicationContext,
+        },
+      ).checkForReadyForTrial();
 
       expect(caseToCheck.status).toEqual(
         Case.STATUS_TYPES.generalDocketReadyForTrial,
@@ -1061,13 +1102,15 @@ describe('Case entity', () => {
 
   describe('generateTrialSortTags', () => {
     it('should generate sort tags for a regular case', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           ...MOCK_CASE,
           createdAt: '2018-12-12T05:00:00Z',
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
           'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -1077,14 +1120,16 @@ describe('Case entity', () => {
     });
 
     it('should generate sort tags for a small case', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           ...MOCK_CASE,
           createdAt: '2018-12-12T05:00:00Z',
           procedureType: 'Small',
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
           'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -1094,14 +1139,16 @@ describe('Case entity', () => {
     });
 
     it('should generate sort tags for a prioritized P case', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           ...MOCK_CASE,
           createdAt: '2018-12-12T05:00:00Z',
           caseType: 'passport',
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
           'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -1111,14 +1158,16 @@ describe('Case entity', () => {
     });
 
     it('should generate sort tags for a prioritized L case', () => {
-      const myCase = new Case({
-        applicationContext,
-        rawCase: {
+      const myCase = new Case(
+        {
           ...MOCK_CASE,
           createdAt: '2018-12-12T05:00:00Z',
           caseType: 'cdp (lien/levy)',
         },
-      });
+        {
+          applicationContext,
+        },
+      );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
           'WashingtonDC-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -1130,9 +1179,8 @@ describe('Case entity', () => {
 
   describe('setAsCalendared', () => {
     it('should set case as calendared', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       myCase.setAsCalendared({
         judge: {
@@ -1147,9 +1195,8 @@ describe('Case entity', () => {
 
   describe('closeCase', () => {
     it('should update the status of the case to closed', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       myCase.closeCase();
       expect(myCase.status).toEqual(Case.STATUS_TYPES.closed);
@@ -1158,9 +1205,8 @@ describe('Case entity', () => {
 
   describe('recallFromIRSHoldingQueue', () => {
     it('should update the status of the case to recalled', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       myCase.recallFromIRSHoldingQueue();
       expect(myCase.status).toEqual(Case.STATUS_TYPES.recalled);
@@ -1169,9 +1215,8 @@ describe('Case entity', () => {
 
   describe('getDocumentById', () => {
     it('should get the document by an Id', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       const result = myCase.getDocumentById({
         documentId: MOCK_DOCUMENTS[0].documentId,
@@ -1189,9 +1234,8 @@ describe('Case entity', () => {
 
   describe('addDocumentWithoutDocketRecord', () => {
     it('should add the document without a docket record change', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       const docketRecordLength = myCase.docketRecord.length;
       myCase.addDocumentWithoutDocketRecord({
@@ -1203,9 +1247,8 @@ describe('Case entity', () => {
 
   describe('updateDocument', () => {
     it('should update the document', () => {
-      const myCase = new Case({
+      const myCase = new Case(MOCK_CASE, {
         applicationContext,
-        rawCase: MOCK_CASE,
       });
       myCase.updateDocument({
         documentId: MOCK_DOCUMENTS[0].documentId,

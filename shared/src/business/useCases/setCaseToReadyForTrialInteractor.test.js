@@ -26,9 +26,7 @@ describe('set case status to ready for trial', () => {
           createCaseTrialSortMappingRecords: () => {},
           getCaseByCaseId: () => Promise.resolve(mockCase),
           updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(
-              new Case({ applicationContext, rawCase: caseToUpdate }),
-            ),
+            Promise.resolve(new Case(caseToUpdate, { applicationContext })),
         };
       },
     };
@@ -108,9 +106,7 @@ describe('set case status to ready for trial', () => {
           getCaseByCaseId: () =>
             Promise.resolve(omit(MOCK_CASE, 'docketNumber')),
           updateCase: ({ caseToUpdate }) =>
-            Promise.resolve(
-              new Case({ applicationContext, rawCase: caseToUpdate }),
-            ),
+            Promise.resolve(new Case(caseToUpdate, { applicationContext })),
         };
       },
     };
