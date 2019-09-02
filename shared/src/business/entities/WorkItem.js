@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -15,6 +14,9 @@ const { orderBy } = require('lodash');
  * @constructor
  */
 function WorkItem(rawWorkItem, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
   this.caseId = rawWorkItem.caseId;
@@ -37,7 +39,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.sentBySection = rawWorkItem.sentBySection;
   this.sentByUserId = rawWorkItem.sentByUserId;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
-  this.workItemId = rawWorkItem.workItemId || uuid.v4();
+  this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
   this.messages = (rawWorkItem.messages || []).map(
     message => new Message(message, { applicationContext }),
   );

@@ -1,4 +1,5 @@
 const sinon = require('sinon');
+const uuid = require('uuid');
 const {
   createTestApplicationContext,
 } = require('./createTestApplicationContext');
@@ -20,7 +21,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
   beforeEach(() => {
     sinon.stub(window.Date.prototype, 'toISOString').returns(CREATED_DATE);
     applicationContext = createTestApplicationContext({
-      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       user: {
         name: 'Test Petitioner',
         role: 'petitioner',
@@ -425,6 +425,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
       applicationContext,
       section: 'docket',
     });
+
+    expect(workItems.length).toEqual(4);
 
     expect(workItems).toMatchObject([
       {
