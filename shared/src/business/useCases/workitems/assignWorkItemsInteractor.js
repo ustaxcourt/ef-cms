@@ -48,8 +48,10 @@ exports.assignWorkItemsInteractor = async ({
     });
 
   const caseToUpdate = new Case(caseObject);
-  const workItemEntity = new WorkItem(fullWorkItem);
-  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem));
+  const workItemEntity = new WorkItem(fullWorkItem, { applicationContext });
+  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem), {
+    applicationContext,
+  });
 
   const newMessage = new Message(
     {

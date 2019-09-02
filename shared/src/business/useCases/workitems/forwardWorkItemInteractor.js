@@ -59,7 +59,7 @@ exports.forwardWorkItemInteractor = async ({
     { applicationContext },
   );
 
-  const workItemToForward = new WorkItem(fullWorkItem)
+  const workItemToForward = new WorkItem(fullWorkItem, { applicationContext })
     .setAsInternal()
     .assignToUser({
       assigneeId: userToForwardTo.userId,

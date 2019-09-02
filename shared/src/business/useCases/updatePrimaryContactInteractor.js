@@ -108,21 +108,24 @@ exports.updatePrimaryContactInteractor = async ({
     userId: user.userId,
   });
 
-  const workItem = new WorkItem({
-    assigneeId: null,
-    assigneeName: null,
-    caseId,
-    caseStatus: caseEntity.status,
-    docketNumber: caseEntity.docketNumber,
-    docketNumberSuffix: caseEntity.docketNumberSuffix,
-    document: {
-      ...changeOfAddressDocument.toRawObject(),
-      createdAt: changeOfAddressDocument.createdAt,
+  const workItem = new WorkItem(
+    {
+      assigneeId: null,
+      assigneeName: null,
+      caseId,
+      caseStatus: caseEntity.status,
+      docketNumber: caseEntity.docketNumber,
+      docketNumberSuffix: caseEntity.docketNumberSuffix,
+      document: {
+        ...changeOfAddressDocument.toRawObject(),
+        createdAt: changeOfAddressDocument.createdAt,
+      },
+      isInternal: false,
+      section: DOCKET_SECTION,
+      sentBy: user.userId,
     },
-    isInternal: false,
-    section: DOCKET_SECTION,
-    sentBy: user.userId,
-  });
+    { applicationContext },
+  );
 
   const message = new Message(
     {

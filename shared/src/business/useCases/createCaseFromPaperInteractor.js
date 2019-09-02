@@ -17,24 +17,27 @@ const addPetitionDocumentWithWorkItemToCase = ({
 }) => {
   const message = `${documentEntity.documentType} filed by ${documentEntity.filedBy} is ready for review.`;
 
-  const workItemEntity = new WorkItem({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    caseId: caseToAdd.caseId,
-    caseStatus: caseToAdd.status,
-    docketNumber: caseToAdd.docketNumber,
-    docketNumberSuffix: caseToAdd.docketNumberSuffix,
-    document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+  const workItemEntity = new WorkItem(
+    {
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      caseId: caseToAdd.caseId,
+      caseStatus: caseToAdd.status,
+      docketNumber: caseToAdd.docketNumber,
+      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      document: {
+        ...documentEntity.toRawObject(),
+        createdAt: documentEntity.createdAt,
+      },
+      isInitializeCase: documentEntity.isPetitionDocument(),
+      isInternal: false,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
     },
-    isInitializeCase: documentEntity.isPetitionDocument(),
-    isInternal: false,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
+    { applicationContext },
+  );
 
   const newMessage = new Message(
     {
