@@ -94,14 +94,17 @@ exports.fileDocketEntryInteractor = async ({
     ],
   ].forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
-      const documentEntity = new Document({
-        ...baseMetadata,
-        ...metadata,
-        relationship,
-        documentId,
-        documentType: metadata.documentType,
-        userId: user.userId,
-      });
+      const documentEntity = new Document(
+        {
+          ...baseMetadata,
+          ...metadata,
+          relationship,
+          documentId,
+          documentType: metadata.documentType,
+          userId: user.userId,
+        },
+        { applicationContext },
+      );
       documentEntity.generateFiledBy(caseToUpdate);
 
       const workItem = new WorkItem(

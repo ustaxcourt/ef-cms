@@ -117,16 +117,19 @@ exports.updateUserContactInformationInteractor = async ({
 
       const newDocumentId = applicationContext.getUniqueId();
 
-      const changeOfAddressDocument = new Document({
-        additionalInfo2: `for ${user.name}`,
-        caseId: caseEntity.caseId,
-        documentId: newDocumentId,
-        documentType: documentType.title,
-        eventCode: documentType.eventCode,
-        filedBy: user.name,
-        processingStatus: 'complete',
-        userId: user.userId,
-      });
+      const changeOfAddressDocument = new Document(
+        {
+          additionalInfo2: `for ${user.name}`,
+          caseId: caseEntity.caseId,
+          documentId: newDocumentId,
+          documentType: documentType.title,
+          eventCode: documentType.eventCode,
+          filedBy: user.name,
+          processingStatus: 'complete',
+          userId: user.userId,
+        },
+        { applicationContext },
+      );
 
       const workItem = new WorkItem(
         {

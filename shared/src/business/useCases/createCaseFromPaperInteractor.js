@@ -118,16 +118,19 @@ exports.createCaseFromPaperInteractor = async ({
   caseToAdd.caseCaption = petitionEntity.caseCaption;
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
-  const petitionDocumentEntity = new Document({
-    createdAt: caseToAdd.receivedAt,
-    documentId: petitionFileId,
-    documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
-    eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
-    filedBy: caseCaptionNames,
-    isPaper: true,
-    receivedAt: caseToAdd.receivedAt,
-    userId: user.userId,
-  });
+  const petitionDocumentEntity = new Document(
+    {
+      createdAt: caseToAdd.receivedAt,
+      documentId: petitionFileId,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filedBy: caseCaptionNames,
+      isPaper: true,
+      receivedAt: caseToAdd.receivedAt,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
 
   const {
     message: newMessage,
@@ -150,48 +153,58 @@ exports.createCaseFromPaperInteractor = async ({
       );
     }
 
-    const requestForPlaceOfTrialDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
-      documentId: requestForPlaceOfTrialFileId,
-      documentTitle,
-      documentType:
-        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-      eventCode:
-        Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-      filedBy: caseCaptionNames,
-      isPaper: true,
-      receivedAt: caseToAdd.receivedAt,
-      userId: user.userId,
-    });
+    const requestForPlaceOfTrialDocumentEntity = new Document(
+      {
+        createdAt: caseToAdd.receivedAt,
+        documentId: requestForPlaceOfTrialFileId,
+        documentTitle,
+        documentType:
+          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        filedBy: caseCaptionNames,
+        isPaper: true,
+        receivedAt: caseToAdd.receivedAt,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
     caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
   }
 
   if (stinFileId) {
-    const stinDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
-      documentId: stinFileId,
-      documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
-      filedBy: caseCaptionNames,
-      isPaper: true,
-      receivedAt: caseToAdd.receivedAt,
-      userId: user.userId,
-    });
+    const stinDocumentEntity = new Document(
+      {
+        createdAt: caseToAdd.receivedAt,
+        documentId: stinFileId,
+        documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+        eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        filedBy: caseCaptionNames,
+        isPaper: true,
+        receivedAt: caseToAdd.receivedAt,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
   }
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new Document({
-      createdAt: caseToAdd.receivedAt,
-      documentId: ownershipDisclosureFileId,
-      documentType:
-        Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-      filedBy: caseCaptionNames,
-      isPaper: true,
-      receivedAt: caseToAdd.receivedAt,
-      userId: user.userId,
-    });
+    const odsDocumentEntity = new Document(
+      {
+        createdAt: caseToAdd.receivedAt,
+        documentId: ownershipDisclosureFileId,
+        documentType:
+          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filedBy: caseCaptionNames,
+        isPaper: true,
+        receivedAt: caseToAdd.receivedAt,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
     caseToAdd.addDocument(odsDocumentEntity);
   }
 

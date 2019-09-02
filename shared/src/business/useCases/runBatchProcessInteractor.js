@@ -90,7 +90,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
 
-    const petitionDocumentEntity = new Document(petitionDocument);
+    const petitionDocumentEntity = new Document(petitionDocument, {
+      applicationContext,
+    });
     petitionDocumentEntity.setAsServed();
     caseEntity.updateDocument(petitionDocumentEntity);
 
