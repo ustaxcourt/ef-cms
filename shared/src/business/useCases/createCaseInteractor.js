@@ -138,14 +138,17 @@ exports.createCaseInteractor = async ({
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
-  const petitionDocumentEntity = new Document({
-    documentId: petitionFileId,
-    documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
-    eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
-    filedBy: caseCaptionNames,
-    practitioner: practitioners[0],
-    userId: user.userId,
-  });
+  const petitionDocumentEntity = new Document(
+    {
+      documentId: petitionFileId,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filedBy: caseCaptionNames,
+      practitioner: practitioners[0],
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
   petitionDocumentEntity.generateFiledBy(caseToAdd);
   const newWorkItem = addDocumentToCase({
     applicationContext,
@@ -163,27 +166,34 @@ exports.createCaseInteractor = async ({
     }),
   );
 
-  const stinDocumentEntity = new Document({
-    documentId: stinFileId,
-    documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
-    eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    filedBy: caseCaptionNames,
-    practitioner: practitioners[0],
-    userId: user.userId,
-  });
+  const stinDocumentEntity = new Document(
+    {
+      documentId: stinFileId,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+      filedBy: caseCaptionNames,
+      practitioner: practitioners[0],
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
   stinDocumentEntity.generateFiledBy(caseToAdd);
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new Document({
-      documentId: ownershipDisclosureFileId,
-      documentType:
-        Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-      filedBy: caseCaptionNames,
-      practitioner: practitioners[0],
-      userId: user.userId,
-    });
+    const odsDocumentEntity = new Document(
+      {
+        documentId: ownershipDisclosureFileId,
+        documentType:
+          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filedBy: caseCaptionNames,
+        practitioner: practitioners[0],
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
     odsDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(odsDocumentEntity);
   }

@@ -97,16 +97,19 @@ exports.updatePrimaryContactInteractor = async ({
 
   const newDocumentId = applicationContext.getUniqueId();
 
-  const changeOfAddressDocument = new Document({
-    additionalInfo2: `for ${caseNameToUse}`,
-    caseId,
-    documentId: newDocumentId,
-    documentType: documentType.title,
-    eventCode: documentType.eventCode,
-    filedBy: user.name,
-    processingStatus: 'complete',
-    userId: user.userId,
-  });
+  const changeOfAddressDocument = new Document(
+    {
+      additionalInfo2: `for ${caseNameToUse}`,
+      caseId,
+      documentId: newDocumentId,
+      documentType: documentType.title,
+      eventCode: documentType.eventCode,
+      filedBy: user.name,
+      processingStatus: 'complete',
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
 
   const workItem = new WorkItem(
     {
