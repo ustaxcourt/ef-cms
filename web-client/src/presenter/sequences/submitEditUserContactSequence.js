@@ -21,11 +21,16 @@ export const submitEditUserContactSequence = [
     success: [
       setFormSubmittingAction,
       updateUserContactAction,
-      setAlertSuccessAction,
-      unsetFormSubmittingAction,
-      set(state.saveAlertsForNavigation, true),
-      setCurrentPageAction('Interstitial'),
-      navigateToDashboardAction,
+      {
+        noChange: [unsetFormSubmittingAction, navigateToDashboardAction],
+        success: [
+          setAlertSuccessAction,
+          unsetFormSubmittingAction,
+          set(state.saveAlertsForNavigation, true),
+          setCurrentPageAction('Interstitial'),
+          navigateToDashboardAction,
+        ],
+      },
     ],
   },
 ];

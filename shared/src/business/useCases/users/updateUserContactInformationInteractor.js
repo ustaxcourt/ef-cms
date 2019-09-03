@@ -9,6 +9,7 @@ const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
+const { isEqual } = require('lodash');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -40,6 +41,10 @@ exports.updateUserContactInformationInteractor = async ({
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
+
+  if (isEqual(user.contact, contactInfo)) {
+    throw new Error('there were no changes found needing to be updated');
+  }
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
