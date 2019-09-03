@@ -10,6 +10,10 @@ describe('Message', () => {
   });
 
   describe('isValid', () => {
+    it('should throw an error if app context is not passed in', () => {
+      expect(() => new Message({}, {})).toThrow();
+    });
+
     it('Creates a valid Message without messageId (defaults to new uuid)', () => {
       const message = new Message(
         {
