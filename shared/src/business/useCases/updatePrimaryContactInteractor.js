@@ -98,7 +98,8 @@ exports.updatePrimaryContactInteractor = async ({
   const newDocumentId = applicationContext.getUniqueId();
 
   const changeOfAddressDocument = new Document({
-    additionalInfo2: `for ${caseNameToUse}`,
+    addToCoversheet: true,
+    additionalInfo: `for ${caseNameToUse}`,
     caseId,
     documentId: newDocumentId,
     documentType: documentType.title,

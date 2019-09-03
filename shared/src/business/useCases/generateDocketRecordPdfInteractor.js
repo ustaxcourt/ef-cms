@@ -84,9 +84,7 @@ exports.generateDocketRecordPdfInteractor = async ({
                 <p>${practitioner.formattedName}</p>
                 ${getAddress({
                   ...practitioner,
-                  address1: practitioner.address1,
-                  address2: practitioner.address2,
-                  address3: practitioner.address3,
+                  ...practitioner.contact,
                 })}
                 <p>
                   <strong>Representing</strong>
@@ -131,9 +129,7 @@ exports.generateDocketRecordPdfInteractor = async ({
                 <p>${respondent.name}</p>
                 ${getAddress({
                   ...respondent,
-                  address1: respondent.address1,
-                  address2: respondent.address2,
-                  address3: respondent.address3,
+                  ...respondent.contact,
                 })}
               </div>
             `;
