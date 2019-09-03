@@ -99,6 +99,7 @@ describe('Send petition to IRS Holding Queue', () => {
           updateWorkItem: () => Promise.resolve(null),
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCases: () => ({
         getCaseInteractor,
       }),
@@ -147,6 +148,7 @@ describe('Send petition to IRS Holding Queue', () => {
           updateCase: () => null,
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCases: () => ({ getCaseInteractor }),
     };
     let error;
@@ -188,6 +190,7 @@ describe('Send petition to IRS Holding Queue', () => {
           updateWorkItem: () => Promise.resolve(null),
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCases: () => ({ getCaseInteractor }),
     };
     let error;

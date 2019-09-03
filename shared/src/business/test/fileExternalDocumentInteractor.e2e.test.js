@@ -425,6 +425,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
       section: 'docket',
     });
 
+    expect(workItems.length).toEqual(4);
+
     expect(workItems).toMatchObject([
       {
         assigneeId: null,

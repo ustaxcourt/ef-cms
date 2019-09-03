@@ -90,7 +90,9 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
 
-    const petitionDocumentEntity = new Document(petitionDocument);
+    const petitionDocumentEntity = new Document(petitionDocument, {
+      applicationContext,
+    });
     petitionDocumentEntity.setAsServed();
     caseEntity.updateDocument(petitionDocumentEntity);
 
@@ -103,6 +105,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     const batchedByName = lastMessage.from;
 
     initializeCaseWorkItem.setAsSentToIRS({
+      applicationContext,
       batchedByName,
       batchedByUserId,
     });

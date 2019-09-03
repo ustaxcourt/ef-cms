@@ -34,18 +34,21 @@ exports.saveSignedDocumentInteractor = async ({
     document => document.documentId === originalDocumentId,
   );
 
-  const signedDocumentEntity = new Document({
-    createdAt: applicationContext.getUtilities().createISODateString(),
-    documentId: signedDocumentId,
-    documentType:
-      Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
-    eventCode:
-      Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
-    filedBy: originalDocumentEntity.filedBy,
-    isPaper: false,
-    processingStatus: 'complete',
-    userId: user.userId,
-  });
+  const signedDocumentEntity = new Document(
+    {
+      createdAt: applicationContext.getUtilities().createISODateString(),
+      documentId: signedDocumentId,
+      documentType:
+        Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+      eventCode:
+        Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+      filedBy: originalDocumentEntity.filedBy,
+      isPaper: false,
+      processingStatus: 'complete',
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
 
   signedDocumentEntity.setSigned(user.userId);
 

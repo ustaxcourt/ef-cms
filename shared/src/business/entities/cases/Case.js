@@ -198,7 +198,9 @@ function Case(rawCase, { applicationContext }) {
   }
 
   if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents.map(document => new Document(document));
+    this.documents = rawCase.documents.map(
+      document => new Document(document, { applicationContext }),
+    );
   } else {
     this.documents = [];
   }
