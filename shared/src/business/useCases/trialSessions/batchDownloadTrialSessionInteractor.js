@@ -52,7 +52,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
     'MMMM D, YYYY',
   );
   const { trialLocation } = trialSessionDetails;
-  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`);
+  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`)
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
 
   sessionCases = sessionCases.map(caseToBatch => {
     const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
@@ -92,7 +94,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
   for (let index = 0; index < sessionCases.length; index++) {
     let { caseId } = sessionCases[index];
     extraFiles.push(
-      applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+      await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
         applicationContext,
         caseDetail: caseDetails[caseId],
       }),
