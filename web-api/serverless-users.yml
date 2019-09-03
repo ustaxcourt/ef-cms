@@ -353,6 +353,7 @@ functions:
           path: /{userId}/contact-info
           method: put
           cors: true
+          async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
