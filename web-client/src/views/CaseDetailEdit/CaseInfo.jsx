@@ -58,6 +58,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-month"
                       max="12"
+                      maxLength="2"
                       min="1"
                       name="receivedAtMonth"
                       type="number"
@@ -71,6 +72,9 @@ export const CaseInfo = connect(
                           value: e.target.value,
                         });
                       }}
+                      onInput={e =>
+                        (e.target.value = e.target.value.slice(0, 2))
+                      }
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
@@ -90,6 +94,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-day"
                       max="31"
+                      maxLength="2"
                       min="1"
                       name="receivedAtDay"
                       type="number"
@@ -103,6 +108,9 @@ export const CaseInfo = connect(
                           value: e.target.value,
                         });
                       }}
+                      onInput={e =>
+                        (e.target.value = e.target.value.slice(0, 2))
+                      }
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
@@ -122,6 +130,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-year"
                       max="2100"
+                      maxLength="4"
                       min="1900"
                       name="receivedAtYear"
                       type="number"
@@ -135,6 +144,9 @@ export const CaseInfo = connect(
                           value: e.target.value,
                         });
                       }}
+                      onInput={e =>
+                        (e.target.value = e.target.value.slice(0, 4))
+                      }
                     />
                   </div>
                 </div>

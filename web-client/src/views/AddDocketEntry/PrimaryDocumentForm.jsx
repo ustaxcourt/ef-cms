@@ -102,6 +102,7 @@ export const PrimaryDocumentForm = connect(
                         value: e.target.value,
                       });
                     }}
+                    onInput={e => (e.target.value = e.target.value.slice(0, 2))}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day">
@@ -111,6 +112,7 @@ export const PrimaryDocumentForm = connect(
                     className="usa-input usa-input--inline"
                     id="date-received-day"
                     max="31"
+                    maxLength="2"
                     min="1"
                     name="dateReceivedDay"
                     placeholder="DD"
@@ -125,6 +127,7 @@ export const PrimaryDocumentForm = connect(
                         value: e.target.value,
                       });
                     }}
+                    onInput={e => (e.target.value = e.target.value.slice(0, 2))}
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year">
@@ -134,6 +137,7 @@ export const PrimaryDocumentForm = connect(
                     className="usa-input usa-input--inline"
                     id="date-received-year"
                     max="2100"
+                    maxLength="4"
                     min="1900"
                     name="dateReceivedYear"
                     placeholder="YYYY"
@@ -148,6 +152,7 @@ export const PrimaryDocumentForm = connect(
                         value: e.target.value,
                       });
                     }}
+                    onInput={e => (e.target.value = e.target.value.slice(0, 4))}
                   />
                 </div>
               </div>

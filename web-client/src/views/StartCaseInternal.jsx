@@ -108,6 +108,9 @@ export const StartCaseInternal = connect(
                                 value: e.target.value,
                               });
                             }}
+                            onInput={e =>
+                              (e.target.value = e.target.value.slice(0, 2))
+                            }
                           />
                         </div>
                         <div className="usa-form-group usa-form-group--day margin-bottom-0">
@@ -130,6 +133,9 @@ export const StartCaseInternal = connect(
                                 value: e.target.value,
                               });
                             }}
+                            onInput={e =>
+                              (e.target.value = e.target.value.slice(0, 2))
+                            }
                           />
                         </div>
                         <div className="usa-form-group usa-form-group--year margin-bottom-0">
@@ -152,6 +158,9 @@ export const StartCaseInternal = connect(
                                 value: e.target.value,
                               });
                             }}
+                            onInput={e =>
+                              (e.target.value = e.target.value.slice(0, 4))
+                            }
                           />
                         </div>
                       </div>
