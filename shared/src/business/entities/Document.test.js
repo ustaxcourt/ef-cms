@@ -26,6 +26,10 @@ describe('Document entity', () => {
   });
 
   describe('isValid', () => {
+    it('should throw an error if app context is not passed in', () => {
+      expect(() => new Document({}, {})).toThrow();
+    });
+
     it('Creates a valid document', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       myDoc.documentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
