@@ -5,6 +5,9 @@ const {
 let pageContent = '';
 
 const launchMock = jest.fn();
+const launchErrorMock = jest.fn(() => {
+  throw new Error('something');
+});
 const newPageMock = jest.fn();
 const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
 const pdfMock = jest.fn(
@@ -15,8 +18,45 @@ const pdfMock = jest.fn(
   },
 );
 const closeMock = jest.fn();
+const errorMock = jest.fn();
 
 describe('generatePdfFromHtmlInteractor', () => {
+  it('should call the error logger if an error is thrown', async () => {
+    const applicationContext = {
+      getChromium: () => {
+        return {
+          puppeteer: {
+            launch: () => {
+              return launchErrorMock();
+            },
+          },
+        };
+      },
+      logger: {
+        error: errorMock,
+        time: () => null,
+        timeEnd: () => null,
+      },
+    };
+
+    const args = {
+      applicationContext,
+      contentHtml:
+        '<!doctype html><html><head></head><body>Hello World</body></html>',
+      displayHeaderFooter: false,
+      docketNumber: '123-45',
+    };
+
+    let error;
+    try {
+      await generatePdfFromHtmlInteractor(args);
+    } catch (err) {
+      error = err;
+    }
+    expect(errorMock).toHaveBeenCalled();
+    expect(error).toBeDefined();
+  });
+
   it('should launch puppeteer to generate a new pdf', async () => {
     const applicationContext = {
       getChromium: () => {

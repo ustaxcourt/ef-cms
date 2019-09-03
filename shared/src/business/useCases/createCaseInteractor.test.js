@@ -277,4 +277,97 @@ describe('createCaseInteractor', () => {
     expect(result.practitioners[0].representingPrimary).toEqual(true);
     expect(result.practitioners[0].representingSecondary).toBeUndefined();
   });
+
+  it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
+    const practitionerUser = new User({
+      name: 'Olivia Jade',
+      role: 'practitioner',
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext = {
+      docketNumberGenerator: {
+        createDocketNumber: () => Promise.resolve('00101-00'),
+      },
+      environment: { stage: 'local' },
+      getCurrentUser: () => practitionerUser,
+      getEntityConstructors: () => ({
+        CaseExternal,
+      }),
+      getPersistenceGateway: () => {
+        return {
+          createCase: async () => null,
+          getUserById: () => ({
+            name: 'Olivia Jade',
+            role: 'practitioner',
+            section: 'practitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
+          saveWorkItemForNonPaper: async () => null,
+        };
+      },
+      getUseCases: () => ({
+        getUserInteractor: () => ({
+          name: 'john doe',
+          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        }),
+      }),
+    };
+
+    let error;
+    let result;
+
+    try {
+      result = await createCaseInteractor({
+        applicationContext,
+        ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseType: 'other',
+          contactPrimary: {
+            address1: '99 South Oak Lane',
+            address2: 'Culpa numquam saepe ',
+            address3: 'Eaque voluptates com',
+            city: 'Dignissimos voluptat',
+            countryType: 'domestic',
+            email: 'petitioner1@example.com',
+            name: 'Diana Prince',
+            phone: '+1 (215) 128-6587',
+            postalCode: '69580',
+            state: 'AR',
+          },
+          contactSecondary: {
+            address1: '99 South Oak Lane',
+            address2: 'Culpa numquam saepe ',
+            address3: 'Eaque voluptates com',
+            city: 'Dignissimos voluptat',
+            countryType: 'domestic',
+            name: 'Bob Prince',
+            phone: '+1 (215) 128-6587',
+            postalCode: '69580',
+            state: 'AR',
+          },
+          filingType: 'Myself and my spouse',
+          hasIrsNotice: true,
+          isSpouseDeceased: 'No',
+          partyType: 'Petitioner & Spouse',
+          petitionFile: new File([], 'test.pdf'),
+          petitionFileSize: 1,
+          preferredTrialCity: 'Chattanooga, TN',
+          procedureType: 'Small',
+          signature: true,
+          stinFile: new File([], 'test.pdf'),
+          stinFileSize: 1,
+        },
+        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).toBeUndefined();
+    expect(result).toBeDefined();
+    expect(result.practitioners[0].representingPrimary).toEqual(true);
+    expect(result.practitioners[0].representingSecondary).toEqual(true);
+  });
 });
