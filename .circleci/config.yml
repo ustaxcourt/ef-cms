@@ -44,7 +44,9 @@ jobs:
           at: /home/circleci
       - run:
           name: Lint
-          command: npm run lint
+          command: |
+            ls -la
+            npm run lint
       - run:
           name: Shellcheck
           command: |
