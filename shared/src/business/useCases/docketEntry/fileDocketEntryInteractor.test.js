@@ -50,6 +50,7 @@ describe('fileDocketEntryInteractor', () => {
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       await fileDocketEntryInteractor({
         applicationContext,
@@ -90,6 +91,7 @@ describe('fileDocketEntryInteractor', () => {
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       await fileDocketEntryInteractor({
         applicationContext,
@@ -140,6 +142,7 @@ describe('fileDocketEntryInteractor', () => {
 
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       await fileDocketEntryInteractor({
         applicationContext,
@@ -185,6 +188,7 @@ describe('fileDocketEntryInteractor', () => {
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       caseEntity = await fileDocketEntryInteractor({
         applicationContext,
@@ -228,6 +232,7 @@ describe('fileDocketEntryInteractor', () => {
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       caseEntity = await fileDocketEntryInteractor({
         applicationContext,

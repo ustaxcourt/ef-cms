@@ -1,5 +1,5 @@
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
-
+const uuidv4 = require('uuid/v4');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -117,6 +117,9 @@ const createTestApplicationContext = ({ user } = {}) => {
         updateWorkItemInCase,
         verifyCaseForUser,
       };
+    },
+    getUniqueId: () => {
+      return uuidv4();
     },
     isAuthorizedForWorkItems: () => true,
   };

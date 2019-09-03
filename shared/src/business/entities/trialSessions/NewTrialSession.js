@@ -12,8 +12,8 @@ NewTrialSession.validationName = 'TrialSession';
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function NewTrialSession(rawSession) {
-  TrialSession.prototype.init.call(this, rawSession);
+function NewTrialSession(rawSession, { applicationContext }) {
+  TrialSession.prototype.init.call(this, rawSession, { applicationContext });
 }
 
 NewTrialSession.errorToMessageMap = { ...TrialSession.errorToMessageMap };

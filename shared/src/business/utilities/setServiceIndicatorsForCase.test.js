@@ -130,20 +130,6 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${constants.SI_ELECTRONIC} for a Practitioner filing electronically`, async () => {
-    const caseDetail = {
-      ...baseCaseDetail,
-      isPaper: true,
-      practitioners: [{ ...basePractitioner, userId: '321-cba-321-cba' }],
-    };
-
-    const result = setServiceIndicatorsForCase(caseDetail);
-
-    expect(result.practitioners[0].serviceIndicator).toEqual(
-      constants.SI_ELECTRONIC,
-    );
-  });
-
   it(`should return ${constants.SI_ELECTRONIC} for a Respondent`, async () => {
     const caseDetail = {
       ...baseCaseDetail,

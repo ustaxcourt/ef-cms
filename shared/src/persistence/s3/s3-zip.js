@@ -57,9 +57,10 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
   const archive = archiver(this.format || 'zip', this.archiverOpts || {});
 
   const extrasPromises = (extras || []).map((extra, index) =>
-    Promise.resolve(extra).then(file =>
-      archive.append(file, { name: extrasZip[index] }),
-    ),
+    Promise.resolve(extra).then(file => {
+      self.debug && console.log('append to zip from promise', extrasZip[index]);
+      archive.append(file, { name: extrasZip[index] });
+    }),
   );
 
   const extraFilesPromisesAll = Promise.all(extrasPromises).then(() => {
