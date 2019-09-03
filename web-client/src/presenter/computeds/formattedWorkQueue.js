@@ -49,7 +49,7 @@ export const formatWorkItem = (
   applicationContext,
   workItem = {},
   selectedWorkItems = [],
-  isInternal,
+  workQueueIsInternal,
 ) => {
   const result = _.cloneDeep(workItem);
 
@@ -116,7 +116,7 @@ export const formatWorkItem = (
 
   result.currentMessage = result.messages[0];
 
-  result.receivedAt = isInternal
+  result.receivedAt = workQueueIsInternal
     ? result.currentMessage.createdAt
     : isDateToday(result.document.receivedAt, applicationContext)
     ? result.document.createdAt
@@ -145,10 +145,9 @@ export const formatWorkItem = (
 export const filterWorkItems = ({
   applicationContext,
   user,
-  workQueueIsInternal,
   workQueueToDisplay,
 }) => {
-  const { box, queue } = workQueueToDisplay;
+  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   const docQCUserSection =
     user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
   const { Case } = applicationContext.getEntityConstructors();
@@ -278,7 +277,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
-  const isInternal = get(state.workQueueIsInternal);
+  const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
 
   let workQueue = workItems
@@ -286,12 +285,16 @@ export const formattedWorkQueue = (get, applicationContext) => {
       filterWorkItems({
         applicationContext,
         user,
-        workQueueIsInternal: isInternal,
         workQueueToDisplay,
       }),
     )
     .map(item =>
-      formatWorkItem(applicationContext, item, selectedWorkItems, isInternal),
+      formatWorkItem(
+        applicationContext,
+        item,
+        selectedWorkItems,
+        workQueueIsInternal,
+      ),
     );
 
   const sortFields = {
@@ -349,12 +352,12 @@ export const formattedWorkQueue = (get, applicationContext) => {
   };
 
   const sortField =
-    sortFields[isInternal ? 'messages' : 'documentQc'][
+    sortFields[workQueueIsInternal ? 'messages' : 'documentQc'][
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
   const sortDirection =
-    sortDirections[isInternal ? 'messages' : 'documentQc'][
+    sortDirections[workQueueIsInternal ? 'messages' : 'documentQc'][
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
