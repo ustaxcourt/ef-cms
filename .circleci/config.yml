@@ -32,7 +32,7 @@ jobs:
             - node_modules # location depends on npm version
           key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
-          root: /home/circleci
+          root: ~/
           paths:
             - project
 
