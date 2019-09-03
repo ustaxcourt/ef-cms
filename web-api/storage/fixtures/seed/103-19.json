@@ -838,5 +838,10 @@
     "docketNumber": "103-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:33:24.183Z"
+  },
+  {
+    "sk": "case-491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "catalog"
   }
 ]

@@ -260,5 +260,10 @@
     "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
     "description": "Pre-trial memorandum due",
     "pk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa"
+  },
+  {
+    "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "pk": "catalog"
   }
 ]
