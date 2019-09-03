@@ -8,22 +8,40 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral store used for getting state.form
  * @returns {object} alertSuccess, caseId, tab
  */
-export const updateUserContactAction = async ({ applicationContext, get }) => {
+export const updateUserContactAction = async ({
+  applicationContext,
+  get,
+  path,
+}) => {
   const userId = get(state.user.userId);
   const contactInfo = get(state.user.contact);
 
-  await applicationContext
-    .getUseCases()
-    .updateUserContactInformationInteractor({
-      applicationContext,
-      contactInfo,
-      userId,
-    });
+  try {
+    await applicationContext
+      .getUseCases()
+      .updateUserContactInformationInteractor({
+        applicationContext,
+        contactInfo,
+        userId,
+      });
+  } catch (err) {
+    console.log('err.originalError', err.originalError);
+    if (
+      err.originalError &&
+      err.originalError.response.data.indexOf(
+        'there were no changes found needing to be updated',
+      ) !== -1
+    ) {
+      return path.noChange();
+    } else {
+      throw err;
+    }
+  }
 
-  return {
+  return path.success({
     alertSuccess: {
       message: 'Please confirm the information below is correct.',
       title: 'Your changes have been saved.',
     },
-  };
+  });
 };
