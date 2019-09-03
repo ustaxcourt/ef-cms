@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const sanitize = require('sanitize-filename');
 const {
   BATCH_DOWNLOAD_TRIAL_SESSION,
@@ -20,6 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
+  caseDetails,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -44,6 +44,8 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   let s3Ids = [];
   let fileNames = [];
+  let extraFiles = [];
+  let extraFileNames = [];
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
@@ -92,10 +94,21 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   });
 
-  console.log(fileNames, s3Ids, zipName);
+  for (let index = 0; index < sessionCases.length; index++) {
+    let { caseId } = sessionCases[index];
+    extraFiles.push(
+      await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseDetail: caseDetails[caseId],
+      }),
+    );
+    extraFileNames.push(`${sessionCases[index].caseFolder}/Docket Record.pdf`);
+  }
 
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
+    extraFileNames,
+    extraFiles,
     fileNames,
     s3Ids,
     zipName,
