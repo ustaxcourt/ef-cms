@@ -205,7 +205,13 @@ const router = {
         app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
       }),
     );
-
+    route(
+      '/case-detail/*/printable-docket-record',
+      checkLoggedIn(docketNumber => {
+        document.title = `Docket Record ${pageTitleSuffix}`;
+        app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
+      }),
+    );
     route(
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
