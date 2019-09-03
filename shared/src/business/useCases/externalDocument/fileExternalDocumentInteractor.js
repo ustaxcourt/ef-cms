@@ -105,39 +105,48 @@ exports.fileExternalDocumentInteractor = async ({
 
   documentsToAdd.forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
-      const documentEntity = new Document({
-        ...baseMetadata,
-        ...metadata,
-        relationship,
-        documentId,
-        documentType: metadata.documentType,
-        userId: user.userId,
-      });
+      const documentEntity = new Document(
+        {
+          ...baseMetadata,
+          ...metadata,
+          relationship,
+          documentId,
+          documentType: metadata.documentType,
+          userId: user.userId,
+        },
+        { applicationContext },
+      );
       documentEntity.generateFiledBy(caseToUpdate);
 
-      const workItem = new WorkItem({
-        assigneeId: null,
-        assigneeName: null,
-        caseId: caseId,
-        caseStatus: caseToUpdate.status,
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-        document: {
-          ...documentEntity.toRawObject(),
-          createdAt: documentEntity.createdAt,
+      const workItem = new WorkItem(
+        {
+          assigneeId: null,
+          assigneeName: null,
+          caseId: caseId,
+          caseStatus: caseToUpdate.status,
+          docketNumber: caseToUpdate.docketNumber,
+          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+          document: {
+            ...documentEntity.toRawObject(),
+            createdAt: documentEntity.createdAt,
+          },
+          isInternal: false,
+          section: DOCKET_SECTION,
+          sentBy: user.userId,
         },
-        isInternal: false,
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
+        { applicationContext },
+      );
 
-      const message = new Message({
-        from: user.name,
-        fromUserId: user.userId,
-        message: `${documentEntity.documentType} filed by ${capitalize(
-          user.role,
-        )} is ready for review.`,
-      });
+      const message = new Message(
+        {
+          from: user.name,
+          fromUserId: user.userId,
+          message: `${documentEntity.documentType} filed by ${capitalize(
+            user.role,
+          )} is ready for review.`,
+        },
+        { applicationContext },
+      );
 
       workItem.addMessage(message);
       documentEntity.addWorkItem(workItem);

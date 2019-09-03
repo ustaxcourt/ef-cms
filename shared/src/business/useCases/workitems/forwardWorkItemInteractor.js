@@ -47,16 +47,19 @@ exports.forwardWorkItemInteractor = async ({
       workItemId: workItemId,
     });
 
-  const newMessage = new Message({
-    createdAt: createISODateString(),
-    from: user.name,
-    fromUserId: user.userId,
-    message,
-    to: userToForwardTo.name,
-    toUserId: userToForwardTo.userId,
-  });
+  const newMessage = new Message(
+    {
+      createdAt: createISODateString(),
+      from: user.name,
+      fromUserId: user.userId,
+      message,
+      to: userToForwardTo.name,
+      toUserId: userToForwardTo.userId,
+    },
+    { applicationContext },
+  );
 
-  const workItemToForward = new WorkItem(fullWorkItem)
+  const workItemToForward = new WorkItem(fullWorkItem, { applicationContext })
     .setAsInternal()
     .assignToUser({
       assigneeId: userToForwardTo.userId,

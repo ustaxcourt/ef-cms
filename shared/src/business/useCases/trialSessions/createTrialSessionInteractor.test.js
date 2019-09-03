@@ -27,6 +27,7 @@ describe('createTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         createTrialSession: () => {},
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     await expect(
       createTrialSessionInteractor({
@@ -50,6 +51,7 @@ describe('createTrialSessionInteractor', () => {
           throw new Error('yup');
         },
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     let error;
@@ -78,6 +80,7 @@ describe('createTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         createTrialSession: () => MOCK_TRIAL,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     let error;
@@ -107,6 +110,7 @@ describe('createTrialSessionInteractor', () => {
         createTrialSession: () => MOCK_TRIAL,
         createTrialSessionWorkingCopy: () => null,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     let error;
@@ -138,6 +142,7 @@ describe('createTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         createTrialSession: trial => trial,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     const result = await createTrialSessionInteractor({
@@ -163,6 +168,7 @@ describe('createTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         createTrialSession: trial => trial,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     const result = await createTrialSessionInteractor({
@@ -188,6 +194,7 @@ describe('createTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         createTrialSession: trial => trial,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     const result = await createTrialSessionInteractor({

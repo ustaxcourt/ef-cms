@@ -22,7 +22,9 @@ exports.createTrialSessionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  const trialSessionEntity = new TrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   if (!isAuthorized(user, TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
