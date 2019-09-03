@@ -20,6 +20,14 @@ describe('setPDFForSigningAction', () => {
         presenter,
       },
       props: {
+        caseDetail: {
+          documents: [
+            {
+              documentId,
+              documentType: 'Proposed Stipulated Decision',
+            },
+          ],
+        },
         documentId,
       },
       state: {
