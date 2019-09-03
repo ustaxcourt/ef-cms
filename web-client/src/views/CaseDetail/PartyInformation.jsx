@@ -11,7 +11,8 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
   return (
     <React.Fragment>
       <p className="margin-top-0 address-name">
-        {nameOverride || contact.name}
+        {nameOverride || contact.name}{' '}
+        {contact.barNumber && `(${contact.barNumber})`}
         {contact.inCareOf && (
           <span>
             <br />
@@ -82,14 +83,15 @@ const PartyInformation = connect(
                 </address>
 
                 {caseHelper.showEditContactButton && (
-                  <div>
+                  <p>
                     <a
+                      className="usa-button usa-button--unstyled"
                       href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
                     </a>
-                  </div>
+                  </p>
                 )}
                 {caseDetail.contactPrimary.serviceIndicator && (
                   <div className="margin-top-4">
@@ -149,7 +151,7 @@ const PartyInformation = connect(
                       },
                       constants,
                       {
-                        nameOverride: practitioner.formattedName,
+                        nameOverride: practitioner.name,
                       },
                     )}
                 </address>
@@ -195,7 +197,7 @@ const PartyInformation = connect(
                       },
                       constants,
                       {
-                        nameOverride: respondent.formattedName,
+                        nameOverride: respondent.name,
                       },
                     )}
                 </address>
