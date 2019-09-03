@@ -61,7 +61,7 @@ exports.updateUserContactInformationInteractor = async ({
       let oldData;
       const newData = contactInfo;
 
-      let caseEntity = new Case(userCase);
+      let caseEntity = new Case(userCase, { applicationContext });
       const practitioner = caseEntity.practitioners.find(
         practitioner => practitioner.userId === userId,
       );
@@ -79,7 +79,7 @@ exports.updateUserContactInformationInteractor = async ({
       }
 
       // we do this again so that it will convert '' to null
-      caseEntity = new Case(caseEntity);
+      caseEntity = new Case(caseEntity, { applicationContext });
       const rawCase = caseEntity.validate().toRawObject();
 
       const caseDetail = {

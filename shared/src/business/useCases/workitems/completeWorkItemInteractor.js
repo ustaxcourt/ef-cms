@@ -68,7 +68,7 @@ exports.completeWorkItemInteractor = async ({
       caseId: completedWorkItem.caseId,
     });
 
-  const caseToUpdate = new Case(caseObject);
+  const caseToUpdate = new Case(caseObject, { applicationContext });
 
   const workItemEntity = new WorkItem(completedWorkItem);
 
