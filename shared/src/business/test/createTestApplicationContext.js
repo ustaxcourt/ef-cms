@@ -1,5 +1,5 @@
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
-import uuidv4 from 'uuid/v4';
+const uuidv4 = require('uuid/v4');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
