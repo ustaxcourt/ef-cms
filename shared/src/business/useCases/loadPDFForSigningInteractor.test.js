@@ -30,4 +30,23 @@ describe('loadPDFForSigningInteractor', () => {
 
     expect(result).toEqual('pdf data');
   });
+
+  it('should throw an error if getDocument returns an error', async () => {
+    let error;
+    try {
+      await loadPDFForSigningInteractor({
+        applicationContext: {
+          getPersistenceGateway: () => ({
+            getDocument: () => {
+              throw new Error('something');
+            },
+          }),
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toEqual(new Error('error loading PDF'));
+  });
 });

@@ -64,11 +64,11 @@ describe('generateDocketRecordPdfInteractor', () => {
           isStatusServed: true,
           servedAtFormatted: '03/27/19 05:54 pm',
         },
-        filingsAndProceedings: 'Test F&P',
         index: '3',
         record: {
           createdAtFormatted: '12/27/18',
           description: 'Test Description',
+          filingsAndProceedings: 'Test F&P',
         },
       },
     ],

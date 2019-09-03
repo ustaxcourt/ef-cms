@@ -1,7 +1,8 @@
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
-import { updateFormValueWithoutEmptyStringAction } from '../actions/updateFormValueWithoutEmptyStringAction';
+import { props, state } from 'cerebral';
+import { set } from 'cerebral/factories';
 
 export const updateTrialSessionFormDataSequence = [
-  updateFormValueWithoutEmptyStringAction,
+  set(state.form[props.key], props.value),
   computeTrialSessionFormDataAction,
 ];

@@ -9,17 +9,21 @@ import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
 import { WorkingCopySessionList } from './WorkingCopySessionList';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(
   {
-    baseUrl: state.baseUrl,
+    downloadBatchOfTrialSessionSequence:
+      sequences.downloadBatchOfTrialSessionSequence,
     formattedTrialSession: state.formattedTrialSessionDetails,
     showModal: state.showModal,
-    token: state.token,
   },
-  ({ baseUrl, formattedTrialSession, showModal, token }) => {
+  ({
+    downloadBatchOfTrialSessionSequence,
+    formattedTrialSession,
+    showModal,
+  }) => {
     return (
       <>
         <TrialSessionDetailHeader />
@@ -29,13 +33,17 @@ export const TrialSessionWorkingCopy = connect(
               <h2 className="heading-1">Session Working Copy</h2>
             </div>
             <div className="grid-col-3 text-right padding-top-2">
-              <a
-                aria-label="Batch download trial session"
-                href={`${baseUrl}/trial-sessions/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
+              <button
+                className="usa-button usa-button--unstyled"
+                onClick={() => {
+                  downloadBatchOfTrialSessionSequence({
+                    trialSessionId: formattedTrialSession.trialSessionId,
+                  });
+                }}
               >
                 <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
                 Download All Cases
-              </a>
+              </button>
             </div>
           </div>
 

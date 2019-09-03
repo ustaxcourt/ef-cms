@@ -71,7 +71,9 @@ exports.updatePrimaryContactInteractor = async ({
     .generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
-      docketNumber: caseDetail.docketNumber,
+      docketNumberWithSuffix: `${
+        caseDetail.docketNumber
+      }${caseDetail.docketNumberSuffix || ''}`,
       documentTitle: documentType.title,
       name: caseNameToUse,
       newData: contactInfo,
@@ -96,7 +98,8 @@ exports.updatePrimaryContactInteractor = async ({
   const newDocumentId = applicationContext.getUniqueId();
 
   const changeOfAddressDocument = new Document({
-    additionalInfo2: `for ${caseNameToUse}`,
+    addToCoversheet: true,
+    additionalInfo: `for ${caseNameToUse}`,
     caseId,
     documentId: newDocumentId,
     documentType: documentType.title,
