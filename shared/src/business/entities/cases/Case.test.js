@@ -13,7 +13,7 @@ describe('Case entity', () => {
 
   beforeAll(() => {
     applicationContext = {
-      getUniqueId: () => 'unique-id-1',
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
   });
 
@@ -948,16 +948,19 @@ describe('Case entity', () => {
         documentType: 'Answer',
         userId: 'respondent',
       });
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        document: {},
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          document: {},
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       myCase.documents[0].addWorkItem(workItem);
       const workItems = myCase.getWorkItems();
       expect(workItems.length).toEqual(1);

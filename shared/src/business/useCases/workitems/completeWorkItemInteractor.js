@@ -35,7 +35,9 @@ exports.completeWorkItemInteractor = async ({
       workItemId,
     });
 
-  const completedWorkItem = new WorkItem(originalWorkItem)
+  const completedWorkItem = new WorkItem(originalWorkItem, {
+    applicationContext,
+  })
     .setAsCompleted({
       message: completedMessage,
       user: applicationContext.getCurrentUser(),
@@ -70,7 +72,9 @@ exports.completeWorkItemInteractor = async ({
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
 
-  const workItemEntity = new WorkItem(completedWorkItem);
+  const workItemEntity = new WorkItem(completedWorkItem, {
+    applicationContext,
+  });
 
   caseToUpdate.documents.forEach(
     document =>

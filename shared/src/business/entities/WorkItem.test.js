@@ -2,138 +2,170 @@ const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 
 describe('WorkItem', () => {
+  let applicationContext;
+
+  beforeAll(() => {
+    applicationContext = {
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+  });
+
   describe('isValid', () => {
     it('Creates a valid workitem', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        messages: [],
-        section: 'docket',
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          messages: [],
+          section: 'docket',
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Update a valid workitem with a workItemId', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        messages: [],
-        section: 'docket',
-        sentBy: 'bob',
-        workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          messages: [],
+          section: 'docket',
+          sentBy: 'bob',
+          workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        },
+        { applicationContext },
+      );
       expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Update a valid workitem with a isRead', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        isRead: true,
-        messages: [],
-        section: 'docket',
-        sentBy: 'bob',
-        workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          isRead: true,
+          messages: [],
+          section: 'docket',
+          sentBy: 'bob',
+          workItemId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        },
+        { applicationContext },
+      );
       expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Create a valid workitem without messages', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        section: 'docket',
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          section: 'docket',
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       expect(workItem.isValid()).toBeTruthy();
     });
 
     it('Create a valid workitem with real message', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        messages: [
-          {
-            from: 'abc',
-            fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'abc',
-          },
-        ],
-        section: 'docket',
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          messages: [
+            {
+              from: 'abc',
+              fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+              message: 'abc',
+            },
+          ],
+          section: 'docket',
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       expect(workItem.isValid()).toBeTruthy();
     });
   });
 
   describe('acquires messages', () => {
     it('when calling add message', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        messages: [],
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          messages: [],
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       workItem.addMessage(
-        new Message({
-          from: 'abc',
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'abc',
-        }),
+        new Message(
+          {
+            from: 'abc',
+            fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+            message: 'abc',
+          },
+          { applicationContext },
+        ),
       );
       expect(workItem.messages.length).toEqual(1);
     });
 
     it('no message added when set as completed', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'new',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        messages: [],
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'new',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          messages: [],
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       workItem.setAsCompleted({
         user: { name: 'jane', userId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
       });
@@ -141,19 +173,23 @@ describe('WorkItem', () => {
     });
 
     it('a message should be added when set as sentToIRS', () => {
-      const workItem = new WorkItem({
-        assigneeId: 'bob',
-        assigneeName: 'bob',
-        caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        caseStatus: 'Batched for IRS',
-        caseTitle: 'testing',
-        docketNumber: '101-18',
-        docketNumberSuffix: 'S',
-        document: {},
-        messages: [],
-        sentBy: 'bob',
-      });
+      const workItem = new WorkItem(
+        {
+          assigneeId: 'bob',
+          assigneeName: 'bob',
+          caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseStatus: 'Batched for IRS',
+          caseTitle: 'testing',
+          docketNumber: '101-18',
+          docketNumberSuffix: 'S',
+          document: {},
+          messages: [],
+          sentBy: 'bob',
+        },
+        { applicationContext },
+      );
       workItem.setAsSentToIRS({
+        applicationContext,
         batchedByName: 'bob',
         batchedByUserId: 'abc',
       });
