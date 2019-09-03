@@ -16,6 +16,7 @@
               "createdAt": "2019-03-01T21:40:46.415Z",
               "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Petitioner",
               "workItems": []
@@ -61,7 +62,6 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "currentVersion": "0",
     "caseType": "Whistleblower",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Architecto assumenda",
       "address2": "Suscipit animi solu",
@@ -130,6 +130,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
       "documentType": "Petition",
+      "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
       "workItems": []
@@ -168,6 +169,7 @@
       "createdAt": "2019-03-01T21:40:46.415Z",
       "documentId": "1f1aa3f7-e2e3-43e6-885d-4ce341588c76",
       "documentType": "Petition",
+      "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
       "workItems": []

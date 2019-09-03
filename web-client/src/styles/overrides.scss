@@ -11,38 +11,6 @@
   border: none;
 }
 
-.usa-header {
-  margin-bottom: 3rem;
-
-  .usa-logo {
-    width: 100%;
-    margin: 20px 0 0 0;
-
-    button {
-      padding: 0;
-      border: none;
-      background: none;
-      color: #1b1b1b;
-      text-decoration: none;
-    }
-
-    img {
-      width: 100%;
-      max-width: 75px;
-      max-height: 100%;
-    }
-
-    @media only screen and (max-width: units('desktop')) {
-      width: 46px;
-      margin: 0;
-    }
-  }
-
-  .usa-nav {
-    border: none;
-  }
-}
-
 option:first-child {
   font-weight: initial;
 }
@@ -64,10 +32,6 @@ option:first-child {
   }
 }
 
-.usa-header .usa-nav-secondary .usa-search {
-  margin-top: -0.6rem;
-}
-
 .usa-alert {
   margin-bottom: 2rem;
   &.usa-alert-paragraph {
@@ -76,16 +40,6 @@ option:first-child {
       max-width: 66ch;
     }
   }
-}
-
-.usa-nav-secondary-links li:not(:last-child)::after {
-  padding-left: 0.5rem;
-  color: transparent;
-  content: '';
-}
-
-.usa-nav-secondary-links li {
-  padding-left: 1rem;
 }
 
 .usa-section {

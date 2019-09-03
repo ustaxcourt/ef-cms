@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
 const { IRS_BATCH_SYSTEM_SECTION, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
 const { orderBy } = require('lodash');
@@ -23,7 +24,7 @@ function WorkItem(rawWorkItem) {
   this.completedBy = rawWorkItem.completedBy;
   this.completedByUserId = rawWorkItem.completedByUserId;
   this.completedMessage = rawWorkItem.completedMessage;
-  this.createdAt = rawWorkItem.createdAt || new Date().toISOString();
+  this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
   this.document = rawWorkItem.document;
@@ -35,7 +36,7 @@ function WorkItem(rawWorkItem) {
   this.sentBy = rawWorkItem.sentBy;
   this.sentBySection = rawWorkItem.sentBySection;
   this.sentByUserId = rawWorkItem.sentByUserId;
-  this.updatedAt = rawWorkItem.updatedAt || new Date().toISOString();
+  this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || uuid.v4();
   this.messages = (rawWorkItem.messages || []).map(
     message => new Message(message),
@@ -250,7 +251,7 @@ WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
  * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.setAsCompleted = function({ message, user }) {
-  this.completedAt = new Date().toISOString();
+  this.completedAt = createISODateString();
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedMessage = message;
@@ -270,7 +271,7 @@ WorkItem.prototype.setAsSentToIRS = function({
   batchedByName,
   batchedByUserId,
 }) {
-  this.completedAt = new Date().toISOString();
+  this.completedAt = createISODateString();
   this.completedMessage = 'Served on IRS';
   this.completedBy = batchedByName;
   this.completedByUserId = batchedByUserId;

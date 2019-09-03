@@ -11,7 +11,17 @@ export const BindedSelect = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  ({ bind, children, className, id, name, onChange, simpleSetter, value }) => {
+  ({
+    ariaLabel,
+    bind,
+    children,
+    className,
+    id,
+    name,
+    onChange,
+    simpleSetter,
+    value,
+  }) => {
     let activeOption, setSelect;
 
     if (bind) {
@@ -25,7 +35,7 @@ export const BindedSelect = connect(
 
     return (
       <select
-        aria-label={name}
+        aria-label={ariaLabel || name}
         className={classNames('usa-select', className)}
         id={id}
         name={name}

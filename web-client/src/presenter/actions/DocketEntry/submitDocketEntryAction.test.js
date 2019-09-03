@@ -1,3 +1,4 @@
+import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitDocketEntryAction } from './submitDocketEntryAction';
@@ -12,6 +13,7 @@ describe('submitDocketEntryAction', () => {
     fileDocketEntryStub = sinon.stub();
 
     presenter.providers.applicationContext = {
+      ...applicationContext,
       getUniqueId: () => '123',
       getUseCases: () => ({
         createCoverSheet: createCoverSheetStub,

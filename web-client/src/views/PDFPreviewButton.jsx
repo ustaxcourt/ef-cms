@@ -22,7 +22,7 @@ export const PDFPreviewButton = connect(
     return (
       <>
         <button
-          className="usa-button usa-button--unstyled"
+          className="usa-button usa-button--unstyled pdf-preview-btn"
           type="button"
           onClick={() => openPdfPreviewModalSequence({ file })}
         >

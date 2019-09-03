@@ -245,7 +245,12 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updatePrimaryContact:
+    runtime: nodejs8.10
     handler: web-api/src/casesHandlers.updatePrimaryContactLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/contact-primary
@@ -470,6 +475,66 @@ functions:
       - http:
           path: /{caseId}/associate-respondent
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  createCaseNote:
+    handler: web-api/src/casesHandlers.createCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCaseNote:
+    handler: web-api/src/casesHandlers.getCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseNote:
+    handler: web-api/src/casesHandlers.updateCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteCaseNote:
+    handler: web-api/src/casesHandlers.deleteCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getAllCaseDeadlines:
+    handler: web-api/src/casesHandlers.getAllCaseDeadlinesLambda
+    events:
+      - http:
+          path: /case-deadlines
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

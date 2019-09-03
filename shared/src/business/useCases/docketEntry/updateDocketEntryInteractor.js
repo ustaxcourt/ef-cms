@@ -2,14 +2,12 @@ const {
   FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { Message } = require('../../entities/Message');
+const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -72,12 +70,14 @@ exports.updateDocketEntryInteractor = async ({
     const workItemToDelete = currentDocument.workItems.find(
       workItem => !workItem.document.isFileAttached,
     );
+
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       workItem: workItemToDelete,
     });
 
-    const workItem = new WorkItem({
+    const workItem = currentDocument.workItems[0];
+    Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,
       caseId: caseId,
@@ -93,17 +93,6 @@ exports.updateDocketEntryInteractor = async ({
       sentBy: user.userId,
     });
 
-    const message = new Message({
-      from: user.name,
-      fromUserId: user.userId,
-      message: `${documentEntity.documentType} filed by ${capitalize(
-        user.role,
-      )} is ready for review.`,
-    });
-
-    workItem.addMessage(message);
-    documentEntity.addWorkItem(workItem);
-
     workItem.setAsCompleted({
       message: 'completed',
       user,
@@ -117,6 +106,8 @@ exports.updateDocketEntryInteractor = async ({
       sentBySection: user.section,
       sentByUserId: user.userId,
     });
+
+    documentEntity.addWorkItem(workItem);
 
     await applicationContext
       .getPersistenceGateway()

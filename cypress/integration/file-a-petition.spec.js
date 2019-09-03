@@ -154,6 +154,10 @@ describe('creation form', () => {
       .select('Mobile, Alabama');
   });
 
+  it('reviews information before filing', () => {
+    cy.get('button#submit-case').click();
+  });
+
   it('submits forms and shows a success message', () => {
     cy.server();
     cy.route('POST', '**/cases').as('postCase');

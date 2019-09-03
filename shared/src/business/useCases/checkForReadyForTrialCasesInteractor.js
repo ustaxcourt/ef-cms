@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * @param {object} providers the providers object
@@ -7,7 +8,7 @@ const { Case } = require('../entities/cases/Case');
 exports.checkForReadyForTrialCasesInteractor = async ({
   applicationContext,
 }) => {
-  applicationContext.logger.info('Time', new Date().toISOString());
+  applicationContext.logger.info('Time', createISODateString());
 
   const caseCatalog = await applicationContext
     .getPersistenceGateway()
@@ -59,5 +60,5 @@ exports.checkForReadyForTrialCasesInteractor = async ({
   }
   await Promise.all(updatedCases);
 
-  applicationContext.logger.info('Time', new Date().toISOString());
+  applicationContext.logger.info('Time', createISODateString());
 };

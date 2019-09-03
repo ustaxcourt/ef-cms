@@ -55,7 +55,7 @@ export const StartCaseStep1 = connect(
               htmlFor="stin-file"
               id="stin-file-label"
             >
-              Upload Your Statement of Taxpayer Identification{' '}
+              Upload your Statement of Taxpayer Identification{' '}
               <span className="success-message">
                 <FontAwesomeIcon icon="check-circle" size="1x" />
               </span>

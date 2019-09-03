@@ -44,9 +44,12 @@ export const MessagesInProgress = connect(
                         href={documentHelper({
                           docketNumber: workItem.docketNumber,
                           documentId: workItem.document.documentId,
+                          shouldLinkToEdit:
+                            workItem.document.isFileAttached === false,
                         })}
                       >
-                        {workItem.document.documentType}
+                        {workItem.document.documentTitle ||
+                          workItem.document.documentType}
                       </a>
                     </p>
                     <p className="message-detail margin-y-0">

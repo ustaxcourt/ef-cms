@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const headerHelper = get => {
   const user = get(state.user);
+  const isLoggedIn = !!user;
   const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
@@ -25,13 +26,13 @@ export const headerHelper = get => {
     return !externalRoles.includes(role);
   };
 
-  const isTrialSessions = currentPage.startsWith('TrialSessions');
-  const isTrialSessionDetails = currentPage.startsWith('TrialSessionDetail');
+  const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
   const pageIsMessages =
     userRole == 'judge'
       ? currentPage.startsWith('Messages')
       : isDashboard && workQueueIsInternal && !isTrialSessions;
+  const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
@@ -41,15 +42,15 @@ export const headerHelper = get => {
     pageIsHome: isDashboard && !pageIsMessages,
     pageIsMessages,
     pageIsMyCases: isDashboard && isUserExternal(userRole),
-    pageIsTrialSessions:
-      currentPage &&
-      (isTrialSessions || isTrialSessionDetails) &&
-      isUserInternal(userRole),
+    pageIsReports: isCaseDeadlines,
+    pageIsTrialSessions: isTrialSessions && isUserInternal(userRole),
+    showAccountMenu: isLoggedIn,
     showDocumentQC: isUserInternal(userRole),
     showHomeIcon: userRole == 'judge',
     showMessages: isUserInternal(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
     showMyCases: isUserExternal(userRole),
+    showReports: isUserInternal(userRole),
     showSearchInHeader:
       user &&
       userRole &&

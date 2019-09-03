@@ -27,6 +27,7 @@
               "createdAt": "2019-03-01T21:42:29.073Z",
               "documentId": "89c781f6-71ba-4ead-93d8-c681c2183a73",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Petitioner",
               "workItems": []
@@ -72,7 +73,6 @@
     "partyType": "Petitioner & Spouse",
     "isSpouseDeceased": "No",
     "caseType": "Passport",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Dolor ea elit dolor",
       "address2": "Duis molestias ullam",

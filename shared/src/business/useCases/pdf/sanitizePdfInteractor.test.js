@@ -1,11 +1,10 @@
+const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
-
-const { PDFDocumentFactory } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 const { sanitizePdfInteractor } = require('./sanitizePdfInteractor');
-const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
-const fs = require('fs');
 
+const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../../test-output/');
 
 const testAsset = name => {
@@ -48,7 +47,7 @@ describe('sanitizePdf', () => {
 
     it('sanitizes an original and returns new data with same number of pages for a valid document', async () => {
       const result = await sanitizePdfInteractor(params);
-      const newPdfDoc = PDFDocumentFactory.load(result);
+      const newPdfDoc = await PDFDocument.load(result);
       const newPdfDocPages = newPdfDoc.getPages();
 
       expect(saveDocumentStub.calledOnce).toBeTruthy();

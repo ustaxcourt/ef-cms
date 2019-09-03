@@ -52,7 +52,7 @@ export const SecondarySupportingDocumentForm = connect(
               htmlFor={`secondary-supporting-document-${index}`}
               id={`secondary-supporting-document-${index}-label`}
             >
-              Select Supporting Document
+              Select supporting document
             </label>
             <select
               aria-describedby={`secondary-supporting-document-${index}-label`}

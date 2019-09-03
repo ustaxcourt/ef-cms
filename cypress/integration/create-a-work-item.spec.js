@@ -46,14 +46,15 @@ describe('Create a work item ', () => {
     navigateToDashboard('petitionsclerk');
     viewMyOutbox();
     getTableRows().should('have.length', 1);
-    getWorkItemContaining('104-19').click();
+    cy.showsSpinner(false);
+    getWorkItemContaining('104-19');
     getWorkItemContaining('yolo').should('exist');
   });
 
   it('creates a section sent message in the petitions section', () => {
     viewSectionOutbox();
     getTableRows().should('have.length', 1);
-    getWorkItemContaining('104-19').click();
+    getWorkItemContaining('104-19');
     getWorkItemContaining('yolo').should('exist');
   });
 
@@ -61,7 +62,7 @@ describe('Create a work item ', () => {
     navigateToDashboard('docketclerk');
     viewMyInbox();
     getTableRows().should('have.length', 1);
-    getWorkItemContaining('104-19').click();
+    getWorkItemContaining('104-19');
     getWorkItemContaining('yolo').should('exist');
   });
 

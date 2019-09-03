@@ -5,6 +5,7 @@
       {
         "createdAt": "2019-03-05T17:34:13.490Z",
         "documentType": "Petition",
+        "documentTitle": "Petition",
         "filedBy": "Test Petitioner",
         "processingStatus": "complete",
         "workItems": [
@@ -14,6 +15,7 @@
             "document": {
               "createdAt": "2019-03-05T17:34:13.490Z",
               "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
+              "documentTitle": "Petition",
               "documentType": "Petition",
               "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Petitioner",
@@ -70,7 +72,6 @@
     "orderForFilingFee": true,
     "partyType": "Corporation",
     "caseType": "Innocent Spouse",
-    "yearAmounts": [],
     "contactPrimary": {
       "inCareOf": "Abdul Barlow",
       "address3": "Reprehenderit conseq",
@@ -161,6 +162,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
+      "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
       "workItems": []
@@ -197,6 +199,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "c63be3f2-2240-451e-b6bd-8206d52a070b",
       "documentType": "Petition",
+      "documentTitle": "Petition",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Petitioner",
       "workItems": []
@@ -221,5 +224,41 @@
     ],
     "docketNumber": "104-19",
     "updatedAt": "2019-03-05T17:34:13.490Z"
+  },
+  {
+    "createdAt": "2019-08-22T12:47:16.905Z",
+    "deadlineDate": "2019-08-25T04:00:00.000Z",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "caseDeadlineId": "ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "description": "Final status report due to Judge Ashford",
+    "pk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057"
+  },
+  {
+    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05|case-deadline"
+  },
+  {
+    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05|case-deadline"
+  },
+  {
+    "caseDeadlineId": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "pk": "case-deadline-catalog"
+  },
+  {
+    "caseDeadlineId": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "sk": "case-deadline-ff22fe63-4117-42ee-a66c-8cfd2062a057",
+    "pk": "case-deadline-catalog"
+  },
+  {
+    "createdAt": "2019-08-22T12:46:01.052Z",
+    "deadlineDate": "2019-08-22T04:00:00.000Z",
+    "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
+    "sk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "caseDeadlineId": "08855730-3047-4ca6-a9e7-16ff64c9dcaa",
+    "description": "Pre-trial memorandum due",
+    "pk": "case-deadline-08855730-3047-4ca6-a9e7-16ff64c9dcaa"
   }
 ]

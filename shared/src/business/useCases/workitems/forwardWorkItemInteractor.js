@@ -3,6 +3,7 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -47,7 +48,7 @@ exports.forwardWorkItemInteractor = async ({
     });
 
   const newMessage = new Message({
-    createdAt: new Date().toISOString(),
+    createdAt: createISODateString(),
     from: user.name,
     fromUserId: user.userId,
     message,
@@ -105,7 +106,7 @@ exports.forwardWorkItemInteractor = async ({
     applicationContext,
     workItem: {
       ...workItemToForward.validate().toRawObject(),
-      createdAt: new Date().toISOString(),
+      createdAt: createISODateString(),
     },
   });
 

@@ -46,84 +46,18 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
 
-  if (new Date(result.deadlineDate) < new Date()) {
+  //use the app context utility function so the time zones match when comparing dates
+  const deadlineDateMomented = applicationContext
+    .getUtilities()
+    .prepareDateFromString(result.deadlineDate);
+
+  const today = applicationContext.getUtilities().prepareDateFromString();
+
+  if (deadlineDateMomented.isBefore(today, 'day')) {
     result.overdue = true;
   }
 
   return result;
-};
-
-const processArrayErrors = (yearAmount, caseDetailErrors, idx) => {
-  const yearAmountError = caseDetailErrors.yearAmounts.find(error => {
-    return error.index === idx;
-  });
-
-  if (yearAmountError) {
-    yearAmount.showError = true;
-    yearAmount.errorMessage = yearAmountError.year;
-  }
-};
-
-const processDuplicateError = (caseDetail, caseDetailErrors) => {
-  const duplicates = _.filter(caseDetail.yearAmounts, (val, i, iteratee) =>
-    _.find(iteratee, (val2, i2) => {
-      return val.formattedYear === val2.formattedYear && i !== i2;
-    }),
-  );
-
-  duplicates.forEach(duplicate => {
-    duplicate.showError = true;
-    duplicate.errorMessage = caseDetailErrors.yearAmounts;
-  });
-};
-
-const formatYearAmount = (applicationContext, caseDetailErrors, caseDetail) => (
-  yearAmount,
-  idx,
-) => {
-  const isoYear = applicationContext
-    .getUtilities()
-    .createISODateString(yearAmount.year, 'YYYY');
-  const formattedYear = yearAmount.year
-    ? applicationContext.getUtilities().formatDateString(isoYear, 'YYYY')
-    : 'Invalid date';
-  yearAmount.formattedYear = formattedYear;
-  yearAmount.showError = false;
-  yearAmount.amountFormatted = yearAmount.amount
-    ? Number(yearAmount.amount).toLocaleString('en-US')
-    : yearAmount.amount;
-  if (Array.isArray(caseDetailErrors.yearAmounts)) {
-    processArrayErrors(yearAmount, caseDetailErrors, idx);
-  } else if (typeof caseDetailErrors.yearAmounts === 'string') {
-    processDuplicateError(caseDetail, caseDetailErrors);
-  }
-
-  return {
-    ...yearAmount,
-    year:
-      formattedYear.includes('Invalid') || yearAmount.year.length < 4
-        ? yearAmount.year
-        : formattedYear,
-  };
-};
-
-export const formatYearAmounts = (
-  applicationContext,
-  caseDetail = {},
-  caseDetailErrors = {},
-) => {
-  caseDetail.canAddYearAmount =
-    (caseDetail.yearAmounts || []).filter(yearAmount => {
-      return !yearAmount.year;
-    }).length !== 1;
-
-  if (!caseDetail.yearAmounts || caseDetail.yearAmounts.length === 0) {
-    caseDetail.yearAmountsFormatted = [{ amount: '', year: '' }];
-  } else {
-    caseDetail.yearAmountsFormatted = caseDetail.yearAmounts.map(
-      formatYearAmount(applicationContext, caseDetailErrors, caseDetail),
-    );
-  }
 };
 
 const formatDocketRecordWithDocument = (
@@ -150,28 +84,7 @@ const formatDocketRecordWithDocument = (
           .formatDateString(document.certificateOfServiceDate, 'MMDDYY');
       }
 
-      //filings and proceedings string
-      //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
-      const filingsAndProceedingsArray = [
-        `${
-          document.certificateOfService
-            ? `(C/S ${document.certificateOfServiceDateFormatted})`
-            : ''
-        }`,
-        `${document.exhibits ? '(Exhibit(s))' : ''}`,
-        `${document.attachments ? '(Attachment(s))' : ''}`,
-        `${
-          document.objections === 'Yes'
-            ? '(Objection)'
-            : document.objections === 'No'
-            ? '(No Objection)'
-            : ''
-        }`,
-        `${document.lodged ? '(Lodged)' : ''}`,
-      ];
-      record.filingsAndProceedings = filingsAndProceedingsArray
-        .filter(item => item !== '')
-        .join(' ');
+      record.filingsAndProceedings = getFilingsAndProceedings(document);
 
       if (document.additionalInfo) {
         record.description += ` ${document.additionalInfo}`;
@@ -180,6 +93,30 @@ const formatDocketRecordWithDocument = (
 
     return { document, index, record };
   });
+};
+
+export const getFilingsAndProceedings = document => {
+  //filings and proceedings string
+  //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+  const filingsAndProceedingsArray = [
+    `${
+      document.certificateOfService
+        ? `(C/S ${document.certificateOfServiceDateFormatted})`
+        : ''
+    }`,
+    `${document.exhibits ? '(Exhibit(s))' : ''}`,
+    `${document.attachments ? '(Attachment(s))' : ''}`,
+    `${
+      document.objections === 'Yes'
+        ? '(Objection)'
+        : document.objections === 'No'
+        ? '(No Objection)'
+        : ''
+    }`,
+    `${document.lodged ? '(Lodged)' : ''}`,
+  ];
+
+  return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
 };
 
 const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
@@ -192,7 +129,7 @@ const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
   );
 };
 
-const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
+const formatCase = (applicationContext, caseDetail) => {
   if (_.isEmpty(caseDetail)) {
     return {};
   }
@@ -267,14 +204,9 @@ const formatCase = (applicationContext, caseDetail, caseDetailErrors) => {
       result.hasVerifiedIrsNotice === undefined) &&
       result.hasIrsNotice);
 
-  result.shouldShowYearAmounts =
-    result.shouldShowIrsNoticeDate && result.hasVerifiedIrsNotice;
-
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
-
-  formatYearAmounts(applicationContext, result, caseDetailErrors);
 
   result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
   result.formattedTrialDate = 'Not scheduled';
@@ -366,8 +298,12 @@ export const formattedCaseDetail = (get, applicationContext) => {
   if (caseId) {
     docketRecordSort = get(state.sessionMetadata.docketRecordSort[caseId]);
   }
-  const caseDetailErrors = get(state.caseDetailErrors);
-  const result = formatCase(applicationContext, caseDetail, caseDetailErrors);
+  const result = {
+    ...applicationContext
+      .getUtilities()
+      .setServiceIndicatorsForCase(caseDetail),
+    ...formatCase(applicationContext, caseDetail),
+  };
   result.docketRecordWithDocument = sortDocketRecords(
     result.docketRecordWithDocument,
     docketRecordSort,

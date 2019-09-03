@@ -50,6 +50,7 @@ const goToDashboard = [
       },
     ],
     petitioner: [
+      clearAlertsAction,
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),

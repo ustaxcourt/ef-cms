@@ -36,6 +36,9 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  batchDownloadTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
+const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
 const {
@@ -66,6 +69,12 @@ const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
 const {
+  createCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/createCaseNote');
+const {
+  createCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/createCaseNoteInteractor');
+const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
@@ -82,6 +91,9 @@ const {
 const {
   createTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor');
+const {
+  createTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy');
 const {
   createUser,
 } = require('../../shared/src/persistence/dynamo/users/createUser');
@@ -100,6 +112,12 @@ const {
 const {
   deleteCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor');
+const {
+  deleteCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/deleteCaseNote');
+const {
+  deleteCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor');
 const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
@@ -125,11 +143,21 @@ const {
   forwardWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/forwardWorkItemInteractor');
 const {
-  generateDocketRecordPdfInteractor,
-} = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
+  generateChangeOfAddressTemplate,
+  getDocumentTypeForAddressChange,
+} = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
+const {
+  getAllCaseDeadlines,
+} = require('../../shared/src/persistence/dynamo/caseDeadlines/getAllCaseDeadlines');
+const {
+  getAllCaseDeadlinesInteractor,
+} = require('../../shared/src/business/useCases/caseDeadline/getAllCaseDeadlinesInteractor');
 const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
@@ -154,6 +182,12 @@ const {
 const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
+const {
+  getCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/getCaseNote');
+const {
+  getCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/getCaseNoteInteractor');
 const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
@@ -256,6 +290,12 @@ const {
 const {
   getTrialSessionsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionsInteractor');
+const {
+  getTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionWorkingCopy');
+const {
+  getTrialSessionWorkingCopyInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/getTrialSessionWorkingCopyInteractor');
 const {
   getUploadPolicy,
 } = require('../../shared/src/persistence/s3/getUploadPolicy');
@@ -363,6 +403,12 @@ const {
   updateCaseInteractor,
 } = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
+  updateCaseNote,
+} = require('../../shared/src/persistence/dynamo/caseNotes/updateCaseNote');
+const {
+  updateCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
+const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
@@ -380,6 +426,12 @@ const {
 const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
+const {
+  updateTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
+const {
+  updateTrialSessionWorkingCopyInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/updateTrialSessionWorkingCopyInteractor');
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
@@ -495,21 +547,25 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
+        createCaseNote,
         createCaseTrialSortMappingRecords,
         createTrialSession,
+        createTrialSessionWorkingCopy,
         createUser,
         createWorkItem,
         deleteCaseDeadline,
-
+        deleteCaseNote,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
+        getAllCaseDeadlines,
         getAllCatalogCases,
         getCalendaredCasesForTrialSession,
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
+        getCaseNote,
         getCasesByUser,
         getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
@@ -525,6 +581,7 @@ module.exports = (appContextUser = {}) => {
         getSentMessagesForSection,
         getSentMessagesForUser,
         getTrialSessionById,
+        getTrialSessionWorkingCopy,
         getTrialSessions,
         getUploadPolicy,
         getUserById,
@@ -542,9 +599,11 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
+        updateCaseNote,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateTrialSession,
+        updateTrialSessionWorkingCopy,
         updateWorkItem,
         updateWorkItemInCase,
         uploadDocument,
@@ -573,25 +632,30 @@ module.exports = (appContextUser = {}) => {
         assignWorkItemsInteractor,
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
+        batchDownloadTrialSessionInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
+        createCaseNoteInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
+        deleteCaseNoteInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
-        generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
+        generatePdfFromHtmlInteractor,
+        getAllCaseDeadlinesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
+        getCaseNoteInteractor,
         getCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
         getDocumentQCBatchedForUserInteractor,
@@ -609,6 +673,7 @@ module.exports = (appContextUser = {}) => {
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
         getTrialSessionDetailsInteractor,
+        getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
         getUserInteractor,
         getUsersInSectionInteractor,
@@ -628,9 +693,11 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
+        updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
+        updateTrialSessionWorkingCopyInteractor,
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
@@ -642,6 +709,8 @@ module.exports = (appContextUser = {}) => {
       return {
         createISODateString,
         formatDateString,
+        generateChangeOfAddressTemplate,
+        getDocumentTypeForAddressChange,
         prepareDateFromString,
       };
     },

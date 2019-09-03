@@ -8,7 +8,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-
+    const documentCount = overrides.documentCount || 2;
     const docketNumberSuffix = overrides.docketNumberSuffix || 'W';
 
     const caseDetail = test.getState('caseDetail');
@@ -26,7 +26,7 @@ export default (test, overrides = {}) => {
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
       `${test.docketNumber}${docketNumberSuffix}`,
     );
-    expect(caseDetail.documents.length).toEqual(2);
+    expect(caseDetail.documents.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
     expect(caseDetail.documents[0].eventCode).toEqual('P');

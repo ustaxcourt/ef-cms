@@ -325,6 +325,25 @@
           }
         ]
       },
+      "put": {
+        "tags": ["documents"],
+        "summary": "updates a current docket entry on a case",
+        "description": "Updates a docket entry/document and attaches it to a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
@@ -2607,14 +2626,58 @@
         }
       }
     },
-    "/docket-record-pdf": {
+    "/generate-pdf-from-html": {
       "post": {
-        "summary": "generate a printable pdf of the docket record",
-        "description": "creates a printable pdf with the provided docket record html template.\n",
+        "summary": "generates a pdf given a html string",
+        "description": "creates a printable pdf out of the provided html string.\n",
         "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/case-deadlines": {
+      "get": {
+        "tags": ["caseDeadlines"],
+        "summary": "get all case deadlines",
+        "description": "get all case deadlines.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseDeadline"
+            }
           }
         },
         "security": [
@@ -2863,6 +2926,186 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trial-sessions/{trialSessionId}/working-copy": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["trialsessions"],
+        "summary": "gets the trial session working copy for a trial session for the logged in user",
+        "description": "gets the trial session working copy for a trial session for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSessionWorkingCopy"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["trialsessions"],
+        "summary": "updates the trial session working copy for a trial session for the logged in user",
+        "description": "updates the trial session working copy for a trial session for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSessionWorkingCopy"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/case-note": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["caseNotes"],
+        "summary": "gets the logged in user's note for a case",
+        "description": "gets the logged in user's note for a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["caseNotes"],
+        "summary": "create and associate a note to a case for the logged in user",
+        "description": "create and associate a note to a case for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["caseNotes"],
+        "summary": "update a case note for the logged in user",
+        "description": "update a case note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["caseNotes"],
+        "summary": "delete the case note for the logged in user",
+        "description": "delete the case note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/caseNote"
             }
           }
         },
@@ -3189,6 +3432,32 @@
       },
       "description": "a trial session"
     },
+    "trialSessionWorkingCopy": {
+      "type": "object",
+      "properties": {
+        "sort": {
+          "type": "string",
+          "description": "field to sort the cases by"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": "sort order"
+        },
+        "caseMetadata": {
+          "type": "object",
+          "description": "map of cases to trial statuses"
+        },
+        "filters": {
+          "type": "object",
+          "description": "trial status filters with boolean values"
+        },
+        "trialSessionId": {
+          "type": "string",
+          "description": "id of the trial session"
+        }
+      },
+      "description": "a trial session"
+    },
     "caseDeadline": {
       "type": "object",
       "properties": {
@@ -3214,6 +3483,24 @@
         }
       },
       "description": "a case deadline"
+    },
+    "caseNote": {
+      "type": "object",
+      "properties": {
+        "caseId": {
+          "type": "string",
+          "description": "id of the case"
+        },
+        "userId": {
+          "type": "string",
+          "description": "id of the user who owns the note"
+        },
+        "notes": {
+          "type": "string",
+          "description": "notes for the case"
+        }
+      },
+      "description": "a case note"
     }
   }
 }

@@ -139,14 +139,11 @@
       "Effect": "Allow",
       "Action": [
         "iam:GetRole",
-        "iam:CreateRole",
         "iam:DeleteRole",
         "iam:PutRolePolicy",
-        "iam:CreatePolicy",
         "iam:PassRole",
         "iam:DeleteRolePolicy",
         "iam:GetRolePolicy",
-        "iam:CreateInstanceProfile",
         "iam:GetInstanceProfile",
         "iam:GetPolicy",
         "iam:GetPolicyVersion",
@@ -162,15 +159,13 @@
       "Resource": [
         "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-cases-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/dynamsoft_role-*",
-        "arn:aws:iam::ACCOUNT_ID:role/AccessS3Storage-*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:instance-profile/dynamsoft_role-*",
-        "arn:aws:iam::ACCOUNT_ID:policy/AccessS3Storage-*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-documents-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-users-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_*"
+        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_*",
+        "arn:aws:iam::ACCOUNT_ID:role/*"
       ]
     }
   ]
