@@ -20,7 +20,7 @@ export const MyContactInformation = connect(
               {AddressDisplay({ ...user, ...user.contact }, constants)}
               <p className="margin-bottom-0">
                 <a
-                  className="usa-button usa-button--unstyled"
+                  className="usa-button usa-button--unstyled no-visited-style"
                   href="/user/contact/edit"
                 >
                   <FontAwesomeIcon className="margin-0" icon="edit" />
