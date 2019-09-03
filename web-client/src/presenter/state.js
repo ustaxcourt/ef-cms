@@ -29,6 +29,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
+import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -125,6 +126,7 @@ export const state = {
   percentComplete: 0,
   petition: {},
   previewPdfFile: null,
+  primaryContactEditHelper,
   procedureTypes: [],
   requestAccessHelper,
   scanBatchPreviewerHelper,
@@ -161,7 +163,6 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
-  workQueueIsInternal: true,
   workQueueSectionHelper,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
 };

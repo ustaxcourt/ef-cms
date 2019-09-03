@@ -56,7 +56,7 @@ export default test => {
     });
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
-      irsNoticeDate: 'Please enter a valid IRS notice date.',
+      irsNoticeDate: 'Please enter a valid IRS notice date',
     });
 
     // irsNoticeDate - valid
@@ -149,11 +149,11 @@ export default test => {
 
     await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
-      caseType: 'Case Type is required.',
-      procedureType: 'Procedure Type is required.',
+      caseType: 'Select a case type',
+      procedureType: 'Select a case procedure',
     });
     expect(test.getState('alertError')).toEqual({
-      messages: ['Case Type is required.', 'Procedure Type is required.'],
+      messages: ['Select a case type', 'Select a case procedure'],
       title: 'Please correct the following errors on the page:',
     });
 

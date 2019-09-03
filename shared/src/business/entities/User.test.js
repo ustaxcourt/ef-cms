@@ -42,6 +42,24 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
+  it('Creates a valid taxpayer user without address2 or address3', () => {
+    const user = new User({
+      contact: {
+        address1: '234 Main St',
+        city: 'Chicago',
+        countryType: 'domestic',
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      firstName: 'firstName',
+      lastName: 'lastName',
+      role: 'petitioner',
+      userId: 'taxpayer',
+    });
+    expect(user.isValid()).toBeTruthy();
+  });
+
   it('Creates a valid petitioner user', () => {
     const user = new User({
       firstName: 'firstName',

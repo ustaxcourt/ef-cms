@@ -26,10 +26,12 @@ describe('chooseWorkQueueSequence', () => {
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
+      workQueueIsInternal: true,
     });
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'inbox',
       queue: 'section',
+      workQueueIsInternal: true,
     });
     expect(getInboxMessagesForSectionStub.called).toBeTruthy();
   });

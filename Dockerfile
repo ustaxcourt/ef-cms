@@ -1,5 +1,7 @@
 FROM cypress/base:10.15.3
 
+RUN echo "recache"
+
 WORKDIR /home/app
 
 RUN echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
@@ -40,8 +42,7 @@ ENV GS4JS_HOME=/usr/lib
 
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
-RUN cd /home/app \
-  npm set progress=false \
+RUN npm set progress=false && \
   npm i
 
 COPY . /home/app

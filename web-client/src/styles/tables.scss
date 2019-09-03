@@ -252,7 +252,7 @@ table.work-queue {
     }
 
     &.message-queue-document {
-      max-width: units('tablet');
+      max-width: 35rem;
     }
 
     &.has-icon {
@@ -261,11 +261,15 @@ table.work-queue {
 
     .message-document-title {
       overflow: hidden;
-      max-width: units('tablet');
+      max-width: 35rem;
       padding: 4px;
       margin: -4px;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    &.to {
+      min-width: 10rem;
     }
 
     .message-document-detail {
