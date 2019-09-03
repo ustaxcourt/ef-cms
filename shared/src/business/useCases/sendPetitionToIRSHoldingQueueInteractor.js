@@ -51,6 +51,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
       });
 
       workItem.assignToIRSBatchSystem({
+        applicationContext,
         name: user.name,
         userId: user.userId,
         userSection: user.section,

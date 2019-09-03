@@ -48,17 +48,22 @@ exports.assignWorkItemsInteractor = async ({
     });
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
-  const workItemEntity = new WorkItem(fullWorkItem);
-  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem));
-
-  const newMessage = new Message({
-    createdAt: createISODateString(),
-    from: user.name,
-    fromUserId: user.userId,
-    message: workItemEntity.getLatestMessageEntity().message,
-    to: assigneeName,
-    toUserId: assigneeId,
+  const workItemEntity = new WorkItem(fullWorkItem, { applicationContext });
+  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem), {
+    applicationContext,
   });
+
+  const newMessage = new Message(
+    {
+      createdAt: createISODateString(),
+      from: user.name,
+      fromUserId: user.userId,
+      message: workItemEntity.getLatestMessageEntity().message,
+      to: assigneeName,
+      toUserId: assigneeId,
+    },
+    { applicationContext },
+  );
 
   workItemEntity
     .assignToUser({

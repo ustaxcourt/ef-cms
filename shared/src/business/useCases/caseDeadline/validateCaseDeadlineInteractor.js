@@ -12,6 +12,7 @@ exports.validateCaseDeadlineInteractor = ({
 }) => {
   const errors = new (applicationContext.getEntityConstructors()).CaseDeadline(
     caseDeadline,
+    { applicationContext },
   ).getFormattedValidationErrors();
   return errors || null;
 };

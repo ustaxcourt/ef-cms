@@ -12,6 +12,7 @@ exports.validateTrialSessionInteractor = ({
 }) => {
   const errors = new (applicationContext.getEntityConstructors()).NewTrialSession(
     trialSession,
+    { applicationContext },
   ).getFormattedValidationErrors();
   return errors || null;
 };

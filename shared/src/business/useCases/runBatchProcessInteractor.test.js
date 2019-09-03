@@ -73,6 +73,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           zipDocuments: zipDocumentsStub,
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
   });
 
@@ -154,6 +155,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           zipDocuments: zipDocumentsStub,
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     await runBatchProcessInteractor({
       applicationContext,
@@ -214,6 +216,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           zipDocuments: zipDocumentsStub,
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     await runBatchProcessInteractor({
       applicationContext,
