@@ -77,70 +77,69 @@ Case.ANSWER_DOCUMENT_CODES = [
 ];
 
 Case.COMMON_ERROR_MESSAGES = {
-  caseCaption: 'Case Caption is required.',
-  caseType: 'Case Type is required.',
-  docketNumber: 'Docket number is required.',
-  documents: 'At least one valid document is required.',
-  filingType: 'Filing Type is required.',
-  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
+  caseCaption: 'Enter a case caption',
+  caseType: 'Select a case type',
+  docketNumber: 'Docket number is required',
+  documents: 'At least one valid document is required',
+  filingType: 'Filing Type is required',
+  hasIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
       message:
         'The IRS notice date is in the future. Please enter a valid date.',
     },
-    'Please enter a valid IRS notice date.',
+    'Please enter a valid IRS notice date',
   ],
-  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
   ownershipDisclosureFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Ownership Disclosure Statement file size is empty.',
+    'Your Ownership Disclosure Statement file size is empty',
   ],
-  partyType: 'Party Type is required.',
+  partyType: 'Select a party type',
   payGovDate: [
     {
       contains: 'must be less than or equal to',
       message:
         'The Fee Payment date is in the future. Please enter a valid date.',
     },
-    'Please enter a valid Fee Payment date.',
+    'Please enter a valid Fee Payment date',
   ],
   payGovId: 'Fee Payment Id must be in a valid format',
-  petitionFile: 'The Petition file was not selected.',
+  petitionFile: 'Upload a Petition',
   petitionFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Petition file size is empty.',
+    'Your Petition file size is empty',
   ],
-  preferredTrialCity: 'Preferred Trial City is required.',
-  procedureType: 'Procedure Type is required.',
+  preferredTrialCity: 'Select a preferred trial location',
+  procedureType: 'Select a case procedure',
   receivedAt: [
     {
       contains: 'must be less than or equal to',
-      message: 'The Date Received is in the future. Please enter a valid date.',
+      message: 'Date received cannot be in the future. Enter a valid date.',
     },
-    'Please enter a valid Date Received.',
+    'Enter a valid date received',
   ],
   requestForPlaceOfTrialFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Request for Place of Trial file size is empty.',
+    'Your Request for Place of Trial file size is empty',
   ],
-  signature: 'You must review the form before submitting.',
-  stinFile: 'Statement of Taxpayer Identification Number is required.',
+  stinFile: 'Upload a Statement of Taxpayer Identification',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your STIN file size is empty.',
+    'Your STIN file size is empty',
   ],
 };
 

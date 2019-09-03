@@ -21,7 +21,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '1',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
-        'Statement of Taxpayer Identification Number is required.',
+        'Upload a Statement of Taxpayer Identification',
       );
     });
 
@@ -56,7 +56,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(`Your STIN file size is empty.`);
+        ).toEqual('Your STIN file size is empty');
       });
 
       it('should not error on stinFileSize when stinFile is undefined', () => {
@@ -75,7 +75,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(`Your STIN file size is empty.`);
+        ).toEqual('Your STIN file size is empty');
       });
     });
   });
@@ -86,9 +86,9 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-        petitionFile: 'The Petition file was not selected.',
-        stinFile: 'Statement of Taxpayer Identification Number is required.',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        petitionFile: 'Upload a Petition',
+        stinFile: 'Upload a Statement of Taxpayer Identification',
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -96,9 +96,9 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-        petitionFile: 'The Petition file was not selected.',
-        stinFileSize: 'Your STIN file size is empty.',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        petitionFile: 'Upload a Petition',
+        stinFileSize: 'Your STIN file size is empty',
       });
     });
 
@@ -109,8 +109,8 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-        petitionFile: 'The Petition file was not selected.',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        petitionFile: 'Upload a Petition',
       });
     });
 
@@ -124,7 +124,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        caseType: 'Case Type is required.',
+        caseType: 'Select a case type',
       });
     });
 
@@ -184,7 +184,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().petitionFileSize,
-        ).toEqual(`Your Petition file size is empty.`);
+        ).toEqual('Your Petition file size is empty');
       });
 
       it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -207,7 +207,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().petitionFileSize,
-        ).toEqual(`Your Petition file size is empty.`);
+        ).toEqual('Your Petition file size is empty');
       });
     });
   });
@@ -218,11 +218,11 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: 'Filing Type is required.',
-        hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-        partyType: 'Party Type is required.',
-        petitionFile: 'The Petition file was not selected.',
-        stinFile: 'Statement of Taxpayer Identification Number is required.',
+        filingType: 'Filing Type is required',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        partyType: 'Select a party type',
+        petitionFile: 'Upload a Petition',
+        stinFile: 'Upload a Statement of Taxpayer Identification',
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -232,11 +232,11 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        caseType: 'Case Type is required.',
-        filingType: 'Filing Type is required.',
-        partyType: 'Party Type is required.',
-        petitionFileSize: 'Your Petition file size is empty.',
-        stinFileSize: 'Your STIN file size is empty.',
+        caseType: 'Select a case type',
+        filingType: 'Filing Type is required',
+        partyType: 'Select a party type',
+        petitionFileSize: 'Your Petition file size is empty',
+        stinFileSize: 'Your STIN file size is empty',
       });
     });
 
@@ -251,8 +251,8 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: 'Filing Type is required.',
-        partyType: 'Party Type is required.',
+        filingType: 'Filing Type is required',
+        partyType: 'Select a party type',
       });
     });
 
@@ -270,7 +270,7 @@ describe('CaseExternalInformationFactory entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual('Ownership Disclosure Statement is required.');
+      ).toEqual('Upload an Ownership Disclosure Statement');
     });
 
     it('does not require ownershipDisclosureFile if filingType is not A business', () => {
@@ -359,7 +359,7 @@ describe('CaseExternalInformationFactory entity', () => {
         expect(
           caseExternal.getFormattedValidationErrors()
             .ownershipDisclosureFileSize,
-        ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
+        ).toEqual('Your Ownership Disclosure Statement file size is empty');
       });
 
       it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
@@ -380,7 +380,7 @@ describe('CaseExternalInformationFactory entity', () => {
         expect(
           caseExternal.getFormattedValidationErrors()
             .ownershipDisclosureFileSize,
-        ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
+        ).toEqual('Your Ownership Disclosure Statement file size is empty');
       });
     });
   });
@@ -391,13 +391,13 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '4',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: 'Filing Type is required.',
-        hasIrsNotice: 'You must indicate whether you received an IRS notice.',
-        partyType: 'Party Type is required.',
-        petitionFile: 'The Petition file was not selected.',
-        preferredTrialCity: 'Preferred Trial City is required.',
-        procedureType: 'Procedure Type is required.',
-        stinFile: 'Statement of Taxpayer Identification Number is required.',
+        filingType: 'Filing Type is required',
+        hasIrsNotice: 'Indicate whether you received an IRS notice',
+        partyType: 'Select a party type',
+        petitionFile: 'Upload a Petition',
+        preferredTrialCity: 'Select a preferred trial location',
+        procedureType: 'Select a case procedure',
+        stinFile: 'Upload a Statement of Taxpayer Identification',
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -409,7 +409,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '4',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        caseType: 'Case Type is required.',
+        caseType: 'Select a case type',
         contactPrimary: {
           address1: 'Address is a required field.',
           city: 'City is a required field.',
@@ -428,10 +428,10 @@ describe('CaseExternalInformationFactory entity', () => {
           postalCode: 'Zip Code is a required field.',
           state: 'State is a required field.',
         },
-        petitionFileSize: 'Your Petition file size is empty.',
-        preferredTrialCity: 'Preferred Trial City is required.',
-        procedureType: 'Procedure Type is required.',
-        stinFileSize: 'Your STIN file size is empty.',
+        petitionFileSize: 'Your Petition file size is empty',
+        preferredTrialCity: 'Select a preferred trial location',
+        procedureType: 'Select a case procedure',
+        stinFileSize: 'Your STIN file size is empty',
       });
     });
 
