@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -115,11 +114,14 @@ TrialSession.validationName = 'TrialSession';
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function TrialSession(rawSession) {
-  this.init(rawSession);
+function TrialSession(rawSession, { applicationContext }) {
+  this.init(rawSession, { applicationContext });
 }
 
-TrialSession.prototype.init = function(rawSession) {
+TrialSession.prototype.init = function(rawSession, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = rawSession.caseOrder || [];
@@ -144,7 +146,8 @@ TrialSession.prototype.init = function(rawSession) {
   this.termYear = rawSession.termYear;
   this.trialClerk = rawSession.trialClerk;
   this.trialLocation = rawSession.trialLocation;
-  this.trialSessionId = rawSession.trialSessionId || uuid.v4();
+  this.trialSessionId =
+    rawSession.trialSessionId || applicationContext.getUniqueId();
 };
 
 TrialSession.errorToMessageMap = {

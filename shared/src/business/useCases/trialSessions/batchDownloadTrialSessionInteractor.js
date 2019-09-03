@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const sanitize = require('sanitize-filename');
 const {
   BATCH_DOWNLOAD_TRIAL_SESSION,
@@ -19,7 +20,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
-  caseDetails,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -44,15 +44,15 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   let s3Ids = [];
   let fileNames = [];
-  let extraFiles = [];
-  let extraFileNames = [];
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
     'MMMM D, YYYY',
   );
   const { trialLocation } = trialSessionDetails;
-  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`);
+  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`)
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
 
   sessionCases = sessionCases.map(caseToBatch => {
     const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
@@ -82,28 +82,20 @@ exports.batchDownloadTrialSessionInteractor = async ({
           'YYYY-MM-DD',
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
-        const pdfTitle = `${caseToBatch.caseFolder}/${docDate}_${docNum}_${aDocketRecord.description}.pdf`;
+        const fileName = sanitize(
+          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+        );
+        const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
         s3Ids.push(myDoc.documentId);
         fileNames.push(pdfTitle);
       }
     });
   });
 
-  for (let index = 0; index < sessionCases.length; index++) {
-    let { caseId } = sessionCases[index];
-    extraFiles.push(
-      applicationContext.getUseCases().generateDocketRecordPdfInteractor({
-        applicationContext,
-        caseDetail: caseDetails[caseId],
-      }),
-    );
-    extraFileNames.push(`${sessionCases[index].caseFolder}/Docket Record.pdf`);
-  }
+  console.log(fileNames, s3Ids, zipName);
 
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
-    extraFileNames,
-    extraFiles,
     fileNames,
     s3Ids,
     zipName,

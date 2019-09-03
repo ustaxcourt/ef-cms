@@ -27,6 +27,7 @@ describe('createCaseFromPaperInteractor', () => {
       getCurrentUser: () => {
         return {};
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     let error;
     try {
@@ -63,6 +64,7 @@ describe('createCaseFromPaperInteractor', () => {
         }),
         saveWorkItemForPaper: async () => null,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCases: () => ({
         getUserInteractor: () => ({
           name: 'john doe',
@@ -140,6 +142,7 @@ describe('createCaseFromPaperInteractor', () => {
         }),
         saveWorkItemForPaper: async () => null,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCases: () => ({
         getUserInteractor: () => ({
           name: 'john doe',

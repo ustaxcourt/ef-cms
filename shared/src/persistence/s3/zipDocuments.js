@@ -35,6 +35,8 @@ exports.zipDocuments = ({
       s3Client.upload(params, function() {});
 
       pass.on('finish', () => {
+        // eslint-disable-next-line no-console
+        console.log(`'${zipName}' in '${bucket}' has been created`);
         resolve();
       });
 
@@ -46,7 +48,7 @@ exports.zipDocuments = ({
     s3Zip
       .setArchiverOptions({ gzip: false })
       .archive(
-        { bucket: bucket, region: region, s3: s3Client },
+        { bucket: bucket, debug: true, region: region, s3: s3Client },
         '',
         s3Ids,
         fileNames,

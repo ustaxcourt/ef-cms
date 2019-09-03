@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -14,7 +13,10 @@ const { orderBy } = require('lodash');
  * @param {object} rawWorkItem the raw work item data
  * @constructor
  */
-function WorkItem(rawWorkItem) {
+function WorkItem(rawWorkItem, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.assigneeId = rawWorkItem.assigneeId;
   this.assigneeName = rawWorkItem.assigneeName;
   this.caseId = rawWorkItem.caseId;
@@ -37,9 +39,9 @@ function WorkItem(rawWorkItem) {
   this.sentBySection = rawWorkItem.sentBySection;
   this.sentByUserId = rawWorkItem.sentByUserId;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
-  this.workItemId = rawWorkItem.workItemId || uuid.v4();
+  this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
   this.messages = (rawWorkItem.messages || []).map(
-    message => new Message(message),
+    message => new Message(message, { applicationContext }),
   );
 }
 
@@ -192,6 +194,7 @@ WorkItem.prototype.setStatus = function(status) {
  * @param {string} props.userRole the role of the user who triggered the assign action
  */
 WorkItem.prototype.assignToIRSBatchSystem = function({
+  applicationContext,
   name,
   userId,
   userSection,
@@ -205,13 +208,16 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
     sentByUserId: userId,
   });
   this.addMessage(
-    new Message({
-      from: name,
-      fromUserId: userId,
-      message: 'Petition batched for IRS',
-      to: 'IRS Holding Queue',
-      toUserId: IRS_BATCH_SYSTEM_USER_ID,
-    }),
+    new Message(
+      {
+        from: name,
+        fromUserId: userId,
+        message: 'Petition batched for IRS',
+        to: 'IRS Holding Queue',
+        toUserId: IRS_BATCH_SYSTEM_USER_ID,
+      },
+      { applicationContext },
+    ),
   );
 };
 
@@ -221,14 +227,20 @@ WorkItem.prototype.assignToIRSBatchSystem = function({
  * @param {string} props.user the user who recalled the work item from the IRS queue
  * @returns {Message} the message created when the work item was recalled
  */
-WorkItem.prototype.recallFromIRSBatchSystem = function({ user }) {
-  const message = new Message({
-    from: 'IRS Holding Queue',
-    fromUserId: IRS_BATCH_SYSTEM_USER_ID,
-    message: 'Petition recalled from IRS Holding Queue',
-    to: user.name,
-    toUserId: user.userId,
-  });
+WorkItem.prototype.recallFromIRSBatchSystem = function({
+  applicationContext,
+  user,
+}) {
+  const message = new Message(
+    {
+      from: 'IRS Holding Queue',
+      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+      message: 'Petition recalled from IRS Holding Queue',
+      to: user.name,
+      toUserId: user.userId,
+    },
+    { applicationContext },
+  );
 
   this.assignToUser({
     assigneeId: user.userId,
@@ -268,6 +280,7 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
  * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.setAsSentToIRS = function({
+  applicationContext,
   batchedByName,
   batchedByUserId,
 }) {
@@ -277,13 +290,16 @@ WorkItem.prototype.setAsSentToIRS = function({
   this.completedByUserId = batchedByUserId;
 
   this.addMessage(
-    new Message({
-      from: 'IRS Holding Queue',
-      fromUserId: IRS_BATCH_SYSTEM_USER_ID,
-      message: 'Served on IRS',
-      to: null,
-      toUserId: null,
-    }),
+    new Message(
+      {
+        from: 'IRS Holding Queue',
+        fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+        message: 'Served on IRS',
+        to: null,
+        toUserId: null,
+      },
+      { applicationContext },
+    ),
   );
 
   return this;

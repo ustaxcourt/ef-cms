@@ -43,7 +43,7 @@ export const StartCaseStep5 = connect(
         </p>
 
         <Hint>
-          Don’t forget to check your PDF(s) to ensure all personal infromation
+          Don’t forget to check your PDF(s) to ensure all personal information
           has been removed or redacted from all documents{' '}
           <span className="semi-bold">EXCEPT</span> for the Statement of
           Taxpayer Identification.

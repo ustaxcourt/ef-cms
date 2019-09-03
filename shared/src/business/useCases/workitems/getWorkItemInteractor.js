@@ -31,5 +31,7 @@ exports.getWorkItemInteractor = async ({ applicationContext, workItemId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return new WorkItem(workItem).validate().toRawObject();
+  return new WorkItem(workItem, { applicationContext })
+    .validate()
+    .toRawObject();
 };
