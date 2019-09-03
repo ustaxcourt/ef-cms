@@ -26,7 +26,6 @@ export const submitEditUserContactSequence = [
         success: [
           setAlertSuccessAction,
           unsetFormSubmittingAction,
-          set(state.saveAlertsForNavigation, true),
           setCurrentPageAction('Interstitial'),
           navigateToDashboardAction,
         ],
