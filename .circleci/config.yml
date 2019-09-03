@@ -8,21 +8,21 @@ jobs:
       - restore_cache:
           name: Source - Restoring Cache
           keys:
-            - source-v2-{{ .Branch }}-{{ .Revision }}
-            - source-v2-{{ .Branch }}-
-            - source-v2-
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
       - checkout
       - save_cache:
           name: Source - Saving Cache
-          key: source-v-{{ .Branch }}-{{ .Revision }}
+          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
       - restore_cache:
           name: NPM - Restoring Cache
           keys:
-            - npm-v2-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-v2-{{ .Branch }}-
-            - npm-v2-
+            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
           command: npm i
@@ -30,7 +30,7 @@ jobs:
           name: NPM - Save to Cache
           paths:
             - node_modules # location depends on npm version
-          key: npm-v2-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: /home/circleci
           paths:
@@ -48,6 +48,9 @@ jobs:
       - run:
           name: Shellcheck
           command: |
+            ls -la ~
+            ls -la /root/
+            ls -la /root/project
             ./run-shellcheck.sh
       - run:
           name: Web API - Test
