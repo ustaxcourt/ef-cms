@@ -62,6 +62,7 @@ describe('addCoverToPDFDocumentInteractor', () => {
         lodged: true,
         additionalInfo: 'Additional Info Something',
         addToCoversheet: true,
+        isPaper: true,
       },
     ],
     irsSendDate: '2019-04-19T14:45:15.595Z',

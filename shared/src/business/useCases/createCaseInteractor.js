@@ -2,7 +2,6 @@ const {
   isAuthorized,
   PETITION,
 } = require('../../authorization/authorizationClientService');
-const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
@@ -11,7 +10,7 @@ const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
-const addDocumentToCase = ({
+const addPetitionDocumentToCase = ({
   applicationContext,
   caseToAdd,
   documentEntity,
@@ -39,14 +38,8 @@ const addDocumentToCase = ({
 
   let message;
 
-  if (documentEntity.documentType === 'Petition') {
-    const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
-    message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
-  } else {
-    message = `${documentEntity.documentType} filed by ${capitalize(
-      user.role,
-    )} is ready for review.`;
-  }
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
+  message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
 
   workItemEntity.addMessage(
     new Message(
@@ -150,7 +143,7 @@ exports.createCaseInteractor = async ({
     { applicationContext },
   );
   petitionDocumentEntity.generateFiledBy(caseToAdd);
-  const newWorkItem = addDocumentToCase({
+  const newWorkItem = addPetitionDocumentToCase({
     applicationContext,
     caseToAdd,
     documentEntity: petitionDocumentEntity,

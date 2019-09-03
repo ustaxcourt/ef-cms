@@ -168,7 +168,7 @@ function createWorkItem(test) {
  * @param {string} message the message to search for
  * @param {string} queue the work queue name (my || section)
  * @param {object} test the current test object
- * @param {boolean} workQueueIsInternal whether the work queue to be searched is internal
+ * @param {boolean} workQueueIsInternal whether the work queue to be searched is the messages queue
  * @returns {object} workItem
  */
 async function findWorkItemInWorkQueue({
