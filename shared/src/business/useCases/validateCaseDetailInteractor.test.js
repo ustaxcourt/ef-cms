@@ -18,7 +18,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      docketNumber: 'Docket number is required.',
+      docketNumber: 'Docket number is required',
     });
   });
 
@@ -31,7 +31,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      docketNumber: 'Docket number is required.',
+      docketNumber: 'Docket number is required',
     });
   });
 

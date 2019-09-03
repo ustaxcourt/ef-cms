@@ -163,7 +163,6 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
-  workQueueIsInternal: true,
   workQueueSectionHelper,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
 };
