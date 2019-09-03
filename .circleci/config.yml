@@ -44,11 +44,7 @@ jobs:
           at: ~/
       - run:
           name: Lint
-          command: |
-            ls -la ~
-            ls -la /root/
-            ls -la /root/project
-            npm run lint
+          command: npm run lint
       - run:
           name: Shellcheck
           command: |
