@@ -20,13 +20,27 @@ exports.caseSearchInteractor = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
-  const caseCatalog = await applicationContext
+  //delete full index
+  /*await applicationContext.getSearchClient().indices.delete(
+    {
+      index: 'cases',
+    },
+    function(err) {
+      if (err) {
+        console.error(err.message);
+      } else {
+        console.log('Index has been deleted!');
+      }
+    },
+  );*/
+
+  //set up the index
+  /*const caseCatalog = await applicationContext
     .getPersistenceGateway()
     .getAllCatalogCases({
       applicationContext,
     });
 
-  const caseRecordCatalog = [];
   for (let caseRecord of caseCatalog) {
     const { caseId } = caseRecord;
     const caseDetail = await applicationContext
@@ -35,46 +49,66 @@ exports.caseSearchInteractor = async ({
         applicationContext,
         caseId,
       });
-    caseRecordCatalog.push(caseDetail);
-  }
 
-  let filteredCases = caseRecordCatalog;
+    const yearFiled = '20' + caseDetail.docketNumber.split('-')[1];
+
+    console.log('indexing');
+    await applicationContext.getSearchClient().index({
+      body: {
+        ...caseDetail,
+        yearFiled,
+      },
+      id: caseDetail.caseId,
+      index: 'cases',
+    });
+  }*/
+
+  const query = [];
 
   if (countryType) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        myCase.contactPrimary &&
-        myCase.contactPrimary.countryType === countryType,
-    );
-  }
-  if (state) {
-    filteredCases = filteredCases.filter(
-      myCase => myCase.contactPrimary && myCase.contactPrimary.state === state,
-    );
+    query.push({ match: { 'contactPrimary.countryType': countryType } });
   }
   if (petitionerName) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.name &&
-          myCase.contactPrimary.name.includes(petitionerName)) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.name &&
-          myCase.contactSecondary.name.includes(petitionerName)),
-    );
-  }
-  if (yearFiledMin) {
-    filteredCases = filteredCases.filter(myCase => {
-      const docketNumberYear = myCase.docketNumber.split('-')[1];
-      return +docketNumberYear >= +yearFiledMin;
+    query.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.name': petitionerName } },
+          { match: { 'contactSecondary.name': petitionerName } },
+        ],
+      },
     });
   }
-  if (yearFiledMax) {
-    filteredCases = filteredCases.filter(myCase => {
-      const docketNumberYear = myCase.docketNumber.split('-')[1];
-      return +docketNumberYear <= +yearFiledMax;
+  if (state) {
+    query.push({ match: { 'contactPrimary.state': state } });
+  }
+  if (yearFiledMin || yearFiledMax) {
+    query.push({
+      range: {
+        yearFiled: {
+          boost: 2.0,
+          gte: yearFiledMin,
+          lte: yearFiledMax,
+        },
+      },
     });
   }
 
-  return Case.validateRawCollection(filteredCases, { applicationContext });
+  const { body } = await applicationContext.getSearchClient().search({
+    body: {
+      query: {
+        bool: {
+          must: query,
+        },
+      },
+    },
+    index: 'cases',
+  });
+
+  const foundCases = [];
+  if (body && body.hits) {
+    for (let hit of body.hits.hits) {
+      foundCases.push(hit['_source']);
+    }
+  }
+  return Case.validateRawCollection(foundCases, { applicationContext });
 };

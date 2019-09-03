@@ -478,6 +478,7 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const { Client } = require('@elastic/elasticsearch');
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -487,6 +488,8 @@ const execPromise = util.promisify(exec);
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  elasticsearchEndpoint:
+    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
     process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
@@ -506,6 +509,7 @@ const setCurrentUser = newUser => {
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
+let searchClientCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -628,6 +632,14 @@ module.exports = (appContextUser = {}) => {
         verifyPendingCaseForUser,
         zipDocuments,
       };
+    },
+    getSearchClient: () => {
+      if (!searchClientCache) {
+        searchClientCache = new Client({
+          node: environment.elasticsearchEndpoint,
+        });
+      }
+      return searchClientCache;
     },
     getStorageClient: () => {
       if (!s3Cache) {
