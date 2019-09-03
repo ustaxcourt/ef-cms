@@ -373,6 +373,28 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  caseSearch:
+    handler: web-api/src/casesHandlers.caseSearchLambda
+    events:
+      - http:
+          path: /search
+          method: get
+          request:
+            template:
+              application/json:
+                {
+                  'petitionerName': "$input.params('petitionerName')",
+                  'countryType': "$input.params('countryType')",
+                  'state': "$input.params('state')",
+                  'yearFiledMin': "$input.params('yearFiledMin')",
+                  'yearFiledMax': "$input.params('yearFiledMax')",
+                }
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   sendToIRS:
     handler: web-api/src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
     events:
