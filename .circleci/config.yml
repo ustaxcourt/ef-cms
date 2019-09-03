@@ -44,13 +44,14 @@ jobs:
           at: /home/circleci
       - run:
           name: Lint
-          command: npm run lint
-      - run:
-          name: Shellcheck
           command: |
             ls -la ~
             ls -la /root/
             ls -la /root/project
+            npm run lint
+      - run:
+          name: Shellcheck
+          command: |
             ./run-shellcheck.sh
       - run:
           name: Web API - Test
