@@ -5,6 +5,8 @@ const {
 } = require('../../dynamo/helpers/createMappingRecord');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
+  delete user.password;
+
   if (user.barNumber === '') {
     delete user.barNumber;
   }

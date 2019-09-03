@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import {
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
@@ -6,7 +5,6 @@ import {
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
-import moment from 'moment';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext
@@ -26,7 +24,9 @@ const formatDateIfToday = (date, applicationContext) => {
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
   const yesterday = applicationContext.getUtilities().formatDateString(
-    moment(new Date())
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString()
       .add(-1, 'days')
       .toDate(),
     'MMDDYY',
@@ -143,6 +143,7 @@ export const formatWorkItem = (
 };
 
 export const filterWorkItems = ({
+  applicationContext,
   user,
   workQueueIsInternal,
   workQueueToDisplay,
@@ -150,6 +151,7 @@ export const filterWorkItems = ({
   const { box, queue } = workQueueToDisplay;
   const docQCUserSection =
     user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
+  const { Case } = applicationContext.getEntityConstructors();
 
   const filters = {
     documentQc: {
@@ -282,6 +284,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   let workQueue = workItems
     .filter(
       filterWorkItems({
+        applicationContext,
         user,
         workQueueIsInternal: isInternal,
         workQueueToDisplay,
@@ -295,11 +298,13 @@ export const formattedWorkQueue = (get, applicationContext) => {
     documentQc: {
       my: {
         batched: 'batchedAt',
+        inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
       },
       section: {
         batched: 'batchedAt',
+        inProgress: 'receivedAt',
         inbox: 'receivedAt',
         outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
       },
@@ -316,12 +321,44 @@ export const formattedWorkQueue = (get, applicationContext) => {
     },
   };
 
+  let sortDirections = {
+    documentQc: {
+      my: {
+        batched: 'desc',
+        inProgress: 'asc',
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+      section: {
+        batched: 'desc',
+        inProgress: 'asc',
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+    },
+    messages: {
+      my: {
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+      section: {
+        inbox: 'desc',
+        outbox: 'desc',
+      },
+    },
+  };
+
   const sortField =
     sortFields[isInternal ? 'messages' : 'documentQc'][
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], 'desc');
+  const sortDirection =
+    sortDirections[isInternal ? 'messages' : 'documentQc'][
+      workQueueToDisplay.queue
+    ][workQueueToDisplay.box];
+
+  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
 
   return workQueue;
 };

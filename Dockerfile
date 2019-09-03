@@ -40,7 +40,7 @@ ENV GS4JS_HOME=/usr/lib
 
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
-RUN cd /home/app && npm ci
+RUN cd /home/app && npm i
 
 COPY . /home/app
 

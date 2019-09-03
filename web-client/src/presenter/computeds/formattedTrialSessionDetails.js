@@ -1,10 +1,13 @@
 import { compact } from 'lodash';
 import { state } from 'cerebral';
 
-export const formatCase = caseItem => {
+export const formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${
     caseItem.docketNumber
   }${caseItem.docketNumberSuffix || ''}`;
+  caseItem.caseCaptionNames = applicationContext.getCaseCaptionNames(
+    caseItem.caseCaption || '',
+  );
   return caseItem;
 };
 
@@ -26,9 +29,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
 
   result.formattedEligibleCases = (
     get(state.trialSession.eligibleCases) || []
-  ).map(formatCase);
+  ).map(caseItem => formatCase({ applicationContext, caseItem }));
   result.allCases = (get(state.trialSession.calendaredCases) || [])
-    .map(formatCase)
+    .map(caseItem => formatCase({ applicationContext, caseItem }))
     .sort(compareCasesByDocketNumber);
   result.openCases = result.allCases.filter(item => item.status != 'Closed');
   result.closedCases = result.allCases.filter(item => item.status == 'Closed');
@@ -38,6 +41,10 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
   result.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(result.startDate, 'MMDDYY');
+
+  result.formattedStartDateFull = applicationContext
+    .getUtilities()
+    .formatDateString(result.startDate, 'MMMM DD, YYYY');
 
   let [hour, min] = result.startTime.split(':');
   let startTimeExtension = 'am';

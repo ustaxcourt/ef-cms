@@ -4,6 +4,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
@@ -31,7 +32,7 @@ function Document(rawDocument) {
   this.category = rawDocument.category;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
-  this.createdAt = rawDocument.createdAt || new Date().toISOString();
+  this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
@@ -50,7 +51,7 @@ function Document(rawDocument) {
   this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
   this.processingStatus = rawDocument.processingStatus;
-  this.receivedAt = rawDocument.receivedAt || new Date().toISOString();
+  this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
   this.servedAt = rawDocument.servedAt;
@@ -194,7 +195,7 @@ Document.prototype.addWorkItem = function(workItem) {
 
 Document.prototype.setAsServed = function(servedParties = null) {
   this.status = 'served';
-  this.servedAt = new Date().toISOString();
+  this.servedAt = createISODateString();
   if (servedParties) {
     this.servedParties = servedParties;
   }
@@ -253,7 +254,7 @@ Document.prototype.generateFiledBy = function(caseDetail) {
  */
 Document.prototype.setSigned = function(signByUserId) {
   this.signedByUserId = signByUserId;
-  this.signedAt = new Date().toISOString();
+  this.signedAt = createISODateString();
 };
 
 exports.Document = Document;

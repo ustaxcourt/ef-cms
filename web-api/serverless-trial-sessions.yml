@@ -266,3 +266,39 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getTrialSessionWorkingCopy:
+    handler: web-api/src/trialSessionsHandlers.getTrialSessionWorkingCopyLambda
+    events:
+      - http:
+          path: /{trialSessionId}/working-copy
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateTrialSessionWorkingCopy:
+    handler: web-api/src/trialSessionsHandlers.updateTrialSessionWorkingCopyLambda
+    events:
+      - http:
+          path: /{trialSessionId}/working-copy
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  batchDownloadTrialSession:
+    handler: web-api/src/trialSessionsHandlers.batchDownloadTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/batch-download
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

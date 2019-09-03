@@ -1,8 +1,8 @@
 const joi = require('joi-browser');
-const moment = require('moment');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { formatDateString } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
@@ -22,7 +22,7 @@ ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
   return replaceBracketed(
     this.documentTitle,
     this.previousDocument,
-    moment.utc(this.serviceDate).format('MM-DD-YYYY'),
+    formatDateString(this.serviceDate, 'MM-DD-YYYY'),
   );
 };
 

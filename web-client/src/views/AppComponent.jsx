@@ -2,6 +2,7 @@ import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
+import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -25,6 +26,7 @@ import { MessagesJudge } from './Messages/MessagesJudge';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
+import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { StartCaseInternal } from './StartCaseInternal';
@@ -44,6 +46,7 @@ const pages = {
   AddTrialSession,
   BeforeStartingCase,
   BeforeYouFileADocument,
+  CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
   CreateOrder,
@@ -65,6 +68,7 @@ const pages = {
   PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
+  PrintableTrialCalendar,
   RequestAccessWizard,
   SelectDocumentType,
   StartCaseInternal,

@@ -26,6 +26,7 @@ import {
   faCheckCircle,
   faClipboardList,
   faClock as faClockSolid,
+  faCloudDownloadAlt,
   faCloudUploadAlt,
   faCopy as faCopySolid,
   faDollarSign,
@@ -129,6 +130,7 @@ const app = {
       faStepBackward,
       faClockSolid,
       faClone,
+      faCloudDownloadAlt,
       faCloudUploadAlt,
       faCopy,
       faCopySolid,
@@ -181,6 +183,7 @@ const app = {
       <Container app={cerebralApp}>
         <IdleActivityMonitor />
         <AppComponent />
+        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       document.querySelector('#app'),
     );

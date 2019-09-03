@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { createISODateString } = require('../utilities/DateHandler');
 
 /**
  * Case Deadline entity
@@ -13,7 +14,7 @@ const {
 function CaseDeadline(rawProps) {
   this.caseDeadlineId = rawProps.caseDeadlineId || uuid.v4();
   this.caseId = rawProps.caseId;
-  this.createdAt = rawProps.createdAt || new Date().toISOString();
+  this.createdAt = rawProps.createdAt || createISODateString();
   this.description = rawProps.description;
   this.deadlineDate = rawProps.deadlineDate;
 }

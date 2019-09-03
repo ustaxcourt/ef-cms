@@ -1,0 +1,1211 @@
+[
+  {
+    "completedAt": "2019-08-16T19:22:13.925Z",
+    "docketNumberSuffix": null,
+    "caseStatus": "Batched for IRS",
+    "completedMessage": "Served on IRS",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2019-08-16T19:21:46.146Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+      "workItems": [],
+      "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+      "receivedAt": "2019-08-16T19:21:46.146Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "section": "irsBatchSection",
+    "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "isInitializeCase": true,
+    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": false,
+    "createdAt": "2019-08-16T19:21:46.147Z",
+    "assigneeName": "IRS Holding Queue",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "messages": [
+      {
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-08-16T19:22:11.050Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+        "from": "Test Petitionsclerk",
+        "to": "IRS Holding Queue",
+        "message": "Petition batched for IRS",
+        "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+      },
+      {
+        "createdAt": "2019-08-16T19:22:13.925Z",
+        "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+        "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+        "from": "IRS Holding Queue",
+        "to": null,
+        "message": "Served on IRS",
+        "toUserId": null
+      }
+    ],
+    "pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "docketNumber": "108-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk",
+    "updatedAt": "2019-08-16T19:21:46.147Z"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "completedAt": "2019-08-16T19:22:13.925Z",
+            "docketNumberSuffix": null,
+            "caseStatus": "Batched for IRS",
+            "completedMessage": "Served on IRS",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "irsBatchSection",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+            "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:11.050Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+                "from": "Test Petitionsclerk",
+                "to": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:13.925Z",
+                "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+                "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+                "from": "IRS Holding Queue",
+                "to": null,
+                "message": "Served on IRS",
+                "toUserId": null
+              }
+            ],
+            "docketNumber": "108-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "completedBy": "Test Petitionsclerk",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "servedAt": "2019-08-16T19:22:13.925Z",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      }
+    ],
+    "irsNoticeDate": null,
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "receivedAt": null,
+    "trialJudge": "Judge Armen",
+    "irsSendDate": "2019-08-16T19:22:13.919Z",
+    "caseType": "Worker Classification",
+    "trialLocation": "Houston, Texas",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "trialTime": "10:00",
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "0",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "docketNumberSuffix": null,
+    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "trialDate": "2019-11-27T05:00:00.000Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "6",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "status": "R served on 08/16/2019 2:22 PM"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "Calendared"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "pending",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "docketNumberSuffix": null,
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": null,
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "108-19",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "pending",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "caseType": "Worker Classification",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "1",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "1",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "docketNumberSuffix": null,
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "petitions",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": null,
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "108-19",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "irsNoticeDate": null,
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "receivedAt": null,
+    "caseType": "Worker Classification",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "2",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
+    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "2",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "New"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "docketNumberSuffix": null,
+            "caseStatus": "Batched for IRS",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "irsBatchSection",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:11.050Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+                "from": "Test Petitionsclerk",
+                "to": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+              }
+            ],
+            "docketNumber": "108-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      }
+    ],
+    "irsNoticeDate": null,
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "receivedAt": null,
+    "caseType": "Worker Classification",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "3",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
+    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "3",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "Batched for IRS"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "completedAt": "2019-08-16T19:22:13.925Z",
+            "docketNumberSuffix": null,
+            "caseStatus": "Batched for IRS",
+            "completedMessage": "Served on IRS",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "irsBatchSection",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+            "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:11.050Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+                "from": "Test Petitionsclerk",
+                "to": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:13.925Z",
+                "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+                "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+                "from": "IRS Holding Queue",
+                "to": null,
+                "message": "Served on IRS",
+                "toUserId": null
+              }
+            ],
+            "docketNumber": "108-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "completedBy": "Test Petitionsclerk",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "servedAt": "2019-08-16T19:22:13.925Z",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      }
+    ],
+    "irsNoticeDate": null,
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "receivedAt": null,
+    "irsSendDate": "2019-08-16T19:22:13.919Z",
+    "caseType": "Worker Classification",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "4",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
+    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "4",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "status": "R served on 08/16/2019 2:22 PM"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "General Docket - Not at Issue"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "completedAt": "2019-08-16T19:22:13.925Z",
+            "docketNumberSuffix": null,
+            "caseStatus": "Batched for IRS",
+            "completedMessage": "Served on IRS",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "irsBatchSection",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+            "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:11.050Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+                "from": "Test Petitionsclerk",
+                "to": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:13.925Z",
+                "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+                "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+                "from": "IRS Holding Queue",
+                "to": null,
+                "message": "Served on IRS",
+                "toUserId": null
+              }
+            ],
+            "docketNumber": "108-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "completedBy": "Test Petitionsclerk",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "servedAt": "2019-08-16T19:22:13.925Z",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      }
+    ],
+    "irsNoticeDate": null,
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "receivedAt": null,
+    "irsSendDate": "2019-08-16T19:22:13.919Z",
+    "caseType": "Worker Classification",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "5",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "docketNumberSuffix": null,
+    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "5",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "status": "R served on 08/16/2019 2:22 PM"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "eventCode": "P",
+        "createdAt": "2019-08-16T19:21:46.146Z",
+        "processingStatus": "complete",
+        "documentType": "Petition",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [
+          {
+            "completedAt": "2019-08-16T19:22:13.925Z",
+            "docketNumberSuffix": null,
+            "caseStatus": "Batched for IRS",
+            "completedMessage": "Served on IRS",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-08-16T19:21:46.146Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+              "workItems": [],
+              "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+              "receivedAt": "2019-08-16T19:21:46.146Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "section": "irsBatchSection",
+            "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+            "isInitializeCase": true,
+            "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+            "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "sentBy": "Test Petitionsclerk",
+            "sentBySection": "petitions",
+            "isInternal": false,
+            "createdAt": "2019-08-16T19:21:46.147Z",
+            "assigneeName": "IRS Holding Queue",
+            "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+            "messages": [
+              {
+                "createdAt": "2019-08-16T19:21:46.147Z",
+                "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:11.050Z",
+                "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+                "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+                "from": "Test Petitionsclerk",
+                "to": "IRS Holding Queue",
+                "message": "Petition batched for IRS",
+                "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+              },
+              {
+                "createdAt": "2019-08-16T19:22:13.925Z",
+                "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+                "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+                "from": "IRS Holding Queue",
+                "to": null,
+                "message": "Served on IRS",
+                "toUserId": null
+              }
+            ],
+            "docketNumber": "108-19",
+            "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+            "completedBy": "Test Petitionsclerk",
+            "updatedAt": "2019-08-16T19:21:46.147Z"
+          }
+        ],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "servedAt": "2019-08-16T19:22:13.925Z",
+        "receivedAt": "2019-08-16T19:21:46.146Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      },
+      {
+        "eventCode": "STIN",
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "processingStatus": "complete",
+        "documentType": "Statement of Taxpayer Identification",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "workItems": [],
+        "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+        "documentId": "3adb712b-d0c5-40e8-98c1-d2f38757e27a",
+        "receivedAt": "2019-08-16T19:21:46.147Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "status": "served"
+      }
+    ],
+    "irsNoticeDate": null,
+    "orderForFilingFee": false,
+    "partyType": "Trust",
+    "receivedAt": null,
+    "trialJudge": "Judge Armen",
+    "irsSendDate": "2019-08-16T19:22:13.919Z",
+    "caseType": "Worker Classification",
+    "trialLocation": "Houston, Texas",
+    "contactPrimary": {
+      "address3": "Nisi quisquam ea har",
+      "secondaryName": "Leslie Bullock",
+      "address2": "Qui est neque rerum ",
+      "city": "Ut similique id erro",
+      "phone": "+1 (241) 924-9153",
+      "address1": "907 West Rocky Cowley Parkway",
+      "postalCode": "26371",
+      "name": "Garrett Carpenter",
+      "state": "MD",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "createdAt": "2019-08-16T19:21:46.146Z",
+    "noticeOfAttachments": false,
+    "trialTime": "10:00",
+    "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "6",
+    "filingType": "Other",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "_",
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "docketNumberSuffix": null,
+    "caseTitle": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s) v. Commissioner of Internal Revenue, Respondent",
+    "trialDate": "2019-11-27T05:00:00.000Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "currentVersion": "6",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Houston, Texas",
+    "respondents": [],
+    "practitioners": [],
+    "payGovDate": null,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+        "filingDate": "2019-08-16T19:21:46.146Z",
+        "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+        "status": "R served on 08/16/2019 2:22 PM"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Houston, Texas",
+        "index": 2,
+        "filingDate": "2019-08-16T19:21:46.146Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "docketNumber": "108-19",
+    "status": "Calendared"
+  },
+  {
+    "sk": "case-46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "catalog"
+  },
+  {
+    "completedAt": "2019-08-16T19:22:13.925Z",
+    "docketNumberSuffix": null,
+    "caseStatus": "Calendared",
+    "completedMessage": "Served on IRS",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2019-08-16T19:21:46.146Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+      "workItems": [],
+      "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+      "receivedAt": "2019-08-16T19:21:46.146Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "section": "irsBatchSection",
+    "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "isInitializeCase": true,
+    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": false,
+    "createdAt": "2019-08-16T19:21:46.147Z",
+    "assigneeName": "IRS Holding Queue",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "2019-08-16T19:21:46.147Z",
+    "messages": [
+      {
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-08-16T19:22:11.050Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+        "from": "Test Petitionsclerk",
+        "to": "IRS Holding Queue",
+        "message": "Petition batched for IRS",
+        "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+      },
+      {
+        "createdAt": "2019-08-16T19:22:13.925Z",
+        "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+        "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+        "from": "IRS Holding Queue",
+        "to": null,
+        "message": "Served on IRS",
+        "toUserId": null
+      }
+    ],
+    "pk": "section-outbox-petitions",
+    "docketNumber": "108-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk",
+    "updatedAt": "2019-08-16T19:21:46.147Z"
+  },
+  {
+    "completedAt": "2019-08-16T19:22:13.925Z",
+    "docketNumberSuffix": null,
+    "caseStatus": "Calendared",
+    "completedMessage": "Served on IRS",
+    "document": {
+      "eventCode": "P",
+      "createdAt": "2019-08-16T19:21:46.146Z",
+      "processingStatus": "pending",
+      "documentType": "Petition",
+      "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
+      "workItems": [],
+      "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
+      "receivedAt": "2019-08-16T19:21:46.146Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "gsi1pk": "workitem-ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "section": "irsBatchSection",
+    "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "isInitializeCase": true,
+    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBy": "Test Petitionsclerk",
+    "sentBySection": "petitions",
+    "isInternal": false,
+    "createdAt": "2019-08-16T19:21:46.147Z",
+    "assigneeName": "IRS Holding Queue",
+    "caseId": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "sk": "2019-08-16T19:21:46.147Z",
+    "messages": [
+      {
+        "createdAt": "2019-08-16T19:21:46.147Z",
+        "messageId": "3088a5d3-3968-4be3-8986-1cd724b486e2",
+        "from": "Test Petitioner",
+        "message": "Petition filed by Garrett Carpenter, Leslie Bullock, Trustee is ready for review.",
+        "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+      },
+      {
+        "createdAt": "2019-08-16T19:22:11.050Z",
+        "fromUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+        "messageId": "c4872dee-1d3f-402b-94fb-16352c29ed11",
+        "from": "Test Petitionsclerk",
+        "to": "IRS Holding Queue",
+        "message": "Petition batched for IRS",
+        "toUserId": "63784910-c1af-4476-8988-a02f92da8e09"
+      },
+      {
+        "createdAt": "2019-08-16T19:22:13.925Z",
+        "fromUserId": "63784910-c1af-4476-8988-a02f92da8e09",
+        "messageId": "f6fe3969-4472-4c96-bb06-6c4f0c2a7b0f",
+        "from": "IRS Holding Queue",
+        "to": null,
+        "message": "Served on IRS",
+        "toUserId": null
+      }
+    ],
+    "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "108-19",
+    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk",
+    "updatedAt": "2019-08-16T19:21:46.147Z"
+  },
+  {
+    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "108-19|case"
+  },
+  {
+    "sk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5",
+    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+  },
+  {
+    "sk": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
+    "pk": "46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5|workItem"
+  }
+]

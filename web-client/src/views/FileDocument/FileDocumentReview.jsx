@@ -84,7 +84,7 @@ export const FileDocumentReview = connect(
                             className="usa-label"
                             htmlFor="filing-includes"
                           >
-                            Document Includes
+                            Document includes
                           </label>
                           <ul className="ustc-unstyled-list without-margins">
                             {form.certificateOfService && (
@@ -147,7 +147,7 @@ export const FileDocumentReview = connect(
                                   className="usa-label"
                                   htmlFor="filing-includes"
                                 >
-                                  Document Includes
+                                  Document includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
                                   {item.certificateOfService && (
@@ -219,7 +219,7 @@ export const FileDocumentReview = connect(
                               className="usa-label"
                               htmlFor="filing-includes"
                             >
-                              Document Includes
+                              Document includes
                             </label>
                             <ul className="ustc-unstyled-list without-margins">
                               {form.secondaryDocument.certificateOfService && (
@@ -287,7 +287,7 @@ export const FileDocumentReview = connect(
                                   className="usa-label"
                                   htmlFor="filing-includes"
                                 >
-                                  Document Includes
+                                  Document includes
                                 </label>
                                 <ul className="ustc-unstyled-list without-margins">
                                   {item.certificateOfService && (
@@ -319,7 +319,7 @@ export const FileDocumentReview = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <label className="usa-label" htmlFor="filing-parties">
-                        Filing Parties
+                        Filing parties
                       </label>
                       <ul className="ustc-unstyled-list without-margins">
                         {form.partyPrimary && (

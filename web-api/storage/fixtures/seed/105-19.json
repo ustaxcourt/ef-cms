@@ -16,6 +16,7 @@
               "createdAt": "2019-03-27T21:53:00.297Z",
               "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
               "documentType": "Petition",
+              "documentTitle": "Petition",
               "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
               "filedBy": "Test Practitioner",
               "workItems": []
@@ -61,7 +62,6 @@
     "orderForFilingFee": false,
     "partyType": "Petitioner",
     "caseType": "Interest Abatement",
-    "yearAmounts": [],
     "contactPrimary": {
       "address3": "Aliquam molestias fu",
       "address2": "Est asperiores ullam",
@@ -142,6 +142,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
       "documentType": "Petition",
+      "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Practitioner",
       "workItems": []
@@ -178,6 +179,7 @@
       "receivedAt": "2019-03-01T21:40:46.415Z",
       "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
       "documentType": "Petition",
+      "documentTitle": "Petition",
       "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
       "filedBy": "Test Practitioner",
       "workItems": []

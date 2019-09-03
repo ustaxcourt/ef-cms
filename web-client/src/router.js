@@ -388,6 +388,14 @@ const router = {
       }),
     );
 
+    route(
+      '/reports/case-deadlines',
+      checkLoggedIn(() => {
+        document.title = `Case Deadlines ${pageTitleSuffix}`;
+        app.getSequence('gotoAllCaseDeadlinesSequence')();
+      }),
+    );
+
     route('/mock-login...', () => {
       const { path, token } = queryStringDecoder();
       if (token) {

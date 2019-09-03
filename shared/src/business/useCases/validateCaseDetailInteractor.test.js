@@ -74,104 +74,6 @@ describe('validate case detail', () => {
     expect(errors.payGovDate).toBeTruthy();
   });
 
-  it('returns an error if yearAmounts have duplicate years', () => {
-    const errors = validateCaseDetailInteractor({
-      caseDetail: {
-        caseType: 'defined',
-        docketNumber: '101-18',
-        documents: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentType: 'Petition',
-            role: 'petitioner',
-            userId: 'taxpayer',
-            workItems: [],
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentType: 'Petition',
-            role: 'petitioner',
-            userId: 'taxpayer',
-            workItems: [],
-          },
-        ],
-        filingType: 'defined',
-        hasIrsNotice: true,
-        irsNoticeDate: new Date().toISOString(),
-        partyType: 'Petitioner',
-        petitioners: [{ name: 'user' }],
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'defined',
-        signature: true,
-        yearAmounts: [
-          {
-            amount: '123',
-            year: '2000',
-          },
-          {
-            amount: '99',
-            year: '2000',
-          },
-        ],
-      },
-    });
-    expect(errors).toEqual({
-      yearAmounts: 'Duplicate years are not allowed',
-    });
-  });
-
-  it('returns an error if yearAmounts is in the future', () => {
-    const errors = validateCaseDetailInteractor({
-      caseDetail: {
-        caseType: 'defined',
-        docketNumber: '101-18',
-        documents: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentType: 'Petition',
-            role: 'petitioner',
-            userId: 'taxpayer',
-            workItems: [],
-          },
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentType: 'Petition',
-            role: 'petitioner',
-            userId: 'taxpayer',
-            workItems: [],
-          },
-        ],
-        filingType: 'defined',
-        hasIrsNotice: true,
-        irsNoticeDate: new Date().toISOString(),
-        partyType: 'Petitioner',
-        petitioners: [{ name: 'user' }],
-        preferredTrialCity: 'Chattanooga, TN',
-        procedureType: 'defined',
-        signature: true,
-        yearAmounts: [
-          {
-            amount: 0,
-            year: '2100-01-01',
-          },
-        ],
-      },
-    });
-    expect(errors).toEqual({
-      yearAmounts: [
-        {
-          amount: 'Please enter a valid amount.',
-          index: 0,
-          year: 'That year is in the future. Please enter a valid year.',
-        },
-      ],
-    });
-  });
-
   it('returns no errors on valid amounts and years', () => {
     const errors = validateCaseDetailInteractor({
       caseDetail: {
@@ -203,20 +105,6 @@ describe('validate case detail', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'defined',
         signature: true,
-        yearAmounts: [
-          {
-            amount: '123',
-            year: '2000',
-          },
-          {
-            amount: 123,
-            year: '2001',
-          },
-          {
-            amount: '1',
-            year: '2002',
-          },
-        ],
       },
     });
     expect(errors).toEqual(null);
@@ -254,7 +142,6 @@ describe('validate case detail', () => {
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'defined',
         signature: true,
-        yearAmounts: [],
       },
     });
     expect(errors).toEqual(null);

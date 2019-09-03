@@ -1,8 +1,8 @@
 import { applicationContext } from '../../applicationContext';
 import {
   formatDocument,
-  formatYearAmounts,
   formattedCaseDetail as formattedCaseDetailComputed,
+  getFilingsAndProceedings,
 } from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -22,182 +22,6 @@ describe('formattedCaseDetail', () => {
       caseDeadlines: [],
       docketRecordSort: undefined,
       docketRecordWithDocument: [],
-    });
-  });
-
-  describe('formatYearAmounts', () => {
-    it('does not return 2018 when a blank string is passed in', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        yearAmounts: [
-          {
-            amount: '',
-            year: '2000',
-          },
-          {
-            amount: '',
-            year: '',
-          },
-        ],
-      };
-      formatYearAmounts(applicationContext, caseDetail, undefined);
-      expect(caseDetail.yearAmountsFormatted).toEqual([
-        {
-          amount: '',
-          amountFormatted: '',
-          formattedYear: '2000',
-          showError: false,
-          year: '2000',
-        },
-        {
-          amount: '',
-          amountFormatted: '',
-          formattedYear: 'Invalid date',
-          showError: false,
-          year: '',
-        },
-      ]);
-    });
-
-    it('returns the yearAmount that has year 5000 as an error', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        yearAmounts: [
-          {
-            amount: '',
-            year: '2000',
-          },
-          {
-            amount: '',
-            year: '5000-12-24T00:00:00.000Z',
-          },
-        ],
-      };
-      const caseDetailErrors = {
-        yearAmounts: [{ index: 1, year: 'year can not be in future' }],
-      };
-      formatYearAmounts(applicationContext, caseDetail, caseDetailErrors);
-      expect(caseDetail.yearAmountsFormatted).toEqual([
-        {
-          amount: '',
-          amountFormatted: '',
-          formattedYear: '2000',
-          showError: false,
-          year: '2000',
-        },
-        {
-          amount: '',
-          amountFormatted: '',
-          errorMessage: 'year can not be in future',
-          formattedYear: '5000',
-          showError: true,
-          year: '5000',
-        },
-      ]);
-    });
-
-    it('returns duplication errors for the second year Amount on duplicates', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        yearAmounts: [
-          {
-            amount: '1000',
-            year: '2000',
-          },
-          {
-            amount: '1337',
-            year: '2000-12-24T00:00:00.000Z',
-          },
-        ],
-      };
-      const caseDetailErrors = {
-        yearAmounts: 'Duplicate years are bad',
-      };
-      formatYearAmounts(applicationContext, caseDetail, caseDetailErrors);
-      expect(caseDetail.yearAmountsFormatted).toEqual([
-        {
-          amount: '1000',
-          amountFormatted: '1,000',
-          formattedYear: '2000',
-          showError: false,
-          year: '2000',
-        },
-        {
-          amount: '1337',
-          amountFormatted: '1,337',
-          errorMessage: 'Duplicate years are bad',
-          formattedYear: '2000',
-          showError: true,
-          year: '2000',
-        },
-      ]);
-    });
-
-    it('sets shouldShowIrsNoticeDate to true when hasIrsNotice is true and hasVerifiedIrsNotice is undefined', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        hasIrsNotice: true,
-        hasVerifiedIrsNotice: undefined,
-        petitioners: [{ name: 'bob' }],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.shouldShowIrsNoticeDate).toBeTruthy();
-    });
-
-    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to true when hasIrsNotice is true and hasVerifiedIrsNotice is true', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        hasIrsNotice: true,
-        hasVerifiedIrsNotice: true,
-        petitioners: [{ name: 'bob' }],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.shouldShowIrsNoticeDate).toBeTruthy();
-      expect(result.shouldShowYearAmounts).toBeTruthy();
-    });
-
-    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is undefined', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        hasIrsNotice: false,
-        hasVerifiedIrsNotice: undefined,
-        petitioners: [{ name: 'bob' }],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.shouldShowIrsNoticeDate).toBeFalsy();
-      expect(result.shouldShowYearAmounts).toBeFalsy();
-    });
-
-    it('sets shouldShowIrsNoticeDate and shouldShowYearAmounts to false when hasIrsNotice is false and hasVerifiedIrsNotice is false', () => {
-      const caseDetail = {
-        caseCaption: 'Brett Osborne, Petitioner',
-        hasIrsNotice: false,
-        hasVerifiedIrsNotice: false,
-        petitioners: [{ name: 'bob' }],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.shouldShowIrsNoticeDate).toBeFalsy();
-      expect(result.shouldShowYearAmounts).toBeFalsy();
     });
   });
 
@@ -821,6 +645,27 @@ describe('formattedCaseDetail', () => {
       ]);
     });
 
+    it('formats deadline dates and does not set overdue to true if the deadlineDate is today', () => {
+      const caseDetail = {
+        petitioners: [{ name: 'bob' }],
+      };
+      const caseDeadlines = [
+        {
+          deadlineDate: new Date(),
+        },
+      ];
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDeadlines,
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.caseDeadlines.length).toEqual(1);
+      expect(result.caseDeadlines[0].overdue).toBeUndefined();
+    });
+
     it('does not format empty caseDeadlines array', () => {
       const caseDetail = {
         caseDeadlines: [],
@@ -855,6 +700,23 @@ describe('formatDocument', () => {
     });
     expect(results).toMatchObject({
       servedPartiesCode: 'B',
+    });
+  });
+
+  describe('getFilingsAndProceedings', () => {
+    it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
+      const result = getFilingsAndProceedings({
+        attachments: true,
+        certificateOfService: true,
+        certificateOfServiceDateFormatted: '11/12/1999',
+        exhibits: true,
+        lodged: true,
+        objections: 'Yes',
+      });
+
+      expect(result).toEqual(
+        '(C/S 11/12/1999) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)',
+      );
     });
   });
 });

@@ -41,7 +41,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
             >
-              Upload Your Document{' '}
+              Upload your document{' '}
               <span className="success-message padding-left-1">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>{' '}

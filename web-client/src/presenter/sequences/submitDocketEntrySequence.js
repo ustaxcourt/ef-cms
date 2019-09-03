@@ -16,11 +16,12 @@ import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { set } from 'cerebral/factories';
+import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
+import { setIsUpdatingWithFileAction } from '../actions/DocketEntry/setIsUpdatingWithFileAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
@@ -77,9 +78,11 @@ export const submitDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
+          unset(state.isUpdatingWithFile),
           generateTitleAction,
           set(state.showValidation, false),
           clearAlertsAction,
+          setIsUpdatingWithFileAction,
           isFileAttachedAction,
           {
             no: [

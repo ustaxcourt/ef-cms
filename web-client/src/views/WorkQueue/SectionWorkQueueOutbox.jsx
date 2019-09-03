@@ -45,16 +45,14 @@ export const SectionWorkQueueOutbox = connect(
         {sectionWorkQueue.map((item, idx) => (
           <tbody key={idx}>
             <tr>
-              <td className="focus-toggle">
-                <button
-                  aria-controls={`detail-${item.workItemId}`}
-                  aria-expanded={item.isFocused}
-                  aria-label="Expand message detail"
-                  className="focus-button usa-button usa-button--unstyled"
-                />{' '}
-              </td>
+              <td aria-hidden="true" className="focus-toggle" />
               <td className="message-queue-row">
-                <span className="no-wrap">{item.docketNumberWithSuffix}</span>
+                <a
+                  className="no-wrap"
+                  href={`/case-detail/${item.docketNumber}`}
+                >
+                  {item.docketNumberWithSuffix}
+                </a>
               </td>
               {workQueueHelper.showReceivedColumn && (
                 <td className="message-queue-row">
@@ -90,7 +88,7 @@ export const SectionWorkQueueOutbox = connect(
                       e.stopPropagation();
                     }}
                   >
-                    {item.document.documentType}
+                    {item.document.documentTitle || item.document.documentType}
                   </a>
                 </div>
                 {workQueueHelper.showMessageContent && (

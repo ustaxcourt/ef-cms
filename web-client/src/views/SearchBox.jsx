@@ -12,31 +12,33 @@ export const SearchBox = connect(
     return (
       <form
         noValidate
-        className="usa-search"
+        className="usa-search usa-search--small ustc-search"
         id="search-input"
         onSubmit={e => {
           e.preventDefault();
           submitSearchSequence();
         }}
       >
-        <label className="usa-sr-only" htmlFor="search-field">
-          Search term
-        </label>
-        <input
-          className="usa-input"
-          id="search-field"
-          name="searchTerm"
-          type="search"
-          value={searchTerm}
-          onChange={e => {
-            updateSearchTermSequence({
-              searchTerm: e.target.value,
-            });
-          }}
-        />
-        <button className="usa-button search-button" type="submit">
-          <span className="usa-search-submit-text">Search</span>
-        </button>
+        <div role="search">
+          <label className="usa-sr-only" htmlFor="search-field">
+            Search term
+          </label>
+          <input
+            className="usa-input"
+            id="search-field"
+            name="searchTerm"
+            type="search"
+            value={searchTerm}
+            onChange={e => {
+              updateSearchTermSequence({
+                searchTerm: e.target.value,
+              });
+            }}
+          />
+          <button className="usa-button ustc-search-button" type="submit">
+            <span className="usa-search-submit-text">Search</span>
+          </button>
+        </div>
       </form>
     );
   },
