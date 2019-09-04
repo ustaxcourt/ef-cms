@@ -11,4 +11,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=respondent&path=/case-detail/102-19&info=can-file-document',
   },
+  'http://localhost:1234/mock-login?token=respondent&path=/case-search/no-matches',
 ];
