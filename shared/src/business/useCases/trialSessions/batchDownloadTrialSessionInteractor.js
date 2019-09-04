@@ -49,10 +49,10 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
-    'MMMM D, YYYY',
+    'MMMM_D_YYYY',
   );
   const { trialLocation } = trialSessionDetails;
-  let zipName = sanitize(`${trialDate} - ${trialLocation}.zip`)
+  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
     .replace(/,/g, '');
   zipName = sanitize(`${trialSessionId}.zip`)
@@ -87,7 +87,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
           'YYYY-MM-DD',
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
-        const fileName = sanitize(`${docDate}_${docNum}.pdf`);
+        const fileName = sanitize(
+          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+        );
         const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
         s3Ids.push(myDoc.documentId);
         fileNames.push(pdfTitle);
@@ -103,7 +105,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
         caseDetail: caseDetails[caseId],
       }),
     );
-    extraFileNames.push(`${sessionCases[index].caseFolder}/00000000000.pdf`);
+    extraFileNames.push(
+      `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
+    );
   }
 
   await applicationContext.getPersistenceGateway().zipDocuments({
