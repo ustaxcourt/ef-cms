@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { connect } from '@cerebral/react';
+import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -69,12 +70,9 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 2),
                         });
                       }}
-                      onInput={e =>
-                        (e.target.value = e.target.value.slice(0, 2))
-                      }
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
@@ -105,12 +103,9 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 2),
                         });
                       }}
-                      onInput={e =>
-                        (e.target.value = e.target.value.slice(0, 2))
-                      }
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
@@ -141,12 +136,9 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 4),
                         });
                       }}
-                      onInput={e =>
-                        (e.target.value = e.target.value.slice(0, 4))
-                      }
                     />
                   </div>
                 </div>
