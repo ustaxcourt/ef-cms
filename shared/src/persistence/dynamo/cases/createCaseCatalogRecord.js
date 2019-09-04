@@ -11,7 +11,7 @@ exports.createCaseCatalogRecord = async ({ applicationContext, caseId }) => {
   await put({
     Item: {
       caseId,
-      pk: `catalog`,
+      pk: 'catalog',
       sk: `case-${caseId}`,
     },
     applicationContext,
