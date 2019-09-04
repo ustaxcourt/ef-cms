@@ -31,7 +31,7 @@ describe('clearSecondaryDocumentScenarioAction', () => {
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toEqual(null);
+    expect(result.state.form.certificateOfServiceDate).toBeUndefined();
   });
   it('clears document scenario with "documentType" key', async () => {
     const result = await runAction(clearWizardDataAction, {

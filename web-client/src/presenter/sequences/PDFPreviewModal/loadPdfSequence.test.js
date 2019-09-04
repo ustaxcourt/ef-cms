@@ -48,7 +48,6 @@ describe('loadPdfSequence', () => {
     expect(test.getState('pdfPreviewModal')).toMatchObject({
       ctx: 'abc',
       currentPage: 1,
-      error: null,
       height: 100,
       pdfDoc: { numPages: 5 },
       totalPages: 5,
