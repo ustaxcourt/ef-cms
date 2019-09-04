@@ -10,8 +10,8 @@ import { state } from 'cerebral';
 export const clearAlertsAction = ({ get, store }) => {
   const saveAlerts = get(state.saveAlertsForNavigation);
   if (!saveAlerts) {
-    store.set(state.alertError, null);
-    store.set(state.alertSuccess, null);
+    store.unset(state.alertError);
+    store.unset(state.alertSuccess);
   }
   store.set(state.caseDetailErrors, {});
   store.set(state.saveAlertsForNavigation, false);
